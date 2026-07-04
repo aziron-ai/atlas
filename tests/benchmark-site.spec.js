@@ -80,6 +80,12 @@ test.describe("atlas benchmark site — redesign", () => {
     for (const cmd of INSTALL_COMMANDS) {
       expect(text, cmd).toContain(cmd);
     }
+    // download URL tracks the released version (package.json → site-data.json)
+    expect(text).toContain(`atlas_${site.version}_linux_amd64.tar.gz`);
+  });
+
+  test("nav chip shows the released version", async ({ page }) => {
+    await expect(page.getByTestId("nav")).toContainText(`v${site.version}`);
   });
 
   test("evidence drawer links resolve", async ({ page, request }) => {
