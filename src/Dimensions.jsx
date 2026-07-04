@@ -245,9 +245,9 @@ export default function Dimensions({ dims }) {
                   </div>
                   <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 4 }}>
                     the React app's calls matched to the Go server's handlers by name — endpoint → handler symbol —
-                    and the reverse question ("who consumes this server?") answers{" "}
+                    and the reverse question ("who consumes this server?") finds{" "}
                     <span className="mono" style={{ color: "var(--text)" }}>
-                      {(h.crossRepo.linked.consumerRepos || []).join(", ") || "—"}
+                      {h.crossRepo.linked.consumerRepoCount ?? 0} consumer repo{(h.crossRepo.linked.consumerRepoCount ?? 0) === 1 ? "" : "s"}
                     </span>
                   </div>
                 </div>

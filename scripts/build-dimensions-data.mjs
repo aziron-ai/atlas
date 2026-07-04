@@ -77,14 +77,21 @@ const out = {
       const consumerRows = Object.values(ex).reduce((s, r) => s + (r.consumer || 0), 0);
       const deps = (dims.cross_repo.queries || {}).dependencies || {};
       const cons = (dims.cross_repo.queries || {}).consumers || {};
+      // PUBLIC-SITE HYGIENE: the bench artifact carries real internal repo names,
+      // handler paths and symbols; the public payload keeps only counts,
+      // latencies and generic labels — never internal topology.
+      const q = dims.cross_repo.queries || {};
+      const publicQueries = Object.fromEntries(Object.entries(q).map(([op, v]) => [op, {
+        count: v.count ?? null, latency_ms: v.latency_ms ?? null,
+      }]));
       return {
-        note: "measured on a real 2-repo workspace (Go API server + React app), indexed together",
+        note: "measured on a real 2-repo workspace (a Go API server + a React app), indexed together",
         producerRoutes, consumerRows,
         linked: {
           dependencies: deps.count ?? null, dependencyLatencyMs: deps.latency_ms ?? null,
-          consumerRepos: cons.consumer_repos || [], impacted: cons.count ?? null,
+          consumerRepoCount: (cons.consumer_repos || []).length, impacted: cons.count ?? null,
         },
-        queries: dims.cross_repo.queries,
+        queries: publicQueries,
       };
     })() : null,
   },
