@@ -8,6 +8,7 @@ import {
   Download,
   ExternalLink,
 } from "lucide-react";
+import Dimensions from "./Dimensions";
 import GraphExplorer from "./GraphExplorer";
 import LanguagesExplorer from "./LanguagesExplorer";
 
@@ -237,6 +238,7 @@ function SectionHeader({ kicker, title, children, actions, id }) {
 /* ========================== CONSOLE BAR ================================== */
 
 const NAV_ITEMS = [
+  ["Dimensions", "dimensions"],
   ["Coverage", "vs-native"],
   ["Comparison", "vs-graphify"],
   ["Graph", "graph"],
@@ -1839,7 +1841,8 @@ function App() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [graphMeta, setGraphMeta] = useState(null);
-  const active = useScrollSpy(["vs-native", "vs-graphify", "graph", "matrix", "install"]);
+  const [dims, setDims] = useState(null);
+  const active = useScrollSpy(["dimensions", "vs-native", "vs-graphify", "graph", "matrix", "install"]);
 
   useEffect(() => {
     fetch("data/benchmark-data.json", { cache: "no-store" })
@@ -1854,6 +1857,12 @@ function App() {
       });
     // graph meta is read for the How-it-works real edge numbers; if it fails
     // we fall back to the brief-verified constants, no console error surfaced.
+    // dimensions profile is additive: if it fails to load the section simply
+    // doesn't render — the rest of the site is unaffected.
+    fetch("data/dimensions-data.json", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then(setDims)
+      .catch(() => {});
     fetch("data/graph.json")
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => {
@@ -1899,6 +1908,7 @@ function App() {
       <ConsoleBar data={data} active={active} />
       <main id="main">
         <HeroReadout data={data} />
+        <Dimensions dims={dims} />
         <VsNative data={data} />
         <VsGraphify data={data} />
         <NotComparable data={data} />
