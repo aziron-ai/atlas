@@ -237,6 +237,21 @@ export default function Dimensions({ dims }) {
                   <div style={{ fontSize: 11.5, color: "var(--muted)" }}>consumer call sites recorded — the raw material for blast-radius across repos</div>
                 </div>
               </div>
+              {h.crossRepo.linked && h.crossRepo.linked.dependencies != null && (
+                <div className="rounded-lg p-3" style={{ background: "var(--bg2)", border: "1px solid var(--primary-dim)" }}>
+                  <div className="mono" style={{ fontSize: 13, color: "var(--primary)" }}>
+                    {h.crossRepo.linked.dependencies} live cross-repo links resolved
+                    {h.crossRepo.linked.dependencyLatencyMs != null ? ` in ${h.crossRepo.linked.dependencyLatencyMs}ms` : ""}
+                  </div>
+                  <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 4 }}>
+                    the React app's calls matched to the Go server's handlers by name — endpoint → handler symbol —
+                    and the reverse question ("who consumes this server?") answers{" "}
+                    <span className="mono" style={{ color: "var(--text)" }}>
+                      {(h.crossRepo.linked.consumerRepos || []).join(", ") || "—"}
+                    </span>
+                  </div>
+                </div>
+              )}
               {xrq && (
                 <div className="mono flex flex-col gap-1" style={{ fontSize: 11.5, color: "var(--muted)" }}>
                   {Object.entries(xrq).map(([op, q]) => (

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-04T04:34:18.283Z",
+  "generatedAt": "2026-07-04T04:58:16.014Z",
   "sourceLabel": "aziron-atlas bench: DIMENSIONS_BENCH + CALLERS_F1_AFTER + LSP_F1_GO (linux run)",
   "headline": {
     "accuracy": {
@@ -11,9 +11,9 @@
       "evidence": "fixture-truth: exact set F1, ground truth by construction, no LLM"
     },
     "latency": {
-      "atlasMedianMs": 22.9,
-      "graphifyMedianMs": 207.7,
-      "ratio": 9.1,
+      "atlasMedianMs": 23,
+      "graphifyMedianMs": 207.1,
+      "ratio": 9,
       "evidence": "median of 3 CLI invocations incl. process spawn, identical fixtures, this machine"
     },
     "tokens": {
@@ -30,7 +30,7 @@
       "evidence": "len/4 heuristic on the plain answer context; graphify token medians shown only over the rows it answered correctly (fair fight) — where it works its answers are smaller; Atlas's context buys 37/37 correctness"
     },
     "speed": {
-      "medianFixtureIndexMs": 81,
+      "medianFixtureIndexMs": 77.4,
       "evidence": "fixture index --reindex wall ms"
     },
     "coverage": {
@@ -46,28 +46,40 @@
       "evidence": "gopls call_hierarchy ground truth on a production repo"
     },
     "crossRepo": {
-      "note": "extraction measured on a real 2-repo workspace (Go API server + React app)",
+      "note": "measured on a real 2-repo workspace (Go API server + React app), indexed together",
       "producerRoutes": 355,
-      "consumerRows": 731,
+      "consumerRows": 738,
+      "linked": {
+        "dependencies": 3,
+        "dependencyLatencyMs": 32.4,
+        "consumerRepos": [
+          "aziron-ui"
+        ],
+        "impacted": 3
+      },
       "queries": {
         "route_contracts": {
-          "count": 0,
-          "latency_ms": 26.1,
+          "count": 200,
+          "latency_ms": 36.3,
           "exit": 0,
-          "total": 0
+          "total": 355
         },
         "consumers": {
-          "count": 0,
-          "latency_ms": 26.8,
+          "count": 3,
+          "latency_ms": 33.8,
           "exit": 0,
-          "consumer_repos": []
+          "consumer_repos": [
+            "aziron-ui"
+          ]
         },
         "dependencies": {
-          "count": 0,
-          "latency_ms": 23.2,
+          "count": 3,
+          "latency_ms": 32.4,
           "exit": 0,
-          "producer_repos": [],
-          "total": 0
+          "producer_repos": [
+            "Aziron"
+          ],
+          "total": 3
         }
       }
     }
@@ -77,371 +89,371 @@
       "language": "go",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 22.6,
-      "graphifyMs": 222.1,
+      "atlasMs": 23,
+      "graphifyMs": 205.2,
       "atlasTokens": 214,
       "graphifyTokens": 162,
-      "indexMs": 93.4
+      "indexMs": 81.2
     },
     {
       "language": "python",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 23.2,
-      "graphifyMs": 207.4,
+      "atlasMs": 22.5,
+      "graphifyMs": 210.3,
       "atlasTokens": 166,
       "graphifyTokens": 162,
-      "indexMs": 81
+      "indexMs": 74.9
     },
     {
       "language": "javascript",
       "f1": 1,
       "graphifyF1": 1,
       "atlasMs": 22.2,
-      "graphifyMs": 206.4,
+      "graphifyMs": 210.5,
       "atlasTokens": 233,
       "graphifyTokens": 162,
-      "indexMs": 76.8
+      "indexMs": 74
     },
     {
       "language": "typescript",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 22.9,
-      "graphifyMs": 204.2,
+      "atlasMs": 22.6,
+      "graphifyMs": 236.5,
       "atlasTokens": 255,
       "graphifyTokens": 162,
-      "indexMs": 80.9
+      "indexMs": 79.6
     },
     {
       "language": "java",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 23.2,
-      "graphifyMs": 201.6,
+      "atlasMs": 23.3,
+      "graphifyMs": 211.4,
       "atlasTokens": 244,
       "graphifyTokens": 166,
-      "indexMs": 80.5
+      "indexMs": 76.8
     },
     {
       "language": "c",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 21.7,
-      "graphifyMs": 211.2,
+      "atlasMs": 25.3,
+      "graphifyMs": 202.4,
       "atlasTokens": 214,
       "graphifyTokens": 161,
-      "indexMs": 90.1
+      "indexMs": 81.7
     },
     {
       "language": "cpp",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 22.9,
-      "graphifyMs": 203.8,
+      "atlasMs": 22.7,
+      "graphifyMs": 200.5,
       "atlasTokens": 222,
       "graphifyTokens": 162,
-      "indexMs": 82.8
+      "indexMs": 74.4
     },
     {
       "language": "rust",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 23.2,
-      "graphifyMs": 210.3,
+      "atlasMs": 23.3,
+      "graphifyMs": 202.7,
       "atlasTokens": 210,
       "graphifyTokens": 162,
-      "indexMs": 91.4
+      "indexMs": 87.2
     },
     {
       "language": "ruby",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 23.3,
-      "graphifyMs": 201.4,
+      "atlasMs": 24.1,
+      "graphifyMs": 213.2,
       "atlasTokens": 148,
       "graphifyTokens": 41,
-      "indexMs": 130.5
+      "indexMs": 121.7
     },
     {
       "language": "php",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 23.1,
-      "graphifyMs": 203.7,
+      "atlasMs": 22.3,
+      "graphifyMs": 221.6,
       "atlasTokens": 237,
       "graphifyTokens": 162,
-      "indexMs": 103.6
+      "indexMs": 98
     },
     {
       "language": "csharp",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 23.2,
-      "graphifyMs": 216.2,
+      "atlasMs": 23.1,
+      "graphifyMs": 209.5,
       "atlasTokens": 237,
       "graphifyTokens": 166,
-      "indexMs": 207.5
+      "indexMs": 117.3
     },
     {
       "language": "kotlin",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 26.5,
-      "graphifyMs": 220.9,
+      "atlasMs": 22.1,
+      "graphifyMs": 214.1,
       "atlasTokens": 210,
       "graphifyTokens": 162,
-      "indexMs": 110
+      "indexMs": 98.6
     },
     {
       "language": "swift",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 21.8,
-      "graphifyMs": 220.3,
+      "atlasMs": 22.1,
+      "graphifyMs": 201.5,
       "atlasTokens": 225,
       "graphifyTokens": 163,
-      "indexMs": 238.3
+      "indexMs": 216.1
     },
     {
       "language": "scala",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 24.7,
-      "graphifyMs": 244.6,
+      "atlasMs": 22.4,
+      "graphifyMs": 205.2,
       "atlasTokens": 252,
       "graphifyTokens": 176,
-      "indexMs": 153.7
+      "indexMs": 118.7
     },
     {
       "language": "lua",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 22.8,
-      "graphifyMs": 207.7,
+      "atlasMs": 21.9,
+      "graphifyMs": 207.4,
       "atlasTokens": 233,
       "graphifyTokens": 162,
-      "indexMs": 79.7
+      "indexMs": 75.4
     },
     {
       "language": "powershell",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 23.9,
-      "graphifyMs": 217.6,
+      "atlasMs": 23.2,
+      "graphifyMs": 204.5,
       "atlasTokens": 218,
       "graphifyTokens": 162,
-      "indexMs": 83.4
+      "indexMs": 76
     },
     {
       "language": "bash",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 25,
-      "graphifyMs": 233.1,
+      "atlasMs": 23.6,
+      "graphifyMs": 210.1,
       "atlasTokens": 192,
       "graphifyTokens": 162,
-      "indexMs": 109
+      "indexMs": 72.6
     },
     {
       "language": "zig",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 32.3,
-      "graphifyMs": 223.8,
+      "atlasMs": 23.1,
+      "graphifyMs": 200.9,
       "atlasTokens": 233,
       "graphifyTokens": 162,
-      "indexMs": 124.1
+      "indexMs": 106.3
     },
     {
       "language": "elixir",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 26.7,
-      "graphifyMs": 211.8,
+      "atlasMs": 22.4,
+      "graphifyMs": 201.1,
       "atlasTokens": 210,
       "graphifyTokens": 41,
-      "indexMs": 81.8
+      "indexMs": 77.5
     },
     {
       "language": "objc",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 23.4,
-      "graphifyMs": 213.9,
+      "atlasMs": 22.2,
+      "graphifyMs": 205.1,
       "atlasTokens": 229,
       "graphifyTokens": 8,
-      "indexMs": 108.1
+      "indexMs": 73.9
     },
     {
       "language": "julia",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 23.4,
-      "graphifyMs": 219.8,
+      "atlasMs": 23,
+      "graphifyMs": 203.8,
       "atlasTokens": 178,
       "graphifyTokens": 160,
-      "indexMs": 81
+      "indexMs": 73.3
     },
     {
       "language": "fortran",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 22.5,
-      "graphifyMs": 202.1,
+      "atlasMs": 22.8,
+      "graphifyMs": 214.3,
       "atlasTokens": 189,
       "graphifyTokens": 162,
-      "indexMs": 80.5
+      "indexMs": 76.6
     },
     {
       "language": "dart",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 23.1,
-      "graphifyMs": 201.6,
+      "atlasMs": 23.9,
+      "graphifyMs": 209.1,
       "atlasTokens": 173,
       "graphifyTokens": 42,
-      "indexMs": 79.1
+      "indexMs": 82.9
     },
     {
       "language": "verilog",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 22.6,
-      "graphifyMs": 211.7,
+      "atlasMs": 22.7,
+      "graphifyMs": 209.4,
       "atlasTokens": 204,
       "graphifyTokens": 41,
-      "indexMs": 377
+      "indexMs": 81
     },
     {
       "language": "pascal",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 21.3,
-      "graphifyMs": 201.3,
+      "atlasMs": 23.1,
+      "graphifyMs": 226,
       "atlasTokens": 185,
       "graphifyTokens": 161,
-      "indexMs": 75.7
+      "indexMs": 79
     },
     {
       "language": "byond",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 22.3,
-      "graphifyMs": 208.2,
+      "atlasMs": 24.4,
+      "graphifyMs": 205.7,
       "atlasTokens": 155,
       "graphifyTokens": 8,
-      "indexMs": 74.1
+      "indexMs": 77.1
     },
     {
       "language": "razor",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 22.7,
-      "graphifyMs": 196.5,
+      "atlasMs": 25.9,
+      "graphifyMs": 215.9,
       "atlasTokens": 233,
       "graphifyTokens": 8,
-      "indexMs": 71.3
+      "indexMs": 82.1
     },
     {
       "language": "vue",
       "f1": 1,
       "graphifyF1": 1,
-      "atlasMs": 22,
-      "graphifyMs": 198,
+      "atlasMs": 24,
+      "graphifyMs": 210.9,
       "atlasTokens": 233,
       "graphifyTokens": 162,
-      "indexMs": 74.4
+      "indexMs": 77.4
     },
     {
       "language": "svelte",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 22.3,
-      "graphifyMs": 196.5,
+      "atlasMs": 23.2,
+      "graphifyMs": 204.6,
       "atlasTokens": 244,
       "graphifyTokens": 8,
-      "indexMs": 72
+      "indexMs": 74.8
     },
     {
       "language": "astro",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 22.9,
-      "graphifyMs": 201.8,
+      "atlasMs": 23.1,
+      "graphifyMs": 203.2,
       "atlasTokens": 240,
       "graphifyTokens": 8,
-      "indexMs": 73.9
+      "indexMs": 77.5
     },
     {
       "language": "ejs",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 22.3,
-      "graphifyMs": 200.4,
+      "atlasMs": 22.1,
+      "graphifyMs": 207.1,
       "atlasTokens": 237,
       "graphifyTokens": 8,
-      "indexMs": 80.5
+      "indexMs": 73.9
     },
     {
       "language": "ets",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 23.8,
-      "graphifyMs": 205.4,
+      "atlasMs": 22.6,
+      "graphifyMs": 212.5,
       "atlasTokens": 263,
       "graphifyTokens": 8,
-      "indexMs": 78.6
+      "indexMs": 72.6
     },
     {
       "language": "r",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 22.5,
-      "graphifyMs": 202.7,
+      "atlasMs": 25,
+      "graphifyMs": 197.2,
       "atlasTokens": 233,
       "graphifyTokens": 8,
-      "indexMs": 75
+      "indexMs": 75.9
     },
     {
       "language": "apex",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 22.4,
-      "graphifyMs": 213.6,
+      "atlasMs": 23.5,
+      "graphifyMs": 203.9,
       "atlasTokens": 255,
       "graphifyTokens": 52,
-      "indexMs": 74.3
+      "indexMs": 73.9
     },
     {
       "language": "blade",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 22.7,
-      "graphifyMs": 212.6,
+      "atlasMs": 22.6,
+      "graphifyMs": 202.6,
       "atlasTokens": 259,
       "graphifyTokens": 8,
-      "indexMs": 79.4
+      "indexMs": 73.2
     },
     {
       "language": "groovy",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 25.6,
-      "graphifyMs": 219.1,
+      "atlasMs": 22.5,
+      "graphifyMs": 204.5,
       "atlasTokens": 214,
       "graphifyTokens": 8,
-      "indexMs": 90.6
+      "indexMs": 78.7
     },
     {
       "language": "sql",
       "f1": 1,
       "graphifyF1": 0,
-      "atlasMs": 25.3,
-      "graphifyMs": 205.7,
+      "atlasMs": 22.9,
+      "graphifyMs": 209.1,
       "atlasTokens": 476,
       "graphifyTokens": 8,
-      "indexMs": 85
+      "indexMs": 77.4
     }
   ],
   "toolLandscape": [
@@ -449,7 +461,7 @@
       "tool": "atlas",
       "kind": "one binary, all languages",
       "languages": 37,
-      "queryMs": 22.9,
+      "queryMs": 23,
       "f1": 1,
       "evidence": "this run (fixtures) + gopls-truth 0.933 real repo"
     },
@@ -457,7 +469,7 @@
       "tool": "graphify 0.9.5",
       "kind": "portable code graph",
       "languages": 21,
-      "queryMs": 207.7,
+      "queryMs": 207.1,
       "f1": 0.57,
       "evidence": "this run, identical fixtures"
     },
