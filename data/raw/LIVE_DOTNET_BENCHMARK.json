@@ -4,12 +4,12 @@
   "commit": "72a54c475f75e18cb93cba0809d00a5e6e49efd9",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/DapperLib/Dapper /tmp/atlas-live-dotnet-dapper/repo",
+    "clone": "git clone --depth 1 https://github.com/DapperLib/Dapper $WORK/atlas-live-dotnet-dapper/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-dotnet-dapper/atlas.db --json index /tmp/atlas-live-dotnet-dapper/repo",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-dotnet-dapper/atlas.db --json index /tmp/atlas-live-dotnet-dapper/repo",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-dotnet-dapper/atlas.db --json index $WORK/atlas-live-dotnet-dapper/repo",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-dotnet-dapper/atlas.db --json index $WORK/atlas-live-dotnet-dapper/repo",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "/opt/homebrew/bin/python3 -c <dotnet project counter> /tmp/atlas-live-dotnet-dapper/repo",
+    "native_baseline": "/opt/homebrew/bin/python3 -c <dotnet project counter> $WORK/atlas-live-dotnet-dapper/repo",
     "query_symbols": [
       "Dapper",
       "Dapper.Tests",
@@ -22,8 +22,8 @@
       "GridReader",
       "DefaultTypeMap"
     ],
-    "target_path": "/tmp/atlas-live-dotnet-dapper/repo",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-dotnet-dapper/atlas.db --repo repo serve --addr 127.0.0.1:48232"
+    "target_path": "$WORK/atlas-live-dotnet-dapper/repo",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-dotnet-dapper/atlas.db --repo repo serve --addr 127.0.0.1:48232"
   },
   "atlas": {
     "cold_wall_seconds": 0.485,
@@ -301,7 +301,7 @@
     "tool": "python-dotnet-project",
     "status": "ok",
     "ok": true,
-    "command": "/opt/homebrew/bin/python3 -c <dotnet project counter> /tmp/atlas-live-dotnet-dapper/repo",
+    "command": "/opt/homebrew/bin/python3 -c <dotnet project counter> $WORK/atlas-live-dotnet-dapper/repo",
     "metrics": {
       "files": 12,
       "parsed_files": 12,
@@ -814,7 +814,7 @@
       {
         "repo": "https://github.com/Far0n/xgbfi",
         "commit": "f779f7c7042557bac2289e2f40ea7e9475dc8473",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/dotnet/3-Far0n__xgbfi",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/dotnet/3-Far0n__xgbfi",
         "atlas_definitions": 2,
         "native_definitions": 2,
         "coverage_ratio": 1,
@@ -824,7 +824,7 @@
       {
         "repo": "https://github.com/Viladoman/StructLayout",
         "commit": "fde80869381bdcf7747628ecd3d9105bc6d39056",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/dotnet/4-Viladoman__StructLayout",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/dotnet/4-Viladoman__StructLayout",
         "atlas_definitions": 13,
         "native_definitions": 13,
         "coverage_ratio": 1,
@@ -834,7 +834,7 @@
       {
         "repo": "https://github.com/b2developer/MonopolyNEAT",
         "commit": "5706282faf6a13a4a522c2e71b469737222ab4b8",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/dotnet/5-b2developer__MonopolyNEAT",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/dotnet/5-b2developer__MonopolyNEAT",
         "atlas_definitions": 4,
         "native_definitions": 4,
         "coverage_ratio": 1,

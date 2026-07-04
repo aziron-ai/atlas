@@ -4,12 +4,12 @@
   "commit": "2c826cd803a3c0417354fa37b2417f21993ce4ac",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/remobjects/pascalscript /tmp/atlas-live-pascal-pascalscript/repo",
+    "clone": "git clone --depth 1 https://github.com/remobjects/pascalscript $WORK/atlas-live-pascal-pascalscript/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-pascal-pascalscript/atlas.db --json index /tmp/atlas-live-pascal-pascalscript/repo/Source",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-pascal-pascalscript/atlas.db --json index /tmp/atlas-live-pascal-pascalscript/repo/Source",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-pascal-pascalscript/atlas.db --json index $WORK/atlas-live-pascal-pascalscript/repo/Source",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-pascal-pascalscript/atlas.db --json index $WORK/atlas-live-pascal-pascalscript/repo/Source",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "/opt/homebrew/bin/python3 -c <pascal declaration counter> /tmp/atlas-live-pascal-pascalscript/repo/Source",
+    "native_baseline": "/opt/homebrew/bin/python3 -c <pascal declaration counter> $WORK/atlas-live-pascal-pascalscript/repo/Source",
     "query_symbols": [
       "TPSPascalCompiler",
       "TPSRuntimeClassImporter",
@@ -23,8 +23,8 @@
       "LCL",
       "PascalScript_Core_Reg"
     ],
-    "target_path": "/tmp/atlas-live-pascal-pascalscript/repo/Source",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-pascal-pascalscript/atlas.db --repo Source serve --addr 127.0.0.1:48239"
+    "target_path": "$WORK/atlas-live-pascal-pascalscript/repo/Source",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-pascal-pascalscript/atlas.db --repo Source serve --addr 127.0.0.1:48239"
   },
   "atlas": {
     "cold_wall_seconds": 0.765,
@@ -215,7 +215,7 @@
     "tool": "pascal-regex-counter",
     "status": "ok",
     "ok": true,
-    "command": "/opt/homebrew/bin/python3 -c <pascal declaration counter> /tmp/atlas-live-pascal-pascalscript/repo/Source",
+    "command": "/opt/homebrew/bin/python3 -c <pascal declaration counter> $WORK/atlas-live-pascal-pascalscript/repo/Source",
     "metrics": {
       "files": 93,
       "parsed_files": 93,
@@ -731,7 +731,7 @@
       {
         "repo": "https://github.com/remobjects/pascalscript",
         "commit": "2c826cd803a3c0417354fa37b2417f21993ce4ac",
-        "target_path": "/private/tmp/atlas-pascal-3repo-1782815868/pascalscript/repo/Source",
+        "target_path": "/private$WORK/atlas-pascal-3repo-1782815868/pascalscript/repo/Source",
         "atlas_definitions": 6431,
         "native_definitions": 5315,
         "coverage_ratio": 1.21,
@@ -741,7 +741,7 @@
       {
         "repo": "https://github.com/fpc/Lazarus",
         "commit": "e1cc57bb27e48541ffe4bf66c78a8dddfc4f6630",
-        "target_path": "/private/tmp/atlas-pascal-3repo-1782815868/lazarus-lcl/repo/lcl",
+        "target_path": "/private$WORK/atlas-pascal-3repo-1782815868/lazarus-lcl/repo/lcl",
         "atlas_definitions": 98262,
         "native_definitions": 59399,
         "coverage_ratio": 1.6543,
@@ -751,7 +751,7 @@
       {
         "repo": "https://github.com/transmission-remote-gui/transgui",
         "commit": "da71b860d4920f7ab847a48bd8d804725ddbad7b",
-        "target_path": "/private/tmp/atlas-pascal-3repo-1782815868/transgui/repo",
+        "target_path": "/private$WORK/atlas-pascal-3repo-1782815868/transgui/repo",
         "atlas_definitions": 5540,
         "native_definitions": 3127,
         "coverage_ratio": 1.7717,

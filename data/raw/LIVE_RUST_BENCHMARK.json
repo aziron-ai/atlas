@@ -4,11 +4,11 @@
   "commit": "dfe4a81d2591daca76d25ae4e052c34b26578155",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/BurntSushi/ripgrep /tmp/atlas-live-rust-ripgrep/repo",
+    "clone": "git clone --depth 1 https://github.com/BurntSushi/ripgrep $WORK/atlas-live-rust-ripgrep/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-rust-ripgrep/atlas.db --json index /tmp/atlas-live-rust-ripgrep/repo",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-rust-ripgrep/atlas.db --json index /tmp/atlas-live-rust-ripgrep/repo",
-    "graphify_update": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-rust-ripgrep/atlas.db --json index $WORK/atlas-live-rust-ripgrep/repo",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-rust-ripgrep/atlas.db --json index $WORK/atlas-live-rust-ripgrep/repo",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "native_baseline": "/opt/homebrew/bin/rust-analyzer documentSymbol <16 Rust files>",
     "query_symbols": [
       "HiArgs",
@@ -16,8 +16,8 @@
       "PatternMatcher",
       "WalkBuilder"
     ],
-    "target_path": "/tmp/atlas-live-rust-ripgrep/repo",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-rust-ripgrep/atlas.db serve --addr 127.0.0.1:4190"
+    "target_path": "$WORK/atlas-live-rust-ripgrep/repo",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-rust-ripgrep/atlas.db serve --addr 127.0.0.1:4190"
   },
   "atlas": {
     "cold_wall_seconds": 0.474,
@@ -203,7 +203,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 2.067,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "  AST extraction: 100/125 uncached files (80%) [14 workers]",
@@ -311,7 +311,7 @@
   "query_warmup": {
     "symbol": "HiArgs",
     "atlas_command": "curl -fsS http://127.0.0.1:4190/api/v1/symbols/HiArgs/explain?repo_id=repo&format=plain",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain HiArgs",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain HiArgs",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -321,7 +321,7 @@
       "symbol": "HiArgs",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4190/api/v1/symbols/HiArgs/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain HiArgs",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain HiArgs",
       "atlas_tokens": 2,
       "graphify_tokens": 249,
       "atlas_ms": 10.144,
@@ -359,7 +359,7 @@
       "symbol": "LowArgs",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4190/api/v1/symbols/LowArgs/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain LowArgs",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain LowArgs",
       "atlas_tokens": 2,
       "graphify_tokens": 258,
       "atlas_ms": 9.609,
@@ -397,7 +397,7 @@
       "symbol": "PatternMatcher",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4190/api/v1/symbols/PatternMatcher/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain PatternMatcher",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain PatternMatcher",
       "atlas_tokens": 2,
       "graphify_tokens": 119,
       "atlas_ms": 10.441,
@@ -435,7 +435,7 @@
       "symbol": "WalkBuilder",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4190/api/v1/symbols/WalkBuilder/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain WalkBuilder",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain WalkBuilder",
       "atlas_tokens": 2,
       "graphify_tokens": 259,
       "atlas_ms": 10.383,
@@ -487,7 +487,7 @@
       {
         "repo": "https://github.com/Taaitaaiger/jlrs",
         "commit": "2297a23438ade895605619bd658510c67a239102",
-        "target_path": "/tmp/atlas-random-validation/work/rust/1-Taaitaaiger__jlrs",
+        "target_path": "$WORK/atlas-random-validation/work/rust/1-Taaitaaiger__jlrs",
         "atlas_definitions": 7152,
         "native_definitions": 5081,
         "coverage_ratio": 1.4076,
@@ -497,7 +497,7 @@
       {
         "repo": "https://github.com/rust-windowing/softbuffer",
         "commit": "840683cfce68a04d20cfb75b2976d009d3ba77d8",
-        "target_path": "/tmp/atlas-random-validation/work/rust/2-rust-windowing__softbuffer",
+        "target_path": "$WORK/atlas-random-validation/work/rust/2-rust-windowing__softbuffer",
         "atlas_definitions": 715,
         "native_definitions": 475,
         "coverage_ratio": 1.5053,
@@ -507,7 +507,7 @@
       {
         "repo": "https://github.com/rapidfuzz/strsim-rs",
         "commit": "dacc84c0dc61eff0ee0ff66962bcf2e17018ad26",
-        "target_path": "/tmp/atlas-random-validation/work/rust/3-rapidfuzz__strsim-rs",
+        "target_path": "$WORK/atlas-random-validation/work/rust/3-rapidfuzz__strsim-rs",
         "atlas_definitions": 249,
         "native_definitions": 148,
         "coverage_ratio": 1.6824,

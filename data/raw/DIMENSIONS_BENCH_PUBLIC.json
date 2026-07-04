@@ -1,0 +1,548 @@
+{
+  "label": "dimensions",
+  "rows": [
+    {
+      "language": "go",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 214,
+      "atlas_latency_ms": 23,
+      "index_ms": 81.2,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 205.2
+      }
+    },
+    {
+      "language": "python",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 166,
+      "atlas_latency_ms": 22.5,
+      "index_ms": 74.9,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 210.3
+      }
+    },
+    {
+      "language": "javascript",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 233,
+      "atlas_latency_ms": 22.2,
+      "index_ms": 74,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 210.5
+      }
+    },
+    {
+      "language": "typescript",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 255,
+      "atlas_latency_ms": 22.6,
+      "index_ms": 79.6,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 236.5
+      }
+    },
+    {
+      "language": "java",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 244,
+      "atlas_latency_ms": 23.3,
+      "index_ms": 76.8,
+      "graphify": {
+        "f1": 1,
+        "tokens": 166,
+        "latency_ms": 211.4
+      }
+    },
+    {
+      "language": "c",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 214,
+      "atlas_latency_ms": 25.3,
+      "index_ms": 81.7,
+      "graphify": {
+        "f1": 1,
+        "tokens": 161,
+        "latency_ms": 202.4
+      }
+    },
+    {
+      "language": "cpp",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 222,
+      "atlas_latency_ms": 22.7,
+      "index_ms": 74.4,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 200.5
+      }
+    },
+    {
+      "language": "rust",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 210,
+      "atlas_latency_ms": 23.3,
+      "index_ms": 87.2,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 202.7
+      }
+    },
+    {
+      "language": "ruby",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 148,
+      "atlas_latency_ms": 24.1,
+      "index_ms": 121.7,
+      "graphify": {
+        "f1": 0,
+        "tokens": 41,
+        "latency_ms": 213.2
+      }
+    },
+    {
+      "language": "php",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 237,
+      "atlas_latency_ms": 22.3,
+      "index_ms": 98,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 221.6
+      }
+    },
+    {
+      "language": "csharp",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 237,
+      "atlas_latency_ms": 23.1,
+      "index_ms": 117.3,
+      "graphify": {
+        "f1": 1,
+        "tokens": 166,
+        "latency_ms": 209.5
+      }
+    },
+    {
+      "language": "kotlin",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 210,
+      "atlas_latency_ms": 22.1,
+      "index_ms": 98.6,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 214.1
+      }
+    },
+    {
+      "language": "swift",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 225,
+      "atlas_latency_ms": 22.1,
+      "index_ms": 216.1,
+      "graphify": {
+        "f1": 1,
+        "tokens": 163,
+        "latency_ms": 201.5
+      }
+    },
+    {
+      "language": "scala",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 252,
+      "atlas_latency_ms": 22.4,
+      "index_ms": 118.7,
+      "graphify": {
+        "f1": 1,
+        "tokens": 176,
+        "latency_ms": 205.2
+      }
+    },
+    {
+      "language": "lua",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 233,
+      "atlas_latency_ms": 21.9,
+      "index_ms": 75.4,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 207.4
+      }
+    },
+    {
+      "language": "powershell",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 218,
+      "atlas_latency_ms": 23.2,
+      "index_ms": 76,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 204.5
+      }
+    },
+    {
+      "language": "bash",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 192,
+      "atlas_latency_ms": 23.6,
+      "index_ms": 72.6,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 210.1
+      }
+    },
+    {
+      "language": "zig",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 233,
+      "atlas_latency_ms": 23.1,
+      "index_ms": 106.3,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 200.9
+      }
+    },
+    {
+      "language": "elixir",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 210,
+      "atlas_latency_ms": 22.4,
+      "index_ms": 77.5,
+      "graphify": {
+        "f1": 0,
+        "tokens": 41,
+        "latency_ms": 201.1
+      }
+    },
+    {
+      "language": "objc",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 229,
+      "atlas_latency_ms": 22.2,
+      "index_ms": 73.9,
+      "graphify": {
+        "f1": 0,
+        "tokens": 8,
+        "latency_ms": 205.1
+      }
+    },
+    {
+      "language": "julia",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 178,
+      "atlas_latency_ms": 23,
+      "index_ms": 73.3,
+      "graphify": {
+        "f1": 1,
+        "tokens": 160,
+        "latency_ms": 203.8
+      }
+    },
+    {
+      "language": "fortran",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 189,
+      "atlas_latency_ms": 22.8,
+      "index_ms": 76.6,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 214.3
+      }
+    },
+    {
+      "language": "dart",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 173,
+      "atlas_latency_ms": 23.9,
+      "index_ms": 82.9,
+      "graphify": {
+        "f1": 0,
+        "tokens": 42,
+        "latency_ms": 209.1
+      }
+    },
+    {
+      "language": "verilog",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 204,
+      "atlas_latency_ms": 22.7,
+      "index_ms": 81,
+      "graphify": {
+        "f1": 0,
+        "tokens": 41,
+        "latency_ms": 209.4
+      }
+    },
+    {
+      "language": "pascal",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 185,
+      "atlas_latency_ms": 23.1,
+      "index_ms": 79,
+      "graphify": {
+        "f1": 1,
+        "tokens": 161,
+        "latency_ms": 226
+      }
+    },
+    {
+      "language": "byond",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 155,
+      "atlas_latency_ms": 24.4,
+      "index_ms": 77.1,
+      "graphify": {
+        "f1": 0,
+        "tokens": 8,
+        "latency_ms": 205.7
+      }
+    },
+    {
+      "language": "razor",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 233,
+      "atlas_latency_ms": 25.9,
+      "index_ms": 82.1,
+      "graphify": {
+        "f1": 0,
+        "tokens": 8,
+        "latency_ms": 215.9
+      }
+    },
+    {
+      "language": "vue",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 233,
+      "atlas_latency_ms": 24,
+      "index_ms": 77.4,
+      "graphify": {
+        "f1": 1,
+        "tokens": 162,
+        "latency_ms": 210.9
+      }
+    },
+    {
+      "language": "svelte",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 244,
+      "atlas_latency_ms": 23.2,
+      "index_ms": 74.8,
+      "graphify": {
+        "f1": 0,
+        "tokens": 8,
+        "latency_ms": 204.6
+      }
+    },
+    {
+      "language": "astro",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 240,
+      "atlas_latency_ms": 23.1,
+      "index_ms": 77.5,
+      "graphify": {
+        "f1": 0,
+        "tokens": 8,
+        "latency_ms": 203.2
+      }
+    },
+    {
+      "language": "ejs",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 237,
+      "atlas_latency_ms": 22.1,
+      "index_ms": 73.9,
+      "graphify": {
+        "f1": 0,
+        "tokens": 8,
+        "latency_ms": 207.1
+      }
+    },
+    {
+      "language": "ets",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 263,
+      "atlas_latency_ms": 22.6,
+      "index_ms": 72.6,
+      "graphify": {
+        "f1": 0,
+        "tokens": 8,
+        "latency_ms": 212.5
+      }
+    },
+    {
+      "language": "r",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 233,
+      "atlas_latency_ms": 25,
+      "index_ms": 75.9,
+      "graphify": {
+        "f1": 0,
+        "tokens": 8,
+        "latency_ms": 197.2
+      }
+    },
+    {
+      "language": "apex",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 255,
+      "atlas_latency_ms": 23.5,
+      "index_ms": 73.9,
+      "graphify": {
+        "f1": 0,
+        "tokens": 52,
+        "latency_ms": 203.9
+      }
+    },
+    {
+      "language": "blade",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 259,
+      "atlas_latency_ms": 22.6,
+      "index_ms": 73.2,
+      "graphify": {
+        "f1": 0,
+        "tokens": 8,
+        "latency_ms": 202.6
+      }
+    },
+    {
+      "language": "groovy",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 214,
+      "atlas_latency_ms": 22.5,
+      "index_ms": 78.7,
+      "graphify": {
+        "f1": 0,
+        "tokens": 8,
+        "latency_ms": 204.5
+      }
+    },
+    {
+      "language": "sql",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 476,
+      "atlas_latency_ms": 22.9,
+      "index_ms": 77.4,
+      "graphify": {
+        "f1": 0,
+        "tokens": 8,
+        "latency_ms": 209.1
+      }
+    }
+  ],
+  "notes": {
+    "tokens": "len//4 heuristic on the plain-format answer context (same as bench toks())",
+    "latency": "median of 3 CLI invocations incl. process spawn — the honest agent-visible cost",
+    "speed": "fixture index --reindex wall ms"
+  },
+  "cross_repo": {
+    "note": "a real 2-repo workspace — a Go API server and the React app that calls it — indexed together",
+    "producerRoutes": 355,
+    "consumerRefs": 738,
+    "queries": {
+      "route_contracts": {
+        "count": 200,
+        "latencyMs": 36.3
+      },
+      "consumers": {
+        "count": 3,
+        "latencyMs": 33.8
+      },
+      "dependencies": {
+        "count": 3,
+        "latencyMs": 32.4
+      }
+    },
+    "consumerRepoCount": 1
+  }
+}

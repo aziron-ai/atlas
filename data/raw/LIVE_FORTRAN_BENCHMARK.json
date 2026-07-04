@@ -4,12 +4,12 @@
   "commit": "4c8521d5658455a576946cca3bfe2bd8ede36e24",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/fortran-lang/stdlib /tmp/atlas-live-fortran-stdlib/repo",
+    "clone": "git clone --depth 1 https://github.com/fortran-lang/stdlib $WORK/atlas-live-fortran-stdlib/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-fortran-3repo-1782813923/stdlib/atlas.db --json index /tmp/atlas-fortran-3repo-1782813923/stdlib/repo/src",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-fortran-3repo-1782813923/stdlib/atlas.db --json index /tmp/atlas-fortran-3repo-1782813923/stdlib/repo/src",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-fortran-3repo-1782813923/stdlib/atlas.db --json index $WORK/atlas-fortran-3repo-1782813923/stdlib/repo/src",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-fortran-3repo-1782813923/stdlib/atlas.db --json index $WORK/atlas-fortran-3repo-1782813923/stdlib/repo/src",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "/tmp/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> /tmp/atlas-live-fortran-stdlib/repo/src",
+    "native_baseline": "$WORK/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> $WORK/atlas-live-fortran-stdlib/repo/src",
     "query_symbols": [
       "stdlib_array",
       "stdlib_datetime",
@@ -18,8 +18,8 @@
       "loading",
       "free_chaining_map"
     ],
-    "target_path": "/tmp/atlas-fortran-3repo-1782813923/stdlib/repo/src",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-fortran-3repo-1782813923/stdlib/atlas.db --repo src serve --addr 127.0.0.1:48236"
+    "target_path": "$WORK/atlas-fortran-3repo-1782813923/stdlib/repo/src",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-fortran-3repo-1782813923/stdlib/atlas.db --repo src serve --addr 127.0.0.1:48236"
   },
   "atlas": {
     "cold_wall_seconds": 0.104,
@@ -183,7 +183,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.11,
-    "command": "/tmp/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> /tmp/atlas-live-fortran-stdlib/repo/src",
+    "command": "$WORK/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> $WORK/atlas-live-fortran-stdlib/repo/src",
     "metrics": {
       "files": 22,
       "parsed_files": 22,
@@ -419,7 +419,7 @@
       {
         "repo": "https://github.com/fortran-lang/stdlib",
         "commit": "4c8521d5658455a576946cca3bfe2bd8ede36e24",
-        "target_path": "/tmp/atlas-fortran-3repo-1782813923/stdlib/repo/src",
+        "target_path": "$WORK/atlas-fortran-3repo-1782813923/stdlib/repo/src",
         "atlas_definitions": 364,
         "native_definitions": 364,
         "coverage_ratio": 1,
@@ -429,7 +429,7 @@
       {
         "repo": "https://github.com/fortran-lang/fpm",
         "commit": "eaffbb36086abdb16c0d052961a3e7240cb22b0a",
-        "target_path": "/tmp/atlas-fortran-3repo-1782813923/fpm/repo/src",
+        "target_path": "$WORK/atlas-fortran-3repo-1782813923/fpm/repo/src",
         "atlas_definitions": 777,
         "native_definitions": 777,
         "coverage_ratio": 1,
@@ -439,7 +439,7 @@
       {
         "repo": "https://github.com/jacobwilliams/json-fortran",
         "commit": "d9ed2e4ee53745f4ed98d7536e17bee5198aa3b0",
-        "target_path": "/tmp/atlas-fortran-3repo-1782813923/json-fortran/repo/src",
+        "target_path": "$WORK/atlas-fortran-3repo-1782813923/json-fortran/repo/src",
         "atlas_definitions": 428,
         "native_definitions": 426,
         "coverage_ratio": 1.0047,

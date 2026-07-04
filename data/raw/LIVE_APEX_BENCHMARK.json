@@ -4,12 +4,12 @@
   "commit": "cb5cd9d3621985b816476e5a317b5a0016fc3576",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/trailheadapps/apex-recipes /tmp/atlas-live-apex-recipes/repo",
+    "clone": "git clone --depth 1 https://github.com/trailheadapps/apex-recipes $WORK/atlas-live-apex-recipes/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-apex-recipes/atlas.db --json index /tmp/atlas-live-apex-recipes/repo/force-app",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-apex-recipes/atlas.db --json index /tmp/atlas-live-apex-recipes/repo/force-app",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-apex-recipes/atlas.db --json index $WORK/atlas-live-apex-recipes/repo/force-app",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-apex-recipes/atlas.db --json index $WORK/atlas-live-apex-recipes/repo/force-app",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "python3 <apex source counter> /tmp/atlas-live-apex-recipes/repo/force-app",
+    "native_baseline": "python3 <apex source counter> $WORK/atlas-live-apex-recipes/repo/force-app",
     "query_symbols": [
       "SOQLRecipes",
       "DMLRecipes",
@@ -24,8 +24,8 @@
       "formatMarkdown",
       "RelatedCodeTabs"
     ],
-    "target_path": "/tmp/atlas-live-apex-recipes/repo/force-app",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-apex-recipes/atlas.db --repo force-app serve --addr 127.0.0.1:48233"
+    "target_path": "$WORK/atlas-live-apex-recipes/repo/force-app",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-apex-recipes/atlas.db --repo force-app serve --addr 127.0.0.1:48233"
   },
   "atlas": {
     "cold_wall_seconds": 1.154,
@@ -270,7 +270,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.025,
-    "command": "python3 <apex source counter> /tmp/atlas-live-apex-recipes/repo/force-app",
+    "command": "python3 <apex source counter> $WORK/atlas-live-apex-recipes/repo/force-app",
     "metrics": {
       "files": 142,
       "parsed_files": 142,
@@ -997,7 +997,7 @@
       {
         "repo": "https://github.com/aquivalabs/my-org-butler",
         "commit": "f1225426aa62d207f8efa9a434fbda9082e48b9a",
-        "target_path": "/tmp/atlas-random-validation-remaining/work/apex/6-aquivalabs__my-org-butler",
+        "target_path": "$WORK/atlas-random-validation-remaining/work/apex/6-aquivalabs__my-org-butler",
         "atlas_definitions": 559,
         "native_definitions": 527,
         "coverage_ratio": 1.0607,
@@ -1007,7 +1007,7 @@
       {
         "repo": "https://github.com/cirruspath/stripeforce",
         "commit": "83f0b7625a9b09a571769b9b71ae1680d854187b",
-        "target_path": "/tmp/atlas-random-validation-remaining/work/apex/13-cirruspath__stripeforce",
+        "target_path": "$WORK/atlas-random-validation-remaining/work/apex/13-cirruspath__stripeforce",
         "atlas_definitions": 194,
         "native_definitions": 182,
         "coverage_ratio": 1.0659,
@@ -1017,7 +1017,7 @@
       {
         "repo": "https://github.com/codefriar/promise",
         "commit": "dbd29f856250fcffbf4b89b244aecd492807f860",
-        "target_path": "/tmp/atlas-random-validation-remaining/work/apex/22-codefriar__promise",
+        "target_path": "$WORK/atlas-random-validation-remaining/work/apex/22-codefriar__promise",
         "atlas_definitions": 43,
         "native_definitions": 35,
         "coverage_ratio": 1.2286,

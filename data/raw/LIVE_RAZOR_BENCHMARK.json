@@ -4,12 +4,12 @@
   "commit": "4da8212117e87d808d4bbc7da6286fd2147ce606",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/dotnet-architecture/eShopOnWeb /tmp/atlas-live-razor-eshoponweb/repo",
+    "clone": "git clone --depth 1 https://github.com/dotnet-architecture/eShopOnWeb $WORK/atlas-live-razor-eshoponweb/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-razor-eshoponweb/atlas.db --json index /tmp/atlas-live-razor-eshoponweb/repo/src",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-razor-eshoponweb/atlas.db --json index /tmp/atlas-live-razor-eshoponweb/repo/src",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-razor-eshoponweb/atlas.db --json index $WORK/atlas-live-razor-eshoponweb/repo/src",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-razor-eshoponweb/atlas.db --json index $WORK/atlas-live-razor-eshoponweb/repo/src",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "python3 <razor directive counter> /tmp/atlas-live-razor-eshoponweb/repo/src",
+    "native_baseline": "python3 <razor directive counter> $WORK/atlas-live-razor-eshoponweb/repo/src",
     "query_symbols": [
       "EditForm",
       "CreateClick",
@@ -18,8 +18,8 @@
       "BasketService",
       "BlazorComponent"
     ],
-    "target_path": "/tmp/atlas-live-razor-eshoponweb/repo/src",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-razor-eshoponweb/atlas.db --repo src serve --addr 127.0.0.1:48213"
+    "target_path": "$WORK/atlas-live-razor-eshoponweb/repo/src",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-razor-eshoponweb/atlas.db --repo src serve --addr 127.0.0.1:48213"
   },
   "atlas": {
     "cold_wall_seconds": 0.42,
@@ -367,7 +367,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.004,
-    "command": "python3 <razor directive counter> /tmp/atlas-live-razor-eshoponweb/repo/src",
+    "command": "python3 <razor directive counter> $WORK/atlas-live-razor-eshoponweb/repo/src",
     "metrics": {
       "files": 61,
       "parsed_files": 61,
@@ -1201,7 +1201,7 @@
       {
         "repo": "https://github.com/soundaranbu/Razor.Templating.Core",
         "commit": "5f984ab8c652bdb32effb5d8f179c9ef5332f4c6",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/razor/4-soundaranbu__Razor.Templating.Core",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/razor/4-soundaranbu__Razor.Templating.Core",
         "atlas_definitions": 32,
         "native_definitions": 32,
         "coverage_ratio": 1,
@@ -1211,7 +1211,7 @@
       {
         "repo": "https://github.com/mikoskinen/Blazor.Animate",
         "commit": "b21038311e3142f347c2d88d2ada0d44fca222e4",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/razor/7-mikoskinen__Blazor.Animate",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/razor/7-mikoskinen__Blazor.Animate",
         "atlas_definitions": 138,
         "native_definitions": 136,
         "coverage_ratio": 1.0147,
@@ -1221,7 +1221,7 @@
       {
         "repo": "https://github.com/mryderie/aspnet-core-htmx-example",
         "commit": "becc566a0f2b3268878b2f888e47c9ae85c31914",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/razor/13-mryderie__aspnet-core-htmx-example",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/razor/13-mryderie__aspnet-core-htmx-example",
         "atlas_definitions": 33,
         "native_definitions": 33,
         "coverage_ratio": 1,

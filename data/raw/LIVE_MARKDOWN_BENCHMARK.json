@@ -4,12 +4,12 @@
   "commit": "cb49cc5523e609a731f27dea1af4395a504815a5",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/rust-lang/mdBook /tmp/atlas-live-markdown-mdbook/repo",
+    "clone": "git clone --depth 1 https://github.com/rust-lang/mdBook $WORK/atlas-live-markdown-mdbook/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-markdown-mdbook/atlas.db --json index /tmp/atlas-live-markdown-mdbook/repo/guide/src",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-markdown-mdbook/atlas.db --json index /tmp/atlas-live-markdown-mdbook/repo/guide/src",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-markdown-mdbook/atlas.db --json index $WORK/atlas-live-markdown-mdbook/repo/guide/src",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-markdown-mdbook/atlas.db --json index $WORK/atlas-live-markdown-mdbook/repo/guide/src",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "/tmp/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> /tmp/atlas-live-markdown-mdbook/repo/guide/src",
+    "native_baseline": "$WORK/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> $WORK/atlas-live-markdown-mdbook/repo/guide/src",
     "query_symbols": [
       "Installation",
       "Creating a book",
@@ -18,8 +18,8 @@
       "count_words",
       "WordcountConfig"
     ],
-    "target_path": "/tmp/atlas-live-markdown-mdbook/repo/guide/src",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-markdown-mdbook/atlas.db --repo src serve --addr 127.0.0.1:48235"
+    "target_path": "$WORK/atlas-live-markdown-mdbook/repo/guide/src",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-markdown-mdbook/atlas.db --repo src serve --addr 127.0.0.1:48235"
   },
   "atlas": {
     "cold_wall_seconds": 0.211,
@@ -161,7 +161,7 @@
     "tool": "markdown-it-py",
     "status": "ok",
     "ok": true,
-    "command": "/tmp/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> /tmp/atlas-live-markdown-mdbook/repo/guide/src",
+    "command": "$WORK/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> $WORK/atlas-live-markdown-mdbook/repo/guide/src",
     "metrics": {
       "files": 35,
       "parsed_files": 35,
@@ -497,7 +497,7 @@
       {
         "repo": "https://github.com/rust-lang/mdBook",
         "commit": "cb49cc5523e609a731f27dea1af4395a504815a5",
-        "target_path": "/tmp/atlas-markdown-3repo-1782814471/mdbook/repo/guide/src",
+        "target_path": "$WORK/atlas-markdown-3repo-1782814471/mdbook/repo/guide/src",
         "atlas_definitions": 156,
         "native_definitions": 156,
         "coverage_ratio": 1,
@@ -507,7 +507,7 @@
       {
         "repo": "https://github.com/vitejs/vite",
         "commit": "8f925e2e496f4d313d860acb53880245b07ce6f7",
-        "target_path": "/tmp/atlas-markdown-3repo-1782814471/vite/repo/docs",
+        "target_path": "$WORK/atlas-markdown-3repo-1782814471/vite/repo/docs",
         "atlas_definitions": 642,
         "native_definitions": 642,
         "coverage_ratio": 1,
@@ -517,7 +517,7 @@
       {
         "repo": "https://github.com/pnpm/pnpm.io",
         "commit": "aa7acf218a3a80aacdb5a23e5752f6585aa1dcdb",
-        "target_path": "/tmp/atlas-markdown-3repo-1782814471/pnpm-io/repo/docs",
+        "target_path": "$WORK/atlas-markdown-3repo-1782814471/pnpm-io/repo/docs",
         "atlas_definitions": 792,
         "native_definitions": 792,
         "coverage_ratio": 1,

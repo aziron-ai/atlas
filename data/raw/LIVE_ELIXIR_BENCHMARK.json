@@ -4,12 +4,12 @@
   "commit": "9d3f1f63e00c92aafc8f015073969a2632c6879a",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/phoenixframework/phoenix /tmp/atlas-live-elixir-phoenix/repo",
+    "clone": "git clone --depth 1 https://github.com/phoenixframework/phoenix $WORK/atlas-live-elixir-phoenix/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-elixir-phoenix/atlas-refresh.db --json index /tmp/atlas-live-elixir-phoenix/repo/lib",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-elixir-phoenix/atlas-refresh.db --json index /tmp/atlas-live-elixir-phoenix/repo/lib",
-    "graphify_update": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify update .",
-    "native_baseline": "/tmp/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> /tmp/atlas-live-elixir-phoenix/repo/lib",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-elixir-phoenix/atlas-refresh.db --json index $WORK/atlas-live-elixir-phoenix/repo/lib",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-elixir-phoenix/atlas-refresh.db --json index $WORK/atlas-live-elixir-phoenix/repo/lib",
+    "graphify_update": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify update .",
+    "native_baseline": "$WORK/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> $WORK/atlas-live-elixir-phoenix/repo/lib",
     "query_symbols": [
       "Phoenix.Router",
       "Phoenix.Endpoint",
@@ -17,8 +17,8 @@
       "path",
       "socket"
     ],
-    "target_path": "/tmp/atlas-live-elixir-phoenix/repo/lib",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-elixir-phoenix/atlas-refresh.db serve --addr 127.0.0.1:4211"
+    "target_path": "$WORK/atlas-live-elixir-phoenix/repo/lib",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-elixir-phoenix/atlas-refresh.db serve --addr 127.0.0.1:4211"
   },
   "atlas": {
     "cold_wall_seconds": 2.198,
@@ -336,7 +336,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.872,
-    "command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify update .",
+    "command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "[graphify watch] Rebuilt: 1051 nodes, 1876 edges, 66 communities",
@@ -363,7 +363,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.139,
-    "command": "/tmp/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> /tmp/atlas-live-elixir-phoenix/repo/lib",
+    "command": "$WORK/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> $WORK/atlas-live-elixir-phoenix/repo/lib",
     "metrics": {
       "files": 74,
       "parsed_files": 74,
@@ -458,7 +458,7 @@
   "query_warmup": {
     "symbol": "Phoenix.Router",
     "atlas_command": "curl -fsS http://127.0.0.1:4211/api/v1/symbols/Phoenix.Router/explain?repo_id=lib&format=plain",
-    "graphify_command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify explain Phoenix.Router",
+    "graphify_command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify explain Phoenix.Router",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -468,7 +468,7 @@
       "symbol": "Phoenix.Router",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4211/api/v1/symbols/Phoenix.Router/explain?repo_id=lib&format=plain",
-      "graphify_command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify explain Phoenix.Router",
+      "graphify_command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify explain Phoenix.Router",
       "atlas_tokens": 2,
       "graphify_tokens": 99,
       "atlas_ms": 7.666,
@@ -524,7 +524,7 @@
       "symbol": "Phoenix.Endpoint",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4211/api/v1/symbols/Phoenix.Endpoint/explain?repo_id=lib&format=plain",
-      "graphify_command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify explain Phoenix.Endpoint",
+      "graphify_command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify explain Phoenix.Endpoint",
       "atlas_tokens": 2,
       "graphify_tokens": 71,
       "atlas_ms": 7.926,
@@ -580,7 +580,7 @@
       "symbol": "Phoenix.Controller",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4211/api/v1/symbols/Phoenix.Controller/explain?repo_id=lib&format=plain",
-      "graphify_command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify explain Phoenix.Controller",
+      "graphify_command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify explain Phoenix.Controller",
       "atlas_tokens": 2,
       "graphify_tokens": 99,
       "atlas_ms": 8.205,
@@ -636,7 +636,7 @@
       "symbol": "path",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4211/api/v1/symbols/path/explain?repo_id=lib&format=plain",
-      "graphify_command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify explain path",
+      "graphify_command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify explain path",
       "atlas_tokens": 2,
       "graphify_tokens": 23,
       "atlas_ms": 7.89,
@@ -692,7 +692,7 @@
       "symbol": "socket",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4211/api/v1/symbols/socket/explain?repo_id=lib&format=plain",
-      "graphify_command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify explain socket",
+      "graphify_command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify explain socket",
       "atlas_tokens": 2,
       "graphify_tokens": 19,
       "atlas_ms": 7.916,
@@ -761,7 +761,7 @@
       {
         "repo": "https://github.com/phoenixframework/phoenix",
         "commit": "909725968776c2601bbea7827fd5b76e4992cc70",
-        "target_path": "/private/tmp/atlas-remaining-3repo-validation/elixir/1-phoenix/repo/lib",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/elixir/1-phoenix/repo/lib",
         "atlas_definitions": 1642,
         "native_definitions": 1642,
         "coverage_ratio": 1,
@@ -771,7 +771,7 @@
       {
         "repo": "https://github.com/elixir-plug/plug",
         "commit": "82cbff630373c61696b246bd383f16da1ecc945b",
-        "target_path": "/private/tmp/atlas-remaining-3repo-validation/elixir/2-plug/repo/lib",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/elixir/2-plug/repo/lib",
         "atlas_definitions": 909,
         "native_definitions": 909,
         "coverage_ratio": 1,
@@ -781,7 +781,7 @@
       {
         "repo": "https://github.com/elixir-ecto/ecto",
         "commit": "c4bb74a1140b341ef6667da288f535ee5620796a",
-        "target_path": "/private/tmp/atlas-remaining-3repo-validation/elixir/3-ecto/repo/lib",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/elixir/3-ecto/repo/lib",
         "atlas_definitions": 2725,
         "native_definitions": 2725,
         "coverage_ratio": 1,

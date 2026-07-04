@@ -4,12 +4,12 @@
   "commit": "5d94ef52582867e077bf41c3fa20fb8b1d1d834e",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/dart-lang/http /tmp/atlas-live-dart-http/repo",
+    "clone": "git clone --depth 1 https://github.com/dart-lang/http $WORK/atlas-live-dart-http/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-dart-http/atlas.db --json index /tmp/atlas-live-dart-http/repo/pkgs/http/lib",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-dart-http/atlas.db --json index /tmp/atlas-live-dart-http/repo/pkgs/http/lib",
-    "graphify_update": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
-    "native_baseline": "/tmp/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> /tmp/atlas-live-dart-http/repo/pkgs/http/lib",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-dart-http/atlas.db --json index $WORK/atlas-live-dart-http/repo/pkgs/http/lib",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-dart-http/atlas.db --json index $WORK/atlas-live-dart-http/repo/pkgs/http/lib",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> $WORK/atlas-live-dart-http/repo/pkgs/http/lib",
     "query_symbols": [
       "Client",
       "BaseClient",
@@ -18,8 +18,8 @@
       "send",
       "RetryClient"
     ],
-    "target_path": "/tmp/atlas-live-dart-http/repo/pkgs/http/lib",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-dart-http/atlas.db serve --addr 127.0.0.1:4219"
+    "target_path": "$WORK/atlas-live-dart-http/repo/pkgs/http/lib",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-dart-http/atlas.db serve --addr 127.0.0.1:4219"
   },
   "atlas": {
     "cold_wall_seconds": 0.055,
@@ -133,7 +133,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.429,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "[graphify watch] Rebuilt: 314 nodes, 424 edges, 16 communities",
@@ -153,7 +153,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.081,
-    "command": "/tmp/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> /tmp/atlas-live-dart-http/repo/pkgs/http/lib",
+    "command": "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> $WORK/atlas-live-dart-http/repo/pkgs/http/lib",
     "metrics": {
       "files": 27,
       "parsed_files": 27,
@@ -223,7 +223,7 @@
   "query_warmup": {
     "symbol": "Client",
     "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/Client/explain?repo_id=lib&format=plain",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Client",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Client",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -233,7 +233,7 @@
       "symbol": "Client",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/Client/explain?repo_id=lib&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Client",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Client",
       "atlas_tokens": 2,
       "graphify_tokens": 42,
       "atlas_ms": 8.712,
@@ -271,7 +271,7 @@
       "symbol": "BaseClient",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/BaseClient/explain?repo_id=lib&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain BaseClient",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain BaseClient",
       "atlas_tokens": 2,
       "graphify_tokens": 101,
       "atlas_ms": 7.862,
@@ -309,7 +309,7 @@
       "symbol": "Request",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/Request/explain?repo_id=lib&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Request",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Request",
       "atlas_tokens": 2,
       "graphify_tokens": 51,
       "atlas_ms": 7.469,
@@ -347,7 +347,7 @@
       "symbol": "Response",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/Response/explain?repo_id=lib&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Response",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Response",
       "atlas_tokens": 2,
       "graphify_tokens": 59,
       "atlas_ms": 7.69,
@@ -385,7 +385,7 @@
       "symbol": "send",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/send/explain?repo_id=lib&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain send",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain send",
       "atlas_tokens": 2,
       "graphify_tokens": 42,
       "atlas_ms": 7.209,
@@ -423,7 +423,7 @@
       "symbol": "RetryClient",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/RetryClient/explain?repo_id=lib&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain RetryClient",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain RetryClient",
       "atlas_tokens": 2,
       "graphify_tokens": 55,
       "atlas_ms": 7.683,
@@ -473,7 +473,7 @@
       {
         "repo": "https://github.com/dart-lang/http",
         "commit": "5d94ef52582867e077bf41c3fa20fb8b1d1d834e",
-        "target_path": "/private/tmp/atlas-remaining-3repo-validation/dart/1-http/repo/pkgs/http/lib",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/dart/1-http/repo/pkgs/http/lib",
         "atlas_definitions": 238,
         "native_definitions": 180,
         "coverage_ratio": 1.3222,
@@ -485,7 +485,7 @@
       {
         "repo": "https://github.com/dart-lang/path",
         "commit": "7e3d5d87220133ad9cc99f82e85a826011a62859",
-        "target_path": "/private/tmp/atlas-remaining-3repo-validation/dart/2-path/repo/lib",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/dart/2-path/repo/lib",
         "atlas_definitions": 242,
         "native_definitions": 180,
         "coverage_ratio": 1.3444,
@@ -497,7 +497,7 @@
       {
         "repo": "https://github.com/dart-lang/args",
         "commit": "7a2dfb528768f0a2e5680f711dbfb948f1d6c255",
-        "target_path": "/private/tmp/atlas-remaining-3repo-validation/dart/3-args/repo/lib",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/dart/3-args/repo/lib",
         "atlas_definitions": 203,
         "native_definitions": 141,
         "coverage_ratio": 1.4397,

@@ -1,0 +1,13 @@
+{
+  "platform": "Linux 6.18.5 x86_64",
+  "tools": {
+    "atlas": "atlas dev (none, unknown)",
+    "go": "go version go1.25.0 linux/amd64",
+    "python": "Python 3.11.15",
+    "node": "v22.22.2",
+    "gopls": "golang.org/x/tools/gopls v0.22.0",
+    "tsc": "Version 6.0.3",
+    "pyright": "WARNING: there is a new pyright version available (v1.1.408 -> v1.1.411).",
+    "graphify": "graphify 0.9.5"
+  }
+}

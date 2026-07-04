@@ -2,9 +2,9 @@
   "atlas_binary": "./bin/atlas",
   "duration_seconds": 4.346,
   "generated_at": "2026-07-01T05:45:14Z",
-  "graphify_binary": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify",
+  "graphify_binary": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify",
   "graphify_discovery": {
-    "binary": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify",
+    "binary": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify",
     "code_extension_count": 88,
     "code_extensions": [
       ".F",
@@ -187,7 +187,7 @@
       ".zig"
     ],
     "detect_benchmark_total_files": 88,
-    "detect_source": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/lib/python3.12/site-packages/graphify/detect.py",
+    "detect_source": "$HOME/.local/share/uv/tools/graphifyy/lib/python3.12/site-packages/graphify/detect.py",
     "detector_only_code_extensions": [
       ".ejs",
       ".ets",
@@ -641,9 +641,9 @@
       "`graphify.detect.CODE_EXTENSIONS` plus a runtime `detect()` benchmark listed code extensions.",
       "`graphify.extract._DISPATCH` provided the deterministic extractor map used as the parser-parity target."
     ],
-    "extract_source": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/lib/python3.12/site-packages/graphify/extract.py",
+    "extract_source": "$HOME/.local/share/uv/tools/graphifyy/lib/python3.12/site-packages/graphify/extract.py",
     "help_command_count": 148,
-    "python": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/python",
+    "python": "$HOME/.local/share/uv/tools/graphifyy/bin/python",
     "rows": [
       [
         "go",
@@ -881,7 +881,7 @@
       ]
     ],
     "runtime_error": "",
-    "source_root": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/lib/python3.12/site-packages/graphify",
+    "source_root": "$HOME/.local/share/uv/tools/graphifyy/lib/python3.12/site-packages/graphify",
     "special": [
       {
         "extension": "*.blade.php",
@@ -1531,7 +1531,7 @@
   "results": [
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/go/atlas.db --repo atlas-supported/go --format json index /tmp/atlas-supported-language-benchmark/go/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/go/atlas.db --repo atlas-supported/go --format json index $WORK/atlas-supported-language-benchmark/go/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 336,
@@ -1668,7 +1668,7 @@
       },
       "fixture_path": "main.go",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 2,
           "extracted_calls": 2,
@@ -1690,7 +1690,7 @@
       },
       "language": "go",
       "native_baseline": {
-        "command": "go run /tmp/atlas-supported-language-benchmark/go/repo/count_go_ast.go",
+        "command": "go run $WORK/atlas-supported-language-benchmark/go/repo/count_go_ast.go",
         "metrics": {
           "definitions": 5
         },
@@ -1707,7 +1707,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/python/atlas.db --repo atlas-supported/python --format json index /tmp/atlas-supported-language-benchmark/python/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/python/atlas.db --repo atlas-supported/python --format json index $WORK/atlas-supported-language-benchmark/python/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 238,
@@ -1817,7 +1817,7 @@
       },
       "fixture_path": "app.py",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -1839,7 +1839,7 @@
       },
       "language": "python",
       "native_baseline": {
-        "command": "python3 -c <ast-counter> /tmp/atlas-supported-language-benchmark/python/repo/app.py",
+        "command": "python3 -c <ast-counter> $WORK/atlas-supported-language-benchmark/python/repo/app.py",
         "metrics": {
           "definitions": 3
         },
@@ -1856,7 +1856,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/javascript/atlas.db --repo atlas-supported/javascript --format json index /tmp/atlas-supported-language-benchmark/javascript/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/javascript/atlas.db --repo atlas-supported/javascript --format json index $WORK/atlas-supported-language-benchmark/javascript/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 210,
@@ -1964,7 +1964,7 @@
       },
       "fixture_path": "app.js",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -1986,7 +1986,7 @@
       },
       "language": "javascript",
       "native_baseline": {
-        "command": "node /tmp/atlas-supported-language-benchmark/javascript/repo/_native_acorn_counter.cjs /tmp/atlas-supported-language-benchmark/javascript/repo/app.js",
+        "command": "node $WORK/atlas-supported-language-benchmark/javascript/repo/_native_acorn_counter.cjs $WORK/atlas-supported-language-benchmark/javascript/repo/app.js",
         "metrics": {
           "definitions": 3
         },
@@ -2003,7 +2003,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/typescript/atlas.db --repo atlas-supported/typescript --format json index /tmp/atlas-supported-language-benchmark/typescript/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/typescript/atlas.db --repo atlas-supported/typescript --format json index $WORK/atlas-supported-language-benchmark/typescript/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 147,
@@ -2135,7 +2135,7 @@
       },
       "fixture_path": "app.ts",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -2157,7 +2157,7 @@
       },
       "language": "typescript",
       "native_baseline": {
-        "command": "node /tmp/atlas-supported-language-benchmark/typescript/repo/_native_typescript_counter.cjs /tmp/atlas-supported-language-benchmark/typescript/repo/app.ts",
+        "command": "node $WORK/atlas-supported-language-benchmark/typescript/repo/_native_typescript_counter.cjs $WORK/atlas-supported-language-benchmark/typescript/repo/app.ts",
         "metrics": {
           "definitions": 5
         },
@@ -2174,7 +2174,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/java/atlas.db --repo atlas-supported/java --format json index /tmp/atlas-supported-language-benchmark/java/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/java/atlas.db --repo atlas-supported/java --format json index $WORK/atlas-supported-language-benchmark/java/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 237,
@@ -2283,7 +2283,7 @@
       },
       "fixture_path": "App.java",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -2305,7 +2305,7 @@
       },
       "language": "java",
       "native_baseline": {
-        "command": "/usr/bin/javac -d /tmp/atlas-supported-language-benchmark/java/repo/classes /tmp/atlas-supported-language-benchmark/java/repo/App.java",
+        "command": "/usr/bin/javac -d $WORK/atlas-supported-language-benchmark/java/repo/classes $WORK/atlas-supported-language-benchmark/java/repo/App.java",
         "metrics": {},
         "note": "",
         "ok": true,
@@ -2320,7 +2320,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/c/atlas.db --repo atlas-supported/c --format json index /tmp/atlas-supported-language-benchmark/c/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/c/atlas.db --repo atlas-supported/c --format json index $WORK/atlas-supported-language-benchmark/c/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 215,
@@ -2428,7 +2428,7 @@
       },
       "fixture_path": "app.c",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -2450,7 +2450,7 @@
       },
       "language": "c",
       "native_baseline": {
-        "command": "/usr/bin/clang -fsyntax-only /tmp/atlas-supported-language-benchmark/c/repo/app.c",
+        "command": "/usr/bin/clang -fsyntax-only $WORK/atlas-supported-language-benchmark/c/repo/app.c",
         "metrics": {},
         "note": "",
         "ok": true,
@@ -2465,7 +2465,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/cpp/atlas.db --repo atlas-supported/cpp --format json index /tmp/atlas-supported-language-benchmark/cpp/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/cpp/atlas.db --repo atlas-supported/cpp --format json index $WORK/atlas-supported-language-benchmark/cpp/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 274,
@@ -2585,7 +2585,7 @@
       },
       "fixture_path": "app.cpp",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 3,
           "extracted_calls": 3,
@@ -2607,7 +2607,7 @@
       },
       "language": "cpp",
       "native_baseline": {
-        "command": "/usr/bin/clang++ -std=c++17 -fsyntax-only /tmp/atlas-supported-language-benchmark/cpp/repo/app.cpp",
+        "command": "/usr/bin/clang++ -std=c++17 -fsyntax-only $WORK/atlas-supported-language-benchmark/cpp/repo/app.cpp",
         "metrics": {},
         "note": "",
         "ok": true,
@@ -2622,7 +2622,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/rust/atlas.db --repo atlas-supported/rust --format json index /tmp/atlas-supported-language-benchmark/rust/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/rust/atlas.db --repo atlas-supported/rust --format json index $WORK/atlas-supported-language-benchmark/rust/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 250,
@@ -2736,7 +2736,7 @@
       },
       "fixture_path": "lib.rs",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -2758,7 +2758,7 @@
       },
       "language": "rust",
       "native_baseline": {
-        "command": "/opt/homebrew/bin/rustc --crate-type=lib /tmp/atlas-supported-language-benchmark/rust/repo/lib.rs -o /tmp/atlas-supported-language-benchmark/rust/repo/libfixture.rlib",
+        "command": "/opt/homebrew/bin/rustc --crate-type=lib $WORK/atlas-supported-language-benchmark/rust/repo/lib.rs -o $WORK/atlas-supported-language-benchmark/rust/repo/libfixture.rlib",
         "metrics": {},
         "note": "",
         "ok": true,
@@ -2773,7 +2773,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/ruby/atlas.db --repo atlas-supported/ruby --format json index /tmp/atlas-supported-language-benchmark/ruby/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/ruby/atlas.db --repo atlas-supported/ruby --format json index $WORK/atlas-supported-language-benchmark/ruby/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 97,
@@ -2875,7 +2875,7 @@
       },
       "fixture_path": "app.rb",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -2897,7 +2897,7 @@
       },
       "language": "ruby",
       "native_baseline": {
-        "command": "ruby -e <ripper-counter> /tmp/atlas-supported-language-benchmark/ruby/repo/app.rb",
+        "command": "ruby -e <ripper-counter> $WORK/atlas-supported-language-benchmark/ruby/repo/app.rb",
         "metrics": {
           "definitions": 3
         },
@@ -2914,7 +2914,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/kotlin/atlas.db --repo atlas-supported/kotlin --format json index /tmp/atlas-supported-language-benchmark/kotlin/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/kotlin/atlas.db --repo atlas-supported/kotlin --format json index $WORK/atlas-supported-language-benchmark/kotlin/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 137,
@@ -3021,7 +3021,7 @@
       },
       "fixture_path": "App.kt",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -3056,7 +3056,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/scala/atlas.db --repo atlas-supported/scala --format json index /tmp/atlas-supported-language-benchmark/scala/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/scala/atlas.db --repo atlas-supported/scala --format json index $WORK/atlas-supported-language-benchmark/scala/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 114,
@@ -3163,7 +3163,7 @@
       },
       "fixture_path": "App.scala",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -3198,7 +3198,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/php/atlas.db --repo atlas-supported/php --format json index /tmp/atlas-supported-language-benchmark/php/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/php/atlas.db --repo atlas-supported/php --format json index $WORK/atlas-supported-language-benchmark/php/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 116,
@@ -3305,7 +3305,7 @@
       },
       "fixture_path": "app.php",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -3327,7 +3327,7 @@
       },
       "language": "php",
       "native_baseline": {
-        "command": "php -r <token-counter> /tmp/atlas-supported-language-benchmark/php/repo/app.php",
+        "command": "php -r <token-counter> $WORK/atlas-supported-language-benchmark/php/repo/app.php",
         "metrics": {
           "definitions": 3
         },
@@ -3344,7 +3344,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/swift/atlas.db --repo atlas-supported/swift --format json index /tmp/atlas-supported-language-benchmark/swift/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/swift/atlas.db --repo atlas-supported/swift --format json index $WORK/atlas-supported-language-benchmark/swift/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 117,
@@ -3453,7 +3453,7 @@
       },
       "fixture_path": "App.swift",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -3488,7 +3488,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/lua/atlas.db --repo atlas-supported/lua --format json index /tmp/atlas-supported-language-benchmark/lua/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/lua/atlas.db --repo atlas-supported/lua --format json index $WORK/atlas-supported-language-benchmark/lua/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 68,
@@ -3587,7 +3587,7 @@
       },
       "fixture_path": "app.lua",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -3622,7 +3622,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/zig/atlas.db --repo atlas-supported/zig --format json index /tmp/atlas-supported-language-benchmark/zig/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/zig/atlas.db --repo atlas-supported/zig --format json index $WORK/atlas-supported-language-benchmark/zig/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 92,
@@ -3749,7 +3749,7 @@
       },
       "fixture_path": "main.zig",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -3784,7 +3784,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/elixir/atlas.db --repo atlas-supported/elixir --format json index /tmp/atlas-supported-language-benchmark/elixir/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/elixir/atlas.db --repo atlas-supported/elixir --format json index $WORK/atlas-supported-language-benchmark/elixir/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 88,
@@ -3893,7 +3893,7 @@
       },
       "fixture_path": "app.ex",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -3928,7 +3928,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/objc/atlas.db --repo atlas-supported/objc --format json index /tmp/atlas-supported-language-benchmark/objc/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/objc/atlas.db --repo atlas-supported/objc --format json index $WORK/atlas-supported-language-benchmark/objc/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 118,
@@ -4043,7 +4043,7 @@
       },
       "fixture_path": "App.m",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -4078,7 +4078,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/julia/atlas.db --repo atlas-supported/julia --format json index /tmp/atlas-supported-language-benchmark/julia/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/julia/atlas.db --repo atlas-supported/julia --format json index $WORK/atlas-supported-language-benchmark/julia/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 107,
@@ -4196,7 +4196,7 @@
       },
       "fixture_path": "app.jl",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -4231,7 +4231,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/fortran/atlas.db --repo atlas-supported/fortran --format json index /tmp/atlas-supported-language-benchmark/fortran/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/fortran/atlas.db --repo atlas-supported/fortran --format json index $WORK/atlas-supported-language-benchmark/fortran/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 89,
@@ -4338,7 +4338,7 @@
       },
       "fixture_path": "app.f90",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -4373,7 +4373,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/dart/atlas.db --repo atlas-supported/dart --format json index /tmp/atlas-supported-language-benchmark/dart/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/dart/atlas.db --repo atlas-supported/dart --format json index $WORK/atlas-supported-language-benchmark/dart/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 69,
@@ -4482,7 +4482,7 @@
       },
       "fixture_path": "app.dart",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -4517,7 +4517,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/verilog/atlas.db --repo atlas-supported/verilog --format json index /tmp/atlas-supported-language-benchmark/verilog/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/verilog/atlas.db --repo atlas-supported/verilog --format json index $WORK/atlas-supported-language-benchmark/verilog/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 65,
@@ -4609,7 +4609,7 @@
       },
       "fixture_path": "app.sv",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -4644,7 +4644,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/pascal/atlas.db --repo atlas-supported/pascal --format json index /tmp/atlas-supported-language-benchmark/pascal/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/pascal/atlas.db --repo atlas-supported/pascal --format json index $WORK/atlas-supported-language-benchmark/pascal/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 74,
@@ -4749,7 +4749,7 @@
       },
       "fixture_path": "app.pas",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -4784,7 +4784,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/delphi/atlas.db --repo atlas-supported/delphi --format json index /tmp/atlas-supported-language-benchmark/delphi/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/delphi/atlas.db --repo atlas-supported/delphi --format json index $WORK/atlas-supported-language-benchmark/delphi/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 69,
@@ -4893,7 +4893,7 @@
       },
       "fixture_path": "Main.dfm",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -4928,7 +4928,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/terraform/atlas.db --repo atlas-supported/terraform --format json index /tmp/atlas-supported-language-benchmark/terraform/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/terraform/atlas.db --repo atlas-supported/terraform --format json index $WORK/atlas-supported-language-benchmark/terraform/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 73,
@@ -5031,7 +5031,7 @@
       },
       "fixture_path": "main.tf",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -5066,7 +5066,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/byond/atlas.db --repo atlas-supported/byond --format json index /tmp/atlas-supported-language-benchmark/byond/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/byond/atlas.db --repo atlas-supported/byond --format json index $WORK/atlas-supported-language-benchmark/byond/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 54,
@@ -5180,7 +5180,7 @@
       },
       "fixture_path": "app.dm",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -5215,7 +5215,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/dotnet/atlas.db --repo atlas-supported/dotnet --format json index /tmp/atlas-supported-language-benchmark/dotnet/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/dotnet/atlas.db --repo atlas-supported/dotnet --format json index $WORK/atlas-supported-language-benchmark/dotnet/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 101,
@@ -5331,7 +5331,7 @@
       },
       "fixture_path": "Sample.csproj",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -5366,7 +5366,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/razor/atlas.db --repo atlas-supported/razor --format json index /tmp/atlas-supported-language-benchmark/razor/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/razor/atlas.db --repo atlas-supported/razor --format json index $WORK/atlas-supported-language-benchmark/razor/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 68,
@@ -5484,7 +5484,7 @@
       },
       "fixture_path": "Counter.razor",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -5519,7 +5519,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/apex/atlas.db --repo atlas-supported/apex --format json index /tmp/atlas-supported-language-benchmark/apex/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/apex/atlas.db --repo atlas-supported/apex --format json index $WORK/atlas-supported-language-benchmark/apex/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 63,
@@ -5621,7 +5621,7 @@
       },
       "fixture_path": "AccountService.cls",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -5656,7 +5656,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/blade/atlas.db --repo atlas-supported/blade --format json index /tmp/atlas-supported-language-benchmark/blade/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/blade/atlas.db --repo atlas-supported/blade --format json index $WORK/atlas-supported-language-benchmark/blade/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 79,
@@ -5767,7 +5767,7 @@
       },
       "fixture_path": "view.blade.php",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -5802,7 +5802,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/vue/atlas.db --repo atlas-supported/vue --format json index /tmp/atlas-supported-language-benchmark/vue/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/vue/atlas.db --repo atlas-supported/vue --format json index $WORK/atlas-supported-language-benchmark/vue/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 69,
@@ -5900,7 +5900,7 @@
       },
       "fixture_path": "App.vue",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -5935,7 +5935,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/svelte/atlas.db --repo atlas-supported/svelte --format json index /tmp/atlas-supported-language-benchmark/svelte/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/svelte/atlas.db --repo atlas-supported/svelte --format json index $WORK/atlas-supported-language-benchmark/svelte/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 59,
@@ -6020,7 +6020,7 @@
       },
       "fixture_path": "App.svelte",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -6055,7 +6055,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/astro/atlas.db --repo atlas-supported/astro --format json index /tmp/atlas-supported-language-benchmark/astro/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/astro/atlas.db --repo atlas-supported/astro --format json index $WORK/atlas-supported-language-benchmark/astro/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 72,
@@ -6170,7 +6170,7 @@
       },
       "fixture_path": "App.astro",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -6205,7 +6205,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/ejs/atlas.db --repo atlas-supported/ejs --format json index /tmp/atlas-supported-language-benchmark/ejs/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/ejs/atlas.db --repo atlas-supported/ejs --format json index $WORK/atlas-supported-language-benchmark/ejs/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 68,
@@ -6300,7 +6300,7 @@
       },
       "fixture_path": "view.ejs",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -6335,7 +6335,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/ets/atlas.db --repo atlas-supported/ets --format json index /tmp/atlas-supported-language-benchmark/ets/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/ets/atlas.db --repo atlas-supported/ets --format json index $WORK/atlas-supported-language-benchmark/ets/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 77,
@@ -6452,7 +6452,7 @@
       },
       "fixture_path": "Index.ets",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -6487,7 +6487,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/r/atlas.db --repo atlas-supported/r --format json index /tmp/atlas-supported-language-benchmark/r/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/r/atlas.db --repo atlas-supported/r --format json index $WORK/atlas-supported-language-benchmark/r/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 77,
@@ -6585,7 +6585,7 @@
       },
       "fixture_path": "app.R",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -6620,7 +6620,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/p4/atlas.db --repo atlas-supported/p4 --format json index /tmp/atlas-supported-language-benchmark/p4/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/p4/atlas.db --repo atlas-supported/p4 --format json index $WORK/atlas-supported-language-benchmark/p4/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 87,
@@ -6762,7 +6762,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/csharp/atlas.db --repo atlas-supported/csharp --format json index /tmp/atlas-supported-language-benchmark/csharp/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/csharp/atlas.db --repo atlas-supported/csharp --format json index $WORK/atlas-supported-language-benchmark/csharp/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 104,
@@ -6869,7 +6869,7 @@
       },
       "fixture_path": "App.cs",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -6904,7 +6904,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/groovy/atlas.db --repo atlas-supported/groovy --format json index /tmp/atlas-supported-language-benchmark/groovy/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/groovy/atlas.db --repo atlas-supported/groovy --format json index $WORK/atlas-supported-language-benchmark/groovy/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 98,
@@ -7013,7 +7013,7 @@
       },
       "fixture_path": "App.groovy",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -7048,7 +7048,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/bash/atlas.db --repo atlas-supported/bash --format json index /tmp/atlas-supported-language-benchmark/bash/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/bash/atlas.db --repo atlas-supported/bash --format json index $WORK/atlas-supported-language-benchmark/bash/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 74,
@@ -7144,7 +7144,7 @@
       },
       "fixture_path": "app.sh",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -7166,7 +7166,7 @@
       },
       "language": "bash",
       "native_baseline": {
-        "command": "/bin/bash -n /tmp/atlas-supported-language-benchmark/bash/repo/app.sh",
+        "command": "/bin/bash -n $WORK/atlas-supported-language-benchmark/bash/repo/app.sh",
         "metrics": {},
         "note": "",
         "ok": true,
@@ -7181,7 +7181,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/html/atlas.db --repo atlas-supported/html --format json index /tmp/atlas-supported-language-benchmark/html/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/html/atlas.db --repo atlas-supported/html --format json index $WORK/atlas-supported-language-benchmark/html/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 32,
@@ -7274,7 +7274,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/css/atlas.db --repo atlas-supported/css --format json index /tmp/atlas-supported-language-benchmark/css/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/css/atlas.db --repo atlas-supported/css --format json index $WORK/atlas-supported-language-benchmark/css/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 60,
@@ -7367,7 +7367,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/markdown/atlas.db --repo atlas-supported/markdown --format json index /tmp/atlas-supported-language-benchmark/markdown/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/markdown/atlas.db --repo atlas-supported/markdown --format json index $WORK/atlas-supported-language-benchmark/markdown/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 98,
@@ -7468,7 +7468,7 @@
       },
       "fixture_path": "README.md",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -7503,7 +7503,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/mdx/atlas.db --repo atlas-supported/mdx --format json index /tmp/atlas-supported-language-benchmark/mdx/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/mdx/atlas.db --repo atlas-supported/mdx --format json index $WORK/atlas-supported-language-benchmark/mdx/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 123,
@@ -7594,7 +7594,7 @@
       },
       "fixture_path": "Guide.mdx",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -7629,7 +7629,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/yaml/atlas.db --repo atlas-supported/yaml --format json index /tmp/atlas-supported-language-benchmark/yaml/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/yaml/atlas.db --repo atlas-supported/yaml --format json index $WORK/atlas-supported-language-benchmark/yaml/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 76,
@@ -7747,7 +7747,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/json/atlas.db --repo atlas-supported/json --format json index /tmp/atlas-supported-language-benchmark/json/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/json/atlas.db --repo atlas-supported/json --format json index $WORK/atlas-supported-language-benchmark/json/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 76,
@@ -7848,7 +7848,7 @@
       },
       "fixture_path": "package.json",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -7870,7 +7870,7 @@
       },
       "language": "json",
       "native_baseline": {
-        "command": "python3 -c <json-parser> /tmp/atlas-supported-language-benchmark/json/repo/package.json",
+        "command": "python3 -c <json-parser> $WORK/atlas-supported-language-benchmark/json/repo/package.json",
         "metrics": {
           "top_keys": 2
         },
@@ -7887,7 +7887,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/proto/atlas.db --repo atlas-supported/proto --format json index /tmp/atlas-supported-language-benchmark/proto/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/proto/atlas.db --repo atlas-supported/proto --format json index $WORK/atlas-supported-language-benchmark/proto/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 66,
@@ -8004,7 +8004,7 @@
       },
       "language": "proto",
       "native_baseline": {
-        "command": "/opt/homebrew/bin/protoc --proto_path=/tmp/atlas-supported-language-benchmark/proto/repo --descriptor_set_out=/tmp/atlas-supported-language-benchmark/proto/repo/descriptor.pb /tmp/atlas-supported-language-benchmark/proto/repo/service.proto",
+        "command": "/opt/homebrew/bin/protoc --proto_path=$WORK/atlas-supported-language-benchmark/proto/repo --descriptor_set_out=$WORK/atlas-supported-language-benchmark/proto/repo/descriptor.pb $WORK/atlas-supported-language-benchmark/proto/repo/service.proto",
         "metrics": {},
         "note": "",
         "ok": true,
@@ -8019,7 +8019,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/toml/atlas.db --repo atlas-supported/toml --format json index /tmp/atlas-supported-language-benchmark/toml/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/toml/atlas.db --repo atlas-supported/toml --format json index $WORK/atlas-supported-language-benchmark/toml/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 120,
@@ -8127,7 +8127,7 @@
       },
       "language": "toml",
       "native_baseline": {
-        "command": "python3 -c <tomllib-parser> /tmp/atlas-supported-language-benchmark/toml/repo/config.toml",
+        "command": "python3 -c <tomllib-parser> $WORK/atlas-supported-language-benchmark/toml/repo/config.toml",
         "metrics": {
           "top_keys": 1
         },
@@ -8144,7 +8144,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/xml/atlas.db --repo atlas-supported/xml --format json index /tmp/atlas-supported-language-benchmark/xml/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/xml/atlas.db --repo atlas-supported/xml --format json index $WORK/atlas-supported-language-benchmark/xml/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 101,
@@ -8249,7 +8249,7 @@
       },
       "language": "xml",
       "native_baseline": {
-        "command": "python3 -c <xml-parser> /tmp/atlas-supported-language-benchmark/xml/repo/config.xml",
+        "command": "python3 -c <xml-parser> $WORK/atlas-supported-language-benchmark/xml/repo/config.xml",
         "metrics": {
           "elements": 3,
           "root": "project"
@@ -8267,7 +8267,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/plist/atlas.db --repo atlas-supported/plist --format json index /tmp/atlas-supported-language-benchmark/plist/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/plist/atlas.db --repo atlas-supported/plist --format json index $WORK/atlas-supported-language-benchmark/plist/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 120,
@@ -8379,7 +8379,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/gomod/atlas.db --repo atlas-supported/gomod --format json index /tmp/atlas-supported-language-benchmark/gomod/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/gomod/atlas.db --repo atlas-supported/gomod --format json index $WORK/atlas-supported-language-benchmark/gomod/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 102,
@@ -8494,7 +8494,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/gosum/atlas.db --repo atlas-supported/gosum --format json index /tmp/atlas-supported-language-benchmark/gosum/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/gosum/atlas.db --repo atlas-supported/gosum --format json index $WORK/atlas-supported-language-benchmark/gosum/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 73,
@@ -8606,7 +8606,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/config/atlas.db --repo atlas-supported/config --format json index /tmp/atlas-supported-language-benchmark/config/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/config/atlas.db --repo atlas-supported/config --format json index $WORK/atlas-supported-language-benchmark/config/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 186,
@@ -8721,7 +8721,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/makefile/atlas.db --repo atlas-supported/makefile --format json index /tmp/atlas-supported-language-benchmark/makefile/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/makefile/atlas.db --repo atlas-supported/makefile --format json index $WORK/atlas-supported-language-benchmark/makefile/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 162,
@@ -8841,7 +8841,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/batch/atlas.db --repo atlas-supported/batch --format json index /tmp/atlas-supported-language-benchmark/batch/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/batch/atlas.db --repo atlas-supported/batch --format json index $WORK/atlas-supported-language-benchmark/batch/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 139,
@@ -8953,7 +8953,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/powershell/atlas.db --repo atlas-supported/powershell --format json index /tmp/atlas-supported-language-benchmark/powershell/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/powershell/atlas.db --repo atlas-supported/powershell --format json index $WORK/atlas-supported-language-benchmark/powershell/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 138,
@@ -9044,7 +9044,7 @@
       },
       "fixture_path": "build.ps1",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 1,
           "extracted_calls": 1,
@@ -9066,7 +9066,7 @@
       },
       "language": "powershell",
       "native_baseline": {
-        "command": "pwsh -NoProfile -Command <ast-counter> /tmp/atlas-supported-language-benchmark/powershell/repo/build.ps1",
+        "command": "pwsh -NoProfile -Command <ast-counter> $WORK/atlas-supported-language-benchmark/powershell/repo/build.ps1",
         "metrics": {
           "definitions": 0,
           "errors": 1
@@ -9076,7 +9076,7 @@
         "seconds": 0.499,
         "status": "ok",
         "stderr": "",
-        "stdout": "{\"definitions\":0,\"errors\":1}\n/tmp/atlas-supported-language-benchmark/powershell/repo/build.ps1",
+        "stdout": "{\"definitions\":0,\"errors\":1}\n$WORK/atlas-supported-language-benchmark/powershell/repo/build.ps1",
         "tool": "powershell parser",
         "tool_class": "native-ast"
       },
@@ -9084,7 +9084,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/sql/atlas.db --repo atlas-supported/sql --format json index /tmp/atlas-supported-language-benchmark/sql/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/sql/atlas.db --repo atlas-supported/sql --format json index $WORK/atlas-supported-language-benchmark/sql/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 104,
@@ -9192,7 +9192,7 @@
       },
       "fixture_path": "schema.sql",
       "graphify": {
-        "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+        "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
         "metrics": {
           "calls": 0,
           "extracted_calls": 0,
@@ -9227,7 +9227,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/csv/atlas.db --repo atlas-supported/csv --format json index /tmp/atlas-supported-language-benchmark/csv/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/csv/atlas.db --repo atlas-supported/csv --format json index $WORK/atlas-supported-language-benchmark/csv/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 159,
@@ -9329,7 +9329,7 @@
       },
       "language": "csv",
       "native_baseline": {
-        "command": "python3 -c <csv-parser> /tmp/atlas-supported-language-benchmark/csv/repo/data.csv",
+        "command": "python3 -c <csv-parser> $WORK/atlas-supported-language-benchmark/csv/repo/data.csv",
         "metrics": {
           "columns": 2,
           "rows": 2
@@ -9347,7 +9347,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/text/atlas.db --repo atlas-supported/text --format json index /tmp/atlas-supported-language-benchmark/text/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/text/atlas.db --repo atlas-supported/text --format json index $WORK/atlas-supported-language-benchmark/text/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 78,
@@ -9457,7 +9457,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/dockerfile/atlas.db --repo atlas-supported/dockerfile --format json index /tmp/atlas-supported-language-benchmark/dockerfile/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/dockerfile/atlas.db --repo atlas-supported/dockerfile --format json index $WORK/atlas-supported-language-benchmark/dockerfile/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 105,
@@ -9578,7 +9578,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/pptx/atlas.db --repo atlas-supported/pptx --format json index /tmp/atlas-supported-language-benchmark/pptx/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/pptx/atlas.db --repo atlas-supported/pptx --format json index $WORK/atlas-supported-language-benchmark/pptx/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 128,
@@ -9696,7 +9696,7 @@
       },
       "language": "pptx",
       "native_baseline": {
-        "command": "python3 -c <zip-inspector> /tmp/atlas-supported-language-benchmark/pptx/repo/deck.pptx",
+        "command": "python3 -c <zip-inspector> $WORK/atlas-supported-language-benchmark/pptx/repo/deck.pptx",
         "metrics": {
           "zip_entries": 3
         },
@@ -9711,7 +9711,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/docx/atlas.db --repo atlas-supported/docx --format json index /tmp/atlas-supported-language-benchmark/docx/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/docx/atlas.db --repo atlas-supported/docx --format json index $WORK/atlas-supported-language-benchmark/docx/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 130,
@@ -9808,7 +9808,7 @@
       },
       "language": "docx",
       "native_baseline": {
-        "command": "python3 -c <zip-inspector> /tmp/atlas-supported-language-benchmark/docx/repo/spec.docx",
+        "command": "python3 -c <zip-inspector> $WORK/atlas-supported-language-benchmark/docx/repo/spec.docx",
         "metrics": {
           "zip_entries": 1
         },
@@ -9823,7 +9823,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/xlsx/atlas.db --repo atlas-supported/xlsx --format json index /tmp/atlas-supported-language-benchmark/xlsx/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/xlsx/atlas.db --repo atlas-supported/xlsx --format json index $WORK/atlas-supported-language-benchmark/xlsx/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 139,
@@ -9920,7 +9920,7 @@
       },
       "language": "xlsx",
       "native_baseline": {
-        "command": "python3 -c <zip-inspector> /tmp/atlas-supported-language-benchmark/xlsx/repo/budget.xlsx",
+        "command": "python3 -c <zip-inspector> $WORK/atlas-supported-language-benchmark/xlsx/repo/budget.xlsx",
         "metrics": {
           "zip_entries": 2
         },
@@ -9935,7 +9935,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/image/atlas.db --repo atlas-supported/image --format json index /tmp/atlas-supported-language-benchmark/image/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/image/atlas.db --repo atlas-supported/image --format json index $WORK/atlas-supported-language-benchmark/image/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 127,
@@ -10032,7 +10032,7 @@
       },
       "language": "image",
       "native_baseline": {
-        "command": "python3 -c <png-header-inspector> /tmp/atlas-supported-language-benchmark/image/repo/flow.png",
+        "command": "python3 -c <png-header-inspector> $WORK/atlas-supported-language-benchmark/image/repo/flow.png",
         "metrics": {
           "bytes": 68
         },
@@ -10047,7 +10047,7 @@
     },
     {
       "atlas": {
-        "command": "./bin/atlas --db sqlite:///tmp/atlas-supported-language-benchmark/pdf/atlas.db --repo atlas-supported/pdf --format json index /tmp/atlas-supported-language-benchmark/pdf/repo --progress=false --reindex",
+        "command": "./bin/atlas --db sqlite://$WORK/atlas-supported-language-benchmark/pdf/atlas.db --repo atlas-supported/pdf --format json index $WORK/atlas-supported-language-benchmark/pdf/repo --progress=false --reindex",
         "index": {
           "commit_sha": "working-tree",
           "duration_ms": 44,
@@ -10144,7 +10144,7 @@
       },
       "language": "pdf",
       "native_baseline": {
-        "command": "python3 -c <pdf-header-inspector> /tmp/atlas-supported-language-benchmark/pdf/repo/whitepaper.pdf",
+        "command": "python3 -c <pdf-header-inspector> $WORK/atlas-supported-language-benchmark/pdf/repo/whitepaper.pdf",
         "metrics": {
           "bytes": 2905,
           "pdf_header": true

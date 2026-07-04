@@ -1,0 +1,9 @@
+{
+  "truth_source": "gopls call_hierarchy (LSP-truth)",
+  "scoring": "deterministic simple-name set comparison; no LLM",
+  "repo": "a production Go service (private)",
+  "symbols_scored": 10,
+  "mean_f1": 0.9333,
+  "mean_precision": 0.9647,
+  "mean_recall": 0.918
+}

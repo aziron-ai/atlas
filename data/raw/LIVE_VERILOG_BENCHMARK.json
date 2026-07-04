@@ -4,12 +4,12 @@
   "commit": "022f084096baed0a9b5ebdf697ed2965f13e8ed8",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/lowRISC/ibex /tmp/atlas-live-verilog-ibex/repo",
+    "clone": "git clone --depth 1 https://github.com/lowRISC/ibex $WORK/atlas-live-verilog-ibex/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-verilog-ibex/atlas-refresh.db --json index /tmp/atlas-live-verilog-ibex/repo/rtl",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-verilog-ibex/atlas-refresh.db --json index /tmp/atlas-live-verilog-ibex/repo/rtl",
-    "graphify_update": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify update .",
-    "native_baseline": "/tmp/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> /tmp/atlas-live-verilog-ibex/repo/rtl",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-verilog-ibex/atlas-refresh.db --json index $WORK/atlas-live-verilog-ibex/repo/rtl",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-verilog-ibex/atlas-refresh.db --json index $WORK/atlas-live-verilog-ibex/repo/rtl",
+    "graphify_update": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify update .",
+    "native_baseline": "$WORK/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> $WORK/atlas-live-verilog-ibex/repo/rtl",
     "query_symbols": [
       "ibex_core",
       "ibex_top",
@@ -18,8 +18,8 @@
       "cm_stack_adj_base",
       "decode_i_insn"
     ],
-    "target_path": "/tmp/atlas-live-verilog-ibex/repo/rtl",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-verilog-ibex/atlas-refresh.db serve --addr 127.0.0.1:4311"
+    "target_path": "$WORK/atlas-live-verilog-ibex/repo/rtl",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-verilog-ibex/atlas-refresh.db serve --addr 127.0.0.1:4311"
   },
   "atlas": {
     "cold_wall_seconds": 0.188,
@@ -307,7 +307,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.288,
-    "command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify update .",
+    "command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "[graphify watch] Rebuilt: 170 nodes, 139 edges, 31 communities",
@@ -334,7 +334,7 @@
     "status": "partial",
     "ok": false,
     "seconds": 0.045,
-    "command": "/tmp/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> /tmp/atlas-live-verilog-ibex/repo/rtl",
+    "command": "$WORK/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> $WORK/atlas-live-verilog-ibex/repo/rtl",
     "metrics": {
       "files": 30,
       "parsed_files": 20,
@@ -454,7 +454,7 @@
   "query_warmup": {
     "symbol": "ibex_core",
     "atlas_command": "curl -fsS http://127.0.0.1:4311/api/v1/symbols/ibex_core/explain?repo_id=rtl&format=plain",
-    "graphify_command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify explain ibex_core",
+    "graphify_command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify explain ibex_core",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -464,7 +464,7 @@
       "symbol": "ibex_core",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4311/api/v1/symbols/ibex_core/explain?repo_id=rtl&format=plain",
-      "graphify_command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify explain ibex_core",
+      "graphify_command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify explain ibex_core",
       "atlas_tokens": 2,
       "graphify_tokens": 13,
       "atlas_ms": 7.29,
@@ -519,7 +519,7 @@
       "symbol": "ibex_top",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4311/api/v1/symbols/ibex_top/explain?repo_id=rtl&format=plain",
-      "graphify_command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify explain ibex_top",
+      "graphify_command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify explain ibex_top",
       "atlas_tokens": 2,
       "graphify_tokens": 39,
       "atlas_ms": 7.583,
@@ -575,7 +575,7 @@
       "symbol": "ibex_pkg",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4311/api/v1/symbols/ibex_pkg/explain?repo_id=rtl&format=plain",
-      "graphify_command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify explain ibex_pkg",
+      "graphify_command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify explain ibex_pkg",
       "atlas_tokens": 2,
       "graphify_tokens": 19,
       "atlas_ms": 7.845,
@@ -631,7 +631,7 @@
       "symbol": "ibex_alu",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4311/api/v1/symbols/ibex_alu/explain?repo_id=rtl&format=plain",
-      "graphify_command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify explain ibex_alu",
+      "graphify_command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify explain ibex_alu",
       "atlas_tokens": 2,
       "graphify_tokens": 23,
       "atlas_ms": 7.291,
@@ -687,7 +687,7 @@
       "symbol": "cm_stack_adj_base",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4311/api/v1/symbols/cm_stack_adj_base/explain?repo_id=rtl&format=plain",
-      "graphify_command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify explain cm_stack_adj_base",
+      "graphify_command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify explain cm_stack_adj_base",
       "atlas_tokens": 2,
       "graphify_tokens": 19,
       "atlas_ms": 7.338,
@@ -743,7 +743,7 @@
       "symbol": "decode_i_insn",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4311/api/v1/symbols/decode_i_insn/explain?repo_id=rtl&format=plain",
-      "graphify_command": "/Users/damirdarasu/.langflow/uv/uv tool run --from graphifyy graphify explain decode_i_insn",
+      "graphify_command": "$HOME/.langflow/uv/uv tool run --from graphifyy graphify explain decode_i_insn",
       "atlas_tokens": 2,
       "graphify_tokens": 19,
       "atlas_ms": 7.717,
@@ -812,7 +812,7 @@
       {
         "repo": "https://github.com/lowRISC/ibex",
         "commit": "022f084096baed0a9b5ebdf697ed2965f13e8ed8",
-        "target_path": "/private/tmp/atlas-remaining-3repo-validation/verilog/1-ibex/repo/rtl",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/verilog/1-ibex/repo/rtl",
         "atlas_definitions": 93,
         "native_definitions": 93,
         "coverage_ratio": 1,
@@ -822,7 +822,7 @@
       {
         "repo": "https://github.com/YosysHQ/picorv32",
         "commit": "87c89acc18994c8cf9a2311e871818e87d304568",
-        "target_path": "/private/tmp/atlas-remaining-3repo-validation/verilog/2-picorv32/repo/picosoc",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/verilog/2-picorv32/repo/picosoc",
         "atlas_definitions": 24,
         "native_definitions": 24,
         "coverage_ratio": 1,
@@ -832,7 +832,7 @@
       {
         "repo": "https://github.com/alexforencich/verilog-ethernet",
         "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb",
-        "target_path": "/private/tmp/atlas-remaining-3repo-validation/verilog/3-verilog-ethernet/repo/rtl",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/verilog/3-verilog-ethernet/repo/rtl",
         "atlas_definitions": 114,
         "native_definitions": 114,
         "coverage_ratio": 1,

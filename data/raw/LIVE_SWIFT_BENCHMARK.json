@@ -4,20 +4,20 @@
   "commit": "8122bc5941426c9494c78ff5ad01951e81c02f53",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/apple/swift-argument-parser /tmp/atlas-live-swift-argument-parser/repo",
+    "clone": "git clone --depth 1 https://github.com/apple/swift-argument-parser $WORK/atlas-live-swift-argument-parser/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-swift-argument-parser/atlas.db --json index /tmp/atlas-live-swift-argument-parser/repo",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-swift-argument-parser/atlas.db --json index /tmp/atlas-live-swift-argument-parser/repo",
-    "graphify_update": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
-    "native_baseline": "/usr/bin/sourcekit-lsp --scratch-path /tmp/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-swift-argument-parser/atlas.db --json index $WORK/atlas-live-swift-argument-parser/repo",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-swift-argument-parser/atlas.db --json index $WORK/atlas-live-swift-argument-parser/repo",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "/usr/bin/sourcekit-lsp --scratch-path $WORK/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM",
     "query_symbols": [
       "ArgumentParser",
       "parse",
       "run",
       "help"
     ],
-    "target_path": "/tmp/atlas-live-swift-argument-parser/repo",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-swift-argument-parser/atlas.db serve --addr 127.0.0.1:4330"
+    "target_path": "$WORK/atlas-live-swift-argument-parser/repo",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-swift-argument-parser/atlas.db serve --addr 127.0.0.1:4330"
   },
   "atlas": {
     "cold_wall_seconds": 4.074,
@@ -294,7 +294,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 1.544,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "  AST extraction: 100/219 uncached files (45%) [14 workers]",
@@ -317,7 +317,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 3.457,
-    "command": "/usr/bin/sourcekit-lsp --scratch-path /tmp/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM",
+    "command": "/usr/bin/sourcekit-lsp --scratch-path $WORK/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM",
     "metrics": {
       "sample_files": 16,
       "document_symbol_files": 16,
@@ -375,7 +375,7 @@
   "query_warmup": {
     "symbol": "ArgumentParser",
     "atlas_command": "curl -fsS http://127.0.0.1:4330/api/v1/symbols/ArgumentParser/explain?repo_id=repo&format=plain",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain ArgumentParser",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain ArgumentParser",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -385,7 +385,7 @@
       "symbol": "ArgumentParser",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4330/api/v1/symbols/ArgumentParser/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain ArgumentParser",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain ArgumentParser",
       "atlas_tokens": 1,
       "graphify_tokens": 332,
       "atlas_ms": 7.56,
@@ -427,7 +427,7 @@
       "symbol": "parse",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4330/api/v1/symbols/parse/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain parse",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain parse",
       "atlas_tokens": 2,
       "graphify_tokens": 139,
       "atlas_ms": 6.901,
@@ -469,7 +469,7 @@
       "symbol": "run",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4330/api/v1/symbols/run/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain run",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain run",
       "atlas_tokens": 2,
       "graphify_tokens": 48,
       "atlas_ms": 7.111,
@@ -511,7 +511,7 @@
       "symbol": "help",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4330/api/v1/symbols/help/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain help",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain help",
       "atlas_tokens": 2,
       "graphify_tokens": 44,
       "atlas_ms": 6.993,
@@ -587,7 +587,7 @@
       {
         "repo": "https://github.com/ReSwift/ReSwift-Router",
         "commit": "a915f67704ca5a0cf439723f7c4f7c26ef7809ba",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/swift/1-ReSwift__ReSwift-Router",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/swift/1-ReSwift__ReSwift-Router",
         "atlas_definitions": 171,
         "native_definitions": 169,
         "coverage_ratio": 1.0118,
@@ -597,7 +597,7 @@
       {
         "repo": "https://github.com/treastrain/TRETJapanNFCReader",
         "commit": "03470a515c0b06d762de39e6d80f9a07ed502cae",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/swift/3-treastrain__TRETJapanNFCReader",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/swift/3-treastrain__TRETJapanNFCReader",
         "atlas_definitions": 1674,
         "native_definitions": 950,
         "coverage_ratio": 1.7621,
@@ -607,7 +607,7 @@
       {
         "repo": "https://github.com/soberman/ARSLineProgress",
         "commit": "c97c55a5228ac58acf388dd882e800fdb7c2930f",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/swift/5-soberman__ARSLineProgress",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/swift/5-soberman__ARSLineProgress",
         "atlas_definitions": 236,
         "native_definitions": 225,
         "coverage_ratio": 1.0489,

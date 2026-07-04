@@ -4,12 +4,12 @@
   "commit": "e5ef310dece16746843753e4c3b44e868b917b64",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/JuliaIO/JSON.jl /tmp/atlas-live-julia-json/repo",
+    "clone": "git clone --depth 1 https://github.com/JuliaIO/JSON.jl $WORK/atlas-live-julia-json/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-julia-json/atlas.db --json index /tmp/atlas-live-julia-json/repo/src",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-julia-json/atlas.db --json index /tmp/atlas-live-julia-json/repo/src",
-    "graphify_update": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
-    "native_baseline": "/tmp/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> /tmp/atlas-live-julia-json/repo/src",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-julia-json/atlas.db --json index $WORK/atlas-live-julia-json/repo/src",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-julia-json/atlas.db --json index $WORK/atlas-live-julia-json/repo/src",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> $WORK/atlas-live-julia-json/repo/src",
     "query_symbols": [
       "JSON",
       "JSONText",
@@ -18,8 +18,8 @@
       "json",
       "LazyValue"
     ],
-    "target_path": "/tmp/atlas-live-julia-json/repo/src",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-julia-json/atlas.db serve --addr 127.0.0.1:4314"
+    "target_path": "$WORK/atlas-live-julia-json/repo/src",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-julia-json/atlas.db serve --addr 127.0.0.1:4314"
   },
   "atlas": {
     "cold_wall_seconds": 0.054,
@@ -128,7 +128,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.19,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "[graphify watch] Rebuilt: 114 nodes, 179 edges, 11 communities",
@@ -148,7 +148,7 @@
     "status": "partial",
     "ok": false,
     "seconds": 0.098,
-    "command": "/tmp/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> /tmp/atlas-live-julia-json/repo/src",
+    "command": "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> $WORK/atlas-live-julia-json/repo/src",
     "metrics": {
       "files": 6,
       "parsed_files": 5,
@@ -216,7 +216,7 @@
   "query_warmup": {
     "symbol": "JSON",
     "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/JSON/explain?repo_id=src&format=plain",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain JSON",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain JSON",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -226,7 +226,7 @@
       "symbol": "JSON",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/JSON/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain JSON",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain JSON",
       "atlas_tokens": 2,
       "graphify_tokens": 38,
       "atlas_ms": 7.528,
@@ -268,7 +268,7 @@
       "symbol": "JSONText",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/JSONText/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain JSONText",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain JSONText",
       "atlas_tokens": 2,
       "graphify_tokens": 51,
       "atlas_ms": 7.022,
@@ -310,7 +310,7 @@
       "symbol": "Object",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/Object/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Object",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Object",
       "atlas_tokens": 2,
       "graphify_tokens": 75,
       "atlas_ms": 7.055,
@@ -352,7 +352,7 @@
       "symbol": "parse",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/parse/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain parse",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain parse",
       "atlas_tokens": 2,
       "graphify_tokens": 167,
       "atlas_ms": 7.081,
@@ -394,7 +394,7 @@
       "symbol": "json",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/json/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain json",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain json",
       "atlas_tokens": 2,
       "graphify_tokens": 38,
       "atlas_ms": 7.211,
@@ -436,7 +436,7 @@
       "symbol": "LazyValue",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/LazyValue/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain LazyValue",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain LazyValue",
       "atlas_tokens": 2,
       "graphify_tokens": 9,
       "atlas_ms": 7.122,
@@ -483,7 +483,7 @@
       {
         "repo": "https://github.com/JuliaIO/JSON.jl",
         "commit": "e5ef310dece16746843753e4c3b44e868b917b64",
-        "target_path": "/private/tmp/atlas-remaining-3repo-validation/julia/1-JSON.jl/repo/src",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/julia/1-JSON.jl/repo/src",
         "atlas_definitions": 312,
         "native_definitions": 310,
         "coverage_ratio": 1.0065,
@@ -495,7 +495,7 @@
       {
         "repo": "https://github.com/JuliaData/DataFrames.jl",
         "commit": "3924697ea6c02ac186a95b298a4e06b52e881b53",
-        "target_path": "/private/tmp/atlas-remaining-3repo-validation/julia/2-DataFrames.jl/repo/src",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/julia/2-DataFrames.jl/repo/src",
         "atlas_definitions": 1364,
         "native_definitions": 1359,
         "coverage_ratio": 1.0037,
@@ -507,7 +507,7 @@
       {
         "repo": "https://github.com/JuliaStats/StatsBase.jl",
         "commit": "b8d458aee0fbfb20d386ae2986f30260361675a3",
-        "target_path": "/private/tmp/atlas-julia-third-candidates/StatsBase/repo/src",
+        "target_path": "/private$WORK/atlas-julia-third-candidates/StatsBase/repo/src",
         "atlas_definitions": 605,
         "native_definitions": 602,
         "coverage_ratio": 1.005,

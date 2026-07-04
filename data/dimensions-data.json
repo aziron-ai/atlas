@@ -512,7 +512,7 @@
       "gopls": {
         "status": "ok",
         "version": "golang.org/x/tools/gopls v0.22.0",
-        "command": "/root/go/bin/gopls version"
+        "command": "$HOME/go/bin/gopls version"
       },
       "tsc": {
         "status": "ok",

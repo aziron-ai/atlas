@@ -1,0 +1,897 @@
+{
+  "label": "after",
+  "truth": "fixture-truth: target called by exactly c01..c15, decoys n01..n03 (by construction)",
+  "scoring": "deterministic set comparison on simple names; no LLM",
+  "perfect_languages": 37,
+  "total_languages": 37,
+  "rows": [
+    {
+      "language": "go",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "python",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "javascript",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "typescript",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "java",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "c",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 21
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "cpp",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 21
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "rust",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 17
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "ruby",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "php",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "csharp",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "kotlin",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "swift",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "scala",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "lua",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "powershell",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "bash",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "zig",
+      "status": "ok",
+      "index": {
+        "symbols": 23,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "elixir",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 16
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "objc",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 21
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "julia",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 17
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "fortran",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "dart",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "verilog",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "pascal",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 17
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "byond",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "razor",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "vue",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "svelte",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "astro",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "ejs",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 16
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "ets",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 21
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "r",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "apex",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "blade",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 16
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "groovy",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 17
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    },
+    {
+      "language": "sql",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 16
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": [],
+      "graphify": {
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "decoy_leaks": []
+      }
+    }
+  ]
+}

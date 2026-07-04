@@ -4,12 +4,12 @@
   "commit": "f7e48c8178602ce25d43293bc6f8ca51d84ae222",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/gothinkster/vue-realworld-example-app /tmp/atlas-live-vue-realworld/repo",
+    "clone": "git clone --depth 1 https://github.com/gothinkster/vue-realworld-example-app $WORK/atlas-live-vue-realworld/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-vue-realworld/atlas.db --json index /tmp/atlas-live-vue-realworld/repo/src",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-vue-realworld/atlas.db --json index /tmp/atlas-live-vue-realworld/repo/src",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-vue-realworld/atlas.db --json index $WORK/atlas-live-vue-realworld/repo/src",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-vue-realworld/atlas.db --json index $WORK/atlas-live-vue-realworld/repo/src",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "/opt/homebrew/bin/node /tmp/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js /tmp/atlas-live-vue-realworld/repo/src",
+    "native_baseline": "/opt/homebrew/bin/node $WORK/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js $WORK/atlas-live-vue-realworld/repo/src",
     "query_symbols": [
       "emitPage",
       "changePage",
@@ -17,8 +17,8 @@
       "useHomeStore",
       "pinia"
     ],
-    "target_path": "/tmp/atlas-live-vue-realworld/repo/src",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-vue-realworld/atlas.db --repo src serve --addr 127.0.0.1:48211"
+    "target_path": "$WORK/atlas-live-vue-realworld/repo/src",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-vue-realworld/atlas.db --repo src serve --addr 127.0.0.1:48211"
   },
   "atlas": {
     "cold_wall_seconds": 0.15,
@@ -319,7 +319,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.202,
-    "command": "/opt/homebrew/bin/node /tmp/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js /tmp/atlas-live-vue-realworld/repo/src",
+    "command": "/opt/homebrew/bin/node $WORK/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js $WORK/atlas-live-vue-realworld/repo/src",
     "metrics": {
       "files": 20,
       "parsed_files": 20,
@@ -811,7 +811,7 @@
       {
         "repo": "https://github.com/LiuXin-Developer/rightHouse",
         "commit": "5d003ae3a5f5f12534cdf617ac11be86d3d9ca54",
-        "target_path": "/tmp/atlas-random-validation-web/work/vue/1-LiuXin-Developer__rightHouse",
+        "target_path": "$WORK/atlas-random-validation-web/work/vue/1-LiuXin-Developer__rightHouse",
         "atlas_definitions": 969,
         "native_definitions": 211,
         "coverage_ratio": 4.5924,
@@ -821,7 +821,7 @@
       {
         "repo": "https://github.com/Tencent/tdesign-vue-starter",
         "commit": "61bb51b304e018a4243489bcb48c28750f8aa535",
-        "target_path": "/tmp/atlas-random-validation-web/work/vue/2-Tencent__tdesign-vue-starter",
+        "target_path": "$WORK/atlas-random-validation-web/work/vue/2-Tencent__tdesign-vue-starter",
         "atlas_definitions": 82,
         "native_definitions": 24,
         "coverage_ratio": 3.4167,
@@ -831,7 +831,7 @@
       {
         "repo": "https://github.com/powerdong/Music-player",
         "commit": "c505e40c41a3c3b6040988df4d122e845f01e8cb",
-        "target_path": "/tmp/atlas-random-validation-web/work/vue/3-powerdong__Music-player",
+        "target_path": "$WORK/atlas-random-validation-web/work/vue/3-powerdong__Music-player",
         "atlas_definitions": 294,
         "native_definitions": 6,
         "coverage_ratio": 49,

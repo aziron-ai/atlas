@@ -3,7 +3,7 @@
     "language": "go",
     "repo": "https://github.com/sirupsen/logrus",
     "subdir": "",
-    "target": "/tmp/atlas-codeintel-matrix-final/go/repo",
+    "target": "$WORK/atlas-codeintel-matrix-final/go/repo",
     "tools": {
       "atlas": {
         "tool": "atlas",
@@ -325,7 +325,7 @@
     "language": "python",
     "repo": "https://github.com/psf/requests",
     "subdir": "src",
-    "target": "/tmp/atlas-codeintel-matrix-final/python/repo/src",
+    "target": "$WORK/atlas-codeintel-matrix-final/python/repo/src",
     "tools": {
       "atlas": {
         "tool": "atlas",
@@ -609,7 +609,7 @@
     "language": "javascript",
     "repo": "https://github.com/expressjs/express",
     "subdir": "lib",
-    "target": "/tmp/atlas-codeintel-matrix-final/javascript/repo/lib",
+    "target": "$WORK/atlas-codeintel-matrix-final/javascript/repo/lib",
     "tools": {
       "atlas": {
         "tool": "atlas",
@@ -947,7 +947,7 @@
     "language": "typescript",
     "repo": "https://github.com/pmndrs/zustand",
     "subdir": "src",
-    "target": "/tmp/atlas-codeintel-matrix-final/typescript/repo/src",
+    "target": "$WORK/atlas-codeintel-matrix-final/typescript/repo/src",
     "tools": {
       "atlas": {
         "tool": "atlas",
@@ -1264,7 +1264,7 @@
     "language": "java",
     "repo": "https://github.com/google/gson",
     "subdir": "gson/src/main/java",
-    "target": "/tmp/atlas-codeintel-matrix-final/java/repo/gson/src/main/java",
+    "target": "$WORK/atlas-codeintel-matrix-final/java/repo/gson/src/main/java",
     "tools": {
       "atlas": {
         "tool": "atlas",
@@ -1508,7 +1508,7 @@
     "language": "c",
     "repo": "https://github.com/DaveGamble/cJSON",
     "subdir": "",
-    "target": "/tmp/atlas-codeintel-matrix-final/c/repo",
+    "target": "$WORK/atlas-codeintel-matrix-final/c/repo",
     "tools": {
       "atlas": {
         "tool": "atlas",
@@ -1591,7 +1591,7 @@
           "stderr_tail": [
             "I[01:22:17.333] --> textDocument/publishDiagnostics",
             "I[01:22:17.333] --> reply:textDocument/documentSymbol(16) 403 ms",
-            "I[01:22:17.394] Built preamble of size 1594808 for file /private/tmp/atlas-codeintel-matrix-final/c/repo/cJSON.c version 1 in 0.45 seconds",
+            "I[01:22:17.394] Built preamble of size 1594808 for file /private$WORK/atlas-codeintel-matrix-final/c/repo/cJSON.c version 1 in 0.45 seconds",
             "I[01:22:17.415] --> textDocument/publishDiagnostics",
             "I[01:22:17.417] --> reply:textDocument/documentSymbol(10) 486 ms"
           ]
@@ -1807,7 +1807,7 @@
     "language": "cpp",
     "repo": "https://github.com/google/leveldb",
     "subdir": "",
-    "target": "/tmp/atlas-codeintel-matrix-final/cpp/repo",
+    "target": "$WORK/atlas-codeintel-matrix-final/cpp/repo",
     "tools": {
       "atlas": {
         "tool": "atlas",
