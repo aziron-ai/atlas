@@ -70,7 +70,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "apex-source-counter",
-      "nativeCommandTemplate": "python3 <apex source counter> /tmp/atlas-live-apex-recipes/repo/force-app",
+      "nativeCommandTemplate": "python3 <apex source counter> $WORK/atlas-live-apex-recipes/repo/force-app",
       "graphifyDetectorOnly": false,
       "toolClass": "source-counter-proxy",
       "risk": "medium",
@@ -227,7 +227,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "astro-compiler",
-      "nativeCommandTemplate": "/opt/homebrew/bin/node /tmp/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js /tmp/atlas-live-astro-blog-tutorial/repo/src",
+      "nativeCommandTemplate": "/opt/homebrew/bin/node $WORK/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js $WORK/atlas-live-astro-blog-tutorial/repo/src",
       "graphifyDetectorOnly": false,
       "toolClass": "parser-library-baseline",
       "risk": "low",
@@ -287,7 +287,7 @@
             "(cd work/astro/01-cssninjaStudio__krypton && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/opt/homebrew/bin/node /tmp/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js work/astro/01-cssninjaStudio__krypton"
+            "/opt/homebrew/bin/node $WORK/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js work/astro/01-cssninjaStudio__krypton"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_uses_ephemeral_helper_path"
@@ -326,7 +326,7 @@
             "(cd work/astro/02-natemoo-re__astro-remote && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/opt/homebrew/bin/node /tmp/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js work/astro/02-natemoo-re__astro-remote"
+            "/opt/homebrew/bin/node $WORK/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js work/astro/02-natemoo-re__astro-remote"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_uses_ephemeral_helper_path"
@@ -365,7 +365,7 @@
             "(cd work/astro/03-MaeWolff__astro-portfolio-template && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/opt/homebrew/bin/node /tmp/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js work/astro/03-MaeWolff__astro-portfolio-template"
+            "/opt/homebrew/bin/node $WORK/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js work/astro/03-MaeWolff__astro-portfolio-template"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_uses_ephemeral_helper_path"
@@ -544,7 +544,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "blade-directive-counter",
-      "nativeCommandTemplate": "python3 <blade directive counter> /tmp/atlas-live-blade-bookstack/repo/resources/views",
+      "nativeCommandTemplate": "python3 <blade directive counter> $WORK/atlas-live-blade-bookstack/repo/resources/views",
       "graphifyDetectorOnly": false,
       "toolClass": "source-counter-proxy",
       "risk": "medium",
@@ -701,7 +701,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "byond-source-counter",
-      "nativeCommandTemplate": "python3 <byond source counter> /tmp/atlas-live-byond-tgstation/repo/code/modules/mob",
+      "nativeCommandTemplate": "python3 <byond source counter> $WORK/atlas-live-byond-tgstation/repo/code/modules/mob",
       "graphifyDetectorOnly": false,
       "toolClass": "source-counter-proxy",
       "risk": "medium",
@@ -858,7 +858,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "roslyn",
-      "nativeCommandTemplate": "/opt/homebrew/bin/dotnet run --no-build -- /tmp/atlas-live-csharp-dapper/repo (Roslyn syntax tree counter)",
+      "nativeCommandTemplate": "/opt/homebrew/bin/dotnet run --no-build -- $WORK/atlas-live-csharp-dapper/repo (Roslyn syntax tree counter)",
       "graphifyDetectorOnly": false,
       "toolClass": "compiler-or-lsp-baseline",
       "risk": "low",
@@ -1011,7 +1011,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "cuda-source-counter",
-      "nativeCommandTemplate": "python3 <cuda source counter> /tmp/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+      "nativeCommandTemplate": "python3 <cuda source counter> $WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
       "graphifyDetectorOnly": false,
       "toolClass": "source-counter-proxy",
       "risk": "medium",
@@ -1168,7 +1168,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "tree-sitter-dart",
-      "nativeCommandTemplate": "/tmp/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> /tmp/atlas-live-dart-http/repo/pkgs/http/lib",
+      "nativeCommandTemplate": "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> $WORK/atlas-live-dart-http/repo/pkgs/http/lib",
       "graphifyDetectorOnly": false,
       "toolClass": "tree-sitter-baseline",
       "risk": "low",
@@ -1230,7 +1230,7 @@
             "(cd work/dart/01-dart-lang__http/pkgs/http/lib && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> work/dart/01-dart-lang__http/pkgs/http/lib"
+            "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> work/dart/01-dart-lang__http/pkgs/http/lib"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -1271,7 +1271,7 @@
             "(cd work/dart/02-dart-lang__path/lib && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> work/dart/02-dart-lang__path/lib"
+            "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> work/dart/02-dart-lang__path/lib"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -1312,7 +1312,7 @@
             "(cd work/dart/03-dart-lang__args/lib && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> work/dart/03-dart-lang__args/lib"
+            "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> work/dart/03-dart-lang__args/lib"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -1328,7 +1328,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "delphi-lazarus-source-counter",
-      "nativeCommandTemplate": "python3 <delphi/lazarus source counter> /tmp/atlas-live-delphi-lazarus/repo/ide",
+      "nativeCommandTemplate": "python3 <delphi/lazarus source counter> $WORK/atlas-live-delphi-lazarus/repo/ide",
       "graphifyDetectorOnly": false,
       "toolClass": "source-counter-proxy",
       "risk": "medium",
@@ -1485,7 +1485,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "python-dotnet-project",
-      "nativeCommandTemplate": "/opt/homebrew/bin/python3 -c <dotnet project counter> /tmp/atlas-live-dotnet-dapper/repo",
+      "nativeCommandTemplate": "/opt/homebrew/bin/python3 -c <dotnet project counter> $WORK/atlas-live-dotnet-dapper/repo",
       "graphifyDetectorOnly": false,
       "toolClass": "scope-proxy",
       "risk": "medium",
@@ -1632,7 +1632,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "ejs-template-counter",
-      "nativeCommandTemplate": "python3 <ejs template counter> /tmp/atlas-live-ejs-express/repo/examples",
+      "nativeCommandTemplate": "python3 <ejs template counter> $WORK/atlas-live-ejs-express/repo/examples",
       "graphifyDetectorOnly": true,
       "toolClass": "graphify-detector-only-proxy",
       "risk": "high",
@@ -1779,7 +1779,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "tree-sitter-elixir module/function proxy",
-      "nativeCommandTemplate": "/tmp/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> /tmp/atlas-live-elixir-phoenix/repo/lib",
+      "nativeCommandTemplate": "$WORK/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> $WORK/atlas-live-elixir-phoenix/repo/lib",
       "graphifyDetectorOnly": false,
       "toolClass": "scope-proxy",
       "risk": "medium",
@@ -1843,7 +1843,7 @@
             "(cd work/elixir/01-phoenixframework__phoenix/lib && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> work/elixir/01-phoenixframework__phoenix/lib"
+            "$WORK/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> work/elixir/01-phoenixframework__phoenix/lib"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -1885,7 +1885,7 @@
             "(cd work/elixir/02-elixir-plug__plug/lib && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> work/elixir/02-elixir-plug__plug/lib"
+            "$WORK/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> work/elixir/02-elixir-plug__plug/lib"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -1927,7 +1927,7 @@
             "(cd work/elixir/03-elixir-ecto__ecto/lib && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> work/elixir/03-elixir-ecto__ecto/lib"
+            "$WORK/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> work/elixir/03-elixir-ecto__ecto/lib"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -1943,7 +1943,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "ets-source-counter",
-      "nativeCommandTemplate": "python3 <ets source counter> /tmp/atlas-live-ets-openharmony-tabs/repo/code/ArkTS1.2/TabsSample/entry/src/main/ets",
+      "nativeCommandTemplate": "python3 <ets source counter> $WORK/atlas-live-ets-openharmony-tabs/repo/code/ArkTS1.2/TabsSample/entry/src/main/ets",
       "graphifyDetectorOnly": true,
       "toolClass": "graphify-detector-only-proxy",
       "risk": "high",
@@ -2100,7 +2100,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "tree-sitter-fortran",
-      "nativeCommandTemplate": "/tmp/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> /tmp/atlas-live-fortran-stdlib/repo/src",
+      "nativeCommandTemplate": "$WORK/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> $WORK/atlas-live-fortran-stdlib/repo/src",
       "graphifyDetectorOnly": false,
       "toolClass": "tree-sitter-baseline",
       "risk": "low",
@@ -2162,7 +2162,7 @@
             "(cd work/fortran/01-fortran-lang__stdlib/src && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> /tmp/atlas-live-fortran-stdlib/repo/src"
+            "$WORK/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> $WORK/atlas-live-fortran-stdlib/repo/src"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -2203,7 +2203,7 @@
             "(cd work/fortran/02-fortran-lang__fpm/src && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> /tmp/atlas-live-fortran-stdlib/repo/src"
+            "$WORK/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> $WORK/atlas-live-fortran-stdlib/repo/src"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -2244,7 +2244,7 @@
             "(cd work/fortran/03-jacobwilliams__json-fortran/src && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> /tmp/atlas-live-fortran-stdlib/repo/src"
+            "$WORK/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> $WORK/atlas-live-fortran-stdlib/repo/src"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -2260,7 +2260,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "tree-sitter-groovy",
-      "nativeCommandTemplate": "/tmp/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> /tmp/atlas-live-groovy-nextflow/repo/modules/nf-commons/src/main",
+      "nativeCommandTemplate": "$WORK/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> $WORK/atlas-live-groovy-nextflow/repo/modules/nf-commons/src/main",
       "graphifyDetectorOnly": false,
       "toolClass": "tree-sitter-baseline",
       "risk": "low",
@@ -2322,7 +2322,7 @@
             "(cd work/groovy/01-jvoegele__gradle-android-plugin && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> work/groovy/01-jvoegele__gradle-android-plugin"
+            "$WORK/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> work/groovy/01-jvoegele__gradle-android-plugin"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -2363,7 +2363,7 @@
             "(cd work/groovy/02-allegro__json-avro-converter && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> work/groovy/02-allegro__json-avro-converter"
+            "$WORK/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> work/groovy/02-allegro__json-avro-converter"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -2404,7 +2404,7 @@
             "(cd work/groovy/03-jaredsburrows__gradle-license-plugin && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> work/groovy/03-jaredsburrows__gradle-license-plugin"
+            "$WORK/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> work/groovy/03-jaredsburrows__gradle-license-plugin"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -2420,7 +2420,7 @@
       "isCodeLanguage": false,
       "isStructured": true,
       "nativeTool": "python-json",
-      "nativeCommandTemplate": "/opt/homebrew/bin/python3 -c <python-json key counter> /tmp/atlas-live-json-eslint-create-config/repo",
+      "nativeCommandTemplate": "/opt/homebrew/bin/python3 -c <python-json key counter> $WORK/atlas-live-json-eslint-create-config/repo",
       "graphifyDetectorOnly": false,
       "toolClass": "structured-format",
       "risk": "structured",
@@ -2452,7 +2452,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "tree-sitter-julia",
-      "nativeCommandTemplate": "/tmp/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> /tmp/atlas-live-julia-json/repo/src",
+      "nativeCommandTemplate": "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> $WORK/atlas-live-julia-json/repo/src",
       "graphifyDetectorOnly": false,
       "toolClass": "tree-sitter-baseline",
       "risk": "low",
@@ -2514,7 +2514,7 @@
             "(cd work/julia/01-JuliaIO__JSON.jl/src && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> work/julia/01-JuliaIO__JSON.jl/src"
+            "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> work/julia/01-JuliaIO__JSON.jl/src"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -2555,7 +2555,7 @@
             "(cd work/julia/02-JuliaData__DataFrames.jl/src && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> work/julia/02-JuliaData__DataFrames.jl/src"
+            "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> work/julia/02-JuliaData__DataFrames.jl/src"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -2596,7 +2596,7 @@
             "(cd work/julia/03-JuliaStats__StatsBase.jl/src && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> work/julia/03-JuliaStats__StatsBase.jl/src"
+            "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> work/julia/03-JuliaStats__StatsBase.jl/src"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -2612,7 +2612,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "tree-sitter-kotlin",
-      "nativeCommandTemplate": "/tmp/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> /tmp/atlas-live-kotlin-okhttp/repo/okhttp/src/commonJvmAndroid/kotlin",
+      "nativeCommandTemplate": "$WORK/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> $WORK/atlas-live-kotlin-okhttp/repo/okhttp/src/commonJvmAndroid/kotlin",
       "graphifyDetectorOnly": false,
       "toolClass": "tree-sitter-baseline",
       "risk": "low",
@@ -2674,7 +2674,7 @@
             "(cd work/kotlin/01-gothinkster__kotlin-spring-realworld-example-app && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> work/kotlin/01-gothinkster__kotlin-spring-realworld-example-app"
+            "$WORK/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> work/kotlin/01-gothinkster__kotlin-spring-realworld-example-app"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -2715,7 +2715,7 @@
             "(cd work/kotlin/02-VKCOM__vk-android-sdk && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> work/kotlin/02-VKCOM__vk-android-sdk"
+            "$WORK/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> work/kotlin/02-VKCOM__vk-android-sdk"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -2756,7 +2756,7 @@
             "(cd work/kotlin/03-husaynhakeem__android-face-detector && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> work/kotlin/03-husaynhakeem__android-face-detector"
+            "$WORK/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> work/kotlin/03-husaynhakeem__android-face-detector"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -2772,7 +2772,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "luaparser",
-      "nativeCommandTemplate": "/tmp/atlas-live-lua-lazy/luaparser-venv/bin/python -c <luaparser definition counter> /tmp/atlas-live-lua-lazy/repo",
+      "nativeCommandTemplate": "$WORK/atlas-live-lua-lazy/luaparser-venv/bin/python -c <luaparser definition counter> $WORK/atlas-live-lua-lazy/repo",
       "graphifyDetectorOnly": false,
       "toolClass": "parser-library-baseline",
       "risk": "low",
@@ -2915,7 +2915,7 @@
       "isCodeLanguage": false,
       "isStructured": true,
       "nativeTool": "markdown-it-py",
-      "nativeCommandTemplate": "/tmp/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> /tmp/atlas-live-markdown-mdbook/repo/guide/src",
+      "nativeCommandTemplate": "$WORK/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> $WORK/atlas-live-markdown-mdbook/repo/guide/src",
       "graphifyDetectorOnly": false,
       "toolClass": "structured-format",
       "risk": "structured",
@@ -2978,7 +2978,7 @@
             "(cd work/markdown/01-rust-lang__mdBook/guide/src && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> work/markdown/01-rust-lang__mdBook/guide/src"
+            "$WORK/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> work/markdown/01-rust-lang__mdBook/guide/src"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -3019,7 +3019,7 @@
             "(cd work/markdown/02-vitejs__vite/docs && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> work/markdown/02-vitejs__vite/docs"
+            "$WORK/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> work/markdown/02-vitejs__vite/docs"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -3060,7 +3060,7 @@
             "(cd work/markdown/03-pnpm__pnpm.io/docs && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> work/markdown/03-pnpm__pnpm.io/docs"
+            "$WORK/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> work/markdown/03-pnpm__pnpm.io/docs"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -3076,7 +3076,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "tree-sitter-objc",
-      "nativeCommandTemplate": "/tmp/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> /tmp/atlas-live-objc-sdwebimage/repo/SDWebImage",
+      "nativeCommandTemplate": "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> $WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
       "graphifyDetectorOnly": false,
       "toolClass": "tree-sitter-baseline",
       "risk": "low",
@@ -3138,7 +3138,7 @@
             "(cd work/objc/01-thetron__StringScore && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> work/objc/01-thetron__StringScore"
+            "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> work/objc/01-thetron__StringScore"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -3179,7 +3179,7 @@
             "(cd work/objc/02-rs__SafariTabSwitching && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> work/objc/02-rs__SafariTabSwitching"
+            "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> work/objc/02-rs__SafariTabSwitching"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -3220,7 +3220,7 @@
             "(cd work/objc/03-iosphere__ISHPullUp && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> work/objc/03-iosphere__ISHPullUp"
+            "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> work/objc/03-iosphere__ISHPullUp"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -3236,7 +3236,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "pascal-regex-counter",
-      "nativeCommandTemplate": "/opt/homebrew/bin/python3 -c <pascal declaration counter> /tmp/atlas-live-pascal-pascalscript/repo/Source",
+      "nativeCommandTemplate": "/opt/homebrew/bin/python3 -c <pascal declaration counter> $WORK/atlas-live-pascal-pascalscript/repo/Source",
       "graphifyDetectorOnly": false,
       "toolClass": "source-counter-proxy",
       "risk": "medium",
@@ -3393,7 +3393,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "php-tokenizer",
-      "nativeCommandTemplate": "php /tmp/atlas-php-3repo-1782814733/php_token_counter.php /tmp/atlas-php-3repo-1782814733/slim/repo",
+      "nativeCommandTemplate": "php $WORK/atlas-php-3repo-1782814733/php_token_counter.php $WORK/atlas-php-3repo-1782814733/slim/repo",
       "graphifyDetectorOnly": false,
       "toolClass": "parser-library-baseline",
       "risk": "low",
@@ -3536,7 +3536,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "pwsh-parser",
-      "nativeCommandTemplate": "/usr/local/bin/pwsh -NoLogo -NoProfile -File /tmp/atlas-live-powershell-powershellget/pwsh_stats.ps1 /tmp/atlas-live-powershell-powershellget/repo/src",
+      "nativeCommandTemplate": "/usr/local/bin/pwsh -NoLogo -NoProfile -File $WORK/atlas-live-powershell-powershellget/pwsh_stats.ps1 $WORK/atlas-live-powershell-powershellget/repo/src",
       "graphifyDetectorOnly": false,
       "toolClass": "parser-library-baseline",
       "risk": "low",
@@ -3679,7 +3679,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "razor-directive-counter",
-      "nativeCommandTemplate": "python3 <razor directive counter> /tmp/atlas-live-razor-eshoponweb/repo/src",
+      "nativeCommandTemplate": "python3 <razor directive counter> $WORK/atlas-live-razor-eshoponweb/repo/src",
       "graphifyDetectorOnly": false,
       "toolClass": "source-counter-proxy",
       "risk": "medium",
@@ -3826,7 +3826,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "ruby-ripper",
-      "nativeCommandTemplate": "/usr/bin/ruby /tmp/atlas-live-ruby-sinatra/ripper_stats.rb /tmp/atlas-live-ruby-sinatra/repo",
+      "nativeCommandTemplate": "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb $WORK/atlas-live-ruby-sinatra/repo",
       "graphifyDetectorOnly": false,
       "toolClass": "parser-library-baseline",
       "risk": "low",
@@ -3886,7 +3886,7 @@
             "(cd work/ruby/01-tpope__hookup && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/usr/bin/ruby /tmp/atlas-live-ruby-sinatra/ripper_stats.rb work/ruby/01-tpope__hookup"
+            "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb work/ruby/01-tpope__hookup"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_uses_ephemeral_helper_path"
@@ -3925,7 +3925,7 @@
             "(cd work/ruby/02-mailgun__mailgun-ruby && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/usr/bin/ruby /tmp/atlas-live-ruby-sinatra/ripper_stats.rb work/ruby/02-mailgun__mailgun-ruby"
+            "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb work/ruby/02-mailgun__mailgun-ruby"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_uses_ephemeral_helper_path"
@@ -3964,7 +3964,7 @@
             "(cd work/ruby/03-BerlinVagrant__vagrant-dns && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/usr/bin/ruby /tmp/atlas-live-ruby-sinatra/ripper_stats.rb work/ruby/03-BerlinVagrant__vagrant-dns"
+            "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb work/ruby/03-BerlinVagrant__vagrant-dns"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_uses_ephemeral_helper_path"
@@ -4139,7 +4139,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "r-source-counter",
-      "nativeCommandTemplate": "python3 <R source counter> /tmp/atlas-live-r-ggplot2/repo/R",
+      "nativeCommandTemplate": "python3 <R source counter> $WORK/atlas-live-r-ggplot2/repo/R",
       "graphifyDetectorOnly": true,
       "toolClass": "graphify-detector-only-proxy",
       "risk": "high",
@@ -4296,7 +4296,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "tree-sitter-scala",
-      "nativeCommandTemplate": "/tmp/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> /tmp/atlas-live-scala-cats/repo/core/src/main/scala",
+      "nativeCommandTemplate": "$WORK/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> $WORK/atlas-live-scala-cats/repo/core/src/main/scala",
       "graphifyDetectorOnly": false,
       "toolClass": "tree-sitter-baseline",
       "risk": "low",
@@ -4358,7 +4358,7 @@
             "(cd work/scala/01-spirom__LearningSpark && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> work/scala/01-spirom__LearningSpark"
+            "$WORK/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> work/scala/01-spirom__LearningSpark"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -4399,7 +4399,7 @@
             "(cd work/scala/02-Eliah-Lakhin__papa-carlo && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> work/scala/02-Eliah-Lakhin__papa-carlo"
+            "$WORK/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> work/scala/02-Eliah-Lakhin__papa-carlo"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -4440,7 +4440,7 @@
             "(cd work/scala/03-xerial__larray && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> work/scala/03-xerial__larray"
+            "$WORK/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> work/scala/03-xerial__larray"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -4456,7 +4456,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "sqlfluff",
-      "nativeCommandTemplate": "/tmp/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>",
+      "nativeCommandTemplate": "$WORK/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>",
       "graphifyDetectorOnly": false,
       "toolClass": "parser-library-baseline",
       "risk": "low",
@@ -4518,7 +4518,7 @@
             "(cd work/sql/01-hasura__graphql-engine/server/src-rsr/migrations && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>"
+            "$WORK/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -4559,7 +4559,7 @@
             "(cd work/sql/02-timescale__timescaledb/sql/pre_install && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>"
+            "$WORK/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -4600,7 +4600,7 @@
             "(cd work/sql/03-postgres__postgres/contrib/bloom && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>"
+            "$WORK/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -4616,7 +4616,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "svelte-compiler",
-      "nativeCommandTemplate": "/opt/homebrew/bin/node /tmp/atlas-live-svelte-carbon/svelte-compiler/svelte_stats.js /tmp/atlas-live-svelte-carbon/repo/src",
+      "nativeCommandTemplate": "/opt/homebrew/bin/node $WORK/atlas-live-svelte-carbon/svelte-compiler/svelte_stats.js $WORK/atlas-live-svelte-carbon/repo/src",
       "graphifyDetectorOnly": false,
       "toolClass": "parser-library-baseline",
       "risk": "low",
@@ -4759,7 +4759,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "sourcekit-lsp",
-      "nativeCommandTemplate": "/usr/bin/sourcekit-lsp --scratch-path /tmp/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM",
+      "nativeCommandTemplate": "/usr/bin/sourcekit-lsp --scratch-path $WORK/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM",
       "graphifyDetectorOnly": false,
       "toolClass": "compiler-or-lsp-baseline",
       "risk": "low",
@@ -4819,7 +4819,7 @@
             "(cd work/swift/01-ReSwift__ReSwift-Router && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/usr/bin/sourcekit-lsp --scratch-path /tmp/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM"
+            "/usr/bin/sourcekit-lsp --scratch-path $WORK/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_uses_ephemeral_helper_path"
@@ -4858,7 +4858,7 @@
             "(cd work/swift/02-treastrain__TRETJapanNFCReader && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/usr/bin/sourcekit-lsp --scratch-path /tmp/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM"
+            "/usr/bin/sourcekit-lsp --scratch-path $WORK/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_uses_ephemeral_helper_path"
@@ -4897,7 +4897,7 @@
             "(cd work/swift/03-soberman__ARSLineProgress && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/usr/bin/sourcekit-lsp --scratch-path /tmp/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM"
+            "/usr/bin/sourcekit-lsp --scratch-path $WORK/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_uses_ephemeral_helper_path"
@@ -4912,7 +4912,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "python-hcl2",
-      "nativeCommandTemplate": "/tmp/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> /tmp/atlas-live-terraform-vpc/repo",
+      "nativeCommandTemplate": "$WORK/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> $WORK/atlas-live-terraform-vpc/repo",
       "graphifyDetectorOnly": false,
       "toolClass": "parser-library-baseline",
       "risk": "low",
@@ -4974,7 +4974,7 @@
             "(cd work/terraform/01-terraform-aws-modules__terraform-aws-vpc && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> work/terraform/01-terraform-aws-modules__terraform-aws-vpc"
+            "$WORK/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> work/terraform/01-terraform-aws-modules__terraform-aws-vpc"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -5015,7 +5015,7 @@
             "(cd work/terraform/02-terraform-aws-modules__terraform-aws-eks && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> work/terraform/02-terraform-aws-modules__terraform-aws-eks"
+            "$WORK/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> work/terraform/02-terraform-aws-modules__terraform-aws-eks"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -5056,7 +5056,7 @@
             "(cd work/terraform/03-terraform-aws-modules__terraform-aws-security-group && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> work/terraform/03-terraform-aws-modules__terraform-aws-security-group"
+            "$WORK/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> work/terraform/03-terraform-aws-modules__terraform-aws-security-group"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -5072,7 +5072,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "tree-sitter-systemverilog module/package/function proxy",
-      "nativeCommandTemplate": "/tmp/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> /tmp/atlas-live-verilog-ibex/repo/rtl",
+      "nativeCommandTemplate": "$WORK/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> $WORK/atlas-live-verilog-ibex/repo/rtl",
       "graphifyDetectorOnly": false,
       "toolClass": "scope-proxy",
       "risk": "medium",
@@ -5136,7 +5136,7 @@
             "(cd work/verilog/01-lowRISC__ibex/rtl && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> work/verilog/01-lowRISC__ibex/rtl"
+            "$WORK/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> work/verilog/01-lowRISC__ibex/rtl"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -5178,7 +5178,7 @@
             "(cd work/verilog/02-YosysHQ__picorv32/picosoc && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> work/verilog/02-YosysHQ__picorv32/picosoc"
+            "$WORK/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> work/verilog/02-YosysHQ__picorv32/picosoc"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -5220,7 +5220,7 @@
             "(cd work/verilog/03-alexforencich__verilog-ethernet/rtl && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> work/verilog/03-alexforencich__verilog-ethernet/rtl"
+            "$WORK/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> work/verilog/03-alexforencich__verilog-ethernet/rtl"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -5236,7 +5236,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "vue-compiler-sfc",
-      "nativeCommandTemplate": "/opt/homebrew/bin/node /tmp/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js /tmp/atlas-live-vue-realworld/repo/src",
+      "nativeCommandTemplate": "/opt/homebrew/bin/node $WORK/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js $WORK/atlas-live-vue-realworld/repo/src",
       "graphifyDetectorOnly": false,
       "toolClass": "parser-library-baseline",
       "risk": "low",
@@ -5296,7 +5296,7 @@
             "(cd work/vue/01-LiuXin-Developer__rightHouse && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/opt/homebrew/bin/node /tmp/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js work/vue/01-LiuXin-Developer__rightHouse"
+            "/opt/homebrew/bin/node $WORK/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js work/vue/01-LiuXin-Developer__rightHouse"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_uses_ephemeral_helper_path"
@@ -5335,7 +5335,7 @@
             "(cd work/vue/02-Tencent__tdesign-vue-starter && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/opt/homebrew/bin/node /tmp/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js work/vue/02-Tencent__tdesign-vue-starter"
+            "/opt/homebrew/bin/node $WORK/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js work/vue/02-Tencent__tdesign-vue-starter"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_uses_ephemeral_helper_path"
@@ -5374,7 +5374,7 @@
             "(cd work/vue/03-powerdong__Music-player && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/opt/homebrew/bin/node /tmp/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js work/vue/03-powerdong__Music-player"
+            "/opt/homebrew/bin/node $WORK/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js work/vue/03-powerdong__Music-player"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_uses_ephemeral_helper_path"
@@ -5389,7 +5389,7 @@
       "isCodeLanguage": true,
       "isStructured": false,
       "nativeTool": "tree-sitter-zig",
-      "nativeCommandTemplate": "/tmp/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> /tmp/atlas-live-zig-zls/repo/src",
+      "nativeCommandTemplate": "$WORK/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> $WORK/atlas-live-zig-zls/repo/src",
       "graphifyDetectorOnly": false,
       "toolClass": "tree-sitter-baseline",
       "risk": "low",
@@ -5451,7 +5451,7 @@
             "(cd work/zig/01-norma-core__gremlin.zig && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> work/zig/01-norma-core__gremlin.zig"
+            "$WORK/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> work/zig/01-norma-core__gremlin.zig"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -5492,7 +5492,7 @@
             "(cd work/zig/02-jamii__focus && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> work/zig/02-jamii__focus"
+            "$WORK/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> work/zig/02-jamii__focus"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",
@@ -5533,7 +5533,7 @@
             "(cd work/zig/03-Validark__Accelerated-Zig-Parser && uv tool run --from graphifyy graphify update .)"
           ],
           "nativeRemeasurementCandidateCommands": [
-            "/tmp/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> work/zig/03-Validark__Accelerated-Zig-Parser"
+            "$WORK/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> work/zig/03-Validark__Accelerated-Zig-Parser"
           ],
           "nativeRemeasurementCandidateBlockers": [
             "native_command_contains_placeholder",

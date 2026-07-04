@@ -4,12 +4,12 @@
   "commit": "8da87d4f3305a550e7b739bad764e34bf1e46a08",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/zigtools/zls /tmp/atlas-live-zig-zls/repo",
+    "clone": "git clone --depth 1 https://github.com/zigtools/zls $WORK/atlas-live-zig-zls/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-zig-zls/atlas.db --json index /tmp/atlas-live-zig-zls/repo/src",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-zig-zls/atlas.db --json index /tmp/atlas-live-zig-zls/repo/src",
-    "graphify_update": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
-    "native_baseline": "/tmp/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> /tmp/atlas-live-zig-zls/repo/src",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-zig-zls/atlas.db --json index $WORK/atlas-live-zig-zls/repo/src",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-zig-zls/atlas.db --json index $WORK/atlas-live-zig-zls/repo/src",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "$WORK/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> $WORK/atlas-live-zig-zls/repo/src",
     "query_symbols": [
       "Server",
       "DocumentStore",
@@ -17,8 +17,8 @@
       "Config",
       "main"
     ],
-    "target_path": "/tmp/atlas-live-zig-zls/repo/src",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-zig-zls/atlas.db serve --addr 127.0.0.1:4240"
+    "target_path": "$WORK/atlas-live-zig-zls/repo/src",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-zig-zls/atlas.db serve --addr 127.0.0.1:4240"
   },
   "atlas": {
     "cold_wall_seconds": 0.932,
@@ -271,7 +271,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.58,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "[graphify watch] Rebuilt: 1096 nodes, 2536 edges, 47 communities",
@@ -291,7 +291,7 @@
     "status": "partial",
     "ok": false,
     "seconds": 0.212,
-    "command": "/tmp/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> /tmp/atlas-live-zig-zls/repo/src",
+    "command": "$WORK/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> $WORK/atlas-live-zig-zls/repo/src",
     "metrics": {
       "files": 43,
       "parsed_files": 42,
@@ -340,7 +340,7 @@
   "query_warmup": {
     "symbol": "Server",
     "atlas_command": "curl -fsS http://127.0.0.1:4240/api/v1/symbols/Server/explain?repo_id=src&format=plain",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Server",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Server",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -350,7 +350,7 @@
       "symbol": "Server",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4240/api/v1/symbols/Server/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Server",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Server",
       "atlas_tokens": 2,
       "graphify_tokens": 268,
       "atlas_ms": 8.15,
@@ -388,7 +388,7 @@
       "symbol": "DocumentStore",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4240/api/v1/symbols/DocumentStore/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain DocumentStore",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain DocumentStore",
       "atlas_tokens": 2,
       "graphify_tokens": 277,
       "atlas_ms": 7.291,
@@ -426,7 +426,7 @@
       "symbol": "Analyser",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4240/api/v1/symbols/Analyser/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Analyser",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Analyser",
       "atlas_tokens": 2,
       "graphify_tokens": 259,
       "atlas_ms": 7.219,
@@ -464,7 +464,7 @@
       "symbol": "Config",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4240/api/v1/symbols/Config/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Config",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Config",
       "atlas_tokens": 2,
       "graphify_tokens": 79,
       "atlas_ms": 7.047,
@@ -502,7 +502,7 @@
       "symbol": "main",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4240/api/v1/symbols/main/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain main",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain main",
       "atlas_tokens": 2,
       "graphify_tokens": 202,
       "atlas_ms": 7.094,
@@ -555,7 +555,7 @@
       {
         "repo": "https://github.com/norma-core/gremlin.zig",
         "commit": "fa7fab721fa403b8d2b7957e0c59dbe232fde9fc",
-        "target_path": "/tmp/atlas-random-validation-tags/work-tight/zig/1-norma-core__gremlin.zig",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/zig/1-norma-core__gremlin.zig",
         "atlas_definitions": 2331,
         "native_definitions": 946,
         "coverage_ratio": 2.4641,
@@ -565,7 +565,7 @@
       {
         "repo": "https://github.com/jamii/focus",
         "commit": "4aee7dda8bea2cbcb766a8eb78711d42fcd62761",
-        "target_path": "/tmp/atlas-random-validation-tags/work-tight/zig/2-jamii__focus",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/zig/2-jamii__focus",
         "atlas_definitions": 1624,
         "native_definitions": 769,
         "coverage_ratio": 2.1118,
@@ -575,7 +575,7 @@
       {
         "repo": "https://github.com/Validark/Accelerated-Zig-Parser",
         "commit": "8782a1924573641dc1f4a146afd530bf47838987",
-        "target_path": "/tmp/atlas-random-validation-tags/work-tight/zig/3-Validark__Accelerated-Zig-Parser",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/zig/3-Validark__Accelerated-Zig-Parser",
         "atlas_definitions": 941,
         "native_definitions": 200,
         "coverage_ratio": 4.705,

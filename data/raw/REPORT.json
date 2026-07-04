@@ -3,7 +3,7 @@
     "lang": "go",
     "repo": "https://github.com/sirupsen/logrus",
     "subdir": "",
-    "target": "/tmp/atlas-graphify-vs-atlas-final/go",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/go",
     "graphify": {
       "ok": true,
       "seconds": 0.7,
@@ -51,7 +51,7 @@
     "lang": "python",
     "repo": "https://github.com/psf/requests",
     "subdir": "src",
-    "target": "/tmp/atlas-graphify-vs-atlas-final/python/src",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/python/src",
     "graphify": {
       "ok": true,
       "seconds": 0.66,
@@ -94,7 +94,7 @@
     "lang": "javascript",
     "repo": "https://github.com/expressjs/express",
     "subdir": "lib",
-    "target": "/tmp/atlas-graphify-vs-atlas-final/javascript/lib",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/javascript/lib",
     "graphify": {
       "ok": true,
       "seconds": 0.16,
@@ -142,7 +142,7 @@
     "lang": "typescript",
     "repo": "https://github.com/pmndrs/zustand",
     "subdir": "src",
-    "target": "/tmp/atlas-graphify-vs-atlas-final/typescript/src",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/typescript/src",
     "graphify": {
       "ok": true,
       "seconds": 0.2,
@@ -190,7 +190,7 @@
     "lang": "java",
     "repo": "https://github.com/google/gson",
     "subdir": "gson/src/main/java",
-    "target": "/tmp/atlas-graphify-vs-atlas-final/java/gson/src/main/java",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/java/gson/src/main/java",
     "graphify": {
       "ok": true,
       "seconds": 0.99,
@@ -228,7 +228,7 @@
     "lang": "c",
     "repo": "https://github.com/DaveGamble/cJSON",
     "subdir": "",
-    "target": "/tmp/atlas-graphify-vs-atlas-final/c",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/c",
     "graphify": {
       "ok": true,
       "seconds": 0.95,
@@ -278,7 +278,7 @@
     "lang": "cpp",
     "repo": "https://github.com/google/leveldb",
     "subdir": "",
-    "target": "/tmp/atlas-graphify-vs-atlas-final/cpp",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/cpp",
     "graphify": {
       "ok": true,
       "seconds": 1.28,

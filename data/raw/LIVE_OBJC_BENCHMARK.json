@@ -4,12 +4,12 @@
   "commit": "c3ad5e1a9bf55c9b76d4c362430b5fcded96c502",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/SDWebImage/SDWebImage /tmp/atlas-live-objc-sdwebimage/repo",
+    "clone": "git clone --depth 1 https://github.com/SDWebImage/SDWebImage $WORK/atlas-live-objc-sdwebimage/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-objc-sdwebimage/atlas.db --json index /tmp/atlas-live-objc-sdwebimage/repo/SDWebImage",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-objc-sdwebimage/atlas.db --json index /tmp/atlas-live-objc-sdwebimage/repo/SDWebImage",
-    "graphify_update": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
-    "native_baseline": "/tmp/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> /tmp/atlas-live-objc-sdwebimage/repo/SDWebImage",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-objc-sdwebimage/atlas.db --json index $WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-objc-sdwebimage/atlas.db --json index $WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> $WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
     "query_symbols": [
       "SDImageCache",
       "SDWebImageManager",
@@ -17,8 +17,8 @@
       "storeImage:forKey:completion:",
       "objectForKey:"
     ],
-    "target_path": "/tmp/atlas-live-objc-sdwebimage/repo/SDWebImage",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-objc-sdwebimage/atlas.db serve --addr 127.0.0.1:4295"
+    "target_path": "$WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-objc-sdwebimage/atlas.db serve --addr 127.0.0.1:4295"
   },
   "atlas": {
     "cold_wall_seconds": 0.132,
@@ -276,7 +276,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.644,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "  AST extraction: 100/208 uncached files (48%) [14 workers]",
@@ -299,7 +299,7 @@
     "status": "partial",
     "ok": false,
     "seconds": 0.131,
-    "command": "/tmp/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> /tmp/atlas-live-objc-sdwebimage/repo/SDWebImage",
+    "command": "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> $WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
     "metrics": {
       "files": 72,
       "parsed_files": 67,
@@ -368,7 +368,7 @@
   "query_warmup": {
     "symbol": "SDImageCache",
     "atlas_command": "curl -fsS http://127.0.0.1:4295/api/v1/symbols/SDImageCache/explain?repo_id=SDWebImage&format=plain",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain SDImageCache",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain SDImageCache",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -378,7 +378,7 @@
       "symbol": "SDImageCache",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4295/api/v1/symbols/SDImageCache/explain?repo_id=SDWebImage&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain SDImageCache",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain SDImageCache",
       "atlas_tokens": 2,
       "graphify_tokens": 300,
       "atlas_ms": 8.893,
@@ -416,7 +416,7 @@
       "symbol": "SDWebImageManager",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4295/api/v1/symbols/SDWebImageManager/explain?repo_id=SDWebImage&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain SDWebImageManager",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain SDWebImageManager",
       "atlas_tokens": 2,
       "graphify_tokens": 414,
       "atlas_ms": 7.725,
@@ -454,7 +454,7 @@
       "symbol": "sharedImageCache",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4295/api/v1/symbols/sharedImageCache/explain?repo_id=SDWebImage&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain sharedImageCache",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain sharedImageCache",
       "atlas_tokens": 2,
       "graphify_tokens": 57,
       "atlas_ms": 7.358,
@@ -492,7 +492,7 @@
       "symbol": "storeImage:forKey:completion:",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4295/api/v1/symbols/storeImage%3AforKey%3Acompletion%3A/explain?repo_id=SDWebImage&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain storeImage:forKey:completion:",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain storeImage:forKey:completion:",
       "atlas_tokens": 2,
       "graphify_tokens": 14,
       "atlas_ms": 7.165,
@@ -523,7 +523,7 @@
       "symbol": "objectForKey:",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4295/api/v1/symbols/objectForKey%3A/explain?repo_id=SDWebImage&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain objectForKey:",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain objectForKey:",
       "atlas_tokens": 2,
       "graphify_tokens": 56,
       "atlas_ms": 7.151,
@@ -757,7 +757,7 @@
       {
         "repo": "https://github.com/thetron/StringScore",
         "commit": "0a6151c63d859e1a6a788b1a6cdfd5debfffe109",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/objc/5-thetron__StringScore",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/objc/5-thetron__StringScore",
         "atlas_definitions": 4,
         "native_definitions": 4,
         "coverage_ratio": 1,
@@ -767,7 +767,7 @@
       {
         "repo": "https://github.com/rs/SafariTabSwitching",
         "commit": "a5b8ab9c4232fd99e15c672fd60b84acdfab5f9b",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/objc/12-rs__SafariTabSwitching",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/objc/12-rs__SafariTabSwitching",
         "atlas_definitions": 8,
         "native_definitions": 8,
         "coverage_ratio": 1,
@@ -777,7 +777,7 @@
       {
         "repo": "https://github.com/iosphere/ISHPullUp",
         "commit": "13539b8938e697b1f9a2a47a6a8f86d40f2e5068",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/objc/29-iosphere__ISHPullUp",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/objc/29-iosphere__ISHPullUp",
         "atlas_definitions": 101,
         "native_definitions": 101,
         "coverage_ratio": 1,

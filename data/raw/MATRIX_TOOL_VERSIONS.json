@@ -11,7 +11,7 @@
       "tool": "atlas",
       "status": "ok",
       "ok": true,
-      "command": "/tmp/atlas-stamped-1a2ba7a version",
+      "command": "$WORK/atlas-stamped-1a2ba7a version",
       "version": "atlas v0.1.26-24-g1a2ba7a (1a2ba7a, 2026-06-30T19:47:26Z)",
       "stdout": [],
       "stderr": [
@@ -24,7 +24,7 @@
       "tool": "graphify",
       "status": "ok",
       "ok": true,
-      "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify --version",
+      "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify --version",
       "version": "graphify 0.8.49",
       "stdout": [
         "graphify 0.8.49"
@@ -33,7 +33,7 @@
       "exit_code": 0,
       "seconds": 0.039,
       "discovered_version": "graphifyy 0.8.49",
-      "binary": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify"
+      "binary": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify"
     },
     {
       "tool": "go",
@@ -97,7 +97,7 @@
       "tool": "scip-go",
       "status": "ok",
       "ok": true,
-      "command": "/Users/damirdarasu/go/bin/scip-go --version",
+      "command": "$HOME/go/bin/scip-go --version",
       "version": "0.2.7",
       "stdout": [
         "0.2.7"
@@ -136,7 +136,7 @@
       "tool": "scip-java",
       "status": "ok",
       "ok": true,
-      "command": "/Users/damirdarasu/workspace/Aziron/aziron-atlas/bench/tools/scip-java-coursier --version",
+      "command": "<atlas-src>/bench/tools/scip-java-coursier --version",
       "version": "0.12.3",
       "stdout": [
         "0.12.3"
@@ -149,7 +149,7 @@
       "tool": "gopls",
       "status": "ok",
       "ok": true,
-      "command": "/Users/damirdarasu/go/bin/gopls version",
+      "command": "$HOME/go/bin/gopls version",
       "version": "golang.org/x/tools/gopls v0.22.0",
       "stdout": [
         "golang.org/x/tools/gopls v0.22.0"

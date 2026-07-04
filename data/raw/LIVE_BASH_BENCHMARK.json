@@ -4,10 +4,10 @@
   "commit": "a6ec73943099a86fba98bde3b04a1c60944a4549",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/nvm-sh/nvm /tmp/atlas-live-bash-nvm/repo",
+    "clone": "git clone --depth 1 https://github.com/nvm-sh/nvm $WORK/atlas-live-bash-nvm/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-bash-3repo-1782813366/nvm/atlas.db --json index /tmp/atlas-bash-3repo-1782813366/nvm/repo",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-bash-3repo-1782813366/nvm/atlas.db --json index /tmp/atlas-bash-3repo-1782813366/nvm/repo",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-bash-3repo-1782813366/nvm/atlas.db --json index $WORK/atlas-bash-3repo-1782813366/nvm/repo",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-bash-3repo-1782813366/nvm/atlas.db --json index $WORK/atlas-bash-3repo-1782813366/nvm/repo",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
     "native_baseline": "/bin/bash -n plus source function counter <5 shell files>",
     "query_symbols": [
@@ -16,8 +16,8 @@
       "nvm_die_on_prefix",
       "nvm_get_os"
     ],
-    "target_path": "/tmp/atlas-bash-3repo-1782813366/nvm/repo",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-bash-3repo-1782813366/nvm/atlas.db --repo repo serve --addr 127.0.0.1:48234"
+    "target_path": "$WORK/atlas-bash-3repo-1782813366/nvm/repo",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-bash-3repo-1782813366/nvm/atlas.db --repo repo serve --addr 127.0.0.1:48234"
   },
   "atlas": {
     "cold_wall_seconds": 0.337,
@@ -385,7 +385,7 @@
       {
         "repo": "https://github.com/nvm-sh/nvm",
         "commit": "a6ec73943099a86fba98bde3b04a1c60944a4549",
-        "target_path": "/tmp/atlas-bash-3repo-1782813366/nvm/repo",
+        "target_path": "$WORK/atlas-bash-3repo-1782813366/nvm/repo",
         "atlas_definitions": 158,
         "native_definitions": 158,
         "coverage_ratio": 1,
@@ -395,7 +395,7 @@
       {
         "repo": "https://github.com/rbenv/rbenv",
         "commit": "7f984a7bb5c084b0c1c532441862eed5bbeab129",
-        "target_path": "/tmp/atlas-bash-3repo-1782813366/rbenv/repo",
+        "target_path": "$WORK/atlas-bash-3repo-1782813366/rbenv/repo",
         "atlas_definitions": 12,
         "native_definitions": 12,
         "coverage_ratio": 1,
@@ -405,7 +405,7 @@
       {
         "repo": "https://github.com/pyenv/pyenv",
         "commit": "a27d2723d6d4cc00439faa0fd277db700add717f",
-        "target_path": "/tmp/atlas-bash-3repo-1782813366/pyenv/repo",
+        "target_path": "$WORK/atlas-bash-3repo-1782813366/pyenv/repo",
         "atlas_definitions": 36,
         "native_definitions": 36,
         "coverage_ratio": 1,

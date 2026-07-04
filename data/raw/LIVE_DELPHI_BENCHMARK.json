@@ -4,12 +4,12 @@
   "commit": "a37c7c35c6a271b377cd799c48586ea2689a8e0f",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 --filter=blob:none --sparse https://github.com/fpc/Lazarus /tmp/atlas-live-delphi-lazarus/repo",
-    "sparse_checkout": "git -C /tmp/atlas-live-delphi-lazarus/repo sparse-checkout set ide",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-delphi-lazarus/atlas.db --json index /tmp/atlas-live-delphi-lazarus/repo/ide",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-delphi-lazarus/atlas.db --json index /tmp/atlas-live-delphi-lazarus/repo/ide",
+    "clone": "git clone --depth 1 --filter=blob:none --sparse https://github.com/fpc/Lazarus $WORK/atlas-live-delphi-lazarus/repo",
+    "sparse_checkout": "git -C $WORK/atlas-live-delphi-lazarus/repo sparse-checkout set ide",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-delphi-lazarus/atlas.db --json index $WORK/atlas-live-delphi-lazarus/repo/ide",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-delphi-lazarus/atlas.db --json index $WORK/atlas-live-delphi-lazarus/repo/ide",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "python3 <delphi/lazarus source counter> /tmp/atlas-live-delphi-lazarus/repo/ide",
+    "native_baseline": "python3 <delphi/lazarus source counter> $WORK/atlas-live-delphi-lazarus/repo/ide",
     "query_symbols": [
       "AboutForm",
       "FormClose",
@@ -21,8 +21,8 @@
       "TBuildManager",
       "TLazPackageGraph"
     ],
-    "target_path": "/tmp/atlas-live-delphi-lazarus/repo/ide",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-delphi-lazarus/atlas.db --repo ide serve --addr 127.0.0.1:48237"
+    "target_path": "$WORK/atlas-live-delphi-lazarus/repo/ide",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-delphi-lazarus/atlas.db --repo ide serve --addr 127.0.0.1:48237"
   },
   "atlas": {
     "cold_wall_seconds": 2.723,
@@ -226,7 +226,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.026,
-    "command": "python3 <delphi/lazarus source counter> /tmp/atlas-live-delphi-lazarus/repo/ide",
+    "command": "python3 <delphi/lazarus source counter> $WORK/atlas-live-delphi-lazarus/repo/ide",
     "metrics": {
       "files": 206,
       "parsed_files": 206,
@@ -700,7 +700,7 @@
       {
         "repo": "https://github.com/fpc/Lazarus",
         "commit": "a37c7c35c6a271b377cd799c48586ea2689a8e0f",
-        "target_path": "/private/tmp/atlas-delphi-3repo-1782815066/lazarus-ide/repo/ide",
+        "target_path": "/private$WORK/atlas-delphi-3repo-1782815066/lazarus-ide/repo/ide",
         "atlas_definitions": 11308,
         "native_definitions": 11308,
         "coverage_ratio": 1,
@@ -710,7 +710,7 @@
       {
         "repo": "https://github.com/transmission-remote-gui/transgui",
         "commit": "da71b860d4920f7ab847a48bd8d804725ddbad7b",
-        "target_path": "/private/tmp/atlas-delphi-3repo-1782815066/transgui/repo",
+        "target_path": "/private$WORK/atlas-delphi-3repo-1782815066/transgui/repo",
         "atlas_definitions": 1460,
         "native_definitions": 1460,
         "coverage_ratio": 1,
@@ -720,7 +720,7 @@
       {
         "repo": "https://github.com/castle-engine/castle-engine",
         "commit": "ce51df9a6a775826a017546a6f9e460443c94a5c",
-        "target_path": "/private/tmp/atlas-delphi-3repo-1782815066/castle-engine/repo/tools",
+        "target_path": "/private$WORK/atlas-delphi-3repo-1782815066/castle-engine/repo/tools",
         "atlas_definitions": 2429,
         "native_definitions": 2429,
         "coverage_ratio": 1,

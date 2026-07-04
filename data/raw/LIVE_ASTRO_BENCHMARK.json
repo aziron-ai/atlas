@@ -4,12 +4,12 @@
   "commit": "0859a3ea85f35325c0a292f9b3131824ef95ee38",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/withastro/blog-tutorial-demo /tmp/atlas-live-astro-blog-tutorial/repo",
+    "clone": "git clone --depth 1 https://github.com/withastro/blog-tutorial-demo $WORK/atlas-live-astro-blog-tutorial/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-astro-blog-tutorial/atlas.db --json index /tmp/atlas-live-astro-blog-tutorial/repo/src",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-astro-blog-tutorial/atlas.db --json index /tmp/atlas-live-astro-blog-tutorial/repo/src",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-astro-blog-tutorial/atlas.db --json index $WORK/atlas-live-astro-blog-tutorial/repo/src",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-astro-blog-tutorial/atlas.db --json index $WORK/atlas-live-astro-blog-tutorial/repo/src",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "/opt/homebrew/bin/node /tmp/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js /tmp/atlas-live-astro-blog-tutorial/repo/src",
+    "native_baseline": "/opt/homebrew/bin/node $WORK/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js $WORK/atlas-live-astro-blog-tutorial/repo/src",
     "query_symbols": [
       "BaseLayout",
       "BlogPost",
@@ -18,8 +18,8 @@
       "GET",
       "menu"
     ],
-    "target_path": "/tmp/atlas-live-astro-blog-tutorial/repo/src",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-astro-blog-tutorial/atlas.db --repo src serve --addr 127.0.0.1:48212"
+    "target_path": "$WORK/atlas-live-astro-blog-tutorial/repo/src",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-astro-blog-tutorial/atlas.db --repo src serve --addr 127.0.0.1:48212"
   },
   "atlas": {
     "cold_wall_seconds": 0.09,
@@ -317,7 +317,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.307,
-    "command": "/opt/homebrew/bin/node /tmp/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js /tmp/atlas-live-astro-blog-tutorial/repo/src",
+    "command": "/opt/homebrew/bin/node $WORK/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js $WORK/atlas-live-astro-blog-tutorial/repo/src",
     "metrics": {
       "files": 14,
       "parsed_files": 14,
@@ -1054,7 +1054,7 @@
       {
         "repo": "https://github.com/cssninjaStudio/krypton",
         "commit": "9826929fae84f21ee27dc5874be45084de953f72",
-        "target_path": "/tmp/atlas-random-validation-web/work/astro/1-cssninjaStudio__krypton",
+        "target_path": "$WORK/atlas-random-validation-web/work/astro/1-cssninjaStudio__krypton",
         "atlas_definitions": 46,
         "native_definitions": 46,
         "coverage_ratio": 1,
@@ -1064,7 +1064,7 @@
       {
         "repo": "https://github.com/natemoo-re/astro-remote",
         "commit": "649f9e6bd118e69d2395e5ee604156d374185b59",
-        "target_path": "/tmp/atlas-random-validation-web/work/astro/2-natemoo-re__astro-remote",
+        "target_path": "$WORK/atlas-random-validation-web/work/astro/2-natemoo-re__astro-remote",
         "atlas_definitions": 57,
         "native_definitions": 47,
         "coverage_ratio": 1.2128,
@@ -1074,7 +1074,7 @@
       {
         "repo": "https://github.com/MaeWolff/astro-portfolio-template",
         "commit": "c156b7c0bade58fd8f6409aefb5e78e85686633e",
-        "target_path": "/tmp/atlas-random-validation-web/work/astro/3-MaeWolff__astro-portfolio-template",
+        "target_path": "$WORK/atlas-random-validation-web/work/astro/3-MaeWolff__astro-portfolio-template",
         "atlas_definitions": 59,
         "native_definitions": 50,
         "coverage_ratio": 1.18,

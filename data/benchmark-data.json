@@ -7,295 +7,295 @@
       "name": "MATRIX_REPORT.json",
       "source": "bench/MATRIX_REPORT.json",
       "path": "data/raw/MATRIX_REPORT.json",
-      "bytes": 48502,
-      "sha256": "195b5c9f28fa62acf73f9ded4b0798e323fef6be2526a6ae853984e12ece3cf6"
+      "bytes": 48510,
+      "sha256": "ab017f799b387095476eaf3ae4be5fe77ce6c687adb3d605cabeeda0853a969f"
     },
     {
       "name": "SATURATION_REPORT.json",
       "source": "bench/SATURATION_REPORT.json",
       "path": "data/raw/SATURATION_REPORT.json",
-      "bytes": 529,
-      "sha256": "aaf971f855f4bfed7804446404a8193ed531b0f9c0bc4a4cdcb4145c9ef1f170"
+      "bytes": 516,
+      "sha256": "2de0d446af1e2f31b1f2ab875a6314804fbf451e1fc209b69c371a9f2825c699"
     },
     {
       "name": "REPORT.json",
       "source": "bench/REPORT.json",
       "path": "data/raw/REPORT.json",
-      "bytes": 5544,
-      "sha256": "7fdd8418ee391f5044ae882e45339f076fd114149a8962e4587f92d221054941"
+      "bytes": 5551,
+      "sha256": "cdaa2af7b9408cff386b1497c679341debb1d547f949596ca592e34c2da2cbbb"
     },
     {
       "name": "MATRIX_TOOL_VERSIONS.json",
       "source": "bench/MATRIX_TOOL_VERSIONS.json",
       "path": "data/raw/MATRIX_TOOL_VERSIONS.json",
-      "bytes": 8445,
-      "sha256": "15ed3203fae329a99e8b9af29a5d21f534f195022241aaf304a19e498bb96208"
+      "bytes": 8357,
+      "sha256": "50b4fb90df205eb7b2d469284795a69d13b4d1da8bdf7e8712b8e092362ae49a"
     },
     {
       "name": "GRAPHIFY_LANGUAGE_DISCOVERY.json",
       "source": "bench/GRAPHIFY_LANGUAGE_DISCOVERY.json",
       "path": "data/raw/GRAPHIFY_LANGUAGE_DISCOVERY.json",
-      "bytes": 17587,
-      "sha256": "edf2653326aefd4d16c58a35efd4862b969afeef76d9b22c7a3a673da995c4ab"
+      "bytes": 17522,
+      "sha256": "8f5d094e1c887706f2c41fb2a63c8b816831e1701e29b15e9e7a636847cd1310"
     },
     {
       "name": "LIVE_APEX_BENCHMARK.json",
       "source": "bench/LIVE_APEX_BENCHMARK.json",
       "path": "data/raw/LIVE_APEX_BENCHMARK.json",
-      "bytes": 36749,
-      "sha256": "7883d688856cf2d89d82ae090d8399485c9c60e30717a0b8e9dcb08edaefce46"
+      "bytes": 36761,
+      "sha256": "e5eda6a6f92d9a654c344ca06e01b2b87f4c93373a80dde42d56bcbd547dd019"
     },
     {
       "name": "LIVE_ASTRO_BENCHMARK.json",
       "source": "bench/LIVE_ASTRO_BENCHMARK.json",
       "path": "data/raw/LIVE_ASTRO_BENCHMARK.json",
-      "bytes": 31450,
-      "sha256": "3c72ecd94ad5088949da6008638c181e5872c5f5a071fbe9f7e2d580861083e3"
+      "bytes": 31464,
+      "sha256": "71891f3f7bb02b3c91da7e5db9a3a60a6e3ce3fa96078d36939e8d736976502a"
     },
     {
       "name": "LIVE_BASH_BENCHMARK.json",
       "source": "bench/LIVE_BASH_BENCHMARK.json",
       "path": "data/raw/LIVE_BASH_BENCHMARK.json",
-      "bytes": 14024,
-      "sha256": "3f199c48a0ca66d90f2cd87bcf60148ab155c51b1e7be53df0489221fa6ca3b2"
+      "bytes": 14034,
+      "sha256": "f863db0de695c7d4d8541fd0b7bb9d99384c4dc8bdf93904998053c6664a9d30"
     },
     {
       "name": "LIVE_BLADE_BENCHMARK.json",
       "source": "bench/LIVE_BLADE_BENCHMARK.json",
       "path": "data/raw/LIVE_BLADE_BENCHMARK.json",
-      "bytes": 22489,
-      "sha256": "bee24ea0400dff07e8ccc48356bafc9d2a28947d3114eb80c685e7a9d468ce29"
+      "bytes": 22397,
+      "sha256": "1f1977704dd973b3b4fec3a507612a37393adc9c89e74057bea79f202da7528d"
     },
     {
       "name": "LIVE_BYOND_BENCHMARK.json",
       "source": "bench/LIVE_BYOND_BENCHMARK.json",
       "path": "data/raw/LIVE_BYOND_BENCHMARK.json",
-      "bytes": 26030,
-      "sha256": "f8476e2c1a740678a399d4e8bc158fbbcd7025c818d807959dde34c5107f7f82"
+      "bytes": 25940,
+      "sha256": "7e184b881936d7f452608af6617453a90ad1a50c9d96a02c71df1ab1f074c970"
     },
     {
       "name": "LIVE_CSHARP_BENCHMARK.json",
       "source": "bench/LIVE_CSHARP_BENCHMARK.json",
       "path": "data/raw/LIVE_CSHARP_BENCHMARK.json",
-      "bytes": 20185,
-      "sha256": "830702f918ae51c9511833555ef52dba093d1ea88ca047704d138a581bf5ebe6"
+      "bytes": 20106,
+      "sha256": "b5d29bab3e9258c1c9912a09926a59024f4c8174b430df04a0b483ecfd9d091a"
     },
     {
       "name": "LIVE_CUDA_BENCHMARK.json",
       "source": "bench/LIVE_CUDA_BENCHMARK.json",
       "path": "data/raw/LIVE_CUDA_BENCHMARK.json",
-      "bytes": 22558,
-      "sha256": "91d97b680867c90cf41494adb489f99907c08ef5f5221377920accf91a7dde94"
+      "bytes": 22571,
+      "sha256": "029e0dd4ac8e8d87d81aa0b367c9fbb393ed22b0c4b5d0949283bc68060f2234"
     },
     {
       "name": "LIVE_DART_BENCHMARK.json",
       "source": "bench/LIVE_DART_BENCHMARK.json",
       "path": "data/raw/LIVE_DART_BENCHMARK.json",
-      "bytes": 17352,
-      "sha256": "381559c6244f5103e5a25eccd4b0abdefb4c39857aff06236f57b4e96f905c79"
+      "bytes": 17249,
+      "sha256": "e6077adf7283a28f6cea187faa30887dfb7df9c61377fbd22108b3b501bd9415"
     },
     {
       "name": "LIVE_DELPHI_BENCHMARK.json",
       "source": "bench/LIVE_DELPHI_BENCHMARK.json",
       "path": "data/raw/LIVE_DELPHI_BENCHMARK.json",
-      "bytes": 24910,
-      "sha256": "24037e629807447f6cb60485b3925663ae2862d0af81830ce510bd4374356383"
+      "bytes": 24923,
+      "sha256": "bda1150eb19e4b680f6659c8cea38188c01ad751ae9803d175defa21c529bc08"
     },
     {
       "name": "LIVE_DOTNET_BENCHMARK.json",
       "source": "bench/LIVE_DOTNET_BENCHMARK.json",
       "path": "data/raw/LIVE_DOTNET_BENCHMARK.json",
-      "bytes": 28878,
-      "sha256": "515aeac9f700b4e242f4930529c6f367d9991c9a910172337aea3aa4ccbd9640"
+      "bytes": 28890,
+      "sha256": "61d687e5398de7277f11682d05b636d1487b5b9314fea37d877b3470ee161569"
     },
     {
       "name": "LIVE_EJS_BENCHMARK.json",
       "source": "bench/LIVE_EJS_BENCHMARK.json",
       "path": "data/raw/LIVE_EJS_BENCHMARK.json",
-      "bytes": 24445,
-      "sha256": "cfa6bf9c75d6fc318c25e6852104f3555fbc91b67a50a0f175085fbd9622850b"
+      "bytes": 24353,
+      "sha256": "71b22dfd6323e2f90fc0dd3850243a41724426ecdcc76c50dbfb28ca737cd3d8"
     },
     {
       "name": "LIVE_ELIXIR_BENCHMARK.json",
       "source": "bench/LIVE_ELIXIR_BENCHMARK.json",
       "path": "data/raw/LIVE_ELIXIR_BENCHMARK.json",
-      "bytes": 24808,
-      "sha256": "d88b4c3a8240b7467e26778189049b3be376c2efc7aac02e9e96f4790cecf64b"
+      "bytes": 24718,
+      "sha256": "125c670b5daf7088098ff40aa7f02924dfe4cffb9044a9325c040bd20a8ecd22"
     },
     {
       "name": "LIVE_ETS_BENCHMARK.json",
       "source": "bench/LIVE_ETS_BENCHMARK.json",
       "path": "data/raw/LIVE_ETS_BENCHMARK.json",
-      "bytes": 27131,
-      "sha256": "365eea37c2ca010107d11341d04cfa72990c6a91401eb56ba3c21122c3f293e4"
+      "bytes": 26932,
+      "sha256": "caa3ec9ab2a8ae11fb6ed6df6fd2c7ae4c59c7b075620e199a341590d8d192da"
     },
     {
       "name": "LIVE_FORTRAN_BENCHMARK.json",
       "source": "bench/LIVE_FORTRAN_BENCHMARK.json",
       "path": "data/raw/LIVE_FORTRAN_BENCHMARK.json",
-      "bytes": 16431,
-      "sha256": "73d8005e5d14e50e7f9bb6e67697f9bf41c0f8a2442ecd310b64c759da0eb886"
+      "bytes": 16445,
+      "sha256": "e0a57f0f25a186dc0b259106b6c36634b58a7574484c03eee36da97f1220ba95"
     },
     {
       "name": "LIVE_GROOVY_BENCHMARK.json",
       "source": "bench/LIVE_GROOVY_BENCHMARK.json",
       "path": "data/raw/LIVE_GROOVY_BENCHMARK.json",
-      "bytes": 21191,
-      "sha256": "75b73fee3e9392e88fb7559575107a47a783000e33fbea279ff8592e4b6b4a70"
+      "bytes": 21101,
+      "sha256": "91d2f67c53265a68d355eee7cbae2ae291aebe52b171ab1fcc784f79852000e8"
     },
     {
       "name": "LIVE_JSON_BENCHMARK.json",
       "source": "bench/LIVE_JSON_BENCHMARK.json",
       "path": "data/raw/LIVE_JSON_BENCHMARK.json",
-      "bytes": 20601,
-      "sha256": "d940ab03011d05f889e48323b2d76dbd4f95ac164984e762f09e364b97a59699"
+      "bytes": 20610,
+      "sha256": "3c6eb0a673846eb2bd909e97b6b316c7e8282f0b9bd56ad9ce64736f8c762553"
     },
     {
       "name": "LIVE_JULIA_BENCHMARK.json",
       "source": "bench/LIVE_JULIA_BENCHMARK.json",
       "path": "data/raw/LIVE_JULIA_BENCHMARK.json",
-      "bytes": 17328,
-      "sha256": "b15449899e0eaffcb3de4287e5a7ea766f9e112c0c003400a34f9a05f884f94f"
+      "bytes": 17225,
+      "sha256": "9dc0b1ac4e84fa0f8cf249d6d814732077e86908324288873e7148aac7e5b260"
     },
     {
       "name": "LIVE_KOTLIN_BENCHMARK.json",
       "source": "bench/LIVE_KOTLIN_BENCHMARK.json",
       "path": "data/raw/LIVE_KOTLIN_BENCHMARK.json",
-      "bytes": 20013,
-      "sha256": "c3682674a8148a97c4bb30610b39c42e995519982a2538edc6eb87adef7a97f6"
+      "bytes": 19923,
+      "sha256": "9a707885c5bdfd1294fc54637349e76c141c1e50956778b110a4f05017d2249a"
     },
     {
       "name": "LIVE_LUA_BENCHMARK.json",
       "source": "bench/LIVE_LUA_BENCHMARK.json",
       "path": "data/raw/LIVE_LUA_BENCHMARK.json",
-      "bytes": 17597,
-      "sha256": "102eee2db14e435d91f2ba3cb4a7f4f953008244c542ebd5554d511589db649f"
+      "bytes": 17520,
+      "sha256": "677e28776f15a4f1a23e2168e48cdb4ea1f5d5d94a3b3ad62375e81e91d1b2eb"
     },
     {
       "name": "LIVE_MARKDOWN_BENCHMARK.json",
       "source": "bench/LIVE_MARKDOWN_BENCHMARK.json",
       "path": "data/raw/LIVE_MARKDOWN_BENCHMARK.json",
-      "bytes": 18549,
-      "sha256": "110e1055ae91981a2fa4488305d10d2a2270f364924082a7153bdf90478eba08"
+      "bytes": 18563,
+      "sha256": "1d244289d6750ce99ad25d5012fe458700c406e7120096873e2b41379d9603cc"
     },
     {
       "name": "LIVE_OBJC_BENCHMARK.json",
       "source": "bench/LIVE_OBJC_BENCHMARK.json",
       "path": "data/raw/LIVE_OBJC_BENCHMARK.json",
-      "bytes": 26146,
-      "sha256": "c01c5ee5f1c771d255164b74f51f1441b53b202597b814eb8577cda883ed1b95"
+      "bytes": 26056,
+      "sha256": "ed4a9c1b9dd58e577ea7cefb7d03172ccaa3169233898a2a0fa1257d9ee67b92"
     },
     {
       "name": "LIVE_PASCAL_BENCHMARK.json",
       "source": "bench/LIVE_PASCAL_BENCHMARK.json",
       "path": "data/raw/LIVE_PASCAL_BENCHMARK.json",
-      "bytes": 26523,
-      "sha256": "c74ad1096b7e9f40a0e9ba7b934240c3b2b3c832726bf7bd8ab0e8acc9435f4f"
+      "bytes": 26535,
+      "sha256": "6b96ba361e48150e508a5b811c760161f399cfb2eff46681d774ace227ed11e0"
     },
     {
       "name": "LIVE_PHP_BENCHMARK.json",
       "source": "bench/LIVE_PHP_BENCHMARK.json",
       "path": "data/raw/LIVE_PHP_BENCHMARK.json",
-      "bytes": 15460,
-      "sha256": "ef31996bf829b539e414485369c25e8e6c38129969cf52b7fbc12ea42672d8e6"
+      "bytes": 15474,
+      "sha256": "6c97b4069421841e8bd7ee0bab4f328dbbb16c0eec02a04a1a60c78b1cdeb0c0"
     },
     {
       "name": "LIVE_POWERSHELL_BENCHMARK.json",
       "source": "bench/LIVE_POWERSHELL_BENCHMARK.json",
       "path": "data/raw/LIVE_POWERSHELL_BENCHMARK.json",
-      "bytes": 15861,
-      "sha256": "0123a5c56d1495c3806eab9ed5e130c2ebbb1ad40195a3a4693272670fec08e1"
+      "bytes": 15788,
+      "sha256": "b962d0616214f35169fc9f6ff5448d8677cf8ade96d524521a2b388cdcf4ea85"
     },
     {
       "name": "LIVE_RAZOR_BENCHMARK.json",
       "source": "bench/LIVE_RAZOR_BENCHMARK.json",
       "path": "data/raw/LIVE_RAZOR_BENCHMARK.json",
-      "bytes": 36958,
-      "sha256": "5db32543114514b56533c0ce241ec8f1440ca0d054ce7056ae0bc80cdaa6c2fb"
+      "bytes": 36970,
+      "sha256": "e16f4f36158fda03778858e0f5a001bbb3ac2b673b74d24f3a5d1d4f817ef60b"
     },
     {
       "name": "LIVE_RUBY_BENCHMARK.json",
       "source": "bench/LIVE_RUBY_BENCHMARK.json",
       "path": "data/raw/LIVE_RUBY_BENCHMARK.json",
-      "bytes": 17934,
-      "sha256": "3332c1acfb90e20a802c5ad50069a1edbbc24df4c9ee951346af406d69f25ff9"
+      "bytes": 17857,
+      "sha256": "d4b61c9ee8769ffe114d36f966be8c32133e05eb8cd296a2808d48b704392fd0"
     },
     {
       "name": "LIVE_RUST_BENCHMARK.json",
       "source": "bench/LIVE_RUST_BENCHMARK.json",
       "path": "data/raw/LIVE_RUST_BENCHMARK.json",
-      "bytes": 17085,
-      "sha256": "b9593e691a79a22d4093fa035022663f4e89b4843f319772661ffc2cdf934d76"
+      "bytes": 17004,
+      "sha256": "69f132abd680f1e7046696eab1890f68de335e5f901a260afbd14d389129b254"
     },
     {
       "name": "LIVE_R_BENCHMARK.json",
       "source": "bench/LIVE_R_BENCHMARK.json",
       "path": "data/raw/LIVE_R_BENCHMARK.json",
-      "bytes": 23533,
-      "sha256": "f045baf0e4ec1b2eb71d2ed0f223d089a439905430d03c819979236ba69c7520"
+      "bytes": 23333,
+      "sha256": "ef25b9921f0677d4e99a34b08f898eb1d89e73096dcff87e784a3ca720c46fe4"
     },
     {
       "name": "LIVE_SCALA_BENCHMARK.json",
       "source": "bench/LIVE_SCALA_BENCHMARK.json",
       "path": "data/raw/LIVE_SCALA_BENCHMARK.json",
-      "bytes": 14705,
-      "sha256": "95dfd73fb2a6e35549ff255f36fc9ac5b5a359d78384f00df39cb8d8c1e2ec45"
+      "bytes": 14620,
+      "sha256": "c11e1961172e7a981c380b3f774d07a526efac4d12dc641766b6b12c87f168b4"
     },
     {
       "name": "LIVE_SQL_BENCHMARK.json",
       "source": "bench/LIVE_SQL_BENCHMARK.json",
       "path": "data/raw/LIVE_SQL_BENCHMARK.json",
-      "bytes": 15779,
-      "sha256": "2bcf276f7f76e3278eca1a57f770aa798bf95453cad9f64d753d136f6398e595"
+      "bytes": 15700,
+      "sha256": "357718af0b77f406e39e544a077d3951ab017f3cc978548ac5dcda79f6671667"
     },
     {
       "name": "LIVE_SVELTE_BENCHMARK.json",
       "source": "bench/LIVE_SVELTE_BENCHMARK.json",
       "path": "data/raw/LIVE_SVELTE_BENCHMARK.json",
-      "bytes": 21714,
-      "sha256": "34bde717e93d0cda2e7bdbaa9fb408c409c3e2c3bb7e8f8e320201fcafaab76b"
+      "bytes": 21624,
+      "sha256": "8c0407d14ef86547448a966c84c26ed88f0664d588f1ed8072ea481ddaa1cb2b"
     },
     {
       "name": "LIVE_SWIFT_BENCHMARK.json",
       "source": "bench/LIVE_SWIFT_BENCHMARK.json",
       "path": "data/raw/LIVE_SWIFT_BENCHMARK.json",
-      "bytes": 20488,
-      "sha256": "d3a9197d93e1109e24039c1490d58f322d9cc6769aa98a7c408872290248a2d7"
+      "bytes": 20409,
+      "sha256": "aad29357cb0a7180ac36986ebb7db57da3d410c21e85fd043ff70f255aa20dc8"
     },
     {
       "name": "LIVE_TERRAFORM_BENCHMARK.json",
       "source": "bench/LIVE_TERRAFORM_BENCHMARK.json",
       "path": "data/raw/LIVE_TERRAFORM_BENCHMARK.json",
-      "bytes": 15090,
-      "sha256": "15774db89d681f01ebd4fe7a27a1480ad65c2f7328059c501dd851cd91cac0a0"
+      "bytes": 15026,
+      "sha256": "d06e52bf67adefac1c8dec331d25d5373fac20d79d848e0b6ba94b3e36558306"
     },
     {
       "name": "LIVE_VERILOG_BENCHMARK.json",
       "source": "bench/LIVE_VERILOG_BENCHMARK.json",
       "path": "data/raw/LIVE_VERILOG_BENCHMARK.json",
-      "bytes": 25869,
-      "sha256": "6eea8b59c7cb6b312ec47003833b4ed2d257284daf2d70dddb2316c60066c88b"
+      "bytes": 25766,
+      "sha256": "b9a21fb1fb7e9ff76e94f7148e2626e4d118daece1ebc309f63fd3c80979b5b4"
     },
     {
       "name": "LIVE_VUE_BENCHMARK.json",
       "source": "bench/LIVE_VUE_BENCHMARK.json",
       "path": "data/raw/LIVE_VUE_BENCHMARK.json",
-      "bytes": 24950,
-      "sha256": "476cfe56499197ea75f656810e508ee6bc7613bfdc14668a4e0a9fe2497d12a1"
+      "bytes": 24964,
+      "sha256": "14ade4cb5f0e293ba4d885a8468cc0cdc2a6febcdd5295b368a77c34704f6269"
     },
     {
       "name": "LIVE_ZIG_BENCHMARK.json",
       "source": "bench/LIVE_ZIG_BENCHMARK.json",
       "path": "data/raw/LIVE_ZIG_BENCHMARK.json",
-      "bytes": 19159,
-      "sha256": "b26cf517321166d213f9c5d363ba8274951524d3cb34c62fafe7fbda10d9c7af"
+      "bytes": 19069,
+      "sha256": "66e0ff880786cc052f0de30cb05f0d727c9bb880454533976360018319b86b2f"
     },
     {
       "name": "SUPPORTED_LANGUAGE_BENCHMARK.json",
       "source": "bench/SUPPORTED_LANGUAGE_BENCHMARK.json",
       "path": "data/raw/SUPPORTED_LANGUAGE_BENCHMARK.json",
-      "bytes": 342572,
-      "sha256": "280d922117ade956ef976269881e15f21757c0640b5c82fecfb861317a57ad2c"
+      "bytes": 342092,
+      "sha256": "255dae8461939a6053b8ad9d24f6acd2a509815b79fb228b149327c0b106956e"
     }
   ],
   "derivedArtifacts": [
@@ -388,7 +388,7 @@
           "tool": "atlas",
           "status": "ok",
           "ok": true,
-          "command": "/tmp/atlas-stamped-1a2ba7a version",
+          "command": "$WORK/atlas-stamped-1a2ba7a version",
           "version": "atlas v0.1.26-24-g1a2ba7a (1a2ba7a, 2026-06-30T19:47:26Z)",
           "stdout": [],
           "stderr": [
@@ -401,7 +401,7 @@
           "tool": "graphify",
           "status": "ok",
           "ok": true,
-          "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify --version",
+          "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify --version",
           "version": "graphify 0.8.49",
           "stdout": [
             "graphify 0.8.49"
@@ -410,7 +410,7 @@
           "exit_code": 0,
           "seconds": 0.039,
           "discovered_version": "graphifyy 0.8.49",
-          "binary": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify"
+          "binary": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify"
         },
         {
           "tool": "go",
@@ -474,7 +474,7 @@
           "tool": "scip-go",
           "status": "ok",
           "ok": true,
-          "command": "/Users/damirdarasu/go/bin/scip-go --version",
+          "command": "$HOME/go/bin/scip-go --version",
           "version": "0.2.7",
           "stdout": [
             "0.2.7"
@@ -513,7 +513,7 @@
           "tool": "scip-java",
           "status": "ok",
           "ok": true,
-          "command": "/Users/damirdarasu/workspace/Aziron/aziron-atlas/bench/tools/scip-java-coursier --version",
+          "command": "<atlas-src>/bench/tools/scip-java-coursier --version",
           "version": "0.12.3",
           "stdout": [
             "0.12.3"
@@ -526,7 +526,7 @@
           "tool": "gopls",
           "status": "ok",
           "ok": true,
-          "command": "/Users/damirdarasu/go/bin/gopls version",
+          "command": "$HOME/go/bin/gopls version",
           "version": "golang.org/x/tools/gopls v0.22.0",
           "stdout": [
             "golang.org/x/tools/gopls v0.22.0"
@@ -680,14 +680,14 @@
           "tool": "apex-source-counter",
           "status": "ok",
           "ok": true,
-          "version": "python3 <apex source counter> /tmp/atlas-live-apex-recipes/repo/force-app",
+          "version": "python3 <apex source counter> $WORK/atlas-live-apex-recipes/repo/force-app",
           "note": ""
         },
         {
           "tool": "astro-compiler",
           "status": "ok",
           "ok": true,
-          "version": "/opt/homebrew/bin/node /tmp/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js /tmp/atlas-live-astro-blog-tutorial/repo/src",
+          "version": "/opt/homebrew/bin/node $WORK/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js $WORK/atlas-live-astro-blog-tutorial/repo/src",
           "note": ""
         },
         {
@@ -701,126 +701,126 @@
           "tool": "blade-directive-counter",
           "status": "ok",
           "ok": true,
-          "version": "python3 <blade directive counter> /tmp/atlas-live-blade-bookstack/repo/resources/views",
+          "version": "python3 <blade directive counter> $WORK/atlas-live-blade-bookstack/repo/resources/views",
           "note": ""
         },
         {
           "tool": "byond-source-counter",
           "status": "ok",
           "ok": true,
-          "version": "python3 <byond source counter> /tmp/atlas-live-byond-tgstation/repo/code/modules/mob",
+          "version": "python3 <byond source counter> $WORK/atlas-live-byond-tgstation/repo/code/modules/mob",
           "note": ""
         },
         {
           "tool": "cuda-source-counter",
           "status": "ok",
           "ok": true,
-          "version": "python3 <cuda source counter> /tmp/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+          "version": "python3 <cuda source counter> $WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
           "note": ""
         },
         {
           "tool": "delphi-lazarus-source-counter",
           "status": "ok",
           "ok": true,
-          "version": "python3 <delphi/lazarus source counter> /tmp/atlas-live-delphi-lazarus/repo/ide",
+          "version": "python3 <delphi/lazarus source counter> $WORK/atlas-live-delphi-lazarus/repo/ide",
           "note": ""
         },
         {
           "tool": "ejs-template-counter",
           "status": "ok",
           "ok": true,
-          "version": "python3 <ejs template counter> /tmp/atlas-live-ejs-express/repo/examples",
+          "version": "python3 <ejs template counter> $WORK/atlas-live-ejs-express/repo/examples",
           "note": ""
         },
         {
           "tool": "ets-source-counter",
           "status": "ok",
           "ok": true,
-          "version": "python3 <ets source counter> /tmp/atlas-live-ets-openharmony-tabs/repo/code/ArkTS1.2/TabsSample/entry/src/main/ets",
+          "version": "python3 <ets source counter> $WORK/atlas-live-ets-openharmony-tabs/repo/code/ArkTS1.2/TabsSample/entry/src/main/ets",
           "note": ""
         },
         {
           "tool": "luaparser",
           "status": "ok",
           "ok": true,
-          "version": "/tmp/atlas-live-lua-lazy/luaparser-venv/bin/python -c <luaparser definition counter> /tmp/atlas-live-lua-lazy/repo",
+          "version": "$WORK/atlas-live-lua-lazy/luaparser-venv/bin/python -c <luaparser definition counter> $WORK/atlas-live-lua-lazy/repo",
           "note": ""
         },
         {
           "tool": "markdown-it-py",
           "status": "ok",
           "ok": true,
-          "version": "/tmp/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> /tmp/atlas-live-markdown-mdbook/repo/guide/src",
+          "version": "$WORK/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> $WORK/atlas-live-markdown-mdbook/repo/guide/src",
           "note": ""
         },
         {
           "tool": "pascal-regex-counter",
           "status": "ok",
           "ok": true,
-          "version": "/opt/homebrew/bin/python3 -c <pascal declaration counter> /tmp/atlas-live-pascal-pascalscript/repo/Source",
+          "version": "/opt/homebrew/bin/python3 -c <pascal declaration counter> $WORK/atlas-live-pascal-pascalscript/repo/Source",
           "note": ""
         },
         {
           "tool": "php-tokenizer",
           "status": "ok",
           "ok": true,
-          "version": "/opt/homebrew/bin/php /tmp/atlas-live-php-slim/php_token_stats.php /tmp/atlas-live-php-slim/repo",
+          "version": "/opt/homebrew/bin/php $WORK/atlas-live-php-slim/php_token_stats.php $WORK/atlas-live-php-slim/repo",
           "note": ""
         },
         {
           "tool": "pwsh-parser",
           "status": "ok",
           "ok": true,
-          "version": "/usr/local/bin/pwsh -NoLogo -NoProfile -File /tmp/atlas-live-powershell-powershellget/pwsh_stats.ps1 /tmp/atlas-live-powershell-powershellget/repo/src",
+          "version": "/usr/local/bin/pwsh -NoLogo -NoProfile -File $WORK/atlas-live-powershell-powershellget/pwsh_stats.ps1 $WORK/atlas-live-powershell-powershellget/repo/src",
           "note": ""
         },
         {
           "tool": "python-dotnet-project",
           "status": "ok",
           "ok": true,
-          "version": "/opt/homebrew/bin/python3 -c <dotnet project counter> /tmp/atlas-live-dotnet-dapper/repo",
+          "version": "/opt/homebrew/bin/python3 -c <dotnet project counter> $WORK/atlas-live-dotnet-dapper/repo",
           "note": ""
         },
         {
           "tool": "python-hcl2",
           "status": "ok",
           "ok": true,
-          "version": "/tmp/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> /tmp/atlas-live-terraform-vpc/repo",
+          "version": "$WORK/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> $WORK/atlas-live-terraform-vpc/repo",
           "note": ""
         },
         {
           "tool": "python-json",
           "status": "ok",
           "ok": true,
-          "version": "/opt/homebrew/bin/python3 -c <python-json key counter> /tmp/atlas-live-json-eslint-create-config/repo",
+          "version": "/opt/homebrew/bin/python3 -c <python-json key counter> $WORK/atlas-live-json-eslint-create-config/repo",
           "note": ""
         },
         {
           "tool": "r-source-counter",
           "status": "ok",
           "ok": true,
-          "version": "python3 <R source counter> /tmp/atlas-live-r-ggplot2/repo/R",
+          "version": "python3 <R source counter> $WORK/atlas-live-r-ggplot2/repo/R",
           "note": ""
         },
         {
           "tool": "razor-directive-counter",
           "status": "ok",
           "ok": true,
-          "version": "python3 <razor directive counter> /tmp/atlas-live-razor-eshoponweb/repo/src",
+          "version": "python3 <razor directive counter> $WORK/atlas-live-razor-eshoponweb/repo/src",
           "note": ""
         },
         {
           "tool": "roslyn",
           "status": "ok",
           "ok": true,
-          "version": "/opt/homebrew/bin/dotnet run --no-build -- /tmp/atlas-live-csharp-dapper/repo (Roslyn syntax tree counter)",
+          "version": "/opt/homebrew/bin/dotnet run --no-build -- $WORK/atlas-live-csharp-dapper/repo (Roslyn syntax tree counter)",
           "note": ""
         },
         {
           "tool": "ruby-ripper",
           "status": "ok",
           "ok": true,
-          "version": "/usr/bin/ruby /tmp/atlas-live-ruby-sinatra/ripper_stats.rb /tmp/atlas-live-ruby-sinatra/repo",
+          "version": "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb $WORK/atlas-live-ruby-sinatra/repo",
           "note": ""
         },
         {
@@ -834,98 +834,98 @@
           "tool": "sourcekit-lsp",
           "status": "ok",
           "ok": true,
-          "version": "/usr/bin/sourcekit-lsp --scratch-path /tmp/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM",
+          "version": "/usr/bin/sourcekit-lsp --scratch-path $WORK/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM",
           "note": ""
         },
         {
           "tool": "sqlfluff",
           "status": "ok",
           "ok": true,
-          "version": "/tmp/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>",
+          "version": "$WORK/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>",
           "note": ""
         },
         {
           "tool": "svelte-compiler",
           "status": "ok",
           "ok": true,
-          "version": "/opt/homebrew/bin/node /tmp/atlas-live-svelte-carbon/svelte-compiler/svelte_stats.js /tmp/atlas-live-svelte-carbon/repo/src",
+          "version": "/opt/homebrew/bin/node $WORK/atlas-live-svelte-carbon/svelte-compiler/svelte_stats.js $WORK/atlas-live-svelte-carbon/repo/src",
           "note": ""
         },
         {
           "tool": "tree-sitter-dart",
           "status": "ok",
           "ok": true,
-          "version": "/tmp/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> /tmp/atlas-live-dart-http/repo/pkgs/http/lib",
+          "version": "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> $WORK/atlas-live-dart-http/repo/pkgs/http/lib",
           "note": ""
         },
         {
           "tool": "tree-sitter-elixir module/function proxy",
           "status": "ok",
           "ok": true,
-          "version": "/tmp/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> /tmp/atlas-live-elixir-phoenix/repo/lib",
+          "version": "$WORK/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> $WORK/atlas-live-elixir-phoenix/repo/lib",
           "note": ""
         },
         {
           "tool": "tree-sitter-fortran",
           "status": "ok",
           "ok": true,
-          "version": "/tmp/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> /tmp/atlas-live-fortran-stdlib/repo/src",
+          "version": "$WORK/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> $WORK/atlas-live-fortran-stdlib/repo/src",
           "note": ""
         },
         {
           "tool": "tree-sitter-groovy",
           "status": "partial",
           "ok": false,
-          "version": "/tmp/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> /tmp/atlas-live-groovy-nextflow/repo/modules/nf-commons/src/main",
+          "version": "$WORK/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> $WORK/atlas-live-groovy-nextflow/repo/modules/nf-commons/src/main",
           "note": ""
         },
         {
           "tool": "tree-sitter-julia",
           "status": "partial",
           "ok": false,
-          "version": "/tmp/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> /tmp/atlas-live-julia-json/repo/src",
+          "version": "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> $WORK/atlas-live-julia-json/repo/src",
           "note": ""
         },
         {
           "tool": "tree-sitter-kotlin",
           "status": "partial",
           "ok": false,
-          "version": "/tmp/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> /tmp/atlas-live-kotlin-okhttp/repo/okhttp/src/commonJvmAndroid/kotlin",
+          "version": "$WORK/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> $WORK/atlas-live-kotlin-okhttp/repo/okhttp/src/commonJvmAndroid/kotlin",
           "note": ""
         },
         {
           "tool": "tree-sitter-objc",
           "status": "partial",
           "ok": false,
-          "version": "/tmp/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> /tmp/atlas-live-objc-sdwebimage/repo/SDWebImage",
+          "version": "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> $WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
           "note": ""
         },
         {
           "tool": "tree-sitter-scala",
           "status": "partial",
           "ok": false,
-          "version": "/tmp/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> /tmp/atlas-live-scala-cats/repo/core/src/main/scala",
+          "version": "$WORK/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> $WORK/atlas-live-scala-cats/repo/core/src/main/scala",
           "note": ""
         },
         {
           "tool": "tree-sitter-systemverilog module/package/function proxy",
           "status": "partial",
           "ok": false,
-          "version": "/tmp/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> /tmp/atlas-live-verilog-ibex/repo/rtl",
+          "version": "$WORK/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> $WORK/atlas-live-verilog-ibex/repo/rtl",
           "note": ""
         },
         {
           "tool": "tree-sitter-zig",
           "status": "partial",
           "ok": false,
-          "version": "/tmp/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> /tmp/atlas-live-zig-zls/repo/src",
+          "version": "$WORK/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> $WORK/atlas-live-zig-zls/repo/src",
           "note": ""
         },
         {
           "tool": "vue-compiler-sfc",
           "status": "ok",
           "ok": true,
-          "version": "/opt/homebrew/bin/node /tmp/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js /tmp/atlas-live-vue-realworld/repo/src",
+          "version": "/opt/homebrew/bin/node $WORK/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js $WORK/atlas-live-vue-realworld/repo/src",
           "note": ""
         }
       ]
@@ -2036,7 +2036,7 @@
             "stderr_tail": [
               "I[01:22:17.333] --> textDocument/publishDiagnostics",
               "I[01:22:17.333] --> reply:textDocument/documentSymbol(16) 403 ms",
-              "I[01:22:17.394] Built preamble of size 1594808 for file /private/tmp/atlas-codeintel-matrix-final/c/repo/cJSON.c version 1 in 0.45 seconds",
+              "I[01:22:17.394] Built preamble of size 1594808 for file /private$WORK/atlas-codeintel-matrix-final/c/repo/cJSON.c version 1 in 0.45 seconds",
               "I[01:22:17.415] --> textDocument/publishDiagnostics",
               "I[01:22:17.417] --> reply:textDocument/documentSymbol(10) 486 ms"
             ]
@@ -2330,7 +2330,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.025,
-        "command": "python3 <apex source counter> /tmp/atlas-live-apex-recipes/repo/force-app",
+        "command": "python3 <apex source counter> $WORK/atlas-live-apex-recipes/repo/force-app",
         "definitions": 1072,
         "diagnostics": null
       },
@@ -2376,7 +2376,7 @@
           {
             "repo": "https://github.com/aquivalabs/my-org-butler",
             "commit": "f1225426aa62d207f8efa9a434fbda9082e48b9a",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work/apex/6-aquivalabs__my-org-butler",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work/apex/6-aquivalabs__my-org-butler",
             "atlasDefinitions": 559,
             "nativeDefinitions": 527,
             "coverageRatio": 1.0607,
@@ -2386,7 +2386,7 @@
           {
             "repo": "https://github.com/cirruspath/stripeforce",
             "commit": "83f0b7625a9b09a571769b9b71ae1680d854187b",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work/apex/13-cirruspath__stripeforce",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work/apex/13-cirruspath__stripeforce",
             "atlasDefinitions": 194,
             "nativeDefinitions": 182,
             "coverageRatio": 1.0659,
@@ -2396,7 +2396,7 @@
           {
             "repo": "https://github.com/codefriar/promise",
             "commit": "dbd29f856250fcffbf4b89b244aecd492807f860",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work/apex/22-codefriar__promise",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work/apex/22-codefriar__promise",
             "atlasDefinitions": 43,
             "nativeDefinitions": 35,
             "coverageRatio": 1.2286,
@@ -2616,7 +2616,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.307,
-        "command": "/opt/homebrew/bin/node /tmp/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js /tmp/atlas-live-astro-blog-tutorial/repo/src",
+        "command": "/opt/homebrew/bin/node $WORK/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js $WORK/atlas-live-astro-blog-tutorial/repo/src",
         "definitions": 58,
         "diagnostics": null
       },
@@ -2657,7 +2657,7 @@
           {
             "repo": "https://github.com/cssninjaStudio/krypton",
             "commit": "9826929fae84f21ee27dc5874be45084de953f72",
-            "targetPath": "/tmp/atlas-random-validation-web/work/astro/1-cssninjaStudio__krypton",
+            "targetPath": "$WORK/atlas-random-validation-web/work/astro/1-cssninjaStudio__krypton",
             "atlasDefinitions": 46,
             "nativeDefinitions": 46,
             "coverageRatio": 1,
@@ -2667,7 +2667,7 @@
           {
             "repo": "https://github.com/natemoo-re/astro-remote",
             "commit": "649f9e6bd118e69d2395e5ee604156d374185b59",
-            "targetPath": "/tmp/atlas-random-validation-web/work/astro/2-natemoo-re__astro-remote",
+            "targetPath": "$WORK/atlas-random-validation-web/work/astro/2-natemoo-re__astro-remote",
             "atlasDefinitions": 57,
             "nativeDefinitions": 47,
             "coverageRatio": 1.2128,
@@ -2677,7 +2677,7 @@
           {
             "repo": "https://github.com/MaeWolff/astro-portfolio-template",
             "commit": "c156b7c0bade58fd8f6409aefb5e78e85686633e",
-            "targetPath": "/tmp/atlas-random-validation-web/work/astro/3-MaeWolff__astro-portfolio-template",
+            "targetPath": "$WORK/atlas-random-validation-web/work/astro/3-MaeWolff__astro-portfolio-template",
             "atlasDefinitions": 59,
             "nativeDefinitions": 50,
             "coverageRatio": 1.18,
@@ -2885,7 +2885,7 @@
           {
             "repo": "https://github.com/nvm-sh/nvm",
             "commit": "a6ec73943099a86fba98bde3b04a1c60944a4549",
-            "targetPath": "/tmp/atlas-bash-3repo-1782813366/nvm/repo",
+            "targetPath": "$WORK/atlas-bash-3repo-1782813366/nvm/repo",
             "atlasDefinitions": 158,
             "nativeDefinitions": 158,
             "coverageRatio": 1,
@@ -2895,7 +2895,7 @@
           {
             "repo": "https://github.com/rbenv/rbenv",
             "commit": "7f984a7bb5c084b0c1c532441862eed5bbeab129",
-            "targetPath": "/tmp/atlas-bash-3repo-1782813366/rbenv/repo",
+            "targetPath": "$WORK/atlas-bash-3repo-1782813366/rbenv/repo",
             "atlasDefinitions": 12,
             "nativeDefinitions": 12,
             "coverageRatio": 1,
@@ -2905,7 +2905,7 @@
           {
             "repo": "https://github.com/pyenv/pyenv",
             "commit": "a27d2723d6d4cc00439faa0fd277db700add717f",
-            "targetPath": "/tmp/atlas-bash-3repo-1782813366/pyenv/repo",
+            "targetPath": "$WORK/atlas-bash-3repo-1782813366/pyenv/repo",
             "atlasDefinitions": 36,
             "nativeDefinitions": 36,
             "coverageRatio": 1,
@@ -3050,7 +3050,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.008,
-        "command": "python3 <blade directive counter> /tmp/atlas-live-blade-bookstack/repo/resources/views",
+        "command": "python3 <blade directive counter> $WORK/atlas-live-blade-bookstack/repo/resources/views",
         "definitions": 1090,
         "diagnostics": null
       },
@@ -3091,7 +3091,7 @@
           {
             "repo": "https://github.com/BookStackApp/BookStack",
             "commit": "f7df78b91b12ff1d8e248ded7747e76203904b8e",
-            "targetPath": "/private/tmp/atlas-blade-3repo-1782816048/bookstack/repo/resources/views",
+            "targetPath": "/private$WORK/atlas-blade-3repo-1782816048/bookstack/repo/resources/views",
             "atlasDefinitions": 1090,
             "nativeDefinitions": 1077,
             "coverageRatio": 1.0121,
@@ -3101,7 +3101,7 @@
           {
             "repo": "https://github.com/coollabsio/coolify",
             "commit": "e7dff30b7c998c301fd91bd169727b90c59ec291",
-            "targetPath": "/private/tmp/atlas-blade-3repo-1782816048/coolify/repo/resources/views",
+            "targetPath": "/private$WORK/atlas-blade-3repo-1782816048/coolify/repo/resources/views",
             "atlasDefinitions": 3321,
             "nativeDefinitions": 2439,
             "coverageRatio": 1.3616,
@@ -3111,7 +3111,7 @@
           {
             "repo": "https://github.com/koel/koel",
             "commit": "d727dec030d3b0fb349b4a4aa853adc1baae9bdd",
-            "targetPath": "/private/tmp/atlas-blade-3repo-1782816048/koel/repo/resources/views",
+            "targetPath": "/private$WORK/atlas-blade-3repo-1782816048/koel/repo/resources/views",
             "atlasDefinitions": 25,
             "nativeDefinitions": 21,
             "coverageRatio": 1.1905,
@@ -3276,7 +3276,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.259,
-        "command": "python3 <byond source counter> /tmp/atlas-live-byond-tgstation/repo/code/modules/mob",
+        "command": "python3 <byond source counter> $WORK/atlas-live-byond-tgstation/repo/code/modules/mob",
         "definitions": 8874,
         "diagnostics": null
       },
@@ -3327,7 +3327,7 @@
           {
             "repo": "https://github.com/tgstation/tgstation",
             "commit": "da0d9e08a0b3e9091c287a8aa733f463322e247f",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/byond/1-tgstation/repo/code/modules/mob",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/byond/1-tgstation/repo/code/modules/mob",
             "atlasDefinitions": 8874,
             "nativeDefinitions": 8874,
             "coverageRatio": 1,
@@ -3337,7 +3337,7 @@
           {
             "repo": "https://github.com/goonstation/goonstation",
             "commit": "54977b957b9cb26895407c527e8e643eeff1d8d0",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/byond/2-goonstation/repo/code/modules/speech",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/byond/2-goonstation/repo/code/modules/speech",
             "atlasDefinitions": 810,
             "nativeDefinitions": 810,
             "coverageRatio": 1,
@@ -3347,7 +3347,7 @@
           {
             "repo": "https://github.com/ParadiseSS13/Paradise",
             "commit": "f9332f11bf0f3a3d98a0c6174630ce840d0eb44c",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/byond/3-Paradise/repo/code/modules/mob",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/byond/3-Paradise/repo/code/modules/mob",
             "atlasDefinitions": 8198,
             "nativeDefinitions": 8198,
             "coverageRatio": 1,
@@ -3513,7 +3513,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 2.62,
-        "command": "/opt/homebrew/bin/dotnet run --no-build -- /tmp/atlas-live-csharp-dapper/repo (Roslyn syntax tree counter)",
+        "command": "/opt/homebrew/bin/dotnet run --no-build -- $WORK/atlas-live-csharp-dapper/repo (Roslyn syntax tree counter)",
         "definitions": 1855,
         "diagnostics": null
       },
@@ -3564,7 +3564,7 @@
           {
             "repo": "https://github.com/Ceiridge/Chrome-Developer-Mode-Extension-Warning-Patcher",
             "commit": "936977542ecfb025b784cd457fcbfd7dffbe5f5c",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/csharp/1-Ceiridge__Chrome-Developer-Mode-Extension-Warning-Patcher",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/csharp/1-Ceiridge__Chrome-Developer-Mode-Extension-Warning-Patcher",
             "atlasDefinitions": 139,
             "nativeDefinitions": 112,
             "coverageRatio": 1.2411,
@@ -3574,7 +3574,7 @@
           {
             "repo": "https://github.com/Viladoman/StructLayout",
             "commit": "fde80869381bdcf7747628ecd3d9105bc6d39056",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/csharp/2-Viladoman__StructLayout",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/csharp/2-Viladoman__StructLayout",
             "atlasDefinitions": 545,
             "nativeDefinitions": 336,
             "coverageRatio": 1.622,
@@ -3584,7 +3584,7 @@
           {
             "repo": "https://github.com/b2developer/MonopolyNEAT",
             "commit": "5706282faf6a13a4a522c2e71b469737222ab4b8",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/csharp/3-b2developer__MonopolyNEAT",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/csharp/3-b2developer__MonopolyNEAT",
             "atlasDefinitions": 234,
             "nativeDefinitions": 176,
             "coverageRatio": 1.3295,
@@ -3731,7 +3731,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0,
-        "command": "python3 <cuda source counter> /tmp/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+        "command": "python3 <cuda source counter> $WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
         "definitions": 3,
         "diagnostics": null
       },
@@ -3772,7 +3772,7 @@
           {
             "repo": "https://github.com/MegviiRobot/MegBA",
             "commit": "bd86dc05c0a345ac5d43e77c353cbe0583e6f128",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/cuda/1-MegviiRobot__MegBA",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/cuda/1-MegviiRobot__MegBA",
             "atlasDefinitions": 188,
             "nativeDefinitions": 73,
             "coverageRatio": 2.5753,
@@ -3782,7 +3782,7 @@
           {
             "repo": "https://github.com/dnouri/cuda-convnet",
             "commit": "e4ac0c1f374a15cfe3944bd6d732c3822cc2b96b",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/cuda/2-dnouri__cuda-convnet",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/cuda/2-dnouri__cuda-convnet",
             "atlasDefinitions": 940,
             "nativeDefinitions": 57,
             "coverageRatio": 16.4912,
@@ -3792,7 +3792,7 @@
           {
             "repo": "https://github.com/ashawkey/diff-gaussian-rasterization",
             "commit": "8829d14f814fccdaf840b7b0f3021a616583c0a1",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/cuda/3-ashawkey__diff-gaussian-rasterization",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/cuda/3-ashawkey__diff-gaussian-rasterization",
             "atlasDefinitions": 28,
             "nativeDefinitions": 4,
             "coverageRatio": 7,
@@ -3936,7 +3936,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.081,
-        "command": "/tmp/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> /tmp/atlas-live-dart-http/repo/pkgs/http/lib",
+        "command": "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> $WORK/atlas-live-dart-http/repo/pkgs/http/lib",
         "definitions": 180,
         "diagnostics": null
       },
@@ -3977,7 +3977,7 @@
           {
             "repo": "https://github.com/dart-lang/http",
             "commit": "5d94ef52582867e077bf41c3fa20fb8b1d1d834e",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/dart/1-http/repo/pkgs/http/lib",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/dart/1-http/repo/pkgs/http/lib",
             "atlasDefinitions": 238,
             "nativeDefinitions": 180,
             "coverageRatio": 1.3222,
@@ -3987,7 +3987,7 @@
           {
             "repo": "https://github.com/dart-lang/path",
             "commit": "7e3d5d87220133ad9cc99f82e85a826011a62859",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/dart/2-path/repo/lib",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/dart/2-path/repo/lib",
             "atlasDefinitions": 242,
             "nativeDefinitions": 180,
             "coverageRatio": 1.3444,
@@ -3997,7 +3997,7 @@
           {
             "repo": "https://github.com/dart-lang/args",
             "commit": "7a2dfb528768f0a2e5680f711dbfb948f1d6c255",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/dart/3-args/repo/lib",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/dart/3-args/repo/lib",
             "atlasDefinitions": 203,
             "nativeDefinitions": 141,
             "coverageRatio": 1.4397,
@@ -4164,7 +4164,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.026,
-        "command": "python3 <delphi/lazarus source counter> /tmp/atlas-live-delphi-lazarus/repo/ide",
+        "command": "python3 <delphi/lazarus source counter> $WORK/atlas-live-delphi-lazarus/repo/ide",
         "definitions": 11308,
         "diagnostics": null
       },
@@ -4210,7 +4210,7 @@
           {
             "repo": "https://github.com/fpc/Lazarus",
             "commit": "a37c7c35c6a271b377cd799c48586ea2689a8e0f",
-            "targetPath": "/private/tmp/atlas-delphi-3repo-1782815066/lazarus-ide/repo/ide",
+            "targetPath": "/private$WORK/atlas-delphi-3repo-1782815066/lazarus-ide/repo/ide",
             "atlasDefinitions": 11308,
             "nativeDefinitions": 11308,
             "coverageRatio": 1,
@@ -4220,7 +4220,7 @@
           {
             "repo": "https://github.com/transmission-remote-gui/transgui",
             "commit": "da71b860d4920f7ab847a48bd8d804725ddbad7b",
-            "targetPath": "/private/tmp/atlas-delphi-3repo-1782815066/transgui/repo",
+            "targetPath": "/private$WORK/atlas-delphi-3repo-1782815066/transgui/repo",
             "atlasDefinitions": 1460,
             "nativeDefinitions": 1460,
             "coverageRatio": 1,
@@ -4230,7 +4230,7 @@
           {
             "repo": "https://github.com/castle-engine/castle-engine",
             "commit": "ce51df9a6a775826a017546a6f9e460443c94a5c",
-            "targetPath": "/private/tmp/atlas-delphi-3repo-1782815066/castle-engine/repo/tools",
+            "targetPath": "/private$WORK/atlas-delphi-3repo-1782815066/castle-engine/repo/tools",
             "atlasDefinitions": 2429,
             "nativeDefinitions": 2429,
             "coverageRatio": 1,
@@ -4432,7 +4432,7 @@
         "status": "ok",
         "ok": true,
         "seconds": null,
-        "command": "/opt/homebrew/bin/python3 -c <dotnet project counter> /tmp/atlas-live-dotnet-dapper/repo",
+        "command": "/opt/homebrew/bin/python3 -c <dotnet project counter> $WORK/atlas-live-dotnet-dapper/repo",
         "definitions": 132,
         "diagnostics": null
       },
@@ -4468,7 +4468,7 @@
           {
             "repo": "https://github.com/Far0n/xgbfi",
             "commit": "f779f7c7042557bac2289e2f40ea7e9475dc8473",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/dotnet/3-Far0n__xgbfi",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/dotnet/3-Far0n__xgbfi",
             "atlasDefinitions": 2,
             "nativeDefinitions": 2,
             "coverageRatio": 1,
@@ -4478,7 +4478,7 @@
           {
             "repo": "https://github.com/Viladoman/StructLayout",
             "commit": "fde80869381bdcf7747628ecd3d9105bc6d39056",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/dotnet/4-Viladoman__StructLayout",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/dotnet/4-Viladoman__StructLayout",
             "atlasDefinitions": 13,
             "nativeDefinitions": 13,
             "coverageRatio": 1,
@@ -4488,7 +4488,7 @@
           {
             "repo": "https://github.com/b2developer/MonopolyNEAT",
             "commit": "5706282faf6a13a4a522c2e71b469737222ab4b8",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/dotnet/5-b2developer__MonopolyNEAT",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/dotnet/5-b2developer__MonopolyNEAT",
             "atlasDefinitions": 4,
             "nativeDefinitions": 4,
             "coverageRatio": 1,
@@ -4693,7 +4693,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.001,
-        "command": "python3 <ejs template counter> /tmp/atlas-live-ejs-express/repo/examples",
+        "command": "python3 <ejs template counter> $WORK/atlas-live-ejs-express/repo/examples",
         "definitions": 36,
         "diagnostics": null
       },
@@ -4734,7 +4734,7 @@
           {
             "repo": "https://github.com/aws-samples/eb-node-express-sample",
             "commit": "093dd30cf3897df8f9c3c3800a3cfbfe02a5777a",
-            "targetPath": "/tmp/atlas-random-validation-web/work/ejs/2-aws-samples__eb-node-express-sample",
+            "targetPath": "$WORK/atlas-random-validation-web/work/ejs/2-aws-samples__eb-node-express-sample",
             "atlasDefinitions": 1,
             "nativeDefinitions": 1,
             "coverageRatio": 1,
@@ -4744,7 +4744,7 @@
           {
             "repo": "https://github.com/ActiveCampaign/PactMaker",
             "commit": "0a4d52295df7a4c3056280b7e8687987684ee1c5",
-            "targetPath": "/tmp/atlas-random-validation-web/work/ejs/4-ActiveCampaign__PactMaker",
+            "targetPath": "$WORK/atlas-random-validation-web/work/ejs/4-ActiveCampaign__PactMaker",
             "atlasDefinitions": 14,
             "nativeDefinitions": 14,
             "coverageRatio": 1,
@@ -4754,7 +4754,7 @@
           {
             "repo": "https://github.com/codemistic/HacktoberFest",
             "commit": "371100e1508ed228cce50b6c51b61beda0c1ad3e",
-            "targetPath": "/tmp/atlas-random-validation-web/work/ejs/5-codemistic__HacktoberFest",
+            "targetPath": "$WORK/atlas-random-validation-web/work/ejs/5-codemistic__HacktoberFest",
             "atlasDefinitions": 2,
             "nativeDefinitions": 2,
             "coverageRatio": 1,
@@ -4926,7 +4926,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.139,
-        "command": "/tmp/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> /tmp/atlas-live-elixir-phoenix/repo/lib",
+        "command": "$WORK/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> $WORK/atlas-live-elixir-phoenix/repo/lib",
         "definitions": 1642,
         "diagnostics": null
       },
@@ -4978,7 +4978,7 @@
           {
             "repo": "https://github.com/phoenixframework/phoenix",
             "commit": "909725968776c2601bbea7827fd5b76e4992cc70",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/elixir/1-phoenix/repo/lib",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/elixir/1-phoenix/repo/lib",
             "atlasDefinitions": 1642,
             "nativeDefinitions": 1642,
             "coverageRatio": 1,
@@ -4988,7 +4988,7 @@
           {
             "repo": "https://github.com/elixir-plug/plug",
             "commit": "82cbff630373c61696b246bd383f16da1ecc945b",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/elixir/2-plug/repo/lib",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/elixir/2-plug/repo/lib",
             "atlasDefinitions": 909,
             "nativeDefinitions": 909,
             "coverageRatio": 1,
@@ -4998,7 +4998,7 @@
           {
             "repo": "https://github.com/elixir-ecto/ecto",
             "commit": "c4bb74a1140b341ef6667da288f535ee5620796a",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/elixir/3-ecto/repo/lib",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/elixir/3-ecto/repo/lib",
             "atlasDefinitions": 2725,
             "nativeDefinitions": 2725,
             "coverageRatio": 1,
@@ -5148,7 +5148,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.004,
-        "command": "python3 <ets source counter> /tmp/atlas-live-ets-openharmony-tabs/repo/code/ArkTS1.2/TabsSample/entry/src/main/ets",
+        "command": "python3 <ets source counter> $WORK/atlas-live-ets-openharmony-tabs/repo/code/ArkTS1.2/TabsSample/entry/src/main/ets",
         "definitions": 153,
         "diagnostics": null
       },
@@ -5194,7 +5194,7 @@
           {
             "repo": "https://github.com/openharmony/applications_app_samples",
             "commit": "a826ab0e75fe51d028c1c5af58188e908736b53b",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/ets/1-applications_app_samples/repo/code/ArkTS1.2/TabsSample/entry/src/main/ets",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/ets/1-applications_app_samples/repo/code/ArkTS1.2/TabsSample/entry/src/main/ets",
             "atlasDefinitions": 161,
             "nativeDefinitions": 153,
             "coverageRatio": 1.0523,
@@ -5204,7 +5204,7 @@
           {
             "repo": "https://github.com/openharmony/codelabs",
             "commit": "eadb14174aa2c4e9a4d8622b50fd16748de57a9e",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/ets/2-codelabs/repo/Ability/PagesRouter/entry/src/main/ets",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/ets/2-codelabs/repo/Ability/PagesRouter/entry/src/main/ets",
             "atlasDefinitions": 38,
             "nativeDefinitions": 36,
             "coverageRatio": 1.0556,
@@ -5214,7 +5214,7 @@
           {
             "repo": "https://github.com/openharmony/applications_filepicker",
             "commit": "5438caec93de79e5c7395887771d2e7a304bd861",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/ets/3-applications_filepicker/repo/entry/src/main/ets",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/ets/3-applications_filepicker/repo/entry/src/main/ets",
             "atlasDefinitions": 895,
             "nativeDefinitions": 875,
             "coverageRatio": 1.0229,
@@ -5444,7 +5444,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.11,
-        "command": "/tmp/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> /tmp/atlas-live-fortran-stdlib/repo/src",
+        "command": "$WORK/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> $WORK/atlas-live-fortran-stdlib/repo/src",
         "definitions": 364,
         "diagnostics": null
       },
@@ -5485,7 +5485,7 @@
           {
             "repo": "https://github.com/fortran-lang/stdlib",
             "commit": "4c8521d5658455a576946cca3bfe2bd8ede36e24",
-            "targetPath": "/tmp/atlas-fortran-3repo-1782813923/stdlib/repo/src",
+            "targetPath": "$WORK/atlas-fortran-3repo-1782813923/stdlib/repo/src",
             "atlasDefinitions": 364,
             "nativeDefinitions": 364,
             "coverageRatio": 1,
@@ -5495,7 +5495,7 @@
           {
             "repo": "https://github.com/fortran-lang/fpm",
             "commit": "eaffbb36086abdb16c0d052961a3e7240cb22b0a",
-            "targetPath": "/tmp/atlas-fortran-3repo-1782813923/fpm/repo/src",
+            "targetPath": "$WORK/atlas-fortran-3repo-1782813923/fpm/repo/src",
             "atlasDefinitions": 777,
             "nativeDefinitions": 777,
             "coverageRatio": 1,
@@ -5505,7 +5505,7 @@
           {
             "repo": "https://github.com/jacobwilliams/json-fortran",
             "commit": "d9ed2e4ee53745f4ed98d7536e17bee5198aa3b0",
-            "targetPath": "/tmp/atlas-fortran-3repo-1782813923/json-fortran/repo/src",
+            "targetPath": "$WORK/atlas-fortran-3repo-1782813923/json-fortran/repo/src",
             "atlasDefinitions": 428,
             "nativeDefinitions": 426,
             "coverageRatio": 1.0047,
@@ -5672,7 +5672,7 @@
         "status": "partial",
         "ok": false,
         "seconds": 0.11,
-        "command": "/tmp/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> /tmp/atlas-live-groovy-nextflow/repo/modules/nf-commons/src/main",
+        "command": "$WORK/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> $WORK/atlas-live-groovy-nextflow/repo/modules/nf-commons/src/main",
         "definitions": 525,
         "diagnostics": null
       },
@@ -5713,7 +5713,7 @@
           {
             "repo": "https://github.com/jvoegele/gradle-android-plugin",
             "commit": "2063680c8d2a777aa1311b1865d299c8aa65d5be",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/groovy/1-jvoegele__gradle-android-plugin",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/groovy/1-jvoegele__gradle-android-plugin",
             "atlasDefinitions": 195,
             "nativeDefinitions": 124,
             "coverageRatio": 1.5726,
@@ -5723,7 +5723,7 @@
           {
             "repo": "https://github.com/allegro/json-avro-converter",
             "commit": "ad871e8a497003a90da1ff523b18d96e4afbf5c7",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/groovy/2-allegro__json-avro-converter",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/groovy/2-allegro__json-avro-converter",
             "atlasDefinitions": 38,
             "nativeDefinitions": 35,
             "coverageRatio": 1.0857,
@@ -5733,7 +5733,7 @@
           {
             "repo": "https://github.com/jaredsburrows/gradle-license-plugin",
             "commit": "062bcdcdbc88325f62b3d5e92cf0a1ed57af37a7",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/groovy/3-jaredsburrows__gradle-license-plugin",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/groovy/3-jaredsburrows__gradle-license-plugin",
             "atlasDefinitions": 18,
             "nativeDefinitions": 10,
             "coverageRatio": 1.8,
@@ -5891,7 +5891,7 @@
         "status": "ok",
         "ok": true,
         "seconds": null,
-        "command": "/opt/homebrew/bin/python3 -c <python-json key counter> /tmp/atlas-live-json-eslint-create-config/repo",
+        "command": "/opt/homebrew/bin/python3 -c <python-json key counter> $WORK/atlas-live-json-eslint-create-config/repo",
         "definitions": 60,
         "diagnostics": null
       },
@@ -6137,7 +6137,7 @@
         "status": "partial",
         "ok": false,
         "seconds": 0.098,
-        "command": "/tmp/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> /tmp/atlas-live-julia-json/repo/src",
+        "command": "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> $WORK/atlas-live-julia-json/repo/src",
         "definitions": 310,
         "diagnostics": null
       },
@@ -6173,7 +6173,7 @@
           {
             "repo": "https://github.com/JuliaIO/JSON.jl",
             "commit": "e5ef310dece16746843753e4c3b44e868b917b64",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/julia/1-JSON.jl/repo/src",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/julia/1-JSON.jl/repo/src",
             "atlasDefinitions": 312,
             "nativeDefinitions": 310,
             "coverageRatio": 1.0065,
@@ -6183,7 +6183,7 @@
           {
             "repo": "https://github.com/JuliaData/DataFrames.jl",
             "commit": "3924697ea6c02ac186a95b298a4e06b52e881b53",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/julia/2-DataFrames.jl/repo/src",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/julia/2-DataFrames.jl/repo/src",
             "atlasDefinitions": 1364,
             "nativeDefinitions": 1359,
             "coverageRatio": 1.0037,
@@ -6193,7 +6193,7 @@
           {
             "repo": "https://github.com/JuliaStats/StatsBase.jl",
             "commit": "b8d458aee0fbfb20d386ae2986f30260361675a3",
-            "targetPath": "/private/tmp/atlas-julia-third-candidates/StatsBase/repo/src",
+            "targetPath": "/private$WORK/atlas-julia-third-candidates/StatsBase/repo/src",
             "atlasDefinitions": 605,
             "nativeDefinitions": 602,
             "coverageRatio": 1.005,
@@ -6358,7 +6358,7 @@
         "status": "partial",
         "ok": false,
         "seconds": 0.176,
-        "command": "/tmp/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> /tmp/atlas-live-kotlin-okhttp/repo/okhttp/src/commonJvmAndroid/kotlin",
+        "command": "$WORK/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> $WORK/atlas-live-kotlin-okhttp/repo/okhttp/src/commonJvmAndroid/kotlin",
         "definitions": 3876,
         "diagnostics": null
       },
@@ -6399,7 +6399,7 @@
           {
             "repo": "https://github.com/gothinkster/kotlin-spring-realworld-example-app",
             "commit": "848c29e3abfe1bd72001cc7d7a3227aebec96e9b",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/kotlin/1-gothinkster__kotlin-spring-realworld-example-app",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/kotlin/1-gothinkster__kotlin-spring-realworld-example-app",
             "atlasDefinitions": 188,
             "nativeDefinitions": 140,
             "coverageRatio": 1.3429,
@@ -6409,7 +6409,7 @@
           {
             "repo": "https://github.com/VKCOM/vk-android-sdk",
             "commit": "a0da7abf54acac8910fae43f0a189cc163cb9694",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/kotlin/2-VKCOM__vk-android-sdk",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/kotlin/2-VKCOM__vk-android-sdk",
             "atlasDefinitions": 10150,
             "nativeDefinitions": 5604,
             "coverageRatio": 1.8112,
@@ -6419,7 +6419,7 @@
           {
             "repo": "https://github.com/husaynhakeem/android-face-detector",
             "commit": "a8162ac724d1a439b9e2040c33cd2a1e69ae657a",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/kotlin/3-husaynhakeem__android-face-detector",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/kotlin/3-husaynhakeem__android-face-detector",
             "atlasDefinitions": 67,
             "nativeDefinitions": 44,
             "coverageRatio": 1.5227,
@@ -6579,7 +6579,7 @@
         "status": "ok",
         "ok": true,
         "seconds": null,
-        "command": "/tmp/atlas-live-lua-lazy/luaparser-venv/bin/python -c <luaparser definition counter> /tmp/atlas-live-lua-lazy/repo",
+        "command": "$WORK/atlas-live-lua-lazy/luaparser-venv/bin/python -c <luaparser definition counter> $WORK/atlas-live-lua-lazy/repo",
         "definitions": 444,
         "diagnostics": null
       },
@@ -6625,7 +6625,7 @@
           {
             "repo": "https://github.com/pandoc-scholar/pandoc-scholar",
             "commit": "40870982b42a9928c6cde4638b0e80a0bc894546",
-            "targetPath": "/tmp/atlas-random-validation/work/lua/1-pandoc-scholar__pandoc-scholar",
+            "targetPath": "$WORK/atlas-random-validation/work/lua/1-pandoc-scholar__pandoc-scholar",
             "atlasDefinitions": 169,
             "nativeDefinitions": 169,
             "coverageRatio": 1,
@@ -6635,7 +6635,7 @@
           {
             "repo": "https://github.com/Kaixhin/Autoencoders",
             "commit": "21fcbd01024699180fc068665d831a04f306d354",
-            "targetPath": "/tmp/atlas-random-validation/work/lua/2-Kaixhin__Autoencoders",
+            "targetPath": "$WORK/atlas-random-validation/work/lua/2-Kaixhin__Autoencoders",
             "atlasDefinitions": 33,
             "nativeDefinitions": 2,
             "coverageRatio": 16.5,
@@ -6645,7 +6645,7 @@
           {
             "repo": "https://github.com/sunjon/Shade.nvim",
             "commit": "4286b5abc47d62d0c9ffb22a4f388b7bf2ac2461",
-            "targetPath": "/tmp/atlas-random-validation/work/lua/3-sunjon__Shade.nvim",
+            "targetPath": "$WORK/atlas-random-validation/work/lua/3-sunjon__Shade.nvim",
             "atlasDefinitions": 23,
             "nativeDefinitions": 23,
             "coverageRatio": 1,
@@ -6790,7 +6790,7 @@
         "status": "ok",
         "ok": true,
         "seconds": null,
-        "command": "/tmp/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> /tmp/atlas-live-markdown-mdbook/repo/guide/src",
+        "command": "$WORK/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> $WORK/atlas-live-markdown-mdbook/repo/guide/src",
         "definitions": 156,
         "diagnostics": null
       },
@@ -6831,7 +6831,7 @@
           {
             "repo": "https://github.com/rust-lang/mdBook",
             "commit": "cb49cc5523e609a731f27dea1af4395a504815a5",
-            "targetPath": "/tmp/atlas-markdown-3repo-1782814471/mdbook/repo/guide/src",
+            "targetPath": "$WORK/atlas-markdown-3repo-1782814471/mdbook/repo/guide/src",
             "atlasDefinitions": 156,
             "nativeDefinitions": 156,
             "coverageRatio": 1,
@@ -6841,7 +6841,7 @@
           {
             "repo": "https://github.com/vitejs/vite",
             "commit": "8f925e2e496f4d313d860acb53880245b07ce6f7",
-            "targetPath": "/tmp/atlas-markdown-3repo-1782814471/vite/repo/docs",
+            "targetPath": "$WORK/atlas-markdown-3repo-1782814471/vite/repo/docs",
             "atlasDefinitions": 642,
             "nativeDefinitions": 642,
             "coverageRatio": 1,
@@ -6851,7 +6851,7 @@
           {
             "repo": "https://github.com/pnpm/pnpm.io",
             "commit": "aa7acf218a3a80aacdb5a23e5752f6585aa1dcdb",
-            "targetPath": "/tmp/atlas-markdown-3repo-1782814471/pnpm-io/repo/docs",
+            "targetPath": "$WORK/atlas-markdown-3repo-1782814471/pnpm-io/repo/docs",
             "atlasDefinitions": 792,
             "nativeDefinitions": 792,
             "coverageRatio": 1,
@@ -7017,7 +7017,7 @@
         "status": "partial",
         "ok": false,
         "seconds": 0.131,
-        "command": "/tmp/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> /tmp/atlas-live-objc-sdwebimage/repo/SDWebImage",
+        "command": "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> $WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
         "definitions": 971,
         "diagnostics": null
       },
@@ -7058,7 +7058,7 @@
           {
             "repo": "https://github.com/thetron/StringScore",
             "commit": "0a6151c63d859e1a6a788b1a6cdfd5debfffe109",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/objc/5-thetron__StringScore",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/objc/5-thetron__StringScore",
             "atlasDefinitions": 4,
             "nativeDefinitions": 4,
             "coverageRatio": 1,
@@ -7068,7 +7068,7 @@
           {
             "repo": "https://github.com/rs/SafariTabSwitching",
             "commit": "a5b8ab9c4232fd99e15c672fd60b84acdfab5f9b",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/objc/12-rs__SafariTabSwitching",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/objc/12-rs__SafariTabSwitching",
             "atlasDefinitions": 8,
             "nativeDefinitions": 8,
             "coverageRatio": 1,
@@ -7078,7 +7078,7 @@
           {
             "repo": "https://github.com/iosphere/ISHPullUp",
             "commit": "13539b8938e697b1f9a2a47a6a8f86d40f2e5068",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/objc/29-iosphere__ISHPullUp",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/objc/29-iosphere__ISHPullUp",
             "atlasDefinitions": 101,
             "nativeDefinitions": 101,
             "coverageRatio": 1,
@@ -7237,7 +7237,7 @@
         "status": "ok",
         "ok": true,
         "seconds": null,
-        "command": "/opt/homebrew/bin/python3 -c <pascal declaration counter> /tmp/atlas-live-pascal-pascalscript/repo/Source",
+        "command": "/opt/homebrew/bin/python3 -c <pascal declaration counter> $WORK/atlas-live-pascal-pascalscript/repo/Source",
         "definitions": 6431,
         "diagnostics": null
       },
@@ -7278,7 +7278,7 @@
           {
             "repo": "https://github.com/remobjects/pascalscript",
             "commit": "2c826cd803a3c0417354fa37b2417f21993ce4ac",
-            "targetPath": "/private/tmp/atlas-pascal-3repo-1782815868/pascalscript/repo/Source",
+            "targetPath": "/private$WORK/atlas-pascal-3repo-1782815868/pascalscript/repo/Source",
             "atlasDefinitions": 6431,
             "nativeDefinitions": 5315,
             "coverageRatio": 1.21,
@@ -7288,7 +7288,7 @@
           {
             "repo": "https://github.com/fpc/Lazarus",
             "commit": "e1cc57bb27e48541ffe4bf66c78a8dddfc4f6630",
-            "targetPath": "/private/tmp/atlas-pascal-3repo-1782815868/lazarus-lcl/repo/lcl",
+            "targetPath": "/private$WORK/atlas-pascal-3repo-1782815868/lazarus-lcl/repo/lcl",
             "atlasDefinitions": 98262,
             "nativeDefinitions": 59399,
             "coverageRatio": 1.6543,
@@ -7298,7 +7298,7 @@
           {
             "repo": "https://github.com/transmission-remote-gui/transgui",
             "commit": "da71b860d4920f7ab847a48bd8d804725ddbad7b",
-            "targetPath": "/private/tmp/atlas-pascal-3repo-1782815868/transgui/repo",
+            "targetPath": "/private$WORK/atlas-pascal-3repo-1782815868/transgui/repo",
             "atlasDefinitions": 5540,
             "nativeDefinitions": 3127,
             "coverageRatio": 1.7717,
@@ -7513,7 +7513,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.336,
-        "command": "/opt/homebrew/bin/php /tmp/atlas-live-php-slim/php_token_stats.php /tmp/atlas-live-php-slim/repo",
+        "command": "/opt/homebrew/bin/php $WORK/atlas-live-php-slim/php_token_stats.php $WORK/atlas-live-php-slim/repo",
         "definitions": 866,
         "diagnostics": null
       },
@@ -7554,7 +7554,7 @@
           {
             "repo": "https://github.com/slimphp/Slim",
             "commit": "0da7dd2fc66956730b6633f6a056b35e59126583",
-            "targetPath": "/private/tmp/atlas-php-3repo-1782814733/slim/repo",
+            "targetPath": "/private$WORK/atlas-php-3repo-1782814733/slim/repo",
             "atlasDefinitions": 866,
             "nativeDefinitions": 866,
             "coverageRatio": 1,
@@ -7564,7 +7564,7 @@
           {
             "repo": "https://github.com/symfony/console",
             "commit": "b711a8ab808b6c074c6b8caef70d0fd8d6b6d07d",
-            "targetPath": "/private/tmp/atlas-php-3repo-1782814733/symfony-console/repo",
+            "targetPath": "/private$WORK/atlas-php-3repo-1782814733/symfony-console/repo",
             "atlasDefinitions": 3112,
             "nativeDefinitions": 3112,
             "coverageRatio": 1,
@@ -7574,7 +7574,7 @@
           {
             "repo": "https://github.com/composer/composer",
             "commit": "8c3eba87d24bbdcdaaf8f5c42391de20fd8ed6b1",
-            "targetPath": "/private/tmp/atlas-php-3repo-1782814733/composer/repo/src",
+            "targetPath": "/private$WORK/atlas-php-3repo-1782814733/composer/repo/src",
             "atlasDefinitions": 2930,
             "nativeDefinitions": 2930,
             "coverageRatio": 1,
@@ -7718,7 +7718,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.714,
-        "command": "/usr/local/bin/pwsh -NoLogo -NoProfile -File /tmp/atlas-live-powershell-powershellget/pwsh_stats.ps1 /tmp/atlas-live-powershell-powershellget/repo/src",
+        "command": "/usr/local/bin/pwsh -NoLogo -NoProfile -File $WORK/atlas-live-powershell-powershellget/pwsh_stats.ps1 $WORK/atlas-live-powershell-powershellget/repo/src",
         "definitions": 28,
         "diagnostics": null
       },
@@ -7764,7 +7764,7 @@
           {
             "repo": "https://github.com/PowerShell/PowerShellGet",
             "commit": "a2dac8e74603f7c9eec4a54c5e23459531751b0d",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/powershell/1-PowerShellGet/repo/src",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/powershell/1-PowerShellGet/repo/src",
             "atlasDefinitions": 28,
             "nativeDefinitions": 28,
             "coverageRatio": 1,
@@ -7774,7 +7774,7 @@
           {
             "repo": "https://github.com/PowerShell/SecretManagement",
             "commit": "e24cc88e87d02cabbbf0fbaf76e4e287e927dbed",
-            "targetPath": "/private/tmp/atlas-powershell-candidates/SecretManagement/repo/ExtensionModules",
+            "targetPath": "/private$WORK/atlas-powershell-candidates/SecretManagement/repo/ExtensionModules",
             "atlasDefinitions": 13,
             "nativeDefinitions": 13,
             "coverageRatio": 1,
@@ -7784,7 +7784,7 @@
           {
             "repo": "https://github.com/PowerShell/PSResourceGet",
             "commit": "6ecc668473baf37aa3cb84cc54dce7434364d121",
-            "targetPath": "/private/tmp/atlas-powershell-candidates/PSResourceGet/repo/test",
+            "targetPath": "/private$WORK/atlas-powershell-candidates/PSResourceGet/repo/test",
             "atlasDefinitions": 43,
             "nativeDefinitions": 43,
             "coverageRatio": 1,
@@ -7927,7 +7927,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.055,
-        "command": "python3 <R source counter> /tmp/atlas-live-r-ggplot2/repo/R",
+        "command": "python3 <R source counter> $WORK/atlas-live-r-ggplot2/repo/R",
         "definitions": 3011,
         "diagnostics": null
       },
@@ -7968,7 +7968,7 @@
           {
             "repo": "https://github.com/tidyverse/ggplot2",
             "commit": "6870419aa6e106c3580c45c81d5b688cb31758bd",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/r/1-ggplot2/repo/R",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/r/1-ggplot2/repo/R",
             "atlasDefinitions": 3010,
             "nativeDefinitions": 1717,
             "coverageRatio": 1.7531,
@@ -7978,7 +7978,7 @@
           {
             "repo": "https://github.com/r-lib/cli",
             "commit": "86bdefe1eb23399499b40884f7fab84194283bc1",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/r/2-cli/repo/R",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/r/2-cli/repo/R",
             "atlasDefinitions": 1270,
             "nativeDefinitions": 782,
             "coverageRatio": 1.624,
@@ -7988,7 +7988,7 @@
           {
             "repo": "https://github.com/tidyverse/dplyr",
             "commit": "d5e94e7fa8fd4a5f79c1a707d1842216bb4c691f",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/r/3-dplyr/repo/R",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/r/3-dplyr/repo/R",
             "atlasDefinitions": 1430,
             "nativeDefinitions": 890,
             "coverageRatio": 1.6067,
@@ -8225,7 +8225,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.004,
-        "command": "python3 <razor directive counter> /tmp/atlas-live-razor-eshoponweb/repo/src",
+        "command": "python3 <razor directive counter> $WORK/atlas-live-razor-eshoponweb/repo/src",
         "definitions": 208,
         "diagnostics": null
       },
@@ -8266,7 +8266,7 @@
           {
             "repo": "https://github.com/soundaranbu/Razor.Templating.Core",
             "commit": "5f984ab8c652bdb32effb5d8f179c9ef5332f4c6",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/razor/4-soundaranbu__Razor.Templating.Core",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/razor/4-soundaranbu__Razor.Templating.Core",
             "atlasDefinitions": 32,
             "nativeDefinitions": 32,
             "coverageRatio": 1,
@@ -8276,7 +8276,7 @@
           {
             "repo": "https://github.com/mikoskinen/Blazor.Animate",
             "commit": "b21038311e3142f347c2d88d2ada0d44fca222e4",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/razor/7-mikoskinen__Blazor.Animate",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/razor/7-mikoskinen__Blazor.Animate",
             "atlasDefinitions": 138,
             "nativeDefinitions": 136,
             "coverageRatio": 1.0147,
@@ -8286,7 +8286,7 @@
           {
             "repo": "https://github.com/mryderie/aspnet-core-htmx-example",
             "commit": "becc566a0f2b3268878b2f888e47c9ae85c31914",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/razor/13-mryderie__aspnet-core-htmx-example",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/razor/13-mryderie__aspnet-core-htmx-example",
             "atlasDefinitions": 33,
             "nativeDefinitions": 33,
             "coverageRatio": 1,
@@ -8456,7 +8456,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.166,
-        "command": "/usr/bin/ruby /tmp/atlas-live-ruby-sinatra/ripper_stats.rb /tmp/atlas-live-ruby-sinatra/repo",
+        "command": "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb $WORK/atlas-live-ruby-sinatra/repo",
         "definitions": 1164,
         "diagnostics": null
       },
@@ -8492,7 +8492,7 @@
           {
             "repo": "https://github.com/tpope/hookup",
             "commit": "3bca3fef5177de45bbdaa6caee063dd252ae9050",
-            "targetPath": "/tmp/atlas-random-validation/work/ruby/1-tpope__hookup",
+            "targetPath": "$WORK/atlas-random-validation/work/ruby/1-tpope__hookup",
             "atlasDefinitions": 28,
             "nativeDefinitions": 28,
             "coverageRatio": 1,
@@ -8502,7 +8502,7 @@
           {
             "repo": "https://github.com/mailgun/mailgun-ruby",
             "commit": "bb69b98a8bc34bfd44713bbecebd17319d0d4697",
-            "targetPath": "/tmp/atlas-random-validation/work/ruby/2-mailgun__mailgun-ruby",
+            "targetPath": "$WORK/atlas-random-validation/work/ruby/2-mailgun__mailgun-ruby",
             "atlasDefinitions": 325,
             "nativeDefinitions": 311,
             "coverageRatio": 1.045,
@@ -8512,7 +8512,7 @@
           {
             "repo": "https://github.com/BerlinVagrant/vagrant-dns",
             "commit": "57dee3fc45c40fb286c218f667435eae84666905",
-            "targetPath": "/tmp/atlas-random-validation/work/ruby/3-BerlinVagrant__vagrant-dns",
+            "targetPath": "$WORK/atlas-random-validation/work/ruby/3-BerlinVagrant__vagrant-dns",
             "atlasDefinitions": 116,
             "nativeDefinitions": 116,
             "coverageRatio": 1,
@@ -8711,7 +8711,7 @@
           {
             "repo": "https://github.com/Taaitaaiger/jlrs",
             "commit": "2297a23438ade895605619bd658510c67a239102",
-            "targetPath": "/tmp/atlas-random-validation/work/rust/1-Taaitaaiger__jlrs",
+            "targetPath": "$WORK/atlas-random-validation/work/rust/1-Taaitaaiger__jlrs",
             "atlasDefinitions": 7152,
             "nativeDefinitions": 5081,
             "coverageRatio": 1.4076,
@@ -8721,7 +8721,7 @@
           {
             "repo": "https://github.com/rust-windowing/softbuffer",
             "commit": "840683cfce68a04d20cfb75b2976d009d3ba77d8",
-            "targetPath": "/tmp/atlas-random-validation/work/rust/2-rust-windowing__softbuffer",
+            "targetPath": "$WORK/atlas-random-validation/work/rust/2-rust-windowing__softbuffer",
             "atlasDefinitions": 715,
             "nativeDefinitions": 475,
             "coverageRatio": 1.5053,
@@ -8731,7 +8731,7 @@
           {
             "repo": "https://github.com/rapidfuzz/strsim-rs",
             "commit": "dacc84c0dc61eff0ee0ff66962bcf2e17018ad26",
-            "targetPath": "/tmp/atlas-random-validation/work/rust/3-rapidfuzz__strsim-rs",
+            "targetPath": "$WORK/atlas-random-validation/work/rust/3-rapidfuzz__strsim-rs",
             "atlasDefinitions": 249,
             "nativeDefinitions": 148,
             "coverageRatio": 1.6824,
@@ -8870,7 +8870,7 @@
         "status": "partial",
         "ok": false,
         "seconds": 0.429,
-        "command": "/tmp/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> /tmp/atlas-live-scala-cats/repo/core/src/main/scala",
+        "command": "$WORK/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> $WORK/atlas-live-scala-cats/repo/core/src/main/scala",
         "definitions": 7840,
         "diagnostics": null
       },
@@ -8911,7 +8911,7 @@
           {
             "repo": "https://github.com/spirom/LearningSpark",
             "commit": "8498a592e2bf6bbce8fc29dc6d7a0850a38a72f5",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/scala/1-spirom__LearningSpark",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/scala/1-spirom__LearningSpark",
             "atlasDefinitions": 881,
             "nativeDefinitions": 370,
             "coverageRatio": 2.3811,
@@ -8921,7 +8921,7 @@
           {
             "repo": "https://github.com/Eliah-Lakhin/papa-carlo",
             "commit": "d65c3e63dfd1d3b9721fbfa4297f475829423c96",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/scala/2-Eliah-Lakhin__papa-carlo",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/scala/2-Eliah-Lakhin__papa-carlo",
             "atlasDefinitions": 800,
             "nativeDefinitions": 564,
             "coverageRatio": 1.4184,
@@ -8931,7 +8931,7 @@
           {
             "repo": "https://github.com/xerial/larray",
             "commit": "400d23241f5050dc06f724b4fee7a485b1688bf9",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/scala/3-xerial__larray",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/scala/3-xerial__larray",
             "atlasDefinitions": 1237,
             "nativeDefinitions": 751,
             "coverageRatio": 1.6471,
@@ -9082,7 +9082,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 20.628,
-        "command": "/tmp/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>",
+        "command": "$WORK/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>",
         "definitions": 111,
         "diagnostics": null
       },
@@ -9113,7 +9113,7 @@
           {
             "repo": "https://github.com/hasura/graphql-engine",
             "commit": "417c174c0ac3c80dafe6e8f9e8ac39d868334724",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-sql/1-graphql-engine/repo/server/src-rsr/migrations",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-sql/1-graphql-engine/repo/server/src-rsr/migrations",
             "atlasDefinitions": 131,
             "nativeDefinitions": 111,
             "coverageRatio": 1.1802,
@@ -9123,7 +9123,7 @@
           {
             "repo": "https://github.com/timescale/timescaledb",
             "commit": "edcd867121c5260db2bf2afe9d9924928192004e",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-sql/3-timescaledb/repo/sql/pre_install",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-sql/3-timescaledb/repo/sql/pre_install",
             "atlasDefinitions": 68,
             "nativeDefinitions": 36,
             "coverageRatio": 1.8889,
@@ -9133,7 +9133,7 @@
           {
             "repo": "https://github.com/postgres/postgres",
             "commit": "8c579bdc366dbca4fe9432a01408216133628c52",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-sql/2-postgres/repo/contrib/bloom",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-sql/2-postgres/repo/contrib/bloom",
             "atlasDefinitions": 9,
             "nativeDefinitions": 2,
             "coverageRatio": 4.5,
@@ -9285,7 +9285,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.342,
-        "command": "/opt/homebrew/bin/node /tmp/atlas-live-svelte-carbon/svelte-compiler/svelte_stats.js /tmp/atlas-live-svelte-carbon/repo/src",
+        "command": "/opt/homebrew/bin/node $WORK/atlas-live-svelte-carbon/svelte-compiler/svelte_stats.js $WORK/atlas-live-svelte-carbon/repo/src",
         "definitions": 1278,
         "diagnostics": null
       },
@@ -9321,7 +9321,7 @@
           {
             "repo": "https://github.com/orefalo/svelte-splitpanes",
             "commit": "7425e6a25cd53b87cf91d829c272e74b2b0546d9",
-            "targetPath": "/tmp/atlas-random-validation-web/work/svelte/2-orefalo__svelte-splitpanes",
+            "targetPath": "$WORK/atlas-random-validation-web/work/svelte/2-orefalo__svelte-splitpanes",
             "atlasDefinitions": 198,
             "nativeDefinitions": 101,
             "coverageRatio": 1.9604,
@@ -9331,7 +9331,7 @@
           {
             "repo": "https://github.com/agustinl/svelte-tags-input",
             "commit": "5c8e7ff10deab4858a36da8bf71ab5942da5a390",
-            "targetPath": "/tmp/atlas-random-validation-web/work/svelte/5-agustinl__svelte-tags-input",
+            "targetPath": "$WORK/atlas-random-validation-web/work/svelte/5-agustinl__svelte-tags-input",
             "atlasDefinitions": 39,
             "nativeDefinitions": 28,
             "coverageRatio": 1.3929,
@@ -9341,7 +9341,7 @@
           {
             "repo": "https://github.com/Alia5/lovelace-expander-card",
             "commit": "0899ce63fc6d3b0361e25932025df29abda31654",
-            "targetPath": "/tmp/atlas-random-validation-web/work/svelte/8-Alia5__lovelace-expander-card",
+            "targetPath": "$WORK/atlas-random-validation-web/work/svelte/8-Alia5__lovelace-expander-card",
             "atlasDefinitions": 22,
             "nativeDefinitions": 21,
             "coverageRatio": 1.0476,
@@ -9500,7 +9500,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 3.457,
-        "command": "/usr/bin/sourcekit-lsp --scratch-path /tmp/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM",
+        "command": "/usr/bin/sourcekit-lsp --scratch-path $WORK/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM",
         "definitions": 209,
         "diagnostics": 0
       },
@@ -9536,7 +9536,7 @@
           {
             "repo": "https://github.com/ReSwift/ReSwift-Router",
             "commit": "a915f67704ca5a0cf439723f7c4f7c26ef7809ba",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/swift/1-ReSwift__ReSwift-Router",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/swift/1-ReSwift__ReSwift-Router",
             "atlasDefinitions": 171,
             "nativeDefinitions": 169,
             "coverageRatio": 1.0118,
@@ -9546,7 +9546,7 @@
           {
             "repo": "https://github.com/treastrain/TRETJapanNFCReader",
             "commit": "03470a515c0b06d762de39e6d80f9a07ed502cae",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/swift/3-treastrain__TRETJapanNFCReader",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/swift/3-treastrain__TRETJapanNFCReader",
             "atlasDefinitions": 1674,
             "nativeDefinitions": 950,
             "coverageRatio": 1.7621,
@@ -9556,7 +9556,7 @@
           {
             "repo": "https://github.com/soberman/ARSLineProgress",
             "commit": "c97c55a5228ac58acf388dd882e800fdb7c2930f",
-            "targetPath": "/tmp/atlas-random-validation-remaining/work2/swift/5-soberman__ARSLineProgress",
+            "targetPath": "$WORK/atlas-random-validation-remaining/work2/swift/5-soberman__ARSLineProgress",
             "atlasDefinitions": 236,
             "nativeDefinitions": 225,
             "coverageRatio": 1.0489,
@@ -9702,7 +9702,7 @@
         "status": "ok",
         "ok": true,
         "seconds": null,
-        "command": "/tmp/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> /tmp/atlas-live-terraform-vpc/repo",
+        "command": "$WORK/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> $WORK/atlas-live-terraform-vpc/repo",
         "definitions": 1738,
         "diagnostics": null
       },
@@ -9733,7 +9733,7 @@
           {
             "repo": "https://github.com/terraform-aws-modules/terraform-aws-vpc",
             "commit": "3ffbd46fb1c7733e1b34d8666893280454e27436",
-            "targetPath": "/tmp/atlas-terraform-3repo-1782815314/vpc/repo",
+            "targetPath": "$WORK/atlas-terraform-3repo-1782815314/vpc/repo",
             "atlasDefinitions": 1738,
             "nativeDefinitions": 1734,
             "coverageRatio": 1.0023,
@@ -9743,7 +9743,7 @@
           {
             "repo": "https://github.com/terraform-aws-modules/terraform-aws-eks",
             "commit": "d4669ca8eb109a37f6c19ab8fb9487ab7521a9ba",
-            "targetPath": "/tmp/atlas-terraform-3repo-1782815314/eks/repo",
+            "targetPath": "$WORK/atlas-terraform-3repo-1782815314/eks/repo",
             "atlasDefinitions": 1160,
             "nativeDefinitions": 1014,
             "coverageRatio": 1.144,
@@ -9753,7 +9753,7 @@
           {
             "repo": "https://github.com/terraform-aws-modules/terraform-aws-security-group",
             "commit": "58d8e895915f5573767081142d063b7caf7a2b47",
-            "targetPath": "/tmp/atlas-terraform-3repo-1782815314/security-group/repo",
+            "targetPath": "$WORK/atlas-terraform-3repo-1782815314/security-group/repo",
             "atlasDefinitions": 1542,
             "nativeDefinitions": 1542,
             "coverageRatio": 1,
@@ -9899,7 +9899,7 @@
         "status": "partial",
         "ok": false,
         "seconds": 0.045,
-        "command": "/tmp/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> /tmp/atlas-live-verilog-ibex/repo/rtl",
+        "command": "$WORK/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> $WORK/atlas-live-verilog-ibex/repo/rtl",
         "definitions": 93,
         "diagnostics": null
       },
@@ -9950,7 +9950,7 @@
           {
             "repo": "https://github.com/lowRISC/ibex",
             "commit": "022f084096baed0a9b5ebdf697ed2965f13e8ed8",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/verilog/1-ibex/repo/rtl",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/verilog/1-ibex/repo/rtl",
             "atlasDefinitions": 93,
             "nativeDefinitions": 93,
             "coverageRatio": 1,
@@ -9960,7 +9960,7 @@
           {
             "repo": "https://github.com/YosysHQ/picorv32",
             "commit": "87c89acc18994c8cf9a2311e871818e87d304568",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/verilog/2-picorv32/repo/picosoc",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/verilog/2-picorv32/repo/picosoc",
             "atlasDefinitions": 24,
             "nativeDefinitions": 24,
             "coverageRatio": 1,
@@ -9970,7 +9970,7 @@
           {
             "repo": "https://github.com/alexforencich/verilog-ethernet",
             "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb",
-            "targetPath": "/private/tmp/atlas-remaining-3repo-validation/verilog/3-verilog-ethernet/repo/rtl",
+            "targetPath": "/private$WORK/atlas-remaining-3repo-validation/verilog/3-verilog-ethernet/repo/rtl",
             "atlasDefinitions": 114,
             "nativeDefinitions": 114,
             "coverageRatio": 1,
@@ -10135,7 +10135,7 @@
         "status": "ok",
         "ok": true,
         "seconds": 0.202,
-        "command": "/opt/homebrew/bin/node /tmp/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js /tmp/atlas-live-vue-realworld/repo/src",
+        "command": "/opt/homebrew/bin/node $WORK/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js $WORK/atlas-live-vue-realworld/repo/src",
         "definitions": 119,
         "diagnostics": null
       },
@@ -10171,7 +10171,7 @@
           {
             "repo": "https://github.com/LiuXin-Developer/rightHouse",
             "commit": "5d003ae3a5f5f12534cdf617ac11be86d3d9ca54",
-            "targetPath": "/tmp/atlas-random-validation-web/work/vue/1-LiuXin-Developer__rightHouse",
+            "targetPath": "$WORK/atlas-random-validation-web/work/vue/1-LiuXin-Developer__rightHouse",
             "atlasDefinitions": 969,
             "nativeDefinitions": 211,
             "coverageRatio": 4.5924,
@@ -10181,7 +10181,7 @@
           {
             "repo": "https://github.com/Tencent/tdesign-vue-starter",
             "commit": "61bb51b304e018a4243489bcb48c28750f8aa535",
-            "targetPath": "/tmp/atlas-random-validation-web/work/vue/2-Tencent__tdesign-vue-starter",
+            "targetPath": "$WORK/atlas-random-validation-web/work/vue/2-Tencent__tdesign-vue-starter",
             "atlasDefinitions": 82,
             "nativeDefinitions": 24,
             "coverageRatio": 3.4167,
@@ -10191,7 +10191,7 @@
           {
             "repo": "https://github.com/powerdong/Music-player",
             "commit": "c505e40c41a3c3b6040988df4d122e845f01e8cb",
-            "targetPath": "/tmp/atlas-random-validation-web/work/vue/3-powerdong__Music-player",
+            "targetPath": "$WORK/atlas-random-validation-web/work/vue/3-powerdong__Music-player",
             "atlasDefinitions": 294,
             "nativeDefinitions": 6,
             "coverageRatio": 49,
@@ -10348,7 +10348,7 @@
         "status": "partial",
         "ok": false,
         "seconds": 0.212,
-        "command": "/tmp/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> /tmp/atlas-live-zig-zls/repo/src",
+        "command": "$WORK/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> $WORK/atlas-live-zig-zls/repo/src",
         "definitions": 5279,
         "diagnostics": null
       },
@@ -10384,7 +10384,7 @@
           {
             "repo": "https://github.com/norma-core/gremlin.zig",
             "commit": "fa7fab721fa403b8d2b7957e0c59dbe232fde9fc",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/zig/1-norma-core__gremlin.zig",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/zig/1-norma-core__gremlin.zig",
             "atlasDefinitions": 2331,
             "nativeDefinitions": 946,
             "coverageRatio": 2.4641,
@@ -10394,7 +10394,7 @@
           {
             "repo": "https://github.com/jamii/focus",
             "commit": "4aee7dda8bea2cbcb766a8eb78711d42fcd62761",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/zig/2-jamii__focus",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/zig/2-jamii__focus",
             "atlasDefinitions": 1624,
             "nativeDefinitions": 769,
             "coverageRatio": 2.1118,
@@ -10404,7 +10404,7 @@
           {
             "repo": "https://github.com/Validark/Accelerated-Zig-Parser",
             "commit": "8782a1924573641dc1f4a146afd530bf47838987",
-            "targetPath": "/tmp/atlas-random-validation-tags/work-tight/zig/3-Validark__Accelerated-Zig-Parser",
+            "targetPath": "$WORK/atlas-random-validation-tags/work-tight/zig/3-Validark__Accelerated-Zig-Parser",
             "atlasDefinitions": 941,
             "nativeDefinitions": 200,
             "coverageRatio": 4.705,
@@ -10542,7 +10542,7 @@
       "system": "Darwin"
     },
     "atlasBinary": "./bin/atlas",
-    "graphifyBinary": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify",
+    "graphifyBinary": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify",
     "rows": [
       {
         "language": "go",
@@ -20347,7 +20347,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "apex-source-counter",
-        "nativeCommandTemplate": "python3 <apex source counter> /tmp/atlas-live-apex-recipes/repo/force-app",
+        "nativeCommandTemplate": "python3 <apex source counter> $WORK/atlas-live-apex-recipes/repo/force-app",
         "graphifyDetectorOnly": false,
         "toolClass": "source-counter-proxy",
         "risk": "medium",
@@ -20504,7 +20504,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "astro-compiler",
-        "nativeCommandTemplate": "/opt/homebrew/bin/node /tmp/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js /tmp/atlas-live-astro-blog-tutorial/repo/src",
+        "nativeCommandTemplate": "/opt/homebrew/bin/node $WORK/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js $WORK/atlas-live-astro-blog-tutorial/repo/src",
         "graphifyDetectorOnly": false,
         "toolClass": "parser-library-baseline",
         "risk": "low",
@@ -20564,7 +20564,7 @@
               "(cd work/astro/01-cssninjaStudio__krypton && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/opt/homebrew/bin/node /tmp/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js work/astro/01-cssninjaStudio__krypton"
+              "/opt/homebrew/bin/node $WORK/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js work/astro/01-cssninjaStudio__krypton"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_uses_ephemeral_helper_path"
@@ -20603,7 +20603,7 @@
               "(cd work/astro/02-natemoo-re__astro-remote && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/opt/homebrew/bin/node /tmp/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js work/astro/02-natemoo-re__astro-remote"
+              "/opt/homebrew/bin/node $WORK/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js work/astro/02-natemoo-re__astro-remote"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_uses_ephemeral_helper_path"
@@ -20642,7 +20642,7 @@
               "(cd work/astro/03-MaeWolff__astro-portfolio-template && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/opt/homebrew/bin/node /tmp/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js work/astro/03-MaeWolff__astro-portfolio-template"
+              "/opt/homebrew/bin/node $WORK/atlas-live-astro-blog-tutorial/astro-compiler/astro_stats.js work/astro/03-MaeWolff__astro-portfolio-template"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_uses_ephemeral_helper_path"
@@ -20821,7 +20821,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "blade-directive-counter",
-        "nativeCommandTemplate": "python3 <blade directive counter> /tmp/atlas-live-blade-bookstack/repo/resources/views",
+        "nativeCommandTemplate": "python3 <blade directive counter> $WORK/atlas-live-blade-bookstack/repo/resources/views",
         "graphifyDetectorOnly": false,
         "toolClass": "source-counter-proxy",
         "risk": "medium",
@@ -20978,7 +20978,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "byond-source-counter",
-        "nativeCommandTemplate": "python3 <byond source counter> /tmp/atlas-live-byond-tgstation/repo/code/modules/mob",
+        "nativeCommandTemplate": "python3 <byond source counter> $WORK/atlas-live-byond-tgstation/repo/code/modules/mob",
         "graphifyDetectorOnly": false,
         "toolClass": "source-counter-proxy",
         "risk": "medium",
@@ -21135,7 +21135,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "roslyn",
-        "nativeCommandTemplate": "/opt/homebrew/bin/dotnet run --no-build -- /tmp/atlas-live-csharp-dapper/repo (Roslyn syntax tree counter)",
+        "nativeCommandTemplate": "/opt/homebrew/bin/dotnet run --no-build -- $WORK/atlas-live-csharp-dapper/repo (Roslyn syntax tree counter)",
         "graphifyDetectorOnly": false,
         "toolClass": "compiler-or-lsp-baseline",
         "risk": "low",
@@ -21288,7 +21288,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "cuda-source-counter",
-        "nativeCommandTemplate": "python3 <cuda source counter> /tmp/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+        "nativeCommandTemplate": "python3 <cuda source counter> $WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
         "graphifyDetectorOnly": false,
         "toolClass": "source-counter-proxy",
         "risk": "medium",
@@ -21445,7 +21445,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "tree-sitter-dart",
-        "nativeCommandTemplate": "/tmp/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> /tmp/atlas-live-dart-http/repo/pkgs/http/lib",
+        "nativeCommandTemplate": "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> $WORK/atlas-live-dart-http/repo/pkgs/http/lib",
         "graphifyDetectorOnly": false,
         "toolClass": "tree-sitter-baseline",
         "risk": "low",
@@ -21507,7 +21507,7 @@
               "(cd work/dart/01-dart-lang__http/pkgs/http/lib && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> work/dart/01-dart-lang__http/pkgs/http/lib"
+              "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> work/dart/01-dart-lang__http/pkgs/http/lib"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -21548,7 +21548,7 @@
               "(cd work/dart/02-dart-lang__path/lib && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> work/dart/02-dart-lang__path/lib"
+              "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> work/dart/02-dart-lang__path/lib"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -21589,7 +21589,7 @@
               "(cd work/dart/03-dart-lang__args/lib && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> work/dart/03-dart-lang__args/lib"
+              "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> work/dart/03-dart-lang__args/lib"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -21605,7 +21605,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "delphi-lazarus-source-counter",
-        "nativeCommandTemplate": "python3 <delphi/lazarus source counter> /tmp/atlas-live-delphi-lazarus/repo/ide",
+        "nativeCommandTemplate": "python3 <delphi/lazarus source counter> $WORK/atlas-live-delphi-lazarus/repo/ide",
         "graphifyDetectorOnly": false,
         "toolClass": "source-counter-proxy",
         "risk": "medium",
@@ -21762,7 +21762,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "python-dotnet-project",
-        "nativeCommandTemplate": "/opt/homebrew/bin/python3 -c <dotnet project counter> /tmp/atlas-live-dotnet-dapper/repo",
+        "nativeCommandTemplate": "/opt/homebrew/bin/python3 -c <dotnet project counter> $WORK/atlas-live-dotnet-dapper/repo",
         "graphifyDetectorOnly": false,
         "toolClass": "scope-proxy",
         "risk": "medium",
@@ -21909,7 +21909,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "ejs-template-counter",
-        "nativeCommandTemplate": "python3 <ejs template counter> /tmp/atlas-live-ejs-express/repo/examples",
+        "nativeCommandTemplate": "python3 <ejs template counter> $WORK/atlas-live-ejs-express/repo/examples",
         "graphifyDetectorOnly": true,
         "toolClass": "graphify-detector-only-proxy",
         "risk": "high",
@@ -22056,7 +22056,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "tree-sitter-elixir module/function proxy",
-        "nativeCommandTemplate": "/tmp/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> /tmp/atlas-live-elixir-phoenix/repo/lib",
+        "nativeCommandTemplate": "$WORK/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> $WORK/atlas-live-elixir-phoenix/repo/lib",
         "graphifyDetectorOnly": false,
         "toolClass": "scope-proxy",
         "risk": "medium",
@@ -22120,7 +22120,7 @@
               "(cd work/elixir/01-phoenixframework__phoenix/lib && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> work/elixir/01-phoenixframework__phoenix/lib"
+              "$WORK/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> work/elixir/01-phoenixframework__phoenix/lib"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -22162,7 +22162,7 @@
               "(cd work/elixir/02-elixir-plug__plug/lib && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> work/elixir/02-elixir-plug__plug/lib"
+              "$WORK/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> work/elixir/02-elixir-plug__plug/lib"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -22204,7 +22204,7 @@
               "(cd work/elixir/03-elixir-ecto__ecto/lib && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> work/elixir/03-elixir-ecto__ecto/lib"
+              "$WORK/atlas-live-elixir-phoenix/tree-sitter-elixir-venv/bin/python -c <tree-sitter-elixir definition counter> work/elixir/03-elixir-ecto__ecto/lib"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -22220,7 +22220,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "ets-source-counter",
-        "nativeCommandTemplate": "python3 <ets source counter> /tmp/atlas-live-ets-openharmony-tabs/repo/code/ArkTS1.2/TabsSample/entry/src/main/ets",
+        "nativeCommandTemplate": "python3 <ets source counter> $WORK/atlas-live-ets-openharmony-tabs/repo/code/ArkTS1.2/TabsSample/entry/src/main/ets",
         "graphifyDetectorOnly": true,
         "toolClass": "graphify-detector-only-proxy",
         "risk": "high",
@@ -22377,7 +22377,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "tree-sitter-fortran",
-        "nativeCommandTemplate": "/tmp/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> /tmp/atlas-live-fortran-stdlib/repo/src",
+        "nativeCommandTemplate": "$WORK/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> $WORK/atlas-live-fortran-stdlib/repo/src",
         "graphifyDetectorOnly": false,
         "toolClass": "tree-sitter-baseline",
         "risk": "low",
@@ -22439,7 +22439,7 @@
               "(cd work/fortran/01-fortran-lang__stdlib/src && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> /tmp/atlas-live-fortran-stdlib/repo/src"
+              "$WORK/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> $WORK/atlas-live-fortran-stdlib/repo/src"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -22480,7 +22480,7 @@
               "(cd work/fortran/02-fortran-lang__fpm/src && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> /tmp/atlas-live-fortran-stdlib/repo/src"
+              "$WORK/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> $WORK/atlas-live-fortran-stdlib/repo/src"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -22521,7 +22521,7 @@
               "(cd work/fortran/03-jacobwilliams__json-fortran/src && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> /tmp/atlas-live-fortran-stdlib/repo/src"
+              "$WORK/atlas-live-fortran-stdlib/tree-sitter-fortran-venv/bin/python -c <tree-sitter-fortran definition counter> $WORK/atlas-live-fortran-stdlib/repo/src"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -22537,7 +22537,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "tree-sitter-groovy",
-        "nativeCommandTemplate": "/tmp/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> /tmp/atlas-live-groovy-nextflow/repo/modules/nf-commons/src/main",
+        "nativeCommandTemplate": "$WORK/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> $WORK/atlas-live-groovy-nextflow/repo/modules/nf-commons/src/main",
         "graphifyDetectorOnly": false,
         "toolClass": "tree-sitter-baseline",
         "risk": "low",
@@ -22599,7 +22599,7 @@
               "(cd work/groovy/01-jvoegele__gradle-android-plugin && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> work/groovy/01-jvoegele__gradle-android-plugin"
+              "$WORK/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> work/groovy/01-jvoegele__gradle-android-plugin"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -22640,7 +22640,7 @@
               "(cd work/groovy/02-allegro__json-avro-converter && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> work/groovy/02-allegro__json-avro-converter"
+              "$WORK/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> work/groovy/02-allegro__json-avro-converter"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -22681,7 +22681,7 @@
               "(cd work/groovy/03-jaredsburrows__gradle-license-plugin && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> work/groovy/03-jaredsburrows__gradle-license-plugin"
+              "$WORK/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> work/groovy/03-jaredsburrows__gradle-license-plugin"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -22697,7 +22697,7 @@
         "isCodeLanguage": false,
         "isStructured": true,
         "nativeTool": "python-json",
-        "nativeCommandTemplate": "/opt/homebrew/bin/python3 -c <python-json key counter> /tmp/atlas-live-json-eslint-create-config/repo",
+        "nativeCommandTemplate": "/opt/homebrew/bin/python3 -c <python-json key counter> $WORK/atlas-live-json-eslint-create-config/repo",
         "graphifyDetectorOnly": false,
         "toolClass": "structured-format",
         "risk": "structured",
@@ -22729,7 +22729,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "tree-sitter-julia",
-        "nativeCommandTemplate": "/tmp/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> /tmp/atlas-live-julia-json/repo/src",
+        "nativeCommandTemplate": "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> $WORK/atlas-live-julia-json/repo/src",
         "graphifyDetectorOnly": false,
         "toolClass": "tree-sitter-baseline",
         "risk": "low",
@@ -22791,7 +22791,7 @@
               "(cd work/julia/01-JuliaIO__JSON.jl/src && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> work/julia/01-JuliaIO__JSON.jl/src"
+              "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> work/julia/01-JuliaIO__JSON.jl/src"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -22832,7 +22832,7 @@
               "(cd work/julia/02-JuliaData__DataFrames.jl/src && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> work/julia/02-JuliaData__DataFrames.jl/src"
+              "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> work/julia/02-JuliaData__DataFrames.jl/src"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -22873,7 +22873,7 @@
               "(cd work/julia/03-JuliaStats__StatsBase.jl/src && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> work/julia/03-JuliaStats__StatsBase.jl/src"
+              "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> work/julia/03-JuliaStats__StatsBase.jl/src"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -22889,7 +22889,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "tree-sitter-kotlin",
-        "nativeCommandTemplate": "/tmp/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> /tmp/atlas-live-kotlin-okhttp/repo/okhttp/src/commonJvmAndroid/kotlin",
+        "nativeCommandTemplate": "$WORK/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> $WORK/atlas-live-kotlin-okhttp/repo/okhttp/src/commonJvmAndroid/kotlin",
         "graphifyDetectorOnly": false,
         "toolClass": "tree-sitter-baseline",
         "risk": "low",
@@ -22951,7 +22951,7 @@
               "(cd work/kotlin/01-gothinkster__kotlin-spring-realworld-example-app && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> work/kotlin/01-gothinkster__kotlin-spring-realworld-example-app"
+              "$WORK/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> work/kotlin/01-gothinkster__kotlin-spring-realworld-example-app"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -22992,7 +22992,7 @@
               "(cd work/kotlin/02-VKCOM__vk-android-sdk && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> work/kotlin/02-VKCOM__vk-android-sdk"
+              "$WORK/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> work/kotlin/02-VKCOM__vk-android-sdk"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -23033,7 +23033,7 @@
               "(cd work/kotlin/03-husaynhakeem__android-face-detector && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> work/kotlin/03-husaynhakeem__android-face-detector"
+              "$WORK/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> work/kotlin/03-husaynhakeem__android-face-detector"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -23049,7 +23049,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "luaparser",
-        "nativeCommandTemplate": "/tmp/atlas-live-lua-lazy/luaparser-venv/bin/python -c <luaparser definition counter> /tmp/atlas-live-lua-lazy/repo",
+        "nativeCommandTemplate": "$WORK/atlas-live-lua-lazy/luaparser-venv/bin/python -c <luaparser definition counter> $WORK/atlas-live-lua-lazy/repo",
         "graphifyDetectorOnly": false,
         "toolClass": "parser-library-baseline",
         "risk": "low",
@@ -23192,7 +23192,7 @@
         "isCodeLanguage": false,
         "isStructured": true,
         "nativeTool": "markdown-it-py",
-        "nativeCommandTemplate": "/tmp/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> /tmp/atlas-live-markdown-mdbook/repo/guide/src",
+        "nativeCommandTemplate": "$WORK/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> $WORK/atlas-live-markdown-mdbook/repo/guide/src",
         "graphifyDetectorOnly": false,
         "toolClass": "structured-format",
         "risk": "structured",
@@ -23255,7 +23255,7 @@
               "(cd work/markdown/01-rust-lang__mdBook/guide/src && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> work/markdown/01-rust-lang__mdBook/guide/src"
+              "$WORK/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> work/markdown/01-rust-lang__mdBook/guide/src"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -23296,7 +23296,7 @@
               "(cd work/markdown/02-vitejs__vite/docs && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> work/markdown/02-vitejs__vite/docs"
+              "$WORK/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> work/markdown/02-vitejs__vite/docs"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -23337,7 +23337,7 @@
               "(cd work/markdown/03-pnpm__pnpm.io/docs && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> work/markdown/03-pnpm__pnpm.io/docs"
+              "$WORK/atlas-live-markdown-mdbook/markdown-it-venv/bin/python -c <markdown-it-py heading counter> work/markdown/03-pnpm__pnpm.io/docs"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -23353,7 +23353,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "tree-sitter-objc",
-        "nativeCommandTemplate": "/tmp/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> /tmp/atlas-live-objc-sdwebimage/repo/SDWebImage",
+        "nativeCommandTemplate": "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> $WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
         "graphifyDetectorOnly": false,
         "toolClass": "tree-sitter-baseline",
         "risk": "low",
@@ -23415,7 +23415,7 @@
               "(cd work/objc/01-thetron__StringScore && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> work/objc/01-thetron__StringScore"
+              "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> work/objc/01-thetron__StringScore"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -23456,7 +23456,7 @@
               "(cd work/objc/02-rs__SafariTabSwitching && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> work/objc/02-rs__SafariTabSwitching"
+              "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> work/objc/02-rs__SafariTabSwitching"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -23497,7 +23497,7 @@
               "(cd work/objc/03-iosphere__ISHPullUp && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> work/objc/03-iosphere__ISHPullUp"
+              "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> work/objc/03-iosphere__ISHPullUp"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -23513,7 +23513,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "pascal-regex-counter",
-        "nativeCommandTemplate": "/opt/homebrew/bin/python3 -c <pascal declaration counter> /tmp/atlas-live-pascal-pascalscript/repo/Source",
+        "nativeCommandTemplate": "/opt/homebrew/bin/python3 -c <pascal declaration counter> $WORK/atlas-live-pascal-pascalscript/repo/Source",
         "graphifyDetectorOnly": false,
         "toolClass": "source-counter-proxy",
         "risk": "medium",
@@ -23670,7 +23670,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "php-tokenizer",
-        "nativeCommandTemplate": "php /tmp/atlas-php-3repo-1782814733/php_token_counter.php /tmp/atlas-php-3repo-1782814733/slim/repo",
+        "nativeCommandTemplate": "php $WORK/atlas-php-3repo-1782814733/php_token_counter.php $WORK/atlas-php-3repo-1782814733/slim/repo",
         "graphifyDetectorOnly": false,
         "toolClass": "parser-library-baseline",
         "risk": "low",
@@ -23813,7 +23813,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "pwsh-parser",
-        "nativeCommandTemplate": "/usr/local/bin/pwsh -NoLogo -NoProfile -File /tmp/atlas-live-powershell-powershellget/pwsh_stats.ps1 /tmp/atlas-live-powershell-powershellget/repo/src",
+        "nativeCommandTemplate": "/usr/local/bin/pwsh -NoLogo -NoProfile -File $WORK/atlas-live-powershell-powershellget/pwsh_stats.ps1 $WORK/atlas-live-powershell-powershellget/repo/src",
         "graphifyDetectorOnly": false,
         "toolClass": "parser-library-baseline",
         "risk": "low",
@@ -23956,7 +23956,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "razor-directive-counter",
-        "nativeCommandTemplate": "python3 <razor directive counter> /tmp/atlas-live-razor-eshoponweb/repo/src",
+        "nativeCommandTemplate": "python3 <razor directive counter> $WORK/atlas-live-razor-eshoponweb/repo/src",
         "graphifyDetectorOnly": false,
         "toolClass": "source-counter-proxy",
         "risk": "medium",
@@ -24103,7 +24103,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "ruby-ripper",
-        "nativeCommandTemplate": "/usr/bin/ruby /tmp/atlas-live-ruby-sinatra/ripper_stats.rb /tmp/atlas-live-ruby-sinatra/repo",
+        "nativeCommandTemplate": "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb $WORK/atlas-live-ruby-sinatra/repo",
         "graphifyDetectorOnly": false,
         "toolClass": "parser-library-baseline",
         "risk": "low",
@@ -24163,7 +24163,7 @@
               "(cd work/ruby/01-tpope__hookup && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/usr/bin/ruby /tmp/atlas-live-ruby-sinatra/ripper_stats.rb work/ruby/01-tpope__hookup"
+              "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb work/ruby/01-tpope__hookup"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_uses_ephemeral_helper_path"
@@ -24202,7 +24202,7 @@
               "(cd work/ruby/02-mailgun__mailgun-ruby && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/usr/bin/ruby /tmp/atlas-live-ruby-sinatra/ripper_stats.rb work/ruby/02-mailgun__mailgun-ruby"
+              "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb work/ruby/02-mailgun__mailgun-ruby"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_uses_ephemeral_helper_path"
@@ -24241,7 +24241,7 @@
               "(cd work/ruby/03-BerlinVagrant__vagrant-dns && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/usr/bin/ruby /tmp/atlas-live-ruby-sinatra/ripper_stats.rb work/ruby/03-BerlinVagrant__vagrant-dns"
+              "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb work/ruby/03-BerlinVagrant__vagrant-dns"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_uses_ephemeral_helper_path"
@@ -24416,7 +24416,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "r-source-counter",
-        "nativeCommandTemplate": "python3 <R source counter> /tmp/atlas-live-r-ggplot2/repo/R",
+        "nativeCommandTemplate": "python3 <R source counter> $WORK/atlas-live-r-ggplot2/repo/R",
         "graphifyDetectorOnly": true,
         "toolClass": "graphify-detector-only-proxy",
         "risk": "high",
@@ -24573,7 +24573,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "tree-sitter-scala",
-        "nativeCommandTemplate": "/tmp/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> /tmp/atlas-live-scala-cats/repo/core/src/main/scala",
+        "nativeCommandTemplate": "$WORK/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> $WORK/atlas-live-scala-cats/repo/core/src/main/scala",
         "graphifyDetectorOnly": false,
         "toolClass": "tree-sitter-baseline",
         "risk": "low",
@@ -24635,7 +24635,7 @@
               "(cd work/scala/01-spirom__LearningSpark && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> work/scala/01-spirom__LearningSpark"
+              "$WORK/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> work/scala/01-spirom__LearningSpark"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -24676,7 +24676,7 @@
               "(cd work/scala/02-Eliah-Lakhin__papa-carlo && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> work/scala/02-Eliah-Lakhin__papa-carlo"
+              "$WORK/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> work/scala/02-Eliah-Lakhin__papa-carlo"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -24717,7 +24717,7 @@
               "(cd work/scala/03-xerial__larray && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> work/scala/03-xerial__larray"
+              "$WORK/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> work/scala/03-xerial__larray"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -24733,7 +24733,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "sqlfluff",
-        "nativeCommandTemplate": "/tmp/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>",
+        "nativeCommandTemplate": "$WORK/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>",
         "graphifyDetectorOnly": false,
         "toolClass": "parser-library-baseline",
         "risk": "low",
@@ -24795,7 +24795,7 @@
               "(cd work/sql/01-hasura__graphql-engine/server/src-rsr/migrations && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>"
+              "$WORK/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -24836,7 +24836,7 @@
               "(cd work/sql/02-timescale__timescaledb/sql/pre_install && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>"
+              "$WORK/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -24877,7 +24877,7 @@
               "(cd work/sql/03-postgres__postgres/contrib/bloom && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>"
+              "$WORK/atlas-live-sql-hasura/sqlfluff-venv/bin/sqlfluff parse --dialect postgres <82 SQL files>"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -24893,7 +24893,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "svelte-compiler",
-        "nativeCommandTemplate": "/opt/homebrew/bin/node /tmp/atlas-live-svelte-carbon/svelte-compiler/svelte_stats.js /tmp/atlas-live-svelte-carbon/repo/src",
+        "nativeCommandTemplate": "/opt/homebrew/bin/node $WORK/atlas-live-svelte-carbon/svelte-compiler/svelte_stats.js $WORK/atlas-live-svelte-carbon/repo/src",
         "graphifyDetectorOnly": false,
         "toolClass": "parser-library-baseline",
         "risk": "low",
@@ -25036,7 +25036,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "sourcekit-lsp",
-        "nativeCommandTemplate": "/usr/bin/sourcekit-lsp --scratch-path /tmp/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM",
+        "nativeCommandTemplate": "/usr/bin/sourcekit-lsp --scratch-path $WORK/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM",
         "graphifyDetectorOnly": false,
         "toolClass": "compiler-or-lsp-baseline",
         "risk": "low",
@@ -25096,7 +25096,7 @@
               "(cd work/swift/01-ReSwift__ReSwift-Router && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/usr/bin/sourcekit-lsp --scratch-path /tmp/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM"
+              "/usr/bin/sourcekit-lsp --scratch-path $WORK/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_uses_ephemeral_helper_path"
@@ -25135,7 +25135,7 @@
               "(cd work/swift/02-treastrain__TRETJapanNFCReader && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/usr/bin/sourcekit-lsp --scratch-path /tmp/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM"
+              "/usr/bin/sourcekit-lsp --scratch-path $WORK/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_uses_ephemeral_helper_path"
@@ -25174,7 +25174,7 @@
               "(cd work/swift/03-soberman__ARSLineProgress && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/usr/bin/sourcekit-lsp --scratch-path /tmp/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM"
+              "/usr/bin/sourcekit-lsp --scratch-path $WORK/atlas-live-swift-argument-parser/sourcekit-scratch --default-workspace-type swiftPM"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_uses_ephemeral_helper_path"
@@ -25189,7 +25189,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "python-hcl2",
-        "nativeCommandTemplate": "/tmp/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> /tmp/atlas-live-terraform-vpc/repo",
+        "nativeCommandTemplate": "$WORK/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> $WORK/atlas-live-terraform-vpc/repo",
         "graphifyDetectorOnly": false,
         "toolClass": "parser-library-baseline",
         "risk": "low",
@@ -25251,7 +25251,7 @@
               "(cd work/terraform/01-terraform-aws-modules__terraform-aws-vpc && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> work/terraform/01-terraform-aws-modules__terraform-aws-vpc"
+              "$WORK/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> work/terraform/01-terraform-aws-modules__terraform-aws-vpc"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -25292,7 +25292,7 @@
               "(cd work/terraform/02-terraform-aws-modules__terraform-aws-eks && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> work/terraform/02-terraform-aws-modules__terraform-aws-eks"
+              "$WORK/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> work/terraform/02-terraform-aws-modules__terraform-aws-eks"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -25333,7 +25333,7 @@
               "(cd work/terraform/03-terraform-aws-modules__terraform-aws-security-group && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> work/terraform/03-terraform-aws-modules__terraform-aws-security-group"
+              "$WORK/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> work/terraform/03-terraform-aws-modules__terraform-aws-security-group"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -25349,7 +25349,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "tree-sitter-systemverilog module/package/function proxy",
-        "nativeCommandTemplate": "/tmp/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> /tmp/atlas-live-verilog-ibex/repo/rtl",
+        "nativeCommandTemplate": "$WORK/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> $WORK/atlas-live-verilog-ibex/repo/rtl",
         "graphifyDetectorOnly": false,
         "toolClass": "scope-proxy",
         "risk": "medium",
@@ -25413,7 +25413,7 @@
               "(cd work/verilog/01-lowRISC__ibex/rtl && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> work/verilog/01-lowRISC__ibex/rtl"
+              "$WORK/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> work/verilog/01-lowRISC__ibex/rtl"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -25455,7 +25455,7 @@
               "(cd work/verilog/02-YosysHQ__picorv32/picosoc && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> work/verilog/02-YosysHQ__picorv32/picosoc"
+              "$WORK/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> work/verilog/02-YosysHQ__picorv32/picosoc"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -25497,7 +25497,7 @@
               "(cd work/verilog/03-alexforencich__verilog-ethernet/rtl && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> work/verilog/03-alexforencich__verilog-ethernet/rtl"
+              "$WORK/atlas-live-verilog-ibex/tree-sitter-systemverilog-venv/bin/python -c <tree-sitter-systemverilog definition counter> work/verilog/03-alexforencich__verilog-ethernet/rtl"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -25513,7 +25513,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "vue-compiler-sfc",
-        "nativeCommandTemplate": "/opt/homebrew/bin/node /tmp/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js /tmp/atlas-live-vue-realworld/repo/src",
+        "nativeCommandTemplate": "/opt/homebrew/bin/node $WORK/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js $WORK/atlas-live-vue-realworld/repo/src",
         "graphifyDetectorOnly": false,
         "toolClass": "parser-library-baseline",
         "risk": "low",
@@ -25573,7 +25573,7 @@
               "(cd work/vue/01-LiuXin-Developer__rightHouse && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/opt/homebrew/bin/node /tmp/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js work/vue/01-LiuXin-Developer__rightHouse"
+              "/opt/homebrew/bin/node $WORK/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js work/vue/01-LiuXin-Developer__rightHouse"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_uses_ephemeral_helper_path"
@@ -25612,7 +25612,7 @@
               "(cd work/vue/02-Tencent__tdesign-vue-starter && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/opt/homebrew/bin/node /tmp/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js work/vue/02-Tencent__tdesign-vue-starter"
+              "/opt/homebrew/bin/node $WORK/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js work/vue/02-Tencent__tdesign-vue-starter"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_uses_ephemeral_helper_path"
@@ -25651,7 +25651,7 @@
               "(cd work/vue/03-powerdong__Music-player && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/opt/homebrew/bin/node /tmp/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js work/vue/03-powerdong__Music-player"
+              "/opt/homebrew/bin/node $WORK/atlas-live-vue-realworld/vue-compiler/vue_sfc_stats.js work/vue/03-powerdong__Music-player"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_uses_ephemeral_helper_path"
@@ -25666,7 +25666,7 @@
         "isCodeLanguage": true,
         "isStructured": false,
         "nativeTool": "tree-sitter-zig",
-        "nativeCommandTemplate": "/tmp/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> /tmp/atlas-live-zig-zls/repo/src",
+        "nativeCommandTemplate": "$WORK/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> $WORK/atlas-live-zig-zls/repo/src",
         "graphifyDetectorOnly": false,
         "toolClass": "tree-sitter-baseline",
         "risk": "low",
@@ -25728,7 +25728,7 @@
               "(cd work/zig/01-norma-core__gremlin.zig && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> work/zig/01-norma-core__gremlin.zig"
+              "$WORK/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> work/zig/01-norma-core__gremlin.zig"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -25769,7 +25769,7 @@
               "(cd work/zig/02-jamii__focus && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> work/zig/02-jamii__focus"
+              "$WORK/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> work/zig/02-jamii__focus"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",
@@ -25810,7 +25810,7 @@
               "(cd work/zig/03-Validark__Accelerated-Zig-Parser && uv tool run --from graphifyy graphify update .)"
             ],
             "nativeRemeasurementCandidateCommands": [
-              "/tmp/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> work/zig/03-Validark__Accelerated-Zig-Parser"
+              "$WORK/atlas-live-zig-zls/tree-sitter-zig-venv/bin/python -c <tree-sitter-zig definition counter> work/zig/03-Validark__Accelerated-Zig-Parser"
             ],
             "nativeRemeasurementCandidateBlockers": [
               "native_command_contains_placeholder",

@@ -4,20 +4,20 @@
   "commit": "3ffbd46fb1c7733e1b34d8666893280454e27436",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/terraform-aws-modules/terraform-aws-vpc /tmp/atlas-live-terraform-vpc/repo",
+    "clone": "git clone --depth 1 https://github.com/terraform-aws-modules/terraform-aws-vpc $WORK/atlas-live-terraform-vpc/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-terraform-vpc/atlas.db --json index /tmp/atlas-live-terraform-vpc/repo",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-terraform-vpc/atlas.db --json index /tmp/atlas-live-terraform-vpc/repo",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-terraform-vpc/atlas.db --json index $WORK/atlas-live-terraform-vpc/repo",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-terraform-vpc/atlas.db --json index $WORK/atlas-live-terraform-vpc/repo",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "/tmp/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> /tmp/atlas-live-terraform-vpc/repo",
+    "native_baseline": "$WORK/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> $WORK/atlas-live-terraform-vpc/repo",
     "query_symbols": [
       "aws_vpc.this",
       "aws_subnet.public",
       "aws_route_table.public",
       "aws_nat_gateway.this"
     ],
-    "target_path": "/tmp/atlas-live-terraform-vpc/repo",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-terraform-vpc/atlas.db serve --addr 127.0.0.1:4214"
+    "target_path": "$WORK/atlas-live-terraform-vpc/repo",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-terraform-vpc/atlas.db serve --addr 127.0.0.1:4214"
   },
   "atlas": {
     "cold_wall_seconds": 0.166,
@@ -146,7 +146,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.921,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "  AST extraction: 100/102 uncached files (98%) [14 workers]",
@@ -167,7 +167,7 @@
     "tool": "python-hcl2",
     "status": "ok",
     "ok": true,
-    "command": "/tmp/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> /tmp/atlas-live-terraform-vpc/repo",
+    "command": "$WORK/atlas-live-terraform-vpc/hcl2-venv/bin/python -c <hcl2 definition counter> $WORK/atlas-live-terraform-vpc/repo",
     "metrics": {
       "files": 77,
       "parsed_files": 77,
@@ -213,7 +213,7 @@
   "query_warmup": {
     "symbol": "aws_vpc.this",
     "atlas_command": "curl -fsS http://127.0.0.1:4214/api/v1/symbols/aws_vpc.this/explain?repo_id=repo&format=plain",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain aws_vpc.this",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain aws_vpc.this",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -223,7 +223,7 @@
       "symbol": "aws_vpc.this",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4214/api/v1/symbols/aws_vpc.this/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain aws_vpc.this",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain aws_vpc.this",
       "atlas_tokens": 2,
       "graphify_tokens": 291,
       "atlas_ms": 8.662,
@@ -261,7 +261,7 @@
       "symbol": "aws_subnet.public",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4214/api/v1/symbols/aws_subnet.public/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain aws_subnet.public",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain aws_subnet.public",
       "atlas_tokens": 2,
       "graphify_tokens": 308,
       "atlas_ms": 8.033,
@@ -299,7 +299,7 @@
       "symbol": "aws_route_table.public",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4214/api/v1/symbols/aws_route_table.public/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain aws_route_table.public",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain aws_route_table.public",
       "atlas_tokens": 2,
       "graphify_tokens": 280,
       "atlas_ms": 7.512,
@@ -337,7 +337,7 @@
       "symbol": "aws_nat_gateway.this",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4214/api/v1/symbols/aws_nat_gateway.this/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain aws_nat_gateway.this",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain aws_nat_gateway.this",
       "atlas_tokens": 2,
       "graphify_tokens": 286,
       "atlas_ms": 7.474,
@@ -387,7 +387,7 @@
       {
         "repo": "https://github.com/terraform-aws-modules/terraform-aws-vpc",
         "commit": "3ffbd46fb1c7733e1b34d8666893280454e27436",
-        "target_path": "/tmp/atlas-terraform-3repo-1782815314/vpc/repo",
+        "target_path": "$WORK/atlas-terraform-3repo-1782815314/vpc/repo",
         "atlas_definitions": 1738,
         "native_definitions": 1734,
         "coverage_ratio": 1.0023,
@@ -397,7 +397,7 @@
       {
         "repo": "https://github.com/terraform-aws-modules/terraform-aws-eks",
         "commit": "d4669ca8eb109a37f6c19ab8fb9487ab7521a9ba",
-        "target_path": "/tmp/atlas-terraform-3repo-1782815314/eks/repo",
+        "target_path": "$WORK/atlas-terraform-3repo-1782815314/eks/repo",
         "atlas_definitions": 1160,
         "native_definitions": 1014,
         "coverage_ratio": 1.144,
@@ -407,7 +407,7 @@
       {
         "repo": "https://github.com/terraform-aws-modules/terraform-aws-security-group",
         "commit": "58d8e895915f5573767081142d063b7caf7a2b47",
-        "target_path": "/tmp/atlas-terraform-3repo-1782815314/security-group/repo",
+        "target_path": "$WORK/atlas-terraform-3repo-1782815314/security-group/repo",
         "atlas_definitions": 1542,
         "native_definitions": 1542,
         "coverage_ratio": 1,

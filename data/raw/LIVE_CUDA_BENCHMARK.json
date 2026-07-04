@@ -4,20 +4,20 @@
   "commit": "b7c5481c556c3fe98db060207ecaa41a4b9a9abc",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 --filter=blob:none --sparse https://github.com/NVIDIA/cuda-samples /tmp/atlas-live-cuda-samples/repo",
-    "sparse_checkout": "git -C /tmp/atlas-live-cuda-samples/repo sparse-checkout set cpp/0_Introduction/simpleAtomicIntrinsics",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-cuda-samples/atlas.db --json index /tmp/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-cuda-samples/atlas.db --json index /tmp/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+    "clone": "git clone --depth 1 --filter=blob:none --sparse https://github.com/NVIDIA/cuda-samples $WORK/atlas-live-cuda-samples/repo",
+    "sparse_checkout": "git -C $WORK/atlas-live-cuda-samples/repo sparse-checkout set cpp/0_Introduction/simpleAtomicIntrinsics",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-cuda-samples/atlas.db --json index $WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-cuda-samples/atlas.db --json index $WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "python3 <cuda source counter> /tmp/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+    "native_baseline": "python3 <cuda source counter> $WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
     "query_symbols": [
       "testKernel",
       "runTest",
       "main",
       "computeGold"
     ],
-    "target_path": "/tmp/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-cuda-samples/atlas.db --repo simpleAtomicIntrinsics serve --addr 127.0.0.1:48185"
+    "target_path": "$WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-cuda-samples/atlas.db --repo simpleAtomicIntrinsics serve --addr 127.0.0.1:48185"
   },
   "atlas": {
     "cold_wall_seconds": 0.18,
@@ -289,7 +289,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0,
-    "command": "python3 <cuda source counter> /tmp/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+    "command": "python3 <cuda source counter> $WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
     "metrics": {
       "files": 2,
       "parsed_files": 2,
@@ -707,7 +707,7 @@
       {
         "repo": "https://github.com/MegviiRobot/MegBA",
         "commit": "bd86dc05c0a345ac5d43e77c353cbe0583e6f128",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/cuda/1-MegviiRobot__MegBA",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/cuda/1-MegviiRobot__MegBA",
         "atlas_definitions": 188,
         "native_definitions": 73,
         "coverage_ratio": 2.5753,
@@ -717,7 +717,7 @@
       {
         "repo": "https://github.com/dnouri/cuda-convnet",
         "commit": "e4ac0c1f374a15cfe3944bd6d732c3822cc2b96b",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/cuda/2-dnouri__cuda-convnet",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/cuda/2-dnouri__cuda-convnet",
         "atlas_definitions": 940,
         "native_definitions": 57,
         "coverage_ratio": 16.4912,
@@ -727,7 +727,7 @@
       {
         "repo": "https://github.com/ashawkey/diff-gaussian-rasterization",
         "commit": "8829d14f814fccdaf840b7b0f3021a616583c0a1",
-        "target_path": "/tmp/atlas-random-validation-remaining/work2/cuda/3-ashawkey__diff-gaussian-rasterization",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/cuda/3-ashawkey__diff-gaussian-rasterization",
         "atlas_definitions": 28,
         "native_definitions": 4,
         "coverage_ratio": 7,

@@ -4,21 +4,21 @@
   "commit": "a2dac8e74603f7c9eec4a54c5e23459531751b0d",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/PowerShell/PowerShellGet /tmp/atlas-live-powershell-powershellget/repo",
+    "clone": "git clone --depth 1 https://github.com/PowerShell/PowerShellGet $WORK/atlas-live-powershell-powershellget/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-powershell-powershellget/atlas-refresh.db --json index /tmp/atlas-live-powershell-powershellget/repo/src",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-powershell-powershellget/atlas-refresh.db --json index /tmp/atlas-live-powershell-powershellget/repo/src",
-    "graphify_update": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
-    "native_baseline": "/usr/local/bin/pwsh -NoLogo -NoProfile -File /tmp/atlas-live-powershell-powershellget/pwsh_stats.ps1 /tmp/atlas-live-powershell-powershellget/repo/src",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-powershell-powershellget/atlas-refresh.db --json index $WORK/atlas-live-powershell-powershellget/repo/src",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-powershell-powershellget/atlas-refresh.db --json index $WORK/atlas-live-powershell-powershellget/repo/src",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "/usr/local/bin/pwsh -NoLogo -NoProfile -File $WORK/atlas-live-powershell-powershellget/pwsh_stats.ps1 $WORK/atlas-live-powershell-powershellget/repo/src",
     "query_symbols": [
       "Find-Module",
       "Install-Module",
       "Register-PSRepository",
       "Update-ModuleManifest"
     ],
-    "target_path": "/tmp/atlas-live-powershell-powershellget/repo/src",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-powershell-powershellget/atlas-refresh.db serve --addr 127.0.0.1:4230",
-    "native_expanded_baseline": "/usr/local/bin/pwsh -NoLogo -NoProfile -File /tmp/pwsh_expanded_counter.ps1 /tmp/atlas-live-powershell-powershellget/repo/src"
+    "target_path": "$WORK/atlas-live-powershell-powershellget/repo/src",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-powershell-powershellget/atlas-refresh.db serve --addr 127.0.0.1:4230",
+    "native_expanded_baseline": "/usr/local/bin/pwsh -NoLogo -NoProfile -File $WORK/pwsh_expanded_counter.ps1 $WORK/atlas-live-powershell-powershellget/repo/src"
   },
   "atlas": {
     "cold_wall_seconds": 0.085,
@@ -120,7 +120,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.14,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "[graphify watch] Rebuilt: 30 nodes, 43 edges, 4 communities",
@@ -140,7 +140,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.714,
-    "command": "/usr/local/bin/pwsh -NoLogo -NoProfile -File /tmp/atlas-live-powershell-powershellget/pwsh_stats.ps1 /tmp/atlas-live-powershell-powershellget/repo/src",
+    "command": "/usr/local/bin/pwsh -NoLogo -NoProfile -File $WORK/atlas-live-powershell-powershellget/pwsh_stats.ps1 $WORK/atlas-live-powershell-powershellget/repo/src",
     "metrics": {
       "files": 2,
       "parsed_files": 2,
@@ -156,7 +156,7 @@
         "function": 28,
         "variable": 3
       },
-      "expanded_counter_command": "/usr/local/bin/pwsh -NoLogo -NoProfile -File /tmp/pwsh_expanded_counter.ps1 /tmp/atlas-live-powershell-powershellget/repo/src",
+      "expanded_counter_command": "/usr/local/bin/pwsh -NoLogo -NoProfile -File $WORK/pwsh_expanded_counter.ps1 $WORK/atlas-live-powershell-powershellget/repo/src",
       "expanded_parse_error_samples": []
     }
   },
@@ -206,7 +206,7 @@
   "query_warmup": {
     "symbol": "Find-Module",
     "atlas_command": "curl -fsS http://127.0.0.1:4230/api/v1/symbols/Find-Module/explain?repo_id=src&format=plain",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Find-Module",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Find-Module",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -216,7 +216,7 @@
       "symbol": "Find-Module",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4230/api/v1/symbols/Find-Module/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Find-Module",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Find-Module",
       "atlas_tokens": 2,
       "graphify_tokens": 66,
       "atlas_ms": 7.865,
@@ -258,7 +258,7 @@
       "symbol": "Install-Module",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4230/api/v1/symbols/Install-Module/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Install-Module",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Install-Module",
       "atlas_tokens": 2,
       "graphify_tokens": 67,
       "atlas_ms": 7.385,
@@ -300,7 +300,7 @@
       "symbol": "Register-PSRepository",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4230/api/v1/symbols/Register-PSRepository/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Register-PSRepository",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Register-PSRepository",
       "atlas_tokens": 2,
       "graphify_tokens": 57,
       "atlas_ms": 7.426,
@@ -342,7 +342,7 @@
       "symbol": "Update-ModuleManifest",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4230/api/v1/symbols/Update-ModuleManifest/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Update-ModuleManifest",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Update-ModuleManifest",
       "atlas_tokens": 2,
       "graphify_tokens": 57,
       "atlas_ms": 7.309,
@@ -398,7 +398,7 @@
       {
         "repo": "https://github.com/PowerShell/PowerShellGet",
         "commit": "a2dac8e74603f7c9eec4a54c5e23459531751b0d",
-        "target_path": "/private/tmp/atlas-remaining-3repo-validation/powershell/1-PowerShellGet/repo/src",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/powershell/1-PowerShellGet/repo/src",
         "atlas_definitions": 28,
         "native_definitions": 28,
         "coverage_ratio": 1,
@@ -408,7 +408,7 @@
       {
         "repo": "https://github.com/PowerShell/SecretManagement",
         "commit": "e24cc88e87d02cabbbf0fbaf76e4e287e927dbed",
-        "target_path": "/private/tmp/atlas-powershell-candidates/SecretManagement/repo/ExtensionModules",
+        "target_path": "/private$WORK/atlas-powershell-candidates/SecretManagement/repo/ExtensionModules",
         "atlas_definitions": 13,
         "native_definitions": 13,
         "coverage_ratio": 1,
@@ -418,7 +418,7 @@
       {
         "repo": "https://github.com/PowerShell/PSResourceGet",
         "commit": "6ecc668473baf37aa3cb84cc54dce7434364d121",
-        "target_path": "/private/tmp/atlas-powershell-candidates/PSResourceGet/repo/test",
+        "target_path": "/private$WORK/atlas-powershell-candidates/PSResourceGet/repo/test",
         "atlas_definitions": 43,
         "native_definitions": 43,
         "coverage_ratio": 1,

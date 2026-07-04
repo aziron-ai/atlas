@@ -4,12 +4,12 @@
   "commit": "851965a582940d804f9a23179f58a53fc97f07dc",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/typelevel/cats /tmp/atlas-live-scala-cats/repo",
+    "clone": "git clone --depth 1 https://github.com/typelevel/cats $WORK/atlas-live-scala-cats/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-scala-cats/atlas.db --json index /tmp/atlas-live-scala-cats/repo/core/src/main/scala",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-scala-cats/atlas.db --json index /tmp/atlas-live-scala-cats/repo/core/src/main/scala",
-    "graphify_update": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
-    "native_baseline": "/tmp/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> /tmp/atlas-live-scala-cats/repo/core/src/main/scala",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-scala-cats/atlas.db --json index $WORK/atlas-live-scala-cats/repo/core/src/main/scala",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-scala-cats/atlas.db --json index $WORK/atlas-live-scala-cats/repo/core/src/main/scala",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "$WORK/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> $WORK/atlas-live-scala-cats/repo/core/src/main/scala",
     "query_symbols": [
       "Functor",
       "Applicative",
@@ -17,7 +17,7 @@
       "Traverse",
       "Eval"
     ],
-    "target_path": "/tmp/atlas-live-scala-cats/repo/core/src/main/scala"
+    "target_path": "$WORK/atlas-live-scala-cats/repo/core/src/main/scala"
   },
   "atlas": {
     "cold_wall_seconds": 1.096,
@@ -110,7 +110,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 2.582,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "  AST extraction: 100/206 uncached files (48%) [14 workers]",
@@ -133,7 +133,7 @@
     "status": "partial",
     "ok": false,
     "seconds": 0.429,
-    "command": "/tmp/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> /tmp/atlas-live-scala-cats/repo/core/src/main/scala",
+    "command": "$WORK/atlas-live-scala-cats/tree-sitter-scala-venv/bin/python -c <tree-sitter-scala definition counter> $WORK/atlas-live-scala-cats/repo/core/src/main/scala",
     "metrics": {
       "files": 206,
       "parsed_files": 204,
@@ -190,8 +190,8 @@
   },
   "query_warmup": {
     "symbol": "Functor",
-    "atlas_command": "bin/atlas --db sqlite:///tmp/atlas-live-scala-cats/atlas.db --format plain --repo scala explain Functor",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Functor",
+    "atlas_command": "bin/atlas --db sqlite://$WORK/atlas-live-scala-cats/atlas.db --format plain --repo scala explain Functor",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Functor",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for both tools before measured query latency rows."
@@ -200,8 +200,8 @@
     {
       "symbol": "Functor",
       "atlas_query_mode": "explain",
-      "atlas_command": "bin/atlas --db sqlite:///tmp/atlas-live-scala-cats/atlas.db --format plain --repo scala explain Functor",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Functor",
+      "atlas_command": "bin/atlas --db sqlite://$WORK/atlas-live-scala-cats/atlas.db --format plain --repo scala explain Functor",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Functor",
       "atlas_tokens": 3,
       "graphify_tokens": 308,
       "atlas_ms": 14.756,
@@ -234,8 +234,8 @@
     {
       "symbol": "Applicative",
       "atlas_query_mode": "explain",
-      "atlas_command": "bin/atlas --db sqlite:///tmp/atlas-live-scala-cats/atlas.db --format plain --repo scala explain Applicative",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Applicative",
+      "atlas_command": "bin/atlas --db sqlite://$WORK/atlas-live-scala-cats/atlas.db --format plain --repo scala explain Applicative",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Applicative",
       "atlas_tokens": 4,
       "graphify_tokens": 272,
       "atlas_ms": 16.489,
@@ -268,8 +268,8 @@
     {
       "symbol": "Monad",
       "atlas_query_mode": "explain",
-      "atlas_command": "bin/atlas --db sqlite:///tmp/atlas-live-scala-cats/atlas.db --format plain --repo scala explain Monad",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Monad",
+      "atlas_command": "bin/atlas --db sqlite://$WORK/atlas-live-scala-cats/atlas.db --format plain --repo scala explain Monad",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Monad",
       "atlas_tokens": 4,
       "graphify_tokens": 291,
       "atlas_ms": 14.757,
@@ -302,8 +302,8 @@
     {
       "symbol": "Traverse",
       "atlas_query_mode": "explain",
-      "atlas_command": "bin/atlas --db sqlite:///tmp/atlas-live-scala-cats/atlas.db --format plain --repo scala explain Traverse",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Traverse",
+      "atlas_command": "bin/atlas --db sqlite://$WORK/atlas-live-scala-cats/atlas.db --format plain --repo scala explain Traverse",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Traverse",
       "atlas_tokens": 4,
       "graphify_tokens": 91,
       "atlas_ms": 15.574,
@@ -336,8 +336,8 @@
     {
       "symbol": "Eval",
       "atlas_query_mode": "explain",
-      "atlas_command": "bin/atlas --db sqlite:///tmp/atlas-live-scala-cats/atlas.db --format plain --repo scala explain Eval",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Eval",
+      "atlas_command": "bin/atlas --db sqlite://$WORK/atlas-live-scala-cats/atlas.db --format plain --repo scala explain Eval",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Eval",
       "atlas_tokens": 3,
       "graphify_tokens": 256,
       "atlas_ms": 14.929,
@@ -386,7 +386,7 @@
       {
         "repo": "https://github.com/spirom/LearningSpark",
         "commit": "8498a592e2bf6bbce8fc29dc6d7a0850a38a72f5",
-        "target_path": "/tmp/atlas-random-validation-tags/work-tight/scala/1-spirom__LearningSpark",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/scala/1-spirom__LearningSpark",
         "atlas_definitions": 881,
         "native_definitions": 370,
         "coverage_ratio": 2.3811,
@@ -396,7 +396,7 @@
       {
         "repo": "https://github.com/Eliah-Lakhin/papa-carlo",
         "commit": "d65c3e63dfd1d3b9721fbfa4297f475829423c96",
-        "target_path": "/tmp/atlas-random-validation-tags/work-tight/scala/2-Eliah-Lakhin__papa-carlo",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/scala/2-Eliah-Lakhin__papa-carlo",
         "atlas_definitions": 800,
         "native_definitions": 564,
         "coverage_ratio": 1.4184,
@@ -406,7 +406,7 @@
       {
         "repo": "https://github.com/xerial/larray",
         "commit": "400d23241f5050dc06f724b4fee7a485b1688bf9",
-        "target_path": "/tmp/atlas-random-validation-tags/work-tight/scala/3-xerial__larray",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/scala/3-xerial__larray",
         "atlas_definitions": 1237,
         "native_definitions": 751,
         "coverage_ratio": 1.6471,

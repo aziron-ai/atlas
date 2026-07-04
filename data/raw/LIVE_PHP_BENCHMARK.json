@@ -4,20 +4,20 @@
   "commit": "0da7dd2fc66956730b6633f6a056b35e59126583",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/slimphp/Slim /tmp/atlas-live-php-slim/repo",
+    "clone": "git clone --depth 1 https://github.com/slimphp/Slim $WORK/atlas-live-php-slim/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-php-3repo-1782814733/slim/atlas.db --json index /tmp/atlas-php-3repo-1782814733/slim/repo",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-php-3repo-1782814733/slim/atlas.db --json index /tmp/atlas-php-3repo-1782814733/slim/repo",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-php-3repo-1782814733/slim/atlas.db --json index $WORK/atlas-php-3repo-1782814733/slim/repo",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-php-3repo-1782814733/slim/atlas.db --json index $WORK/atlas-php-3repo-1782814733/slim/repo",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "php /tmp/atlas-php-3repo-1782814733/php_token_counter.php /tmp/atlas-php-3repo-1782814733/slim/repo",
+    "native_baseline": "php $WORK/atlas-php-3repo-1782814733/php_token_counter.php $WORK/atlas-php-3repo-1782814733/slim/repo",
     "query_symbols": [
       "handle",
       "process",
       "addRoute",
       "getResponseFactory"
     ],
-    "target_path": "/tmp/atlas-php-3repo-1782814733/slim/repo",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-php-3repo-1782814733/slim/atlas.db --repo repo serve --addr 127.0.0.1:48238"
+    "target_path": "$WORK/atlas-php-3repo-1782814733/slim/repo",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-php-3repo-1782814733/slim/atlas.db --repo repo serve --addr 127.0.0.1:48238"
   },
   "atlas": {
     "cold_wall_seconds": 0.211,
@@ -241,7 +241,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.336,
-    "command": "/opt/homebrew/bin/php /tmp/atlas-live-php-slim/php_token_stats.php /tmp/atlas-live-php-slim/repo",
+    "command": "/opt/homebrew/bin/php $WORK/atlas-live-php-slim/php_token_stats.php $WORK/atlas-live-php-slim/repo",
     "metrics": {
       "files": 125,
       "parsed_files": 125,
@@ -420,7 +420,7 @@
       {
         "repo": "https://github.com/slimphp/Slim",
         "commit": "0da7dd2fc66956730b6633f6a056b35e59126583",
-        "target_path": "/private/tmp/atlas-php-3repo-1782814733/slim/repo",
+        "target_path": "/private$WORK/atlas-php-3repo-1782814733/slim/repo",
         "atlas_definitions": 866,
         "native_definitions": 866,
         "coverage_ratio": 1,
@@ -430,7 +430,7 @@
       {
         "repo": "https://github.com/symfony/console",
         "commit": "b711a8ab808b6c074c6b8caef70d0fd8d6b6d07d",
-        "target_path": "/private/tmp/atlas-php-3repo-1782814733/symfony-console/repo",
+        "target_path": "/private$WORK/atlas-php-3repo-1782814733/symfony-console/repo",
         "atlas_definitions": 3112,
         "native_definitions": 3112,
         "coverage_ratio": 1,
@@ -440,7 +440,7 @@
       {
         "repo": "https://github.com/composer/composer",
         "commit": "8c3eba87d24bbdcdaaf8f5c42391de20fd8ed6b1",
-        "target_path": "/private/tmp/atlas-php-3repo-1782814733/composer/repo/src",
+        "target_path": "/private$WORK/atlas-php-3repo-1782814733/composer/repo/src",
         "atlas_definitions": 2930,
         "native_definitions": 2930,
         "coverage_ratio": 1,

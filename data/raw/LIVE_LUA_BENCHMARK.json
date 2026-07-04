@@ -4,20 +4,20 @@
   "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/folke/lazy.nvim /tmp/atlas-live-lua-lazy/repo",
+    "clone": "git clone --depth 1 https://github.com/folke/lazy.nvim $WORK/atlas-live-lua-lazy/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-lua-lazy/atlas.db --json index /tmp/atlas-live-lua-lazy/repo",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-lua-lazy/atlas.db --json index /tmp/atlas-live-lua-lazy/repo",
-    "graphify_update": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
-    "native_baseline": "/tmp/atlas-live-lua-lazy/luaparser-venv/bin/python -c <luaparser definition counter> /tmp/atlas-live-lua-lazy/repo",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-lua-lazy/atlas.db --json index $WORK/atlas-live-lua-lazy/repo",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-lua-lazy/atlas.db --json index $WORK/atlas-live-lua-lazy/repo",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "$WORK/atlas-live-lua-lazy/luaparser-venv/bin/python -c <luaparser definition counter> $WORK/atlas-live-lua-lazy/repo",
     "query_symbols": [
       "Loader.load",
       "Async.new",
       "M.add",
       "M.reload"
     ],
-    "target_path": "/tmp/atlas-live-lua-lazy/repo",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-lua-lazy/atlas.db serve --addr 127.0.0.1:4253"
+    "target_path": "$WORK/atlas-live-lua-lazy/repo",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-lua-lazy/atlas.db serve --addr 127.0.0.1:4253"
   },
   "atlas": {
     "cold_wall_seconds": 0.706,
@@ -278,7 +278,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.48,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "[graphify watch] Rebuilt: 1011 nodes, 1288 edges, 235 communities",
@@ -297,7 +297,7 @@
     "tool": "luaparser",
     "status": "ok",
     "ok": true,
-    "command": "/tmp/atlas-live-lua-lazy/luaparser-venv/bin/python -c <luaparser definition counter> /tmp/atlas-live-lua-lazy/repo",
+    "command": "$WORK/atlas-live-lua-lazy/luaparser-venv/bin/python -c <luaparser definition counter> $WORK/atlas-live-lua-lazy/repo",
     "metrics": {
       "files": 65,
       "parsed_files": 65,
@@ -350,7 +350,7 @@
   "query_warmup": {
     "symbol": "Loader.load",
     "atlas_command": "curl -fsS http://127.0.0.1:4253/api/v1/symbols/Loader.load/explain?repo_id=repo&format=plain",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Loader.load",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Loader.load",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -360,7 +360,7 @@
       "symbol": "Loader.load",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4253/api/v1/symbols/Loader.load/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Loader.load",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Loader.load",
       "atlas_tokens": 2,
       "graphify_tokens": 146,
       "atlas_ms": 8.052,
@@ -398,7 +398,7 @@
       "symbol": "Async.new",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4253/api/v1/symbols/Async.new/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain Async.new",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Async.new",
       "atlas_tokens": 2,
       "graphify_tokens": 58,
       "atlas_ms": 7.367,
@@ -436,7 +436,7 @@
       "symbol": "M.add",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4253/api/v1/symbols/M.add/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain M.add",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain M.add",
       "atlas_tokens": 2,
       "graphify_tokens": 65,
       "atlas_ms": 7.163,
@@ -474,7 +474,7 @@
       "symbol": "M.reload",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4253/api/v1/symbols/M.reload/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain M.reload",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain M.reload",
       "atlas_tokens": 2,
       "graphify_tokens": 78,
       "atlas_ms": 7.279,
@@ -526,7 +526,7 @@
       {
         "repo": "https://github.com/pandoc-scholar/pandoc-scholar",
         "commit": "40870982b42a9928c6cde4638b0e80a0bc894546",
-        "target_path": "/tmp/atlas-random-validation/work/lua/1-pandoc-scholar__pandoc-scholar",
+        "target_path": "$WORK/atlas-random-validation/work/lua/1-pandoc-scholar__pandoc-scholar",
         "atlas_definitions": 169,
         "native_definitions": 169,
         "coverage_ratio": 1,
@@ -536,7 +536,7 @@
       {
         "repo": "https://github.com/Kaixhin/Autoencoders",
         "commit": "21fcbd01024699180fc068665d831a04f306d354",
-        "target_path": "/tmp/atlas-random-validation/work/lua/2-Kaixhin__Autoencoders",
+        "target_path": "$WORK/atlas-random-validation/work/lua/2-Kaixhin__Autoencoders",
         "atlas_definitions": 33,
         "native_definitions": 2,
         "coverage_ratio": 16.5,
@@ -546,7 +546,7 @@
       {
         "repo": "https://github.com/sunjon/Shade.nvim",
         "commit": "4286b5abc47d62d0c9ffb22a4f388b7bf2ac2461",
-        "target_path": "/tmp/atlas-random-validation/work/lua/3-sunjon__Shade.nvim",
+        "target_path": "$WORK/atlas-random-validation/work/lua/3-sunjon__Shade.nvim",
         "atlas_definitions": 23,
         "native_definitions": 23,
         "coverage_ratio": 1,

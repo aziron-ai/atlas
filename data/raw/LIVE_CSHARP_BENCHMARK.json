@@ -4,20 +4,20 @@
   "commit": "72a54c475f75e18cb93cba0809d00a5e6e49efd9",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/DapperLib/Dapper /tmp/atlas-live-csharp-dapper/repo",
+    "clone": "git clone --depth 1 https://github.com/DapperLib/Dapper $WORK/atlas-live-csharp-dapper/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-csharp-dapper/atlas.db --json index /tmp/atlas-live-csharp-dapper/repo",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-csharp-dapper/atlas.db --json index /tmp/atlas-live-csharp-dapper/repo",
-    "graphify_update": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
-    "native_baseline": "/opt/homebrew/bin/dotnet run --no-build -- /tmp/atlas-live-csharp-dapper/repo (Roslyn syntax tree counter)",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-csharp-dapper/atlas.db --json index $WORK/atlas-live-csharp-dapper/repo",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-csharp-dapper/atlas.db --json index $WORK/atlas-live-csharp-dapper/repo",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "/opt/homebrew/bin/dotnet run --no-build -- $WORK/atlas-live-csharp-dapper/repo (Roslyn syntax tree counter)",
     "query_symbols": [
       "SqlMapper",
       "CommandDefinition",
       "DynamicParameters",
       "TypeHandlerCache"
     ],
-    "target_path": "/tmp/atlas-live-csharp-dapper/repo",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-csharp-dapper/atlas.db serve --addr 127.0.0.1:4340"
+    "target_path": "$WORK/atlas-live-csharp-dapper/repo",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-csharp-dapper/atlas.db serve --addr 127.0.0.1:4340"
   },
   "atlas": {
     "cold_wall_seconds": 0.323,
@@ -308,7 +308,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 1.447,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "  AST extraction: 100/182 uncached files (54%) [14 workers]",
@@ -330,7 +330,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 2.62,
-    "command": "/opt/homebrew/bin/dotnet run --no-build -- /tmp/atlas-live-csharp-dapper/repo (Roslyn syntax tree counter)",
+    "command": "/opt/homebrew/bin/dotnet run --no-build -- $WORK/atlas-live-csharp-dapper/repo (Roslyn syntax tree counter)",
     "metrics": {
       "files": 157,
       "parsed_files": 157,
@@ -394,7 +394,7 @@
   "query_warmup": {
     "symbol": "SqlMapper",
     "atlas_command": "curl -fsS http://127.0.0.1:4340/api/v1/symbols/SqlMapper/explain?repo_id=repo&format=plain",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain SqlMapper",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain SqlMapper",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -404,7 +404,7 @@
       "symbol": "SqlMapper",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4340/api/v1/symbols/SqlMapper/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain SqlMapper",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain SqlMapper",
       "atlas_tokens": 2,
       "graphify_tokens": 296,
       "atlas_ms": 7.065,
@@ -446,7 +446,7 @@
       "symbol": "CommandDefinition",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4340/api/v1/symbols/CommandDefinition/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain CommandDefinition",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain CommandDefinition",
       "atlas_tokens": 2,
       "graphify_tokens": 293,
       "atlas_ms": 7.025,
@@ -488,7 +488,7 @@
       "symbol": "DynamicParameters",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4340/api/v1/symbols/DynamicParameters/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain DynamicParameters",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain DynamicParameters",
       "atlas_tokens": 2,
       "graphify_tokens": 69,
       "atlas_ms": 7.097,
@@ -530,7 +530,7 @@
       "symbol": "TypeHandlerCache",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4340/api/v1/symbols/TypeHandlerCache/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain TypeHandlerCache",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain TypeHandlerCache",
       "atlas_tokens": 2,
       "graphify_tokens": 106,
       "atlas_ms": 7.597,
@@ -587,7 +587,7 @@
       {
         "repo": "https://github.com/Ceiridge/Chrome-Developer-Mode-Extension-Warning-Patcher",
         "commit": "936977542ecfb025b784cd457fcbfd7dffbe5f5c",
-        "target_path": "/tmp/atlas-random-validation-tags/work-tight/csharp/1-Ceiridge__Chrome-Developer-Mode-Extension-Warning-Patcher",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/csharp/1-Ceiridge__Chrome-Developer-Mode-Extension-Warning-Patcher",
         "atlas_definitions": 139,
         "native_definitions": 112,
         "coverage_ratio": 1.2411,
@@ -597,7 +597,7 @@
       {
         "repo": "https://github.com/Viladoman/StructLayout",
         "commit": "fde80869381bdcf7747628ecd3d9105bc6d39056",
-        "target_path": "/tmp/atlas-random-validation-tags/work-tight/csharp/2-Viladoman__StructLayout",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/csharp/2-Viladoman__StructLayout",
         "atlas_definitions": 545,
         "native_definitions": 336,
         "coverage_ratio": 1.622,
@@ -607,7 +607,7 @@
       {
         "repo": "https://github.com/b2developer/MonopolyNEAT",
         "commit": "5706282faf6a13a4a522c2e71b469737222ab4b8",
-        "target_path": "/tmp/atlas-random-validation-tags/work-tight/csharp/3-b2developer__MonopolyNEAT",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/csharp/3-b2developer__MonopolyNEAT",
         "atlas_definitions": 234,
         "native_definitions": 176,
         "coverage_ratio": 1.3295,

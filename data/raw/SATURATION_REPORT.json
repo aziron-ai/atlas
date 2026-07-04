@@ -2,7 +2,7 @@
   "generated_at_unix": 1782836467,
   "iterations_requested": 0,
   "atlas": "bin/atlas",
-  "graphify": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify",
+  "graphify": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify",
   "status": "no_current_zero_equivalent_graphify_rows",
   "note": "Final pass current LIVE_*_BENCHMARK artifacts have at least one Graphify-equivalent query row for every live language. Historical BYOND/ETS/R zero-equivalent saturation evidence is superseded by the refreshed live artifacts and is not used for current headline ratios.",
   "languages": []

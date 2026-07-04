@@ -4,12 +4,12 @@
   "commit": "58d77fc302b25976bb4cc7dc273377b421bc226b",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/eslint/create-config /tmp/atlas-live-json-eslint-create-config/repo",
+    "clone": "git clone --depth 1 https://github.com/eslint/create-config $WORK/atlas-live-json-eslint-create-config/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-json-eslint-create-config/atlas.db --json index /tmp/atlas-live-json-eslint-create-config/repo",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-json-eslint-create-config/atlas.db --json index /tmp/atlas-live-json-eslint-create-config/repo",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-json-eslint-create-config/atlas.db --json index $WORK/atlas-live-json-eslint-create-config/repo",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-json-eslint-create-config/atlas.db --json index $WORK/atlas-live-json-eslint-create-config/repo",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "/opt/homebrew/bin/python3 -c <python-json key counter> /tmp/atlas-live-json-eslint-create-config/repo",
+    "native_baseline": "/opt/homebrew/bin/python3 -c <python-json key counter> $WORK/atlas-live-json-eslint-create-config/repo",
     "query_symbols": [
       "scripts",
       "dependencies",
@@ -24,8 +24,8 @@
       "installSyncSaveDev",
       "defineInMemoryFs"
     ],
-    "target_path": "/tmp/atlas-live-json-eslint-create-config/repo",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-json-eslint-create-config/atlas.db --repo repo serve --addr 127.0.0.1:48234"
+    "target_path": "$WORK/atlas-live-json-eslint-create-config/repo",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-json-eslint-create-config/atlas.db --repo repo serve --addr 127.0.0.1:48234"
   },
   "atlas": {
     "cold_wall_seconds": 0.173,
@@ -206,7 +206,7 @@
     "tool": "python-json",
     "status": "ok",
     "ok": true,
-    "command": "/opt/homebrew/bin/python3 -c <python-json key counter> /tmp/atlas-live-json-eslint-create-config/repo",
+    "command": "/opt/homebrew/bin/python3 -c <python-json key counter> $WORK/atlas-live-json-eslint-create-config/repo",
     "metrics": {
       "files": 5,
       "parsed_files": 5,

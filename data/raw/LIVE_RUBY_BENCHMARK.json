@@ -4,20 +4,20 @@
   "commit": "5236d3459b8b9015e5ce21ddd0c6beb0db4081d4",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/sinatra/sinatra /tmp/atlas-live-ruby-sinatra/repo",
+    "clone": "git clone --depth 1 https://github.com/sinatra/sinatra $WORK/atlas-live-ruby-sinatra/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-ruby-sinatra/atlas.db --json index /tmp/atlas-live-ruby-sinatra/repo",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-ruby-sinatra/atlas.db --json index /tmp/atlas-live-ruby-sinatra/repo",
-    "graphify_update": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
-    "native_baseline": "/usr/bin/ruby /tmp/atlas-live-ruby-sinatra/ripper_stats.rb /tmp/atlas-live-ruby-sinatra/repo",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-ruby-sinatra/atlas.db --json index $WORK/atlas-live-ruby-sinatra/repo",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-ruby-sinatra/atlas.db --json index $WORK/atlas-live-ruby-sinatra/repo",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb $WORK/atlas-live-ruby-sinatra/repo",
     "query_symbols": [
       "initialize",
       "call",
       "route",
       "settings"
     ],
-    "target_path": "/tmp/atlas-live-ruby-sinatra/repo",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-ruby-sinatra/atlas.db serve --addr 127.0.0.1:4341"
+    "target_path": "$WORK/atlas-live-ruby-sinatra/repo",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-ruby-sinatra/atlas.db serve --addr 127.0.0.1:4341"
   },
   "atlas": {
     "cold_wall_seconds": 0.187,
@@ -284,7 +284,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.721,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "  AST extraction: 100/156 uncached files (64%) [14 workers]",
@@ -306,7 +306,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.166,
-    "command": "/usr/bin/ruby /tmp/atlas-live-ruby-sinatra/ripper_stats.rb /tmp/atlas-live-ruby-sinatra/repo",
+    "command": "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb $WORK/atlas-live-ruby-sinatra/repo",
     "metrics": {
       "files": 147,
       "parsed_files": 147,
@@ -347,7 +347,7 @@
   "query_warmup": {
     "symbol": "initialize",
     "atlas_command": "curl -fsS http://127.0.0.1:4341/api/v1/symbols/initialize/explain?repo_id=repo&format=plain",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain initialize",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain initialize",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -357,7 +357,7 @@
       "symbol": "initialize",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4341/api/v1/symbols/initialize/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain initialize",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain initialize",
       "atlas_tokens": 2,
       "graphify_tokens": 61,
       "atlas_ms": 7.672,
@@ -399,7 +399,7 @@
       "symbol": "call",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4341/api/v1/symbols/call/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain call",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain call",
       "atlas_tokens": 2,
       "graphify_tokens": 89,
       "atlas_ms": 7.001,
@@ -441,7 +441,7 @@
       "symbol": "route",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4341/api/v1/symbols/route/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain route",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain route",
       "atlas_tokens": 2,
       "graphify_tokens": 96,
       "atlas_ms": 6.955,
@@ -483,7 +483,7 @@
       "symbol": "settings",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4341/api/v1/symbols/settings/explain?repo_id=repo&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain settings",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain settings",
       "atlas_tokens": 2,
       "graphify_tokens": 58,
       "atlas_ms": 7.058,
@@ -539,7 +539,7 @@
       {
         "repo": "https://github.com/tpope/hookup",
         "commit": "3bca3fef5177de45bbdaa6caee063dd252ae9050",
-        "target_path": "/tmp/atlas-random-validation/work/ruby/1-tpope__hookup",
+        "target_path": "$WORK/atlas-random-validation/work/ruby/1-tpope__hookup",
         "atlas_definitions": 28,
         "native_definitions": 28,
         "coverage_ratio": 1,
@@ -549,7 +549,7 @@
       {
         "repo": "https://github.com/mailgun/mailgun-ruby",
         "commit": "bb69b98a8bc34bfd44713bbecebd17319d0d4697",
-        "target_path": "/tmp/atlas-random-validation/work/ruby/2-mailgun__mailgun-ruby",
+        "target_path": "$WORK/atlas-random-validation/work/ruby/2-mailgun__mailgun-ruby",
         "atlas_definitions": 325,
         "native_definitions": 311,
         "coverage_ratio": 1.045,
@@ -559,7 +559,7 @@
       {
         "repo": "https://github.com/BerlinVagrant/vagrant-dns",
         "commit": "57dee3fc45c40fb286c218f667435eae84666905",
-        "target_path": "/tmp/atlas-random-validation/work/ruby/3-BerlinVagrant__vagrant-dns",
+        "target_path": "$WORK/atlas-random-validation/work/ruby/3-BerlinVagrant__vagrant-dns",
         "atlas_definitions": 116,
         "native_definitions": 116,
         "coverage_ratio": 1,

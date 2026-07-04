@@ -4,12 +4,12 @@
   "commit": "f7df78b91b12ff1d8e248ded7747e76203904b8e",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/BookStackApp/BookStack /tmp/atlas-live-blade-bookstack/repo",
+    "clone": "git clone --depth 1 https://github.com/BookStackApp/BookStack $WORK/atlas-live-blade-bookstack/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-blade-bookstack/atlas.db --json index /tmp/atlas-live-blade-bookstack/repo/resources/views",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-blade-bookstack/atlas.db --json index /tmp/atlas-live-blade-bookstack/repo/resources/views",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-blade-bookstack/atlas.db --json index $WORK/atlas-live-blade-bookstack/repo/resources/views",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-blade-bookstack/atlas.db --json index $WORK/atlas-live-blade-bookstack/repo/resources/views",
     "graphify_update": "uv tool run --from graphifyy graphify update .",
-    "native_baseline": "python3 <blade directive counter> /tmp/atlas-live-blade-bookstack/repo/resources/views",
+    "native_baseline": "python3 <blade directive counter> $WORK/atlas-live-blade-bookstack/repo/resources/views",
     "query_symbols": [
       "settings.parts.navbar",
       "home.parts.sidebar",
@@ -18,8 +18,8 @@
       "form.user-select",
       "books.parts.list"
     ],
-    "target_path": "/tmp/atlas-live-blade-bookstack/repo/resources/views",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-blade-bookstack/atlas.db serve --addr 127.0.0.1:4212"
+    "target_path": "$WORK/atlas-live-blade-bookstack/repo/resources/views",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-blade-bookstack/atlas.db serve --addr 127.0.0.1:4212"
   },
   "atlas": {
     "cold_wall_seconds": 0.138,
@@ -136,7 +136,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.819,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "  AST extraction: 100/305 uncached files (32%) [14 workers]",
@@ -160,7 +160,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.008,
-    "command": "python3 <blade directive counter> /tmp/atlas-live-blade-bookstack/repo/resources/views",
+    "command": "python3 <blade directive counter> $WORK/atlas-live-blade-bookstack/repo/resources/views",
     "metrics": {
       "files": 303,
       "parsed_files": 303,
@@ -369,7 +369,7 @@
   "query_warmup": {
     "symbol": "settings.parts.navbar",
     "atlas_command": "curl -fsS http://127.0.0.1:4212/api/v1/symbols/settings.parts.navbar/explain?repo_id=views&format=plain",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain settings.parts.navbar",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain settings.parts.navbar",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -379,7 +379,7 @@
       "symbol": "settings.parts.navbar",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4212/api/v1/symbols/settings.parts.navbar/explain?repo_id=views&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain settings.parts.navbar",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain settings.parts.navbar",
       "atlas_tokens": 2,
       "graphify_tokens": 60,
       "atlas_ms": 8.294,
@@ -417,7 +417,7 @@
       "symbol": "home.parts.sidebar",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4212/api/v1/symbols/home.parts.sidebar/explain?repo_id=views&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain home.parts.sidebar",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain home.parts.sidebar",
       "atlas_tokens": 2,
       "graphify_tokens": 57,
       "atlas_ms": 7.843,
@@ -455,7 +455,7 @@
       "symbol": "entities.view-toggle",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4212/api/v1/symbols/entities.view-toggle/explain?repo_id=views&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain entities.view-toggle",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain entities.view-toggle",
       "atlas_tokens": 2,
       "graphify_tokens": 80,
       "atlas_ms": 7.396,
@@ -493,7 +493,7 @@
       "symbol": "common.dark-mode-toggle",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4212/api/v1/symbols/common.dark-mode-toggle/explain?repo_id=views&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain common.dark-mode-toggle",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain common.dark-mode-toggle",
       "atlas_tokens": 2,
       "graphify_tokens": 59,
       "atlas_ms": 7.393,
@@ -531,7 +531,7 @@
       "symbol": "form.user-select",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4212/api/v1/symbols/form.user-select/explain?repo_id=views&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain form.user-select",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain form.user-select",
       "atlas_tokens": 2,
       "graphify_tokens": 66,
       "atlas_ms": 7.241,
@@ -569,7 +569,7 @@
       "symbol": "books.parts.list",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4212/api/v1/symbols/books.parts.list/explain?repo_id=views&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain books.parts.list",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain books.parts.list",
       "atlas_tokens": 2,
       "graphify_tokens": 56,
       "atlas_ms": 7.39,
@@ -619,7 +619,7 @@
       {
         "repo": "https://github.com/BookStackApp/BookStack",
         "commit": "f7df78b91b12ff1d8e248ded7747e76203904b8e",
-        "target_path": "/private/tmp/atlas-blade-3repo-1782816048/bookstack/repo/resources/views",
+        "target_path": "/private$WORK/atlas-blade-3repo-1782816048/bookstack/repo/resources/views",
         "atlas_definitions": 1090,
         "native_definitions": 1077,
         "coverage_ratio": 1.0121,
@@ -629,7 +629,7 @@
       {
         "repo": "https://github.com/coollabsio/coolify",
         "commit": "e7dff30b7c998c301fd91bd169727b90c59ec291",
-        "target_path": "/private/tmp/atlas-blade-3repo-1782816048/coolify/repo/resources/views",
+        "target_path": "/private$WORK/atlas-blade-3repo-1782816048/coolify/repo/resources/views",
         "atlas_definitions": 3321,
         "native_definitions": 2439,
         "coverage_ratio": 1.3616,
@@ -639,7 +639,7 @@
       {
         "repo": "https://github.com/koel/koel",
         "commit": "d727dec030d3b0fb349b4a4aa853adc1baae9bdd",
-        "target_path": "/private/tmp/atlas-blade-3repo-1782816048/koel/repo/resources/views",
+        "target_path": "/private$WORK/atlas-blade-3repo-1782816048/koel/repo/resources/views",
         "atlas_definitions": 25,
         "native_definitions": 21,
         "coverage_ratio": 1.1905,

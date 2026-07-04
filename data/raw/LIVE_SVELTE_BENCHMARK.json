@@ -4,12 +4,12 @@
   "commit": "454a3881cd2b5ac3e47b92d7524a8faa5d99f03d",
   "graphify_detector_only": "",
   "commands": {
-    "clone": "git clone --depth 1 https://github.com/carbon-design-system/carbon-components-svelte /tmp/atlas-live-svelte-carbon/repo",
+    "clone": "git clone --depth 1 https://github.com/carbon-design-system/carbon-components-svelte $WORK/atlas-live-svelte-carbon/repo",
     "sparse_checkout": "",
-    "atlas_index": "bin/atlas --db sqlite:///tmp/atlas-live-svelte-carbon/atlas.db --json index /tmp/atlas-live-svelte-carbon/repo/src",
-    "atlas_reindex": "bin/atlas --db sqlite:///tmp/atlas-live-svelte-carbon/atlas.db --json index /tmp/atlas-live-svelte-carbon/repo/src",
-    "graphify_update": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
-    "native_baseline": "/opt/homebrew/bin/node /tmp/atlas-live-svelte-carbon/svelte-compiler/svelte_stats.js /tmp/atlas-live-svelte-carbon/repo/src",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-svelte-carbon/atlas.db --json index $WORK/atlas-live-svelte-carbon/repo/src",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-svelte-carbon/atlas.db --json index $WORK/atlas-live-svelte-carbon/repo/src",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "/opt/homebrew/bin/node $WORK/atlas-live-svelte-carbon/svelte-compiler/svelte_stats.js $WORK/atlas-live-svelte-carbon/repo/src",
     "query_symbols": [
       "setChar",
       "focusInput",
@@ -17,8 +17,8 @@
       "handleKeydown",
       "handleOutsideClick"
     ],
-    "target_path": "/tmp/atlas-live-svelte-carbon/repo/src",
-    "atlas_serve": "bin/atlas --db sqlite:///tmp/atlas-live-svelte-carbon/atlas.db serve --addr 127.0.0.1:4290"
+    "target_path": "$WORK/atlas-live-svelte-carbon/repo/src",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-svelte-carbon/atlas.db serve --addr 127.0.0.1:4290"
   },
   "atlas": {
     "cold_wall_seconds": 0.263,
@@ -289,7 +289,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 1.516,
-    "command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
     "stdout_head": [
       "Re-extracting code files in . (no LLM needed)...",
       "  AST extraction: 100/424 uncached files (23%) [14 workers]",
@@ -314,7 +314,7 @@
     "status": "ok",
     "ok": true,
     "seconds": 0.342,
-    "command": "/opt/homebrew/bin/node /tmp/atlas-live-svelte-carbon/svelte-compiler/svelte_stats.js /tmp/atlas-live-svelte-carbon/repo/src",
+    "command": "/opt/homebrew/bin/node $WORK/atlas-live-svelte-carbon/svelte-compiler/svelte_stats.js $WORK/atlas-live-svelte-carbon/repo/src",
     "metrics": {
       "files": 262,
       "parsed_files": 262,
@@ -354,7 +354,7 @@
   "query_warmup": {
     "symbol": "setChar",
     "atlas_command": "curl -fsS http://127.0.0.1:4290/api/v1/symbols/setChar/explain?repo_id=src&format=plain",
-    "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain setChar",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain setChar",
     "atlas_returncode": 0,
     "graphify_returncode": 0,
     "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
@@ -364,7 +364,7 @@
       "symbol": "setChar",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4290/api/v1/symbols/setChar/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain setChar",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain setChar",
       "atlas_tokens": 2,
       "graphify_tokens": 78,
       "atlas_ms": 8.597,
@@ -402,7 +402,7 @@
       "symbol": "focusInput",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4290/api/v1/symbols/focusInput/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain focusInput",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain focusInput",
       "atlas_tokens": 2,
       "graphify_tokens": 141,
       "atlas_ms": 6.955,
@@ -440,7 +440,7 @@
       "symbol": "handleInput",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4290/api/v1/symbols/handleInput/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain handleInput",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain handleInput",
       "atlas_tokens": 2,
       "graphify_tokens": 88,
       "atlas_ms": 6.846,
@@ -478,7 +478,7 @@
       "symbol": "handleKeydown",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4290/api/v1/symbols/handleKeydown/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain handleKeydown",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain handleKeydown",
       "atlas_tokens": 2,
       "graphify_tokens": 79,
       "atlas_ms": 7.209,
@@ -516,7 +516,7 @@
       "symbol": "handleOutsideClick",
       "atlas_query_mode": "serve_explain_plain",
       "atlas_command": "curl -fsS http://127.0.0.1:4290/api/v1/symbols/handleOutsideClick/explain?repo_id=src&format=plain",
-      "graphify_command": "/Users/damirdarasu/.local/share/uv/tools/graphifyy/bin/graphify explain handleOutsideClick",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain handleOutsideClick",
       "atlas_tokens": 2,
       "graphify_tokens": 90,
       "atlas_ms": 6.916,
@@ -615,7 +615,7 @@
       {
         "repo": "https://github.com/orefalo/svelte-splitpanes",
         "commit": "7425e6a25cd53b87cf91d829c272e74b2b0546d9",
-        "target_path": "/tmp/atlas-random-validation-web/work/svelte/2-orefalo__svelte-splitpanes",
+        "target_path": "$WORK/atlas-random-validation-web/work/svelte/2-orefalo__svelte-splitpanes",
         "atlas_definitions": 198,
         "native_definitions": 101,
         "coverage_ratio": 1.9604,
@@ -625,7 +625,7 @@
       {
         "repo": "https://github.com/agustinl/svelte-tags-input",
         "commit": "5c8e7ff10deab4858a36da8bf71ab5942da5a390",
-        "target_path": "/tmp/atlas-random-validation-web/work/svelte/5-agustinl__svelte-tags-input",
+        "target_path": "$WORK/atlas-random-validation-web/work/svelte/5-agustinl__svelte-tags-input",
         "atlas_definitions": 39,
         "native_definitions": 28,
         "coverage_ratio": 1.3929,
@@ -635,7 +635,7 @@
       {
         "repo": "https://github.com/Alia5/lovelace-expander-card",
         "commit": "0899ce63fc6d3b0361e25932025df29abda31654",
-        "target_path": "/tmp/atlas-random-validation-web/work/svelte/8-Alia5__lovelace-expander-card",
+        "target_path": "$WORK/atlas-random-validation-web/work/svelte/8-Alia5__lovelace-expander-card",
         "atlas_definitions": 22,
         "native_definitions": 21,
         "coverage_ratio": 1.0476,
