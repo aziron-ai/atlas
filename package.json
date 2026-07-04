@@ -1,6 +1,6 @@
 {
   "name": "atlas-benchmark-site",
-  "version": "0.1.21",
+  "version": "0.1.28",
   "description": "Static React benchmark and product site for the Atlas CLI release repository.",
   "private": true,
   "scripts": {

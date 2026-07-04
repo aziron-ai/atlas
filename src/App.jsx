@@ -1455,7 +1455,9 @@ function EvidenceSection({ data }) {
 
 /* ============================ install =================================== */
 
-const INSTALL_TABS = {
+// Install commands follow the released version carried in site-data.json —
+// bump package.json, re-run build-site-data, and the URLs stay current.
+const installTabs = (v) => ({
   homebrew: {
     label: "Homebrew",
     sub: "macOS cask",
@@ -1470,13 +1472,13 @@ const INSTALL_TABS = {
     label: "Linux",
     sub: "amd64 / arm64",
     lines: [
-      "curl -LO https://github.com/aziron-ai/atlas/releases/download/v0.1.21/atlas_0.1.21_linux_amd64.tar.gz",
-      "tar -xzf atlas_0.1.21_linux_amd64.tar.gz",
+      `curl -LO https://github.com/aziron-ai/atlas/releases/download/v${v}/atlas_${v}_linux_amd64.tar.gz`,
+      `tar -xzf atlas_${v}_linux_amd64.tar.gz`,
       "sudo install -m 0755 atlas /usr/local/bin/atlas",
       "atlas version",
     ],
   },
-};
+});
 
 function UsageStep({ n, title, line, copy }) {
   return (
@@ -1498,8 +1500,9 @@ function UsageStep({ n, title, line, copy }) {
   );
 }
 
-function Install() {
+function Install({ version }) {
   const [tab, setTab] = useState("homebrew");
+  const INSTALL_TABS = useMemo(() => installTabs(version), [version]);
   return (
     <section id="install" data-testid="install" className="shell py-16" aria-labelledby="install-title">
       <SectionHeader
@@ -1656,7 +1659,7 @@ function App() {
         <RealRepo data={data} />
         <GraphSection />
         <EvidenceSection data={data} />
-        <Install />
+        <Install version={data.version} />
       </main>
       <footer className="hairline" style={{ marginTop: 8 }}>
         <div className="shell flex flex-col gap-2 py-8 sm:flex-row sm:items-center sm:justify-between">

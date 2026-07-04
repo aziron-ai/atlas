@@ -333,10 +333,15 @@ const artifacts = [
 
 /* ============================== emit ==================================== */
 
+// Single source of truth for the released version: package.json. Bump it
+// there when a release ships and re-run this script — the nav chip, footer
+// and install URLs all follow.
+const pkg = JSON.parse(fs.readFileSync(path.join(repoRoot, "package.json"), "utf8"));
+
 const out = {
   schemaVersion: 1,
   generatedAt: new Date().toISOString(),
-  version: "0.1.21",
+  version: pkg.version,
   report,
   fresh,
   liveRepos,
