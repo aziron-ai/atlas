@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-04T04:58:16.014Z",
+  "generatedAt": "2026-07-04T05:09:12.528Z",
   "sourceLabel": "aziron-atlas bench: DIMENSIONS_BENCH + CALLERS_F1_AFTER + LSP_F1_GO (linux run)",
   "headline": {
     "accuracy": {
@@ -46,40 +46,27 @@
       "evidence": "gopls call_hierarchy ground truth on a production repo"
     },
     "crossRepo": {
-      "note": "measured on a real 2-repo workspace (Go API server + React app), indexed together",
+      "note": "measured on a real 2-repo workspace (a Go API server + a React app), indexed together",
       "producerRoutes": 355,
       "consumerRows": 738,
       "linked": {
         "dependencies": 3,
         "dependencyLatencyMs": 32.4,
-        "consumerRepos": [
-          "aziron-ui"
-        ],
+        "consumerRepoCount": 1,
         "impacted": 3
       },
       "queries": {
         "route_contracts": {
           "count": 200,
-          "latency_ms": 36.3,
-          "exit": 0,
-          "total": 355
+          "latency_ms": 36.3
         },
         "consumers": {
           "count": 3,
-          "latency_ms": 33.8,
-          "exit": 0,
-          "consumer_repos": [
-            "aziron-ui"
-          ]
+          "latency_ms": 33.8
         },
         "dependencies": {
           "count": 3,
-          "latency_ms": 32.4,
-          "exit": 0,
-          "producer_repos": [
-            "Aziron"
-          ],
-          "total": 3
+          "latency_ms": 32.4
         }
       }
     }
