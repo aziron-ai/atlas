@@ -71,11 +71,22 @@ const out = {
       repo: "real Go service", meanF1: lsp.mean_f1, precision: lsp.mean_precision, recall: lsp.mean_recall,
       symbols: lsp.symbols_scored, evidence: "gopls call_hierarchy ground truth on a production repo",
     },
-    crossRepo: dims.cross_repo ? {
-      note: "extraction measured on a real 2-repo workspace (Go API server + React app)",
-      producerRoutes: 355, consumerRows: 731,
-      queries: dims.cross_repo.queries,
-    } : null,
+    crossRepo: dims.cross_repo ? (() => {
+      const ex = dims.cross_repo.extraction || {};
+      const producerRoutes = Object.values(ex).reduce((s, r) => s + (r.producer || 0), 0);
+      const consumerRows = Object.values(ex).reduce((s, r) => s + (r.consumer || 0), 0);
+      const deps = (dims.cross_repo.queries || {}).dependencies || {};
+      const cons = (dims.cross_repo.queries || {}).consumers || {};
+      return {
+        note: "measured on a real 2-repo workspace (Go API server + React app), indexed together",
+        producerRoutes, consumerRows,
+        linked: {
+          dependencies: deps.count ?? null, dependencyLatencyMs: deps.latency_ms ?? null,
+          consumerRepos: cons.consumer_repos || [], impacted: cons.count ?? null,
+        },
+        queries: dims.cross_repo.queries,
+      };
+    })() : null,
   },
   perLanguage: rows.map((r) => ({
     language: r.language, f1: r.f1,
