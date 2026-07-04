@@ -1,0 +1,27 @@
+# GitHub's automatic Pages hook intermittently does not fire for pushes made
+# through integration tokens (observed twice on this repo: commits landed on
+# main, no "pages build and deployment" run was created). This workflow makes
+# deployment deterministic: every push to main explicitly requests a Pages
+# build via the API. If the automatic hook did fire, the extra request is a
+# no-op (Pages coalesces builds of the same commit).
+name: ensure-pages-build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  pages: write
+  contents: read
+
+jobs:
+  request-pages-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request a Pages build for this commit
+        run: |
+          curl -sS -X POST \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages/builds"
