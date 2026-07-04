@@ -1,0 +1,20 @@
+# Atlas — deterministic code intelligence
+
+> Atlas is a deterministic, LLM-free code-intelligence CLI: one local binary that indexes a
+> repository into a SQLite symbol/call graph in under a second and answers context queries
+> (definition, callers, callees, imports, routes) in ~7.4 ms and ~21.2 tokens.
+> Benchmark (July 2026, real-LLM scored, 37 languages): Atlas F1 0.757 @ 21.2 tokens vs
+> graph tool 0.539 @ 97 tokens — 6.4× accuracy per token, 36× fewer tokens.
+> Real-repo (gopls ground truth): Atlas F1 0.975 vs graph tool 0.084. 40 code languages on a
+> five-level maturity ladder. Version 0.1.28.
+
+## Benchmark data
+- [site-data.json](https://aziron-ai.github.io/atlas/data/site-data.json): the full payload the page renders — headline table, efficiency frontier, detail knob, maturity ladder, scorecard, per-language results
+- [CALLERS_F1_AFTER.json](https://aziron-ai.github.io/atlas/data/raw/CALLERS_F1_AFTER.json): 37/37 fixture-truth callers F1 (Linux corroboration run)
+- [DIMENSIONS_BENCH_PUBLIC.json](https://aziron-ai.github.io/atlas/data/raw/DIMENSIONS_BENCH_PUBLIC.json): per-language F1 / tokens / latency / index speed
+- [LSP_F1_SUMMARY.json](https://aziron-ai.github.io/atlas/data/raw/LSP_F1_SUMMARY.json): gopls LSP-truth aggregate
+
+## Project
+- [Benchmark & comparison site](https://aziron-ai.github.io/atlas/): interactive version of everything above
+- [GitHub repository](https://github.com/aziron-ai/atlas): releases (macOS, Linux, Windows), issues
+- [npm package](https://www.npmjs.com/package/@dominic097/atlas): `npm install -g @dominic097/atlas`

@@ -1,45 +1,65 @@
-# atlas releases
+# Atlas — deterministic code intelligence for developers and agents
+
+**The most accurate code answer, for the fewest tokens.** Atlas is a
+deterministic, LLM-free code-intelligence CLI: one local binary that indexes a
+repository into a SQLite symbol/call graph in under a second and answers
+context queries — a symbol's definition, callers, callees, imports, routes —
+in ~7 ms and ~21 tokens, instead of dumping whole files into a model's
+context window.
+
+**Benchmark & field comparison:** https://aziron-ai.github.io/atlas/
+
+## Why it matters (July 2026 benchmark, real-LLM scored)
+
+| Result | Number | Evidence |
+| --- | --- | --- |
+| Answer accuracy, all 37 languages | **F1 0.757 @ 21.2 tokens** | fixture-truth, 222 cells / 666 model calls |
+| Accuracy on the 28 fully-supported languages | **F1 1.000 @ 27.1 tokens** | matches a full-file dump at 6.1× fewer tokens |
+| vs. graph tool (Graphify) | **6.4× accuracy per token · 36× fewer tokens** | graph tool: F1 0.539 @ 96.5 tokens |
+| Real repository (sirupsen/logrus vs gopls truth) | **F1 0.975 vs 0.084** | LSP-truth, production fan-in |
+| Query latency | **~7.4 ms, flat to 39k symbols** | 36 real repositories |
+| Independent Linux re-run | **37/37 fixture-perfect · gopls 0.933** | deterministic corroboration |
+
+Accuracy is tunable with a single `--detail low|medium|high|xhigh` knob;
+`high` is the default sweet spot (all the accuracy at 1/13th of xhigh's
+tokens), and retrieval operations floor at `high` so an agent is never handed
+a truncated caller list. 40 code languages sit on a five-level, evidence-graded
+maturity ladder (plus ~24 content formats indexed for search) — see the
+[maturity ladder](https://aziron-ai.github.io/atlas/#languages) for the honest
+per-language status, including the 9 languages pending real-repo proof.
+
+Every number is reproducible from the artifacts committed under
+[`data/`](data/) — start with
+[`data/site-data.json`](https://aziron-ai.github.io/atlas/data/site-data.json).
+
+## Install
 
 This repository publishes prebuilt `atlas` CLI release assets and the public
 benchmark/product site.
-
-Install surfaces:
 
 - GitHub Releases: macOS and Linux archives plus Linux `.deb`, `.rpm`, and `.apk` packages
 - Homebrew tap: `dominic097/homebrew-atlas`
 - npm wrapper package: `@dominic097/atlas`
 
-The command installed by every package surface is:
-
-```sh
-atlas
-```
-
-Benchmark check:
-
-```sh
-atlas version
-```
-
-Homebrew install:
+Homebrew:
 
 ```sh
 brew install --cask dominic097/atlas/atlas
 atlas version
 ```
 
-npm install:
+npm:
 
 ```sh
 npm install -g @dominic097/atlas
 atlas version
 ```
 
-Linux archive install example:
+Linux archive (see [releases/latest](https://github.com/aziron-ai/atlas/releases/latest) for the current version):
 
 ```sh
-curl -LO https://github.com/aziron-ai/atlas/releases/download/v0.1.21/atlas_0.1.21_linux_amd64.tar.gz
-tar -xzf atlas_0.1.21_linux_amd64.tar.gz
+curl -LO https://github.com/aziron-ai/atlas/releases/download/v0.1.28/atlas_0.1.28_linux_amd64.tar.gz
+tar -xzf atlas_0.1.28_linux_amd64.tar.gz
 sudo install -m 0755 atlas /usr/local/bin/atlas
 atlas version
 ```
@@ -54,25 +74,32 @@ atlas mcp --transport http --http 127.0.0.1:8765
 ```
 
 Atlas uses embedded SQLite by default at `sqlite://./.atlas/atlas.db`; no server
-is required for local indexing, context retrieval, or MCP usage.
+is required for local indexing, context retrieval, or MCP usage. Agents connect
+over MCP (`atlas install skill --agent claude`, or `codex`).
 
 No Atlas CLI source tree is maintained in this repository.
 
 ## Benchmark site
 
-The Atlas benchmark dashboard is published with GitHub Pages:
+The Atlas benchmark site is published with GitHub Pages from this repository:
 
 https://aziron-ai.github.io/atlas/
 
-The site is generated from benchmark JSON artifacts committed under `data/raw/`.
-The browser loads `data/benchmark-data.json` at runtime and keeps raw artifact
-links visible for auditability.
+The site is generated from benchmark JSON artifacts committed under `data/raw/`
+and renders `data/site-data.json` at runtime, keeping raw artifact links
+visible for auditability. All published data passes a sanitizer
+(`scripts/sanitize-public-data.mjs`) that strips local machine paths and
+private identifiers, enforced again by the test suite.
 
-The site itself is a static React/Tailwind build. Source lives under `src/`, and
-the generated GitHub Pages assets are committed under `assets/`.
+The site itself is a static React/Tailwind build. Source lives under `src/`,
+the generated GitHub Pages assets are committed under `assets/`, and a static
+crawler-readable digest of the benchmark is injected into `index.html` by
+`scripts/build-seo.mjs`.
 
 ```sh
 npm install
-npm run build
-npm run test:site
+node scripts/build-site-data.mjs /path/to/aziron-atlas/bench   # refresh data
+node scripts/build-seo.mjs                                     # refresh static digest + robots/sitemap/llms.txt
+npm run build                                                  # bundle
+npm run test:site                                              # Playwright checks (serve first)
 ```

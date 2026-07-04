@@ -115,6 +115,27 @@ test.describe("atlas benchmark site — redesign", () => {
     }
   });
 
+  test("crawler-facing layer: static digest, structured data, robots, sitemap, llms.txt", async ({ page }) => {
+    // What a no-JS crawler (GPTBot, ClaudeBot, first-pass Googlebot) receives.
+    const raw = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+    expect(raw).toContain('rel="canonical"');
+    expect(raw).toContain("application/ld+json");
+    expect(raw).toContain('property="og:image"');
+    expect(raw).toContain("Language maturity ladder");
+    expect(raw).toContain(`Download v${site.version}`);
+    expect(raw).toContain(String(site.report.headline.atlasF1All));
+    for (const f of ["robots.txt", "sitemap.xml", "llms.txt"]) {
+      expect(fs.existsSync(path.join(__dirname, "..", f)), f).toBe(true);
+    }
+    // and the digest actually renders without JavaScript
+    const ctx = await page.context().browser().newContext({ javaScriptEnabled: false });
+    const nojs = await ctx.newPage();
+    await nojs.goto(baseURL, { waitUntil: "domcontentloaded" });
+    await expect(nojs.locator("h1")).toContainText("most accurate code answer");
+    await expect(nojs.locator("table").first()).toBeVisible();
+    await ctx.close();
+  });
+
   test("no console errors on load", async ({ page }) => {
     const errors = [];
     page.on("pageerror", (e) => errors.push(String(e)));
