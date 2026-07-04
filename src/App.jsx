@@ -268,10 +268,21 @@ function FrontierChart({ frontier }) {
       aria-label="Efficiency frontier: answer accuracy (F1) versus context tokens for six context sources. Atlas high sits in the ideal top-left quadrant at F1 0.757 and 21 tokens."
       style={{ display: "block" }}
     >
-      {/* ideal quadrant — the argument, drawn */}
-      <rect x={L} y={T} width={x(85) - L} height={y(0.68) - T} rx={8} fill="rgba(94,230,196,0.055)" stroke="rgba(94,230,196,0.25)" strokeDasharray="4 4" />
-      <text x={L + 10} y={T + 18} className="mono" fontSize="10" fill="var(--primary)" letterSpacing="0.14em">
-        IDEAL — accurate & cheap
+      {/* ideal quadrant — a soft corner glow, not a box: hard edges read as a
+          rendering glitch and a fixed-width border clips the label on wider
+          font stacks */}
+      <defs>
+        <radialGradient id="idealGlow" cx="0" cy="0" r="1">
+          <stop offset="0" stopColor="rgba(94,230,196,0.11)" />
+          <stop offset="1" stopColor="rgba(94,230,196,0)" />
+        </radialGradient>
+      </defs>
+      <rect x={L} y={T} width={x(120) - L} height={y(0.55) - T} fill="url(#idealGlow)" />
+      <text x={L + 10} y={T + 16} className="mono" fontSize="10" fontWeight="700" fill="var(--primary)" letterSpacing="0.14em">
+        IDEAL
+      </text>
+      <text x={L + 10} y={T + 30} className="mono" fontSize="9.5" fill="var(--primary-dim)">
+        accurate & cheap
       </text>
 
       {/* grid + axes */}
