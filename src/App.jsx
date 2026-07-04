@@ -1,21 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
-import {
-  ArrowRight,
-  ArrowUpDown,
-  Check,
-  Copy,
-  Download,
-  ExternalLink,
-} from "lucide-react";
-import Dimensions from "./Dimensions";
+import { ArrowRight, Check, Copy, Download, ExternalLink } from "lucide-react";
 import GraphExplorer from "./GraphExplorer";
-import LanguagesExplorer from "./LanguagesExplorer";
 
 /* ============================================================
-   Atlas — The Benchmark Instrument
-   Dark instrument console. Every numeral traces to
-   data/benchmark-data.json. No chart CDN — inline SVG/canvas/CSS.
+   Atlas — Benchmark & Field Comparison
+   Top-to-bottom redesign. One payload (data/site-data.json), two
+   labeled evidence tiers: the July-2026 report is the citation,
+   the Linux re-run corroborates it. No chart CDN — inline SVG.
    ============================================================ */
 
 const fmt = new Intl.NumberFormat("en-US");
@@ -27,69 +19,21 @@ function num(v) {
   if (v === null || v === undefined || Number.isNaN(Number(v))) return "—";
   return fmt.format(v);
 }
-function ratio(v) {
-  if (v === null || v === undefined || Number.isNaN(Number(v))) return "not comparable";
-  return `${Number(v).toFixed(2)}x`;
-}
-function secs(v) {
-  if (v === null || v === undefined || Number.isNaN(Number(v))) return "—";
-  return `${Number(v).toFixed(Number(v) < 1 ? 3 : 2)}s`;
-}
-function shortSha(v) {
-  return v ? v.slice(0, 10) : "—";
+function f1fmt(v) {
+  if (v === null || v === undefined) return "—";
+  return Number(v).toFixed(3);
 }
 function langLabel(v) {
-  if (v === "cpp") return "C++";
-  if (v === "javascript") return "JavaScript";
-  if (v === "typescript") return "TypeScript";
-  if (v === "objc") return "Objective-C";
-  if (v === "csharp") return "C#";
-  if (v === "ejs") return "EJS";
-  if (v === "ets") return "ETS";
-  if (v === "sql") return "SQL";
-  if (v === "php") return "PHP";
-  if (v === "cuda") return "CUDA";
-  if (v === "dotnet") return ".NET";
+  const m = {
+    cpp: "C++", javascript: "JavaScript", typescript: "TypeScript", objc: "Objective-C",
+    csharp: "C#", ejs: "EJS", ets: "ETS", sql: "SQL", php: "PHP", r: "R", c: "C",
+    powershell: "PowerShell", p4: "P4", byond: "BYOND",
+  };
+  if (m[v]) return m[v];
   if (!v) return "unknown";
   return String(v).replace(/\b\w/g, (c) => c.toUpperCase());
 }
-function tenXModel(data) {
-  const summary = data.summary?.live || {};
-  const liveRows = (data.liveBenchmarks || []).filter(
-    (r) => r.coverage && typeof r.coverage.ratio === "number"
-  );
-  const parityRows = liveRows.filter((r) => r.coverage.ratio <= 1.0001);
-  const parityComparable = parityRows.filter(
-    (r) =>
-      r.querySummary &&
-      r.querySummary.equivalentRows > 0 &&
-      r.querySummary.tokenRatio != null &&
-      r.querySummary.latencyRatio != null
-  );
-  const liveComparable = liveRows.filter(
-    (r) =>
-      r.querySummary &&
-      r.querySummary.equivalentRows > 0 &&
-      r.querySummary.tokenRatio != null &&
-      r.querySummary.latencyRatio != null
-  );
-  const count = (rows, pred) => rows.filter(pred).length;
-  return {
-    liveTotal: summary.artifacts ?? liveRows.length,
-    liveComparable: summary.withComparableRows ?? liveComparable.length,
-    liveCoverageExceed: summary.coverageExceedLanguages ?? count(liveRows, (r) => r.coverage.ratio > 1.0001),
-    liveToken10: summary.token10xComparable ?? count(liveComparable, (r) => r.querySummary.tokenRatio >= 10),
-    liveLatency10: summary.latency10xComparable ?? count(liveComparable, (r) => r.querySummary.latencyRatio >= 10),
-    livePerformance10: summary.tenXComparable ?? count(liveComparable, (r) => r.querySummary.tokenRatio >= 10 && r.querySummary.latencyRatio >= 10),
-    parityTotal: summary.coverageParityLanguages ?? parityRows.length,
-    parityComparable: summary.parityComparable ?? parityComparable.length,
-    parityCoverageExceed: 0,
-    parityToken10: summary.parityToken10x ?? count(parityComparable, (r) => r.querySummary.tokenRatio >= 10),
-    parityLatency10: summary.parityLatency10x ?? count(parityComparable, (r) => r.querySummary.latencyRatio >= 10),
-    parityPerformance10: summary.parityTenX ?? count(parityComparable, (r) => r.querySummary.tokenRatio >= 10 && r.querySummary.latencyRatio >= 10),
-    parityNonComparable: parityRows.length - parityComparable.length,
-  };
-}
+
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
   useEffect(() => {
@@ -103,45 +47,9 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
-/* -- shared IntersectionObserver hook -------------------------------------
-   inView is a REVEAL ENHANCEMENT only. It always resolves to true — either
-   because the element scrolled into view, or via a short fallback timer — so
-   deep-link landings, IO misses, JS-disabled-IO, and headless screenshot
-   harnesses never see a blank chart. Charts must default to their final
-   geometry/opacity and use this flag only to opt into the entry animation. */
-function useInView(options) {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || typeof IntersectionObserver === "undefined") {
-      setInView(true);
-      return undefined;
-    }
-    let timer = 0;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setInView(true);
-        });
-      },
-      options || { threshold: 0.25 }
-    );
-    io.observe(el);
-    // Fallback: if the observer never fires (off-screen at load, deep-link,
-    // missed intersection), reveal anyway so the data is always shown.
-    timer = window.setTimeout(() => setInView(true), 1200);
-    return () => {
-      io.disconnect();
-      window.clearTimeout(timer);
-    };
-  }, []);
-  return [ref, inView];
-}
+/* ======================= shared primitives ============================== */
 
-/* ========================== PRIMITIVES ================================== */
-
-function CopyButton({ text, label = "copy", className }) {
+function CopyButton({ text, label = "copy" }) {
   const [copied, setCopied] = useState(false);
   const tRef = useRef(0);
   const onCopy = useCallback(() => {
@@ -153,9 +61,7 @@ function CopyButton({ text, label = "copy", className }) {
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(done).catch(done);
-      } else {
-        done();
-      }
+      } else done();
     } catch {
       done();
     }
@@ -177,38 +83,6 @@ function CopyButton({ text, label = "copy", className }) {
       {copied ? <Check className="h-3.5 w-3.5" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
       {copied ? "copied ✓" : "copy"}
     </button>
-  );
-}
-
-function StatTick({ label, value, sub }) {
-  return (
-    <div className="min-w-0">
-      <div className="kicker truncate">{label}</div>
-      <div className="num mt-1 truncate" style={{ fontSize: 18, color: "var(--text)" }}>
-        {value}
-      </div>
-      {sub && (
-        <div className="mt-0.5 truncate" style={{ fontSize: 11, color: "var(--faint)" }}>
-          {sub}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function SourceLink({ children, href, download = false, testId = true }) {
-  return (
-    <a
-      {...(testId ? { "data-source-artifact": "" } : {})}
-      className="focusring chip transition hover:text-text"
-      href={href}
-      download={download || undefined}
-      target={download ? undefined : "_blank"}
-      rel={download ? undefined : "noreferrer"}
-      style={{ textDecoration: "none" }}
-    >
-      {children}
-    </a>
   );
 }
 
@@ -235,19 +109,80 @@ function SectionHeader({ kicker, title, children, actions, id }) {
   );
 }
 
-/* ========================== CONSOLE BAR ================================== */
+const EVIDENCE_COLORS = {
+  "fixture-truth": "var(--primary)",
+  "LSP-truth": "var(--secondary)",
+  "perf-only": "var(--warning)",
+};
+function EvidenceTag({ kind, children }) {
+  const color = EVIDENCE_COLORS[kind] || "var(--muted)";
+  return (
+    <span className="chip" style={{ borderColor: color, color }} title={children || kind}>
+      {kind}
+    </span>
+  );
+}
+
+/* A fresh-run corroboration chip — visually distinct (dashed) from the
+   canonical report numbers so the two evidence tiers never blur. */
+function FreshChip({ children, title }) {
+  return (
+    <span
+      className="chip"
+      title={title || "Linux corroboration run — deterministic re-run on independent hardware"}
+      style={{ borderStyle: "dashed", borderColor: "var(--primary-dim)", color: "var(--primary)" }}
+    >
+      <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--primary)", display: "inline-block" }} />
+      {children}
+    </span>
+  );
+}
+
+function StatBig({ value, label, sub, accent }) {
+  return (
+    <div className="min-w-0">
+      <div className="num" style={{ fontSize: "clamp(26px,3vw,34px)", fontWeight: 600, color: accent || "var(--text)", lineHeight: 1 }}>
+        {value}
+      </div>
+      <div className="kicker mt-2">{label}</div>
+      {sub && <div className="mt-1" style={{ fontSize: 12, color: "var(--faint)" }}>{sub}</div>}
+    </div>
+  );
+}
+
+function TermBlock({ lines }) {
+  const text = lines.join("\n");
+  return (
+    <div className="term">
+      <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: "1px solid var(--line)", background: "var(--surface)" }}>
+        <span className="mono" style={{ fontSize: 11, color: "var(--faint)" }}>zsh</span>
+        <CopyButton text={text} label="command" />
+      </div>
+      <div className="term-body">
+        {lines.map((l, i) => (
+          <div key={i}>
+            <span className="term-prompt">$ </span>
+            {l}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* =========================== console bar ================================ */
 
 const NAV_ITEMS = [
-  ["Dimensions", "dimensions"],
-  ["Coverage", "vs-native"],
-  ["Comparison", "vs-graphify"],
-  ["Graph", "graph"],
-  ["Languages", "matrix"],
-  ["Install", "install"],
+  ["Frontier", "hero"],
+  ["Knob", "knob"],
+  ["Languages", "languages"],
+  ["Versus", "versus"],
+  ["Field", "field"],
+  ["Proof", "real"],
+  ["Evidence", "evidence"],
 ];
 
 function ConsoleBar({ data, active }) {
-  const platform = data.provenance.platform;
   return (
     <header
       data-testid="nav"
@@ -264,14 +199,7 @@ function ConsoleBar({ data, active }) {
         <a href="#hero" className="focusring flex min-w-0 items-center gap-2.5" style={{ textDecoration: "none" }}>
           <span
             className="mono grid place-items-center rounded-md"
-            style={{
-              width: 26,
-              height: 26,
-              background: "var(--primary)",
-              color: "#04130f",
-              fontWeight: 700,
-              fontSize: 15,
-            }}
+            style={{ width: 26, height: 26, background: "var(--primary)", color: "#04130f", fontWeight: 700, fontSize: 15 }}
             aria-hidden
           >
             A
@@ -279,10 +207,10 @@ function ConsoleBar({ data, active }) {
           <span className="font-semibold tracking-tight" style={{ fontSize: 15, color: "var(--text)" }}>
             ATLAS
           </span>
-          <span className="chip hidden sm:inline-flex">v0.1.21</span>
+          <span className="chip hidden sm:inline-flex">v{data.version}</span>
         </a>
 
-        <div className="hidden items-center gap-0.5 md:flex">
+        <div className="hidden items-center gap-0.5 lg:flex">
           {NAV_ITEMS.map(([label, anchor]) => (
             <a key={anchor} className="navlink focusring" href={`#${anchor}`} data-active={active === anchor}>
               {label}
@@ -291,22 +219,6 @@ function ConsoleBar({ data, active }) {
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="hidden items-center gap-1.5 lg:flex" title={`${platform.system} ${platform.release} ${platform.machine}`}>
-            <span
-              style={{
-                width: 7,
-                height: 7,
-                borderRadius: "50%",
-                background: "var(--success)",
-                boxShadow: "0 0 8px var(--success)",
-                display: "inline-block",
-              }}
-              aria-hidden
-            />
-            <span className="mono" style={{ fontSize: 11, color: "var(--faint)" }}>
-              {platform.system} {platform.release} {platform.machine}
-            </span>
-          </span>
           <a
             className="focusring chip"
             href="https://github.com/aziron-ai/atlas"
@@ -326,226 +238,181 @@ function ConsoleBar({ data, active }) {
   );
 }
 
-/* ========================== HERO READOUT ================================ */
+/* ===================== hero — the efficiency frontier =================== */
 
-function HeroReadout({ data }) {
-  const core = data.summary.core;
-  const liveLangs = data.summary.live.artifacts;
-  const supported = data.summary.supported || {};
-  const supportedFamilies = supported.families ?? core.languages + liveLangs;
-  const supportedAtlasOk = supported.atlasOk ?? supportedFamilies;
-  const liveSummary = data.summary.live;
-  const parityCoverage = liveSummary.coverageParityLanguages ?? 0;
-  const exceedCoverage = liveSummary.coverageExceedLanguages ?? 0;
-  // Atlas's OWN per-query response size, straight from coreMatrix atlasTokens —
-  // the hero identity. graphify's ratio is a supporting comparison, not this.
-  const atlasTokensList = data.coreMatrix.map((r) => r.querySummary.atlasTokens).filter((v) => v != null);
-  const tokMin = Math.min(...atlasTokensList);
-  const tokMax = Math.max(...atlasTokensList);
-  const fastestIndex = Math.min(...data.coreMatrix.map((r) => r.atlas.metrics.cold_seconds).filter((v) => v != null));
-  const toolCount = data.provenance.tools.coreCount;
-  // Native-parity result the ladder PROVES: count of live languages whose
-  // coverage ratio is at or above ×1.0 — every benchmarked live language.
-  // (Distinct from the 39/39 comparable deterministic-row figure, which counts
-  // query rows, not languages — they are reported as separate facts, never one
-  // mixed denominator.)
-  const parityLangs = data.liveBenchmarks.filter(
-    (r) => r.coverage && typeof r.coverage.ratio === "number" && r.coverage.ratio >= 1.0
-  ).length;
-  const liveCovered = data.liveBenchmarks.filter(
-    (r) => r.coverage && typeof r.coverage.ratio === "number"
-  ).length;
-  // comparable deterministic-row universe — the data key was renamed off the
-  // graphify-anchored `graphifyRows`; read the new name with a back-compat fallback.
-  const cov = data.summary.coverage;
-  const comparableRows = cov.comparableRows ?? cov.graphifyRows;
-  // Per-query answer-size spread, derived from coreMatrix atlasTokens so the
-  // inline annotation can never drift from the figure: median + the language
-  // that owns each end of the 14–42 range.
-  const sortedTokens = [...atlasTokensList].sort((a, b) => a - b);
-  const tokMedian = sortedTokens.length
-    ? sortedTokens.length % 2
-      ? sortedTokens[(sortedTokens.length - 1) / 2]
-      : Math.round((sortedTokens[sortedTokens.length / 2 - 1] + sortedTokens[sortedTokens.length / 2]) / 2)
-    : tokMin;
-  const tokMinLang = data.coreMatrix.find((r) => r.querySummary.atlasTokens === tokMin)?.language;
-  const tokMaxLang = data.coreMatrix.find((r) => r.querySummary.atlasTokens === tokMax)?.language;
-  // The row that ACTUALLY owns the fastest cold index — its symbol/edge caption
-  // must come from this row, not a hardcoded language. (Go cold-indexes far
-  // slower than the fastest slice, so a fixed Go caption mislabels the figure.)
-  const fastestRow = data.coreMatrix.find((r) => r.atlas.metrics.cold_seconds === fastestIndex);
-  // The supported-family count comes from parser.Supported fixture evidence.
-  // Public-repo matrix/live artifacts remain separate, stronger evidence tiers.
-  const nativeLangCount = supportedFamilies;
-  const derivedCount = data.derivedArtifacts?.length || 0;
+function FrontierChart({ frontier }) {
+  const W = 580, H = 396;
+  const L = 52, R = 570, T = 20, B = 350;
+  const x = (tok) => L + (tok / 300) * (R - L);
+  const y = (f1) => B - f1 * (B - T);
+  const xTicks = [0, 50, 100, 150, 200, 250, 300];
+  const yTicks = [0, 0.25, 0.5, 0.75, 1.0];
+  const P = Object.fromEntries(frontier.map((p) => [p.id, { ...p, px: x(p.tokens), py: y(p.f1) }]));
+  const color = (p) => (p.kind === "atlas" ? "var(--primary)" : p.kind === "rival" ? "var(--danger)" : "var(--muted)");
+
+  // per-point label anchoring, hand-placed so nothing collides at any width
+  const labels = [
+    { id: "atlas-low", dx: 12, dy: -22, anchor: "start" },
+    { id: "atlas-medium", dx: 14, dy: 26, anchor: "start" },
+    { id: "atlas-high", dx: 24, dy: -18, anchor: "start" },
+    { id: "atlas-xhigh", dx: -13, dy: -22, anchor: "end" },
+    { id: "graphify", dx: 12, dy: 4, anchor: "start" },
+    { id: "raw-file", dx: 12, dy: 18, anchor: "start" },
+  ];
+
   return (
-    <section
-      id="hero"
-      data-testid="hero"
-      className="measure-grid"
-      aria-labelledby="hero-title"
-      style={{ borderBottom: "1px solid var(--line)" }}
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      width="100%"
+      role="img"
+      aria-label="Efficiency frontier: answer accuracy (F1) versus context tokens for six context sources. Atlas high sits in the ideal top-left quadrant at F1 0.757 and 21 tokens."
+      style={{ display: "block" }}
     >
-      <div className="shell grid grid-cols-1 gap-10 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(380px,0.82fr)] lg:py-20">
-        {/* LEFT — Atlas-first thesis + its OWN headline numbers */}
-        <div className="flex min-w-0 flex-col justify-center">
-          <div className="kicker" style={{ color: "var(--primary)" }}>
-            Deterministic · LLM-free · local
-          </div>
-          <h1
-            id="hero-title"
-            className="mt-4 max-w-2xl text-balance font-semibold"
-            style={{ fontSize: "clamp(34px,5vw,56px)", lineHeight: 1.02, letterSpacing: "-0.025em" }}
-          >
-            Your agent reads a sentence, not the whole file.
-          </h1>
-          <p className="mt-5 max-w-xl" style={{ fontSize: 15, lineHeight: 1.6, color: "var(--muted)" }}>
-            Atlas indexes a repo into a local symbol and call graph, then answers any context query — a symbol&rsquo;s
-            definition, callers, callees and imports — in a couple dozen tokens. That precise slice goes to your coding,
-            refactoring, debugging or review agent over CLI, MCP or SDK. No whole-file dumps flooding the context window,
-            no model in the loop, no code leaving the machine.
-          </p>
+      {/* ideal quadrant — the argument, drawn */}
+      <rect x={L} y={T} width={x(85) - L} height={y(0.68) - T} rx={8} fill="rgba(94,230,196,0.055)" stroke="rgba(94,230,196,0.25)" strokeDasharray="4 4" />
+      <text x={L + 10} y={T + 18} className="mono" fontSize="10" fill="var(--primary)" letterSpacing="0.14em">
+        IDEAL — accurate & cheap
+      </text>
 
-          {/* PRIMARY — the answer size Atlas hands an agent, the hero's center of
-              gravity. Full width, dominant, with the self-referential anchor that
-              finally gives the 14–42 figure meaning, plus the measured spread. */}
-          <div className="mt-10 min-w-0">
-            <div className="kicker">The whole answer · per context query</div>
-            <div className="mt-2 flex items-baseline gap-2.5">
-              <span
-                data-testid="ratio-tokens"
-                className="mono tnum"
-                aria-label={`${tokMin} to ${tokMax} response tokens per context query`}
-                style={{ fontSize: "clamp(46px,7vw,82px)", lineHeight: 0.92, letterSpacing: "-0.035em", fontWeight: 600, color: "var(--primary)" }}
-              >
-                {tokMin}–{tokMax}
-              </span>
-              <span className="mono" style={{ fontSize: 16, color: "var(--muted)" }}>tok</span>
+      {/* grid + axes */}
+      {yTicks.map((t) => (
+        <g key={`y${t}`}>
+          <line x1={L} x2={R} y1={y(t)} y2={y(t)} stroke="var(--grid)" strokeWidth="1" />
+          <text x={L - 8} y={y(t) + 4} textAnchor="end" className="mono" fontSize="10" fill="var(--faint)">
+            {t.toFixed(2)}
+          </text>
+        </g>
+      ))}
+      {xTicks.map((t) => (
+        <text key={`x${t}`} x={x(t)} y={B + 20} textAnchor="middle" className="mono" fontSize="10" fill="var(--faint)">
+          {t}
+        </text>
+      ))}
+      <line x1={L} x2={R} y1={B} y2={B} stroke="var(--line-strong)" strokeWidth="1" />
+      <line x1={L} x2={L} y1={T} y2={B} stroke="var(--line-strong)" strokeWidth="1" />
+      <text x={(L + R) / 2} y={H - 6} textAnchor="middle" className="mono" fontSize="10.5" fill="var(--muted)" letterSpacing="0.1em">
+        AVG CONTEXT TOKENS PER QUERY →
+      </text>
+      <text x={14} y={(T + B) / 2} textAnchor="middle" className="mono" fontSize="10.5" fill="var(--muted)" letterSpacing="0.1em" transform={`rotate(-90 14 ${(T + B) / 2})`}>
+        ANSWER ACCURACY (F1) ↑
+      </text>
+
+      {/* high → xhigh: same accuracy, 13.6× the tokens */}
+      <line x1={P["atlas-high"].px + 8} x2={P["atlas-xhigh"].px - 8} y1={P["atlas-high"].py} y2={P["atlas-xhigh"].py} stroke="var(--line-strong)" strokeDasharray="3 5" />
+      <text x={(P["atlas-high"].px + P["atlas-xhigh"].px) / 2 + 20} y={P["atlas-high"].py + 16} textAnchor="middle" className="mono" fontSize="9.5" fill="var(--faint)">
+        same F1 · 13.6× the tokens
+      </text>
+
+      {/* points */}
+      {frontier.map((p) => {
+        const pt = P[p.id];
+        const lb = labels.find((l) => l.id === p.id);
+        return (
+          <g key={p.id}>
+            {p.star && (
+              <>
+                <circle cx={pt.px} cy={pt.py} r={13} fill="none" stroke="var(--primary)" strokeOpacity="0.45" />
+                <circle cx={pt.px} cy={pt.py} r={19} fill="none" stroke="var(--primary)" strokeOpacity="0.16" />
+              </>
+            )}
+            <circle cx={pt.px} cy={pt.py} r={p.star ? 6.5 : 5} fill={color(p)} stroke="var(--bg)" strokeWidth="1.5" />
+            <text
+              x={pt.px + lb.dx}
+              y={pt.py + lb.dy}
+              textAnchor={lb.anchor}
+              className="mono"
+              fontSize={p.star ? 12 : 10.5}
+              fontWeight={p.star ? 700 : 500}
+              fill={p.star ? "var(--text)" : "var(--muted)"}
+            >
+              {p.label}
+            </text>
+            <text
+              x={pt.px + lb.dx}
+              y={pt.py + lb.dy + 13}
+              textAnchor={lb.anchor}
+              className="mono"
+              fontSize="9.5"
+              fill={p.star ? "var(--primary)" : "var(--faint)"}
+            >
+              {p.f1.toFixed(2)} F1 · {Math.round(p.tokens)} tok
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+function Hero({ data }) {
+  const r = data.report;
+  const f = data.fresh;
+  const h = r.headline;
+  return (
+    <section id="hero" data-testid="hero" className="measure-grid" aria-labelledby="hero-title">
+      <div className="shell pb-14 pt-14 lg:pb-20 lg:pt-20">
+        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+          <div className="min-w-0">
+            <div className="kicker" style={{ color: "var(--primary)" }}>
+              Aziron Atlas · {r.label}
             </div>
-            <p className="mt-2.5 max-w-lg" style={{ fontSize: 13.5, lineHeight: 1.5, color: "var(--text)" }}>
-              One symbol&rsquo;s full neighborhood — defs, callers, callees, imports — in fewer tokens than this sentence.
+            <h1
+              id="hero-title"
+              className="mt-4 text-balance font-semibold tracking-tight"
+              style={{ fontSize: "clamp(30px,4.6vw,50px)", lineHeight: 1.05, letterSpacing: "-0.02em" }}
+            >
+              The most accurate code answer,
+              <br />
+              <span style={{ color: "var(--primary)" }}>for the fewest tokens.</span>
+            </h1>
+            <p className="mt-5 max-w-xl" style={{ fontSize: 16, lineHeight: 1.65, color: "var(--muted)" }}>
+              When a coding agent asks <span className="mono" style={{ color: "var(--text)" }}>“who calls this function?”</span>,
+              Atlas answers at F1 {h.atlasF1All} from just {h.atlasTokAll} context tokens — measured across 37 languages
+              with a real LLM scoring every cell. The graph tool needed {Math.round(h.graphifyTok)} tokens to score {h.graphifyF1}.
             </p>
-            <div className="mono mt-1.5" style={{ fontSize: 11.5, color: "var(--faint)", letterSpacing: "0.01em" }}>
-              median {tokMedian} · {langLabel(tokMinLang)} floor {tokMin} · {langLabel(tokMaxLang)} ceiling {tokMax}
-            </div>
-          </div>
 
-          {/* SECONDARY — cold index that stands the answers up. Caption derived
-              from the row that ACTUALLY owns the fastest index, never hardcoded. */}
-          <div className="mt-8 min-w-0">
-            <div className="kicker">Cold index · ready to answer</div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span
-                data-testid="ratio-latency"
-                className="mono tnum"
-                aria-label={`fastest cold index ${fastestIndex} seconds`}
-                style={{ fontSize: "clamp(34px,4.5vw,54px)", lineHeight: 0.95, letterSpacing: "-0.03em", fontWeight: 600, color: "var(--secondary)" }}
-              >
-                {fastestIndex.toFixed(2)}
+            <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-4">
+              <StatBig value={h.atlasF1All.toFixed(3)} label="Atlas F1 · all 37 langs" sub={`@ ${h.atlasTokAll} tokens`} accent="var(--primary)" />
+              <StatBig value={h.atlasF1Supported.toFixed(3)} label={`F1 · ${h.supportedLangs} supported`} sub={`@ ${h.atlasTokSupported} tokens`} />
+              <StatBig value={`${h.accPerToken}×`} label="Accuracy per token" sub="vs. graph tool" />
+              <StatBig value={`${h.fewerTokens}×`} label="Fewer query tokens" sub="for a better answer" />
+            </div>
+
+            <div className="mt-7 flex flex-wrap items-center gap-2" data-testid="fresh-chips">
+              <span className="mono" style={{ fontSize: 11, color: "var(--faint)", letterSpacing: "0.1em" }}>
+                CORROBORATED —
               </span>
-              <span className="mono" style={{ fontSize: 14, color: "var(--muted)" }}>s</span>
+              <FreshChip>{f.saturation.perfect}/{f.saturation.total} langs fixture-perfect</FreshChip>
+              <FreshChip>{f.latency.ratio}× faster queries</FreshChip>
+              <FreshChip>gopls-truth F1 {f.lspTruth.meanF1.toFixed(3)}</FreshChip>
+              <span className="mono hidden sm:inline" style={{ fontSize: 11, color: "var(--faint)" }}>
+                Linux re-run, deterministic
+              </span>
             </div>
-            <div className="mono mt-1" style={{ fontSize: 12, color: "var(--faint)" }}>
-              fastest cold index · {num(fastestRow?.atlas.metrics.symbols)} symbols, {num(fastestRow?.atlas.metrics.edges)} edges ({langLabel(fastestRow?.language)})
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <a href="#install" className="btn btn-primary focusring" style={{ textDecoration: "none" }}>
+                Get Atlas <ArrowRight className="h-4 w-4" aria-hidden />
+              </a>
+              <a href="#evidence" className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
+                Inspect the evidence
+              </a>
+              <span className="mono" style={{ fontSize: 11.5, color: "var(--faint)" }}>
+                {r.method.cells} cells · {r.method.modelCalls} model calls · scored by {r.method.scoringModel}
+              </span>
             </div>
           </div>
 
-          {/* ALL-NATIVE breadth — one story, no core/live/detector split. The
-              language count and the comparable-row count are kept as two clearly
-          distinct denominators, never blurred into one. */}
-          <div className="mt-7 hairline" style={{ paddingTop: 18 }}>
-            <p className="max-w-xl" style={{ fontSize: 13, lineHeight: 1.55, color: "var(--text)" }}>
-              All{" "}
-              <span className="num" style={{ color: "var(--success)", fontWeight: 600 }}>{nativeLangCount}</span>{" "}
-              Atlas-supported parser families have live fixture evidence — Atlas indexed {supportedAtlasOk}/{supportedFamilies}, with zero hidden regex
-              fallback. The public-repo ladder remains {parityCoverage} exactly at parity + {exceedCoverage} above native;{" "}
-              <span className="num" style={{ color: "var(--success)", fontWeight: 600 }}>{parityLangs}/{liveCovered}</span>{" "}
-              live languages are ≥ ×1.0 across{" "}
-              <span className="num" style={{ color: "var(--success)", fontWeight: 600 }}>{cov.deterministicRowsCovered}/{comparableRows}</span>{" "}
-              comparable deterministic rows.
+          <div className="panel min-w-0 p-4 sm:p-5" data-testid="frontier">
+            <div className="mb-2 flex items-center justify-between gap-3">
+              <div className="kicker">The efficiency frontier · 37 languages</div>
+              <EvidenceTag kind="fixture-truth" />
+            </div>
+            <FrontierChart frontier={r.frontier} />
+            <p className="mt-2" style={{ fontSize: 12, lineHeight: 1.55, color: "var(--faint)" }}>
+              Every context source an agent could be handed, placed by accuracy against cost. Atlas high owns the ideal
+              quadrant; xhigh proves more tokens buy nothing; the raw file is perfect but 7.4× the price.
             </p>
-          </div>
-
-          {/* SUPPORTING stat — clearly scoped to graphify, one of many tools */}
-          <div
-            className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 rounded-lg px-4 py-3"
-            style={{ background: "var(--bg2)", border: "1px solid var(--line)" }}
-            data-testid="vs-graphify-support"
-          >
-            <span className="mono" style={{ fontSize: 11, color: "var(--faint)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
-              vs graphify
-            </span>
-            <span style={{ fontSize: 13, color: "var(--muted)" }}>
-              the same answer,{" "}
-              <span className="num" style={{ color: "var(--primary)", fontWeight: 600 }}>{core.tokenRatio.toFixed(2)}×</span> lighter ·{" "}
-              <span className="num" style={{ color: "var(--secondary)", fontWeight: 600 }}>{core.latencyRatio.toFixed(2)}×</span> faster
-            </span>
-            <span className="mono" style={{ fontSize: 11, color: "var(--faint)" }}>
-              1 of {toolCount} tools benchmarked · over {core.equivalentRows} comparable query rows
-            </span>
-          </div>
-
-          {/* instrument rail of plain mono stat ticks */}
-          <div
-            className="mt-7 grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-5"
-            style={{ borderTop: "1px solid var(--line)", paddingTop: 20 }}
-          >
-            <StatTick label="Languages" value={`${nativeLangCount} supported`} sub={`${supportedAtlasOk}/${supportedFamilies} Atlas fixture ok`} />
-            <StatTick label="Coverage split" value={`${parityCoverage} + ${exceedCoverage}`} sub="parity + exceed in live ladder" />
-            <StatTick label="10x target" value={`${liveSummary.tenXComparable}/${liveSummary.withComparableRows}`} sub="token+latency comparable live" />
-            <StatTick label="Tools benchmarked" value={toolCount} sub="incl. SCIP / LSP / graphify" />
-            <StatTick label="Evidence" value={data.sourceArtifacts.length + derivedCount} sub="raw + derived artifacts" />
-          </div>
-
-          <div className="mt-9 flex flex-wrap gap-3">
-            <a href="#vs-graphify" className="btn btn-primary focusring" style={{ textDecoration: "none" }}>
-              See the proof <ArrowRight className="h-4 w-4" aria-hidden />
-            </a>
-            <a href="data/benchmark-data.json" download data-source-artifact className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-              Download evidence <Download className="h-4 w-4" aria-hidden />
-            </a>
-            <a href="data/tenx-gap-report.md" download data-source-artifact className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-              10x gap report <Download className="h-4 w-4" aria-hidden />
-            </a>
-            <a href="data/final-benchmark-audit-report.md" download data-source-artifact className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-              Final audit <Download className="h-4 w-4" aria-hidden />
-            </a>
-            <a href="data/raw/SUPPORTED_LANGUAGE_BENCHMARK.json" download data-source-artifact className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-              Supported sweep <Download className="h-4 w-4" aria-hidden />
-            </a>
-            <a href="data/public-repo-validation-manifest.md" download data-source-artifact className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-              Validation manifest <Download className="h-4 w-4" aria-hidden />
-            </a>
-            <a href="data/validation-remeasurement-manifest.md" download data-source-artifact className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-              Remeasurement readiness <Download className="h-4 w-4" aria-hidden />
-            </a>
-            <a href="data/precision-evidence-manifest.md" download data-source-artifact className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-              Precision evidence <Download className="h-4 w-4" aria-hidden />
-            </a>
-            <a href="data/call-edge-evidence-manifest.md" download data-source-artifact className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-              Call-edge evidence <Download className="h-4 w-4" aria-hidden />
-            </a>
-            <a href="data/graphify-support-manifest.md" download data-source-artifact className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-              Graphify support <Download className="h-4 w-4" aria-hidden />
-            </a>
-          </div>
-        </div>
-
-        {/* RIGHT — framed graph console peek */}
-        <div className="flex min-w-0 flex-col">
-          <div className="panel flex h-full min-h-[420px] flex-col overflow-hidden p-0">
-            <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid var(--line)" }}>
-              <span className="kicker">atlas export --all</span>
-              <span className="mono" style={{ fontSize: 11, color: "var(--faint)" }}>
-                live · deterministic
-              </span>
-            </div>
-            <div className="flex-1 p-3">
-              <GraphExplorer className="atlas-graph-peek" />
-            </div>
-            <div className="mono px-4 py-3" style={{ fontSize: 11, color: "var(--faint)", borderTop: "1px solid var(--line)" }}>
-              280 of 9,139 symbols · 897 edges · 6 communities
-            </div>
           </div>
         </div>
       </div>
@@ -553,140 +420,325 @@ function HeroReadout({ data }) {
   );
 }
 
-/* ====================== VS GRAPHIFY — DUMBBELL ========================== */
+/* ===================== executive summary ================================ */
 
-function DumbbellChart({ rows, metric, widestLang, narrowestLang }) {
-  // rows: [{lang, atlas, graphify, ratio, missing, atlasRaw, graphifyRaw}]
-  // Per-row LOCAL scale: the Atlas dot sits at a fixed left anchor and the
-  // line length encodes the ratio, so the *gap* is the visual and short rows
-  // are never crushed into the left edge against a single shared max.
-  const reduced = usePrefersReducedMotion();
-  const [ref, inView] = useInView({ threshold: 0.2 });
-  // Reveal is enhancement-only: geometry always renders at final positions;
-  // `animate` merely opts into the entry transition once visible.
-  const animate = !reduced && inView;
-  const unit = metric === "tokens" ? "tok" : "ms";
-  const maxRatio = Math.max(...rows.map((r) => r.ratio || 0), 1);
-  const ATLAS_ANCHOR = 6; // % — fixed left anchor for every Atlas dot
-  const TRACK_END = 96; // % — longest bar reaches here
+function MiniPerTokenBars({ table }) {
+  const rows = table.filter((r) => ["atlas high", "graph tool", "raw file (ceiling)"].includes(r.source));
+  const max = Math.max(...rows.map((r) => r.per100));
   return (
-    <div ref={ref} className="flex flex-col gap-1.5" role="table" aria-label={`Atlas versus graphify ${metric} per language`}>
-      <div
-        className="mono hidden grid-cols-[5.5rem_minmax(0,1fr)_4rem] items-center gap-3 px-1 pb-1 sm:grid"
-        style={{ fontSize: 11, color: "var(--faint)" }}
-        role="row"
-      >
-        <span role="columnheader">lang</span>
-        <span role="columnheader">atlas → graphify ({unit}) · bar length ∝ ratio</span>
-        <span role="columnheader" className="text-right">ratio</span>
+    <div className="mt-4 flex flex-col gap-2.5">
+      {rows.map((r) => (
+        <div key={r.source} className="grid items-center gap-2" style={{ gridTemplateColumns: "86px 1fr 44px" }}>
+          <span className="mono truncate" style={{ fontSize: 11, color: "var(--muted)" }}>
+            {r.source.replace(" (ceiling)", "")}
+          </span>
+          <div className="h-2.5 rounded-full" style={{ background: "var(--bg2)" }}>
+            <div
+              className="h-2.5 rounded-full"
+              style={{
+                width: `${(r.per100 / max) * 100}%`,
+                background: r.source === "atlas high" ? "var(--primary)" : r.source === "graph tool" ? "var(--danger)" : "var(--muted)",
+                opacity: r.source === "atlas high" ? 1 : 0.75,
+              }}
+            />
+          </div>
+          <span className="num text-right" style={{ fontSize: 12 }}>{r.per100.toFixed(2)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ExecSummary({ data }) {
+  const r = data.report;
+  const f = data.fresh;
+  return (
+    <section id="summary" data-testid="summary" className="shell py-16" aria-labelledby="summary-title">
+      <SectionHeader id="summary-title" kicker="01 · Executive summary" title="What the numbers say">
+        Agents pay for every context token, on every call, across the whole organization — so the real KPI is
+        accuracy per token. Four results, each carrying its evidence class.
+      </SectionHeader>
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="panel min-w-0 p-5">
+          <div className="flex items-start justify-between gap-2">
+            <div className="kicker">Accuracy per 100 tokens</div>
+            <EvidenceTag kind="fixture-truth" />
+          </div>
+          <div className="num mt-3" style={{ fontSize: 30, fontWeight: 600, color: "var(--primary)" }}>6.4×</div>
+          <p className="mt-1" style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
+            Atlas high delivers 3.56 F1 per 100 tokens; the graph tool 0.56. Best answer, lowest cost.
+          </p>
+          <MiniPerTokenBars table={r.headlineTable} />
+        </div>
+
+        <div className="panel min-w-0 p-5">
+          <div className="flex items-start justify-between gap-2">
+            <div className="kicker">Perfect & cheap where supported</div>
+            <EvidenceTag kind="fixture-truth" />
+          </div>
+          <div className="num mt-3" style={{ fontSize: 30, fontWeight: 600 }}>F1 1.000</div>
+          <p className="mt-1" style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
+            On the {r.headline.supportedLangs} fully-parsed languages Atlas matches a full-file dump —
+            at {r.headline.atlasTokSupported} tokens vs 165, 6.1× fewer. The graph tool tops out at 0.605 there.
+          </p>
+          <div className="mt-4">
+            <FreshChip>fresh run: {f.saturation.perfect}/{f.saturation.total} languages perfect</FreshChip>
+          </div>
+        </div>
+
+        <div className="panel min-w-0 p-5">
+          <div className="flex items-start justify-between gap-2">
+            <div className="kicker">Holds on production code</div>
+            <EvidenceTag kind="LSP-truth" />
+          </div>
+          <div className="num mt-3" style={{ fontSize: 30, fontWeight: 600 }}>0.975 <span style={{ fontSize: 15, color: "var(--danger)" }}>vs 0.084</span></div>
+          <p className="mt-1" style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
+            On {r.goFlagship.repo}, scored against gopls call-hierarchy truth, Atlas holds F1 0.975 while the
+            graph tool and a raw dump collapse — a 12× gap on real fan-in.
+          </p>
+          <div className="mt-4">
+            <FreshChip>re-run on a second Go service: {f.lspTruth.meanF1.toFixed(3)}</FreshChip>
+          </div>
+        </div>
+
+        <div className="panel min-w-0 p-5">
+          <div className="flex items-start justify-between gap-2">
+            <div className="kicker">Accuracy you can dial</div>
+            <EvidenceTag kind="fixture-truth" />
+          </div>
+          <div className="num mt-3" style={{ fontSize: 30, fontWeight: 600 }}>1 knob</div>
+          <p className="mt-1" style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
+            A single <span className="mono">--detail</span> flag moves the budget from a 3-token stub to a 288-token
+            dump. <span style={{ color: "var(--text)" }}>high</span> is the sweet spot — all the accuracy at 1/13th
+            of the tokens.
+          </p>
+          <a href="#knob" className="link mt-4 inline-flex items-center gap-1" style={{ fontSize: 13 }}>
+            See the knob <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+          </a>
+        </div>
       </div>
-      {rows.map((r, i) => {
-        // Bar length is proportional to this row's ratio against the largest
-        // ratio in view — so every dumbbell spans most of the track and the
-        // relative magnitude of the gap is directly legible.
-        const aPct = ATLAS_ANCHOR;
-        const span = ((r.ratio || 0) / maxRatio) * (TRACK_END - ATLAS_ANCHOR);
-        const gPct = ATLAS_ANCHOR + span;
-        const widest = r.lang === widestLang;
-        const narrow = r.lang === narrowestLang;
-        // Labels: anchor the Atlas value left-aligned at its dot, the graphify
-        // value right-aligned at its dot, so the two never collide.
-        return (
-          <div
-            key={r.lang}
-            role="row"
-            className="grid grid-cols-[5.5rem_minmax(0,1fr)_4rem] items-center gap-3 rounded-lg px-1 py-2 transition"
-            style={{ background: i % 2 ? "rgba(255,255,255,0.018)" : "transparent" }}
+
+      <div className="panel mt-4 flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between" style={{ borderColor: "var(--warning)", borderStyle: "dashed" }}>
+        <p style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
+          <span className="mono" style={{ color: "var(--warning)" }}>HONEST LIMITS — </span>
+          at report time 9 of 37 languages had parser gaps. The saturation run has since fixed all 9 on
+          fixture-truth; they carry a <span style={{ color: "var(--warning)" }}>“pending real-repo proof”</span> badge
+          until a production-repo run lands.
+        </p>
+        <a href="#languages" className="link inline-flex shrink-0 items-center gap-1" style={{ fontSize: 13 }}>
+          Maturity ladder <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+        </a>
+      </div>
+    </section>
+  );
+}
+
+/* ========================= the detail knob ============================== */
+
+function KnobChart({ levels }) {
+  const W = 560, H = 330;
+  const L = 46, R = 514, T = 30, B = 272;
+  const plotW = R - L, plotH = B - T;
+  const slot = (i) => L + (i + 0.5) * (plotW / levels.length);
+  const yF1 = (v) => B - v * plotH;
+  const yTok = (v) => B - (v / 300) * plotH;
+  const barW = 52;
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label="The detail knob: F1 climbs from 0 at low to a plateau of 0.76 at high; token cost stays near 21 through high then jumps to 288 at xhigh." style={{ display: "block" }}>
+      {[0, 0.25, 0.5, 0.75, 1].map((t) => (
+        <g key={t}>
+          <line x1={L} x2={R} y1={yF1(t)} y2={yF1(t)} stroke="var(--grid)" />
+          <text x={L - 8} y={yF1(t) + 4} textAnchor="end" className="mono" fontSize="10" fill="var(--faint)">{t.toFixed(2)}</text>
+        </g>
+      ))}
+      {[0, 100, 200, 300].map((t) => (
+        <text key={t} x={R + 8} y={yTok(t) + 4} textAnchor="start" className="mono" fontSize="10" fill="rgba(242,180,58,0.7)">{t}</text>
+      ))}
+      <line x1={L} x2={R} y1={B} y2={B} stroke="var(--line-strong)" />
+
+      {/* default halo behind high */}
+      <rect x={slot(2) - barW / 2 - 12} y={T - 4} width={barW + 24} height={B - T + 30} rx={10} fill="rgba(94,230,196,0.06)" stroke="rgba(94,230,196,0.3)" strokeDasharray="4 4" />
+
+      {/* token bars */}
+      {levels.map((lv, i) => (
+        <g key={lv.id}>
+          <rect x={slot(i) - barW / 2} y={yTok(lv.tokens)} width={barW} height={Math.max(B - yTok(lv.tokens), 2)} rx={Math.min(5, Math.max(B - yTok(lv.tokens), 2) / 2)} fill="rgba(242,180,58,0.4)" stroke="rgba(242,180,58,0.8)" />
+          <text x={slot(i)} y={yTok(lv.tokens) - 7} textAnchor="middle" className="mono" fontSize="11" fontWeight="600" fill="var(--warning)">
+            {lv.tokens}t
+          </text>
+          <text x={slot(i)} y={B + 18} textAnchor="middle" className="mono" fontSize="12" fontWeight={lv.id === "high" ? 700 : 500} fill={lv.id === "high" ? "var(--primary)" : "var(--muted)"}>
+            {lv.id}
+          </text>
+          {lv.id === "high" && (
+            <text x={slot(i)} y={B + 34} textAnchor="middle" className="mono" fontSize="9.5" fill="var(--primary)" letterSpacing="0.12em">
+              DEFAULT
+            </text>
+          )}
+        </g>
+      ))}
+
+      {/* F1 line + dots */}
+      <path
+        d={levels.map((lv, i) => `${i ? "L" : "M"}${slot(i)},${yF1(lv.f1)}`).join(" ")}
+        fill="none"
+        stroke="var(--primary)"
+        strokeWidth="2.5"
+      />
+      {levels.map((lv, i) => (
+        <g key={`d${lv.id}`}>
+          <circle cx={slot(i)} cy={yF1(lv.f1)} r={5.5} fill="var(--primary)" stroke="var(--bg)" strokeWidth="2" />
+          <text
+            x={slot(i) - 12}
+            y={yF1(lv.f1) + (lv.f1 === 0 ? -24 : -10)}
+            textAnchor="end"
+            className="mono"
+            fontSize="11"
+            fontWeight="600"
+            fill="var(--primary)"
+            paintOrder="stroke"
+            stroke="var(--surface)"
+            strokeWidth="4"
           >
-            <span className="num truncate" style={{ fontSize: 12.5, color: "var(--text)" }}>
-              {langLabel(r.lang)}
-            </span>
-            <div className="relative" style={{ height: 26 }}>
-              {/* track */}
-              <div
-                className="absolute"
-                style={{ top: "50%", left: 0, right: 0, height: 1, background: "var(--line)", transform: "translateY(-50%)" }}
-              />
-              {/* connecting segment atlas->graphify (length ∝ ratio) */}
-              <div
-                className="absolute"
-                style={{
-                  top: "50%",
-                  left: `${aPct}%`,
-                  width: `${animate ? span : 0}%`,
-                  height: 2,
-                  background: "linear-gradient(90deg, var(--primary), var(--faint))",
-                  transform: "translateY(-50%)",
-                  transition: reduced ? "none" : "width 480ms cubic-bezier(0.22,1,0.36,1)",
-                }}
-              />
-              {/* atlas dot — fixed anchor */}
-              <div
-                className="absolute"
-                title={`Atlas ${num(Math.round(r.atlasRaw))} ${unit}`}
-                style={{
-                  top: "50%",
-                  left: `${aPct}%`,
-                  width: 9,
-                  height: 9,
-                  borderRadius: "50%",
-                  background: "var(--primary)",
-                  boxShadow: "0 0 8px rgba(94,230,196,0.5)",
-                  transform: "translate(-50%,-50%)",
-                }}
-              />
-              {/* graphify dot */}
-              <div
-                className="absolute"
-                title={`graphify ${num(Math.round(r.graphifyRaw))} ${unit}`}
-                style={{
-                  top: "50%",
-                  left: `${animate ? gPct : aPct}%`,
-                  width: 9,
-                  height: 9,
-                  borderRadius: "50%",
-                  background: "var(--faint)",
-                  transform: "translate(-50%,-50%)",
-                  transition: reduced ? "none" : "left 480ms cubic-bezier(0.22,1,0.36,1)",
-                }}
-              />
-              {/* inline raw values — Atlas anchored left of its dot,
-                  graphify anchored right of its dot: no overlap. */}
-              <div
-                className="mono absolute"
-                style={{ top: -1, left: `${aPct}%`, fontSize: 10, color: "var(--primary)", transform: "translateX(-50%)" }}
-              >
-                {num(Math.round(r.atlasRaw))}
+            {lv.f1.toFixed(2)}
+          </text>
+        </g>
+      ))}
+
+      <text x={L} y={16} className="mono" fontSize="10" fill="var(--primary)" letterSpacing="0.12em">F1 (LEFT)</text>
+      <text x={R} y={16} textAnchor="end" className="mono" fontSize="10" fill="var(--warning)" letterSpacing="0.12em">CONTEXT TOKENS (RIGHT)</text>
+    </svg>
+  );
+}
+
+function DetailKnob({ data }) {
+  const k = data.report.detailKnob;
+  return (
+    <section id="knob" data-testid="knob" className="shell py-16" aria-labelledby="knob-title">
+      <SectionHeader
+        id="knob-title"
+        kicker="02 · The detail knob"
+        title="One knob, four budgets — accuracy you can dial"
+        actions={<EvidenceTag kind="fixture-truth" />}
+      >
+        <span className="mono" style={{ color: "var(--text)" }}>{k.flag}</span> trades context depth for tokens.
+        Accuracy climbs to a plateau at <span className="mono" style={{ color: "var(--primary)" }}>high</span>;
+        beyond it, tokens jump 14× for no gain.
+      </SectionHeader>
+
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+        <div className="panel min-w-0 p-4 sm:p-5">
+          <KnobChart levels={k.levels} />
+          <p className="mt-2" style={{ fontSize: 12, lineHeight: 1.55, color: "var(--faint)" }}>
+            Means across all 37 languages, real-LLM scored. The teal line is F1 (left axis); amber bars are context
+            tokens (right axis).
+          </p>
+        </div>
+
+        <div className="flex min-w-0 flex-col gap-3">
+          {k.levels.map((lv) => (
+            <div
+              key={lv.id}
+              className="panel-raised flex items-start gap-4 p-4"
+              style={lv.id === k.defaultLevel ? { borderColor: "var(--primary-dim)", boxShadow: "0 0 0 1px var(--primary-dim)" } : undefined}
+            >
+              <div className="mono shrink-0 rounded-md px-2 py-1 text-xs font-bold" style={{ background: "var(--bg2)", border: "1px solid var(--line-strong)", color: lv.id === k.defaultLevel ? "var(--primary)" : "var(--muted)" }}>
+                {lv.id}
               </div>
-              <div
-                className="mono absolute"
-                style={{
-                  top: -1,
-                  left: `${animate ? gPct : aPct}%`,
-                  fontSize: 10,
-                  color: "var(--faint)",
-                  transform: "translateX(-50%)",
-                  transition: reduced ? "none" : "left 480ms cubic-bezier(0.22,1,0.36,1)",
-                }}
-              >
-                {num(Math.round(r.graphifyRaw))}
-              </div>
-              {r.missing > 0 && (
-                <div
-                  className="mono absolute"
-                  style={{ bottom: -4, right: 0, fontSize: 10, color: "var(--warning)" }}
-                  title={`${r.missing} query rows had no graphify equivalent`}
-                >
-                  ○ {r.missing} no equiv
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+                  <span style={{ fontSize: 13.5, fontWeight: 600 }}>{lv.what}</span>
+                  <span className="num" style={{ fontSize: 12.5, color: "var(--muted)" }}>
+                    {lv.tokens} tok · F1 {lv.f1.toFixed(2)}
+                  </span>
                 </div>
-              )}
+                <p className="mt-1" style={{ fontSize: 12.5, lineHeight: 1.5, color: "var(--faint)" }}>{lv.note}</p>
+              </div>
             </div>
-            <div className="text-right">
-              <span className="num" style={{ fontSize: 13, color: "var(--primary)" }}>
-                {r.ratio.toFixed(2)}x
-              </span>
-              {widest && <div className="mono" style={{ fontSize: 9.5, color: "var(--warning)" }}>widest gap</div>}
-              {narrow && <div className="mono" style={{ fontSize: 9.5, color: "var(--faint)" }}>narrowest</div>}
+          ))}
+          <div className="panel flex items-center gap-3 p-4" style={{ borderStyle: "dashed" }}>
+            <span aria-hidden style={{ color: "var(--primary)", fontSize: 18 }}>⌀</span>
+            <p style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>{k.floorNote}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============ languages by maturity — the ladder, viz + table =========== */
+
+const LEVEL_STYLE = {
+  L5: { color: "var(--primary)", fill: "rgba(94,230,196,0.12)" },
+  L4: { color: "var(--secondary)", fill: "rgba(122,162,255,0.12)" },
+  L2: { color: "var(--warning)", fill: "rgba(242,180,58,0.10)" },
+  L1: { color: "var(--muted)", fill: "rgba(154,163,179,0.10)" },
+};
+
+function LangChip({ lang, level, pending }) {
+  const st = LEVEL_STYLE[level];
+  return (
+    <span
+      className="mono inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5"
+      data-testid="maturity-lang"
+      title={pending ? "fixture-truth F1 1.000 on the Linux saturation run — L4 pending a real-repo call-graph proof" : undefined}
+      style={{
+        fontSize: 12,
+        fontWeight: 600,
+        color: pending ? "var(--warning)" : "var(--text)",
+        background: pending ? "rgba(242,180,58,0.07)" : st.fill,
+        border: `1px ${pending ? "dashed" : "solid"} ${pending ? "var(--warning)" : "var(--line-strong)"}`,
+      }}
+    >
+      {langLabel(lang)}
+      {pending && <span style={{ fontSize: 9, letterSpacing: "0.08em", opacity: 0.85 }}>PENDING</span>}
+    </span>
+  );
+}
+
+function MaturityLadder({ maturity }) {
+  const pendingSet = new Set(maturity.pending.langs);
+  const bands = maturity.levels.map((lv) => {
+    if (lv.id === "L4") return { ...lv, extra: maturity.pending.langs, count: `${lv.langs.length} + ${maturity.pending.langs.length} pending` };
+    if (lv.id === "L2") return { ...lv, langs: lv.langs.filter((l) => !pendingSet.has(l)), count: `${lv.langs.filter((l) => !pendingSet.has(l)).length} remaining`, note: `${maturity.pending.langs.length} more shown at L4 above, pending proof` };
+    return { ...lv, count: String(lv.langs.length) };
+  });
+  const maxCount = Math.max(...bands.map((b) => b.langs.length + (b.extra || []).length));
+  return (
+    <div className="flex flex-col" data-testid="maturity-ladder">
+      {bands.map((b, i) => {
+        const st = LEVEL_STYLE[b.id];
+        const total = b.langs.length + (b.extra || []).length;
+        return (
+          <div key={b.id} className="relative grid gap-4 py-5 md:grid-cols-[210px_minmax(0,1fr)]" style={{ borderTop: i ? "1px solid var(--line)" : "none" }}>
+            {/* ladder rail */}
+            <div className="min-w-0">
+              <div className="flex items-center gap-2.5">
+                <span className="mono grid shrink-0 place-items-center rounded-md" style={{ width: 34, height: 34, fontSize: 13, fontWeight: 700, color: st.color, background: st.fill, border: `1px solid ${st.color}` }}>
+                  {b.id}
+                </span>
+                <div className="min-w-0">
+                  <div className="truncate" style={{ fontSize: 14, fontWeight: 600 }}>{b.name}</div>
+                  <div className="mono truncate" style={{ fontSize: 10.5, color: "var(--faint)", letterSpacing: "0.06em" }}>{b.short}</div>
+                </div>
+              </div>
+              <p className="mt-2" style={{ fontSize: 12, lineHeight: 1.5, color: "var(--muted)" }}>{b.desc}</p>
+              <div className="mt-2.5 flex items-center gap-2">
+                <div className="h-1.5 flex-1 overflow-hidden rounded-full" style={{ background: "var(--bg2)", maxWidth: 120 }}>
+                  <div className="h-1.5 rounded-full" style={{ width: `${(total / maxCount) * 100}%`, background: st.color, opacity: 0.85 }} />
+                </div>
+                <span className="mono" style={{ fontSize: 11, color: st.color, fontWeight: 700 }}>{b.count}</span>
+              </div>
+            </div>
+            {/* the languages */}
+            <div className="min-w-0">
+              <div className="flex flex-wrap gap-2">
+                {b.langs.map((l) => <LangChip key={l} lang={l} level={b.id} />)}
+                {(b.extra || []).map((l) => <LangChip key={l} lang={l} level="L4" pending />)}
+              </div>
+              {b.note && (
+                <div className="mono mt-2.5" style={{ fontSize: 11, color: "var(--faint)" }}>{b.note}</div>
+              )}
             </div>
           </div>
         );
@@ -695,780 +747,702 @@ function DumbbellChart({ rows, metric, widestLang, narrowestLang }) {
   );
 }
 
-function VsGraphify({ data }) {
-  const core = data.summary.core;
-  const [metric, setMetric] = useState("tokens");
-  const [sortByRatio, setSortByRatio] = useState(true);
-
+function MaturityTable({ data }) {
+  const r = data.report;
+  const maturity = r.maturity;
+  const [q, setQ] = useState("");
+  const freshByLang = useMemo(
+    () => Object.fromEntries(data.fresh.perLanguage.map((p) => [p.lang, p])),
+    [data]
+  );
+  const reportByLang = useMemo(
+    () => Object.fromEntries(r.perLanguage.map((p) => [p.lang, p])),
+    [r]
+  );
+  const pendingSet = new Set(maturity.pending.langs);
+  const order = { L5: 0, L4: 1, L2: 2, L1: 3 };
   const rows = useMemo(() => {
-    const base = data.coreMatrix.map((r) => {
-      const qs = r.querySummary;
-      const atlasRaw = metric === "tokens" ? qs.atlasTokens : qs.atlasMs;
-      const graphifyRaw = metric === "tokens" ? qs.graphifyTokens : qs.graphifyMs;
-      return {
-        lang: r.language,
-        atlas: atlasRaw,
-        graphify: graphifyRaw,
-        atlasRaw,
-        graphifyRaw,
-        ratio: metric === "tokens" ? qs.tokenRatio : qs.latencyRatio,
-        missing: qs.graphifyMissing || 0,
-      };
-    });
-    if (sortByRatio) base.sort((a, b) => b.ratio - a.ratio);
-    return base;
-  }, [data, metric, sortByRatio]);
-
-  // Widest/narrowest are metric-dependent: under Tokens C is widest & JS
-  // narrowest, but under Latency Python is widest & Java narrowest. Derive
-  // them from the live ratios so the superlative labels never go stale.
-  const { widestLang, narrowestLang } = useMemo(() => {
-    let widest = null;
-    let narrow = null;
-    for (const r of rows) {
-      if (r.ratio == null) continue;
-      if (!widest || r.ratio > widest.ratio) widest = r;
-      if (!narrow || r.ratio < narrow.ratio) narrow = r;
+    const out = [];
+    for (const lv of maturity.levels) {
+      for (const lang of lv.langs) {
+        out.push({ lang, level: pendingSet.has(lang) ? "L4*" : lv.id, sortLevel: pendingSet.has(lang) ? 1.5 : order[lv.id], pending: pendingSet.has(lang) });
+      }
     }
-    return { widestLang: widest?.lang, narrowestLang: narrow?.lang };
-  }, [rows]);
-
-  const aggregate = metric === "tokens" ? core.tokenRatio : core.latencyRatio;
-
-  return (
-    <section id="vs-graphify" data-testid="vs-graphify" className="shell py-16" aria-labelledby="vsg-title">
-      <SectionHeader
-        id="vsg-title"
-        kicker={`One comparison · vs graphify (1 of ${data.provenance.tools.coreCount} tools)`}
-        title="Against the closest portable code-graph tool, Atlas returns far less"
-        actions={
-          <div className="flex items-center gap-2">
-            <div className="seg" role="group" aria-label="Toggle metric" data-testid="graphify-toggle">
-              <button type="button" className="seg-btn focusring" data-active={metric === "tokens"} onClick={() => setMetric("tokens")} aria-pressed={metric === "tokens"}>
-                Tokens
-              </button>
-              <button type="button" className="seg-btn focusring" data-active={metric === "latency"} onClick={() => setMetric("latency")} aria-pressed={metric === "latency"}>
-                Latency
-              </button>
-            </div>
-            <button
-              type="button"
-              className="focusring chip"
-              onClick={() => setSortByRatio((s) => !s)}
-              aria-pressed={sortByRatio}
-              title="Sort rows by ratio"
-            >
-              <ArrowUpDown className="h-3.5 w-3.5" aria-hidden /> {sortByRatio ? "by ratio" : "by language"}
-            </button>
-          </div>
-        }
-      >
-        graphify is the closest portable code-graph tool to Atlas, so it makes the most honest head-to-head. Native
-        SCIP/LSP indexers are compared separately on coverage above. Shown only where both tools answered the same
-        query; rows with no graphify equivalent render as a hollow “no equivalent” tick, never a zero.
-      </SectionHeader>
-
-      {/* printed equation — non-negotiable credibility move */}
-      <div
-        data-testid="vs-graphify-equation"
-        className="mono mb-7 flex flex-col gap-1 rounded-lg px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
-        style={{ background: "var(--bg2)", border: "1px solid var(--line)" }}
-      >
-        <span style={{ fontSize: 13.5, color: "var(--text)" }}>
-          {metric === "tokens" ? "graphifyTokens ÷ atlasTokens" : "graphifyMs ÷ atlasMs"} over {core.equivalentRows}{" "}
-          comparable rows
-        </span>
-        <span className="flex items-center gap-2">
-          <span style={{ color: "var(--faint)" }}>=</span>
-          <span style={{ fontSize: 20, fontWeight: 600, color: "var(--primary)" }}>{aggregate.toFixed(2)}x</span>
-        </span>
-      </div>
-
-      <div className="panel p-5 sm:p-7">
-        <DumbbellChart rows={rows} metric={metric} widestLang={widestLang} narrowestLang={narrowestLang} />
-      </div>
-    </section>
-  );
-}
-
-/* ====================== VS NATIVE — COVERAGE SCATTER ==================== */
-
-const NATIVE_TOOL_ORDER = [
-  "scip-go",
-  "scip-python",
-  "scip-typescript",
-  "scip-java",
-  "gopls",
-  "pyright",
-  "tsc",
-  "jdtls",
-  "clangd",
-  "rust-analyzer",
-  "sourcekit-lsp",
-  "dotnet",
-  "ruby",
-  "php",
-  "pwsh",
-];
-
-function toolStatusColor(tool) {
-  if (tool.ok) return "var(--success)";
-  if (tool.status === "missing") return "var(--danger)";
-  return "var(--warning)";
-}
-
-function toolVersionLabel(tool) {
-  if (!tool) return "unknown";
-  return tool.version || tool.status || "unknown";
-}
-
-function buildNativeToolManifest(data) {
-  const byName = new Map();
-  for (const tool of data.provenance.tools.core || []) {
-    if (NATIVE_TOOL_ORDER.includes(tool.tool)) byName.set(tool.tool, tool);
-  }
-  for (const tool of data.provenance.tools.liveBenchmarkTools || []) {
-    if (!byName.has(tool.tool)) byName.set(tool.tool, tool);
-  }
-  return [...byName.values()].sort((a, b) => {
-    const ai = NATIVE_TOOL_ORDER.indexOf(a.tool);
-    const bi = NATIVE_TOOL_ORDER.indexOf(b.tool);
-    if (ai !== -1 || bi !== -1) return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
-    return a.tool.localeCompare(b.tool);
-  });
-}
-
-/* The native-parity LADDER — ONE unified visual.
-   A single horizontal coverage-ratio axis (×1.0 → ×1.84). The ×1.0 spine is
-   the native-parity reference: nothing in the data falls below it. Two honest
-   treatments share that one axis:
-     · PARITY COLUMN — the 29 languages that sit EXACTLY at ×1.0 are not faked
-       into 29 identical bars (that was the old scatter's mush). They are a
-       single counted stack pinned on the spine; click/Enter expands the roster
-       of chips so the cluster is inspectable, never a black box.
-     · STANDOUTS — the 7 languages that EXCEED native render as real bars
-       growing rightward from the spine, ordered by ratio, the bar's THICKNESS
-       (and the trailing dot's area) encoding defs indexed. Raw Atlas-vs-native
-       defs surface on hover/focus + inline.
-   Detector-only languages (ejs/ets/r) live in the parity column flagged with a
-   hollow ▱ glyph — present, reachable, never counted as a coverage "win".
-   No graphify anywhere on the axes — coverage is Atlas defs ÷ native defs. */
-
-const DETECTOR_LANGS = new Set(["ejs", "ets", "r"]);
-
-function buildParityModel(data) {
-  const rows = data.liveBenchmarks
-    .filter((r) => r.coverage && typeof r.coverage.ratio === "number")
-    .map((r) => ({
-      lang: r.language,
-      ratio: r.coverage.ratio,
-      atlasDefs: r.coverage.atlasDefinitions,
-      nativeDefs: r.coverage.nativeDefinitions,
-      tool: r.native?.tool || "—",
-      detector: DETECTOR_LANGS.has(r.language) || !!r.detectorOnly,
-      artifact: r.artifact,
-    }));
-  const atParity = rows
-    .filter((r) => r.ratio <= 1.0)
-    .sort((a, b) => b.atlasDefs - a.atlasDefs);
-  const standouts = rows
-    .filter((r) => r.ratio > 1.0)
-    .sort((a, b) => b.ratio - a.ratio);
-  const maxRatio = Math.max(1.0, ...rows.map((r) => r.ratio));
-  const maxDefs = Math.max(1, ...standouts.map((r) => r.atlasDefs));
-  const minRatio = Math.min(...rows.map((r) => r.ratio));
-  return { rows, atParity, standouts, maxRatio, maxDefs, minRatio };
-}
-
-function NativeParityLadder({ data }) {
-  const reduced = usePrefersReducedMotion();
-  const [ref, inView] = useInView({ threshold: 0.18 });
-  const animate = !reduced && inView;
-  const [expanded, setExpanded] = useState(false);
-  const [active, setActive] = useState(null); // hovered/focused standout lang
-
-  const model = useMemo(() => buildParityModel(data), [data]);
-  const { atParity, standouts, maxRatio, maxDefs, minRatio } = model;
-  const liveTotal = atParity.length + standouts.length;
-  const coreTotal = data.summary.core.languages;
-  const publicRepoTotal = coreTotal + liveTotal;
-  const supportedTotal = data.summary.supported?.families ?? publicRepoTotal;
-
-  // ---- one shared horizontal ratio scale, used by BOTH zones --------------
-  // Domain starts a hair below 1.0 so the spine has air to its left; it ends a
-  // ROUND tick ABOVE the top standout (ceil to the next 0.2 step) so the
-  // longest bar never reaches the axis frame and its ×ratio + raw-defs label
-  // always has a gutter to live in. Ticks are honest ratio marks, never
-  // graphify. For data topping at ×1.84 this yields a ×2.0 domain.
-  const DOM_MIN = 0.96;
-  const DOM_MAX = Math.max(1.2, Math.ceil(maxRatio * 5 + 0.001) / 5); // ceil → next .2
-  const AXIS_LEFT = 21; // % — where ×1.0 spine sits (parity column to its left)
-  const AXIS_RIGHT = 97; // %
-  const ratioToPct = (r) =>
-    AXIS_LEFT + ((Math.max(DOM_MIN, r) - 1.0) / (DOM_MAX - 1.0)) * (AXIS_RIGHT - AXIS_LEFT);
-  // Ladder-x (full width) → standouts-zone-x. The zone is the right grid cell
-  // spanning ladder-x AXIS_LEFT→100, so bars, gridlines and labels inside it
-  // share ONE coordinate space and stay aligned with the axis ticks above.
-  const ZONE_SPAN = 100 - AXIS_LEFT;
-  const ladderToZone = (p) => ((p - AXIS_LEFT) / ZONE_SPAN) * 100;
-  const ticks = [1.0, 1.2, 1.4, 1.6, 1.8, 2.0].filter((t) => t <= DOM_MAX + 0.001);
-  const defsToThickness = (d) => 8 + Math.sqrt(d / maxDefs) * 16; // 8..24px bar
-
-  const detectorCount = atParity.filter((r) => r.detector).length;
+    return out
+      .filter((x) => !q || x.lang.includes(q.toLowerCase()) || langLabel(x.lang).toLowerCase().includes(q.toLowerCase()))
+      .sort((a, b) => a.sortLevel - b.sortLevel || a.lang.localeCompare(b.lang));
+  }, [q, maturity]);
 
   return (
-    <div ref={ref} data-testid="parity-ladder" className="min-w-0 overflow-hidden">
-      {/* TRUTH STRIP — the headline THIS chart proves, in plain numerals. The
-          ladder is a per-LANGUAGE visual (parity column + standout bars), so the
-          headline counts languages; the deterministic-row figure is reported
-          separately in the hero to avoid mixing denominators. */}
-      <div className="mb-5 flex min-w-0 flex-wrap items-center gap-x-6 gap-y-2">
-        <div className="flex min-w-0 flex-wrap items-baseline gap-2">
-          <span className="num" style={{ fontSize: 26, fontWeight: 600, color: "var(--success)" }}>
-            {atParity.length + standouts.length}/{atParity.length + standouts.length}
-          </span>
-          <span style={{ fontSize: 13, color: "var(--muted)" }}>live languages at or above native parity</span>
-        </div>
-        <span className="mono min-w-0" style={{ fontSize: 12, color: "var(--faint)", maxWidth: "100%", overflowWrap: "anywhere" }}>
-          {atParity.length} at parity · {standouts.length} exceed · none below ×1.0 · {data.summary.coverage.detectorOnlyRowsCovered} detector-only
-        </span>
-        <span className="mono min-w-0" style={{ fontSize: 12, color: "var(--primary)", maxWidth: "100%", overflowWrap: "anywhere" }}>
-          {supportedTotal} supported families · {publicRepoTotal} public-repo code surfaces
-        </span>
-      </div>
-
-      {/* ===================== THE LADDER ===================== */}
-      <div className="relative">
-        {/* axis ticks header */}
-        <div className="relative mb-2" style={{ height: 16 }} aria-hidden>
-          {ticks.map((t) => (
-            <span
-              key={t}
-              className="mono absolute"
-              style={{ left: `${ratioToPct(t)}%`, transform: "translateX(-50%)", fontSize: 10.5, color: t === 1.0 ? "var(--warning)" : "var(--faint)" }}
-            >
-              ×{t.toFixed(1)}
-            </span>
-          ))}
-          <span
-            className="kicker absolute"
-            style={{ left: 0, top: 0, fontSize: 10, color: "var(--faint)" }}
-          >
-            at parity
-          </span>
-        </div>
-
-        {/* the ×1.0 parity spine, spanning both zones */}
-        <div
-          className="pointer-events-none absolute"
-          style={{ left: `${AXIS_LEFT}%`, top: 18, bottom: 26, width: 2, background: "var(--warning)", opacity: 0.85, boxShadow: "0 0 10px rgba(242,180,58,0.35)" }}
-          aria-hidden
+    <div>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <input
+          className="field focusring"
+          style={{ maxWidth: 280 }}
+          placeholder={`Filter ${maturity.totalCodeLanguages} languages…`}
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          aria-label="Filter languages"
         />
-
-        <div className="grid items-stretch gap-0" style={{ gridTemplateColumns: `${AXIS_LEFT}% 1fr` }}>
-          {/* -------- ZONE A: PARITY COLUMN (the 29 exactly-at-1.0) -------- */}
-          <button
-            type="button"
-            data-testid="parity-column"
-            onClick={() => setExpanded((v) => !v)}
-            aria-expanded={expanded}
-            aria-label={`${atParity.length} of ${liveTotal} live languages exactly at native coverage parity. ${expanded ? "Collapse" : "Expand"} the roster.`}
-            className="focusring relative flex flex-col items-center justify-end pr-3 text-center"
-            style={{ background: "transparent", border: "none", cursor: "pointer", minHeight: 200 }}
-          >
-            <div
-              className="relative flex w-full max-w-[150px] flex-col items-center justify-end overflow-hidden rounded-t-md"
-              style={{
-                height: animate ? 168 : 0,
-                background: "linear-gradient(180deg, rgba(82,217,139,0.16), rgba(82,217,139,0.05))",
-                border: "1px solid var(--success)",
-                borderBottom: "none",
-                transition: reduced ? "none" : "height 620ms cubic-bezier(0.22,1,0.36,1)",
-              }}
-            >
-              <span className="num" style={{ fontSize: 34, fontWeight: 600, color: "var(--success)", lineHeight: 1 }}>
-                {atParity.length}/{liveTotal}
-              </span>
-              <span className="mono mt-1" style={{ fontSize: 10.5, color: "var(--muted)" }}>
-                of {liveTotal} live ladder
-              </span>
-              <span className="mono mt-3 mb-2" style={{ fontSize: 10, color: "var(--faint)" }}>
-                {expanded ? "hide roster ▴" : "show roster ▾"}
-              </span>
-            </div>
-            <span className="num mt-2" style={{ fontSize: 12, color: "var(--warning)" }}>×1.00</span>
-            <span className="mono" style={{ fontSize: 10, color: "var(--faint)" }}>coverage parity</span>
-          </button>
-
-          {/* -------- ZONE B: STANDOUTS LADDER (the 7 above parity) -------- */}
-          <div className="relative" role="list" aria-label="Languages that exceed native definition coverage">
-            {/* faint ratio gridlines behind the bars */}
-            {ticks.filter((t) => t > 1.0).map((t) => (
-              <div
-                key={t}
-                className="pointer-events-none absolute"
-                style={{ left: `${ladderToZone(ratioToPct(t))}%`, top: 0, bottom: 26, width: 1, background: "var(--grid)" }}
-                aria-hidden
-              />
-            ))}
-            <div className="flex flex-col justify-end gap-2.5 pl-3" style={{ minHeight: 200 }}>
-              {standouts.map((r, i) => {
-                // zone-relative bar end (0–100 within the standouts column)
-                const endZone = ladderToZone(ratioToPct(r.ratio));
-                const widthPct = endZone;
-                const th = defsToThickness(r.atlasDefs);
-                const isActive = active === r.lang;
-                // If the bar end leaves too little zone width for the outside
-                // ×ratio + defs label (which is right-anchored in the gutter),
-                // flip the label INSIDE the bar end so it is never clipped by the
-                // frame and never collides with the bar. The top ×1.84 bar ends
-                // ~81% of zone → inside; everything shorter labels outside.
-                const labelInside = endZone > 72;
-                // Short bars can't contain their own name in dark ink — render
-                // the name in light ink so it stays legible spilling onto the bg.
-                const nameLight = widthPct < 18;
-                return (
-                  <div
-                    key={r.lang}
-                    role="listitem"
-                    className="relative"
-                    style={{ height: Math.max(th, 22) }}
-                    onMouseEnter={() => setActive(r.lang)}
-                    onMouseLeave={() => setActive((a) => (a === r.lang ? null : a))}
-                  >
-                    {/* the bar grows rightward from the spine */}
-                    <div
-                      tabIndex={0}
-                      role="img"
-                      data-testid={`standout-${r.lang}`}
-                      aria-label={`${langLabel(r.lang)} ${r.ratio.toFixed(2)} times native coverage — Atlas ${num(r.atlasDefs)} definitions versus ${num(r.nativeDefs)} from ${r.tool}`}
-                      onFocus={() => setActive(r.lang)}
-                      onBlur={() => setActive((a) => (a === r.lang ? null : a))}
-                      className="focusring absolute flex items-center"
-                      style={{
-                        left: 0,
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        height: th,
-                        width: `${animate ? widthPct : 0}%`,
-                        background: isActive
-                          ? "linear-gradient(90deg, var(--secondary), #9db8ff)"
-                          : "linear-gradient(90deg, rgba(122,162,255,0.85), rgba(122,162,255,0.45))",
-                        borderRadius: "0 4px 4px 0",
-                        transition: reduced ? "none" : `width 640ms cubic-bezier(0.22,1,0.36,1) ${i * 60}ms, background 160ms`,
-                        outlineOffset: 3,
-                      }}
-                    >
-                      {/* trailing dot — area also encodes defs, reinforcing thickness */}
-                      <span
-                        className="absolute"
-                        style={{
-                          right: -5,
-                          top: "50%",
-                          width: 10,
-                          height: 10,
-                          marginTop: -5,
-                          borderRadius: "50%",
-                          background: "var(--secondary)",
-                          boxShadow: "0 0 8px rgba(122,162,255,0.55)",
-                        }}
-                        aria-hidden
-                      />
-                    </div>
-                    {/* language label, anchored inside-left of the bar */}
-                    <span
-                      className="num pointer-events-none absolute"
-                      style={{ left: 10, top: "50%", transform: "translateY(-50%)", fontSize: 12.5, color: nameLight ? "var(--text)" : "#061021", fontWeight: 600 }}
-                    >
-                      {langLabel(r.lang)}
-                    </span>
-                    {/* ratio + raw defs. Outside labels are RIGHT-ANCHORED to
-                        the zone edge (right:0), so they always sit in the gutter
-                        past the bar end and can never overrun the axis frame at
-                        any width or bar length. On the rare bar long enough that
-                        the gutter would collide with the bar end, the label
-                        flips INSIDE the bar end instead. */}
-                    <span
-                      className="num pointer-events-none absolute whitespace-nowrap"
-                      style={
-                        labelInside
-                          ? { left: `calc(${animate ? endZone : 0}% - 12px)`, top: "50%", transform: "translate(-100%,-50%)", fontSize: 12, color: "#061021", fontWeight: 600, transition: reduced ? "none" : `left 640ms cubic-bezier(0.22,1,0.36,1) ${i * 60}ms` }
-                          : { right: 0, top: "50%", transform: "translateY(-50%)", fontSize: 12, color: "var(--text)", textAlign: "right" }
-                      }
-                    >
-                      <span style={{ color: labelInside ? "#061021" : "var(--secondary)", fontWeight: 600 }}>×{r.ratio.toFixed(2)}</span>
-                      <span className="hidden sm:inline" style={{ color: labelInside ? "rgba(6,16,33,0.7)" : "var(--faint)", marginLeft: 8, fontSize: 11 }}>
-                        {num(r.atlasDefs)}/{num(r.nativeDefs)} defs
-                      </span>
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-            {/* exceeds-native caption pinned to the standouts zone */}
-            <div className="mono mt-2 pl-3" style={{ fontSize: 10.5, color: "var(--faint)" }}>
-              exceeds native — bar thickness ∝ definitions indexed
-            </div>
-          </div>
-        </div>
-
-        {/* axis baseline + label */}
-        <div className="relative mt-1" style={{ height: 14 }} aria-hidden>
-          <div className="absolute" style={{ left: `${AXIS_LEFT}%`, right: `${100 - AXIS_RIGHT}%`, top: 0, height: 1, background: "var(--line)" }} />
-        </div>
-        <div className="mono mt-1 text-center" style={{ fontSize: 10.5, color: "var(--muted)" }}>
-          coverage ratio — Atlas definitions ÷ native definitions (range ×{minRatio.toFixed(2)}–×{maxRatio.toFixed(2)})
-        </div>
+        <span className="mono" style={{ fontSize: 11.5, color: "var(--faint)" }}>
+          report columns: fixture-truth, LLM-scored · fresh column: Linux deterministic re-run
+        </span>
       </div>
+      <div className="tablewrap" style={{ maxHeight: 520, overflowY: "auto" }}>
+        <table className="dtable" data-testid="maturity-table" style={{ minWidth: 760 }}>
+          <thead>
+            <tr>
+              <th>language</th>
+              <th>maturity</th>
+              <th>atlas F1 (report)</th>
+              <th>tokens</th>
+              <th>graph tool F1</th>
+              <th>fresh F1 (linux)</th>
+              <th>status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((x) => {
+              const rep = reportByLang[x.lang];
+              const fr = freshByLang[x.lang];
+              const st = LEVEL_STYLE[x.pending ? "L4" : x.level] || LEVEL_STYLE.L1;
+              return (
+                <tr key={x.lang}>
+                  <td className="num" style={{ fontWeight: 600 }}>{langLabel(x.lang)}</td>
+                  <td>
+                    <span className="chip" style={{ borderColor: x.pending ? "var(--warning)" : st.color, color: x.pending ? "var(--warning)" : st.color, borderStyle: x.pending ? "dashed" : "solid" }}>
+                      {x.pending ? "L4 · pending real-repo proof" : x.level}
+                    </span>
+                  </td>
+                  <td className="num" style={{ color: rep ? (rep.atlasF1 === 1 ? "var(--primary)" : "var(--danger)") : "var(--faint)" }}>
+                    {rep ? rep.atlasF1.toFixed(3) : "—"}
+                  </td>
+                  <td className="num" style={{ color: "var(--muted)" }}>{rep ? rep.atlasTok : "—"}</td>
+                  <td className="num" style={{ color: "var(--muted)" }}>{rep ? rep.graphF1.toFixed(3) : "—"}</td>
+                  <td className="num" style={{ color: fr ? (fr.f1 === 1 ? "var(--primary)" : "var(--danger)") : "var(--faint)" }}>
+                    {fr ? fr.f1.toFixed(3) : "—"}
+                  </td>
+                  <td style={{ fontSize: 12, color: "var(--muted)" }}>
+                    {x.pending ? "fixed in saturation run" : rep ? rep.status : "beyond the 37-language benchmark set"}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
 
-      {/* expandable roster of the at-parity cluster — honest inspectability */}
-      <div
-        data-testid="parity-roster"
-        className="grid overflow-hidden transition-all"
-        style={{ gridTemplateRows: expanded ? "1fr" : "0fr", transition: reduced ? "none" : "grid-template-rows 360ms ease" }}
-      >
-        <div className="min-h-0">
-          <div className="mt-5 rounded-lg p-4" style={{ background: "var(--bg2)", border: "1px solid var(--line)" }}>
-            <div className="kicker mb-3">
-              {atParity.length} languages exactly at parity · {detectorCount} detector-only
-            </div>
-            <ul className="flex flex-wrap gap-2" aria-label="Languages at native parity">
-              {atParity.map((r) => (
-                <li key={r.lang}>
-                  <span
-                    className="mono inline-flex items-center gap-1.5 rounded-md px-2 py-1"
-                    title={`${langLabel(r.lang)} · ${num(r.atlasDefs)} Atlas defs vs ${num(r.nativeDefs)} ${r.tool} · ×${r.ratio.toFixed(2)}`}
-                    style={{
-                      fontSize: 11.5,
-                      border: `1px solid ${r.detector ? "var(--not-comparable)" : "var(--line-strong)"}`,
-                      background: "var(--surface)",
-                      color: r.detector ? "var(--not-comparable)" : "var(--text)",
-                    }}
-                  >
-                    {r.detector && <span aria-hidden style={{ fontSize: 11 }}>▱</span>}
-                    {langLabel(r.lang)}
-                    <span style={{ color: "var(--faint)" }}>{num(r.atlasDefs)}</span>
-                  </span>
-                </li>
+function MaturitySection({ data }) {
+  const maturity = data.report.maturity;
+  const [view, setView] = useState("ladder");
+  const l5 = maturity.levels.find((l) => l.id === "L5").langs.length;
+  const l4 = maturity.levels.find((l) => l.id === "L4").langs.length;
+  return (
+    <section id="languages" data-testid="languages" className="py-16" style={{ background: "var(--bg2)" }} aria-labelledby="languages-title">
+      <div className="shell">
+        <SectionHeader
+          id="languages-title"
+          kicker="03 · Language maturity"
+          title={`${maturity.totalCodeLanguages} code languages, graded by proof — not by claim`}
+          actions={
+            <div className="seg" role="tablist" aria-label="Maturity view">
+              {[["ladder", "Ladder"], ["table", "Table"]].map(([key, label]) => (
+                <button
+                  key={key}
+                  type="button"
+                  role="tab"
+                  data-testid={`maturity-view-${key}`}
+                  className="seg-btn focusring"
+                  data-active={view === key}
+                  aria-selected={view === key}
+                  onClick={() => setView(key)}
+                >
+                  {label}
+                </button>
               ))}
-            </ul>
-            <p className="mt-3" style={{ fontSize: 11.5, lineHeight: 1.5, color: "var(--faint)" }}>
-              ▱ detector-only languages (ejs · ets · r) are reached through a scriptable source-counter proxy and shown
-              here for completeness — they are never counted as a coverage win.
-            </p>
-          </div>
+            </div>
+          }
+        >
+          Every language sits on a five-level ladder by how much independent evidence backs its call graph —
+          from “indexed” to “validated against a language server”. {maturity.note} Atlas also indexes
+          ~{maturity.contentFormats} content formats (JSON, YAML, HTML, PDF, …) for search.
+        </SectionHeader>
+
+        <div className="mb-6 flex flex-wrap gap-2">
+          <span className="chip" style={{ borderColor: "var(--primary)", color: "var(--primary)" }}>{l5} reference-validated</span>
+          <span className="chip" style={{ borderColor: "var(--secondary)", color: "var(--secondary)" }}>{l4} real-repo call graph</span>
+          <span className="chip" style={{ borderColor: "var(--warning)", color: "var(--warning)", borderStyle: "dashed" }}>
+            {maturity.pending.langs.length} fixed · pending real-repo proof
+          </span>
+          <FreshChip title={maturity.pending.evidence}>
+            saturation run: {data.fresh.saturation.before} → {data.fresh.saturation.perfect}/{data.fresh.saturation.total} fixture-perfect
+          </FreshChip>
         </div>
+
+        <div className="panel p-5 sm:p-6">
+          {view === "ladder" ? <MaturityLadder maturity={maturity} /> : <MaturityTable data={data} />}
+        </div>
+
+        <p className="mt-4" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--faint)" }}>
+          <span className="mono" style={{ color: "var(--warning)" }}>PENDING</span> = {maturity.pending.evidence}.
+          Until that run lands, the report’s ladder (which counts them at L2) remains the citation.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* ================= head-to-head vs the graph tool ======================= */
+
+function WinMap({ perLanguage, fresh }) {
+  const cls = (p) => {
+    const g = p.graphF1 >= 0.9;
+    if (p.atlasF1 === 1 && !g) return "atlas";
+    if (p.atlasF1 === 1 && g) return "both";
+    if (p.atlasF1 < 1 && g) return "graph";
+    return "neither";
+  };
+  const C = {
+    atlas: { bg: "rgba(94,230,196,0.16)", border: "var(--primary)", label: "Atlas only" },
+    both: { bg: "rgba(122,162,255,0.14)", border: "var(--secondary)", label: "both perfect" },
+    graph: { bg: "rgba(242,180,58,0.13)", border: "var(--warning)", label: "graph tool only (full-source dump)" },
+    neither: { bg: "transparent", border: "var(--line-strong)", label: "neither (report) — fixed in fresh run" },
+  };
+  const counts = { atlas: 0, both: 0, graph: 0, neither: 0 };
+  perLanguage.forEach((p) => counts[cls(p)]++);
+  return (
+    <div>
+      <div className="grid gap-1.5" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(86px, 1fr))" }} data-testid="winmap">
+        {perLanguage.map((p) => {
+          const k = cls(p);
+          return (
+            <div
+              key={p.lang}
+              className="mono rounded-md px-1.5 py-1.5 text-center"
+              title={`${langLabel(p.lang)} — atlas F1 ${p.atlasF1.toFixed(2)} @ ${p.atlasTok} tok · graph ${p.graphF1.toFixed(2)} @ ${p.graphTok} tok`}
+              style={{ fontSize: 11, fontWeight: 600, background: C[k].bg, border: `1px solid ${C[k].border}`, color: k === "neither" ? "var(--faint)" : "var(--text)" }}
+            >
+              {langLabel(p.lang)}
+            </div>
+          );
+        })}
+      </div>
+      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+        {Object.entries(C).map(([k, v]) => (
+          <span key={k} className="inline-flex items-center gap-1.5" style={{ fontSize: 12, color: "var(--muted)" }}>
+            <span aria-hidden style={{ width: 10, height: 10, borderRadius: 3, background: v.bg, border: `1px solid ${v.border}`, display: "inline-block" }} />
+            {counts[k]} {v.label}
+          </span>
+        ))}
+      </div>
+      <div className="mt-3">
+        <FreshChip>fresh Linux run: Atlas perfect on all {fresh.saturation.total}/{fresh.saturation.total} — the “neither/graph-only” cells are the pending-proof set</FreshChip>
       </div>
     </div>
   );
 }
 
-function TenXTargetReadout({ data }) {
-  const m = tenXModel(data);
+function Versus({ data }) {
+  const sc = data.report.scorecard;
+  const f = data.fresh;
   return (
-    <div
-      data-testid="tenx-target"
-      className="mb-7 grid gap-3 rounded-lg px-5 py-4 sm:grid-cols-3"
-      style={{ border: "1px solid var(--line-strong)", background: "var(--bg2)" }}
-      aria-label="10x target progress for at-parity live languages"
-    >
-      <div className="sm:col-span-3">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="kicker">10x target tracker</div>
-          <SourceLink href="data/tenx-gap-report.md" download>
-            <Download className="h-3 w-3" aria-hidden /> tenx-gap-report.md
-          </SourceLink>
-        </div>
-        <p className="mt-2 max-w-3xl" style={{ fontSize: 13, lineHeight: 1.5, color: "var(--muted)" }}>
-          Goal: move the {m.parityTotal} live languages that are exactly at native coverage parity into the exceed
-          column, while also proving at least 10x token and latency ratios on comparable rows. Current data keeps the
-          axes separate: coverage proves parity/exceed, while token and latency carry the 10x ratio target.
-        </p>
-      </div>
-      <StatTick
-        label="Coverage exceed"
-        value={`${m.parityCoverageExceed}/${m.parityTotal}`}
-        sub={`${m.liveCoverageExceed}/${m.liveTotal} live already > native`}
-      />
-      <StatTick
-        label="Token ≥10x"
-        value={`${m.parityToken10}/${m.parityComparable}`}
-        sub={`${m.liveToken10}/${m.liveComparable} comparable live rows`}
-      />
-      <StatTick
-        label="Latency ≥10x"
-        value={`${m.parityLatency10}/${m.parityComparable}`}
-        sub={`${m.parityNonComparable} parity languages not comparable`}
-      />
-      <div className="sm:col-span-3">
-        <p className="mono" style={{ fontSize: 12, lineHeight: 1.5, color: "var(--warning)" }}>
-          Strict token+latency 10x now: {m.livePerformance10}/{m.liveComparable} comparable live languages. Accuracy is
-          tracked as definition coverage versus native, so the honest target is moving {m.parityTotal} parity languages
-          above ×1.0 native coverage, not inventing a 10x accuracy ratio from a bounded denominator.
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function VsNative({ data }) {
-  // The ladder's universe is the LIVE public-repo rows with native/proxy
-  // coverage ratios. The supported-family fixture sweep is broader and lives in
-  // data/raw/SUPPORTED_LANGUAGE_BENCHMARK.json.
-  const liveLangs = data.summary.live.artifacts;
-  const supportedLangs = data.summary.supported?.families ?? liveLangs;
-  const toolManifest = useMemo(() => buildNativeToolManifest(data), [data]);
-  return (
-    <section id="vs-native" data-testid="vs-native" className="shell py-16" aria-labelledby="vsn-title">
-      <SectionHeader
-        id="vsn-title"
-        kicker="Coverage · alongside native SCIP / LSP"
-        title="Atlas meets or beats native definition coverage, language by language"
-      >
-        Coverage is Atlas definitions ÷ the best native indexer for each public-repo row — no graphify on this axis.
-        The ×1.0 spine is native parity: each of the {liveLangs} live languages here sits on it or to its right. The
-        broader supported-family sweep covers {supportedLangs} Atlas parser families in the raw evidence bundle.
+    <section id="versus" data-testid="versus" className="shell py-16" aria-labelledby="versus-title">
+      <SectionHeader id="versus-title" kicker="04 · Head-to-head" title="Atlas vs Graphify — the scorecard">
+        Graphify is the only other tool that covers every language from one binary, so it is the honest incumbent
+        to beat. Accuracy and answer size come from fixtures; latency, tokens and build time from real repositories.
       </SectionHeader>
 
-      {/* peer-framed standfirst — native indexers are the bar Atlas stands with */}
-      <div
-        data-testid="native-callout"
-        className="mb-7 rounded-lg px-5 py-4"
-        style={{ border: "1px solid var(--line-strong)", background: "var(--surface)" }}
-      >
-        <p className="text-balance" style={{ fontSize: 15, lineHeight: 1.5, color: "var(--text)" }}>
-          <span style={{ color: "var(--secondary)", fontWeight: 600 }}>Native indexers are the peer bar</span> — SCIP and
-          LSP servers define ground truth for definition coverage; this is shown on its own coverage axis and is never
-          averaged into any efficiency ratio.
-        </p>
+      <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {sc.stats.map((s) => (
+          <div key={s.label} className="panel p-5 text-center">
+            <div className="num" style={{ fontSize: "clamp(26px,3vw,34px)", fontWeight: 700, color: "var(--primary)" }}>{s.value}</div>
+            <div className="kicker mt-2" style={{ letterSpacing: "0.1em" }}>{s.label}</div>
+          </div>
+        ))}
       </div>
 
-      <TenXTargetReadout data={data} />
-
-      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(260px,0.9fr)]">
-        <div className="panel min-w-0 p-5 sm:p-6">
-          <NativeParityLadder data={data} />
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
+        <div className="tablewrap min-w-0">
+          <table className="dtable" style={{ minWidth: 640 }}>
+            <thead>
+              <tr>
+                <th>metric</th>
+                <th>atlas</th>
+                <th>graphify</th>
+                <th>advantage</th>
+                <th>evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sc.rows.map((r) => (
+                <tr key={r.metric}>
+                  <td style={{ fontWeight: 600, fontSize: 12.5 }}>{r.metric}</td>
+                  <td className="num" style={{ color: "var(--primary)" }}>{r.atlas}</td>
+                  <td className="num" style={{ color: "var(--muted)" }}>{r.graphify}</td>
+                  <td className="num" style={{ color: "var(--text)" }}>{r.advantage}</td>
+                  <td className="mono" style={{ fontSize: 11, color: "var(--faint)" }}>{r.evidence}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <div className="panel min-w-0 p-5 sm:p-6">
-          <div className="kicker">Native baselines</div>
-          <ul className="mt-4 flex min-w-0 flex-col gap-2.5" aria-label="Native tool manifest">
-            {toolManifest.map((tool) => (
-              <li
-                key={tool.tool}
-                className="grid min-w-0 items-center gap-3"
-                style={{ gridTemplateColumns: "minmax(0,0.72fr) minmax(0,1.28fr) 6px" }}
-              >
-                <span className="num truncate" style={{ fontSize: 12.5, color: "var(--text)" }}>
-                  {tool.tool}
-                </span>
-                <span
-                  className="num tnum min-w-0"
-                  style={{ fontSize: 12, color: "var(--muted)", textAlign: "right", fontVariantNumeric: "tabular-nums", overflowWrap: "anywhere" }}
-                  title={tool.note || tool.command || toolVersionLabel(tool)}
-                >
-                  {toolVersionLabel(tool)}
-                </span>
-                <span
-                  style={{ width: 6, height: 6, borderRadius: "50%", background: toolStatusColor(tool) }}
-                  aria-label={tool.status || (tool.ok ? "ok" : "unknown")}
-                />
-              </li>
-            ))}
-          </ul>
-          <p className="mt-4" style={{ fontSize: 12, lineHeight: 1.45, color: "var(--faint)" }}>
-            Where no language server is installed, a scriptable source-counter proxy is used and labelled as such in
-            the live matrix below.
-          </p>
+
+        <div className="flex min-w-0 flex-col gap-4">
+          <div className="panel p-5">
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <div className="kicker">Who resolves callers, per language</div>
+              <EvidenceTag kind="fixture-truth" />
+            </div>
+            <WinMap perLanguage={data.report.perLanguage} fresh={f} />
+          </div>
+          <div className="panel p-4" style={{ borderStyle: "dashed" }}>
+            <p style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--muted)" }}>
+              <span className="mono" style={{ color: "var(--primary)" }}>DETERMINISTIC — </span>{sc.note}
+            </p>
+            <div className="mt-3">
+              <FreshChip>fresh run medians: {f.latency.atlasMedianMs} ms vs {f.latency.graphifyMedianMs} ms per query ({f.latency.ratio}×)</FreshChip>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-/* ===================== NOT COMPARABLE — FAULT LANE ===================== */
+/* ==================== the tool field (landscape) ======================== */
 
-function NotComparable({ data }) {
-  const saturatedRows = data.saturation || [];
-  const saturatedNames = saturatedRows.map((row) => langLabel(row.language)).join(", ");
+function FieldChart({ field }) {
+  const rows = [...field].sort((a, b) => a.indexS - b.indexS);
+  const W = 580;
+  const rowH = 30, T = 34, B = 34, L = 128, R = 560;
+  const H = T + rows.length * rowH + B;
+  const lo = Math.log10(0.01), hi = Math.log10(20);
+  const x = (v) => L + ((Math.log10(v) - lo) / (hi - lo)) * (R - L);
+  const ticks = [0.01, 0.1, 1, 10];
   return (
-    <section id="not-comparable" data-testid="not-comparable" className="shell py-16" aria-labelledby="nc-title">
-      <SectionHeader
-        id="nc-title"
-        kicker="Honesty · the edge of our scope"
-        title={saturatedRows.length ? "Where Atlas doesn’t claim an efficiency win" : "No current zero-equivalent Graphify rows"}
-      >
-        {saturatedRows.length
-          ? `${saturatedNames} held native coverage at or above 1.0 across repeated iterations but produced no comparable query rows, so no token or latency ratio is claimed.`
-          : "The final benchmark pass has at least one Graphify-equivalent query row for every live language. Historical no-equivalent saturation rows are not folded into current headline ratios."}
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label="Index and build time across the tool field on a log scale. Atlas cold build 0.28 seconds is among the fastest; its warm re-index 0.03 seconds is far ahead; jdtls and scip-java take 9 to 11 seconds." style={{ display: "block" }}>
+      {ticks.map((t) => (
+        <g key={t}>
+          <line x1={x(t)} x2={x(t)} y1={T - 10} y2={H - B + 6} stroke="var(--grid)" />
+          <text x={x(t)} y={H - B + 22} textAnchor="middle" className="mono" fontSize="10" fill="var(--faint)">
+            {t < 1 ? `${t}s` : `${t}s`}
+          </text>
+        </g>
+      ))}
+      <text x={R} y={16} textAnchor="end" className="mono" fontSize="10" fill="var(--muted)" letterSpacing="0.1em">
+        INDEX / BUILD TIME · LOG SCALE · LOWER IS BETTER
+      </text>
+      {rows.map((r, i) => {
+        const yMid = T + i * rowH + rowH / 2;
+        const isAtlas = r.tool === "atlas";
+        const barColor = isAtlas ? "var(--primary)" : r.tool === "graphify" ? "var(--danger)" : "var(--muted)";
+        return (
+          <g key={r.tool}>
+            <text x={L - 10} y={yMid + 3.5} textAnchor="end" className="mono" fontSize="11.5" fontWeight={isAtlas ? 700 : 500} fill={isAtlas ? "var(--primary)" : "var(--muted)"}>
+              {r.tool}
+            </text>
+            <line x1={x(0.01)} x2={x(r.indexS)} y1={yMid} y2={yMid} stroke={barColor} strokeWidth={isAtlas ? 7 : 5} strokeLinecap="round" opacity={isAtlas ? 1 : 0.55} />
+            <circle cx={x(r.indexS)} cy={yMid} r={isAtlas ? 5 : 4} fill={barColor} />
+            {r.warmS && (
+              <>
+                <circle cx={x(r.warmS)} cy={yMid} r={4.5} fill="var(--bg)" stroke="var(--primary)" strokeWidth="2" />
+                <text x={x(r.warmS)} y={yMid - 9} textAnchor="middle" className="mono" fontSize="9" fill="var(--primary)">
+                  warm {r.warmS}s
+                </text>
+              </>
+            )}
+            <text x={x(r.indexS) + 10} y={yMid + 3.5} className="mono" fontSize="10.5" fill={isAtlas ? "var(--text)" : "var(--faint)"}>
+              {r.indexS}s
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+function FieldSection({ data }) {
+  const field = data.report.field;
+  return (
+    <section id="field" data-testid="field" className="shell py-16" aria-labelledby="field-title">
+      <SectionHeader id="field-title" kicker="05 · The whole field" title="Not just Graphify — LSP servers and SCIP indexers too" actions={<EvidenceTag kind="perf-only" />}>
+        The real comparison set is the whole code-intelligence stack, measured over the 7 languages every tool can
+        attempt. Atlas and Graphify are the only one-install, all-language tools; the rest are per-language authorities.
       </SectionHeader>
 
-      <div
-        className="mb-6 rounded-lg px-5 py-3.5"
-        style={{ border: "1px solid var(--warning)", background: "rgba(242,180,58,0.06)" }}
-      >
-        <p className="mono" style={{ fontSize: 13, color: "var(--warning)" }}>
-          Principle: no marketing average is ever polluted.
-        </p>
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <div className="tablewrap min-w-0">
+          <table className="dtable" style={{ minWidth: 520 }}>
+            <thead>
+              <tr>
+                <th>tool</th>
+                <th>type</th>
+                <th>coverage</th>
+                <th>one tool?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {field.map((t) => (
+                <tr key={t.tool}>
+                  <td className="num" style={{ fontWeight: 600, color: t.tool === "atlas" ? "var(--primary)" : "var(--text)" }}>{t.tool}</td>
+                  <td style={{ fontSize: 12.5, color: "var(--muted)" }}>{t.type}</td>
+                  <td>
+                    <div className="flex items-center gap-2">
+                      <div className="h-1.5 w-20 overflow-hidden rounded-full" style={{ background: "var(--bg2)" }}>
+                        <div className="h-1.5 rounded-full" style={{ width: `${(t.langs / 7) * 100}%`, background: t.tool === "atlas" ? "var(--primary)" : "var(--muted)" }} />
+                      </div>
+                      <span className="num" style={{ fontSize: 12 }}>{t.langs}/7</span>
+                    </div>
+                  </td>
+                  <td>
+                    {t.oneTool ? (
+                      <span className="chip" style={{ borderColor: "var(--success)", color: "var(--success)" }}>yes</span>
+                    ) : (
+                      <span className="chip">no</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="panel min-w-0 p-4 sm:p-5">
+          <FieldChart field={field} />
+        </div>
       </div>
 
-      <div data-testid="fault-lane" className="grid gap-4 lg:grid-cols-3">
-        {saturatedRows.length === 0 && (
-          <div className="panel p-5 lg:col-span-3" style={{ borderColor: "rgba(82,217,139,0.35)" }}>
-            <div className="kicker" style={{ color: "var(--success)" }}>current final pass</div>
-            <p className="mt-3" style={{ fontSize: 13, lineHeight: 1.5, color: "var(--muted)" }}>
-              `SATURATION_REPORT.json` is still published for auditability, but it now records no active zero-equivalent
-              saturation rows. Detector-only and source-counter proxy caveats remain in the final audit report.
+      <p className="mt-5 max-w-4xl" style={{ fontSize: 13, lineHeight: 1.6, color: "var(--muted)" }}>
+        {data.report.fieldNote}
+      </p>
+    </section>
+  );
+}
+
+/* ================== real-repository proof =============================== */
+
+function FlagshipBars({ flagship }) {
+  const max = Math.max(...flagship.rows.map((r) => r.f1));
+  return (
+    <div className="mt-5 flex items-end justify-around gap-4">
+      {flagship.rows.map((r) => {
+        const isAtlas = r.tool === "Atlas";
+        const h = Math.max((r.f1 / max) * 118, 4);
+        return (
+          <div key={r.tool} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-2">
+            <span className="num" style={{ fontSize: 15, fontWeight: 700, color: isAtlas ? "var(--primary)" : "var(--muted)" }}>
+              {r.f1.toFixed(3)}
+            </span>
+            <div
+              className="w-full rounded-t-md"
+              style={{
+                maxWidth: 84,
+                height: h,
+                background: isAtlas ? "var(--primary)" : "var(--surface-raised)",
+                border: `1px solid ${isAtlas ? "var(--primary)" : "var(--line-strong)"}`,
+                opacity: isAtlas ? 0.9 : 1,
+              }}
+            />
+            <div className="mono truncate" style={{ fontSize: 11, color: "var(--muted)" }}>{r.tool}</div>
+            <div className="mono" style={{ fontSize: 10, color: "var(--faint)" }}>{num(r.tokens)} tok</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function LatencyScatter({ liveRepos, meanMs }) {
+  const pts = liveRepos.filter((r) => r.perQueryMs != null && r.symbols > 0);
+  const W = 560, H = 280;
+  const L = 46, R = 546, T = 20, B = 232;
+  const lo = Math.log10(10), hi = Math.log10(50000);
+  const x = (s) => L + ((Math.log10(Math.max(s, 10)) - lo) / (hi - lo)) * (R - L);
+  const yMax = 16;
+  const y = (ms) => B - (Math.min(ms, yMax) / yMax) * (B - T);
+  const xt = [[10, "10"], [100, "100"], [1000, "1k"], [10000, "10k"]];
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label={`Query latency versus repository size across ${pts.length} real repositories. Latency stays flat — the report mean is ${meanMs} milliseconds — regardless of repo size.`} style={{ display: "block" }}>
+      {[0, 4, 8, 12, 16].map((t) => (
+        <g key={t}>
+          <line x1={L} x2={R} y1={y(t)} y2={y(t)} stroke="var(--grid)" />
+          <text x={L - 8} y={y(t) + 3.5} textAnchor="end" className="mono" fontSize="10" fill="var(--faint)">{t}</text>
+        </g>
+      ))}
+      {xt.map(([v, lb]) => (
+        <text key={v} x={x(v)} y={B + 18} textAnchor="middle" className="mono" fontSize="10" fill="var(--faint)">{lb}</text>
+      ))}
+      <line x1={L} x2={R} y1={B} y2={B} stroke="var(--line-strong)" />
+      <text x={(L + R) / 2} y={H - 4} textAnchor="middle" className="mono" fontSize="10" fill="var(--muted)" letterSpacing="0.1em">
+        REPOSITORY SIZE — SYMBOLS · LOG SCALE →
+      </text>
+      <text x={12} y={(T + B) / 2} textAnchor="middle" className="mono" fontSize="10" fill="var(--muted)" letterSpacing="0.1em" transform={`rotate(-90 12 ${(T + B) / 2})`}>
+        QUERY MS
+      </text>
+
+      <line x1={L} x2={R} y1={y(meanMs)} y2={y(meanMs)} stroke="var(--primary)" strokeDasharray="5 5" opacity="0.7" />
+      <text x={R} y={y(meanMs) + 17} textAnchor="end" className="mono" fontSize="10" fill="var(--primary)" paintOrder="stroke" stroke="var(--surface)" strokeWidth="4">
+        report mean {meanMs} ms
+      </text>
+
+      {pts.map((p) => (
+        <circle key={p.lang} cx={x(p.symbols)} cy={y(p.perQueryMs)} r="4.5" fill="var(--primary)" opacity="0.65" stroke="var(--bg)" strokeWidth="1">
+          <title>{`${langLabel(p.lang)} · ${p.repo} — ${num(p.symbols)} symbols · ${p.perQueryMs} ms/query`}</title>
+        </circle>
+      ))}
+    </svg>
+  );
+}
+
+function RealRepo({ data }) {
+  const flagship = data.report.goFlagship;
+  const las = data.report.latencyAtScale;
+  const f = data.fresh;
+  const xr = f.crossRepo;
+  return (
+    <section id="real" data-testid="real" className="py-16" style={{ background: "var(--bg2)" }} aria-labelledby="real-title">
+      <div className="shell">
+        <SectionHeader id="real-title" kicker="06 · Production proof" title="Fixtures prove the ceiling. Real repositories prove it in production.">
+          Independent ground truth an LSP server defines, latency that ignores repository size, and route-level
+          intelligence across repositories — measured, not asserted.
+        </SectionHeader>
+
+        <div className="grid gap-4 lg:grid-cols-3">
+          <div className="panel min-w-0 p-5">
+            <div className="flex items-start justify-between gap-2">
+              <div className="kicker">Go flagship · {flagship.repo}</div>
+              <EvidenceTag kind="LSP-truth" />
+            </div>
+            <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>
+              Scored against {flagship.truth} — an authority neither tool can influence. A {flagship.advantage}× gap
+              on production fan-in.
             </p>
+            <FlagshipBars flagship={flagship} />
             <div className="mt-4">
-              <SourceLink href="data/raw/SATURATION_REPORT.json" download>
-                <Download className="h-3 w-3" aria-hidden /> SATURATION_REPORT.json
-              </SourceLink>
+              <FreshChip>re-run vs gopls on a second production Go service: F1 {f.lspTruth.meanF1.toFixed(3)} over {f.lspTruth.symbols} symbols</FreshChip>
             </div>
           </div>
-        )}
-        {saturatedRows.map((row) => (
-          <div key={row.language} className="panel flex flex-col p-5" style={{ borderColor: "rgba(242,180,58,0.35)" }}>
-            <div className="flex items-baseline justify-between">
-              <span className="font-semibold" style={{ fontSize: 16 }}>
-                {langLabel(row.language)}
-              </span>
-              <span className="num" style={{ fontSize: 12, color: "var(--warning)" }}>
-                {row.iterationsRun}/{row.iterationsRequested} iterations
-              </span>
+
+          <div className="panel min-w-0 p-5">
+            <div className="flex items-start justify-between gap-2">
+              <div className="kicker">Latency at scale · {data.liveRepos.length} real repos</div>
+              <EvidenceTag kind="perf-only" />
             </div>
-            {/* 5-tick mono strip reading — */}
-            <div className="mt-4 flex gap-1.5" aria-label="Five non-improving iterations, all not comparable">
-              {row.iterations.map((it) => (
-                <div
-                  key={it.iteration}
-                  className="mono flex h-9 flex-1 items-center justify-center rounded"
-                  title={`Iteration ${it.iteration}: ${it.equivalentRows} equivalent rows, ${it.graphifyMissing} graphify missing`}
-                  style={{ background: "var(--bg2)", border: "1px solid var(--line)", color: "var(--warning)", fontSize: 14 }}
-                >
-                  —
-                </div>
-              ))}
+            <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>
+              {num(las.largestSymbols)}-symbol repos answer in about the same time as 100-symbol ones —
+              a {num(las.sizeRange)}× size range, flat latency.
+            </p>
+            <div className="mt-3">
+              <LatencyScatter liveRepos={data.liveRepos} meanMs={las.meanMs} />
             </div>
-            <dl className="mono mt-4 flex flex-col gap-1.5" style={{ fontSize: 12 }}>
-              <div className="flex justify-between">
-                <dt style={{ color: "var(--faint)" }}>equivalent rows</dt>
-                <dd style={{ color: "var(--text)" }}>{row.iterations[0].equivalentRows}</dd>
+          </div>
+
+          <div className="panel min-w-0 p-5">
+            <div className="flex items-start justify-between gap-2">
+              <div className="kicker">Cross-repo intelligence</div>
+              <FreshChip>fresh run</FreshChip>
+            </div>
+            <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>
+              {xr.note}. Atlas links HTTP routes a server exposes to the client code that calls them — so
+              “what breaks if I change this endpoint?” has an answer across repository boundaries.
+            </p>
+            <dl className="mt-5 grid grid-cols-2 gap-4">
+              <div>
+                <dt className="kicker">producer routes</dt>
+                <dd className="num mt-1" style={{ fontSize: 24, fontWeight: 600 }}>{num(xr.producerRoutes)}</dd>
               </div>
-              <div className="flex justify-between">
-                <dt style={{ color: "var(--faint)" }}>tokenRatio</dt>
-                <dd style={{ color: "var(--faint)", textDecoration: "line-through" }}>null</dd>
+              <div>
+                <dt className="kicker">consumer references</dt>
+                <dd className="num mt-1" style={{ fontSize: 24, fontWeight: 600 }}>{num(xr.consumerRefs)}</dd>
               </div>
-              <div className="flex justify-between">
-                <dt style={{ color: "var(--faint)" }}>latencyRatio</dt>
-                <dd style={{ color: "var(--faint)", textDecoration: "line-through" }}>null</dd>
+              <div>
+                <dt className="kicker">linked dependencies</dt>
+                <dd className="num mt-1" style={{ fontSize: 24, fontWeight: 600, color: "var(--primary)" }}>
+                  {xr.queries.dependencies?.count ?? "—"}
+                </dd>
               </div>
-              <div className="flex justify-between">
-                <dt style={{ color: "var(--faint)" }}>coverageRatio</dt>
-                <dd style={{ color: "var(--success)" }}>≥ 1.0</dd>
+              <div>
+                <dt className="kicker">query latency</dt>
+                <dd className="num mt-1" style={{ fontSize: 24, fontWeight: 600 }}>
+                  ~{Math.round(xr.queries.consumers?.latencyMs ?? 0)} ms
+                </dd>
               </div>
             </dl>
-            <p className="mt-4" style={{ fontSize: 12, lineHeight: 1.45, color: "var(--muted)" }}>
-              {row.note}
-            </p>
-            <div className="mt-4">
-              <SourceLink href={row.artifact} download>
-                <Download className="h-3 w-3" aria-hidden /> SATURATION_REPORT.json
-              </SourceLink>
+            <div className="mono mt-5 flex flex-wrap gap-2" style={{ fontSize: 11 }}>
+              {["route-contracts", "consumers", "dependencies", "cross-repo-impact"].map((c) => (
+                <span key={c} className="chip">atlas {c}</span>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
+        </div>
 
-      <ol className="mt-7 grid gap-2.5 sm:grid-cols-2" data-testid="caveats" aria-label="Methodology caveats">
-        {data.caveats.map((c, i) => (
-          <li key={c} className="flex gap-3" style={{ fontSize: 12.5, lineHeight: 1.45, color: "var(--muted)" }}>
-            <span className="mono shrink-0" style={{ color: "var(--faint)" }}>
-              {i + 1}.
-            </span>
-            <span>{c}</span>
-          </li>
-        ))}
-      </ol>
+        <p className="mt-4" style={{ fontSize: 12.5, color: "var(--faint)" }}>
+          Why latency holds: {las.why}
+        </p>
+      </div>
     </section>
   );
 }
 
-/* ========================= GRAPH SECTION =============================== */
+/* ========================= graph explorer =============================== */
 
-function GraphSection({ data }) {
-  const m = data.graphMeta || {};
+function GraphSection() {
   return (
     <section id="graph" data-testid="graph" className="shell py-16" aria-labelledby="graph-title">
-      <SectionHeader id="graph-title" kicker="The map Atlas builds" title="The deterministic symbol & call graph">
+      <SectionHeader id="graph-title" kicker="07 · The map Atlas builds" title="The deterministic symbol & call graph">
         This is the “smallest useful slice” made visible: real <span className="mono">atlas export --all</span> output
         of the Atlas repo, downsampled to a connected core. Hover a node, drag, pan, zoom; click a hub to focus it.
       </SectionHeader>
       <div className="panel p-4 sm:p-5">
-        <div style={{ minHeight: 520 }}>
-          <GraphExplorer className="atlas-graph-full" />
-        </div>
+        <GraphExplorer className="atlas-graph-full" />
       </div>
     </section>
   );
 }
 
-/* ====================== HOW IT WORKS — SIGNAL PATH ===================== */
+/* ==================== evidence, limits & provenance ===================== */
 
-function SignalPath({ data }) {
-  const reduced = usePrefersReducedMotion();
-  const go = data.coreMatrix.find((r) => r.language === "go");
-  const atlasTok = go ? go.querySummary.atlasTokens : 28;
-  const graphifyTok = go ? go.querySummary.graphifyTokens : 389;
-  const stages = [
-    ["repo", "source files"],
-    ["atlas index", "SQLite graph"],
-    ["atlas context", "minimal slice"],
-    ["MCP", "dev or agent"],
-  ];
+function EvidenceSection({ data }) {
+  const r = data.report;
+  const f = data.fresh;
+  const tiers = { report: "report", fresh: "fresh run", derived: "derived" };
   return (
-    <section id="how" data-testid="how" className="shell py-16" aria-labelledby="how-title">
-      <SectionHeader id="how-title" kicker="How it works · the slice" title="Why the token count drops">
-        Atlas indexes once into a local graph, then returns only the symbols, calls and relationships touching a change
-        — not whole files.
+    <section id="evidence" data-testid="evidence" className="shell py-16" aria-labelledby="evidence-title">
+      <SectionHeader id="evidence-title" kicker="08 · Evidence & limits" title="Graded evidence, disclosed limits, downloadable data">
+        No result mixes a favorable subset with an all-language headline without saying so. These are the rules the
+        numbers on this page play by — and the places Atlas is not yet proven.
       </SectionHeader>
-      <div className="panel p-6 sm:p-8">
-        <svg viewBox="0 0 880 130" width="100%" role="img" aria-label="Signal path: repo to atlas index to atlas context to MCP to agent" style={{ display: "block" }}>
-          <defs>
-            <marker id="arrow" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
-              <path d="M0,0 L6,4 L0,8 Z" fill="var(--faint)" />
-            </marker>
-          </defs>
-          {/* wire */}
-          <line x1="60" y1="55" x2="820" y2="55" stroke="var(--line)" strokeWidth="2" />
-          {!reduced && <circle className="signal-dot" cx="60" cy="55" r="4" fill="var(--primary)" />}
-          {stages.map(([title, sub], i) => {
-            const x = 60 + i * (760 / 3);
-            return (
-              <g key={title}>
-                <circle cx={x} cy={55} r="9" fill="var(--surface-raised)" stroke="var(--primary-dim)" strokeWidth="1.5" />
-                <circle cx={x} cy={55} r="3.5" fill="var(--primary)" />
-                <text x={x} y={28} textAnchor="middle" className="mono" fontSize="13" fill="var(--text)" fontWeight="600">
-                  {title}
-                </text>
-                <text x={x} y={88} textAnchor="middle" className="mono" fontSize="11" fill="var(--faint)">
-                  {sub}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
-        <div className="mt-7 grid gap-4 sm:grid-cols-3" style={{ borderTop: "1px solid var(--line)", paddingTop: 24 }}>
-          <StatTick label="Atlas context (Go)" value={`${atlasTok} tokens`} sub="per comparable query, summed" />
-          <StatTick label="graphify context (Go)" value={`${num(graphifyTok)} tokens`} sub="same queries" />
-          <StatTick label="Graph edges shown" value={`${num(data.graphMeta?.shown_edges ?? 897)} / ${num(data.graphMeta?.edges_total ?? 3102)}`} sub="atlas export --all" />
+
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+        <div className="flex min-w-0 flex-col gap-4">
+          <div className="panel p-5">
+            <div className="kicker mb-4">Evidence classes</div>
+            <div className="flex flex-col gap-3">
+              {r.method.evidenceClasses.map((e) => (
+                <div key={e.id} className="flex items-start gap-3">
+                  <EvidenceTag kind={e.id} />
+                  <p style={{ fontSize: 13, lineHeight: 1.5, color: "var(--muted)" }}>{e.desc}</p>
+                </div>
+              ))}
+            </div>
+            <div className="hairline mt-4 pt-4">
+              <div className="kicker mb-3">Cross-model agreement</div>
+              <div className="tablewrap">
+                <table className="dtable dtable-compact" style={{ minWidth: 0 }}>
+                  <thead>
+                    <tr>
+                      <th>context source</th>
+                      <th>haiku 4.5</th>
+                      <th>sonnet 5</th>
+                      <th>agreement</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {r.crossModel.rows.map((row) => (
+                      <tr key={row.source}>
+                        <td style={{ fontSize: 12.5 }}>{row.source}</td>
+                        <td className="num">{row.haiku.toFixed(3)}</td>
+                        <td className="num">{row.sonnet.toFixed(3)}</td>
+                        <td className="mono" style={{ fontSize: 11, color: "var(--success)" }}>{row.agreement}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-3" style={{ fontSize: 12, lineHeight: 1.55, color: "var(--faint)" }}>{r.crossModel.note}</p>
+            </div>
+          </div>
+
+          <div className="panel p-5" style={{ borderColor: "var(--warning)", borderStyle: "dashed" }}>
+            <div className="kicker mb-3" style={{ color: "var(--warning)" }}>Stated plainly — known limits</div>
+            <ul className="flex flex-col gap-2.5" style={{ fontSize: 13, lineHeight: 1.6, color: "var(--muted)" }}>
+              {r.limits.map((l, i) => (
+                <li key={i} className="flex gap-2.5">
+                  <span aria-hidden style={{ color: "var(--warning)" }}>—</span>
+                  <span>{l}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="flex min-w-0 flex-col gap-4">
+          <div className="panel p-5" data-testid="artifact-drawer">
+            <div className="mb-1 flex items-center justify-between gap-3">
+              <div className="kicker">The evidence drawer</div>
+              <a href="data/site-data.json" download data-testid="download-link" className="btn btn-ghost focusring" style={{ minHeight: 34, padding: "0 12px", fontSize: 13, textDecoration: "none" }}>
+                <Download className="h-3.5 w-3.5" aria-hidden /> site-data.json
+              </a>
+            </div>
+            <p className="mb-4" style={{ fontSize: 12.5, color: "var(--muted)" }}>
+              Every number on this page traces to one of these committed artifacts.
+            </p>
+            <ul className="flex flex-col" role="list">
+              {data.artifacts.map((a) => (
+                <li key={a.path} className="flex items-center justify-between gap-3 py-2" style={{ borderTop: "1px solid var(--line)" }}>
+                  <div className="min-w-0">
+                    <a className="mono focusring link block truncate" href={a.path} download data-source-artifact data-testid="download-link" style={{ fontSize: 12.5, textDecoration: "none" }}>
+                      {a.name}
+                    </a>
+                    <div className="truncate" style={{ fontSize: 11.5, color: "var(--faint)" }}>{a.note}</div>
+                  </div>
+                  <span className="chip shrink-0" style={a.tier === "fresh" ? { borderStyle: "dashed", borderColor: "var(--primary-dim)", color: "var(--primary)" } : undefined}>
+                    {tiers[a.tier]}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-4">
+              <TermBlock lines={["curl -LO https://aziron-ai.github.io/atlas/data/site-data.json"]} />
+            </div>
+            <a className="link mt-3 inline-flex items-center gap-1" style={{ fontSize: 12.5 }} href="https://github.com/aziron-ai/atlas/tree/main/data" target="_blank" rel="noreferrer">
+              Browse all raw artifacts on GitHub <ExternalLink className="h-3 w-3" aria-hidden />
+            </a>
+          </div>
+
+          <div className="panel p-5" data-testid="provenance">
+            <div className="kicker mb-4">Provenance</div>
+            <dl className="mono flex flex-col gap-2.5" style={{ fontSize: 12.5 }}>
+              {[
+                ["scoring model", r.method.scoringModel],
+                ["sampling", r.method.sampling],
+                ["coverage", `${r.method.cells} cells · ${r.method.modelCalls} model calls`],
+                ["fixture truth", "15 callers + 3 decoys, by construction"],
+                ["fresh-run host", f.platform],
+              ].map(([k, v]) => (
+                <div key={k} className="flex justify-between gap-4">
+                  <dt className="shrink-0" style={{ color: "var(--faint)" }}>{k}</dt>
+                  <dd className="text-right" style={{ color: "var(--text)" }}>{v}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="kicker mb-3 mt-5">Fresh-run tool pins</div>
+            <div className="flex flex-wrap gap-1.5">
+              {f.tools
+                .map((t) => {
+                  // pull the version-looking token out of raw `--version` output
+                  const m = String(t.version || "").match(/v?\d+\.\d+[^\s(),]*/);
+                  return { tool: t.tool, pin: m ? m[0] : t.tool === "atlas" ? "dev" : null, full: t.version };
+                })
+                .filter((t) => t.pin)
+                .slice(0, 10)
+                .map((t) => (
+                  <span key={t.tool} className="chip" title={t.full}>
+                    {t.tool} {t.pin}
+                  </span>
+                ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-
-/* ============================ INSTALL ================================= */
+/* ============================ install =================================== */
 
 const INSTALL_TABS = {
   homebrew: {
@@ -1492,26 +1466,6 @@ const INSTALL_TABS = {
     ],
   },
 };
-
-function TermBlock({ lines }) {
-  const text = lines.join("\n");
-  return (
-    <div className="term">
-      <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: "1px solid var(--line)", background: "var(--surface)" }}>
-        <span className="mono" style={{ fontSize: 11, color: "var(--faint)" }}>zsh</span>
-        <CopyButton text={text} label="command" />
-      </div>
-      <div className="term-body">
-        {lines.map((l, i) => (
-          <div key={i}>
-            <span className="term-prompt">$ </span>
-            {l}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 function UsageStep({ n, title, line, copy }) {
   return (
@@ -1539,23 +1493,22 @@ function Install() {
     <section id="install" data-testid="install" className="shell py-16" aria-labelledby="install-title">
       <SectionHeader
         id="install-title"
-        kicker="Install & connect"
+        kicker="09 · Install & connect"
         title="One local binary, a SQLite graph, MCP for agents"
         actions={
           <>
-            <SourceLink href="https://github.com/aziron-ai/atlas/releases/latest" testId={false}>
+            <a className="focusring chip" href="https://github.com/aziron-ai/atlas/releases/latest" target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
               releases/latest <ExternalLink className="h-3 w-3" aria-hidden />
-            </SourceLink>
-            <SourceLink href="https://github.com/dominic097/homebrew-atlas" testId={false}>
-              Homebrew tap
-            </SourceLink>
-            <SourceLink href="https://www.npmjs.com/package/@dominic097/atlas" testId={false}>
+            </a>
+            <a className="focusring chip" href="https://www.npmjs.com/package/@dominic097/atlas" target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
               npm
-            </SourceLink>
+            </a>
           </>
         }
       >
         The default database is <span className="mono">sqlite://./.atlas/atlas.db</span> — no shared server required.
+        Retrieval defaults to <span className="mono" style={{ color: "var(--primary)" }}>--detail high</span>, the
+        knob’s sweet spot.
       </SectionHeader>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
@@ -1576,8 +1529,6 @@ function Install() {
               </button>
             ))}
           </div>
-          {/* All method panels stay in the DOM (verbatim commands always present);
-              only the active one is shown. Hidden panels keep textContent for audit. */}
           {Object.entries(INSTALL_TABS).map(([key, t]) => (
             <div key={key} className={tab === key ? "" : "hidden"} aria-hidden={tab !== key}>
               <div className="kicker mb-3">{t.sub}</div>
@@ -1592,73 +1543,18 @@ function Install() {
         </div>
 
         <div className="grid min-w-0 gap-4">
-          <UsageStep n="1" title="Index a repository" line="atlas index . --reindex" copy="Builds the local symbol, call, route and search graph into SQLite." />
+          <UsageStep n="1" title="Index a repository" line="atlas index . --reindex" copy="Builds the local symbol, call, route and search graph into SQLite — in well under a second on most repos." />
           <UsageStep
             n="2"
             title="Retrieve code context"
             line={`atlas context --paths path/to/changed-file.go --query "review risk" --format json`}
-            copy="Returns a compact context bundle around the changed files for any developer or agent — coding, refactoring, debugging, review."
+            copy="Returns the compact context bundle this page benchmarks — callers, callees, routes — around any change."
           />
           <UsageStep
             n="3"
             title="Connect agents"
             line={`atlas mcp --transport http --http 127.0.0.1:8765`}
-            copy="Then atlas install skill --agent codex and atlas install skill --agent claude to wire local assistants over MCP."
-          />
-        </div>
-      </div>
-
-      <div className="panel mt-6 p-5">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <div className="kicker">Download the benchmark</div>
-            <p className="mt-2" style={{ fontSize: 13, color: "var(--muted)" }}>
-              The same JSON used by this page, plus the raw matrix report.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <SourceLink href="data/benchmark-data.json" download>
-              <Download className="h-3 w-3" aria-hidden /> benchmark-data.json
-            </SourceLink>
-            <SourceLink href="data/raw/MATRIX_REPORT.json" download>
-              <Download className="h-3 w-3" aria-hidden /> MATRIX_REPORT.json
-            </SourceLink>
-            <SourceLink href="data/tenx-gap-report.md" download>
-              <Download className="h-3 w-3" aria-hidden /> tenx-gap-report.md
-            </SourceLink>
-            <SourceLink href="data/final-benchmark-audit-report.md" download>
-              <Download className="h-3 w-3" aria-hidden /> final audit report
-            </SourceLink>
-            <SourceLink href="data/public-repo-validation-manifest.md" download>
-              <Download className="h-3 w-3" aria-hidden /> validation manifest
-            </SourceLink>
-            <SourceLink href="data/validation-remeasurement-manifest.md" download>
-              <Download className="h-3 w-3" aria-hidden /> remeasurement readiness
-            </SourceLink>
-            <SourceLink href="data/precision-evidence-manifest.md" download>
-              <Download className="h-3 w-3" aria-hidden /> precision evidence
-            </SourceLink>
-            <SourceLink href="data/call-edge-evidence-manifest.md" download>
-              <Download className="h-3 w-3" aria-hidden /> call-edge evidence
-            </SourceLink>
-            <SourceLink href="data/graphify-support-manifest.md" download>
-              <Download className="h-3 w-3" aria-hidden /> graphify support
-            </SourceLink>
-          </div>
-        </div>
-        <div className="mt-4">
-          <TermBlock
-            lines={[
-              "curl -LO https://aziron-ai.github.io/atlas/data/benchmark-data.json",
-              "curl -LO https://aziron-ai.github.io/atlas/data/raw/MATRIX_REPORT.json",
-              "curl -LO https://aziron-ai.github.io/atlas/data/tenx-gap-report.md",
-              "curl -LO https://aziron-ai.github.io/atlas/data/final-benchmark-audit-report.md",
-              "curl -LO https://aziron-ai.github.io/atlas/data/public-repo-validation-manifest.md",
-              "curl -LO https://aziron-ai.github.io/atlas/data/validation-remeasurement-manifest.md",
-              "curl -LO https://aziron-ai.github.io/atlas/data/precision-evidence-manifest.md",
-              "curl -LO https://aziron-ai.github.io/atlas/data/call-edge-evidence-manifest.md",
-              "curl -LO https://aziron-ai.github.io/atlas/data/graphify-support-manifest.md",
-            ]}
+            copy="Then `atlas install skill --agent claude` (or codex) wires local assistants over MCP."
           />
         </div>
       </div>
@@ -1666,156 +1562,7 @@ function Install() {
   );
 }
 
-/* =========================== EVIDENCE ================================= */
-
-function Evidence({ data }) {
-  const featured = ["benchmark-data.json", "MATRIX_REPORT.json"];
-  const tools = useMemo(() => {
-    const wanted = [
-      "atlas",
-      "graphify",
-      "scip-go",
-      "scip-python",
-      "scip-typescript",
-      "scip-java",
-      "gopls",
-      "pyright",
-      "tsc",
-      "jdtls",
-      "clangd",
-      "rust-analyzer",
-      "sourcekit-lsp",
-    ];
-    return data.provenance.tools.core.filter((t) => wanted.includes(t.tool));
-  }, [data]);
-
-  return (
-    <section id="evidence" data-testid="evidence" className="shell py-16" aria-labelledby="evidence-title">
-      <SectionHeader
-        id="evidence-title"
-        kicker="Evidence & provenance"
-        title="Every number on this page is downloadable"
-      >
-        Auditability is the closing argument: the page is generated entirely from these committed benchmark artifacts.
-      </SectionHeader>
-
-      {/* featured download chips */}
-      <div className="mb-6 flex flex-wrap gap-3">
-        <a href="data/benchmark-data.json" download data-source-artifact data-testid="download-link" className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-          <Download className="h-4 w-4" aria-hidden /> benchmark-data.json
-        </a>
-        <a href="data/raw/MATRIX_REPORT.json" download data-source-artifact data-testid="download-link" className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-          <Download className="h-4 w-4" aria-hidden /> MATRIX_REPORT.json
-        </a>
-        <a href="data/raw/SATURATION_REPORT.json" download data-source-artifact data-testid="download-link" className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-          <Download className="h-4 w-4" aria-hidden /> SATURATION_REPORT.json
-        </a>
-        <a href="data/raw/GRAPHIFY_LANGUAGE_DISCOVERY.json" download data-source-artifact data-testid="download-link" className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-          <Download className="h-4 w-4" aria-hidden /> GRAPHIFY_LANGUAGE_DISCOVERY.json
-        </a>
-        <a href="data/tenx-gap-report.md" download data-source-artifact data-testid="download-link" className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-          <Download className="h-4 w-4" aria-hidden /> tenx-gap-report.md
-        </a>
-        <a href="data/final-benchmark-audit-report.md" download data-source-artifact data-testid="download-link" className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-          <Download className="h-4 w-4" aria-hidden /> final audit report
-        </a>
-        <a href="data/public-repo-validation-manifest.md" download data-source-artifact data-testid="download-link" className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-          <Download className="h-4 w-4" aria-hidden /> validation manifest
-        </a>
-        <a href="data/validation-remeasurement-manifest.md" download data-source-artifact data-testid="download-link" className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-          <Download className="h-4 w-4" aria-hidden /> remeasurement readiness
-        </a>
-        <a href="data/precision-evidence-manifest.md" download data-source-artifact data-testid="download-link" className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-          <Download className="h-4 w-4" aria-hidden /> precision evidence
-        </a>
-        <a href="data/call-edge-evidence-manifest.md" download data-source-artifact data-testid="download-link" className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-          <Download className="h-4 w-4" aria-hidden /> call-edge evidence
-        </a>
-        <a href="data/graphify-support-manifest.md" download data-source-artifact data-testid="download-link" className="btn btn-ghost focusring" style={{ textDecoration: "none" }}>
-          <Download className="h-4 w-4" aria-hidden /> graphify support
-        </a>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-        {/* LEFT — all source artifacts */}
-        <div className="panel min-w-0 p-5">
-          <div className="kicker mb-4">Source artifacts · {data.sourceArtifacts.length}</div>
-          <div className="tablewrap" style={{ maxHeight: 480, overflowY: "auto" }}>
-            <table className="dtable dtable-compact">
-              <colgroup>
-                <col style={{ width: "46%" }} />
-                <col style={{ width: "17%" }} />
-                <col style={{ width: "24%" }} />
-                <col style={{ width: "13%" }} />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>artifact</th>
-                  <th>bytes</th>
-                  <th>sha256</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.sourceArtifacts.map((a) => (
-                  <tr key={a.path} data-testid="source-artifact">
-                    <td className="num" style={{ color: "var(--text)" }}>{a.name}</td>
-                    <td className="num" style={{ color: "var(--muted)" }}>{num(a.bytes)}</td>
-                    <td className="num" style={{ color: "var(--faint)" }}>{a.sha256.slice(0, 12)}…</td>
-                    <td>
-                      <a className="focusring chip" href={a.path} download data-source-artifact data-testid="download-link" style={{ textDecoration: "none" }}>
-                        <Download className="h-3 w-3" aria-hidden /> get
-                      </a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* RIGHT — provenance */}
-        <div data-testid="provenance" className="panel min-w-0 p-5">
-          <div className="kicker mb-4">Provenance</div>
-          <dl className="mono flex flex-col gap-2.5" style={{ fontSize: 12.5 }}>
-            <div className="flex justify-between gap-3">
-              <dt style={{ color: "var(--faint)" }}>graphify</dt>
-              <dd style={{ color: "var(--text)" }}>{data.provenance.graphify.version}</dd>
-            </div>
-            <div className="flex justify-between gap-3">
-              <dt style={{ color: "var(--faint)" }}>dispatch count</dt>
-              <dd style={{ color: "var(--text)" }}>{data.provenance.graphify.dispatchCount}</dd>
-            </div>
-            <div className="flex justify-between gap-3">
-              <dt style={{ color: "var(--faint)" }}>platform</dt>
-              <dd style={{ color: "var(--text)" }}>
-                {data.provenance.platform.system} {data.provenance.platform.release} {data.provenance.platform.machine}
-              </dd>
-            </div>
-            <div className="flex justify-between gap-3">
-              <dt style={{ color: "var(--faint)" }}>python</dt>
-              <dd style={{ color: "var(--text)" }}>{data.provenance.platform.python}</dd>
-            </div>
-          </dl>
-
-          <div className="kicker mb-3 mt-6">Core tool versions</div>
-          <ul className="mono flex flex-col gap-2" style={{ fontSize: 12 }}>
-            {tools.map((t) => (
-              <li key={t.tool} className="flex items-center justify-between gap-3">
-                <span style={{ color: "var(--muted)" }}>{t.tool}</span>
-                <span className="truncate" style={{ color: t.ok ? "var(--text)" : "var(--danger)", maxWidth: 180, textAlign: "right" }} title={t.note || t.version || t.status}>
-                  {toolVersionLabel(t)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ============================= APP =================================== */
+/* ============================== app ===================================== */
 
 function useScrollSpy(ids) {
   const [active, setActive] = useState(ids[0]);
@@ -1840,14 +1587,12 @@ function useScrollSpy(ids) {
 function App() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const [graphMeta, setGraphMeta] = useState(null);
-  const [dims, setDims] = useState(null);
-  const active = useScrollSpy(["dimensions", "vs-native", "vs-graphify", "graph", "matrix", "install"]);
+  const active = useScrollSpy(["hero", "summary", "knob", "languages", "versus", "field", "real", "graph", "evidence", "install"]);
 
   useEffect(() => {
-    fetch("data/benchmark-data.json", { cache: "no-store" })
+    fetch("data/site-data.json", { cache: "no-store" })
       .then((r) => {
-        if (!r.ok) throw new Error(`Unable to load benchmark data: ${r.status}`);
+        if (!r.ok) throw new Error(`Unable to load site data: ${r.status}`);
         return r.json();
       })
       .then(setData)
@@ -1855,20 +1600,6 @@ function App() {
         console.error(e);
         setError(e);
       });
-    // graph meta is read for the How-it-works real edge numbers; if it fails
-    // we fall back to the brief-verified constants, no console error surfaced.
-    // dimensions profile is additive: if it fails to load the section simply
-    // doesn't render — the rest of the site is unaffected.
-    fetch("data/dimensions-data.json", { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then(setDims)
-      .catch(() => {});
-    fetch("data/graph.json")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((j) => {
-        if (j && j.meta) setGraphMeta(j.meta);
-      })
-      .catch(() => {});
   }, []);
 
   if (error) {
@@ -1892,39 +1623,37 @@ function App() {
               <div key={i} className="h-3 rounded" style={{ background: "var(--surface-raised)", width: `${80 - i * 18}%` }} />
             ))}
           </div>
-          <p className="mt-5 mono" style={{ fontSize: 12, color: "var(--faint)" }}>
-            fetching data/benchmark-data.json…
+          <p className="mono mt-5" style={{ fontSize: 12, color: "var(--faint)" }}>
+            fetching data/site-data.json…
           </p>
         </div>
       </main>
     );
   }
 
-  const enriched = { ...data, graphMeta };
-
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
       <ConsoleBar data={data} active={active} />
       <main id="main">
-        <HeroReadout data={data} />
-        <Dimensions dims={dims} />
-        <VsNative data={data} />
-        <VsGraphify data={data} />
-        <NotComparable data={data} />
-        <GraphSection data={enriched} />
-        <SignalPath data={enriched} />
-        <LanguagesExplorer data={data} />
+        <Hero data={data} />
+        <ExecSummary data={data} />
+        <DetailKnob data={data} />
+        <MaturitySection data={data} />
+        <Versus data={data} />
+        <FieldSection data={data} />
+        <RealRepo data={data} />
+        <GraphSection />
+        <EvidenceSection data={data} />
         <Install />
-        <Evidence data={data} />
       </main>
       <footer className="hairline" style={{ marginTop: 8 }}>
         <div className="shell flex flex-col gap-2 py-8 sm:flex-row sm:items-center sm:justify-between">
           <span className="mono" style={{ fontSize: 12, color: "var(--faint)" }}>
-            {data.sourceLabel} · generated {data.generatedAt}
+            {data.report.label} · fresh run {data.generatedAt.slice(0, 10)}
           </span>
           <span className="mono" style={{ fontSize: 12, color: "var(--faint)" }}>
-            Atlas v0.1.21 · static, data-driven, self-contained
+            Atlas v{data.version} · static, data-driven, self-contained
           </span>
         </div>
       </footer>

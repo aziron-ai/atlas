@@ -369,6 +369,16 @@
   }
 }
 
+/* anchor targets land below the 56px sticky console bar */
+section[id] {
+  scroll-margin-top: 72px;
+}
+
+/* the graph stage fills the exhibit panel instead of floating in it */
+.atlas-graph-full div[role="img"] {
+  min-height: 520px;
+}
+
 /* signal-path traveling dot — CSS (not SMIL) so it never poisons
    actionability/stability of unrelated controls. */
 @keyframes atlas-travel {
