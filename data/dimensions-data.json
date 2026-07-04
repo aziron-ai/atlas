@@ -1,0 +1,535 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-04T04:34:18.283Z",
+  "sourceLabel": "aziron-atlas bench: DIMENSIONS_BENCH + CALLERS_F1_AFTER + LSP_F1_GO (linux run)",
+  "headline": {
+    "accuracy": {
+      "atlasPerfect": 37,
+      "total": 37,
+      "graphifyPerfect": 21,
+      "graphifyMeanF1": 0.568,
+      "evidence": "fixture-truth: exact set F1, ground truth by construction, no LLM"
+    },
+    "latency": {
+      "atlasMedianMs": 22.9,
+      "graphifyMedianMs": 207.7,
+      "ratio": 9.1,
+      "evidence": "median of 3 CLI invocations incl. process spawn, identical fixtures, this machine"
+    },
+    "tokens": {
+      "atlasMedian": 229,
+      "fairFight": {
+        "rows": 21,
+        "atlasMedian": 222,
+        "graphifyMedian": 162
+      },
+      "accuracyPer100Tok": {
+        "atlas": 0.44,
+        "graphify": 0.35
+      },
+      "evidence": "len/4 heuristic on the plain answer context; graphify token medians shown only over the rows it answered correctly (fair fight) — where it works its answers are smaller; Atlas's context buys 37/37 correctness"
+    },
+    "speed": {
+      "medianFixtureIndexMs": 81,
+      "evidence": "fixture index --reindex wall ms"
+    },
+    "coverage": {
+      "languages": 37,
+      "perfect": 37
+    },
+    "lspTruth": {
+      "repo": "real Go service",
+      "meanF1": 0.9333,
+      "precision": 0.9647,
+      "recall": 0.918,
+      "symbols": 10,
+      "evidence": "gopls call_hierarchy ground truth on a production repo"
+    },
+    "crossRepo": {
+      "note": "extraction measured on a real 2-repo workspace (Go API server + React app)",
+      "producerRoutes": 355,
+      "consumerRows": 731,
+      "queries": {
+        "route_contracts": {
+          "count": 0,
+          "latency_ms": 26.1,
+          "exit": 0,
+          "total": 0
+        },
+        "consumers": {
+          "count": 0,
+          "latency_ms": 26.8,
+          "exit": 0,
+          "consumer_repos": []
+        },
+        "dependencies": {
+          "count": 0,
+          "latency_ms": 23.2,
+          "exit": 0,
+          "producer_repos": [],
+          "total": 0
+        }
+      }
+    }
+  },
+  "perLanguage": [
+    {
+      "language": "go",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 22.6,
+      "graphifyMs": 222.1,
+      "atlasTokens": 214,
+      "graphifyTokens": 162,
+      "indexMs": 93.4
+    },
+    {
+      "language": "python",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 23.2,
+      "graphifyMs": 207.4,
+      "atlasTokens": 166,
+      "graphifyTokens": 162,
+      "indexMs": 81
+    },
+    {
+      "language": "javascript",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 22.2,
+      "graphifyMs": 206.4,
+      "atlasTokens": 233,
+      "graphifyTokens": 162,
+      "indexMs": 76.8
+    },
+    {
+      "language": "typescript",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 22.9,
+      "graphifyMs": 204.2,
+      "atlasTokens": 255,
+      "graphifyTokens": 162,
+      "indexMs": 80.9
+    },
+    {
+      "language": "java",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 23.2,
+      "graphifyMs": 201.6,
+      "atlasTokens": 244,
+      "graphifyTokens": 166,
+      "indexMs": 80.5
+    },
+    {
+      "language": "c",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 21.7,
+      "graphifyMs": 211.2,
+      "atlasTokens": 214,
+      "graphifyTokens": 161,
+      "indexMs": 90.1
+    },
+    {
+      "language": "cpp",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 22.9,
+      "graphifyMs": 203.8,
+      "atlasTokens": 222,
+      "graphifyTokens": 162,
+      "indexMs": 82.8
+    },
+    {
+      "language": "rust",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 23.2,
+      "graphifyMs": 210.3,
+      "atlasTokens": 210,
+      "graphifyTokens": 162,
+      "indexMs": 91.4
+    },
+    {
+      "language": "ruby",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 23.3,
+      "graphifyMs": 201.4,
+      "atlasTokens": 148,
+      "graphifyTokens": 41,
+      "indexMs": 130.5
+    },
+    {
+      "language": "php",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 23.1,
+      "graphifyMs": 203.7,
+      "atlasTokens": 237,
+      "graphifyTokens": 162,
+      "indexMs": 103.6
+    },
+    {
+      "language": "csharp",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 23.2,
+      "graphifyMs": 216.2,
+      "atlasTokens": 237,
+      "graphifyTokens": 166,
+      "indexMs": 207.5
+    },
+    {
+      "language": "kotlin",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 26.5,
+      "graphifyMs": 220.9,
+      "atlasTokens": 210,
+      "graphifyTokens": 162,
+      "indexMs": 110
+    },
+    {
+      "language": "swift",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 21.8,
+      "graphifyMs": 220.3,
+      "atlasTokens": 225,
+      "graphifyTokens": 163,
+      "indexMs": 238.3
+    },
+    {
+      "language": "scala",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 24.7,
+      "graphifyMs": 244.6,
+      "atlasTokens": 252,
+      "graphifyTokens": 176,
+      "indexMs": 153.7
+    },
+    {
+      "language": "lua",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 22.8,
+      "graphifyMs": 207.7,
+      "atlasTokens": 233,
+      "graphifyTokens": 162,
+      "indexMs": 79.7
+    },
+    {
+      "language": "powershell",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 23.9,
+      "graphifyMs": 217.6,
+      "atlasTokens": 218,
+      "graphifyTokens": 162,
+      "indexMs": 83.4
+    },
+    {
+      "language": "bash",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 25,
+      "graphifyMs": 233.1,
+      "atlasTokens": 192,
+      "graphifyTokens": 162,
+      "indexMs": 109
+    },
+    {
+      "language": "zig",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 32.3,
+      "graphifyMs": 223.8,
+      "atlasTokens": 233,
+      "graphifyTokens": 162,
+      "indexMs": 124.1
+    },
+    {
+      "language": "elixir",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 26.7,
+      "graphifyMs": 211.8,
+      "atlasTokens": 210,
+      "graphifyTokens": 41,
+      "indexMs": 81.8
+    },
+    {
+      "language": "objc",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 23.4,
+      "graphifyMs": 213.9,
+      "atlasTokens": 229,
+      "graphifyTokens": 8,
+      "indexMs": 108.1
+    },
+    {
+      "language": "julia",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 23.4,
+      "graphifyMs": 219.8,
+      "atlasTokens": 178,
+      "graphifyTokens": 160,
+      "indexMs": 81
+    },
+    {
+      "language": "fortran",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 22.5,
+      "graphifyMs": 202.1,
+      "atlasTokens": 189,
+      "graphifyTokens": 162,
+      "indexMs": 80.5
+    },
+    {
+      "language": "dart",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 23.1,
+      "graphifyMs": 201.6,
+      "atlasTokens": 173,
+      "graphifyTokens": 42,
+      "indexMs": 79.1
+    },
+    {
+      "language": "verilog",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 22.6,
+      "graphifyMs": 211.7,
+      "atlasTokens": 204,
+      "graphifyTokens": 41,
+      "indexMs": 377
+    },
+    {
+      "language": "pascal",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 21.3,
+      "graphifyMs": 201.3,
+      "atlasTokens": 185,
+      "graphifyTokens": 161,
+      "indexMs": 75.7
+    },
+    {
+      "language": "byond",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 22.3,
+      "graphifyMs": 208.2,
+      "atlasTokens": 155,
+      "graphifyTokens": 8,
+      "indexMs": 74.1
+    },
+    {
+      "language": "razor",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 22.7,
+      "graphifyMs": 196.5,
+      "atlasTokens": 233,
+      "graphifyTokens": 8,
+      "indexMs": 71.3
+    },
+    {
+      "language": "vue",
+      "f1": 1,
+      "graphifyF1": 1,
+      "atlasMs": 22,
+      "graphifyMs": 198,
+      "atlasTokens": 233,
+      "graphifyTokens": 162,
+      "indexMs": 74.4
+    },
+    {
+      "language": "svelte",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 22.3,
+      "graphifyMs": 196.5,
+      "atlasTokens": 244,
+      "graphifyTokens": 8,
+      "indexMs": 72
+    },
+    {
+      "language": "astro",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 22.9,
+      "graphifyMs": 201.8,
+      "atlasTokens": 240,
+      "graphifyTokens": 8,
+      "indexMs": 73.9
+    },
+    {
+      "language": "ejs",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 22.3,
+      "graphifyMs": 200.4,
+      "atlasTokens": 237,
+      "graphifyTokens": 8,
+      "indexMs": 80.5
+    },
+    {
+      "language": "ets",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 23.8,
+      "graphifyMs": 205.4,
+      "atlasTokens": 263,
+      "graphifyTokens": 8,
+      "indexMs": 78.6
+    },
+    {
+      "language": "r",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 22.5,
+      "graphifyMs": 202.7,
+      "atlasTokens": 233,
+      "graphifyTokens": 8,
+      "indexMs": 75
+    },
+    {
+      "language": "apex",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 22.4,
+      "graphifyMs": 213.6,
+      "atlasTokens": 255,
+      "graphifyTokens": 52,
+      "indexMs": 74.3
+    },
+    {
+      "language": "blade",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 22.7,
+      "graphifyMs": 212.6,
+      "atlasTokens": 259,
+      "graphifyTokens": 8,
+      "indexMs": 79.4
+    },
+    {
+      "language": "groovy",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 25.6,
+      "graphifyMs": 219.1,
+      "atlasTokens": 214,
+      "graphifyTokens": 8,
+      "indexMs": 90.6
+    },
+    {
+      "language": "sql",
+      "f1": 1,
+      "graphifyF1": 0,
+      "atlasMs": 25.3,
+      "graphifyMs": 205.7,
+      "atlasTokens": 476,
+      "graphifyTokens": 8,
+      "indexMs": 85
+    }
+  ],
+  "toolLandscape": [
+    {
+      "tool": "atlas",
+      "kind": "one binary, all languages",
+      "languages": 37,
+      "queryMs": 22.9,
+      "f1": 1,
+      "evidence": "this run (fixtures) + gopls-truth 0.933 real repo"
+    },
+    {
+      "tool": "graphify 0.9.5",
+      "kind": "portable code graph",
+      "languages": 21,
+      "queryMs": 207.7,
+      "f1": 0.57,
+      "evidence": "this run, identical fixtures"
+    },
+    {
+      "tool": "gopls",
+      "kind": "LSP (go only)",
+      "languages": 1,
+      "queryMs": null,
+      "f1": null,
+      "evidence": "the ground-truth authority Atlas scored 0.933 against on a real repo"
+    },
+    {
+      "tool": "pyright / tsserver / clangd / jdtls",
+      "kind": "LSP (one language each)",
+      "languages": 1,
+      "queryMs": null,
+      "f1": null,
+      "evidence": "per-language authorities; matching Atlas's coverage means running 5+ separate servers (see Darwin matrix)"
+    },
+    {
+      "tool": "scip-go/-python/-ts/-java",
+      "kind": "SCIP indexer (one language each)",
+      "languages": 1,
+      "queryMs": null,
+      "f1": null,
+      "evidence": "precise by construction; batch indexers, not interactive query servers"
+    }
+  ],
+  "tools": {
+    "platform": "Linux 6.18.5 x86_64",
+    "environment": "claude-code linux sandbox (this run) — differs from the committed Darwin manifest; both kept",
+    "tools": {
+      "atlas": {
+        "status": "ok",
+        "version": "atlas dev (none, unknown)",
+        "command": "./bin/atlas version"
+      },
+      "go": {
+        "status": "ok",
+        "version": "go version go1.25.0 linux/amd64",
+        "command": "go version"
+      },
+      "python": {
+        "status": "ok",
+        "version": "Python 3.11.15",
+        "command": "python3 --version"
+      },
+      "node": {
+        "status": "ok",
+        "version": "v22.22.2",
+        "command": "node --version"
+      },
+      "gopls": {
+        "status": "ok",
+        "version": "golang.org/x/tools/gopls v0.22.0",
+        "command": "/root/go/bin/gopls version"
+      },
+      "tsc": {
+        "status": "ok",
+        "version": "Version 6.0.3",
+        "command": "tsc --version"
+      },
+      "pyright": {
+        "status": "ok",
+        "version": "WARNING: there is a new pyright version available (v1.1.408 -> v1.1.411).",
+        "command": "pyright --version"
+      },
+      "graphify": {
+        "status": "ok",
+        "version": "graphify 0.9.5",
+        "command": "graphify --version"
+      }
+    }
+  }
+}
