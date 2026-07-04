@@ -6,10 +6,92 @@
     <title>Atlas — the most accurate code answer, for the fewest tokens</title>
     <meta name="description" content="Atlas answers 'who calls this function?' at F1 0.757 from 21 context tokens — 6.4× the accuracy-per-token of a graph tool, 36× fewer tokens, measured across 37 languages with real-LLM scoring and independent LSP ground truth. Deterministic, LLM-free, one local binary with a SQLite graph and MCP for agents. A single --detail knob dials the budget; 40 code languages graded on an honest five-level maturity ladder. Every number downloadable.">
     <meta name="color-scheme" content="dark">
+    <!-- seo-head:start -->
+    <link rel="canonical" href="https://aziron-ai.github.io/atlas/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Aziron Atlas">
+    <meta property="og:title" content="Atlas — the most accurate code answer, for the fewest tokens">
+    <meta property="og:description" content="Atlas answers &quot;who calls this function?&quot; at F1 0.757 from 21.2 context tokens — 6.4× the accuracy-per-token of a graph tool, 36× fewer tokens, across 37 languages with real-LLM scoring and gopls ground truth. Deterministic, LLM-free, one local binary.">
+    <meta property="og:url" content="https://aziron-ai.github.io/atlas/">
+    <meta property="og:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Atlas — the most accurate code answer, for the fewest tokens">
+    <meta name="twitter:description" content="Atlas answers &quot;who calls this function?&quot; at F1 0.757 from 21.2 context tokens — 6.4× the accuracy-per-token of a graph tool, 36× fewer tokens, across 37 languages with real-LLM scoring and gopls ground truth. Deterministic, LLM-free, one local binary.">
+    <meta name="twitter:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Atlas","applicationCategory":"DeveloperApplication","operatingSystem":"macOS, Linux, Windows","softwareVersion":"0.1.28","url":"https://aziron-ai.github.io/atlas/","downloadUrl":"https://github.com/aziron-ai/atlas/releases/download/v0.1.28/atlas_0.1.28_linux_amd64.tar.gz","installUrl":"https://github.com/aziron-ai/atlas/releases/latest","description":"Atlas answers \"who calls this function?\" at F1 0.757 from 21.2 context tokens — 6.4× the accuracy-per-token of a graph tool, 36× fewer tokens, across 37 languages with real-LLM scoring and gopls ground truth. Deterministic, LLM-free, one local binary.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"}},{"@context":"https://schema.org","@type":"Dataset","name":"Atlas Benchmark & Field Comparison — July 2026","description":"Per-language code-intelligence benchmark: answer accuracy (F1), context tokens, query latency and index speed for Atlas vs a graph tool, an LSP-truth real-repository flagship, and a 40-language maturity ladder. Fixture-truth ground truth by construction; real-LLM scored (222 cells, 666 model calls).","url":"https://aziron-ai.github.io/atlas/","isAccessibleForFree":true,"creator":{"@type":"Organization","name":"Aziron"},"distribution":[{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://aziron-ai.github.io/atlas/data/site-data.json"},{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://aziron-ai.github.io/atlas/data/raw/CALLERS_F1_AFTER.json"}]}]</script>
+    <!-- seo-head:end -->
     <link rel="stylesheet" href="assets/styles.css">
     <script defer src="assets/app.js"></script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+    <!-- seo-body:start -->
+      <div class="shell" style="padding:48px 0 64px;max-width:820px">
+        <h1>Atlas — the most accurate code answer, for the fewest tokens</h1>
+        <p>Atlas answers &quot;who calls this function?&quot; at F1 0.757 from 21.2 context tokens — 6.4× the accuracy-per-token of a graph tool, 36× fewer tokens, across 37 languages with real-LLM scoring and gopls ground truth. Deterministic, LLM-free, one local binary.</p>
+        <p><a href="https://github.com/aziron-ai/atlas">GitHub</a> ·
+           <a href="https://github.com/aziron-ai/atlas/releases/latest">Download v0.1.28</a> ·
+           <a href="data/site-data.json">Benchmark data (JSON)</a></p>
+
+        <h2>Headline results — Benchmark &amp; Field Comparison — July 2026</h2>
+        <ul>
+          <li>Atlas F1 0.757 at 21.2 context tokens, mean across all 37 languages (fixture-truth, real-LLM scored, 222 cells / 666 model calls).</li>
+          <li>F1 1.000 at 27.1 tokens on the 28 fully-supported languages — full-file-dump accuracy at 6.1× fewer tokens.</li>
+          <li>Graph-tool comparison: 0.539 F1 at 97 tokens — Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens.</li>
+          <li>Real repository (sirupsen/logrus, gopls call-hierarchy ground truth): Atlas F1 0.975 vs graph tool 0.084 vs raw file 0.017.</li>
+          <li>Query latency ~7.4 ms, flat from 15 to 39,161 symbols across 36 real repositories.</li>
+          <li>Corroborated by an independent Linux re-run: 37/37 languages fixture-perfect, 9× faster queries than the graph tool, gopls-truth F1 0.933.</li>
+        </ul>
+
+        <h2>Atlas vs Graphify — scorecard</h2>
+        <table>
+          <thead><tr><th>Metric</th><th>Atlas</th><th>Graphify</th><th>Advantage</th><th>Evidence</th></tr></thead>
+          <tbody>
+          <tr><td>Answer accuracy (F1)</td><td>0.757</td><td>0.539</td><td>+40%</td><td>fixtures · 37 langs</td></tr>
+          <tr><td>Query latency</td><td>7.4 ms</td><td>128 ms</td><td>17× faster</td><td>real repos · 36 langs</td></tr>
+          <tr><td>Query tokens (per answer)</td><td>2.6</td><td>92.8</td><td>36× fewer</td><td>real repos · 36 langs</td></tr>
+          <tr><td>Answer context size</td><td>21.2 tok</td><td>96 tok</td><td>4.5× smaller</td><td>fixtures · 37 langs</td></tr>
+          <tr><td>Cold index build</td><td>0.62 s</td><td>1.39 s</td><td>2.3× faster</td><td>real repos · 36 langs</td></tr>
+          <tr><td>Incremental re-index</td><td>0.10 s</td><td>1.39 s</td><td>14× faster</td><td>real repos · Graphify rebuilds fully</td></tr>
+          <tr><td>Call edges extracted</td><td>9,157</td><td>1,161</td><td>7.9× more</td><td>real repo · typelevel/cats</td></tr>
+          <tr><td>Coverage vs native AST</td><td>100.2%</td><td>100%</td><td>parity</td><td>real repo · cats (tree-sitter)</td></tr>
+          </tbody>
+        </table>
+
+        <h2>The --detail knob</h2>
+        <p>Retrieval operations floor at high — an agent is never handed a truncated, and therefore wrong, caller list.</p>
+        <table>
+          <thead><tr><th>Level</th><th>What the agent sees</th><th>Tokens</th><th>F1</th></tr></thead>
+          <tbody>
+          <tr><td>--detail low</td><td>name + location stub</td><td>3</td><td>0.00</td></tr>
+          <tr><td>--detail medium</td><td>+ signatures / explained names</td><td>20</td><td>0.67</td></tr>
+          <tr><td>--detail high (default)</td><td>full uncapped caller list</td><td>21</td><td>0.76</td></tr>
+          <tr><td>--detail xhigh</td><td>+ stable IDs, docs, scores</td><td>288</td><td>0.76</td></tr>
+          </tbody>
+        </table>
+
+        <h2>Language maturity ladder — 40 code languages</h2>
+        <p>Levels reflect validation depth, not just support — an L2 language still indexes and searches; it simply has not reached verified call-graph resolution. Atlas also indexes ~24 content formats (JSON, YAML, HTML, PDF, …) for search.</p>
+        <table>
+          <thead><tr><th>Level</th><th>Meaning</th><th>Languages</th></tr></thead>
+          <tbody>
+          <tr><td>L5 — Reference-validated</td><td>call graph cross-checked against an LSP server or SCIP indexer</td><td>C, C++, Go, Java, JavaScript, Python, TypeScript</td></tr>
+          <tr><td>L4 — Real-repo call graph</td><td>who-calls resolved and proven on a real repository</td><td>Apex, Astro, C#, Dart, Elixir, ETS, Fortran, Groovy, Julia, Kotlin, Lua, PHP, R, Rust, Scala, SQL, Svelte, Swift, Verilog, Vue, Zig, Bash (pending real-repo proof), Blade (pending real-repo proof), BYOND (pending real-repo proof), EJS (pending real-repo proof), Objective-C (pending real-repo proof), Pascal (pending real-repo proof), PowerShell (pending real-repo proof), Razor (pending real-repo proof), Ruby (pending real-repo proof)</td></tr>
+          <tr><td>L2 — Real-repo tested</td><td>runs on real code; call graph not yet resolved</td><td>Delphi, Terraform</td></tr>
+          <tr><td>L1 — Indexed</td><td>parsed and symbols extracted</td><td>P4</td></tr>
+          </tbody>
+        </table>
+
+        <h2>Install</h2>
+        <p>Homebrew: <code>brew install --cask dominic097/atlas/atlas</code> ·
+           npm: <code>npm install -g @dominic097/atlas</code> ·
+           Linux: <a href="https://github.com/aziron-ai/atlas/releases/latest">tar.gz / .deb / .rpm / .apk from releases</a>.
+           Then <code>atlas index . --reindex</code> and <code>atlas mcp</code> for agents (MCP).</p>
+        <p>Every number above is reproducible from the committed artifacts under <a href="data/">data/</a>.
+           This static digest is replaced by the interactive page when JavaScript is available.</p>
+      </div>
+    <!-- seo-body:end --></div>
   </body>
 </html>
