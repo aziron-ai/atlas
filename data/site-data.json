@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-04T06:55:10.408Z",
+  "generatedAt": "2026-07-10T17:53:16.722Z",
   "version": "0.1.28",
   "report": {
     "label": "Benchmark & Field Comparison — July 2026",
@@ -1758,6 +1758,139 @@
       "path": "data/site-data.json",
       "tier": "derived",
       "note": "the exact payload this page renders"
+    },
+    {
+      "name": "AGENT_TOKEN_BENCH_PUBLIC.json",
+      "path": "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json",
+      "tier": "fresh",
+      "note": "agent-harness end-to-end token usage (claude + codex, per-run records)"
     }
-  ]
+  ],
+  "agentBench": {
+    "label": "Agent-harness token benchmark — 2026-07-10",
+    "repo": "sirupsen/logrus",
+    "commit7": "a23d315",
+    "nQuestions": 19,
+    "truth": "gopls call_hierarchy (LSP-truth), frozen at the pinned commit",
+    "modes": [
+      "atlas",
+      "graphify",
+      "baseline"
+    ],
+    "agents": [
+      {
+        "id": "claude",
+        "model": "claude-sonnet-5",
+        "calibrationTotal": 29078,
+        "vsAtlas": {
+          "graphify": {
+            "totalTokens": 6,
+            "billedProxy": 1.9,
+            "turns": 5.2
+          },
+          "baseline": {
+            "totalTokens": 2.3,
+            "billedProxy": 1.3,
+            "turns": 2.5
+          }
+        }
+      },
+      {
+        "id": "codex",
+        "model": "gpt-5.6-sol",
+        "calibrationTotal": 12785,
+        "vsAtlas": {
+          "graphify": {
+            "totalTokens": 3.9,
+            "billedProxy": 3.4,
+            "turns": 9.6
+          },
+          "baseline": {
+            "totalTokens": 1.7,
+            "billedProxy": 2.5,
+            "turns": 2.1
+          }
+        }
+      }
+    ],
+    "cells": [
+      {
+        "agent": "claude",
+        "mode": "atlas",
+        "totalTokens": 61561,
+        "billedProxy": 11260,
+        "outputTokens": 315,
+        "turns": 2,
+        "f1": 0.882,
+        "wallS": 8.3,
+        "ok": 19,
+        "n": 19
+      },
+      {
+        "agent": "claude",
+        "mode": "baseline",
+        "totalTokens": 144385,
+        "billedProxy": 15120,
+        "outputTokens": 1018,
+        "turns": 4.9,
+        "f1": 0.569,
+        "wallS": 19.9,
+        "ok": 19,
+        "n": 19
+      },
+      {
+        "agent": "claude",
+        "mode": "graphify",
+        "totalTokens": 370898,
+        "billedProxy": 21097,
+        "outputTokens": 2632,
+        "turns": 10.3,
+        "f1": 0.305,
+        "wallS": 52.7,
+        "ok": 19,
+        "n": 19
+      },
+      {
+        "agent": "codex",
+        "mode": "atlas",
+        "totalTokens": 27981,
+        "billedProxy": 4025,
+        "outputTokens": 245,
+        "turns": 1,
+        "f1": 0.881,
+        "wallS": 13.3,
+        "ok": 19,
+        "n": 19
+      },
+      {
+        "agent": "codex",
+        "mode": "baseline",
+        "totalTokens": 48106,
+        "billedProxy": 9975,
+        "outputTokens": 642,
+        "turns": 2.1,
+        "f1": 0.876,
+        "wallS": 22.6,
+        "ok": 19,
+        "n": 19
+      },
+      {
+        "agent": "codex",
+        "mode": "graphify",
+        "totalTokens": 109662,
+        "billedProxy": 13675,
+        "outputTokens": 1005,
+        "turns": 9.6,
+        "f1": 0.41,
+        "wallS": 42.3,
+        "ok": 19,
+        "n": 19
+      }
+    ],
+    "caveat": "Cross-agent absolute totals are not comparable — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent.",
+    "billedProxyNote": "billed-proxy = fresh input + cache writes + output; cache reads bill at ~10% and are excluded.",
+    "artifact": "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json",
+    "suiteCmd": "python3 agent-bench/agent_token_bench.py --setup --agents auto \\\n    --qa-set agent-bench/QA_SET_logrus.json --workdir agentbench-work",
+    "suiteNeeds": "python3, git, atlas on PATH, graphify (uv tool install graphifyy), and claude and/or codex logged in"
+  }
 }

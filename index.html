@@ -20,7 +20,7 @@
     <meta name="twitter:title" content="Atlas — the most accurate code answer, for the fewest tokens">
     <meta name="twitter:description" content="Atlas answers &quot;who calls this function?&quot; at F1 0.757 from 21.2 context tokens — 6.4× the accuracy-per-token of a graph tool, 36× fewer tokens, across 37 languages with real-LLM scoring and gopls ground truth. Deterministic, LLM-free, one local binary.">
     <meta name="twitter:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
-    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Atlas","applicationCategory":"DeveloperApplication","operatingSystem":"macOS, Linux, Windows","softwareVersion":"0.1.28","url":"https://aziron-ai.github.io/atlas/","downloadUrl":"https://github.com/aziron-ai/atlas/releases/download/v0.1.28/atlas_0.1.28_linux_amd64.tar.gz","installUrl":"https://github.com/aziron-ai/atlas/releases/latest","description":"Atlas answers \"who calls this function?\" at F1 0.757 from 21.2 context tokens — 6.4× the accuracy-per-token of a graph tool, 36× fewer tokens, across 37 languages with real-LLM scoring and gopls ground truth. Deterministic, LLM-free, one local binary.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"}},{"@context":"https://schema.org","@type":"Dataset","name":"Atlas Benchmark & Field Comparison — July 2026","description":"Per-language code-intelligence benchmark: answer accuracy (F1), context tokens, query latency and index speed for Atlas vs a graph tool, an LSP-truth real-repository flagship, and a 40-language maturity ladder. Fixture-truth ground truth by construction; real-LLM scored (222 cells, 666 model calls).","url":"https://aziron-ai.github.io/atlas/","isAccessibleForFree":true,"creator":{"@type":"Organization","name":"Aziron"},"distribution":[{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://aziron-ai.github.io/atlas/data/site-data.json"},{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://aziron-ai.github.io/atlas/data/raw/CALLERS_F1_AFTER.json"}]}]</script>
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Atlas","applicationCategory":"DeveloperApplication","operatingSystem":"macOS, Linux, Windows","softwareVersion":"0.1.28","url":"https://aziron-ai.github.io/atlas/","downloadUrl":"https://github.com/aziron-ai/atlas/releases/download/v0.1.28/atlas_0.1.28_linux_amd64.tar.gz","installUrl":"https://github.com/aziron-ai/atlas/releases/latest","description":"Atlas answers \"who calls this function?\" at F1 0.757 from 21.2 context tokens — 6.4× the accuracy-per-token of a graph tool, 36× fewer tokens, across 37 languages with real-LLM scoring and gopls ground truth. Deterministic, LLM-free, one local binary.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"}},{"@context":"https://schema.org","@type":"Dataset","name":"Atlas Benchmark & Field Comparison — July 2026","description":"Per-language code-intelligence benchmark: answer accuracy (F1), context tokens, query latency and index speed for Atlas vs a graph tool, an LSP-truth real-repository flagship, and a 40-language maturity ladder. Fixture-truth ground truth by construction; real-LLM scored (222 cells, 666 model calls).","url":"https://aziron-ai.github.io/atlas/","isAccessibleForFree":true,"creator":{"@type":"Organization","name":"Aziron"},"distribution":[{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://aziron-ai.github.io/atlas/data/site-data.json"},{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://aziron-ai.github.io/atlas/data/raw/CALLERS_F1_AFTER.json"},{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://aziron-ai.github.io/atlas/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json"}]}]</script>
     <!-- seo-head:end -->
     <link rel="stylesheet" href="assets/styles.css">
     <script defer src="assets/app.js"></script>
@@ -60,6 +60,25 @@
           </tbody>
         </table>
 
+        <h2>What a real agent actually spends — Agent-harness token benchmark — 2026-07-10</h2>
+        <p>Claude Code and OpenAI Codex, run headless in sirupsen/logrus (@a23d315) and restricted to one
+           code-intelligence CLI per run; token numbers are each harness's own usage accounting over
+           19 caller questions with gopls call_hierarchy (LSP-truth), frozen at the pinned commit. Cross-agent absolute totals are not comparable — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent.</p>
+        <table>
+          <thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Mean tool calls</th><th>Mean F1</th></tr></thead>
+          <tbody>
+          <tr><td>claude (claude-sonnet-5)</td><td>Atlas</td><td>61,561</td><td>2</td><td>0.882</td></tr>
+          <tr><td>claude (claude-sonnet-5)</td><td>No tool (raw exploration)</td><td>144,385</td><td>4.9</td><td>0.569</td></tr>
+          <tr><td>claude (claude-sonnet-5)</td><td>Graph tool</td><td>370,898</td><td>10.3</td><td>0.305</td></tr>
+          <tr><td>codex (gpt-5.6-sol)</td><td>Atlas</td><td>27,981</td><td>1</td><td>0.881</td></tr>
+          <tr><td>codex (gpt-5.6-sol)</td><td>No tool (raw exploration)</td><td>48,106</td><td>2.1</td><td>0.876</td></tr>
+          <tr><td>codex (gpt-5.6-sol)</td><td>Graph tool</td><td>109,662</td><td>9.6</td><td>0.410</td></tr>
+          </tbody>
+        </table>
+        <p>Reproducible from any machine: the suite ships in
+           <a href="https://github.com/aziron-ai/atlas/tree/main/agent-bench">agent-bench/</a> (pinned commit, frozen
+           gopls question set, isolation flags baked in); per-run records in
+           <a href="data/raw/AGENT_TOKEN_BENCH_PUBLIC.json">AGENT_TOKEN_BENCH_PUBLIC.json</a>.</p>
         <h2>The --detail knob</h2>
         <p>Retrieval operations floor at high — an agent is never handed a truncated, and therefore wrong, caller list.</p>
         <table>

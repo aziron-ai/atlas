@@ -73,6 +73,7 @@ const jsonLd = [
     distribution: [
       { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${BASE}data/site-data.json` },
       { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${BASE}data/raw/CALLERS_F1_AFTER.json` },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${BASE}data/raw/AGENT_TOKEN_BENCH_PUBLIC.json` },
     ],
   },
 ];
@@ -111,6 +112,29 @@ const scorecardRows = r.scorecard.rows
   .map((row) => `<tr><td>${esc(row.metric)}</td><td>${esc(row.atlas)}</td><td>${esc(row.graphify)}</td><td>${esc(row.advantage)}</td><td>${esc(row.evidence)}</td></tr>`)
   .join("\n          ");
 
+// agent-harness bench digest — present only when the section has shipped
+const ab = site.agentBench;
+const MODE_LABELS = { atlas: "Atlas", graphify: "Graph tool", baseline: "No tool (raw exploration)" };
+const agentBenchBlock = !ab ? "" : `
+        <h2>What a real agent actually spends — ${esc(ab.label)}</h2>
+        <p>Claude Code and OpenAI Codex, run headless in ${esc(ab.repo)} (@${esc(ab.commit7)}) and restricted to one
+           code-intelligence CLI per run; token numbers are each harness's own usage accounting over
+           ${ab.nQuestions} caller questions with ${esc(ab.truth)}. ${esc(ab.caveat)}</p>
+        <table>
+          <thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Mean tool calls</th><th>Mean F1</th></tr></thead>
+          <tbody>
+          ${ab.agents.map((a) =>
+            ab.cells.filter((c) => c.agent === a.id)
+              .map((c) => `<tr><td>${esc(a.id)} (${esc(a.model || "default")})</td><td>${esc(MODE_LABELS[c.mode] || c.mode)}</td><td>${c.totalTokens?.toLocaleString("en-US") ?? "—"}</td><td>${c.turns ?? "—"}</td><td>${c.f1?.toFixed(3) ?? "—"}</td></tr>`)
+              .join("\n          ")
+          ).join("\n          ")}
+          </tbody>
+        </table>
+        <p>Reproducible from any machine: the suite ships in
+           <a href="https://github.com/aziron-ai/atlas/tree/main/agent-bench">agent-bench/</a> (pinned commit, frozen
+           gopls question set, isolation flags baked in); per-run records in
+           <a href="data/raw/AGENT_TOKEN_BENCH_PUBLIC.json">AGENT_TOKEN_BENCH_PUBLIC.json</a>.</p>`;
+
 const knobRows = r.detailKnob.levels
   .map((lv) => `<tr><td>--detail ${lv.id}${lv.id === r.detailKnob.defaultLevel ? " (default)" : ""}</td><td>${esc(lv.what)}</td><td>${lv.tokens}</td><td>${lv.f1.toFixed(2)}</td></tr>`)
   .join("\n          ");
@@ -140,7 +164,7 @@ const body = `
           ${scorecardRows}
           </tbody>
         </table>
-
+${agentBenchBlock}
         <h2>The --detail knob</h2>
         <p>${esc(r.detailKnob.floorNote)}</p>
         <table>
@@ -235,6 +259,7 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas — deterministic cod
 - [CALLERS_F1_AFTER.json](${BASE}data/raw/CALLERS_F1_AFTER.json): 37/37 fixture-truth callers F1 (Linux corroboration run)
 - [DIMENSIONS_BENCH_PUBLIC.json](${BASE}data/raw/DIMENSIONS_BENCH_PUBLIC.json): per-language F1 / tokens / latency / index speed
 - [LSP_F1_SUMMARY.json](${BASE}data/raw/LSP_F1_SUMMARY.json): gopls LSP-truth aggregate
+- [AGENT_TOKEN_BENCH_PUBLIC.json](${BASE}data/raw/AGENT_TOKEN_BENCH_PUBLIC.json): end-to-end token usage of real agent harnesses (Claude Code, OpenAI Codex) with Atlas vs graph tool vs no tool — reproducible via agent-bench/ in the GitHub repo
 
 ## Project
 - [Benchmark & comparison site](${BASE}): interactive version of everything above

@@ -19,6 +19,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { deriveAgentBench, AGENT_BENCH_ARTIFACT_ENTRY } from "./build-agent-bench-data.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const benchDir = path.resolve(process.argv[2] || process.env.ATLAS_BENCH_DIR || "");
@@ -319,6 +320,17 @@ fs.writeFileSync(path.join(rawDir, "MATRIX_TOOL_VERSIONS_LINUX.json"), JSON.stri
   platform: fresh.platform, tools: Object.fromEntries(fresh.tools.map((t) => [t.tool, t.version])),
 }, null, 2) + "\n");
 
+/* ============ agent-harness bench — from the public artifact ============ */
+// Produced by scripts/build-agent-bench-data.mjs (which sanitizes the private
+// AGENT_TOKEN_REPORT.json). Re-ingested here so full rebuilds keep the section.
+
+let agentBench = null;
+try {
+  agentBench = deriveAgentBench(readData(path.join("raw", "AGENT_TOKEN_BENCH_PUBLIC.json")));
+} catch {
+  console.warn("agent bench: data/raw/AGENT_TOKEN_BENCH_PUBLIC.json missing — section omitted (run scripts/build-agent-bench-data.mjs)");
+}
+
 const artifacts = [
   { name: "benchmark-data.json", path: "data/benchmark-data.json", tier: "report", note: "full derived dataset behind the original page" },
   { name: "MATRIX_REPORT.json", path: "data/raw/MATRIX_REPORT.json", tier: "report", note: "core 7-language tool matrix" },
@@ -330,6 +342,7 @@ const artifacts = [
   { name: "MATRIX_TOOL_VERSIONS_LINUX.json", path: "data/raw/MATRIX_TOOL_VERSIONS_LINUX.json", tier: "fresh", note: "tool pins for the Linux run" },
   { name: "site-data.json", path: "data/site-data.json", tier: "derived", note: "the exact payload this page renders" },
 ];
+if (agentBench) artifacts.splice(artifacts.length - 1, 0, AGENT_BENCH_ARTIFACT_ENTRY);
 
 /* ============================== emit ==================================== */
 
@@ -345,6 +358,7 @@ const out = {
   report,
   fresh,
   liveRepos,
+  ...(agentBench ? { agentBench } : {}),
   artifacts,
 };
 

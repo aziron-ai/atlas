@@ -22,7 +22,7 @@ const INSTALL_COMMANDS = [
 
 const SECTIONS = [
   "hero", "summary", "knob", "languages", "versus",
-  "field", "real", "graph", "evidence", "install",
+  "field", "real", "agents", "graph", "evidence", "install",
 ];
 
 test.describe("atlas benchmark site — redesign", () => {
@@ -31,10 +31,26 @@ test.describe("atlas benchmark site — redesign", () => {
     await page.waitForSelector("#hero");
   });
 
-  test("renders every section of the 10-section story", async ({ page }) => {
+  test("renders every section of the 11-section story", async ({ page }) => {
     for (const id of SECTIONS) {
       await expect(page.locator(`#${id}`), id).toHaveCount(1);
     }
+  });
+
+  test("agent-harness section: one panel per agent, honest caveat, runnable suite", async ({ page }) => {
+    for (const a of site.agentBench.agents) {
+      const panel = page.getByTestId(`agent-panel-${a.id}`);
+      await expect(panel).toBeVisible();
+      // every benchmarked mode appears with its mean total tokens
+      for (const cell of site.agentBench.cells.filter((c) => c.agent === a.id)) {
+        await expect(panel).toContainText(
+          new Intl.NumberFormat("en-US").format(cell.totalTokens)
+        );
+      }
+    }
+    const run = page.getByTestId("agent-run-yourself");
+    await expect(run).toContainText("agent-bench/agent_token_bench.py");
+    await expect(page.getByTestId("agents")).toContainText("not comparable");
   });
 
   test("hero carries report headlines and fresh-run corroboration chips", async ({ page }) => {

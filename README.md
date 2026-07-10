@@ -17,6 +17,7 @@ context window.
 | Accuracy on the 28 fully-supported languages | **F1 1.000 @ 27.1 tokens** | matches a full-file dump at 6.1× fewer tokens |
 | vs. graph tool (Graphify) | **6.4× accuracy per token · 36× fewer tokens** | graph tool: F1 0.539 @ 96.5 tokens |
 | Real repository (sirupsen/logrus vs gopls truth) | **F1 0.975 vs 0.084** | LSP-truth, production fan-in |
+| Real agent harnesses, end-to-end (Claude Code + OpenAI Codex) | **3.9–6.0× fewer total tokens than the graph tool at F1 0.88 vs 0.31–0.41** — and cheaper than raw grep exploration | harness-reported usage, 114 runs, [reproduce it yourself](agent-bench/) |
 | Query latency | **~7.4 ms, flat to 39k symbols** | 36 real repositories |
 | Independent Linux re-run | **37/37 fixture-perfect · gopls 0.933** | deterministic corroboration |
 
@@ -99,7 +100,24 @@ crawler-readable digest of the benchmark is injected into `index.html` by
 ```sh
 npm install
 node scripts/build-site-data.mjs /path/to/aziron-atlas/bench   # refresh data
+node scripts/build-agent-bench-data.mjs /path/to/AGENT_TOKEN_REPORT.json  # agent-harness section
 node scripts/build-seo.mjs                                     # refresh static digest + robots/sitemap/llms.txt
 npm run build                                                  # bundle
 npm run test:site                                              # Playwright checks (serve first)
 ```
+
+## Reproduce the agent benchmark yourself
+
+The agent-harness token benchmark on the site — what Claude Code and OpenAI
+Codex actually spend end-to-end with Atlas vs the graphify graph tool — ships
+as a self-contained suite in [`agent-bench/`](agent-bench/): pinned repo
+commit, frozen gopls ground truth, isolation flags baked in. One command,
+your own agent logins:
+
+```sh
+python3 agent-bench/agent_token_bench.py --setup --agents auto \
+    --qa-set agent-bench/QA_SET_logrus.json --workdir agentbench-work
+```
+
+See [`agent-bench/README.md`](agent-bench/README.md) for prerequisites, cost
+expectations, and how to read the numbers.
