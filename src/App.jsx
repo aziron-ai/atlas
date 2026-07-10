@@ -113,6 +113,7 @@ const EVIDENCE_COLORS = {
   "fixture-truth": "var(--primary)",
   "LSP-truth": "var(--secondary)",
   "perf-only": "var(--warning)",
+  "agent-harness": "var(--g2)",
 };
 function EvidenceTag({ kind, children }) {
   const color = EVIDENCE_COLORS[kind] || "var(--muted)";
@@ -179,6 +180,7 @@ const NAV_ITEMS = [
   ["Versus", "versus"],
   ["Field", "field"],
   ["Proof", "real"],
+  ["Agents", "agents"],
   ["Evidence", "evidence"],
 ];
 
@@ -1298,12 +1300,130 @@ function RealRepo({ data }) {
   );
 }
 
+/* ============= agents in the loop — harness token benchmark ============= */
+
+const MODE_LABELS = { atlas: "Atlas", graphify: "Graph tool", baseline: "No tool (raw exploration)" };
+const MODE_ORDER = { atlas: 0, graphify: 1, baseline: 2 };
+
+function AgentPanel({ agentMeta, cells }) {
+  const rows = cells
+    .filter((c) => c.agent === agentMeta.id)
+    .sort((a, b) => (MODE_ORDER[a.mode] ?? 9) - (MODE_ORDER[b.mode] ?? 9));
+  const max = Math.max(...rows.map((r) => r.totalTokens || 0), 1);
+  return (
+    <div className="panel min-w-0 p-5" data-testid={`agent-panel-${agentMeta.id}`}>
+      <div className="flex items-start justify-between gap-2">
+        <div className="kicker">{agentMeta.id} · {agentMeta.model || "default model"}</div>
+        <EvidenceTag kind="agent-harness" />
+      </div>
+      <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>
+        Harness floor {num(agentMeta.calibrationTotal)} tok for a no-tool “OK” — the baseline every run pays before
+        the first question. Bars are mean total tokens per answered question.
+      </p>
+      <div className="mt-4 flex flex-col gap-3">
+        {rows.map((r) => {
+          const isAtlas = r.mode === "atlas";
+          const w = Math.max(((r.totalTokens || 0) / max) * 100, 2);
+          return (
+            <div key={r.mode} className="min-w-0">
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="mono truncate" style={{ fontSize: 11.5, color: isAtlas ? "var(--primary)" : "var(--muted)" }}>
+                  {MODE_LABELS[r.mode] || r.mode}
+                </span>
+                <span className="num" style={{ fontSize: 13, fontWeight: 700, color: isAtlas ? "var(--primary)" : "var(--text)" }}>
+                  {num(r.totalTokens)} tok
+                </span>
+              </div>
+              <div className="mt-1 h-2.5 w-full rounded" style={{ background: "var(--surface-raised)" }}>
+                <div
+                  className="h-full rounded"
+                  style={{ width: `${w}%`, background: isAtlas ? "var(--primary)" : r.mode === "graphify" ? "var(--danger)" : "var(--not-comparable)", opacity: 0.85 }}
+                />
+              </div>
+              <div className="mono mt-1 flex flex-wrap gap-x-4" style={{ fontSize: 10.5, color: "var(--faint)" }}>
+                <span>F1 {r.f1 == null ? "—" : r.f1.toFixed(3)}</span>
+                <span>{r.turns == null ? "—" : r.turns} tool calls</span>
+                <span>{num(r.billedProxy)} billed-proxy tok</span>
+                <span>{r.ok}/{r.n} ok</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="mono mt-4 flex flex-wrap gap-2" style={{ fontSize: 11 }}>
+        {Object.entries(agentMeta.vsAtlas || {}).map(([m, v]) => (
+          v?.totalTokens ? (
+            <span key={m} className="chip" style={{ borderColor: "var(--g2)", color: "var(--g2)" }}>
+              {MODE_LABELS[m] || m}: {v.totalTokens}× Atlas tokens
+            </span>
+          ) : null
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AgentBench({ data }) {
+  const ab = data.agentBench;
+  if (!ab) return null;
+  return (
+    <section id="agents" data-testid="agents" className="shell py-16" aria-labelledby="agents-title">
+      <SectionHeader
+        id="agents-title"
+        kicker="07 · Agents in the loop"
+        title="What a real agent actually spends"
+        actions={<EvidenceTag kind="agent-harness" />}
+      >
+        Context-size benchmarks measure the tool's output. This measures the whole loop: Claude Code and OpenAI Codex
+        run headless in a checkout of {ab.repo} (@{ab.commit7}), restricted to one code-intelligence CLI per run, and the
+        harness's own token accounting is recorded — {ab.nQuestions} caller questions, ground truth {ab.truth}.
+      </SectionHeader>
+
+      <div className="grid gap-4 lg:grid-cols-2" data-testid="agent-panels">
+        {ab.agents.map((a) => (
+          <AgentPanel key={a.id} agentMeta={a} cells={ab.cells} />
+        ))}
+      </div>
+
+      <div className="panel mt-4 p-5" data-testid="agent-run-yourself">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="kicker">Run it from your machine</div>
+            <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>
+              The whole suite ships in this repository under <span className="mono">agent-bench/</span> — pinned repo
+              commit, frozen gopls question set, isolation flags baked in. Needs {ab.suiteNeeds}. Your absolute numbers
+              will differ with models and dates; the mode-vs-mode gap is the reproducible part.
+            </p>
+          </div>
+          <a
+            className="focusring chip"
+            href="https://github.com/aziron-ai/atlas/tree/main/agent-bench"
+            target="_blank"
+            rel="noreferrer"
+            style={{ textDecoration: "none" }}
+          >
+            <ExternalLink className="h-3.5 w-3.5" aria-hidden /> agent-bench/
+          </a>
+        </div>
+        <div className="codeblock mt-3 flex items-start justify-between gap-2 rounded-md p-3" style={{ background: "var(--surface-raised)" }}>
+          <pre className="mono min-w-0 overflow-x-auto" style={{ fontSize: 12, lineHeight: 1.6 }}>{ab.suiteCmd}</pre>
+          <CopyButton text={ab.suiteCmd.replace(/\\\n\s*/g, "")} />
+        </div>
+        <p className="mono mt-3" style={{ fontSize: 11, color: "var(--faint)" }}>
+          {ab.caveat} {ab.billedProxyNote} Raw per-run records:{" "}
+          <a className="link focusring" href={ab.artifact} download>AGENT_TOKEN_BENCH_PUBLIC.json</a>.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 /* ========================= graph explorer =============================== */
 
 function GraphSection() {
   return (
     <section id="graph" data-testid="graph" className="shell py-16" aria-labelledby="graph-title">
-      <SectionHeader id="graph-title" kicker="07 · The map Atlas builds" title="The deterministic symbol & call graph">
+      <SectionHeader id="graph-title" kicker="08 · The map Atlas builds" title="The deterministic symbol & call graph">
         This is the “smallest useful slice” made visible: real <span className="mono">atlas export --all</span> output
         of the Atlas repo, downsampled to a connected core. Hover a node, drag, pan, zoom; click a hub to focus it.
       </SectionHeader>
@@ -1322,7 +1442,7 @@ function EvidenceSection({ data }) {
   const tiers = { report: "report", fresh: "fresh run", derived: "derived" };
   return (
     <section id="evidence" data-testid="evidence" className="shell py-16" aria-labelledby="evidence-title">
-      <SectionHeader id="evidence-title" kicker="08 · Evidence & limits" title="Graded evidence, disclosed limits, downloadable data">
+      <SectionHeader id="evidence-title" kicker="09 · Evidence & limits" title="Graded evidence, disclosed limits, downloadable data">
         No result mixes a favorable subset with an all-language headline without saying so. These are the rules the
         numbers on this page play by — and the places Atlas is not yet proven.
       </SectionHeader>
@@ -1507,7 +1627,7 @@ function Install({ version }) {
     <section id="install" data-testid="install" className="shell py-16" aria-labelledby="install-title">
       <SectionHeader
         id="install-title"
-        kicker="09 · Install & connect"
+        kicker="10 · Install & connect"
         title="One local binary, a SQLite graph, MCP for agents"
         actions={
           <>
@@ -1601,7 +1721,7 @@ function useScrollSpy(ids) {
 function App() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const active = useScrollSpy(["hero", "summary", "knob", "languages", "versus", "field", "real", "graph", "evidence", "install"]);
+  const active = useScrollSpy(["hero", "summary", "knob", "languages", "versus", "field", "real", "agents", "graph", "evidence", "install"]);
 
   useEffect(() => {
     fetch("data/site-data.json", { cache: "no-store" })
@@ -1657,6 +1777,7 @@ function App() {
         <Versus data={data} />
         <FieldSection data={data} />
         <RealRepo data={data} />
+        <AgentBench data={data} />
         <GraphSection />
         <EvidenceSection data={data} />
         <Install version={data.version} />
