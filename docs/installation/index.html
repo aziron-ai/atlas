@@ -64,17 +64,20 @@
 <pre><code>brew install --cask aziron-ai/atlas/atlas
 atlas version</code></pre>
 <p>Homebrew names fully qualified casks as <code>&lt;owner&gt;/&lt;tap&gt;/&lt;cask&gt;</code>. The repository <code>aziron-ai/homebrew-atlas</code> becomes the tap <code>aziron-ai/atlas</code>; the cask and installed executable are both named <code>atlas</code>.</p>
-<h2>npm</h2>
-<pre><code>npm install -g @aziron/atlas
+<h2>npm (GitHub Packages)</h2>
+<p>The npm package is published to GitHub Packages, so npm must be pointed at the <code>@aziron-ai</code> scope with a GitHub token that has <code>read:packages</code> (GitHub Packages requires authentication even for public packages):</p>
+<pre><code>npm config set @aziron-ai:registry https://npm.pkg.github.com
+npm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN
+npm install -g @aziron-ai/atlas
 atlas version</code></pre>
 <p>For a version-pinned installation:</p>
-<pre><code>npm install -g @aziron/atlas@0.1.36</code></pre>
-<p>The npm package downloads the native Atlas binary for the current platform.</p>
+<pre><code>npm install -g @aziron-ai/atlas@0.1.36</code></pre>
+<p>The npm package downloads the native Atlas binary for the current platform. If you do not need npm specifically, Homebrew above is the simpler path.</p>
 <h2>Installation and Assistant Configuration</h2>
 <p>Homebrew and npm installations run Atlas bootstrap to register supported local assistant integrations. Inspect the proposed changes at any time:</p>
 <pre><code>atlas bootstrap --dry-run</code></pre>
 <p>To prevent npm post-install bootstrap in managed environments:</p>
-<pre><code>ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron/atlas</code></pre>
+<pre><code>ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron-ai/atlas</code></pre>
 <h2>Direct Release Archive</h2>
 <p>Choose the current version and platform from <a href="https://github.com/aziron-ai/atlas/releases/latest">GitHub Releases</a>:</p>
 <pre><code>VERSION=0.1.36

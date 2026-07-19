@@ -31,7 +31,7 @@ For npm:
 
 ```sh
 npm prefix -g
-npm install -g @aziron/atlas
+npm install -g @aziron-ai/atlas
 ```
 
 ### npm binary download fails

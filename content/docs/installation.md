@@ -14,20 +14,27 @@ Homebrew names fully qualified casks as `<owner>/<tap>/<cask>`. The repository
 `aziron-ai/homebrew-atlas` becomes the tap `aziron-ai/atlas`; the cask and
 installed executable are both named `atlas`.
 
-## npm
+## npm (GitHub Packages)
+
+The npm package is published to GitHub Packages, so npm must be pointed at the
+`@aziron-ai` scope with a GitHub token that has `read:packages` (GitHub Packages
+requires authentication even for public packages):
 
 ```sh
-npm install -g @aziron/atlas
+npm config set @aziron-ai:registry https://npm.pkg.github.com
+npm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN
+npm install -g @aziron-ai/atlas
 atlas version
 ```
 
 For a version-pinned installation:
 
 ```sh
-npm install -g @aziron/atlas@0.1.36
+npm install -g @aziron-ai/atlas@0.1.36
 ```
 
-The npm package downloads the native Atlas binary for the current platform.
+The npm package downloads the native Atlas binary for the current platform. If
+you do not need npm specifically, Homebrew above is the simpler path.
 
 ## Installation and Assistant Configuration
 
@@ -41,7 +48,7 @@ atlas bootstrap --dry-run
 To prevent npm post-install bootstrap in managed environments:
 
 ```sh
-ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron/atlas
+ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron-ai/atlas
 ```
 
 ## Direct Release Archive
