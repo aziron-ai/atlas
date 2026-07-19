@@ -1,34 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  Activity,
   ArrowRight,
-  BookOpen,
-  Bot,
   Check,
   ChevronRight,
-  CircleHelp,
-  CloudDownload,
-  Code2,
   Copy,
-  Database,
   Download,
   ExternalLink,
-  FileCode2,
-  Gauge,
-  Globe2,
-  KeyRound,
-  Network,
-  PackageCheck,
-  RefreshCw,
-  Search,
-  Server,
-  Settings2,
-  ShieldCheck,
-  Terminal,
-  Trash2,
-  Workflow,
-  Zap,
 } from "lucide-react";
+import SurveyChart, { LatencyScaleBar } from "./SurveyChart";
 
 const RELEASE = "0.1.36";
 const GITHUB = "https://github.com/aziron-ai/atlas";
@@ -75,11 +54,17 @@ export function useSiteRoute() {
   return route;
 }
 
+/* compass-rose brand mark */
 function Brand() {
   return (
     <span className="flex min-w-0 items-center gap-2.5">
-      <span className="atlas-mark mono" aria-hidden>A</span>
-      <span className="font-semibold" style={{ fontSize: 15 }}>ATLAS</span>
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden>
+        <circle cx="13" cy="13" r="11.5" fill="none" stroke="var(--primary)" strokeWidth="1.4" />
+        <circle cx="13" cy="13" r="7" fill="none" stroke="var(--primary)" strokeWidth="0.7" opacity="0.55" />
+        <path d="M13 3.5 L15 13 L13 22.5 L11 13 Z" fill="var(--primary)" />
+        <path d="M3.5 13 L13 11 L22.5 13 L13 15 Z" fill="var(--text)" opacity="0.85" />
+      </svg>
+      <span className="brand-word">ATLAS</span>
     </span>
   );
 }
@@ -121,7 +106,9 @@ export function ProductHeader({ version = RELEASE, active = "overview" }) {
         <div className="flex items-center gap-2">
           <span className="chip hidden sm:inline-flex">v{version}</span>
           <a className="icon-btn focusring hidden sm:inline-flex" href={GITHUB} target="_blank" rel="noreferrer" aria-label="Atlas on GitHub" title="GitHub">
-            <Code2 className="h-4 w-4" aria-hidden />
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
+            </svg>
           </a>
           <a className="btn btn-primary focusring hidden sm:inline-flex" href="#docs/installation">
             <Download className="h-4 w-4" aria-hidden /> Install
@@ -150,6 +137,16 @@ export function ProductHeader({ version = RELEASE, active = "overview" }) {
   );
 }
 
+function GridRef({ cell, name }) {
+  return (
+    <div className="gridref">
+      <span className="cell">{cell}</span>
+      <span className="name">{name}</span>
+      <span className="rule" aria-hidden />
+    </div>
+  );
+}
+
 function CopyCommand({ command }) {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
@@ -170,62 +167,14 @@ function CopyCommand({ command }) {
 }
 
 function Command({ children, label = "Terminal" }) {
-  const command = Array.isArray(children) ? children.join("\n") : String(children);
+  const command = Array.isArray(children) ? children.join("") : String(children);
   return (
     <div className="product-command">
       <div className="flex items-center justify-between gap-3">
-        <span className="mono text-xs" style={{ color: "var(--faint)" }}>{label}</span>
+        <span className="cmd-label">{label}</span>
         <CopyCommand command={command} />
       </div>
       <pre><code>{command}</code></pre>
-    </div>
-  );
-}
-
-function Metric({ icon: Icon, value, label, note, color }) {
-  return (
-    <div className="product-metric">
-      <div className="flex items-center gap-2" style={{ color }}>
-        <Icon className="h-4 w-4" aria-hidden />
-        <span className="mono text-xs font-semibold uppercase">{label}</span>
-      </div>
-      <div className="mono mt-4 text-3xl font-semibold" style={{ color: "var(--text)" }}>{value}</div>
-      <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>{note}</p>
-    </div>
-  );
-}
-
-function ProductConsole() {
-  return (
-    <div className="product-console" aria-label="Example Atlas code intelligence result">
-      <div className="product-console-head">
-        <span className="flex items-center gap-2"><span className="status-dot" /> atlas context</span>
-        <span>local / sqlite</span>
-      </div>
-      <div className="product-console-body">
-        <div><span className="console-prompt">$</span> atlas context --paths internal/auth.go --query "review risk"</div>
-        <div className="mt-5 console-label">PRIMARY SYMBOL</div>
-        <div className="mt-2 flex items-start gap-3">
-          <FileCode2 className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--primary)" }} aria-hidden />
-          <div>
-            <div style={{ color: "var(--text)" }}>AuthorizeRequest</div>
-            <div className="console-muted">internal/auth.go:84</div>
-          </div>
-        </div>
-        <div className="mt-5 grid grid-cols-2 gap-3">
-          <div className="console-result">
-            <span className="console-label">CALLERS</span>
-            <strong>6 cited</strong>
-          </div>
-          <div className="console-result">
-            <span className="console-label">IMPACT</span>
-            <strong>3 paths</strong>
-          </div>
-        </div>
-        <div className="mt-4 console-line"><span /> handlers/session.go:42</div>
-        <div className="console-line"><span /> middleware/access.go:19</div>
-        <div className="console-line"><span /> tests/auth_test.go:116</div>
-      </div>
     </div>
   );
 }
@@ -254,7 +203,7 @@ function InstallSwitcher() {
           </button>
         ))}
       </div>
-      <div className="mt-3 flex min-w-0 items-center justify-between gap-3 rounded-lg">
+      <div className="mt-3 flex min-w-0 items-center justify-between gap-3">
         <code className="mono min-w-0 overflow-x-auto whitespace-nowrap text-sm">{options[active]}</code>
         <CopyCommand command={options[active]} />
       </div>
@@ -262,17 +211,56 @@ function InstallSwitcher() {
   );
 }
 
+/* capability glyphs drawn in the chart idiom */
+function CapGlyph({ kind }) {
+  const common = { width: 30, height: 30, viewBox: "0 0 30 30", fill: "none", stroke: "currentColor", strokeWidth: 1.5, "aria-hidden": true };
+  if (kind === "search") {
+    return (
+      <svg {...common} style={{ color: "var(--primary)" }}>
+        <circle cx="13" cy="13" r="7.5" />
+        <path d="M18.5 18.5 L25 25" />
+        <path d="M13 9.5 v7 M9.5 13 h7" strokeWidth="1" />
+      </svg>
+    );
+  }
+  if (kind === "graph") {
+    return (
+      <svg {...common} style={{ color: "var(--primary)" }}>
+        <circle cx="6" cy="24" r="2.5" />
+        <circle cx="15" cy="8" r="2.5" />
+        <circle cx="25" cy="20" r="2.5" />
+        <path d="M7.5 22 Q10 13 13 10 M17 9.5 Q22 13 24 17.5" strokeDasharray="3 2.5" />
+      </svg>
+    );
+  }
+  if (kind === "target") {
+    return (
+      <svg {...common} style={{ color: "var(--primary)" }}>
+        <circle cx="15" cy="15" r="10.5" />
+        <circle cx="15" cy="15" r="5.5" strokeDasharray="2.2 2" />
+        <circle cx="15" cy="15" r="1.4" fill="currentColor" stroke="none" />
+      </svg>
+    );
+  }
+  return (
+    <svg {...common} style={{ color: "var(--primary)" }}>
+      <path d="M5 25 V11 L15 4.5 L25 11 V25" strokeDasharray="3 2.2" />
+      <path d="M11 25 v-7 h8 v7" />
+    </svg>
+  );
+}
+
 const capabilityItems = [
-  { icon: Search, title: "Find the right code", copy: "Search symbols, definitions, references, and focused snippets across the active repository." },
-  { icon: Network, title: "Follow relationships", copy: "Inspect callers, callees, graph paths, routes, dependencies, and likely change impact." },
-  { icon: Bot, title: "Ground AI reviews", copy: "Give Claude, Codex, and MCP-compatible assistants bounded context with file and line evidence." },
-  { icon: Database, title: "Keep control locally", copy: "Store repository intelligence in a local SQLite database with no Atlas server dependency." },
+  { glyph: "search", title: "Find the right code", copy: "Search symbols, definitions, references, and focused snippets across the active repository — the fix for “where is this, exactly?”" },
+  { glyph: "graph", title: "Follow relationships", copy: "Inspect callers, callees, graph paths, routes, dependencies, and likely change impact before you commit to a change." },
+  { glyph: "target", title: "Ground AI reviews", copy: "Give Claude, Codex, and MCP-compatible assistants bounded context with file-and-line evidence, so every claim carries its coordinates." },
+  { glyph: "home", title: "Keep control locally", copy: "Store repository intelligence in a local SQLite database, with no Atlas server dependency and nothing leaving your machine." },
 ];
 
 const workflowItems = [
-  { n: "01", title: "Index", command: "atlas index .", copy: "Atlas discovers supported files and builds a repository-local graph." },
-  { n: "02", title: "Query", command: 'atlas context --paths changed.go --query "review risk"', copy: "Retrieve compact context for the symbol or change under review." },
-  { n: "03", title: "Connect", command: "atlas bootstrap --dry-run", copy: "Preview MCP setup for installed coding assistants, then apply it." },
+  { n: "1", title: "Survey the territory", command: "atlas index .", copy: "Atlas discovers supported files and builds a repository-local graph — symbols, references, and call routes." },
+  { n: "2", title: "Take a bearing", command: 'atlas context --paths changed.go --query "review risk"', copy: "Retrieve compact, cited context for the symbol or change under review — a bearing, not a data dump." },
+  { n: "3", title: "Hand the chart to your assistant", command: "atlas bootstrap --dry-run", copy: "Preview MCP setup for installed coding assistants, then apply it — Atlas becomes their navigator." },
 ];
 
 export function ProductHome({ data }) {
@@ -282,64 +270,113 @@ export function ProductHome({ data }) {
       <a className="skip-link" href="#main">Skip to content</a>
       <ProductHeader version={data.version} active="overview" />
       <main id="main">
+        {/* =================== A·1 hero =================== */}
         <section className="product-hero" data-testid="product-hero">
-          <div className="shell grid items-center gap-12 py-16 lg:grid-cols-[minmax(0,0.9fr)_minmax(480px,1.1fr)] lg:py-20">
-            <div className="max-w-2xl">
-              <div className="eyebrow"><span className="status-dot" /> Local code intelligence for AI-assisted engineering</div>
-              <h1 className="mt-6">Atlas</h1>
-              <p className="mt-5 text-xl leading-relaxed" style={{ color: "var(--muted)" }}>
-                Give developers and coding assistants precise repository context without sending the entire codebase into the prompt.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a className="btn btn-primary focusring" href="#docs/getting-started">
-                  Get started <ArrowRight className="h-4 w-4" aria-hidden />
-                </a>
-                <a className="btn btn-ghost focusring" href="#benchmarks">
-                  View benchmark evidence <Gauge className="h-4 w-4" aria-hidden />
-                </a>
+          <div className="shell py-14 lg:py-20">
+            <GridRef cell="A·1" name="Overview" />
+            <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
+              <div className="max-w-2xl">
+                <div className="eyebrow"><span className="status-dot" /> Local code intelligence for AI-assisted engineering</div>
+                <h1 className="mt-5">Your codebase is a territory. <span className="accent">Atlas is the map.</span></h1>
+                <p className="lede mt-5 text-lg leading-relaxed">
+                  Give developers and coding assistants precise repository context without sending
+                  the entire codebase into the prompt. Atlas surveys your repository into a local
+                  graph, then answers each query with the few coordinates that matter — symbol,
+                  callers, impact — every one cited to file and line.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <a className="btn btn-primary focusring" href="#docs/getting-started">
+                    Get started <ArrowRight className="h-4 w-4" aria-hidden />
+                  </a>
+                  <a className="btn btn-ghost focusring" href="#benchmarks">
+                    View benchmark evidence
+                  </a>
+                </div>
+                <div className="hero-facts mt-7">
+                  <span>One local binary</span>
+                  <span>SQLite storage</span>
+                  <span>CLI, MCP, HTTP</span>
+                </div>
               </div>
-              <div className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-sm" style={{ color: "var(--muted)" }}>
-                <span className="flex items-center gap-2"><Check className="h-4 w-4" style={{ color: "var(--success)" }} aria-hidden /> One local binary</span>
-                <span className="flex items-center gap-2"><Check className="h-4 w-4" style={{ color: "var(--success)" }} aria-hidden /> SQLite storage</span>
-                <span className="flex items-center gap-2"><Check className="h-4 w-4" style={{ color: "var(--success)" }} aria-hidden /> CLI, MCP, HTTP</span>
-              </div>
+              <SurveyChart />
             </div>
-            <ProductConsole />
           </div>
         </section>
 
+        {/* =================== B·1 survey data =================== */}
         <section className="product-band hairline" aria-labelledby="outcomes-title">
           <div className="shell py-16">
+            <GridRef cell="B·1" name="Survey data" />
             <div className="product-section-head">
               <div>
-                <div className="kicker">Measured outcomes</div>
-                <h2 id="outcomes-title">Smaller context. Faster retrieval. Source-grounded answers.</h2>
+                <h2 id="outcomes-title">Measurements from the field</h2>
+                <p className="lede mt-3">
+                  Smaller context, faster retrieval, source-grounded answers — recorded as a
+                  surveyor would record them: value, instrument, and conditions.
+                </p>
               </div>
               <a className="text-link focusring" href="#benchmarks">Methodology and raw evidence <ChevronRight className="h-4 w-4" aria-hidden /></a>
             </div>
-            <div className="mt-8 grid gap-px overflow-hidden rounded-lg md:grid-cols-3" style={{ background: "var(--line)" }}>
-              <Metric icon={Zap} value={`${h.fewerTokens}x`} label="Fewer query tokens" note="Real-repository comparison against the graph baseline in the published benchmark." color="var(--primary)" />
-              <Metric icon={Activity} value="17x" label="Faster queries" note="Reported benchmark mean: Atlas 7.4 ms versus 128 ms for the graph baseline." color="var(--secondary)" />
-              <Metric icon={ShieldCheck} value={String(h.atlasF1All)} label="Answer F1" note="Mean across 37 fixture-truth language cells with real-model scoring." color="var(--warning)" />
+
+            <div className="survey-table-wrap mt-8">
+              <table className="survey">
+                <caption>Table of recorded measurements — published benchmark</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Ref</th>
+                    <th scope="col">Measurement</th>
+                    <th scope="col">Result</th>
+                    <th scope="col">Method &amp; conditions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="ref">M-01</td>
+                    <td className="measure-name">Query context tokens</td>
+                    <td className="value">{h.fewerTokens}× <small>fewer</small></td>
+                    <td className="method">Real-repository comparison against the graph baseline in the published benchmark.</td>
+                  </tr>
+                  <tr>
+                    <td className="ref">M-02</td>
+                    <td className="measure-name">Query latency</td>
+                    <td className="value">17× <small>faster</small></td>
+                    <td className="method">Reported benchmark mean: Atlas 7.4&nbsp;ms versus 128&nbsp;ms for the graph baseline. Plotted on the scale bar below.</td>
+                  </tr>
+                  <tr>
+                    <td className="ref">M-03</td>
+                    <td className="measure-name">Answer accuracy (F1)</td>
+                    <td className="value">{String(h.atlasF1All)}</td>
+                    <td className="method">Mean across 37 fixture-truth language cells with real-model scoring.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <p className="mt-4 text-xs" style={{ color: "var(--faint)" }}>
-              Results are dated measurements under published conditions, not guarantees for every repository or machine.
+
+            <div className="scalebar-block">
+              <span className="kicker">Scale of latencies — mean milliseconds per query (M-02)</span>
+              <LatencyScaleBar />
+            </div>
+
+            <p className="survey-foot">
+              Results are dated measurements under published conditions, not guarantees for every
+              repository or machine.
             </p>
           </div>
         </section>
 
+        {/* =================== C·1 the instrument =================== */}
         <section className="hairline" aria-labelledby="capabilities-title">
           <div className="shell py-16">
+            <GridRef cell="C·1" name="The instrument" />
             <div className="product-section-head">
               <div>
-                <div className="kicker">What Atlas does</div>
-                <h2 id="capabilities-title">One index for daily code navigation and AI review</h2>
+                <h2 id="capabilities-title">One index for daily navigation and AI review</h2>
               </div>
             </div>
-            <div className="mt-9 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
-              {capabilityItems.map(({ icon: Icon, title, copy }) => (
-                <article className="capability-item" key={title}>
-                  <span className="feature-icon"><Icon className="h-5 w-5" aria-hidden /></span>
+            <div className="cap-grid mt-9">
+              {capabilityItems.map(({ glyph, title, copy }) => (
+                <article className="cap" key={title}>
+                  <CapGlyph kind={glyph} />
                   <h3>{title}</h3>
                   <p>{copy}</p>
                 </article>
@@ -348,75 +385,93 @@ export function ProductHome({ data }) {
           </div>
         </section>
 
+        {/* =================== D·1 plotted route =================== */}
         <section className="product-band hairline" aria-labelledby="workflow-title">
           <div className="shell py-16">
+            <GridRef cell="D·1" name="Plotted route" />
             <div className="product-section-head">
               <div>
-                <div className="kicker">Three-step workflow</div>
-                <h2 id="workflow-title">From checkout to cited context</h2>
+                <h2 id="workflow-title">From checkout to cited context, in three legs</h2>
               </div>
               <a className="text-link focusring" href="#docs/getting-started">Open the getting started guide <ChevronRight className="h-4 w-4" aria-hidden /></a>
             </div>
-            <div className="workflow-grid mt-9">
+            <div className="legs mt-9">
               {workflowItems.map((item) => (
-                <article key={item.n}>
-                  <span className="mono workflow-number">{item.n}</span>
+                <article className="leg" key={item.n}>
+                  <div className="leg-mark"><span className="pt">{item.n}</span><span className="rule" aria-hidden /></div>
                   <h3>{item.title}</h3>
-                  <code className="mono">{item.command}</code>
                   <p>{item.copy}</p>
+                  <div className="cmd">
+                    <code><span className="p">$ </span>{item.command}</code>
+                    <CopyCommand command={item.command} />
+                  </div>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
+        {/* =================== E·1 provisioning =================== */}
         <section className="hairline" aria-labelledby="install-title-product">
-          <div className="shell grid items-center gap-10 py-16 lg:grid-cols-[minmax(0,0.8fr)_minmax(460px,1.2fr)]">
-            <div>
-              <div className="kicker">Install Atlas</div>
-              <h2 id="install-title-product" className="mt-3">Run locally on macOS, Linux, or Windows</h2>
-              <p className="mt-4 leading-relaxed" style={{ color: "var(--muted)" }}>
-                Homebrew, npm, native Linux packages, and release archives all expose the same <code className="mono">atlas</code> command.
-              </p>
-              <a className="text-link focusring mt-5" href="#docs/installation">Installation and verification guide <ArrowRight className="h-4 w-4" aria-hidden /></a>
+          <div className="shell py-16">
+            <GridRef cell="E·1" name="Provisioning" />
+            <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(460px,1.2fr)]">
+              <div>
+                <h2 id="install-title-product">Run locally on macOS, Linux, or Windows</h2>
+                <p className="lede mt-4 leading-relaxed">
+                  Homebrew, npm, native Linux packages, and release archives all expose the same <code className="mono">atlas</code> command.
+                </p>
+                <a className="text-link focusring mt-5" href="#docs/installation">Installation and verification guide <ArrowRight className="h-4 w-4" aria-hidden /></a>
+              </div>
+              <InstallSwitcher />
             </div>
-            <InstallSwitcher />
           </div>
         </section>
 
+        {/* =================== F·1 adjoining sheets =================== */}
         <section className="product-band hairline" aria-labelledby="docs-title">
           <div className="shell py-16">
+            <GridRef cell="F·1" name="Index to adjoining sheets" />
             <div className="product-section-head">
               <div>
-                <div className="kicker">Product documentation</div>
                 <h2 id="docs-title">Operate Atlas with confidence</h2>
+                <p className="lede mt-3">The documentation set, indexed like the sheets that border this one.</p>
               </div>
               <a className="text-link focusring" href={WIKI}>GitHub Wiki mirror <ExternalLink className="h-4 w-4" aria-hidden /></a>
             </div>
-            <div className="doc-link-grid mt-8">
-              {DOC_PAGES.slice(0, 8).map((page) => (
-                <a key={page.slug} href={`#docs/${page.slug}`} className="doc-link focusring">
-                  <page.icon className="h-5 w-5" aria-hidden />
-                  <span><strong>{page.label}</strong><small>{page.summary}</small></span>
-                  <ChevronRight className="h-4 w-4" aria-hidden />
+            <div className="sheets-grid mt-8">
+              {DOC_PAGES.slice(0, 8).map((page, i) => (
+                <a key={page.slug} href={`#docs/${page.slug}`} className="sheet-cell focusring">
+                  <span className="no">SHEET {String(i + 1).padStart(2, "0")}</span>
+                  <h3>{page.label}</h3>
+                  <p>{page.summary}</p>
+                  <span className="go">open →</span>
                 </a>
               ))}
             </div>
           </div>
         </section>
 
+        {/* =================== G·1 boundary line =================== */}
         <section className="privacy-band hairline">
-          <div className="shell flex flex-col gap-6 py-12 md:flex-row md:items-center md:justify-between">
-            <div className="flex max-w-3xl items-start gap-4">
-              <span className="feature-icon shrink-0"><ShieldCheck className="h-5 w-5" aria-hidden /></span>
+          <div className="shell py-14">
+            <GridRef cell="G·1" name="Boundary line" />
+            <div className="boundary">
               <div>
-                <h2>Local by default</h2>
-                <p className="mt-2" style={{ color: "var(--muted)" }}>
-                  Atlas reads the selected workspace and stores its index under <code className="mono">.atlas/</code>. CLI queries and stdio MCP need no hosted Atlas service.
+                <h2>Local by default. The survey never leaves the territory.</h2>
+                <p>
+                  Atlas reads the selected workspace and stores its index under <code className="mono">.atlas/</code>.
+                  CLI queries and stdio MCP need no hosted Atlas service — the dashed line around
+                  this panel is the trust boundary, and everything Atlas knows stays inside it.
                 </p>
+                <a className="text-link focusring mt-4" href="#docs/privacy">Privacy and data handling <ArrowRight className="h-4 w-4" aria-hidden /></a>
+              </div>
+              <div className="boundary-facts" aria-label="Local-by-default facts">
+                <div><span className="tick">▸</span><span>Index stored in a local SQLite database under <code className="mono">.atlas/</code></span></div>
+                <div><span className="tick">▸</span><span>No hosted service; no code leaves your machine</span></div>
+                <div><span className="tick">▸</span><span>One binary you can run, inspect, and delete</span></div>
               </div>
             </div>
-            <a className="btn btn-ghost focusring shrink-0" href="#docs/privacy">Privacy and data handling <ArrowRight className="h-4 w-4" aria-hidden /></a>
           </div>
         </section>
       </main>
@@ -426,25 +481,56 @@ export function ProductHome({ data }) {
 }
 
 const DOC_PAGES = [
-  { slug: "getting-started", label: "Getting started", icon: Zap, summary: "Create an index and run the first cited query." },
-  { slug: "installation", label: "Installation", icon: CloudDownload, summary: "Homebrew, npm, archives, and Linux packages." },
-  { slug: "indexing", label: "Indexing and reindexing", icon: RefreshCw, summary: "Incremental updates, rebuilds, and freshness." },
-  { slug: "cli", label: "CLI reference", icon: Terminal, summary: "Core commands for search, graphs, and impact." },
-  { slug: "assistants", label: "AI assistant setup", icon: Bot, summary: "Connect Codex, Claude, and MCP clients." },
-  { slug: "mcp", label: "MCP tools", icon: Workflow, summary: "Choose the right bounded code-intelligence tool." },
-  { slug: "service", label: "Dashboard and API", icon: Server, summary: "Run the local service, dashboard, and HTTP MCP." },
-  { slug: "configuration", label: "Configuration", icon: Settings2, summary: "Database, limits, security, and precedence." },
-  { slug: "privacy", label: "Privacy and data", icon: ShieldCheck, summary: "Understand local storage and network boundaries." },
-  { slug: "languages", label: "Languages and formats", icon: Code2, summary: "Capability levels across code and content." },
-  { slug: "benchmarks", label: "Benchmark methodology", icon: Gauge, summary: "Interpret and reproduce published evidence." },
-  { slug: "troubleshooting", label: "Troubleshooting", icon: CircleHelp, summary: "Diagnose installs, stale indexes, locks, and MCP." },
-  { slug: "upgrade", label: "Upgrade and uninstall", icon: Trash2, summary: "Update safely or remove Atlas and local data." },
+  { slug: "getting-started", label: "Getting started", summary: "Create an index and run the first cited query." },
+  { slug: "installation", label: "Installation", summary: "Homebrew, npm, archives, and Linux packages." },
+  { slug: "indexing", label: "Indexing and reindexing", summary: "Incremental updates, rebuilds, and freshness." },
+  { slug: "cli", label: "CLI reference", summary: "Core commands for search, graphs, and impact." },
+  { slug: "assistants", label: "AI assistant setup", summary: "Connect Codex, Claude, and MCP clients." },
+  { slug: "mcp", label: "MCP tools", summary: "Choose the right bounded code-intelligence tool." },
+  { slug: "service", label: "Dashboard and API", summary: "Run the local service, dashboard, and HTTP MCP." },
+  { slug: "configuration", label: "Configuration", summary: "Database, limits, security, and precedence." },
+  { slug: "privacy", label: "Privacy and data", summary: "Understand local storage and network boundaries." },
+  { slug: "languages", label: "Languages and formats", summary: "Capability levels across code and content." },
+  { slug: "benchmarks", label: "Benchmark methodology", summary: "Interpret and reproduce published evidence." },
+  { slug: "troubleshooting", label: "Troubleshooting", summary: "Diagnose installs, stale indexes, locks, and MCP." },
+  { slug: "upgrade", label: "Upgrade and uninstall", summary: "Update safely or remove Atlas and local data." },
 ];
+
+/* sidebar groups: letter = group ref, order within = position ref */
+const DOC_GROUPS = [
+  { name: "First survey", letter: "A", slugs: ["getting-started", "installation"] },
+  { name: "Operating the instrument", letter: "B", slugs: ["indexing", "cli", "configuration", "service"] },
+  { name: "Assistants", letter: "C", slugs: ["assistants", "mcp"] },
+  { name: "Trust & evidence", letter: "D", slugs: ["privacy", "languages", "benchmarks"] },
+  { name: "Maintenance", letter: "E", slugs: ["troubleshooting", "upgrade"] },
+];
+
+function sheetRef(slug) {
+  const n = DOC_PAGES.findIndex((p) => p.slug === slug) + 1;
+  const group = DOC_GROUPS.find((g) => g.slugs.includes(slug));
+  const pos = group ? group.slugs.indexOf(slug) + 1 : 1;
+  return `SHEET ${String(n).padStart(2, "0")} · ${group ? group.letter : "A"}·${pos}`;
+}
+
+function StationGlyph() {
+  return (
+    <span className="station" aria-hidden>
+      <svg width="12" height="11" viewBox="0 0 12 11">
+        <polygon points="6,1 1,10 11,10" fill="none" stroke="var(--primary)" strokeWidth="1.4" />
+        <circle cx="6" cy="7" r="1.2" fill="var(--primary)" />
+      </svg>
+    </span>
+  );
+}
+
+function sectionId(title) {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
 
 function ProseSection({ title, children }) {
   return (
-    <section className="docs-prose-section">
-      <h2>{title}</h2>
+    <section className="docs-prose-section" data-toc-id={sectionId(title)}>
+      <h2 id={sectionId(title)}>{title}</h2>
       {children}
     </section>
   );
@@ -452,6 +538,15 @@ function ProseSection({ title, children }) {
 
 function Bullets({ children }) {
   return <ul className="docs-list">{children}</ul>;
+}
+
+function Callout({ kind = "tip", label, children }) {
+  return (
+    <div className={`callout ${kind}`}>
+      <span className="co-label">{label}</span>
+      {children}
+    </div>
+  );
 }
 
 function DocsPage({ slug }) {
@@ -466,8 +561,10 @@ function DocsPage({ slug }) {
           </ProseSection>
           <ProseSection title="npm (GitHub Packages)">
             <Command>{`npm config set @aziron-ai:registry https://npm.pkg.github.com\nnpm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN\nnpm install -g @aziron-ai/atlas\natlas version`}</Command>
-            <p>The npm package is published to GitHub Packages, so point the <code>@aziron-ai</code> scope there with a GitHub token that has <code>read:packages</code> (GitHub Packages requires auth even for public packages). Pin a release with <code>npm install -g @aziron-ai/atlas@{RELEASE}</code>. Homebrew is the simpler path if you don't need npm.</p>
-            <p>Homebrew and npm run bootstrap after installation. In a managed environment, preview with <code>atlas bootstrap --dry-run</code> or set <code>ATLAS_SKIP_BOOTSTRAP=1</code> for npm.</p>
+            <p>The npm package is published to GitHub Packages, so point the <code>@aziron-ai</code> scope there with a GitHub token that has <code>read:packages</code> (GitHub Packages requires auth even for public packages). Pin a release with <code>npm install -g @aziron-ai/atlas@{RELEASE}</code>.</p>
+            <Callout kind="tip" label="Simpler path">
+              <p>Homebrew is the simpler path if you don't need npm. Homebrew and npm run bootstrap after installation. In a managed environment, preview with <code>atlas bootstrap --dry-run</code> or set <code>ATLAS_SKIP_BOOTSTRAP=1</code> for npm.</p>
+            </Callout>
           </ProseSection>
           <ProseSection title="Release archives and Linux packages">
             <Command>{`VERSION=${RELEASE}\nOS=darwin       # darwin or linux\nARCH=arm64      # arm64 or amd64\ncurl -fLO "${GITHUB}/releases/download/v$VERSION/atlas_\${VERSION}_\${OS}_\${ARCH}.tar.gz"`}</Command>
@@ -499,12 +596,14 @@ function DocsPage({ slug }) {
             <p>Atlas respects <code>.gitignore</code>. Add product-specific exclusions to <code>.atlasignore</code>. Semantic vectors are optional; lexical and graph retrieval continue when vectors are disabled.</p>
           </ProseSection>
           <ProseSection title="Safe recovery order">
-            <ol className="docs-list numbered">
-              <li>Stop active <code>serve</code>, <code>watch</code>, and supervised MCP processes.</li>
-              <li>Confirm the repository and database with <code>atlas status</code> and <code>atlas doctor</code>.</li>
-              <li>Run <code>atlas migrate</code> when the schema requires it.</li>
-              <li>Use <code>atlas index . --reindex</code> before deleting local data.</li>
-            </ol>
+            <Callout kind="warn" label="Before deleting local data — follow the route in order">
+              <ol className="docs-list numbered">
+                <li>Stop active <code>serve</code>, <code>watch</code>, and supervised MCP processes.</li>
+                <li>Confirm the repository and database with <code>atlas status</code> and <code>atlas doctor</code>.</li>
+                <li>Run <code>atlas migrate</code> when the schema requires it.</li>
+                <li>Use <code>atlas index . --reindex</code> before deleting local data.</li>
+              </ol>
+            </Callout>
           </ProseSection>
         </>
       );
@@ -587,7 +686,10 @@ function DocsPage({ slug }) {
           </ProseSection>
           <ProseSection title="Protect non-loopback access">
             <Command>{`export ATLAS_API_TOKEN='replace-with-a-strong-token'\nexport ATLAS_MCP_ALLOWED_ORIGINS='https://trusted.example'\natlas serve --mcp --addr 0.0.0.0:3099`}</Command>
-            <p>Use TLS at a trusted reverse proxy when traffic leaves the machine. Never place API tokens in shared links, logs, screenshots, or source control.</p>
+            <p>Use TLS at a trusted reverse proxy when traffic leaves the machine.</p>
+            <Callout kind="warn" label="Token handling">
+              <p>Never place API tokens in shared links, logs, screenshots, or source control.</p>
+            </Callout>
           </ProseSection>
         </>
       );
@@ -610,7 +712,9 @@ function DocsPage({ slug }) {
           </ProseSection>
           <ProseSection title="Explicit database">
             <Command>{`atlas --db "sqlite:///absolute/path/.atlas/atlas.db" status`}</Command>
-            <p>Use absolute database paths in assistant configuration so they do not depend on the assistant process directory.</p>
+            <Callout kind="tip" label="Fixed coordinates">
+              <p>Use absolute database paths in assistant configuration so they do not depend on the assistant process directory.</p>
+            </Callout>
           </ProseSection>
         </>
       );
@@ -702,7 +806,9 @@ function DocsPage({ slug }) {
             </tbody></table></div>
           </ProseSection>
           <ProseSection title="Before deleting data">
-            <p>Stop all Atlas processes, confirm the exact repository and database, back up <code>.atlas/</code>, run doctor, and attempt migration or reindex first.</p>
+            <Callout kind="warn" label="Destructive-data checkpoint">
+              <p>Stop all Atlas processes, confirm the exact repository and database, back up <code>.atlas/</code>, run doctor, and attempt migration or reindex first.</p>
+            </Callout>
           </ProseSection>
         </>
       );
@@ -718,7 +824,9 @@ function DocsPage({ slug }) {
           </ProseSection>
           <ProseSection title="Uninstall">
             <Command>atlas uninstall --dry-run{"\n"}atlas uninstall{"\n"}brew uninstall --cask aziron-ai/atlas/atlas{"\n"}# or: npm uninstall -g @aziron-ai/atlas</Command>
-            <p>Package removal does not delete repository indexes. Remove <code>/absolute/path/to/repository/.atlas</code> only after stopping all Atlas processes and confirming that a complete local-data reset is intended.</p>
+            <Callout kind="warn" label="Local data survives the package">
+              <p>Package removal does not delete repository indexes. Remove <code>/absolute/path/to/repository/.atlas</code> only after stopping all Atlas processes and confirming that a complete local-data reset is intended.</p>
+            </Callout>
           </ProseSection>
         </>
       );
@@ -748,25 +856,79 @@ function DocsPage({ slug }) {
 
 export function Documentation({ data, page = "getting-started" }) {
   const selected = useMemo(() => DOC_PAGES.find((item) => item.slug === page) || DOC_PAGES[0], [page]);
+  const [filter, setFilter] = useState("");
+  const [toc, setToc] = useState([]);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [selected.slug]);
+
+  /* "On this sheet" — collected from the rendered article so the rail
+     always matches the visible headings. */
+  useEffect(() => {
+    const nodes = document.querySelectorAll('[data-testid="docs-article"] .docs-prose-section h2');
+    setToc(Array.from(nodes, (n) => ({ id: n.id, text: n.textContent })));
+  }, [selected.slug]);
+
+  const q = filter.trim().toLowerCase();
+  const matches = (item) =>
+    !q || `${item.label} ${item.summary} ${item.slug}`.toLowerCase().includes(q);
+  const anyMatch = DOC_PAGES.some(matches);
+  const idx = DOC_PAGES.findIndex((item) => item.slug === selected.slug);
+  const prev = idx > 0 ? DOC_PAGES[idx - 1] : null;
+  const next = idx < DOC_PAGES.length - 1 ? DOC_PAGES[idx + 1] : null;
+
+  const scrollToSection = (event, id) => {
+    event.preventDefault();
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ block: "start" });
+  };
+
   return (
     <>
       <a className="skip-link" href="#docs-main">Skip to documentation</a>
       <ProductHeader version={data.version} active="docs" />
       <main id="docs-main" className="docs-shell shell">
-        <aside className="docs-sidebar" aria-label="Documentation sections">
-          <div className="kicker mb-3">Documentation</div>
+        <aside className="docs-sidebar" aria-label="Index of sheets">
+          <div className="kicker mb-3">Index of sheets</div>
+          <input
+            className="filter"
+            type="search"
+            placeholder="filter sheets…"
+            aria-label="Filter sheets by title or summary"
+            value={filter}
+            onChange={(event) => setFilter(event.target.value)}
+          />
           <nav>
-            {DOC_PAGES.map((item) => (
-              <a className="focusring" data-active={item.slug === selected.slug} key={item.slug} href={`#docs/${item.slug}`}>
-                <item.icon className="h-4 w-4 shrink-0" aria-hidden />
-                <span>{item.label}</span>
-              </a>
-            ))}
+            {DOC_GROUPS.map((group) => {
+              const visible = group.slugs
+                .map((slug) => DOC_PAGES.find((item) => item.slug === slug))
+                .filter((item) => item && matches(item));
+              if (!visible.length) return null;
+              return (
+                <div className="sb-group" key={group.name}>
+                  <div className="sb-group-name">{group.name}</div>
+                  {visible.map((item) => (
+                    <a
+                      className="sb-link focusring"
+                      data-active={item.slug === selected.slug}
+                      aria-current={item.slug === selected.slug ? "page" : undefined}
+                      key={item.slug}
+                      href={`#docs/${item.slug}`}
+                    >
+                      <StationGlyph />
+                      <span className="t">
+                        {item.label}
+                        <span className="ref">{sheetRef(item.slug)}</span>
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              );
+            })}
+            {!anyMatch && <div className="sb-none">No sheets match this filter.</div>}
           </nav>
-          <div className="mt-6 border-t pt-5" style={{ borderColor: "var(--line)" }}>
+          <div className="sidebar-foot">
             <a className="text-link focusring text-sm" href={WIKI}>GitHub Wiki mirror <ExternalLink className="h-3.5 w-3.5" aria-hidden /></a>
           </div>
         </aside>
@@ -779,25 +941,58 @@ export function Documentation({ data, page = "getting-started" }) {
         </div>
 
         <article className="docs-article" data-testid="docs-article">
-          <div className="docs-breadcrumb"><a href="#overview">Atlas</a><ChevronRight className="h-3.5 w-3.5" aria-hidden /><span>Documentation</span></div>
-          <div className="flex items-start gap-4">
-            <span className="feature-icon shrink-0"><selected.icon className="h-5 w-5" aria-hidden /></span>
-            <div>
-              <h1>{selected.label}</h1>
-              <p className="mt-2 text-sm" style={{ color: "var(--faint)" }}>{selected.summary}</p>
-            </div>
+          <div className="docs-breadcrumb">
+            <a href="#overview">Atlas</a>
+            <ChevronRight className="h-3.5 w-3.5" aria-hidden />
+            <a href="#docs/getting-started">Documentation</a>
+            <ChevronRight className="h-3.5 w-3.5" aria-hidden />
+            <span className="here">{selected.label}</span>
           </div>
-          <div className="docs-prose mt-10">
+          <header>
+            <div className="doc-refline">
+              <span className="gridref" style={{ margin: 0 }}><span className="cell">{sheetRef(selected.slug)}</span></span>
+              <span className="rule" aria-hidden />
+              <span className="stamp">LAST SURVEYED v{data.version}</span>
+            </div>
+            <h1>{selected.label}</h1>
+            <p className="doc-summary">{selected.summary}</p>
+          </header>
+          <div className="docs-prose mt-6">
             <DocsPage slug={selected.slug} />
           </div>
-          <div className="docs-next">
-            <div>
-              <span className="kicker">Need more context?</span>
-              <p>Use the installed command help for release-specific flags, or browse the Wiki mirror.</p>
+
+          <nav className="adjoining" aria-label="Adjoining sheets">
+            <span className="kicker">Adjoining sheets</span>
+            <div className="adj-grid">
+              {prev && (
+                <a className="adj-card prev focusring" href={`#docs/${prev.slug}`}>
+                  <span className="dir">◀ {sheetRef(prev.slug).split(" · ")[0]}</span>
+                  <span className="nm">{prev.label}</span>
+                  <span className="sm">{prev.summary}</span>
+                </a>
+              )}
+              {next && (
+                <a className="adj-card next focusring" href={`#docs/${next.slug}`}>
+                  <span className="dir">{sheetRef(next.slug).split(" · ")[0]} ▶</span>
+                  <span className="nm">{next.label}</span>
+                  <span className="sm">{next.summary}</span>
+                </a>
+              )}
             </div>
-            <a className="btn btn-ghost focusring" href={WIKI}>Open Wiki <ExternalLink className="h-4 w-4" aria-hidden /></a>
-          </div>
+            <p className="adj-wiki">Every sheet is mirrored on the <a className="text-link" href={WIKI}>GitHub Wiki <ExternalLink className="h-3.5 w-3.5" aria-hidden /></a>.</p>
+          </nav>
         </article>
+
+        <aside className="toc-rail" aria-label="On this sheet">
+          <div className="toc-title">On this sheet</div>
+          <ol>
+            {toc.map((item) => (
+              <li key={item.id}>
+                <a href={`#${item.id}`} onClick={(event) => scrollToSection(event, item.id)}>{item.text}</a>
+              </li>
+            ))}
+          </ol>
+        </aside>
       </main>
       <ProductFooter version={data.version} />
     </>
@@ -807,6 +1002,16 @@ export function Documentation({ data, page = "getting-started" }) {
 export function ProductFooter({ version = RELEASE }) {
   return (
     <footer className="product-footer hairline">
+      <div className="shell pt-10">
+        <div className="colophon-orn" aria-hidden>
+          <svg width="18" height="18" viewBox="0 0 18 18">
+            <path d="M9 1 L10.6 9 L9 17 L7.4 9 Z" fill="var(--primary)" />
+            <path d="M1 9 L9 7.4 L17 9 L9 10.6 Z" fill="var(--muted)" />
+          </svg>
+        </div>
+        <p className="colophon-line1">Atlas — local code intelligence</p>
+        <p className="colophon-line2">Edition v{version} · Surveyed locally, published by Aziron</p>
+      </div>
       <div className="shell grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr]">
         <div>
           <Brand />
