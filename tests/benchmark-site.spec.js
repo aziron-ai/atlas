@@ -152,6 +152,18 @@ test.describe("atlas benchmark site — redesign", () => {
     await ctx.close();
   });
 
+  test("L5 promotion panel matches the run artifact", async ({ page }) => {
+    test.skip(!site.l5run, "no promotion run artifact in this payload");
+    await expect(page.getByTestId("l5-promotion")).toBeVisible();
+    await expect(
+      page.getByTestId("l5-promotion-table").locator("tbody tr")
+    ).toHaveCount(site.l5run.rows.length);
+    // every promoted language renders a NEW badge chip at L5
+    const promoted = site.report.maturity.promoted?.langs || [];
+    const newChips = page.getByTestId("maturity-lang").filter({ hasText: "NEW" });
+    await expect(newChips).toHaveCount(promoted.length);
+  });
+
   test("no console errors on load", async ({ page }) => {
     const errors = [];
     page.on("pageerror", (e) => errors.push(String(e)));
