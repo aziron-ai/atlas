@@ -331,6 +331,69 @@ try {
   console.warn("agent bench: data/raw/AGENT_TOKEN_BENCH_PUBLIC.json missing — section omitted (run scripts/build-agent-bench-data.mjs)");
 }
 
+/* ============ l5run — the macOS L4→L5 promotion run ===================== */
+// bench/l5_matrix.py: each candidate language's call graph cross-checked
+// against ITS OWN language server on a real public repository (callHierarchy
+// preferred; references + documentSymbol enclosure fallback), deterministic
+// set F1, no LLM. Languages that clear the gate move L4 → L5 on the ladder;
+// the full per-symbol evidence — including every excused reference-server
+// blind spot — ships in the public raw artifact.
+let l5run = null;
+try {
+  const m = readData(path.join("raw", "L5_MATRIX_PUBLIC.json"));
+  const rows = (m.results || []).filter((r) => r.status === "ok").map((r) => {
+    const perf = r.perf || {}; const ax = perf.atlas || {}; const gf = perf.graphify || {};
+    const lspq = perf.lsp || {}; const mult = perf.multipliers || {};
+    return {
+      lang: r.language,
+      repo: (r.repo_url || "").replace("https://github.com/", "") || r.repo,
+      sha: r.repo_sha || null,
+      reference: r.reference, mode: (r.truth_mode || []).join("+"),
+      symbols: r.symbols_scored, f1: r.mean_f1, precision: r.mean_precision, recall: r.mean_recall,
+      pass: !!r.l5_pass,
+      atlasCliMs: ax.median_query_ms ?? null, atlasServeMs: ax.serve_warm_query_ms ?? null,
+      atlasTok: ax.mean_answer_tokens ?? null,
+      graphifyMs: gf.median_query_ms ?? null, graphifyTok: gf.mean_answer_tokens ?? null,
+      graphifyRecall: gf.truth_recall ?? null,
+      lspColdMs: lspq.cold_query_ms ?? null, lspWarmMs: lspq.warm_query_ms ?? null,
+      lspTok: lspq.mean_payload_tokens ?? null,
+      xLatGraphify: mult.latency_vs_graphify ?? null,
+      xServeLatGraphify: mult.serve_latency_vs_graphify_cli ?? null,
+      xLatLspCold: mult.latency_vs_lsp_cold ?? null,
+      xServeLatLspCold: mult.serve_latency_vs_lsp_cold ?? null,
+      xTokLsp: mult.tokens_vs_lsp ?? null, xTokRawRead: mult.tokens_vs_raw_read ?? null,
+    };
+  });
+  const passed = rows.filter((r) => r.pass).map((r) => r.lang).sort();
+  const med = (xs) => { const v = xs.filter((x) => x != null).sort((a, b) => a - b); return v.length ? v[Math.floor(v.length / 2)] : null; };
+  l5run = {
+    label: "L4 → L5 promotion run — July 2026 · macOS arm64",
+    truth: m.truth_source, truthFilter: m.truth_filter, scoring: m.scoring, gate: m.gate,
+    rows, passed,
+    medians: {
+      xLatGraphify: med(rows.map((r) => r.xLatGraphify)),
+      xServeLatGraphify: med(rows.map((r) => r.xServeLatGraphify)),
+      xLatLspCold: med(rows.map((r) => r.xLatLspCold)),
+      xServeLatLspCold: med(rows.map((r) => r.xServeLatLspCold)),
+      xTokLsp: med(rows.map((r) => r.xTokLsp)),
+      xTokRawRead: med(rows.map((r) => r.xTokRawRead)),
+    },
+  };
+  if (passed.length) {
+    const lv5 = report.maturity.levels.find((l) => l.id === "L5");
+    const lv4 = report.maturity.levels.find((l) => l.id === "L4");
+    const moving = passed.filter((l) => lv4.langs.includes(l));
+    lv5.langs = [...lv5.langs, ...moving].sort();
+    lv4.langs = lv4.langs.filter((l) => !passed.includes(l));
+    report.maturity.promoted = {
+      langs: moving,
+      evidence: "call graph cross-checked against the language's own LSP server on a real public repository — see the promotion run",
+    };
+  }
+} catch {
+  console.warn("l5run: data/raw/L5_MATRIX_PUBLIC.json missing — promotion section omitted");
+}
+
 const artifacts = [
   { name: "benchmark-data.json", path: "data/benchmark-data.json", tier: "report", note: "full derived dataset behind the original page" },
   { name: "MATRIX_REPORT.json", path: "data/raw/MATRIX_REPORT.json", tier: "report", note: "core 7-language tool matrix" },
@@ -343,6 +406,10 @@ const artifacts = [
   { name: "site-data.json", path: "data/site-data.json", tier: "derived", note: "the exact payload this page renders" },
 ];
 if (agentBench) artifacts.splice(artifacts.length - 1, 0, AGENT_BENCH_ARTIFACT_ENTRY);
+if (l5run) artifacts.splice(artifacts.length - 1, 0, {
+  name: "L5_MATRIX_PUBLIC.json", path: "data/raw/L5_MATRIX_PUBLIC.json", tier: "fresh",
+  note: "L4→L5 promotion run — per-language LSP-truth callers F1 + query-cost multipliers (macOS)",
+});
 
 /* ============================== emit ==================================== */
 
@@ -359,6 +426,7 @@ const out = {
   fresh,
   liveRepos,
   ...(agentBench ? { agentBench } : {}),
+  ...(l5run ? { l5run } : {}),
   artifacts,
 };
 
