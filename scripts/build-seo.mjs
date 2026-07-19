@@ -36,11 +36,9 @@ const h = r.headline;
 const f = site.fresh;
 const today = site.generatedAt.slice(0, 10);
 
-const TITLE = "Atlas — the most accurate code answer, for the fewest tokens";
+const TITLE = "Atlas | Local code intelligence for developers and AI assistants";
 const DESC =
-  `Atlas answers "who calls this function?" at F1 ${h.atlasF1All} from ${h.atlasTokAll} context tokens — ` +
-  `${h.accPerToken}× the accuracy-per-token of a graph tool, ${h.fewerTokens}× fewer tokens, across 37 languages ` +
-  `with real-LLM scoring and gopls ground truth. Deterministic, LLM-free, one local binary.`;
+  "Atlas indexes repositories locally and returns focused, source-grounded context about symbols, callers, references, routes, and change impact through CLI, MCP, and HTTP.";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -141,11 +139,27 @@ const knobRows = r.detailKnob.levels
 
 const body = `
       <div class="shell" style="padding:48px 0 64px;max-width:820px">
-        <h1>Atlas — the most accurate code answer, for the fewest tokens</h1>
+        <h1>Atlas</h1>
         <p>${esc(DESC)}</p>
         <p><a href="https://github.com/aziron-ai/atlas">GitHub</a> ·
            <a href="https://github.com/aziron-ai/atlas/releases/latest">Download v${pkg.version}</a> ·
            <a href="data/site-data.json">Benchmark data (JSON)</a></p>
+
+        <h2>Get started</h2>
+        <p>Install with <code>brew install --cask aziron-ai/atlas/atlas</code> or
+           <code>npm install -g @aziron/atlas</code>. Then run <code>atlas index .</code>,
+           inspect readiness with <code>atlas status</code>, and preview assistant setup with
+           <code>atlas bootstrap --dry-run</code>.</p>
+
+        <h2>Product documentation</h2>
+        <ul>
+          <li><a href="#docs/getting-started">Getting started</a> — first index, query, and assistant connection.</li>
+          <li><a href="#docs/installation">Installation</a> — Homebrew, npm, archives, and Linux packages.</li>
+          <li><a href="#docs/indexing">Indexing and reindexing</a> — freshness, watch mode, and recovery.</li>
+          <li><a href="#docs/cli">CLI reference</a> — search, symbols, relationships, impact, and routes.</li>
+          <li><a href="#docs/assistants">AI assistant setup</a> and <a href="#docs/mcp">MCP tools</a>.</li>
+          <li><a href="#docs/troubleshooting">Troubleshooting</a>, privacy, configuration, and upgrades.</li>
+        </ul>
 
         <h2>Headline results — ${esc(r.label)}</h2>
         <ul>
@@ -184,10 +198,10 @@ ${agentBenchBlock}
         </table>
 
         <h2>Install</h2>
-        <p>Homebrew: <code>brew install --cask dominic097/atlas/atlas</code> ·
-           npm: <code>npm install -g @dominic097/atlas</code> ·
+        <p>Homebrew: <code>brew install --cask aziron-ai/atlas/atlas</code> ·
+           npm: <code>npm install -g @aziron/atlas</code> ·
            Linux: <a href="https://github.com/aziron-ai/atlas/releases/latest">tar.gz / .deb / .rpm / .apk from releases</a>.
-           Then <code>atlas index . --reindex</code> and <code>atlas mcp</code> for agents (MCP).</p>
+           Then <code>atlas index .</code> and <code>atlas mcp --transport stdio</code> for agents.</p>
         <p>Every number above is reproducible from the committed artifacts under <a href="data/">data/</a>.
            This static digest is replaced by the interactive page when JavaScript is available.</p>
       </div>
@@ -211,8 +225,8 @@ fs.writeFileSync(idx, html);
 
 /* --------------------------- crawler files ------------------------------ */
 
-fs.writeFileSync(path.join(repoRoot, "robots.txt"), `# Atlas benchmark site — everything here is public and citable.
-# AI crawlers are explicitly welcome; the raw benchmark data lives under /atlas/data/.
+fs.writeFileSync(path.join(repoRoot, "robots.txt"), `# Atlas product documentation and benchmark evidence.
+# Public benchmark data lives under /atlas/data/.
 User-agent: *
 Allow: /
 
@@ -244,10 +258,10 @@ fs.writeFileSync(path.join(repoRoot, "sitemap.xml"), `<?xml version="1.0" encodi
 </urlset>
 `);
 
-fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas — deterministic code intelligence
+fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intelligence
 
-> Atlas is a deterministic, LLM-free code-intelligence CLI: one local binary that indexes a
-> repository into a SQLite symbol/call graph in under a second and answers context queries
+> Atlas is a local code-intelligence CLI: one native binary that indexes a
+> repository into a SQLite symbol and relationship graph and answers focused context queries
 > (definition, callers, callees, imports, routes) in ~${r.latencyAtScale.meanMs} ms and ~${h.atlasTokAll} tokens.
 > Benchmark (July 2026, real-LLM scored, 37 languages): Atlas F1 ${h.atlasF1All} @ ${h.atlasTokAll} tokens vs
 > graph tool ${h.graphifyF1} @ ${Math.round(h.graphifyTok)} tokens — ${h.accPerToken}× accuracy per token, ${h.fewerTokens}× fewer tokens.
@@ -262,9 +276,11 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas — deterministic cod
 - [AGENT_TOKEN_BENCH_PUBLIC.json](${BASE}data/raw/AGENT_TOKEN_BENCH_PUBLIC.json): end-to-end token usage of real agent harnesses (Claude Code, OpenAI Codex) with Atlas vs graph tool vs no tool — reproducible via agent-bench/ in the GitHub repo
 
 ## Project
-- [Benchmark & comparison site](${BASE}): interactive version of everything above
+- [Product documentation](${BASE}#docs/getting-started): install, index, query, configure, connect, troubleshoot, and upgrade
+- [Benchmark & comparison](${BASE}#benchmarks): interactive version of the published evidence
 - [GitHub repository](https://github.com/aziron-ai/atlas): releases (macOS, Linux, Windows), issues
-- [npm package](https://www.npmjs.com/package/@dominic097/atlas): \`npm install -g @dominic097/atlas\`
+- [GitHub Wiki](https://github.com/aziron-ai/atlas/wiki): mirror of the consumer product guide
+- [npm package](https://www.npmjs.com/package/@aziron/atlas): \`npm install -g @aziron/atlas\`
 `);
 
 /* ------------------------------ verify ---------------------------------- */

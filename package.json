@@ -1,7 +1,7 @@
 {
   "name": "atlas-benchmark-site",
-  "version": "0.1.28",
-  "description": "Static React benchmark and product site for the Atlas CLI release repository.",
+  "version": "0.1.36",
+  "description": "Atlas product documentation, benchmark evidence, and release data.",
   "private": true,
   "scripts": {
     "build": "tailwindcss -i ./src/styles.css -o ./assets/styles.css --minify && esbuild ./src/App.jsx --bundle --format=iife --jsx=automatic --minify --outfile=./assets/app.js",

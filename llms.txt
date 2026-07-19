@@ -1,12 +1,12 @@
-# Atlas — deterministic code intelligence
+# Atlas - local code intelligence
 
-> Atlas is a deterministic, LLM-free code-intelligence CLI: one local binary that indexes a
-> repository into a SQLite symbol/call graph in under a second and answers context queries
+> Atlas is a local code-intelligence CLI: one native binary that indexes a
+> repository into a SQLite symbol and relationship graph and answers focused context queries
 > (definition, callers, callees, imports, routes) in ~7.4 ms and ~21.2 tokens.
 > Benchmark (July 2026, real-LLM scored, 37 languages): Atlas F1 0.757 @ 21.2 tokens vs
 > graph tool 0.539 @ 97 tokens — 6.4× accuracy per token, 36× fewer tokens.
 > Real-repo (gopls ground truth): Atlas F1 0.975 vs graph tool 0.084. 40 code languages on a
-> five-level maturity ladder. Version 0.1.28.
+> five-level maturity ladder. Version 0.1.36.
 
 ## Benchmark data
 - [site-data.json](https://aziron-ai.github.io/atlas/data/site-data.json): the full payload the page renders — headline table, efficiency frontier, detail knob, maturity ladder, scorecard, per-language results
@@ -16,6 +16,8 @@
 - [AGENT_TOKEN_BENCH_PUBLIC.json](https://aziron-ai.github.io/atlas/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json): end-to-end token usage of real agent harnesses (Claude Code, OpenAI Codex) with Atlas vs graph tool vs no tool — reproducible via agent-bench/ in the GitHub repo
 
 ## Project
-- [Benchmark & comparison site](https://aziron-ai.github.io/atlas/): interactive version of everything above
+- [Product documentation](https://aziron-ai.github.io/atlas/#docs/getting-started): install, index, query, configure, connect, troubleshoot, and upgrade
+- [Benchmark & comparison](https://aziron-ai.github.io/atlas/#benchmarks): interactive version of the published evidence
 - [GitHub repository](https://github.com/aziron-ai/atlas): releases (macOS, Linux, Windows), issues
-- [npm package](https://www.npmjs.com/package/@dominic097/atlas): `npm install -g @dominic097/atlas`
+- [GitHub Wiki](https://github.com/aziron-ai/atlas/wiki): mirror of the consumer product guide
+- [npm package](https://www.npmjs.com/package/@aziron/atlas): `npm install -g @aziron/atlas`
