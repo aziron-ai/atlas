@@ -688,29 +688,35 @@ const LEVEL_STYLE = {
   L1: { color: "var(--muted)", fill: "rgba(154,163,179,0.10)" },
 };
 
-function LangChip({ lang, level, pending }) {
+function LangChip({ lang, level, pending, promoted }) {
   const st = LEVEL_STYLE[level];
   return (
     <span
       className="mono inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5"
       data-testid="maturity-lang"
-      title={pending ? "fixture-truth F1 1.000 on the Linux saturation run — L4 pending a real-repo call-graph proof" : undefined}
+      title={
+        pending ? "fixture-truth F1 1.000 on the Linux saturation run — L4 pending a real-repo call-graph proof"
+        : promoted ? "newly promoted: call graph cross-checked against the language's own LSP server on a real public repository (promotion run below)"
+        : undefined
+      }
       style={{
         fontSize: 12,
         fontWeight: 600,
         color: pending ? "var(--warning)" : "var(--text)",
         background: pending ? "rgba(242,180,58,0.07)" : st.fill,
-        border: `1px ${pending ? "dashed" : "solid"} ${pending ? "var(--warning)" : "var(--line-strong)"}`,
+        border: `1px ${pending ? "dashed" : "solid"} ${pending ? "var(--warning)" : promoted ? "var(--primary)" : "var(--line-strong)"}`,
       }}
     >
       {langLabel(lang)}
       {pending && <span style={{ fontSize: 9, letterSpacing: "0.08em", opacity: 0.85 }}>PENDING</span>}
+      {promoted && <span style={{ fontSize: 9, letterSpacing: "0.08em", color: "var(--primary)" }}>NEW</span>}
     </span>
   );
 }
 
 function MaturityLadder({ maturity }) {
   const pendingSet = new Set(maturity.pending.langs);
+  const promotedSet = new Set(maturity.promoted?.langs || []);
   const bands = maturity.levels.map((lv) => {
     if (lv.id === "L4") return { ...lv, extra: maturity.pending.langs, count: `${lv.langs.length} + ${maturity.pending.langs.length} pending` };
     if (lv.id === "L2") return { ...lv, langs: lv.langs.filter((l) => !pendingSet.has(l)), count: `${lv.langs.filter((l) => !pendingSet.has(l)).length} remaining`, note: `${maturity.pending.langs.length} more shown at L4 above, pending proof` };
@@ -746,7 +752,7 @@ function MaturityLadder({ maturity }) {
             {/* the languages */}
             <div className="min-w-0">
               <div className="flex flex-wrap gap-2">
-                {b.langs.map((l) => <LangChip key={l} lang={l} level={b.id} />)}
+                {b.langs.map((l) => <LangChip key={l} lang={l} level={b.id} promoted={b.id === "L5" && promotedSet.has(l)} />)}
                 {(b.extra || []).map((l) => <LangChip key={l} lang={l} level="L4" pending />)}
               </div>
               {b.note && (
@@ -848,6 +854,90 @@ function MaturityTable({ data }) {
   );
 }
 
+function L5PromotionPanel({ l5run }) {
+  const passed = l5run.rows.filter((r) => r.pass);
+  const med = l5run.medians;
+  const fmtX = (x) => (x == null ? "–" : x >= 100 ? `${Math.round(x)}×` : `${x}×`);
+  return (
+    <div className="panel mt-6 p-5 sm:p-6" data-testid="l5-promotion">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h3 style={{ fontSize: 15, fontWeight: 700 }}>{l5run.label}</h3>
+        <span className="mono" style={{ fontSize: 11, color: "var(--faint)" }}>
+          gate: ≥{l5run.gate.min_symbols} symbols · F1 ≥ {l5run.gate.mean_f1} · precision ≥ {l5run.gate.mean_precision}
+        </span>
+      </div>
+      <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--muted)" }}>
+        Each candidate language’s <em>who-calls</em> answers are cross-checked against the language’s own
+        LSP server on a real public repository — the same evidence class that graded the original seven
+        L5 languages. Truth prefers <span className="mono">callHierarchy</span>; servers without it use
+        references with documentSymbol enclosure, call-shaped sites only. Both sides are restricted to
+        textually-defined callers (macro-expanded names are listed, not scored), and an extra caller only
+        counts against precision when no textual call site corroborates it — every excusal ships in the
+        raw artifact. Scoring is a deterministic set comparison; no LLM anywhere.
+      </p>
+      <div className="mt-3 mb-4 flex flex-wrap gap-2">
+        <span className="chip" style={{ borderColor: "var(--primary)", color: "var(--primary)" }}>
+          {passed.length} of {l5run.rows.length} candidates promoted
+        </span>
+        {med.xServeLatGraphify != null && (
+          <span className="chip">{fmtX(med.xServeLatGraphify)} faster than the graph tool per query (warm Atlas daemon vs its CLI — it has no daemon mode; CLI-vs-CLI {fmtX(med.xLatGraphify)})</span>
+        )}
+        {med.xLatLspCold != null && (
+          <span className="chip">{fmtX(med.xLatLspCold)} faster than spawning the reference server per session</span>
+        )}
+        {med.xTokLsp != null && (
+          <span className="chip">{fmtX(med.xTokLsp)} fewer answer tokens than the reference server’s JSON</span>
+        )}
+        {med.xTokRawRead != null && (
+          <span className="chip">{fmtX(med.xTokRawRead)} fewer tokens than reading the implicated files</span>
+        )}
+      </div>
+      <div style={{ overflowX: "auto" }}>
+        <table className="dtable" data-testid="l5-promotion-table" style={{ minWidth: 980 }}>
+          <thead>
+            <tr>
+              <th>language</th><th>repository</th><th>reference truth</th><th>mode</th>
+              <th className="num">syms</th><th className="num">F1</th><th className="num">P</th><th className="num">R</th>
+              <th className="num">atlas warm/CLI ms</th><th className="num">LSP cold ms</th>
+              <th className="num">graph CLI ms</th><th className="num">tok ×LSP</th><th className="num">tok ×read</th>
+              <th>verdict</th>
+            </tr>
+          </thead>
+          <tbody>
+            {l5run.rows.map((r) => (
+              <tr key={r.lang}>
+                <td className="mono">{langLabel(r.lang)}</td>
+                <td className="mono">{r.repo ? <a className="focusring" href={`https://github.com/${r.repo}`} target="_blank" rel="noreferrer">{r.repo}</a> : "–"}</td>
+                <td className="mono">{r.reference}</td>
+                <td className="mono">{r.mode}</td>
+                <td className="num">{r.symbols}</td>
+                <td className="num" style={{ color: r.f1 >= 0.9 ? "var(--primary)" : "var(--warning)", fontWeight: 700 }}>{r.f1?.toFixed(3)}</td>
+                <td className="num">{r.precision?.toFixed(3)}</td>
+                <td className="num">{r.recall?.toFixed(3)}</td>
+                <td className="num">{r.atlasServeMs != null ? `${r.atlasServeMs} / ${r.atlasCliMs}` : r.atlasCliMs}</td>
+                <td className="num">{r.lspColdMs != null ? Math.round(r.lspColdMs).toLocaleString() : "–"}</td>
+                <td className="num">{r.graphifyMs ?? "–"}</td>
+                <td className="num">{fmtX(r.xTokLsp)}</td>
+                <td className="num">{fmtX(r.xTokRawRead)}</td>
+                <td className="mono" style={{ color: r.pass ? "var(--primary)" : "var(--warning)", fontWeight: 700 }}>
+                  {r.pass ? "PASS → L5" : "stays L4"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-3" style={{ fontSize: 12, lineHeight: 1.6, color: "var(--faint)" }}>
+        Latency lanes are compared like-for-like and labeled: Atlas CLI vs graph-tool CLI (both cold
+        process spawns); warm Atlas daemon (the MCP path agents actually use) vs the reference server’s
+        per-session spawn — the reference servers are precise by construction and remain the accuracy
+        target, but they are session tools, not query daemons. Languages that missed the gate stay L4
+        with their numbers shown — nothing is promoted on a partial score.
+      </p>
+    </div>
+  );
+}
+
 function MaturitySection({ data }) {
   const maturity = data.report.maturity;
   const [view, setView] = useState("ladder");
@@ -886,6 +976,11 @@ function MaturitySection({ data }) {
 
         <div className="mb-6 flex flex-wrap gap-2">
           <span className="chip" style={{ borderColor: "var(--primary)", color: "var(--primary)" }}>{l5} reference-validated</span>
+          {maturity.promoted?.langs?.length ? (
+            <span className="chip" style={{ borderColor: "var(--primary)", color: "var(--primary)" }}>
+              +{maturity.promoted.langs.length} newly promoted — LSP-truth on real repos
+            </span>
+          ) : null}
           <span className="chip" style={{ borderColor: "var(--secondary)", color: "var(--secondary)" }}>{l4} real-repo call graph</span>
           <span className="chip" style={{ borderColor: "var(--warning)", color: "var(--warning)", borderStyle: "dashed" }}>
             {maturity.pending.langs.length} fixed · pending real-repo proof
@@ -898,6 +993,8 @@ function MaturitySection({ data }) {
         <div className="panel p-5 sm:p-6">
           {view === "ladder" ? <MaturityLadder maturity={maturity} /> : <MaturityTable data={data} />}
         </div>
+
+        {data.l5run && <L5PromotionPanel l5run={data.l5run} />}
 
         <p className="mt-4" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--faint)" }}>
           <span className="mono" style={{ color: "var(--warning)" }}>PENDING</span> = {maturity.pending.evidence}.
