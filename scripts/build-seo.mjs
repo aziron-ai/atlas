@@ -42,6 +42,98 @@ const DESC =
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
+/* --------------------- docs: indexable static pages --------------------- */
+// The interactive docs live at hash routes (#docs/<slug>) that search engines
+// cannot index as distinct URLs. To make each guide separately discoverable we
+// render a real HTML page per doc under /atlas/docs/<slug>/ from the consumer
+// markdown in content/docs/. Content mirrors the GitHub Wiki guide.
+
+const DOCS = [
+  { slug: "getting-started", title: "Getting Started", desc: "Create a local Atlas index, run the first cited queries, and connect an AI coding assistant." },
+  { slug: "installation", title: "Installation", desc: "Install Atlas via Homebrew, npm, release archives, or native Linux packages, then verify it." },
+  { slug: "indexing", title: "Indexing and Reindexing", desc: "Keep the Atlas index fresh: incremental updates, watch mode, exclusions, and recovery." },
+  { slug: "cli", title: "CLI Reference", desc: "Atlas command-line reference: search, symbols, relationships, impact, routes, and maintenance." },
+  { slug: "assistants", title: "AI Assistant Setup", desc: "Connect Claude, Codex, and other MCP-compatible assistants to Atlas." },
+  { slug: "mcp", title: "MCP Tools", desc: "Atlas MCP tools that give coding assistants bounded, cited code context." },
+  { slug: "service", title: "Dashboard and HTTP API", desc: "Run the local Atlas dashboard and the HTTP / MCP service." },
+  { slug: "configuration", title: "Configuration", desc: "Configure Atlas limits, storage location, and runtime behavior." },
+  { slug: "privacy", title: "Privacy and Data Handling", desc: "How Atlas stores repository intelligence locally and what stays on your machine." },
+  { slug: "languages", title: "Supported Languages and Formats", desc: "Languages and formats Atlas indexes, with capability levels." },
+  { slug: "benchmarks", title: "Benchmarks and Methodology", desc: "How to read and reproduce the published Atlas benchmark evidence." },
+  { slug: "troubleshooting", title: "Troubleshooting", desc: "Diagnose stale, missing, or incomplete Atlas results." },
+  { slug: "upgrade", title: "Upgrade and Uninstall", desc: "Update Atlas safely, or remove it and its local data." },
+];
+
+// Wiki page name -> doc slug, for rewriting the guides' internal links.
+const WIKI_TO_SLUG = {
+  "Getting-Started": "getting-started", "Installation": "installation",
+  "Indexing-and-Reindexing": "indexing", "CLI-Reference": "cli",
+  "AI-Assistant-Setup": "assistants", "MCP-Tools": "mcp",
+  "Dashboard-and-HTTP-API": "service", "Configuration": "configuration",
+  "Privacy-and-Data-Handling": "privacy", "Supported-Languages": "languages",
+  "Benchmarks-and-Methodology": "benchmarks", "Troubleshooting": "troubleshooting",
+  "Upgrade-and-Uninstall": "upgrade",
+};
+const slugSet = new Set(DOCS.map((d) => d.slug));
+
+const rewriteHref = (href) => {
+  if (/^https?:\/\//.test(href) || href.startsWith("#") || href.startsWith("mailto:")) return href;
+  if (href === "Home") return `${BASE}`;
+  if (WIKI_TO_SLUG[href]) return `../${WIKI_TO_SLUG[href]}/`;
+  if (slugSet.has(href)) return `../${href}/`;
+  return href;
+};
+
+// Inline markdown: operate on already HTML-escaped text (markers survive escaping).
+const inline = (t) =>
+  esc(t)
+    .replace(/`([^`]+)`/g, (_m, c) => `<code>${c}</code>`)
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, txt, href) => `<a href="${esc(rewriteHref(href))}">${txt}</a>`)
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+
+// Block markdown -> HTML for the constructs the guides use.
+function mdToHtml(md) {
+  const lines = md.replace(/\r\n/g, "\n").split("\n");
+  const out = [];
+  let i = 0;
+  const flushList = (buf) => { if (buf.length) { out.push(`<ul>${buf.map((li) => `<li>${inline(li)}</li>`).join("")}</ul>`); buf.length = 0; } };
+  const listBuf = [];
+  while (i < lines.length) {
+    const line = lines[i];
+    if (/^```/.test(line)) {                                   // fenced code
+      flushList(listBuf);
+      const code = [];
+      i++;
+      while (i < lines.length && !/^```/.test(lines[i])) { code.push(lines[i]); i++; }
+      i++;
+      out.push(`<pre><code>${esc(code.join("\n"))}</code></pre>`);
+      continue;
+    }
+    if (/^\s*\|.*\|\s*$/.test(line) && i + 1 < lines.length && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i + 1])) {
+      flushList(listBuf);                                      // table
+      const cells = (row) => row.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
+      const header = cells(line);
+      i += 2;
+      const rows = [];
+      while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) { rows.push(cells(lines[i])); i++; }
+      out.push(`<table><thead><tr>${header.map((c) => `<th>${inline(c)}</th>`).join("")}</tr></thead><tbody>${rows.map((rw) => `<tr>${rw.map((c) => `<td>${inline(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`);
+      continue;
+    }
+    const hm = line.match(/^(#{1,4})\s+(.*)$/);
+    if (hm) { flushList(listBuf); const n = hm[1].length; out.push(`<h${n}>${inline(hm[2])}</h${n}>`); i++; continue; }
+    if (/^\s*[-*]\s+/.test(line)) { listBuf.push(line.replace(/^\s*[-*]\s+/, "")); i++; continue; }
+    if (line.trim() === "") { flushList(listBuf); i++; continue; }
+    // paragraph: gather until blank line
+    flushList(listBuf);
+    const para = [line];
+    i++;
+    while (i < lines.length && lines[i].trim() !== "" && !/^(#{1,4}\s|```|\s*[-*]\s|\s*\|)/.test(lines[i])) { para.push(lines[i]); i++; }
+    out.push(`<p>${inline(para.join(" "))}</p>`);
+  }
+  flushList(listBuf);
+  return out.join("\n");
+}
+
 /* ----------------------------- head block ------------------------------- */
 
 const jsonLd = [
@@ -153,12 +245,13 @@ const body = `
 
         <h2>Product documentation</h2>
         <ul>
-          <li><a href="#docs/getting-started">Getting started</a> — first index, query, and assistant connection.</li>
-          <li><a href="#docs/installation">Installation</a> — Homebrew, npm, archives, and Linux packages.</li>
-          <li><a href="#docs/indexing">Indexing and reindexing</a> — freshness, watch mode, and recovery.</li>
-          <li><a href="#docs/cli">CLI reference</a> — search, symbols, relationships, impact, and routes.</li>
-          <li><a href="#docs/assistants">AI assistant setup</a> and <a href="#docs/mcp">MCP tools</a>.</li>
-          <li><a href="#docs/troubleshooting">Troubleshooting</a>, privacy, configuration, and upgrades.</li>
+          <li><a href="docs/getting-started/">Getting started</a> — first index, query, and assistant connection.</li>
+          <li><a href="docs/installation/">Installation</a> — Homebrew, npm, archives, and Linux packages.</li>
+          <li><a href="docs/indexing/">Indexing and reindexing</a> — freshness, watch mode, and recovery.</li>
+          <li><a href="docs/cli/">CLI reference</a> — search, symbols, relationships, impact, and routes.</li>
+          <li><a href="docs/assistants/">AI assistant setup</a> and <a href="docs/mcp/">MCP tools</a>.</li>
+          <li><a href="docs/troubleshooting/">Troubleshooting</a>, <a href="docs/privacy/">privacy</a>, <a href="docs/configuration/">configuration</a>, and <a href="docs/upgrade/">upgrades</a>.</li>
+          <li><a href="docs/">Browse all documentation →</a></li>
         </ul>
 
         <h2>Headline results — ${esc(r.label)}</h2>
@@ -248,13 +341,13 @@ Allow: /
 Sitemap: ${BASE}sitemap.xml
 `);
 
+const sitemapUrls = [
+  `  <url>\n    <loc>${BASE}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>`,
+  ...DOCS.map((d) => `  <url>\n    <loc>${BASE}docs/${d.slug}/</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`),
+];
 fs.writeFileSync(path.join(repoRoot, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${BASE}</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
+${sitemapUrls.join("\n")}
 </urlset>
 `);
 
@@ -283,15 +376,192 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intellig
 - [npm package](https://www.npmjs.com/package/@aziron/atlas): \`npm install -g @aziron/atlas\`
 `);
 
+/* --------------------- per-doc indexable pages -------------------------- */
+
+const DOC_CSS = `
+  :root { color-scheme: dark light; --bg:#0b0c0f; --panel:#111318; --text:#e6e7ea; --muted:#a2a6ad; --line:#23262d; --primary:#34d3a6; --link:#5e4bff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(11,12,15,.85); backdrop-filter:blur(8px); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .mark { width:24px; height:24px; border-radius:6px; background:var(--primary); color:#04130f; display:grid; place-items:center; font-weight:800; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#1b1e24; padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:#14171d; border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#14171d; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+`;
+
+const docsNav = DOCS.map((d) => `<a href="../${d.slug}/">${esc(d.title)}</a>`).join("\n        ");
+
+const docPage = (doc, idx) => {
+  const md = fs.readFileSync(path.join(repoRoot, "content", "docs", `${doc.slug}.md`), "utf8");
+  const bodyHtml = mdToHtml(md);
+  const url = `${BASE}docs/${doc.slug}/`;
+  const prev = idx > 0 ? DOCS[idx - 1] : null;
+  const next = idx < DOCS.length - 1 ? DOCS[idx + 1] : null;
+  const ld = [
+    { "@context": "https://schema.org", "@type": "TechArticle", headline: doc.title, description: doc.desc, url, inLanguage: "en",
+      isPartOf: { "@type": "WebSite", name: "Aziron Atlas", url: BASE },
+      publisher: { "@type": "Organization", name: "Aziron", url: "https://github.com/aziron-ai" }, dateModified: today },
+    { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Atlas", item: BASE },
+      { "@type": "ListItem", position: 2, name: "Documentation", item: `${BASE}docs/` },
+      { "@type": "ListItem", position: 3, name: doc.title, item: url },
+    ] },
+  ];
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${esc(doc.title)} — Atlas documentation</title>
+  <meta name="description" content="${esc(doc.desc)}">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="../../assets/og.png" type="image/png">
+  <link rel="canonical" href="${url}">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="${esc(doc.title)} — Atlas">
+  <meta property="og:description" content="${esc(doc.desc)}">
+  <meta property="og:url" content="${url}">
+  <meta property="og:image" content="${BASE}assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${esc(doc.title)} — Atlas">
+  <meta name="twitter:description" content="${esc(doc.desc)}">
+  <meta name="twitter:image" content="${BASE}assets/og.png">
+  <script type="application/ld+json">${JSON.stringify(ld)}</script>
+  <style>${DOC_CSS}</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="${BASE}"><span class="mark">A</span> ATLAS</a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="${BASE}">Home</a> / <a href="${BASE}docs/">Docs</a> / ${esc(doc.title)}</nav>
+      <a class="open-app" href="${BASE}#docs/${doc.slug}">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+${bodyHtml}
+    </article>
+    <nav class="prevnext">
+      <span>${prev ? `<a href="../${prev.slug}/">← ${esc(prev.title)}</a>` : ""}</span>
+      <span>${next ? `<a href="../${next.slug}/">${esc(next.title)} →</a>` : ""}</span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        ${docsNav}
+    </nav>
+    <footer class="site">
+      Atlas v${pkg.version} · <a href="${BASE}">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>
+`;
+};
+
+DOCS.forEach((doc, idx) => {
+  const dir = path.join(repoRoot, "docs", doc.slug);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, "index.html"), docPage(doc, idx));
+});
+
+// docs hub
+const docsIndex = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Documentation — Atlas</title>
+  <meta name="description" content="Atlas product documentation: install, index, query, connect an AI assistant, configure, troubleshoot, and upgrade.">
+  <meta name="robots" content="index,follow">
+  <meta name="color-scheme" content="dark light">
+  <link rel="canonical" href="${BASE}docs/">
+  <link rel="icon" href="../assets/og.png" type="image/png">
+  <style>${DOC_CSS}</style>
+</head>
+<body>
+  <header class="site"><div class="row">
+    <a class="brand" href="${BASE}"><span class="mark">A</span> ATLAS</a>
+    <nav class="crumbs"><a href="${BASE}">Home</a> / Docs</nav>
+    <a class="open-app" href="${BASE}#docs/getting-started">Open interactive docs →</a>
+  </div></header>
+  <main class="wrap">
+    <article>
+      <h1>Atlas documentation</h1>
+      <p>Local code intelligence for developers and AI coding assistants. Install Atlas, index a repository, and return focused, source-grounded context through the CLI, MCP, and a local HTTP service.</p>
+      <ul>
+        ${DOCS.map((d) => `<li><a href="${d.slug}/">${esc(d.title)}</a> — ${esc(d.desc)}</li>`).join("\n        ")}
+      </ul>
+    </article>
+    <footer class="site">Atlas v${pkg.version} · <a href="${BASE}">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.</footer>
+  </main>
+</body>
+</html>
+`;
+fs.writeFileSync(path.join(repoRoot, "docs", "index.html"), docsIndex);
+
+/* -------------------------- llms-full.txt ------------------------------- */
+// Full-content dump for AI crawlers/agents that ingest a single file.
+const llmsFull = `# Atlas — full documentation for LLMs
+
+> Atlas is a local code-intelligence CLI: one native binary that indexes a
+> repository into a SQLite symbol and relationship graph and answers focused
+> context queries (definition, callers, callees, imports, routes) in
+> ~${r.latencyAtScale.meanMs} ms and ~${h.atlasTokAll} tokens. Benchmark (July 2026, real-LLM
+> scored, 37 languages): Atlas F1 ${h.atlasF1All} @ ${h.atlasTokAll} tokens vs graph tool
+> ${h.graphifyF1} @ ${Math.round(h.graphifyTok)} tokens. Version ${pkg.version}.
+>
+> This file inlines the complete consumer documentation. Canonical HTML pages
+> live at ${BASE}docs/<slug>/ ; the interactive site is at ${BASE}.
+
+- Product site: ${BASE}
+- Benchmarks: ${BASE}#benchmarks
+- GitHub: https://github.com/aziron-ai/atlas
+- Wiki: https://github.com/aziron-ai/atlas/wiki
+- npm: https://www.npmjs.com/package/@aziron/atlas
+
+${DOCS.map((d) => {
+  const md = fs.readFileSync(path.join(repoRoot, "content", "docs", `${d.slug}.md`), "utf8").trim();
+  return `\n---\n\n# ${d.title}\nURL: ${BASE}docs/${d.slug}/\n\n${md}`;
+}).join("\n")}
+`;
+fs.writeFileSync(path.join(repoRoot, "llms-full.txt"), llmsFull);
+
 /* ------------------------------ verify ---------------------------------- */
 
 const finalHtml = fs.readFileSync(idx, "utf8");
 for (const probe of ["seo-head:start", "seo-body:start", "application/ld+json", "canonical", "maturity ladder"]) {
   if (!finalHtml.toLowerCase().includes(probe.toLowerCase())) throw new Error(`index.html missing: ${probe}`);
 }
+const docFiles = DOCS.map((d) => `docs/${d.slug}/index.html`);
 const BANNED = [/\/Users\//, /\/home\//, /\/tmp\//, /damirdarasu/, /aziron-ui/i, /aziron-pulse/i];
-for (const p of ["index.html", "robots.txt", "sitemap.xml", "llms.txt"]) {
+for (const p of ["index.html", "robots.txt", "sitemap.xml", "llms.txt", "llms-full.txt", "docs/index.html", ...docFiles]) {
   const t = fs.readFileSync(path.join(repoRoot, p), "utf8");
   for (const re of BANNED) if (re.test(t)) throw new Error(`${p} leak: ${re}`);
 }
-console.log(`seo layer written: index.html digest (${Math.round(body.length / 1024)}kb), robots.txt, sitemap.xml, llms.txt — v${pkg.version}, ${today}`);
+// every doc page must carry its canonical + real content
+for (const d of DOCS) {
+  const t = fs.readFileSync(path.join(repoRoot, "docs", d.slug, "index.html"), "utf8");
+  if (!t.includes(`canonical" href="${BASE}docs/${d.slug}/"`)) throw new Error(`doc ${d.slug}: missing canonical`);
+  if (!/<article>[\s\S]*<h1>[\s\S]*<\/article>/.test(t)) throw new Error(`doc ${d.slug}: missing article/h1`);
+}
+if (!fs.readFileSync(path.join(repoRoot, "llms-full.txt"), "utf8").includes("# Installation")) throw new Error("llms-full.txt missing doc content");
+console.log(`seo layer written: index.html digest (${Math.round(body.length / 1024)}kb), ${DOCS.length} doc pages, docs/ hub, robots.txt, sitemap.xml (${DOCS.length + 1} urls), llms.txt, llms-full.txt — v${pkg.version}, ${today}`);
