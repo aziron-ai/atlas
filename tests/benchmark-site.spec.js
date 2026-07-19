@@ -14,10 +14,10 @@ const BANNED = [/\/Users\//, /damirdarasu/, /\/tmp\/atlas-live/, /MsysTechnologi
 
 // Install commands that must appear VERBATIM under #install.
 const INSTALL_COMMANDS = [
-  "brew install --cask dominic097/atlas/atlas",
-  "npm install -g @dominic097/atlas",
-  "atlas index . --reindex",
-  "atlas mcp --transport http --http 127.0.0.1:8765",
+  "brew install --cask aziron-ai/atlas/atlas",
+  "npm install -g @aziron/atlas",
+  "atlas index .",
+  "atlas mcp --transport stdio",
 ];
 
 const SECTIONS = [
@@ -25,9 +25,62 @@ const SECTIONS = [
   "field", "real", "agents", "graph", "evidence", "install",
 ];
 
-test.describe("atlas benchmark site — redesign", () => {
+const DOC_PAGES = [
+  "getting-started", "installation", "indexing", "cli", "assistants", "mcp",
+  "service", "configuration", "privacy", "languages", "benchmarks",
+  "troubleshooting", "upgrade",
+];
+
+test.describe("atlas product and documentation", () => {
+  test("overview makes the product, local model, and evidence paths clear", async ({ page }) => {
+    await page.goto(`${baseURL}#overview`, { waitUntil: "networkidle" });
+    const hero = page.getByTestId("product-hero");
+    await expect(hero.getByRole("heading", { level: 1 })).toHaveText("Atlas");
+    await expect(hero).toContainText("precise repository context");
+    await expect(hero).toContainText("One local binary");
+    await expect(page.getByTestId("product-install")).toContainText(
+      "brew install --cask aziron-ai/atlas/atlas"
+    );
+    await expect(page.getByTestId("product-nav")).toContainText(`v${site.version}`);
+    await expect(page.getByRole("link", { name: /View benchmark evidence/ })).toHaveAttribute("href", "#benchmarks");
+  });
+
+  test("all consumer documentation pages render with task content", async ({ page }) => {
+    for (const slug of DOC_PAGES) {
+      await page.goto(`${baseURL}#docs/${slug}`, { waitUntil: "networkidle" });
+      const article = page.getByTestId("docs-article");
+      await expect(article, slug).toBeVisible();
+      await expect(article.locator("h1"), slug).not.toBeEmpty();
+      await expect(article.locator("h2").first(), slug).toBeVisible();
+    }
+  });
+
+  test("installation and assistant setup use current public coordinates", async ({ page }) => {
+    await page.goto(`${baseURL}#docs/installation`, { waitUntil: "networkidle" });
+    await expect(page.getByTestId("docs-article")).toContainText("aziron-ai/atlas/atlas");
+    await expect(page.getByTestId("docs-article")).toContainText("@aziron/atlas");
+    await expect(page.getByTestId("docs-article")).toContainText(`@${site.version}`);
+
+    await page.goto(`${baseURL}#docs/assistants`, { waitUntil: "networkidle" });
+    await expect(page.getByTestId("docs-article")).toContainText("atlas bootstrap --dry-run");
+    await expect(page.getByTestId("docs-article")).toContainText("codex,claude,claude-desktop");
+  });
+
+  test("primary navigation reaches docs, benchmarks, and downloadable data", async ({ page, request }) => {
+    await page.goto(`${baseURL}#overview`, { waitUntil: "networkidle" });
+    await page.getByTestId("product-nav").getByRole("link", { name: "Documentation", exact: true }).click();
+    await expect(page).toHaveURL(/#docs\/getting-started$/);
+    await expect(page.getByTestId("docs-article")).toBeVisible();
+
+    const response = await request.get(new URL("data/site-data.json", baseURL).toString());
+    expect(response.status()).toBe(200);
+    expect((await response.json()).version).toBe(site.version);
+  });
+});
+
+test.describe("atlas benchmark evidence", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(baseURL, { waitUntil: "networkidle" });
+    await page.goto(`${baseURL}#benchmarks`, { waitUntil: "networkidle" });
     await page.waitForSelector("#hero");
   });
 
@@ -147,7 +200,8 @@ test.describe("atlas benchmark site — redesign", () => {
     const ctx = await page.context().browser().newContext({ javaScriptEnabled: false });
     const nojs = await ctx.newPage();
     await nojs.goto(baseURL, { waitUntil: "domcontentloaded" });
-    await expect(nojs.locator("h1")).toContainText("most accurate code answer");
+    await expect(nojs.locator("h1")).toHaveText("Atlas");
+    await expect(nojs.locator("body")).toContainText("Product documentation");
     await expect(nojs.locator("table").first()).toBeVisible();
     await ctx.close();
   });

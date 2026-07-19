@@ -7,11 +7,11 @@ symbols, callers, references, routes, and change impact. Results include file
 and line references so developers and coding agents can inspect the evidence
 without loading an entire codebase into a model context window.
 
-[Documentation](https://github.com/aziron-ai/atlas/wiki) |
-[Install](https://github.com/aziron-ai/atlas/wiki/Installation) |
+[Documentation](https://aziron-ai.github.io/atlas/#docs/getting-started) |
+[Install](https://aziron-ai.github.io/atlas/#docs/installation) |
 [Releases](https://github.com/aziron-ai/atlas/releases) |
-[Benchmarks](https://aziron-ai.github.io/atlas/) |
-[Troubleshooting](https://github.com/aziron-ai/atlas/wiki/Troubleshooting)
+[Benchmarks](https://aziron-ai.github.io/atlas/#benchmarks) |
+[Troubleshooting](https://aziron-ai.github.io/atlas/#docs/troubleshooting)
 
 ## Quickstart
 
@@ -45,7 +45,7 @@ Atlas can then answer questions such as:
 - What may be affected if `services/cart.go` changes?
 - Which routes or repositories depend on this handler?
 
-See [Getting Started](https://github.com/aziron-ai/atlas/wiki/Getting-Started)
+See [Getting Started](https://aziron-ai.github.io/atlas/#docs/getting-started)
 for a guided first index and first query.
 
 ## What Atlas Provides
@@ -73,7 +73,7 @@ Atlas is available through:
 - release archives and native Linux packages
 
 Integration behavior varies by client. Follow
-[AI Assistant Setup](https://github.com/aziron-ai/atlas/wiki/AI-Assistant-Setup)
+[AI Assistant Setup](https://aziron-ai.github.io/atlas/#docs/assistants)
 for supported configurations.
 
 ## Installation Notes
@@ -101,28 +101,33 @@ Atlas release channels currently provide:
 | Linux packages | `.deb`, `.rpm`, and `.apk` for amd64 and arm64 |
 
 Checksums and per-archive SBOMs are attached to each GitHub release. See
-[Installation](https://github.com/aziron-ai/atlas/wiki/Installation) for direct
+[Installation](https://aziron-ai.github.io/atlas/#docs/installation) for direct
 downloads and verification.
 
 ## Documentation
 
-- [Getting Started](https://github.com/aziron-ai/atlas/wiki/Getting-Started)
-- [Installation](https://github.com/aziron-ai/atlas/wiki/Installation)
-- [Indexing and Reindexing](https://github.com/aziron-ai/atlas/wiki/Indexing-and-Reindexing)
-- [CLI Reference](https://github.com/aziron-ai/atlas/wiki/CLI-Reference)
-- [AI Assistant Setup](https://github.com/aziron-ai/atlas/wiki/AI-Assistant-Setup)
-- [MCP Tools](https://github.com/aziron-ai/atlas/wiki/MCP-Tools)
-- [Dashboard and HTTP API](https://github.com/aziron-ai/atlas/wiki/Dashboard-and-HTTP-API)
-- [Configuration](https://github.com/aziron-ai/atlas/wiki/Configuration)
-- [Privacy and Data Handling](https://github.com/aziron-ai/atlas/wiki/Privacy-and-Data-Handling)
-- [Supported Languages](https://github.com/aziron-ai/atlas/wiki/Supported-Languages)
-- [Benchmarks and Methodology](https://github.com/aziron-ai/atlas/wiki/Benchmarks-and-Methodology)
-- [Troubleshooting](https://github.com/aziron-ai/atlas/wiki/Troubleshooting)
-- [Upgrade and Uninstall](https://github.com/aziron-ai/atlas/wiki/Upgrade-and-Uninstall)
+- [Getting Started](https://aziron-ai.github.io/atlas/#docs/getting-started)
+- [Installation](https://aziron-ai.github.io/atlas/#docs/installation)
+- [Indexing and Reindexing](https://aziron-ai.github.io/atlas/#docs/indexing)
+- [CLI Reference](https://aziron-ai.github.io/atlas/#docs/cli)
+- [AI Assistant Setup](https://aziron-ai.github.io/atlas/#docs/assistants)
+- [MCP Tools](https://aziron-ai.github.io/atlas/#docs/mcp)
+- [Dashboard and HTTP API](https://aziron-ai.github.io/atlas/#docs/service)
+- [Configuration](https://aziron-ai.github.io/atlas/#docs/configuration)
+- [Privacy and Data Handling](https://aziron-ai.github.io/atlas/#docs/privacy)
+- [Supported Languages](https://aziron-ai.github.io/atlas/#docs/languages)
+- [Benchmarks and Methodology](https://aziron-ai.github.io/atlas/#docs/benchmarks)
+- [Troubleshooting](https://aziron-ai.github.io/atlas/#docs/troubleshooting)
+- [Upgrade and Uninstall](https://aziron-ai.github.io/atlas/#docs/upgrade)
+
+The complete guide is also mirrored in the
+[GitHub Wiki](https://github.com/aziron-ai/atlas/wiki).
 
 ## Benchmarks and Data
 
-The [Atlas benchmark site](https://aziron-ai.github.io/atlas/) presents dated
+The
+[Atlas benchmark explorer](https://aziron-ai.github.io/atlas/#benchmarks)
+presents dated
 accuracy, token-use, and latency measurements with limitations and evidence
 levels. Public benchmark data remains downloadable:
 
@@ -141,7 +146,7 @@ that client's data policy. Network listeners and optional connected features
 require additional configuration.
 
 Review
-[Privacy and Data Handling](https://github.com/aziron-ai/atlas/wiki/Privacy-and-Data-Handling)
+[Privacy and Data Handling](https://aziron-ai.github.io/atlas/#docs/privacy)
 before enabling network access or organization-connected features.
 
 ## Repository Scope

@@ -2,6 +2,11 @@ import React, { useEffect, useMemo, useRef, useState, useCallback } from "react"
 import { createRoot } from "react-dom/client";
 import { ArrowRight, Check, Copy, Download, ExternalLink } from "lucide-react";
 import GraphExplorer from "./GraphExplorer";
+import {
+  Documentation,
+  ProductHome,
+  useSiteRoute,
+} from "./ProductDocs";
 
 /* ============================================================
    Atlas — Benchmark & Field Comparison
@@ -198,7 +203,7 @@ function ConsoleBar({ data, active }) {
       }}
     >
       <nav className="shell flex h-full items-center justify-between gap-3" aria-label="Primary">
-        <a href="#hero" className="focusring flex min-w-0 items-center gap-2.5" style={{ textDecoration: "none" }}>
+        <a href="#overview" className="focusring flex min-w-0 items-center gap-2.5" style={{ textDecoration: "none" }}>
           <span
             className="mono grid place-items-center rounded-md"
             style={{ width: 26, height: 26, background: "var(--primary)", color: "#04130f", fontWeight: 700, fontSize: 15 }}
@@ -222,6 +227,13 @@ function ConsoleBar({ data, active }) {
 
         <div className="flex items-center gap-2">
           <a
+            className="focusring chip hidden sm:inline-flex"
+            href="#docs/getting-started"
+            style={{ textDecoration: "none" }}
+          >
+            Docs
+          </a>
+          <a
             className="focusring chip"
             href="https://github.com/aziron-ai/atlas"
             target="_blank"
@@ -231,7 +243,7 @@ function ConsoleBar({ data, active }) {
           >
             <ExternalLink className="h-3.5 w-3.5" aria-hidden /> GitHub
           </a>
-          <a href="#install" className="btn btn-primary focusring" style={{ minHeight: 34, padding: "0 14px", textDecoration: "none" }}>
+          <a href="#docs/installation" className="btn btn-primary focusring" style={{ minHeight: 34, padding: "0 14px", textDecoration: "none" }}>
             Get Atlas
           </a>
         </div>
@@ -1678,12 +1690,12 @@ const installTabs = (v) => ({
   homebrew: {
     label: "Homebrew",
     sub: "macOS cask",
-    lines: ["brew install --cask dominic097/atlas/atlas", "atlas version"],
+    lines: ["brew install --cask aziron-ai/atlas/atlas", "atlas version"],
   },
   npm: {
     label: "npm",
     sub: "node wrapper",
-    lines: ["npm install -g @dominic097/atlas", "atlas version"],
+    lines: ["npm install -g @aziron/atlas", "atlas version"],
   },
   linux: {
     label: "Linux",
@@ -1731,7 +1743,7 @@ function Install({ version }) {
             <a className="focusring chip" href="https://github.com/aziron-ai/atlas/releases/latest" target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
               releases/latest <ExternalLink className="h-3 w-3" aria-hidden />
             </a>
-            <a className="focusring chip" href="https://www.npmjs.com/package/@dominic097/atlas" target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
+            <a className="focusring chip" href="https://www.npmjs.com/package/@aziron/atlas" target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
               npm
             </a>
           </>
@@ -1774,7 +1786,7 @@ function Install({ version }) {
         </div>
 
         <div className="grid min-w-0 gap-4">
-          <UsageStep n="1" title="Index a repository" line="atlas index . --reindex" copy="Builds the local symbol, call, route and search graph into SQLite — in well under a second on most repos." />
+          <UsageStep n="1" title="Index a repository" line="atlas index ." copy="Builds the local symbol, call, route and search graph into SQLite and reports discovery and indexing progress." />
           <UsageStep
             n="2"
             title="Retrieve code context"
@@ -1784,8 +1796,8 @@ function Install({ version }) {
           <UsageStep
             n="3"
             title="Connect agents"
-            line={`atlas mcp --transport http --http 127.0.0.1:8765`}
-            copy="Then `atlas install skill --agent claude` (or codex) wires local assistants over MCP."
+            line="atlas mcp --transport stdio"
+            copy="Or use `atlas bootstrap --dry-run` to preview setup for Codex, Claude, and other supported assistants."
           />
         </div>
       </div>
@@ -1815,10 +1827,44 @@ function useScrollSpy(ids) {
   return active;
 }
 
+function BenchmarkExperience({ data }) {
+  const active = useScrollSpy(["hero", "summary", "knob", "languages", "versus", "field", "real", "agents", "graph", "evidence", "install"]);
+
+  return (
+    <>
+      <a className="skip-link" href="#main">Skip to content</a>
+      <ConsoleBar data={data} active={active} />
+      <main id="main">
+        <Hero data={data} />
+        <ExecSummary data={data} />
+        <DetailKnob data={data} />
+        <MaturitySection data={data} />
+        <Versus data={data} />
+        <FieldSection data={data} />
+        <RealRepo data={data} />
+        <AgentBench data={data} />
+        <GraphSection />
+        <EvidenceSection data={data} />
+        <Install version={data.version} />
+      </main>
+      <footer className="hairline" style={{ marginTop: 8 }}>
+        <div className="shell flex flex-col gap-2 py-8 sm:flex-row sm:items-center sm:justify-between">
+          <span className="mono" style={{ fontSize: 12, color: "var(--faint)" }}>
+            {data.report.label} · fresh run {data.generatedAt.slice(0, 10)}
+          </span>
+          <span className="mono" style={{ fontSize: 12, color: "var(--faint)" }}>
+            Atlas v{data.version} · static, data-driven, self-contained
+          </span>
+        </div>
+      </footer>
+    </>
+  );
+}
+
 function App() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const active = useScrollSpy(["hero", "summary", "knob", "languages", "versus", "field", "real", "agents", "graph", "evidence", "install"]);
+  const route = useSiteRoute();
 
   useEffect(() => {
     fetch("data/site-data.json", { cache: "no-store" })
@@ -1862,35 +1908,9 @@ function App() {
     );
   }
 
-  return (
-    <>
-      <a className="skip-link" href="#main">Skip to content</a>
-      <ConsoleBar data={data} active={active} />
-      <main id="main">
-        <Hero data={data} />
-        <ExecSummary data={data} />
-        <DetailKnob data={data} />
-        <MaturitySection data={data} />
-        <Versus data={data} />
-        <FieldSection data={data} />
-        <RealRepo data={data} />
-        <AgentBench data={data} />
-        <GraphSection />
-        <EvidenceSection data={data} />
-        <Install version={data.version} />
-      </main>
-      <footer className="hairline" style={{ marginTop: 8 }}>
-        <div className="shell flex flex-col gap-2 py-8 sm:flex-row sm:items-center sm:justify-between">
-          <span className="mono" style={{ fontSize: 12, color: "var(--faint)" }}>
-            {data.report.label} · fresh run {data.generatedAt.slice(0, 10)}
-          </span>
-          <span className="mono" style={{ fontSize: 12, color: "var(--faint)" }}>
-            Atlas v{data.version} · static, data-driven, self-contained
-          </span>
-        </div>
-      </footer>
-    </>
-  );
+  if (route.view === "docs") return <Documentation data={data} page={route.page} />;
+  if (route.view === "benchmarks") return <BenchmarkExperience data={data} />;
+  return <ProductHome data={data} />;
 }
 
 createRoot(document.getElementById("root")).render(<App />);

@@ -1,5 +1,5 @@
-# Atlas benchmark site — everything here is public and citable.
-# AI crawlers are explicitly welcome; the raw benchmark data lives under /atlas/data/.
+# Atlas product documentation and benchmark evidence.
+# Public benchmark data lives under /atlas/data/.
 User-agent: *
 Allow: /
 
