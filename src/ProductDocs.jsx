@@ -86,7 +86,9 @@ function Brand() {
 
 export function ProductHeader({ version = RELEASE, active = "overview" }) {
   const [open, setOpen] = useState(false);
-  useEffect(() => setOpen(false), [active]);
+  useEffect(() => {
+    setOpen(false);
+  }, [active]);
 
   return (
     <header className="product-header sticky top-0 z-50" data-testid="product-nav">
@@ -746,7 +748,9 @@ function DocsPage({ slug }) {
 
 export function Documentation({ data, page = "getting-started" }) {
   const selected = useMemo(() => DOC_PAGES.find((item) => item.slug === page) || DOC_PAGES[0], [page]);
-  useEffect(() => window.scrollTo({ top: 0, behavior: "auto" }), [selected.slug]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [selected.slug]);
   return (
     <>
       <a className="skip-link" href="#docs-main">Skip to documentation</a>

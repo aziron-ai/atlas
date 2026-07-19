@@ -4,6 +4,7 @@ import { ArrowRight, Check, Copy, Download, ExternalLink } from "lucide-react";
 import GraphExplorer from "./GraphExplorer";
 import {
   Documentation,
+  ProductHeader,
   ProductHome,
   useSiteRoute,
 } from "./ProductDocs";
@@ -189,66 +190,40 @@ const NAV_ITEMS = [
   ["Evidence", "evidence"],
 ];
 
-function ConsoleBar({ data, active }) {
+// Secondary in-page navigation for the long benchmark report. The primary
+// site nav (Overview / Documentation / Benchmarks / Data) is provided by the
+// shared <ProductHeader>, which stays consistent across every view — this
+// strip only jumps between sections of the benchmark page and sits beneath it.
+function ConsoleBar({ active }) {
   return (
-    <header
-      data-testid="nav"
-      className="sticky top-0 z-40"
+    <nav
+      data-testid="benchmark-subnav"
+      className="sticky z-30"
       style={{
-        height: 56,
+        top: 64,
         background: "rgba(8,9,12,0.72)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         borderBottom: "1px solid var(--line)",
       }}
+      aria-label="Benchmark sections"
     >
-      <nav className="shell flex h-full items-center justify-between gap-3" aria-label="Primary">
-        <a href="#overview" className="focusring flex min-w-0 items-center gap-2.5" style={{ textDecoration: "none" }}>
-          <span
-            className="mono grid place-items-center rounded-md"
-            style={{ width: 26, height: 26, background: "var(--primary)", color: "#04130f", fontWeight: 700, fontSize: 15 }}
-            aria-hidden
-          >
-            A
-          </span>
-          <span className="font-semibold tracking-tight" style={{ fontSize: 15, color: "var(--text)" }}>
-            ATLAS
-          </span>
-          <span className="chip hidden sm:inline-flex">v{data.version}</span>
-        </a>
-
-        <div className="hidden items-center gap-0.5 lg:flex">
-          {NAV_ITEMS.map(([label, anchor]) => (
-            <a key={anchor} className="navlink focusring" href={`#${anchor}`} data-active={active === anchor}>
-              {label}
-            </a>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-2">
+      <div className="shell flex h-11 items-center gap-1 overflow-x-auto">
+        <span className="kicker hidden shrink-0 pr-2 sm:inline" style={{ color: "var(--faint)" }}>
+          Sections
+        </span>
+        {NAV_ITEMS.map(([label, anchor]) => (
           <a
-            className="focusring chip hidden sm:inline-flex"
-            href="#docs/getting-started"
-            style={{ textDecoration: "none" }}
+            key={anchor}
+            className="navlink focusring shrink-0"
+            href={`#${anchor}`}
+            data-active={active === anchor}
           >
-            Docs
+            {label}
           </a>
-          <a
-            className="focusring chip"
-            href="https://github.com/aziron-ai/atlas"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Atlas on GitHub"
-            style={{ textDecoration: "none" }}
-          >
-            <ExternalLink className="h-3.5 w-3.5" aria-hidden /> GitHub
-          </a>
-          <a href="#docs/installation" className="btn btn-primary focusring" style={{ minHeight: 34, padding: "0 14px", textDecoration: "none" }}>
-            Get Atlas
-          </a>
-        </div>
-      </nav>
-    </header>
+        ))}
+      </div>
+    </nav>
   );
 }
 
@@ -1833,7 +1808,8 @@ function BenchmarkExperience({ data }) {
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
-      <ConsoleBar data={data} active={active} />
+      <ProductHeader version={data.version} active="benchmarks" />
+      <ConsoleBar active={active} />
       <main id="main">
         <Hero data={data} />
         <ExecSummary data={data} />
