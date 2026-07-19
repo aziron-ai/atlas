@@ -1,123 +1,155 @@
-# Atlas — deterministic code intelligence for developers and agents
+# Atlas
 
-**The most accurate code answer, for the fewest tokens.** Atlas is a
-deterministic, LLM-free code-intelligence CLI: one local binary that indexes a
-repository into a SQLite symbol/call graph in under a second and answers
-context queries — a symbol's definition, callers, callees, imports, routes —
-in ~7 ms and ~21 tokens, instead of dumping whole files into a model's
-context window.
+**Local code intelligence for developers and AI coding assistants.**
 
-**Benchmark & field comparison:** https://aziron-ai.github.io/atlas/
+Atlas indexes a repository and returns focused, source-grounded context about
+symbols, callers, references, routes, and change impact. Results include file
+and line references so developers and coding agents can inspect the evidence
+without loading an entire codebase into a model context window.
 
-## Why it matters (July 2026 benchmark, real-LLM scored)
+[Documentation](https://github.com/aziron-ai/atlas/wiki) |
+[Install](https://github.com/aziron-ai/atlas/wiki/Installation) |
+[Releases](https://github.com/aziron-ai/atlas/releases) |
+[Benchmarks](https://aziron-ai.github.io/atlas/) |
+[Troubleshooting](https://github.com/aziron-ai/atlas/wiki/Troubleshooting)
 
-| Result | Number | Evidence |
-| --- | --- | --- |
-| Answer accuracy, all 37 languages | **F1 0.757 @ 21.2 tokens** | fixture-truth, 222 cells / 666 model calls |
-| Accuracy on the 28 fully-supported languages | **F1 1.000 @ 27.1 tokens** | matches a full-file dump at 6.1× fewer tokens |
-| vs. graph tool (Graphify) | **6.4× accuracy per token · 36× fewer tokens** | graph tool: F1 0.539 @ 96.5 tokens |
-| Real repository (sirupsen/logrus vs gopls truth) | **F1 0.975 vs 0.084** | LSP-truth, production fan-in |
-| Real agent harnesses, end-to-end (Claude Code + OpenAI Codex) | **3.9–6.0× fewer total tokens than the graph tool at F1 0.88 vs 0.31–0.41** — and cheaper than raw grep exploration | harness-reported usage, 114 runs, [reproduce it yourself](agent-bench/) |
-| Query latency | **~7.4 ms, flat to 39k symbols** | 36 real repositories |
-| Independent Linux re-run | **37/37 fixture-perfect · gopls 0.933** | deterministic corroboration |
+## Quickstart
 
-Accuracy is tunable with a single `--detail low|medium|high|xhigh` knob;
-`high` is the default sweet spot (all the accuracy at 1/13th of xhigh's
-tokens), and retrieval operations floor at `high` so an agent is never handed
-a truncated caller list. 40 code languages sit on a five-level, evidence-graded
-maturity ladder (plus ~24 content formats indexed for search) — see the
-[maturity ladder](https://aziron-ai.github.io/atlas/#languages) for the honest
-per-language status, including the 9 languages pending real-repo proof.
-
-Every number is reproducible from the artifacts committed under
-[`data/`](data/) — start with
-[`data/site-data.json`](https://aziron-ai.github.io/atlas/data/site-data.json).
-
-## Install
-
-This repository publishes prebuilt `atlas` CLI release assets and the public
-benchmark/product site.
-
-- GitHub Releases: macOS and Linux archives plus Linux `.deb`, `.rpm`, and `.apk` packages
-- Homebrew tap: `dominic097/homebrew-atlas`
-- npm wrapper package: `@dominic097/atlas`
-
-Homebrew:
+Install Atlas with Homebrew:
 
 ```sh
-brew install --cask dominic097/atlas/atlas
+brew install --cask aziron-ai/atlas/atlas
+```
+
+Or install the npm wrapper:
+
+```sh
+npm install -g @aziron/atlas
+```
+
+Index a repository and connect Atlas to supported coding assistants:
+
+```sh
+cd /path/to/repository
 atlas version
+atlas index .
+atlas bootstrap --dry-run
+atlas bootstrap
+atlas status
 ```
 
-npm:
+Atlas can then answer questions such as:
+
+- Where is the checkout flow implemented?
+- Who calls `CreateOrder`?
+- What may be affected if `services/cart.go` changes?
+- Which routes or repositories depend on this handler?
+
+See [Getting Started](https://github.com/aziron-ai/atlas/wiki/Getting-Started)
+for a guided first index and first query.
+
+## What Atlas Provides
+
+| Task | Capability |
+| --- | --- |
+| Find relevant code | Code-aware search and bounded context |
+| Understand a symbol | Definitions, callers, callees, and references |
+| Review a change | Repository and cross-repository impact analysis |
+| Trace service dependencies | Routes, consumers, and dependencies |
+| Support coding agents | MCP tools with source and line citations |
+| Operate a local index | CLI status, dashboard, and HTTP API |
+
+Atlas runs locally by default and stores its default index in the repository
+workspace. A server is not required for local indexing, CLI queries, or stdio
+MCP usage.
+
+## Interfaces
+
+Atlas is available through:
+
+- the `atlas` command-line interface
+- MCP integrations for Claude, Codex, Cursor, Gemini, and GitHub Copilot
+- a local dashboard and HTTP API
+- release archives and native Linux packages
+
+Integration behavior varies by client. Follow
+[AI Assistant Setup](https://github.com/aziron-ai/atlas/wiki/AI-Assistant-Setup)
+for supported configurations.
+
+## Installation Notes
+
+Homebrew and npm installations run Atlas bootstrap to register supported local
+assistant integrations. Review the planned changes first with:
 
 ```sh
-npm install -g @dominic097/atlas
-atlas version
+atlas bootstrap --dry-run
 ```
 
-Linux archive (see [releases/latest](https://github.com/aziron-ai/atlas/releases/latest) for the current version):
+For npm automation that must not update assistant configuration:
 
 ```sh
-curl -LO https://github.com/aziron-ai/atlas/releases/download/v0.1.28/atlas_0.1.28_linux_amd64.tar.gz
-tar -xzf atlas_0.1.28_linux_amd64.tar.gz
-sudo install -m 0755 atlas /usr/local/bin/atlas
-atlas version
+ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron/atlas
 ```
 
-Basic local workflow:
+Atlas release channels currently provide:
 
-```sh
-atlas index . --reindex
-atlas context --paths path/to/changed-file.go --query "review risk" --format json
-atlas search "symbol or concept" --limit 10
-atlas mcp --transport http --http 127.0.0.1:8765
-```
+| Channel | Platforms |
+| --- | --- |
+| Homebrew cask | macOS and Linux, amd64 and arm64 |
+| npm `@aziron/atlas` | macOS/Linux x64 and arm64; Windows x64 |
+| Release archives | macOS/Linux amd64 and arm64; Windows amd64 |
+| Linux packages | `.deb`, `.rpm`, and `.apk` for amd64 and arm64 |
 
-Atlas uses embedded SQLite by default at `sqlite://./.atlas/atlas.db`; no server
-is required for local indexing, context retrieval, or MCP usage. Agents connect
-over MCP (`atlas install skill --agent claude`, or `codex`).
+Checksums and per-archive SBOMs are attached to each GitHub release. See
+[Installation](https://github.com/aziron-ai/atlas/wiki/Installation) for direct
+downloads and verification.
 
-No Atlas CLI source tree is maintained in this repository.
+## Documentation
 
-## Benchmark site
+- [Getting Started](https://github.com/aziron-ai/atlas/wiki/Getting-Started)
+- [Installation](https://github.com/aziron-ai/atlas/wiki/Installation)
+- [Indexing and Reindexing](https://github.com/aziron-ai/atlas/wiki/Indexing-and-Reindexing)
+- [CLI Reference](https://github.com/aziron-ai/atlas/wiki/CLI-Reference)
+- [AI Assistant Setup](https://github.com/aziron-ai/atlas/wiki/AI-Assistant-Setup)
+- [MCP Tools](https://github.com/aziron-ai/atlas/wiki/MCP-Tools)
+- [Dashboard and HTTP API](https://github.com/aziron-ai/atlas/wiki/Dashboard-and-HTTP-API)
+- [Configuration](https://github.com/aziron-ai/atlas/wiki/Configuration)
+- [Privacy and Data Handling](https://github.com/aziron-ai/atlas/wiki/Privacy-and-Data-Handling)
+- [Supported Languages](https://github.com/aziron-ai/atlas/wiki/Supported-Languages)
+- [Benchmarks and Methodology](https://github.com/aziron-ai/atlas/wiki/Benchmarks-and-Methodology)
+- [Troubleshooting](https://github.com/aziron-ai/atlas/wiki/Troubleshooting)
+- [Upgrade and Uninstall](https://github.com/aziron-ai/atlas/wiki/Upgrade-and-Uninstall)
 
-The Atlas benchmark site is published with GitHub Pages from this repository:
+## Benchmarks and Data
 
-https://aziron-ai.github.io/atlas/
+The [Atlas benchmark site](https://aziron-ai.github.io/atlas/) presents dated
+accuracy, token-use, and latency measurements with limitations and evidence
+levels. Public benchmark data remains downloadable:
 
-The site is generated from benchmark JSON artifacts committed under `data/raw/`
-and renders `data/site-data.json` at runtime, keeping raw artifact links
-visible for auditability. All published data passes a sanitizer
-(`scripts/sanitize-public-data.mjs`) that strips local machine paths and
-private identifiers, enforced again by the test suite.
+- [Processed site data](data/site-data.json)
+- [Raw benchmark artifacts](data/raw/)
+- [Agent benchmark reproduction guide](agent-bench/README.md)
 
-The site itself is a static React/Tailwind build. Source lives under `src/`,
-the generated GitHub Pages assets are committed under `assets/`, and a static
-crawler-readable digest of the benchmark is injected into `index.html` by
-`scripts/build-seo.mjs`.
+Benchmark results describe the published test conditions and are not a
+guarantee for every repository, language, machine, or coding assistant.
 
-```sh
-npm install
-node scripts/build-site-data.mjs /path/to/aziron-atlas/bench   # refresh data
-node scripts/build-agent-bench-data.mjs /path/to/AGENT_TOKEN_REPORT.json  # agent-harness section
-node scripts/build-seo.mjs                                     # refresh static digest + robots/sitemap/llms.txt
-npm run build                                                  # bundle
-npm run test:site                                              # Playwright checks (serve first)
-```
+## Data Handling
 
-## Reproduce the agent benchmark yourself
+Indexing and querying run locally by default. An MCP client or coding assistant
+may send the snippets it receives to its configured model provider, subject to
+that client's data policy. Network listeners and optional connected features
+require additional configuration.
 
-The agent-harness token benchmark on the site — what Claude Code and OpenAI
-Codex actually spend end-to-end with Atlas vs the graphify graph tool — ships
-as a self-contained suite in [`agent-bench/`](agent-bench/): pinned repo
-commit, frozen gopls ground truth, isolation flags baked in. One command,
-your own agent logins:
+Review
+[Privacy and Data Handling](https://github.com/aziron-ai/atlas/wiki/Privacy-and-Data-Handling)
+before enabling network access or organization-connected features.
 
-```sh
-python3 agent-bench/agent_token_bench.py --setup --agents auto \
-    --qa-set agent-bench/QA_SET_logrus.json --workdir agentbench-work
-```
+## Repository Scope
 
-See [`agent-bench/README.md`](agent-bench/README.md) for prerequisites, cost
-expectations, and how to read the numbers.
+This public repository distributes Atlas release binaries, consumer
+documentation, the benchmark site, and downloadable benchmark artifacts. The
+Atlas CLI source tree is not published here.
+
+## License
+
+Atlas is distributed under the [Apache License 2.0](LICENSE).
