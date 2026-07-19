@@ -4,25 +4,25 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 // Interactive deterministic force-directed code graph on a vanilla <canvas>.
 // No external libraries / CDN. Self-fetches data/graph.json on mount.
 
-// Community accent hues, matching the locked design brief g0..g5.
+// Community accent hues, matching the Cartograph tokens g0..g5.
 const COMMUNITY_COLORS = [
-  "#5EE6C4", // g0 mint
-  "#7AA2FF", // g1 blue
+  "#E9B44C", // g0 survey gold
+  "#8FC1DC", // g1 chart blue
   "#C792EA", // g2 violet
-  "#F2B43A", // g3 amber
-  "#FF8FA3", // g4 pink
+  "#63C58C", // g3 green
+  "#E2725B", // g4 coral
   "#67E8F9", // g5 cyan
 ];
 
 const PALETTE = {
-  bg: "#08090C",
-  surface: "#10131A",
-  line: "#1E2430",
-  lineStrong: "#2A323F",
-  text: "#E8ECF2",
-  muted: "#8A93A3",
-  faint: "#5A6373",
-  primary: "#5EE6C4",
+  bg: "#0B2130",
+  surface: "#0E2A3D",
+  line: "#1C3D53",
+  lineStrong: "#2A5674",
+  text: "#EDF3F5",
+  muted: "#9DB6C3",
+  faint: "#6C8BA0",
+  primary: "#E9B44C",
 };
 
 // ----- deterministic PRNG -------------------------------------------------
@@ -420,8 +420,8 @@ export default function GraphExplorer({ className = "" }) {
         H * 0.42,
         Math.max(W, H) * 0.6
       );
-      glow.addColorStop(0, "rgba(94,230,196,0.06)");
-      glow.addColorStop(1, "rgba(94,230,196,0)");
+      glow.addColorStop(0, "rgba(233,180,76,0.06)");
+      glow.addColorStop(1, "rgba(233,180,76,0)");
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, W, H);
 
@@ -441,7 +441,7 @@ export default function GraphExplorer({ className = "" }) {
         if (activeIdx != null && !incident) {
           ctx.strokeStyle = "rgba(120,130,150,0.04)";
         } else if (incident) {
-          ctx.strokeStyle = "rgba(94,230,196,0.45)";
+          ctx.strokeStyle = "rgba(233,180,76,0.45)";
         } else {
           ctx.strokeStyle = "rgba(120,130,150,0.10)";
         }
@@ -983,7 +983,7 @@ export default function GraphExplorer({ className = "" }) {
                     borderRadius: 6,
                     cursor: "pointer",
                     border: `1px solid ${active ? PALETTE.primary : PALETTE.line}`,
-                    background: active ? "rgba(94,230,196,0.12)" : PALETTE.surface,
+                    background: active ? "rgba(233,180,76,0.12)" : PALETTE.surface,
                     color: active ? PALETTE.primary : PALETTE.muted,
                   }}
                 >

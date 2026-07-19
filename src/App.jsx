@@ -262,8 +262,8 @@ function FrontierChart({ frontier }) {
           font stacks */}
       <defs>
         <radialGradient id="idealGlow" cx="0" cy="0" r="1">
-          <stop offset="0" stopColor="rgba(94,230,196,0.11)" />
-          <stop offset="1" stopColor="rgba(94,230,196,0)" />
+          <stop offset="0" stopColor="rgba(233,180,76,0.11)" />
+          <stop offset="1" stopColor="rgba(233,180,76,0)" />
         </radialGradient>
       </defs>
       <rect x={L} y={T} width={x(120) - L} height={y(0.55) - T} fill="url(#idealGlow)" />
@@ -558,7 +558,7 @@ function KnobChart({ levels }) {
       <line x1={L} x2={R} y1={B} y2={B} stroke="var(--line-strong)" />
 
       {/* default halo behind high */}
-      <rect x={slot(2) - barW / 2 - 12} y={T - 4} width={barW + 24} height={B - T + 30} rx={10} fill="rgba(94,230,196,0.06)" stroke="rgba(94,230,196,0.3)" strokeDasharray="4 4" />
+      <rect x={slot(2) - barW / 2 - 12} y={T - 4} width={barW + 24} height={B - T + 30} rx={10} fill="rgba(233,180,76,0.06)" stroke="rgba(233,180,76,0.3)" strokeDasharray="4 4" />
 
       {/* token bars */}
       {levels.map((lv, i) => (
@@ -669,7 +669,7 @@ function DetailKnob({ data }) {
 /* ============ languages by maturity — the ladder, viz + table =========== */
 
 const LEVEL_STYLE = {
-  L5: { color: "var(--primary)", fill: "rgba(94,230,196,0.12)" },
+  L5: { color: "var(--primary)", fill: "rgba(233,180,76,0.12)" },
   L4: { color: "var(--secondary)", fill: "rgba(122,162,255,0.12)" },
   L2: { color: "var(--warning)", fill: "rgba(242,180,58,0.10)" },
   L1: { color: "var(--muted)", fill: "rgba(154,163,179,0.10)" },
@@ -1003,7 +1003,7 @@ function WinMap({ perLanguage, fresh }) {
     return "neither";
   };
   const C = {
-    atlas: { bg: "rgba(94,230,196,0.16)", border: "var(--primary)", label: "Atlas only" },
+    atlas: { bg: "rgba(233,180,76,0.16)", border: "var(--primary)", label: "Atlas only" },
     both: { bg: "rgba(122,162,255,0.14)", border: "var(--secondary)", label: "both perfect" },
     graph: { bg: "rgba(242,180,58,0.13)", border: "var(--warning)", label: "graph tool only (full-source dump)" },
     neither: { bg: "transparent", border: "var(--line-strong)", label: "neither (report) — fixed in fresh run" },

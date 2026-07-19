@@ -15,7 +15,7 @@ const BANNED = [/\/Users\//, /damirdarasu/, /\/tmp\/atlas-live/, /MsysTechnologi
 // Install commands that must appear VERBATIM under #install.
 const INSTALL_COMMANDS = [
   "brew install --cask aziron-ai/atlas/atlas",
-  "npm install -g @aziron/atlas",
+  "npm install -g @aziron-ai/atlas",
   "atlas index .",
   "atlas mcp --transport stdio",
 ];
@@ -35,7 +35,7 @@ test.describe("atlas product and documentation", () => {
   test("overview makes the product, local model, and evidence paths clear", async ({ page }) => {
     await page.goto(`${baseURL}#overview`, { waitUntil: "networkidle" });
     const hero = page.getByTestId("product-hero");
-    await expect(hero.getByRole("heading", { level: 1 })).toHaveText("Atlas");
+    await expect(hero.getByRole("heading", { level: 1 })).toContainText("Atlas is the map");
     await expect(hero).toContainText("precise repository context");
     await expect(hero).toContainText("One local binary");
     await expect(page.getByTestId("product-install")).toContainText(
@@ -58,7 +58,7 @@ test.describe("atlas product and documentation", () => {
   test("installation and assistant setup use current public coordinates", async ({ page }) => {
     await page.goto(`${baseURL}#docs/installation`, { waitUntil: "networkidle" });
     await expect(page.getByTestId("docs-article")).toContainText("aziron-ai/atlas/atlas");
-    await expect(page.getByTestId("docs-article")).toContainText("@aziron/atlas");
+    await expect(page.getByTestId("docs-article")).toContainText("@aziron-ai/atlas");
     await expect(page.getByTestId("docs-article")).toContainText(`@${site.version}`);
 
     await page.goto(`${baseURL}#docs/assistants`, { waitUntil: "networkidle" });
@@ -154,7 +154,7 @@ test.describe("atlas benchmark evidence", () => {
   });
 
   test("nav chip shows the released version", async ({ page }) => {
-    await expect(page.getByTestId("nav")).toContainText(`v${site.version}`);
+    await expect(page.getByTestId("product-nav")).toContainText(`v${site.version}`);
   });
 
   test("evidence drawer links resolve", async ({ page, request }) => {
