@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MCP Tools — Atlas documentation</title>
+  <meta name="description" content="Atlas MCP tools that give coding assistants bounded, cited code context.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="../../assets/og.png" type="image/png">
+  <link rel="canonical" href="https://aziron-ai.github.io/atlas/docs/mcp/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="MCP Tools — Atlas">
+  <meta property="og:description" content="Atlas MCP tools that give coding assistants bounded, cited code context.">
+  <meta property="og:url" content="https://aziron-ai.github.io/atlas/docs/mcp/">
+  <meta property="og:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MCP Tools — Atlas">
+  <meta name="twitter:description" content="Atlas MCP tools that give coding assistants bounded, cited code context.">
+  <meta name="twitter:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"MCP Tools","description":"Atlas MCP tools that give coding assistants bounded, cited code context.","url":"https://aziron-ai.github.io/atlas/docs/mcp/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://aziron-ai.github.io/atlas/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-07-19"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://aziron-ai.github.io/atlas/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://aziron-ai.github.io/atlas/docs/"},{"@type":"ListItem","position":3,"name":"MCP Tools","item":"https://aziron-ai.github.io/atlas/docs/mcp/"}]}]</script>
+  <style>
+  :root { color-scheme: dark light; --bg:#0b0c0f; --panel:#111318; --text:#e6e7ea; --muted:#a2a6ad; --line:#23262d; --primary:#34d3a6; --link:#5e4bff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(11,12,15,.85); backdrop-filter:blur(8px); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .mark { width:24px; height:24px; border-radius:6px; background:var(--primary); color:#04130f; display:grid; place-items:center; font-weight:800; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#1b1e24; padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:#14171d; border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#14171d; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://aziron-ai.github.io/atlas/"><span class="mark">A</span> ATLAS</a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://aziron-ai.github.io/atlas/">Home</a> / <a href="https://aziron-ai.github.io/atlas/docs/">Docs</a> / MCP Tools</nav>
+      <a class="open-app" href="https://aziron-ai.github.io/atlas/#docs/mcp">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>MCP Tools</h1>
+<p>Atlas MCP tools provide bounded code context to coding assistants. Start MCP over stdio for desktop agents:</p>
+<pre><code>atlas mcp --transport stdio</code></pre>
+<p>Or expose MCP through the local service:</p>
+<pre><code>atlas serve --mcp</code></pre>
+<h2>Tool Selection</h2>
+<table><thead><tr><th>Tool</th><th>Use it for</th></tr></thead><tbody><tr><td><code>code_query</code></td><td>Natural-language questions about a repository</td></tr><tr><td><code>search</code></td><td>Focused lexical or semantic discovery</td></tr><tr><td><code>symbol</code></td><td>Definitions, snippets, callers, callees, refs, and coverage</td></tr><tr><td><code>graph</code></td><td>Paths or neighborhoods between symbols</td></tr><tr><td><code>impact</code></td><td>Repository or cross-repository blast radius</td></tr><tr><td><code>routes</code></td><td>Served routes, consumers, and dependencies</td></tr><tr><td><code>context</code></td><td>Code-review context for changed paths</td></tr><tr><td><code>report</code></td><td>Repository-level code intelligence reports</td></tr><tr><td><code>history</code></td><td>Indexed history and graph changes</td></tr><tr><td><code>status</code></td><td>Index, readiness, and retrieval state</td></tr><tr><td><code>link</code></td><td>Register a repository for workspace or cross-repository analysis</td></tr><tr><td><code>record_feedback</code></td><td>Record result-quality feedback</td></tr><tr><td><code>record_task</code></td><td>Record the outcome of a procedural task</td></tr></tbody></table>
+<h2>Recommended Starting Point</h2>
+<p>Use <code>code_query</code> for most repository questions. It checks index readiness and returns cited context under a bounded response budget.</p>
+<p>Example intent:</p>
+<pre><code>How is checkout authorization enforced, and which tests cover it?</code></pre>
+<p>Use <code>context</code> instead when reviewing a known set of changed files:</p>
+<pre><code>changed_paths:
+  - internal/api/handler.go
+intent: review
+query: correctness, regressions, and missing tests</code></pre>
+<h2>Symbol Views</h2>
+<p>The <code>symbol</code> tool supports views such as:</p>
+<ul><li><code>explain</code></li><li><code>definition</code></li><li><code>snippet</code></li><li><code>callers</code></li><li><code>callees</code></li><li><code>neighbors</code></li><li><code>refs</code></li><li><code>coverage</code></li></ul>
+<p>Add package, receiver, or arity filters when a name is overloaded.</p>
+<h2>Detail and Budgets</h2>
+<p>Use:</p>
+<ul><li><code>low</code> for counts and minimal metadata</li><li><code>medium</code> for names and signatures</li><li><code>high</code> for repository-local evidence</li><li><code>xhigh</code> only when broader context is required</li></ul>
+<p>Normal budget overflow may trim results and mark them as truncated. Strict budget mode refuses an oversized answer instead.</p>
+<h2>Common Status Values</h2>
+<table><thead><tr><th>Status</th><th>Meaning</th></tr></thead><tbody><tr><td><code>ok</code></td><td>Atlas returned cited context</td></tr><tr><td><code>indexing</code></td><td>An index was started or is still running</td></tr><tr><td><code>no_index</code></td><td>No usable index exists for the workspace</td></tr><tr><td><code>insufficient</code></td><td>The index could not support a cited answer</td></tr><tr><td><code>budget_exceeded</code></td><td>Strict output budget was too small</td></tr><tr><td><code>workspace_required</code></td><td>Repository scope was not declared</td></tr></tbody></table>
+<h2>Transport Security</h2>
+<p>Stdio MCP is local to the launching assistant. HTTP MCP should stay on loopback unless authentication and origin restrictions are configured:</p>
+<pre><code>export ATLAS_API_TOKEN='replace-with-a-strong-token'
+export ATLAS_MCP_ALLOWED_ORIGINS='https://trusted.example'
+atlas serve --mcp --addr 0.0.0.0:3099</code></pre>
+<p>See <a href="../privacy/">Privacy and Data Handling</a> before enabling networked access.</p>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../assistants/">← AI Assistant Setup</a></span>
+      <span><a href="../service/">Dashboard and HTTP API →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.36 · <a href="https://aziron-ai.github.io/atlas/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>

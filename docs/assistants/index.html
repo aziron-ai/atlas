@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Assistant Setup — Atlas documentation</title>
+  <meta name="description" content="Connect Claude, Codex, and other MCP-compatible assistants to Atlas.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="../../assets/og.png" type="image/png">
+  <link rel="canonical" href="https://aziron-ai.github.io/atlas/docs/assistants/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="AI Assistant Setup — Atlas">
+  <meta property="og:description" content="Connect Claude, Codex, and other MCP-compatible assistants to Atlas.">
+  <meta property="og:url" content="https://aziron-ai.github.io/atlas/docs/assistants/">
+  <meta property="og:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI Assistant Setup — Atlas">
+  <meta name="twitter:description" content="Connect Claude, Codex, and other MCP-compatible assistants to Atlas.">
+  <meta name="twitter:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"AI Assistant Setup","description":"Connect Claude, Codex, and other MCP-compatible assistants to Atlas.","url":"https://aziron-ai.github.io/atlas/docs/assistants/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://aziron-ai.github.io/atlas/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-07-19"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://aziron-ai.github.io/atlas/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://aziron-ai.github.io/atlas/docs/"},{"@type":"ListItem","position":3,"name":"AI Assistant Setup","item":"https://aziron-ai.github.io/atlas/docs/assistants/"}]}]</script>
+  <style>
+  :root { color-scheme: dark light; --bg:#0b0c0f; --panel:#111318; --text:#e6e7ea; --muted:#a2a6ad; --line:#23262d; --primary:#34d3a6; --link:#5e4bff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(11,12,15,.85); backdrop-filter:blur(8px); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .mark { width:24px; height:24px; border-radius:6px; background:var(--primary); color:#04130f; display:grid; place-items:center; font-weight:800; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#1b1e24; padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:#14171d; border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#14171d; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://aziron-ai.github.io/atlas/"><span class="mark">A</span> ATLAS</a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://aziron-ai.github.io/atlas/">Home</a> / <a href="https://aziron-ai.github.io/atlas/docs/">Docs</a> / AI Assistant Setup</nav>
+      <a class="open-app" href="https://aziron-ai.github.io/atlas/#docs/assistants">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>AI Assistant Setup</h1>
+<p>Atlas can register its MCP server with Claude CLI, Claude Desktop, Codex, Cursor, Gemini, and GitHub Copilot. Client behavior and supported transport modes vary.</p>
+<h2>Automatic Setup</h2>
+<p>Preview all detected changes:</p>
+<pre><code>atlas bootstrap --dry-run</code></pre>
+<p>Apply them:</p>
+<pre><code>atlas bootstrap</code></pre>
+<p>Restrict setup to selected clients:</p>
+<pre><code>atlas bootstrap --only codex,claude,claude-desktop</code></pre>
+<p>Restart each assistant after changing its MCP configuration.</p>
+<h2>Repository-Pinned Setup</h2>
+<p>Use a repository-pinned local MCP configuration when one assistant should always query one index:</p>
+<pre><code>cd /path/to/repository
+atlas index .
+
+atlas install skill \
+  --agent codex,claude,claude-desktop \
+  --repo &quot;$PWD&quot; \
+  --db &quot;sqlite://$PWD/.atlas/atlas.db&quot; \
+  --server-url=none</code></pre>
+<h2>Dynamic Workspace Setup</h2>
+<p>Bootstrap is appropriate when the assistant supplies the active workspace at runtime:</p>
+<pre><code>atlas bootstrap</code></pre>
+<p>Repository-scoped MCP tools still require one of:</p>
+<ul><li>a workspace root supplied by the client</li><li>a <code>workspace</code> argument</li><li>a repository ID</li><li>a repository pinned when MCP starts</li></ul>
+<p>If none is available, Atlas returns <code>workspace_required</code> instead of selecting a repository silently.</p>
+<h2>Shared Local Server</h2>
+<p>For multiple thin clients using one local service:</p>
+<pre><code>atlas serve --mcp --open=false
+
+atlas install skill \
+  --agent codex,claude,claude-desktop \
+  --repo &quot;$PWD&quot; \
+  --server-url http://127.0.0.1:3099</code></pre>
+<p>Use a token before exposing the service beyond loopback. See <a href="../service/">Dashboard and HTTP API</a>.</p>
+<h2>Common Configuration Locations</h2>
+<table><thead><tr><th>Client</th><th>Typical location</th></tr></thead><tbody><tr><td>Codex</td><td><code>~/.codex/config.toml</code></td></tr><tr><td>Claude CLI</td><td><code>~/.claude.json</code></td></tr><tr><td>Claude Desktop on macOS</td><td><code>~/Library/Application Support/Claude/</code></td></tr></tbody></table>
+<p>The Claude Desktop configuration filename is <code>claude_desktop_config.json</code>.</p>
+<p>Atlas preserves unrelated client configuration. Always review a dry run before applying changes in managed environments.</p>
+<h2>Verify</h2>
+<pre><code>atlas doctor --verify atlas
+atlas status
+atlas bootstrap --dry-run</code></pre>
+<p>Then ask the assistant a repository-specific question and confirm that the answer includes source file and line references.</p>
+<h2>Remove Integration</h2>
+<p>Preview removal:</p>
+<pre><code>atlas uninstall --dry-run</code></pre>
+<p>Apply removal:</p>
+<pre><code>atlas uninstall</code></pre>
+<p>This removes Atlas-managed assistant entries and skills. It does not remove unrelated assistant configuration or repository indexes.</p>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../cli/">← CLI Reference</a></span>
+      <span><a href="../mcp/">MCP Tools →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.36 · <a href="https://aziron-ai.github.io/atlas/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>

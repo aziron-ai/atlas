@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchmarks and Methodology — Atlas documentation</title>
+  <meta name="description" content="How to read and reproduce the published Atlas benchmark evidence.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="../../assets/og.png" type="image/png">
+  <link rel="canonical" href="https://aziron-ai.github.io/atlas/docs/benchmarks/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="Benchmarks and Methodology — Atlas">
+  <meta property="og:description" content="How to read and reproduce the published Atlas benchmark evidence.">
+  <meta property="og:url" content="https://aziron-ai.github.io/atlas/docs/benchmarks/">
+  <meta property="og:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Benchmarks and Methodology — Atlas">
+  <meta name="twitter:description" content="How to read and reproduce the published Atlas benchmark evidence.">
+  <meta name="twitter:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Benchmarks and Methodology","description":"How to read and reproduce the published Atlas benchmark evidence.","url":"https://aziron-ai.github.io/atlas/docs/benchmarks/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://aziron-ai.github.io/atlas/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-07-19"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://aziron-ai.github.io/atlas/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://aziron-ai.github.io/atlas/docs/"},{"@type":"ListItem","position":3,"name":"Benchmarks and Methodology","item":"https://aziron-ai.github.io/atlas/docs/benchmarks/"}]}]</script>
+  <style>
+  :root { color-scheme: dark light; --bg:#0b0c0f; --panel:#111318; --text:#e6e7ea; --muted:#a2a6ad; --line:#23262d; --primary:#34d3a6; --link:#5e4bff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(11,12,15,.85); backdrop-filter:blur(8px); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .mark { width:24px; height:24px; border-radius:6px; background:var(--primary); color:#04130f; display:grid; place-items:center; font-weight:800; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#1b1e24; padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:#14171d; border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#14171d; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://aziron-ai.github.io/atlas/"><span class="mark">A</span> ATLAS</a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://aziron-ai.github.io/atlas/">Home</a> / <a href="https://aziron-ai.github.io/atlas/docs/">Docs</a> / Benchmarks and Methodology</nav>
+      <a class="open-app" href="https://aziron-ai.github.io/atlas/#docs/benchmarks">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>Benchmarks and Methodology</h1>
+<p>Atlas publishes benchmark results for accuracy, token use, latency, language compatibility, and agent workflows:</p>
+<p><a href="https://aziron-ai.github.io/atlas/#benchmarks">Open the Atlas benchmark explorer</a></p>
+<h2>Download the Data</h2>
+<ul><li><a href="https://github.com/aziron-ai/atlas/blob/main/data/site-data.json">Processed site data</a></li><li><a href="https://github.com/aziron-ai/atlas/tree/main/data/raw">Raw benchmark artifacts</a></li><li><a href="https://github.com/aziron-ai/atlas/tree/main/data">Evidence manifests</a></li><li><a href="https://github.com/aziron-ai/atlas/tree/main/agent-bench">Agent benchmark kit</a></li></ul>
+<h2>How to Read a Result</h2>
+<p>Confirm all of the following before comparing tools:</p>
+<p>1. Atlas and baseline tool versions 2. repository URL and pinned commit 3. language and query set 4. hardware and operating system 5. cold-cache or warm-cache state 6. repeat count and aggregation method 7. accuracy oracle or reviewer 8. token measurement method 9. failure and timeout handling</p>
+<h2>Evidence Categories</h2>
+<p>Do not combine these categories into one unsupported headline:</p>
+<ul><li><strong>Compatibility:</strong> whether a format indexes successfully</li><li><strong>Correctness:</strong> precision, recall, or F1 against an oracle</li><li><strong>Latency:</strong> elapsed index or query time under stated cache conditions</li><li><strong>Token use:</strong> measured model/tool usage or a documented estimate</li><li><strong>Agent workflow:</strong> end-to-end behavior for a pinned assistant and task set</li></ul>
+<h2>Important Limitations</h2>
+<ul><li>Fixture results do not prove production-repository accuracy.</li><li>One repository does not establish performance across a language.</li><li>Different assistants may consume the same MCP result differently.</li><li>Estimated tokens are not equivalent to provider-reported token usage.</li><li>Warm-cache query latency is not cold-start installation or indexing time.</li><li>Language support and result quality can differ by syntax and framework.</li></ul>
+<h2>Reproduce Agent Tests</h2>
+<p>The public repository includes a self-contained agent benchmark guide:</p>
+<pre><code>python3 agent-bench/agent_token_bench.py \
+  --setup \
+  --agents auto \
+  --qa-set agent-bench/QA_SET_logrus.json \
+  --workdir agentbench-work</code></pre>
+<p>Read <a href="https://github.com/aziron-ai/atlas/blob/main/agent-bench/README.md">agent-bench/README.md</a> for prerequisites, expected external cost, pinned inputs, and interpretation.</p>
+<h2>Reporting a Comparison</h2>
+<p>Publish:</p>
+<ul><li>exact commands</li><li>raw machine-readable output</li><li>all failed and timed-out cases</li><li>environment metadata</li><li>evidence limitations</li><li>the Atlas release tag and checksum</li></ul>
+<p>Benchmark results are dated evidence under stated conditions, not a guarantee for every repository, machine, language, or assistant.</p>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../languages/">← Supported Languages and Formats</a></span>
+      <span><a href="../troubleshooting/">Troubleshooting →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.36 · <a href="https://aziron-ai.github.io/atlas/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>

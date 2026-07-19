@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Troubleshooting — Atlas documentation</title>
+  <meta name="description" content="Diagnose stale, missing, or incomplete Atlas results.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="../../assets/og.png" type="image/png">
+  <link rel="canonical" href="https://aziron-ai.github.io/atlas/docs/troubleshooting/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="Troubleshooting — Atlas">
+  <meta property="og:description" content="Diagnose stale, missing, or incomplete Atlas results.">
+  <meta property="og:url" content="https://aziron-ai.github.io/atlas/docs/troubleshooting/">
+  <meta property="og:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Troubleshooting — Atlas">
+  <meta name="twitter:description" content="Diagnose stale, missing, or incomplete Atlas results.">
+  <meta name="twitter:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Troubleshooting","description":"Diagnose stale, missing, or incomplete Atlas results.","url":"https://aziron-ai.github.io/atlas/docs/troubleshooting/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://aziron-ai.github.io/atlas/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-07-19"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://aziron-ai.github.io/atlas/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://aziron-ai.github.io/atlas/docs/"},{"@type":"ListItem","position":3,"name":"Troubleshooting","item":"https://aziron-ai.github.io/atlas/docs/troubleshooting/"}]}]</script>
+  <style>
+  :root { color-scheme: dark light; --bg:#0b0c0f; --panel:#111318; --text:#e6e7ea; --muted:#a2a6ad; --line:#23262d; --primary:#34d3a6; --link:#5e4bff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(11,12,15,.85); backdrop-filter:blur(8px); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .mark { width:24px; height:24px; border-radius:6px; background:var(--primary); color:#04130f; display:grid; place-items:center; font-weight:800; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#1b1e24; padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:#14171d; border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#14171d; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://aziron-ai.github.io/atlas/"><span class="mark">A</span> ATLAS</a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://aziron-ai.github.io/atlas/">Home</a> / <a href="https://aziron-ai.github.io/atlas/docs/">Docs</a> / Troubleshooting</nav>
+      <a class="open-app" href="https://aziron-ai.github.io/atlas/#docs/troubleshooting">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>Troubleshooting</h1>
+<p>Start with:</p>
+<pre><code>atlas version
+atlas status
+atlas doctor</code></pre>
+<p>Record the repository path, database path, Atlas version, and exact command before changing data.</p>
+<h2>Installation</h2>
+<h3><code>atlas: command not found</code></h3>
+<pre><code>command -v atlas
+echo &quot;$PATH&quot;</code></pre>
+<p>For Homebrew:</p>
+<pre><code>brew list --cask atlas
+brew reinstall --cask aziron-ai/atlas/atlas</code></pre>
+<p>For npm:</p>
+<pre><code>npm prefix -g
+npm install -g @aziron/atlas</code></pre>
+<h3>npm binary download fails</h3>
+<p>Confirm the requested version exists on <a href="https://github.com/aziron-ai/atlas/releases">GitHub Releases</a>, then check proxy and GitHub access. Pin a published version instead of a version that is still being released.</p>
+<h3>macOS blocks a manual binary</h3>
+<p>Prefer the Homebrew cask. For a trusted, checksum-verified manual binary:</p>
+<pre><code>xattr -dr com.apple.quarantine /usr/local/bin/atlas</code></pre>
+<h2>Repository and Freshness</h2>
+<h3>Results come from the wrong repository</h3>
+<p>Pin scope:</p>
+<pre><code>atlas --repo /absolute/path status</code></pre>
+<p>For a shared database, use the repository ID shown by <code>atlas status</code>.</p>
+<h3>Results are stale</h3>
+<pre><code>atlas index .
+atlas status</code></pre>
+<p>If the status remains stale:</p>
+<pre><code>atlas doctor
+atlas index . --reindex</code></pre>
+<h3><code>workspace_required</code> from MCP</h3>
+<p>Supply a workspace root, <code>workspace</code>, <code>repo_id</code>, or launch-time <code>--repo</code>. Atlas does not silently select a repository for scoped requests.</p>
+<h2>Database and Retrieval</h2>
+<h3>SQLite is busy or locked</h3>
+<p>Stop <code>atlas serve</code>, <code>atlas watch</code>, and supervised MCP processes. Inspect the owner:</p>
+<pre><code>lsof &quot;$PWD/.atlas/atlas.db&quot;</code></pre>
+<p>Run maintenance serially after all writers exit.</p>
+<h3>Retrieval reports <code>sql_fallback</code></h3>
+<p>This usually means supporting lexical retrieval is unavailable while the graph database is still readable:</p>
+<pre><code>atlas doctor
+atlas compact --rebuild-lexical
+atlas status</code></pre>
+<p>Stop competing Atlas processes before rebuilding retrieval data.</p>
+<h3>Upgrade reports schema or index drift</h3>
+<pre><code>atlas migrate
+atlas status --schema
+atlas index . --reindex</code></pre>
+<p>Back up <code>.atlas/</code> before migration or downgrade testing.</p>
+<h3>Semantic search falls back to lexical</h3>
+<pre><code>atlas index . --enable-vectors
+atlas status</code></pre>
+<p>Also verify semantic retrieval configuration with <code>atlas config list</code>.</p>
+<h2>MCP and Assistants</h2>
+<h3>Assistant does not list Atlas tools</h3>
+<pre><code>atlas bootstrap --dry-run
+atlas doctor --verify atlas</code></pre>
+<p>Apply bootstrap if needed, then fully restart the assistant.</p>
+<h3>MCP list is fast but calls are slow</h3>
+<p>An index or exclusive maintenance task may be running:</p>
+<pre><code>atlas status
+atlas doctor</code></pre>
+<p>Wait for indexing, disable duplicate watchers, or adjust <code>ATLAS_MCP_CALL_TIMEOUT</code> only after confirming the root cause.</p>
+<h3>HTTP 401 or 403</h3>
+<p>Supply the bearer token:</p>
+<pre><code>curl \
+  -H &quot;Authorization: Bearer $ATLAS_API_TOKEN&quot; \
+  http://127.0.0.1:3099/api/v1/status</code></pre>
+<p>For browser clients, also configure <code>ATLAS_MCP_ALLOWED_ORIGINS</code>.</p>
+<h2>Server</h2>
+<h3>Port 3099 is already in use</h3>
+<pre><code>lsof -nP -iTCP:3099 -sTCP:LISTEN</code></pre>
+<p>Stop the existing process or select another address with <code>atlas serve --help</code>.</p>
+<h3><code>healthz</code> passes but <code>readyz</code> fails</h3>
+<p>Atlas is running but cannot complete a lightweight engine request. Check for an active index, database lock, or maintenance operation.</p>
+<h2>Before Deleting Data</h2>
+<p>1. Stop every Atlas process. 2. Confirm the exact database and repository paths. 3. Back up the full <code>.atlas/</code> directory. 4. Run <code>atlas doctor</code>. 5. Attempt migration, lexical rebuild, or reindex first.</p>
+<p>Delete local Atlas data only when a complete reset is intended.</p>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../benchmarks/">← Benchmarks and Methodology</a></span>
+      <span><a href="../upgrade/">Upgrade and Uninstall →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.36 · <a href="https://aziron-ai.github.io/atlas/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>
