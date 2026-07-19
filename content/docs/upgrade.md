@@ -11,14 +11,14 @@ atlas version
 ## Upgrade with npm
 
 ```sh
-npm install -g @aziron/atlas
+npm install -g @aziron-ai/atlas
 atlas version
 ```
 
 Pin a version for reproducible automation:
 
 ```sh
-npm install -g @aziron/atlas@0.1.36
+npm install -g @aziron-ai/atlas@0.1.36
 ```
 
 ## Post-Upgrade Checks
@@ -74,7 +74,7 @@ brew uninstall --cask aziron-ai/atlas/atlas
 npm:
 
 ```sh
-npm uninstall -g @aziron/atlas
+npm uninstall -g @aziron-ai/atlas
 ```
 
 Manual binary:

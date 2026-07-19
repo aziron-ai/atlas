@@ -1670,7 +1670,7 @@ const installTabs = (v) => ({
   npm: {
     label: "npm",
     sub: "node wrapper",
-    lines: ["npm install -g @aziron/atlas", "atlas version"],
+    lines: ["npm install -g @aziron-ai/atlas", "atlas version"],
   },
   linux: {
     label: "Linux",
@@ -1718,7 +1718,7 @@ function Install({ version }) {
             <a className="focusring chip" href="https://github.com/aziron-ai/atlas/releases/latest" target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
               releases/latest <ExternalLink className="h-3 w-3" aria-hidden />
             </a>
-            <a className="focusring chip" href="https://www.npmjs.com/package/@aziron/atlas" target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
+            <a className="focusring chip" href="https://github.com/aziron-ai/atlas/pkgs/npm/atlas" target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
               npm
             </a>
           </>

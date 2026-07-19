@@ -20,4 +20,4 @@
 - [Benchmark & comparison](https://aziron-ai.github.io/atlas/#benchmarks): interactive version of the published evidence
 - [GitHub repository](https://github.com/aziron-ai/atlas): releases (macOS, Linux, Windows), issues
 - [GitHub Wiki](https://github.com/aziron-ai/atlas/wiki): mirror of the consumer product guide
-- [npm package](https://www.npmjs.com/package/@aziron/atlas): `npm install -g @aziron/atlas`
+- [npm package](https://github.com/aziron-ai/atlas/pkgs/npm/atlas): `npm install -g @aziron-ai/atlas`

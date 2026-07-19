@@ -233,7 +233,7 @@ function ProductConsole() {
 function InstallSwitcher() {
   const options = {
     Homebrew: "brew install --cask aziron-ai/atlas/atlas",
-    npm: "npm install -g @aziron/atlas",
+    npm: "npm install -g @aziron-ai/atlas",
     Linux: `curl -LO ${GITHUB}/releases/download/v${RELEASE}/atlas_${RELEASE}_linux_amd64.tar.gz`,
   };
   const [active, setActive] = useState("Homebrew");
@@ -464,9 +464,9 @@ function DocsPage({ slug }) {
             <Command>brew install --cask aziron-ai/atlas/atlas{"\n"}atlas version</Command>
             <p>The repository <code>aziron-ai/homebrew-atlas</code> becomes the tap <code>aziron-ai/atlas</code>; the cask and installed command are both named <code>atlas</code>.</p>
           </ProseSection>
-          <ProseSection title="npm">
-            <Command>npm install -g @aziron/atlas{"\n"}atlas version</Command>
-            <p>The npm wrapper downloads the native binary for the current platform. Pin a release with <code>npm install -g @aziron/atlas@{RELEASE}</code>.</p>
+          <ProseSection title="npm (GitHub Packages)">
+            <Command>{`npm config set @aziron-ai:registry https://npm.pkg.github.com\nnpm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN\nnpm install -g @aziron-ai/atlas\natlas version`}</Command>
+            <p>The npm package is published to GitHub Packages, so point the <code>@aziron-ai</code> scope there with a GitHub token that has <code>read:packages</code> (GitHub Packages requires auth even for public packages). Pin a release with <code>npm install -g @aziron-ai/atlas@{RELEASE}</code>. Homebrew is the simpler path if you don't need npm.</p>
             <p>Homebrew and npm run bootstrap after installation. In a managed environment, preview with <code>atlas bootstrap --dry-run</code> or set <code>ATLAS_SKIP_BOOTSTRAP=1</code> for npm.</p>
           </ProseSection>
           <ProseSection title="Release archives and Linux packages">
@@ -711,13 +711,13 @@ function DocsPage({ slug }) {
         <>
           <p className="docs-lead">Upgrade the package, refresh assistant configuration, migrate supported schemas, and rebuild only when status or release notes require it.</p>
           <ProseSection title="Upgrade">
-            <Command>brew update{"\n"}brew upgrade --cask aziron-ai/atlas/atlas{"\n"}# or{"\n"}npm install -g @aziron/atlas{"\n"}atlas version</Command>
+            <Command>brew update{"\n"}brew upgrade --cask aziron-ai/atlas/atlas{"\n"}# or{"\n"}npm install -g @aziron-ai/atlas{"\n"}atlas version</Command>
           </ProseSection>
           <ProseSection title="Post-upgrade checks">
             <Command>atlas bootstrap{"\n"}atlas migrate{"\n"}atlas status --schema{"\n"}atlas doctor --verify atlas</Command>
           </ProseSection>
           <ProseSection title="Uninstall">
-            <Command>atlas uninstall --dry-run{"\n"}atlas uninstall{"\n"}brew uninstall --cask aziron-ai/atlas/atlas{"\n"}# or: npm uninstall -g @aziron/atlas</Command>
+            <Command>atlas uninstall --dry-run{"\n"}atlas uninstall{"\n"}brew uninstall --cask aziron-ai/atlas/atlas{"\n"}# or: npm uninstall -g @aziron-ai/atlas</Command>
             <p>Package removal does not delete repository indexes. Remove <code>/absolute/path/to/repository/.atlas</code> only after stopping all Atlas processes and confirming that a complete local-data reset is intended.</p>
           </ProseSection>
         </>
@@ -826,7 +826,7 @@ export function ProductFooter({ version = RELEASE }) {
           <div className="footer-links">
             <a href={GITHUB}>GitHub repository</a>
             <a href={`${GITHUB}/releases/latest`}>Latest release</a>
-            <a href="https://www.npmjs.com/package/@aziron/atlas">npm package</a>
+            <a href="https://github.com/aziron-ai/atlas/pkgs/npm/atlas">npm package</a>
           </div>
         </div>
       </div>
