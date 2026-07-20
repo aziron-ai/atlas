@@ -59,27 +59,42 @@
   <main class="wrap">
     <article>
 <h1>Privacy and Data Handling</h1>
-<p>Atlas indexing and querying run locally by default. The default repository index is stored under:</p>
-<pre><code>.atlas/</code></pre>
+<p>Atlas indexes and queries your code locally by default; nothing leaves the machine unless you deliberately turn on a network feature. This page defines that boundary, what is stored where, how to run Atlas in audit-grade read-only mode, and which features are opt-in.</p>
 <h2>What &quot;Local by Default&quot; Means</h2>
-<ul><li>Source files are read from the selected workspace.</li><li>The default index is stored in that workspace.</li><li>CLI queries and stdio MCP do not require a hosted Atlas service.</li><li>A local dashboard and API bind to loopback by default.</li></ul>
-<p>This does not mean every tool connected to Atlas is offline. A coding assistant may send the snippets returned by MCP to its configured model provider, subject to that client's settings and data policy.</p>
-<h2>Before Enabling Network Features</h2>
-<p>Review:</p>
+<p>Use this section to establish the baseline before granting any access:</p>
+<ul><li>Source files are read from the selected workspace.</li><li>The default index is stored in that workspace under <code>.atlas/</code>.</li><li>CLI queries and stdio MCP do not require a hosted Atlas service.</li><li>The local dashboard and API bind to loopback by default.</li></ul>
+<p>This does not mean every tool connected to Atlas is offline. A coding assistant may forward the snippets Atlas returns over MCP to its configured model provider, subject to that client's settings and data policy.</p>
+<h2>What Is Stored Where</h2>
+<p>Know the on-disk layout before backing up, moving, or deleting an index. The <code>.atlas/</code> directory can contain the graph database (<code>atlas.db</code> by default), supporting retrieval data, settings, telemetry, and transient SQLite files (WAL/journal). Treat the directory as one data set: copy, back up, or delete it as a unit.</p>
+<p>Stop active Atlas processes (<code>atlas serve</code>, <code>atlas watch</code>, MCP with <code>--watch</code>) before copying, compacting, or deleting local data.</p>
+<h2>Read-Only Mode for Audit-Grade Use</h2>
+<p>Use <code>--read-only</code> when queries must provably not modify the artifact — for example when examining a database captured as evidence or shared by another team. The flag opens the database immutably:</p>
+<ul><li>no migration runs</li><li>no WAL or journal files are created</li><li>no <code>telemetry.db</code> is created next to the graph database</li><li>artifact bytes hash identically after any query</li><li>a missing database errors instead of being created</li></ul>
+<pre><code>atlas status --read-only --db &quot;sqlite:///path/to/copy/atlas.db&quot;</code></pre>
+<h2>Telemetry</h2>
+<p>Local observability data is kept separate from the graph. By default it lives in <code>telemetry.db</code> beside the graph database; set an explicit location with <code>--telemetry-db PATH</code>. With <code>--read-only</code>, no telemetry database is created — if you want telemetry in that mode, you must pass <code>--telemetry-db</code> explicitly.</p>
+<h2>Fleet Features Are Opt-In</h2>
+<p>Nothing is uplinked unless you run <code>atlas connect</code>. Connecting registers the machine with a central Atlas server under a stable device identity, writes <code>~/.atlas/config.json</code>, and installs the Claude/Codex capture hooks (<code>--no-hooks</code> to skip). There is no default hub: the server URL comes from the explicit argument, <code>ATLAS_SYNC_SERVER</code>, or the URL the machine is already connected to.</p>
+<p>What leaves the machine is governed by the data level:</p>
+<table><thead><tr><th><code>--level</code></th><th>Shares</th></tr></thead><tbody><tr><td><code>off</code></td><td>Nothing</td></tr><tr><td><code>telemetry</code></td><td>Metrics only</td></tr><tr><td><code>interactions</code></td><td>Normalized prompts + redacted traces (the default)</td></tr><tr><td><code>full</code></td><td>Raw prompts (org opt-in)</td></tr></tbody></table>
+<p>Raw transcripts, tool outputs, answers, and secrets never leave the machine at any level. Inspect and drive the uplink explicitly:</p>
+<pre><code>atlas sync status
+atlas sync now</code></pre>
+<p><code>sync status</code> shows uplink configuration, kill switches, and per-stream cursors; <code>sync now</code> pushes all pending telemetry once. To leave the fleet and remove the capture hooks:</p>
+<pre><code>atlas disconnect</code></pre>
+<h2>Before Enabling Network Access</h2>
+<p>Review this checklist before binding the service beyond loopback:</p>
 <ul><li>the bind address</li><li>API authentication</li><li>allowed browser origins</li><li>reverse-proxy TLS</li><li>the data policy of connected assistants and model providers</li><li>any optional embedding or organization-connected service</li></ul>
 <p>Protect non-loopback service access:</p>
 <pre><code>export ATLAS_API_TOKEN='replace-with-a-strong-token'
 export ATLAS_MCP_ALLOWED_ORIGINS='https://trusted.example'
 atlas serve --mcp --addr 0.0.0.0:3099</code></pre>
-<p>Do not commit tokens to repository settings or shell scripts.</p>
-<h2>Local Data</h2>
-<p>The <code>.atlas/</code> directory can contain the graph database, supporting retrieval data, settings, telemetry, and transient SQLite files. Treat the directory as one data set when backing up or moving an index.</p>
-<p>Stop active Atlas processes before copying, compacting, or deleting local data.</p>
+<p>Do not commit tokens to repository settings or shell scripts. See <a href="../service/">Dashboard and HTTP API</a> for token and TLS details.</p>
 <h2>Data Removal</h2>
 <p>Remove Atlas-managed assistant configuration first:</p>
 <pre><code>atlas uninstall --dry-run
 atlas uninstall</code></pre>
-<p>Package removal does not automatically delete repository indexes. See <a href="../upgrade/">Upgrade and Uninstall</a> for explicit data-removal steps.</p>
+<p>Package removal does not automatically delete repository indexes; delete the <code>.atlas/</code> directory (with Atlas processes stopped) to remove an index, or use <code>atlas repo rm</code> to forget one repository's snapshots, symbols, edges, embeddings, and lexical documents from a shared database.</p>
 <h2>Shared and Connected Environments</h2>
 <p>When multiple users or repositories share an Atlas service:</p>
 <ul><li>declare repository scope explicitly</li><li>authenticate every network client</li><li>restrict browser origins</li><li>define retention and backup policy</li><li>avoid mounting sensitive repositories into an index intended for a broader</li></ul>
@@ -93,6 +108,7 @@ atlas uninstall</code></pre>
     <nav class="doclist" aria-label="All documentation">
         <a href="../getting-started/">Getting Started</a>
         <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
         <a href="../indexing/">Indexing and Reindexing</a>
         <a href="../cli/">CLI Reference</a>
         <a href="../assistants/">AI Assistant Setup</a>

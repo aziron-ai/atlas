@@ -59,15 +59,18 @@
   <main class="wrap">
     <article>
 <h1>AI Assistant Setup</h1>
-<p>Atlas can register its MCP server with Claude CLI, Claude Desktop, Codex, Cursor, Gemini, and GitHub Copilot. Client behavior and supported transport modes vary.</p>
-<h2>Automatic Setup</h2>
-<p>Preview all detected changes:</p>
+<p>Atlas registers its MCP server with Claude CLI, Claude Desktop, Codex, Cursor, Gemini, and GitHub Copilot, so any of these assistants can query your local code graph. This page covers automatic setup, repository-pinned setup, git hooks, verification, and removal. For what the tools return once connected, see <a href="../mcp/">MCP Tools</a>.</p>
+<h2>Automatic Setup with Bootstrap</h2>
+<p>Use bootstrap when you want every detected assistant provisioned in one pass. In managed environments, always preview first:</p>
 <pre><code>atlas bootstrap --dry-run</code></pre>
-<p>Apply them:</p>
+<p>Apply the changes:</p>
 <pre><code>atlas bootstrap</code></pre>
-<p>Restrict setup to selected clients:</p>
-<pre><code>atlas bootstrap --only codex,claude,claude-desktop</code></pre>
-<p>Restart each assistant after changing its MCP configuration.</p>
+<p>Restrict provisioning to selected clients, or exclude some:</p>
+<pre><code>atlas bootstrap --only codex,claude,claude-desktop
+atlas bootstrap --skip cursor</code></pre>
+<p>Restart each assistant after its MCP configuration changes; most clients read MCP configuration only at startup.</p>
+<h3>What Bootstrap Writes</h3>
+<p>Bootstrap registers Atlas as an MCP server and installs the atlas-first skill plus a CLAUDE.md directive for all detected assistants. It bakes the absolute binary path into each config and registers the supervised gateway with no <code>--db</code>, so the workspace is resolved at query time rather than pinned at install time. The command is idempotent: it is safe to run repeatedly and from a package post-install hook. Use <code>--home</code> to override the home directory base when provisioning a different account's configuration.</p>
 <h2>Repository-Pinned Setup</h2>
 <p>Use a repository-pinned local MCP configuration when one assistant should always query one index:</p>
 <pre><code>cd /path/to/repository
@@ -79,13 +82,11 @@ atlas install skill \
   --db &quot;sqlite://$PWD/.atlas/atlas.db&quot; \
   --server-url=none</code></pre>
 <h2>Dynamic Workspace Setup</h2>
-<p>Bootstrap is appropriate when the assistant supplies the active workspace at runtime:</p>
-<pre><code>atlas bootstrap</code></pre>
-<p>Repository-scoped MCP tools still require one of:</p>
+<p>Bootstrap is appropriate when the assistant supplies the active workspace at runtime. Repository-scoped MCP tools still require one of:</p>
 <ul><li>a workspace root supplied by the client</li><li>a <code>workspace</code> argument</li><li>a repository ID</li><li>a repository pinned when MCP starts</li></ul>
 <p>If none is available, Atlas returns <code>workspace_required</code> instead of selecting a repository silently.</p>
 <h2>Shared Local Server</h2>
-<p>For multiple thin clients using one local service:</p>
+<p>Use one local service when multiple thin clients should share a single index and watcher:</p>
 <pre><code>atlas serve --mcp --open=false
 
 atlas install skill \
@@ -93,21 +94,25 @@ atlas install skill \
   --repo &quot;$PWD&quot; \
   --server-url http://127.0.0.1:3099</code></pre>
 <p>Use a token before exposing the service beyond loopback. See <a href="../service/">Dashboard and HTTP API</a>.</p>
-<h2>Common Configuration Locations</h2>
-<table><thead><tr><th>Client</th><th>Typical location</th></tr></thead><tbody><tr><td>Codex</td><td><code>~/.codex/config.toml</code></td></tr><tr><td>Claude CLI</td><td><code>~/.claude.json</code></td></tr><tr><td>Claude Desktop on macOS</td><td><code>~/Library/Application Support/Claude/</code></td></tr></tbody></table>
-<p>The Claude Desktop configuration filename is <code>claude_desktop_config.json</code>.</p>
+<h2>Keep the Graph Fresh with a Git Hook</h2>
+<p>Install a local git hook when you want the index updated as part of your normal git workflow rather than by a running watcher:</p>
+<pre><code>atlas install hook</code></pre>
+<p>The hook keeps the Atlas graph fresh in the repository where it is installed.</p>
+<h2>Client Configuration Locations</h2>
+<p>Check these paths when auditing what setup wrote or when a client does not pick up the server:</p>
+<table><thead><tr><th>Client</th><th>Typical location</th></tr></thead><tbody><tr><td>Codex</td><td><code>~/.codex/config.toml</code></td></tr><tr><td>Claude CLI</td><td><code>~/.claude.json</code></td></tr><tr><td>Claude Desktop on macOS</td><td><code>~/Library/Application Support/Claude/claude_desktop_config.json</code></td></tr></tbody></table>
 <p>Atlas preserves unrelated client configuration. Always review a dry run before applying changes in managed environments.</p>
 <h2>Verify</h2>
+<p>Confirm the integration end to end before relying on it:</p>
 <pre><code>atlas doctor --verify atlas
 atlas status
 atlas bootstrap --dry-run</code></pre>
-<p>Then ask the assistant a repository-specific question and confirm that the answer includes source file and line references.</p>
-<h2>Remove Integration</h2>
-<p>Preview removal:</p>
-<pre><code>atlas uninstall --dry-run</code></pre>
-<p>Apply removal:</p>
-<pre><code>atlas uninstall</code></pre>
-<p>This removes Atlas-managed assistant entries and skills. It does not remove unrelated assistant configuration or repository indexes.</p>
+<p><code>doctor --verify atlas</code> also checks for binary drift: whether the <code>atlas</code> on <code>PATH</code> — what assistants launch via <code>command:&quot;atlas&quot;</code> — matches the running binary. Then ask the assistant a repository-specific question and confirm that the answer includes source file and line references.</p>
+<h2>Remove the Integration</h2>
+<p>Preview removal, then apply it:</p>
+<pre><code>atlas uninstall --dry-run
+atlas uninstall</code></pre>
+<p>Uninstall reverses <code>atlas bootstrap</code> across every assistant it provisions: it removes the atlas MCP server entry from each config, the atlas skill markdown, and the atlas-managed block in the global CLAUDE.md. Nothing else is touched — other MCP servers, unrelated config keys, and your own CLAUDE.md content outside the atlas markers are preserved. Re-running reports <code>absent</code> and writes nothing. Repository indexes are not deleted; see <a href="../privacy/">Privacy and Data Handling</a> for data removal.</p>
     </article>
     <nav class="prevnext">
       <span><a href="../cli/">← CLI Reference</a></span>
@@ -116,6 +121,7 @@ atlas bootstrap --dry-run</code></pre>
     <nav class="doclist" aria-label="All documentation">
         <a href="../getting-started/">Getting Started</a>
         <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
         <a href="../indexing/">Indexing and Reindexing</a>
         <a href="../cli/">CLI Reference</a>
         <a href="../assistants/">AI Assistant Setup</a>

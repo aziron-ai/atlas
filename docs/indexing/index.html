@@ -59,55 +59,69 @@
   <main class="wrap">
     <article>
 <h1>Indexing and Reindexing</h1>
-<p>Atlas answers are only as current as the selected index. This guide explains normal updates, forced rebuilds, exclusions, and freshness checks.</p>
-<h2>Initial Index</h2>
-<p>From a repository root:</p>
+<p>Atlas answers are only as current as the selected index. This guide covers creating and updating an index, forcing a rebuild, keeping the graph fresh automatically, controlling what gets indexed, and maintaining the database that stores it. For what the graph contains, see <a href="../concepts/">Core Concepts</a>.</p>
+<h2>Create or Update an Index</h2>
+<p>Run this once to build the graph, and again whenever you want to refresh it — the same command handles both cases. From a repository root:</p>
 <pre><code>atlas index .</code></pre>
-<p>To use an explicit database:</p>
-<pre><code>atlas --db &quot;sqlite://$PWD/.atlas/atlas.db&quot; index .</code></pre>
-<h2>Incremental Update</h2>
-<p>Run the same command after source changes:</p>
-<pre><code>atlas index .</code></pre>
-<p>Atlas may report a delta update when files changed or a no-op when the stored snapshot already matches the workspace.</p>
-<h2>Forced Reindex</h2>
+<p>To pin an explicit database instead of the default <code>sqlite://./.atlas/atlas.db</code>:</p>
+<pre><code>atlas --db &quot;sqlite:///absolute/path/.atlas/atlas.db&quot; index .</code></pre>
+<p><code>atlas index</code> parses symbols, edges, and routes, then persists the graph and the lexical search index. By default it indexes the working tree; use <code>--ref COMMIT_OR_BRANCH</code> to index a specific commit or branch instead.</p>
+<h2>What Index Output Reports</h2>
+<p>Read the index output to confirm what actually happened rather than assuming. With <code>--progress</code> (on by default for human output), Atlas prints start, periodic progress, and completion statistics to stderr. A run reports a delta update when files changed, or a no-op when the stored snapshot already matches the workspace. For profiling an index run, <code>--cpuprofile PATH</code> and <code>--memprofile PATH</code> write runtime/pprof profiles.</p>
+<h2>Incremental Behavior</h2>
+<p>Incremental updates are the default because they are much faster than full rebuilds: Atlas computes a delta against the previous snapshot and reindexes only what changed. To diff against a specific commit rather than the stored base, pass <code>--base COMMIT</code>.</p>
+<h2>Forced Rebuild</h2>
+<p>Use <code>--reindex</code> only when the incremental path cannot repair the index:</p>
 <pre><code>atlas index . --reindex</code></pre>
-<p>Use a full rebuild when:</p>
-<ul><li>an upgrade reports an incompatible or stale index format</li><li>parser or language support changed and old files must be reparsed</li><li><code>atlas doctor</code> recommends a rebuild</li><li>the workspace identity or indexed root was incorrect</li><li>focused troubleshooting confirms the current index is incomplete</li></ul>
+<p>The legitimate reasons for a full rebuild are:</p>
+<p>1. An upgrade reports an incompatible or stale index format, or    <code>atlas doctor</code> recommends a rebuild. 2. Parser or language support changed and old files must be reparsed. 3. The workspace identity or indexed root was incorrect, or focused    troubleshooting confirms the current index is incomplete.</p>
 <p>Do not make forced reindexing the default workflow. It is slower and discards the benefit of incremental updates.</p>
 <h2>Watch Mode</h2>
-<p>Keep a foreground index current:</p>
+<p>Use watch mode when you want the graph to stay fresh during active editing with no manual <code>atlas index</code> runs. <code>atlas watch</code> indexes the repo once, then watches the working tree and runs an incremental, working-tree-aware update on every file change. A burst of edits is coalesced into one update (<code>--debounce-ms</code>, default 250). It runs in the foreground until interrupted.</p>
 <pre><code>atlas watch .</code></pre>
-<p>Supervised MCP can also maintain freshness:</p>
-<pre><code>atlas mcp --supervise</code></pre>
-<p>Disable automatic watching when another process owns indexing:</p>
-<pre><code>atlas mcp --supervise --watch=false</code></pre>
-<h2>Semantic Retrieval</h2>
-<p>Semantic vectors are optional:</p>
-<pre><code>atlas index . --enable-vectors</code></pre>
-<p>If vectors are disabled or unavailable, Atlas can continue with lexical and graph-backed retrieval. Confirm the active mode with <code>atlas status</code> or <code>atlas doctor</code>.</p>
+<p>The MCP and HTTP surfaces maintain freshness the same way — <code>atlas mcp</code> and <code>atlas serve</code> watch the repo by default. Disable watching when another process owns indexing:</p>
+<pre><code>atlas mcp --supervise --watch=false   # or set ATLAS_NO_WATCH=1</code></pre>
+<h2>Semantic Vectors (Optional)</h2>
+<p>Enable vectors only if you want embedding-based retrieval; the deterministic lexical and graph core never depends on them. Run the optional embedding pass at index time:</p>
+<pre><code>atlas index . --enable-vectors
+atlas watch . --enable-vectors   # keep embeddings fresh on each update</code></pre>
+<p>With vectors enabled (<code>ATLAS_ENABLE_VECTORS=1</code> and a repo indexed with <code>--enable-vectors</code>), <code>atlas semantic-search</code> returns nearest symbols by cosine similarity. Otherwise it transparently degrades to lexical search and reports <code>degraded=true</code> / <code>mode_used=lexical</code>. By default the embedder is offline (deterministic token overlap); set <code>ATLAS_EMBED_URL</code> to use a real embedding model. See <a href="../configuration/">Configuration</a>.</p>
 <h2>Excluding Files</h2>
-<p>Atlas respects <code>.gitignore</code> by default. Add Atlas-specific patterns to:</p>
+<p>Exclude generated outputs, dependency caches, and nested repository snapshots so they do not pollute search results. Atlas skips paths git ignores by default (<code>--gitignore</code>, default true); pass <code>--gitignore=false</code> to index everything. Add Atlas-specific patterns to:</p>
 <pre><code>.atlasignore</code></pre>
-<p>Avoid indexing generated outputs, dependency caches, benchmark working copies, or nested repository snapshots unless they are intentionally part of the review surface.</p>
+<h2>Registering Without Indexing</h2>
+<p>Use <code>atlas link</code> when a repo should participate in cross-repo queries and appear in <code>atlas status</code> before (or without) being indexed on this machine:</p>
+<pre><code>atlas link org/name --branch main</code></pre>
+<p><code>REPO</code> may be a filesystem path, a git remote URL, or a bare <code>org/name</code>. Linking is idempotent — re-linking updates the registration and reports <code>created=false</code>. Linking does not populate the graph; run <code>atlas index</code> for that. To remove a repo from the registry, <code>atlas repo rm</code> forgets it entirely: snapshots, symbols, edges, embeddings, and lexical documents.</p>
+<h2>Database Maintenance</h2>
+<p>Run maintenance when the database has grown or after an Atlas upgrade.</p>
+<ul><li><code>atlas compact</code> reports reclaimable pages and truncates the WAL. Modern</li></ul>
+<p>  Atlas databases use online incremental auto-vacuum; legacy databases are   converted with a one-time full VACUUM that takes an exclusive lock — stop   <code>atlas serve</code> and watch processes first, or you get a lock error rather   than partial work.</p>
+<ul><li><code>atlas compact --full</code> additionally runs a full VACUUM and rebuilds the</li></ul>
+<p>  lexical (BM25) sidecar when it has outgrown its size bound — the only way   dead segments are returned to the OS. Exclusive: quiesce other Atlas   processes first.</p>
+<ul><li><code>atlas compact --rebuild-lexical</code> rebuilds the lexical sidecar regardless of</li></ul>
+<p>  size — the fix for an empty or wedged sidecar, which otherwise silently   degrades every search to SQL-only. <code>atlas doctor</code> reports when you need it.</p>
+<ul><li><code>atlas migrate</code> applies storage migrations and reports the active contracts.</li></ul>
+<p>  Both <code>migrate</code> and <code>compact</code> accept <code>--all --root DIR</code> to process every   local <code>.atlas/atlas.db</code> under a directory.</p>
 <h2>Verify Freshness</h2>
+<p>Confirm which index is answering before trusting results:</p>
 <pre><code>atlas status
 atlas stats
 atlas doctor</code></pre>
-<p>When multiple repositories or databases exist, pin both:</p>
-<pre><code>atlas --db &quot;sqlite:///absolute/path/.atlas/atlas.db&quot; \
-  --repo /absolute/path status</code></pre>
-<p>If a running Atlas server is configured, CLI queries may use that server. Unset <code>ATLAS_SERVER_URL</code> or pin an explicit database while diagnosing which index is answering.</p>
+<p>When multiple repositories or databases exist, pin both <code>--db</code> and <code>--repo</code>. If a running Atlas server is configured, CLI queries may use that server — unset <code>ATLAS_SERVER_URL</code> or pin an explicit database while diagnosing.</p>
 <h2>Safe Recovery Order</h2>
+<p>Follow this order so you never destroy data a cheaper step could have fixed:</p>
 <p>1. Stop active <code>serve</code>, <code>watch</code>, and supervised MCP processes. 2. Run <code>atlas status</code> and <code>atlas doctor</code>. 3. Confirm the repository and database paths. 4. Run <code>atlas migrate</code> when a schema upgrade is required. 5. Rebuild lexical data only when recommended. 6. Run <code>atlas index . --reindex</code> as the final non-destructive repair. 7. Delete <code>.atlas</code> only when a complete data reset is intended.</p>
 <p>See <a href="../troubleshooting/">Troubleshooting</a> before removing data.</p>
     </article>
     <nav class="prevnext">
-      <span><a href="../installation/">← Installation</a></span>
+      <span><a href="../concepts/">← Core Concepts</a></span>
       <span><a href="../cli/">CLI Reference →</a></span>
     </nav>
     <nav class="doclist" aria-label="All documentation">
         <a href="../getting-started/">Getting Started</a>
         <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
         <a href="../indexing/">Indexing and Reindexing</a>
         <a href="../cli/">CLI Reference</a>
         <a href="../assistants/">AI Assistant Setup</a>

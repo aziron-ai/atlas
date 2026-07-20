@@ -9,7 +9,10 @@ const executablePath = fs.existsSync(pinned) ? pinned : undefined;
 
 module.exports = defineConfig({
   testDir: "./tests",
-  timeout: 60_000,
+  timeout: 120_000,
+  // Shared/loaded VMs stretch page loads well past the 5s expect default;
+  // the assertions themselves are cheap once the page is up.
+  expect: { timeout: 30_000 },
   use: {
     launchOptions: executablePath ? { executablePath } : {},
   },

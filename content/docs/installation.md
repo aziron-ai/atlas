@@ -1,9 +1,19 @@
 # Installation
 
-Atlas is distributed as a Homebrew cask, an npm wrapper, release archives, and
-native Linux packages.
+Atlas ships through four channels that all install the same native binary.
+Pick the channel that matches how you manage software on the target machine:
 
-## Homebrew
+| Channel | Best for | Platforms |
+| --- | --- | --- |
+| Homebrew | macOS/Linux workstations; managed upgrades | macOS/Linux amd64 and arm64 |
+| npm (GitHub Packages) | Node toolchains and CI that already hold a GitHub token | macOS/Linux x64 and arm64; Windows x64 |
+| Release archive | Air-gapped hosts, exact-version pinning, Windows | macOS/Linux amd64 and arm64; Windows amd64 |
+| Linux package | Fleet management with `.deb`/`.rpm`/`.apk` | amd64 and arm64 |
+
+## Homebrew (macOS and Linux)
+
+Use Homebrew when you want the shortest path and automatic upgrades alongside
+your other tooling.
 
 ```sh
 brew install --cask aziron-ai/atlas/atlas
@@ -11,14 +21,16 @@ atlas version
 ```
 
 Homebrew names fully qualified casks as `<owner>/<tap>/<cask>`. The repository
-`aziron-ai/homebrew-atlas` becomes the tap `aziron-ai/atlas`; the cask and
+`aziron-ai/homebrew-atlas` becomes the tap `aziron-ai/atlas`; the cask and the
 installed executable are both named `atlas`.
 
 ## npm (GitHub Packages)
 
-The npm package is published to GitHub Packages, so npm must be pointed at the
-`@aziron-ai` scope with a GitHub token that has `read:packages` (GitHub Packages
-requires authentication even for public packages):
+Use npm when Atlas should install through an existing Node toolchain or CI
+pipeline. The package is published to GitHub Packages, not the public npm
+registry, so npm must be pointed at the `@aziron-ai` scope with a GitHub token
+that has the `read:packages` scope — GitHub Packages requires authentication
+even for public packages:
 
 ```sh
 npm config set @aziron-ai:registry https://npm.pkg.github.com
@@ -27,33 +39,21 @@ npm install -g @aziron-ai/atlas
 atlas version
 ```
 
-For a version-pinned installation:
+Pin an exact version for reproducible environments:
 
 ```sh
 npm install -g @aziron-ai/atlas@0.1.36
 ```
 
-The npm package downloads the native Atlas binary for the current platform. If
-you do not need npm specifically, Homebrew above is the simpler path.
+The npm package is a wrapper that downloads the native Atlas binary for the
+current platform. If you do not need npm specifically, Homebrew is the
+simpler path.
 
-## Installation and Assistant Configuration
+## Release Archives
 
-Homebrew and npm installations run Atlas bootstrap to register supported local
-assistant integrations. Inspect the proposed changes at any time:
-
-```sh
-atlas bootstrap --dry-run
-```
-
-To prevent npm post-install bootstrap in managed environments:
-
-```sh
-ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron-ai/atlas
-```
-
-## Direct Release Archive
-
-Choose the current version and platform from
+Use a release archive when no package manager is available, on air-gapped
+hosts, or when you need to pin and checksum exact bytes. Choose the current
+version and platform from
 [GitHub Releases](https://github.com/aziron-ai/atlas/releases/latest):
 
 ```sh
@@ -73,11 +73,17 @@ atlas version
 
 On Linux, replace the checksum command with `sha256sum -c -` when available.
 
+### Windows
+
+Each release also includes a Windows amd64 archive. Download it from the same
+release page, extract the `atlas` executable, and add its directory to
+`PATH`. Alternatively, the npm channel above supports Windows x64.
+
 ## Native Linux Packages
 
-Each release includes `.deb`, `.rpm`, and `.apk` packages for amd64 and arm64.
-Download the matching package from the release page, then use the platform
-package manager:
+Use native packages when your fleet is managed through a distribution package
+manager. Each release includes `.deb`, `.rpm`, and `.apk` packages for amd64
+and arm64. Download the matching package from the release page, then install:
 
 ```sh
 # Debian or Ubuntu
@@ -90,16 +96,40 @@ sudo rpm -U atlas_0.1.36_linux_amd64.rpm
 sudo apk add --allow-untrusted atlas_0.1.36_linux_amd64.apk
 ```
 
-## Supported Distribution Targets
+## Post-Install: Assistant Bootstrap
 
-| Channel | Platforms |
-| --- | --- |
-| Homebrew | macOS/Linux amd64 and arm64 |
-| npm | macOS/Linux x64 and arm64; Windows x64 |
-| Release archive | macOS/Linux amd64 and arm64; Windows amd64 |
-| Linux package | `.deb`, `.rpm`, `.apk`; amd64 and arm64 |
+Homebrew and npm installations run `atlas bootstrap` after install. Bootstrap
+registers Atlas as an MCP server and installs the atlas-first skill and
+CLAUDE.md directive for every detected assistant (Claude desktop and CLI,
+Codex, Copilot, Cursor, Gemini). It is idempotent — safe to run repeatedly
+and from a package post-install hook. Inspect the proposed changes at any
+time without writing anything:
+
+```sh
+atlas bootstrap --dry-run
+```
+
+To prevent the npm post-install bootstrap in managed environments:
+
+```sh
+ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron-ai/atlas
+```
+
+Archive and Linux-package installs do not configure assistants automatically;
+run `atlas bootstrap` yourself when you want them connected.
+
+## PATH Note
+
+Assistants launch Atlas by resolving `atlas` from `PATH`, so the binary must
+be reachable from a login shell — not only your current session. Homebrew and
+the Linux packages handle this; for archives, `/usr/local/bin` (used above)
+is on `PATH` by default on most systems. For npm installs, ensure npm's
+global bin directory is on `PATH`.
 
 ## Verify the Installation
+
+Verification confirms three distinct things: the binary is on `PATH`, it
+runs, and it is the same binary your assistants will launch.
 
 ```sh
 command -v atlas
@@ -107,4 +137,11 @@ atlas version
 atlas doctor --verify atlas
 ```
 
-Continue with [Getting Started](Getting-Started).
+`atlas doctor` reports upgrade health and schema/index contract state;
+`--verify atlas` additionally checks for binary drift — whether the `atlas`
+on `PATH` (what assistants launch via `command:"atlas"`) matches the running
+binary. Drift typically means an old install shadows the new one earlier on
+`PATH`.
+
+Continue with [Getting Started](getting-started), or read
+[Core Concepts](concepts) for the model behind the commands.

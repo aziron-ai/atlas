@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Core Concepts — Atlas documentation</title>
+  <meta name="description" content="The Atlas mental model: the code knowledge graph, snapshots, workspace resolution, output control, and the CLI, HTTP, and MCP surfaces.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="../../assets/og.png" type="image/png">
+  <link rel="canonical" href="https://aziron-ai.github.io/atlas/docs/concepts/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="Core Concepts — Atlas">
+  <meta property="og:description" content="The Atlas mental model: the code knowledge graph, snapshots, workspace resolution, output control, and the CLI, HTTP, and MCP surfaces.">
+  <meta property="og:url" content="https://aziron-ai.github.io/atlas/docs/concepts/">
+  <meta property="og:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Core Concepts — Atlas">
+  <meta name="twitter:description" content="The Atlas mental model: the code knowledge graph, snapshots, workspace resolution, output control, and the CLI, HTTP, and MCP surfaces.">
+  <meta name="twitter:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Core Concepts","description":"The Atlas mental model: the code knowledge graph, snapshots, workspace resolution, output control, and the CLI, HTTP, and MCP surfaces.","url":"https://aziron-ai.github.io/atlas/docs/concepts/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://aziron-ai.github.io/atlas/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-07-19"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://aziron-ai.github.io/atlas/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://aziron-ai.github.io/atlas/docs/"},{"@type":"ListItem","position":3,"name":"Core Concepts","item":"https://aziron-ai.github.io/atlas/docs/concepts/"}]}]</script>
+  <style>
+  :root { color-scheme: dark light; --bg:#0b0c0f; --panel:#111318; --text:#e6e7ea; --muted:#a2a6ad; --line:#23262d; --primary:#34d3a6; --link:#5e4bff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(11,12,15,.85); backdrop-filter:blur(8px); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .mark { width:24px; height:24px; border-radius:6px; background:var(--primary); color:#04130f; display:grid; place-items:center; font-weight:800; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#1b1e24; padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:#14171d; border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#14171d; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://aziron-ai.github.io/atlas/"><span class="mark">A</span> ATLAS</a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://aziron-ai.github.io/atlas/">Home</a> / <a href="https://aziron-ai.github.io/atlas/docs/">Docs</a> / Core Concepts</nav>
+      <a class="open-app" href="https://aziron-ai.github.io/atlas/#docs/concepts">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>Core Concepts</h1>
+<p>Every Atlas command shares the same underlying model: a local knowledge graph of your code, a snapshot timeline over its history, one workspace-resolution scheme, and one set of output controls. Understanding these once makes the whole <a href="../cli/">CLI Reference</a> predictable.</p>
+<h2>The Knowledge Graph</h2>
+<p>Atlas answers structural questions from a <strong>knowledge graph</strong> rather than text search, so results are exact relationships, not pattern matches. The graph is built by <code>atlas index</code>, which parses a repository into:</p>
+<ul><li><strong>Symbols</strong> — functions, methods, classes, and other definitions.</li><li><strong>Call edges</strong> — who calls whom, powering <code>callers</code>, <code>path</code>, <code>impact</code>, and</li></ul>
+<p>  the graph-shape commands (<code>hubs</code>, <code>communities</code>).</p>
+<ul><li><strong>Routes</strong> — the HTTP routes a repository serves and calls, powering</li></ul>
+<p>  cross-repo queries such as <code>consumers</code> and <code>dependencies</code>.</p>
+<ul><li><strong>Coverage</strong> — test-to-symbol links, from static call-graph reachability or</li></ul>
+<p>  an imported runtime profile (<code>atlas coverage import</code>).</p>
+<p>Alongside the graph, indexing persists a lexical (BM25 + trigram) search index. Everything lives in an embedded SQLite database, by default <code>sqlite://./.atlas/atlas.db</code> inside the repository — no daemon or service is required to query it.</p>
+<pre><code>atlas index .</code></pre>
+<h2>Snapshots and History</h2>
+<p>Each indexed commit becomes a <strong>snapshot</strong>, giving the graph a per-commit timeline — you can ask not only what the code looks like, but how its structure changed. <code>atlas history</code> lists the timeline; <code>atlas snapshot-diff</code> computes a structural diff (symbols and edges added, removed, modified) between two snapshots, defaulting to the latest snapshot and the one before it. Both <code>--from</code> and <code>--to</code> accept a commit sha (prefix ok) or snapshot id.</p>
+<pre><code>atlas snapshot-diff --from a1b2c3d --to HEAD</code></pre>
+<h2>Workspace Resolution</h2>
+<p>Every command needs to know which repository and which database it is operating on; three global flags resolve that, and the defaults make the common case zero-config.</p>
+<table><thead><tr><th>Flag</th><th>Meaning</th><th>Default</th></tr></thead><tbody><tr><td><code>--repo</code></td><td>Repo workspace: a path, <code>org/name</code>, or <code>repo_id</code>; <code>'*'</code> = all repos on <code>search</code>/<code>semantic-search</code></td><td>the current directory</td></tr><tr><td><code>--db</code></td><td>Storage DSN: <code>sqlite://PATH</code> or <code>postgres://...</code></td><td><code>sqlite://./.atlas/atlas.db</code></td></tr><tr><td><code>--tenant</code></td><td>Tenant/org scope to isolate repos to (hosted multi-tenant)</td><td>empty = all repos</td></tr></tbody></table>
+<p>Run from inside an indexed repository and no flags are needed. Point <code>--db</code> at a shared database to query many repositories from one place:</p>
+<pre><code>atlas search &quot;rate limiter&quot; --repo '*' --db sqlite:///srv/atlas/atlas.db</code></pre>
+<h2>Output Control</h2>
+<p>Output has two independent axes — shape and depth — so you can tune results for a terminal, a script, or an LLM context window.</p>
+<table><thead><tr><th>Flag</th><th>Values</th><th>Default</th></tr></thead><tbody><tr><td><code>--format</code></td><td><code>plain</code> \</td><td><code>json</code> \</td><td><code>compact</code> \</td><td><code>ndjson</code> — output shape</td><td><code>json</code></td></tr><tr><td><code>--json</code></td><td>shorthand for <code>--format json</code></td><td>—</td></tr><tr><td><code>--detail</code></td><td><code>low</code> \</td><td><code>medium</code> \</td><td><code>high</code> \</td><td><code>xhigh</code> — graph context per item</td><td><code>high</code></td></tr></tbody></table>
+<p>Retrieval operations (<code>callers</code>, <code>refs</code>, <code>impact</code>) floor at <code>high</code> detail so they never silently drop the context they exist to provide; <code>xhigh</code> opts into cross-repo context. For agents, prefer <code>--format plain</code>: it carries the same answer in far fewer tokens than structured JSON, which matters when every query result lands in a model's context window.</p>
+<pre><code>atlas search &quot;session store&quot; --format plain --detail low</code></pre>
+<h2>Three Surfaces</h2>
+<p>The same graph is exposed three ways, so humans, services, and AI agents each get a native interface without separate infrastructure.</p>
+<ul><li><strong>CLI</strong> — the commands in this documentation; scriptable via <code>--format</code>.</li><li><strong>REST HTTP API</strong> — <code>atlas serve</code> runs the HTTP API on <code>127.0.0.1:3099</code> by</li></ul>
+<p>  default (use <code>--addr 0.0.0.0:3099</code> to expose it) and opens the dashboard;   <code>--mcp</code> also mounts MCP over HTTP at <code>POST /mcp</code>.</p>
+<ul><li><strong>MCP</strong> — <code>atlas mcp</code> exposes graph, search, and impact as MCP tools to LLM</li></ul>
+<p>  agents over stdio by default, with <code>--http</code>/<code>--sse</code> transports available.   Both <code>serve</code> and <code>mcp</code> keep the graph fresh with a background repo watch   (<code>--watch</code>, on by default; disable with <code>--watch=false</code> or   <code>ATLAS_NO_WATCH=1</code>). <a href="../getting-started/">Getting Started</a> covers wiring   assistants via <code>atlas bootstrap</code>; <a href="../mcp/">MCP Tools</a> covers the tool surface.</p>
+<pre><code>atlas serve --mcp</code></pre>
+<h2>Read-Only Mode</h2>
+<p>Use <code>--read-only</code> when the database must not change — CI caches, content-addressed artifacts, shared read replicas. It opens the database immutably: no migration runs, no WAL/journal files are created, and no <code>telemetry.db</code> appears next to it — artifact bytes hash identically after any query. A missing database errors instead of being created. If you still want telemetry in this mode, point <code>--telemetry-db</code> at an explicit writable path.</p>
+<pre><code>atlas symbol NewServer --read-only</code></pre>
+<h2>Local-First vs Hosted</h2>
+<p>Atlas is local by default: indexing, querying, serving, and MCP all run against your local database, and nothing leaves the machine. Two commands opt into a central Atlas server, and only for fleet telemetry and org skills:</p>
+<ul><li><code>atlas connect</code> registers the machine with a central server under a stable</li></ul>
+<p>  device identity and installs capture hooks. What leaves the machine is   governed by the data level (<code>--level</code>): <code>off</code>, <code>telemetry</code> (metrics only),   <code>interactions</code> (normalized prompts + redacted traces; the default), or   <code>full</code> (raw prompts; org opt-in). Raw transcripts, tool outputs, answers,   and secrets never leave the machine at any level. <code>atlas disconnect</code>   reverses it.</p>
+<ul><li><code>atlas sync</code> is the fleet telemetry uplink — <code>sync status</code> shows the</li></ul>
+<p>  configuration, kill switches, and per-stream cursors; <code>sync now</code> pushes   pending telemetry once.</p>
+<p>Connected machines can also exchange org-trusted skills and automations (<code>atlas skill push/pull</code>, <code>atlas recall push/pull</code>). Everything else — <code>index</code>, <code>search</code>, <code>callers</code>, <code>impact</code>, <code>serve</code>, <code>mcp</code> — works with no server and no account. On a hosted multi-tenant server, <code>--tenant</code> scopes queries to one org. See <a href="../configuration/">Configuration</a> for the related knobs.</p>
+<pre><code>atlas sync status</code></pre>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../installation/">← Installation</a></span>
+      <span><a href="../indexing/">Indexing and Reindexing →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.36 · <a href="https://aziron-ai.github.io/atlas/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>
