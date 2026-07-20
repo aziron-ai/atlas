@@ -59,47 +59,56 @@
   <main class="wrap">
     <article>
 <h1>Upgrade and Uninstall</h1>
-<h2>Upgrade with Homebrew</h2>
+<p>Upgrade the binary through the channel you installed with, then run the post-upgrade sequence — the binary and the on-disk data have separate version contracts, and skipping the sequence is the most common source of post-upgrade drift.</p>
+<h2>Upgrade per Channel</h2>
+<p>Use the same channel you installed from (see <a href="../installation/">Installation</a>).</p>
+<p>Homebrew:</p>
 <pre><code>brew update
 brew upgrade --cask aziron-ai/atlas/atlas
 atlas version</code></pre>
-<h2>Upgrade with npm</h2>
+<p>npm:</p>
 <pre><code>npm install -g @aziron-ai/atlas
 atlas version</code></pre>
 <p>Pin a version for reproducible automation:</p>
 <pre><code>npm install -g @aziron-ai/atlas@0.1.36</code></pre>
-<h2>Post-Upgrade Checks</h2>
+<p>Archives: download the new tar.gz, .deb, .rpm, or .apk from <a href="https://github.com/aziron-ai/atlas/releases/latest">GitHub Releases</a>, replace the installed binary, and confirm with <code>atlas version</code>.</p>
+<h2>Post-Upgrade Sequence</h2>
+<p>Run these four commands after every upgrade. Each one closes a specific gap that a binary swap leaves open:</p>
 <pre><code>atlas bootstrap
 atlas migrate
 atlas status --schema
 atlas doctor --verify atlas</code></pre>
-<p>Bootstrap refreshes assistant configuration that contains an absolute Atlas binary path. Migration upgrades supported database schemas in place.</p>
-<p>Run a full rebuild only when status, doctor, or release notes require it:</p>
+<ul><li><strong><code>atlas bootstrap</code></strong> refreshes the assistant glue: it re-registers Atlas as</li></ul>
+<p>  an MCP server and reinstalls the skill and CLAUDE.md directive for detected   assistants, baking in the absolute binary path. It is idempotent — safe to   run repeatedly.</p>
+<ul><li><strong><code>atlas migrate</code></strong> applies Atlas storage migrations to the database and</li></ul>
+<p>  reports the active contracts. Use <code>--all --root DIR</code> to migrate every   <code>.atlas/atlas.db</code> under a directory.</p>
+<ul><li><strong><code>atlas status --schema</code></strong> reports the schema/index-format/lexical/MCP</li></ul>
+<p>  contract versions and per-repo snapshot format drift, so you can see   whether existing snapshots match what the new binary expects.</p>
+<ul><li><strong><code>atlas doctor --verify atlas</code></strong> reports upgrade health and the</li></ul>
+<p>  schema/index contract state, and additionally checks binary drift — whether   the <code>atlas</code> on PATH (what assistants launch via <code>command:&quot;atlas&quot;</code>) matches   the binary you just upgraded.</p>
+<h2>Reading Doctor Output After an Upgrade</h2>
+<p>Act on what doctor reports rather than rebuilding preemptively. A clean report means the upgrade is complete. If doctor or status flags schema or index contract drift, run <code>atlas migrate</code> and re-check. If doctor reports the lexical sidecar needs rebuilding, use <code>atlas compact --rebuild-lexical</code> (see <a href="../troubleshooting/">Troubleshooting</a>). Run a full rebuild only when status, doctor, or the release notes require it:</p>
 <pre><code>atlas index . --reindex</code></pre>
 <h2>Before Downgrading</h2>
-<p>Back up the full <code>.atlas/</code> directory. Do not assume an older binary can open a database already migrated by a newer release.</p>
-<p>Use a separate database for downgrade testing when possible.</p>
-<h2>Remove Assistant Integrations</h2>
-<p>Preview:</p>
-<pre><code>atlas uninstall --dry-run</code></pre>
-<p>Apply:</p>
-<pre><code>atlas uninstall</code></pre>
-<p>Atlas removes the entries and skills it manages while preserving unrelated assistant configuration.</p>
-<h2>Remove the Package</h2>
-<p>Homebrew:</p>
-<pre><code>brew uninstall --cask aziron-ai/atlas/atlas</code></pre>
-<p>npm:</p>
-<pre><code>npm uninstall -g @aziron-ai/atlas</code></pre>
-<p>Manual binary:</p>
-<pre><code>sudo rm /usr/local/bin/atlas</code></pre>
-<h2>Remove Repository Data</h2>
-<p>Package removal does not delete indexes. After stopping all Atlas processes and verifying the repository path:</p>
+<p>Back up the full <code>.atlas/</code> directory first. Do not assume an older binary can open a database already migrated by a newer release. Use a separate database (<code>--db</code>) for downgrade testing when possible.</p>
+<h2>Uninstall</h2>
+<p>Remove Atlas in this order: assistant integrations first, then the package, then (only if intended) local data.</p>
+<h3>1. Remove Assistant Integrations</h3>
+<p><code>atlas uninstall</code> reverses <code>atlas bootstrap</code> across every assistant it provisions (Claude CLI and desktop, Cursor, Gemini, Codex, Copilot): it removes the atlas MCP server entry from each config, the atlas skill markdown, and the atlas-managed block in the global CLAUDE.md. Nothing else is touched — other MCP servers, unrelated config keys, and your own CLAUDE.md content outside the atlas markers are preserved. It is idempotent: re-running reports <code>absent</code> and writes nothing.</p>
+<pre><code>atlas uninstall --dry-run
+atlas uninstall</code></pre>
+<p>If this machine is connected to a central Atlas server, also disconnect — <code>atlas disconnect</code> disconnects from the central Atlas and removes the capture hooks:</p>
+<pre><code>atlas disconnect</code></pre>
+<h3>2. Remove the Package</h3>
+<pre><code>brew uninstall --cask aziron-ai/atlas/atlas   # Homebrew
+npm uninstall -g @aziron-ai/atlas             # npm
+sudo rm /usr/local/bin/atlas                  # manual binary</code></pre>
+<h3>3. Remove Local Data — Read First</h3>
+<p>&gt; <strong>Warning:</strong> Package removal does not delete repository indexes. Every &gt; indexed repository keeps its <code>.atlas/</code> directory — index, settings, &gt; retrieval data, telemetry, and retained snapshots — until you remove it. &gt; Stop all Atlas processes and confirm the exact paths before deleting; &gt; removal is permanent.</p>
+<p>Per repository, after stopping all Atlas processes and verifying the path:</p>
 <pre><code>rm -rf /absolute/path/to/repository/.atlas</code></pre>
-<p>This permanently removes the local index, settings, retrieval data, telemetry, and retained snapshots for that repository.</p>
-<h2>Remove User-Level Atlas Data</h2>
-<p>After reviewing the directory:</p>
+<p>User-level data, only when all user-level Atlas data and installed Atlas skills should go:</p>
 <pre><code>rm -rf &quot;$HOME/.atlas&quot;</code></pre>
-<p>Do this only when all user-level Atlas data and installed Atlas skills should be removed.</p>
 <h2>Verify Removal</h2>
 <pre><code>command -v atlas || true</code></pre>
 <p>Also inspect the assistant configuration locations listed in <a href="../assistants/">AI Assistant Setup</a> if a client was configured manually.</p>
@@ -111,6 +120,7 @@ atlas doctor --verify atlas</code></pre>
     <nav class="doclist" aria-label="All documentation">
         <a href="../getting-started/">Getting Started</a>
         <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
         <a href="../indexing/">Indexing and Reindexing</a>
         <a href="../cli/">CLI Reference</a>
         <a href="../assistants/">AI Assistant Setup</a>

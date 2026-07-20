@@ -24,54 +24,105 @@ URL: https://aziron-ai.github.io/atlas/docs/getting-started/
 
 # Getting Started
 
-This guide creates a local Atlas index, runs the first queries, and prepares an
-AI assistant integration.
+This guide takes a repository from unindexed to queryable: build the local
+index, verify it is healthy, run the core queries, and connect an AI
+assistant. Atlas is local-first — everything below runs on your machine
+against an embedded database, with no server or account required. For the
+mental model behind these commands, see [Core Concepts](concepts).
 
-## 1. Open a Repository
+## 1. Check Prerequisites
+
+Confirm the binary is installed and on `PATH` before anything else, because
+assistants and scripts resolve `atlas` from `PATH` too.
+
+```sh
+command -v atlas
+atlas version
+```
+
+If either command fails, follow [Installation](installation) first. You also
+need a local checkout of the repository you want to index; a git repository is
+required for commit-pinned indexing (`--ref`) and the per-commit snapshot
+history.
+
+## 2. Index a Repository
+
+Indexing builds everything Atlas knows about a repository: it parses symbols,
+call edges, and routes, and persists the **knowledge graph** plus a lexical
+search index.
 
 ```sh
 cd /path/to/repository
-git status --short
-```
-
-Atlas uses the current repository when no explicit repository is supplied.
-
-## 2. Create the Index
-
-```sh
 atlas index .
 ```
 
-The command reports discovery and indexing progress. The default local database
-is stored under:
+Progress is printed to stderr while the run reports discovery and completion
+stats. Results are stored in an embedded SQLite database in the repository:
 
 ```text
 .atlas/atlas.db
 ```
 
-The first index parses the repository. Later runs can update only changed
-files.
+By default the indexer skips paths git ignores (build output, caches,
+vendored runtimes); pass `--gitignore=false` to index everything. The first
+run parses the whole repository; later runs are incremental deltas. Use
+`--reindex` to force a full rebuild, and `--ref` to index a specific commit or
+branch instead of the working tree. See [Indexing and Reindexing](indexing)
+for exclusions, watch mode, and the optional embedding pass
+(`--enable-vectors`).
 
-## 3. Confirm Status
+## 3. Confirm Readiness
+
+Verify the index before relying on query results, so an empty or drifted
+database does not silently return nothing.
 
 ```sh
 atlas status
 atlas stats
 ```
 
-Check the repository identity, indexed snapshot, file and symbol counts, and
-retrieval health before relying on results.
+`atlas status` reports storage and version health: the schema and index-format
+contracts and the per-repo snapshot format state. `atlas stats` reports graph
+and index telemetry for the indexed repository. Look for your repository
+identity, a current snapshot, and non-zero symbol and edge counts. Zero counts
+or a missing repository mean the index did not build — see
+[Troubleshooting](troubleshooting).
 
 ## 4. Run the First Queries
 
+Each query answers a different question; pick the one that matches what you
+already know.
+
+Use `search` when you know words or phrases but not exact names — it is
+code-aware lexical search (BM25 + trigram) over the symbol index:
+
 ```sh
 atlas search "authentication middleware" --format plain
+```
+
+Use `symbol` when you know a name and want its definition(s) together with
+its callers and callees:
+
+```sh
 atlas symbol NewServer
+```
+
+Use `callers` before changing a function's behavior or signature, to see
+exactly which symbols call it directly:
+
+```sh
 atlas callers NewServer --limit 25
+```
+
+Use `refs` when a rename or type change is on the table — it lists call sites
+plus type-use references (params, fields, returns):
+
+```sh
 atlas refs NewServer
 ```
 
-For change-review context:
+Use `context` when reviewing a change — it builds a bounded review-context
+bundle (16–32 KiB with the default `auto` intent) around the changed files:
 
 ```sh
 atlas context \
@@ -80,48 +131,67 @@ atlas context \
   --format json
 ```
 
-For likely impact:
+For the blast radius of a change — impacted symbols, files, and covering
+tests — use `impact`:
 
 ```sh
 atlas impact --paths path/to/changed-file.go
 ```
 
-Use `atlas <command> --help` for version-specific flags.
+Run `atlas <command> --help` for the full flag list of your installed version,
+or see the [CLI Reference](cli).
 
-## 5. Configure an AI Assistant
+## 5. Connect an AI Assistant
 
-Preview detected integrations:
+Bootstrap registers Atlas as an MCP server and installs the atlas-first skill
+and CLAUDE.md directive for every detected assistant (Claude desktop and CLI,
+Codex, Copilot, Cursor, Gemini), so assistants query the graph instead of
+grepping. Preview what would be written first:
 
 ```sh
 atlas bootstrap --dry-run
 ```
 
-Apply the configuration:
+Then apply it:
 
 ```sh
 atlas bootstrap
 ```
 
-Restart the assistant after configuration changes. See
-[AI Assistant Setup](AI-Assistant-Setup) for client-specific paths and modes.
+Bootstrap is idempotent — safe to run repeatedly. Use `--only` or `--skip`
+(comma-separated agent lists) to limit which assistants are provisioned.
+Restart the assistant after configuration changes, and run
+`atlas doctor --verify atlas` to confirm the `atlas` on `PATH` — what
+assistants launch — matches the binary you installed. See [MCP Tools](mcp)
+for the tool surface assistants receive.
 
-## 6. Keep Results Fresh
+## 6. Keep the Index Fresh
 
-Run an incremental update after important changes:
+Query results are only as current as the last index run. After meaningful
+changes, run an incremental update:
 
 ```sh
 atlas index .
 ```
 
-Use a forced rebuild only when the index format changed or troubleshooting
-recommends it:
+For a foreground process that re-indexes on every file change (edits within
+250 ms are coalesced into one update):
 
 ```sh
-atlas index . --reindex
+atlas watch
 ```
 
-See [Indexing and Reindexing](Indexing-and-Reindexing) for exclusions, watch
-mode, semantic retrieval, and recovery guidance.
+Reserve `atlas index . --reindex` for format changes or recovery, per
+[Indexing and Reindexing](indexing).
+
+## Where to Go Next
+
+- [Core Concepts](concepts) — the graph, snapshots, workspaces, and output
+  control that every command shares.
+- [CLI Reference](cli) — every command and flag.
+- [MCP Tools](mcp) — what assistants can call after bootstrap.
+- [Configuration](configuration) — knob precedence and `atlas config`.
+- [Troubleshooting](troubleshooting) — empty results, drift, and recovery.
 
 ---
 
@@ -130,10 +200,20 @@ URL: https://aziron-ai.github.io/atlas/docs/installation/
 
 # Installation
 
-Atlas is distributed as a Homebrew cask, an npm wrapper, release archives, and
-native Linux packages.
+Atlas ships through four channels that all install the same native binary.
+Pick the channel that matches how you manage software on the target machine:
 
-## Homebrew
+| Channel | Best for | Platforms |
+| --- | --- | --- |
+| Homebrew | macOS/Linux workstations; managed upgrades | macOS/Linux amd64 and arm64 |
+| npm (GitHub Packages) | Node toolchains and CI that already hold a GitHub token | macOS/Linux x64 and arm64; Windows x64 |
+| Release archive | Air-gapped hosts, exact-version pinning, Windows | macOS/Linux amd64 and arm64; Windows amd64 |
+| Linux package | Fleet management with `.deb`/`.rpm`/`.apk` | amd64 and arm64 |
+
+## Homebrew (macOS and Linux)
+
+Use Homebrew when you want the shortest path and automatic upgrades alongside
+your other tooling.
 
 ```sh
 brew install --cask aziron-ai/atlas/atlas
@@ -141,14 +221,16 @@ atlas version
 ```
 
 Homebrew names fully qualified casks as `<owner>/<tap>/<cask>`. The repository
-`aziron-ai/homebrew-atlas` becomes the tap `aziron-ai/atlas`; the cask and
+`aziron-ai/homebrew-atlas` becomes the tap `aziron-ai/atlas`; the cask and the
 installed executable are both named `atlas`.
 
 ## npm (GitHub Packages)
 
-The npm package is published to GitHub Packages, so npm must be pointed at the
-`@aziron-ai` scope with a GitHub token that has `read:packages` (GitHub Packages
-requires authentication even for public packages):
+Use npm when Atlas should install through an existing Node toolchain or CI
+pipeline. The package is published to GitHub Packages, not the public npm
+registry, so npm must be pointed at the `@aziron-ai` scope with a GitHub token
+that has the `read:packages` scope — GitHub Packages requires authentication
+even for public packages:
 
 ```sh
 npm config set @aziron-ai:registry https://npm.pkg.github.com
@@ -157,33 +239,21 @@ npm install -g @aziron-ai/atlas
 atlas version
 ```
 
-For a version-pinned installation:
+Pin an exact version for reproducible environments:
 
 ```sh
 npm install -g @aziron-ai/atlas@0.1.36
 ```
 
-The npm package downloads the native Atlas binary for the current platform. If
-you do not need npm specifically, Homebrew above is the simpler path.
+The npm package is a wrapper that downloads the native Atlas binary for the
+current platform. If you do not need npm specifically, Homebrew is the
+simpler path.
 
-## Installation and Assistant Configuration
+## Release Archives
 
-Homebrew and npm installations run Atlas bootstrap to register supported local
-assistant integrations. Inspect the proposed changes at any time:
-
-```sh
-atlas bootstrap --dry-run
-```
-
-To prevent npm post-install bootstrap in managed environments:
-
-```sh
-ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron-ai/atlas
-```
-
-## Direct Release Archive
-
-Choose the current version and platform from
+Use a release archive when no package manager is available, on air-gapped
+hosts, or when you need to pin and checksum exact bytes. Choose the current
+version and platform from
 [GitHub Releases](https://github.com/aziron-ai/atlas/releases/latest):
 
 ```sh
@@ -203,11 +273,17 @@ atlas version
 
 On Linux, replace the checksum command with `sha256sum -c -` when available.
 
+### Windows
+
+Each release also includes a Windows amd64 archive. Download it from the same
+release page, extract the `atlas` executable, and add its directory to
+`PATH`. Alternatively, the npm channel above supports Windows x64.
+
 ## Native Linux Packages
 
-Each release includes `.deb`, `.rpm`, and `.apk` packages for amd64 and arm64.
-Download the matching package from the release page, then use the platform
-package manager:
+Use native packages when your fleet is managed through a distribution package
+manager. Each release includes `.deb`, `.rpm`, and `.apk` packages for amd64
+and arm64. Download the matching package from the release page, then install:
 
 ```sh
 # Debian or Ubuntu
@@ -220,16 +296,40 @@ sudo rpm -U atlas_0.1.36_linux_amd64.rpm
 sudo apk add --allow-untrusted atlas_0.1.36_linux_amd64.apk
 ```
 
-## Supported Distribution Targets
+## Post-Install: Assistant Bootstrap
 
-| Channel | Platforms |
-| --- | --- |
-| Homebrew | macOS/Linux amd64 and arm64 |
-| npm | macOS/Linux x64 and arm64; Windows x64 |
-| Release archive | macOS/Linux amd64 and arm64; Windows amd64 |
-| Linux package | `.deb`, `.rpm`, `.apk`; amd64 and arm64 |
+Homebrew and npm installations run `atlas bootstrap` after install. Bootstrap
+registers Atlas as an MCP server and installs the atlas-first skill and
+CLAUDE.md directive for every detected assistant (Claude desktop and CLI,
+Codex, Copilot, Cursor, Gemini). It is idempotent — safe to run repeatedly
+and from a package post-install hook. Inspect the proposed changes at any
+time without writing anything:
+
+```sh
+atlas bootstrap --dry-run
+```
+
+To prevent the npm post-install bootstrap in managed environments:
+
+```sh
+ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron-ai/atlas
+```
+
+Archive and Linux-package installs do not configure assistants automatically;
+run `atlas bootstrap` yourself when you want them connected.
+
+## PATH Note
+
+Assistants launch Atlas by resolving `atlas` from `PATH`, so the binary must
+be reachable from a login shell — not only your current session. Homebrew and
+the Linux packages handle this; for archives, `/usr/local/bin` (used above)
+is on `PATH` by default on most systems. For npm installs, ensure npm's
+global bin directory is on `PATH`.
 
 ## Verify the Installation
+
+Verification confirms three distinct things: the binary is on `PATH`, it
+runs, and it is the same binary your assistants will launch.
 
 ```sh
 command -v atlas
@@ -237,7 +337,162 @@ atlas version
 atlas doctor --verify atlas
 ```
 
-Continue with [Getting Started](Getting-Started).
+`atlas doctor` reports upgrade health and schema/index contract state;
+`--verify atlas` additionally checks for binary drift — whether the `atlas`
+on `PATH` (what assistants launch via `command:"atlas"`) matches the running
+binary. Drift typically means an old install shadows the new one earlier on
+`PATH`.
+
+Continue with [Getting Started](getting-started), or read
+[Core Concepts](concepts) for the model behind the commands.
+
+---
+
+# Core Concepts
+URL: https://aziron-ai.github.io/atlas/docs/concepts/
+
+# Core Concepts
+
+Every Atlas command shares the same underlying model: a local knowledge graph
+of your code, a snapshot timeline over its history, one workspace-resolution
+scheme, and one set of output controls. Understanding these once makes the
+whole [CLI Reference](cli) predictable.
+
+## The Knowledge Graph
+
+Atlas answers structural questions from a **knowledge graph** rather than
+text search, so results are exact relationships, not pattern matches. The
+graph is built by `atlas index`, which parses a repository into:
+
+- **Symbols** — functions, methods, classes, and other definitions.
+- **Call edges** — who calls whom, powering `callers`, `path`, `impact`, and
+  the graph-shape commands (`hubs`, `communities`).
+- **Routes** — the HTTP routes a repository serves and calls, powering
+  cross-repo queries such as `consumers` and `dependencies`.
+- **Coverage** — test-to-symbol links, from static call-graph reachability or
+  an imported runtime profile (`atlas coverage import`).
+
+Alongside the graph, indexing persists a lexical (BM25 + trigram) search
+index. Everything lives in an embedded SQLite database, by default
+`sqlite://./.atlas/atlas.db` inside the repository — no daemon or service is
+required to query it.
+
+```sh
+atlas index .
+```
+
+## Snapshots and History
+
+Each indexed commit becomes a **snapshot**, giving the graph a per-commit
+timeline — you can ask not only what the code looks like, but how its
+structure changed. `atlas history` lists the timeline; `atlas snapshot-diff`
+computes a structural diff (symbols and edges added, removed, modified)
+between two snapshots, defaulting to the latest snapshot and the one before
+it. Both `--from` and `--to` accept a commit sha (prefix ok) or snapshot id.
+
+```sh
+atlas snapshot-diff --from a1b2c3d --to HEAD
+```
+
+## Workspace Resolution
+
+Every command needs to know which repository and which database it is
+operating on; three global flags resolve that, and the defaults make the
+common case zero-config.
+
+| Flag | Meaning | Default |
+| --- | --- | --- |
+| `--repo` | Repo workspace: a path, `org/name`, or `repo_id`; `'*'` = all repos on `search`/`semantic-search` | the current directory |
+| `--db` | Storage DSN: `sqlite://PATH` or `postgres://...` | `sqlite://./.atlas/atlas.db` |
+| `--tenant` | Tenant/org scope to isolate repos to (hosted multi-tenant) | empty = all repos |
+
+Run from inside an indexed repository and no flags are needed. Point `--db`
+at a shared database to query many repositories from one place:
+
+```sh
+atlas search "rate limiter" --repo '*' --db sqlite:///srv/atlas/atlas.db
+```
+
+## Output Control
+
+Output has two independent axes — shape and depth — so you can tune results
+for a terminal, a script, or an LLM context window.
+
+| Flag | Values | Default |
+| --- | --- | --- |
+| `--format` | `plain` \| `json` \| `compact` \| `ndjson` — output shape | `json` |
+| `--json` | shorthand for `--format json` | — |
+| `--detail` | `low` \| `medium` \| `high` \| `xhigh` — graph context per item | `high` |
+
+Retrieval operations (`callers`, `refs`, `impact`) floor at `high` detail so
+they never silently drop the context they exist to provide; `xhigh` opts into
+cross-repo context. For agents, prefer `--format plain`: it carries the same
+answer in far fewer tokens than structured JSON, which matters when every
+query result lands in a model's context window.
+
+```sh
+atlas search "session store" --format plain --detail low
+```
+
+## Three Surfaces
+
+The same graph is exposed three ways, so humans, services, and AI agents each
+get a native interface without separate infrastructure.
+
+- **CLI** — the commands in this documentation; scriptable via `--format`.
+- **REST HTTP API** — `atlas serve` runs the HTTP API on `127.0.0.1:3099` by
+  default (use `--addr 0.0.0.0:3099` to expose it) and opens the dashboard;
+  `--mcp` also mounts MCP over HTTP at `POST /mcp`.
+- **MCP** — `atlas mcp` exposes graph, search, and impact as MCP tools to LLM
+  agents over stdio by default, with `--http`/`--sse` transports available.
+  Both `serve` and `mcp` keep the graph fresh with a background repo watch
+  (`--watch`, on by default; disable with `--watch=false` or
+  `ATLAS_NO_WATCH=1`). [Getting Started](getting-started) covers wiring
+  assistants via `atlas bootstrap`; [MCP Tools](mcp) covers the tool surface.
+
+```sh
+atlas serve --mcp
+```
+
+## Read-Only Mode
+
+Use `--read-only` when the database must not change — CI caches,
+content-addressed artifacts, shared read replicas. It opens the database
+immutably: no migration runs, no WAL/journal files are created, and no
+`telemetry.db` appears next to it — artifact bytes hash identically after any
+query. A missing database errors instead of being created. If you still want
+telemetry in this mode, point `--telemetry-db` at an explicit writable path.
+
+```sh
+atlas symbol NewServer --read-only
+```
+
+## Local-First vs Hosted
+
+Atlas is local by default: indexing, querying, serving, and MCP all run
+against your local database, and nothing leaves the machine. Two commands opt
+into a central Atlas server, and only for fleet telemetry and org skills:
+
+- `atlas connect` registers the machine with a central server under a stable
+  device identity and installs capture hooks. What leaves the machine is
+  governed by the data level (`--level`): `off`, `telemetry` (metrics only),
+  `interactions` (normalized prompts + redacted traces; the default), or
+  `full` (raw prompts; org opt-in). Raw transcripts, tool outputs, answers,
+  and secrets never leave the machine at any level. `atlas disconnect`
+  reverses it.
+- `atlas sync` is the fleet telemetry uplink — `sync status` shows the
+  configuration, kill switches, and per-stream cursors; `sync now` pushes
+  pending telemetry once.
+
+Connected machines can also exchange org-trusted skills and automations
+(`atlas skill push/pull`, `atlas recall push/pull`). Everything else —
+`index`, `search`, `callers`, `impact`, `serve`, `mcp` — works with no server
+and no account. On a hosted multi-tenant server, `--tenant` scopes queries to
+one org. See [Configuration](configuration) for the related knobs.
+
+```sh
+atlas sync status
+```
 
 ---
 
@@ -246,96 +501,152 @@ URL: https://aziron-ai.github.io/atlas/docs/indexing/
 
 # Indexing and Reindexing
 
-Atlas answers are only as current as the selected index. This guide explains
-normal updates, forced rebuilds, exclusions, and freshness checks.
+Atlas answers are only as current as the selected index. This guide covers
+creating and updating an index, forcing a rebuild, keeping the graph fresh
+automatically, controlling what gets indexed, and maintaining the database
+that stores it. For what the graph contains, see [Core Concepts](concepts).
 
-## Initial Index
+## Create or Update an Index
 
-From a repository root:
-
-```sh
-atlas index .
-```
-
-To use an explicit database:
-
-```sh
-atlas --db "sqlite://$PWD/.atlas/atlas.db" index .
-```
-
-## Incremental Update
-
-Run the same command after source changes:
+Run this once to build the graph, and again whenever you want to refresh it —
+the same command handles both cases. From a repository root:
 
 ```sh
 atlas index .
 ```
 
-Atlas may report a delta update when files changed or a no-op when the stored
-snapshot already matches the workspace.
+To pin an explicit database instead of the default `sqlite://./.atlas/atlas.db`:
 
-## Forced Reindex
+```sh
+atlas --db "sqlite:///absolute/path/.atlas/atlas.db" index .
+```
+
+`atlas index` parses symbols, edges, and routes, then persists the graph and
+the lexical search index. By default it indexes the working tree; use
+`--ref COMMIT_OR_BRANCH` to index a specific commit or branch instead.
+
+## What Index Output Reports
+
+Read the index output to confirm what actually happened rather than assuming.
+With `--progress` (on by default for human output), Atlas prints start,
+periodic progress, and completion statistics to stderr. A run reports a delta
+update when files changed, or a no-op when the stored snapshot already
+matches the workspace. For profiling an index run, `--cpuprofile PATH` and
+`--memprofile PATH` write runtime/pprof profiles.
+
+## Incremental Behavior
+
+Incremental updates are the default because they are much faster than full
+rebuilds: Atlas computes a delta against the previous snapshot and reindexes
+only what changed. To diff against a specific commit rather than the stored
+base, pass `--base COMMIT`.
+
+## Forced Rebuild
+
+Use `--reindex` only when the incremental path cannot repair the index:
 
 ```sh
 atlas index . --reindex
 ```
 
-Use a full rebuild when:
+The legitimate reasons for a full rebuild are:
 
-- an upgrade reports an incompatible or stale index format
-- parser or language support changed and old files must be reparsed
-- `atlas doctor` recommends a rebuild
-- the workspace identity or indexed root was incorrect
-- focused troubleshooting confirms the current index is incomplete
+1. An upgrade reports an incompatible or stale index format, or
+   `atlas doctor` recommends a rebuild.
+2. Parser or language support changed and old files must be reparsed.
+3. The workspace identity or indexed root was incorrect, or focused
+   troubleshooting confirms the current index is incomplete.
 
 Do not make forced reindexing the default workflow. It is slower and discards
 the benefit of incremental updates.
 
 ## Watch Mode
 
-Keep a foreground index current:
+Use watch mode when you want the graph to stay fresh during active editing
+with no manual `atlas index` runs. `atlas watch` indexes the repo once, then
+watches the working tree and runs an incremental, working-tree-aware update on
+every file change. A burst of edits is coalesced into one update
+(`--debounce-ms`, default 250). It runs in the foreground until interrupted.
 
 ```sh
 atlas watch .
 ```
 
-Supervised MCP can also maintain freshness:
+The MCP and HTTP surfaces maintain freshness the same way — `atlas mcp` and
+`atlas serve` watch the repo by default. Disable watching when another process
+owns indexing:
 
 ```sh
-atlas mcp --supervise
+atlas mcp --supervise --watch=false   # or set ATLAS_NO_WATCH=1
 ```
 
-Disable automatic watching when another process owns indexing:
+## Semantic Vectors (Optional)
 
-```sh
-atlas mcp --supervise --watch=false
-```
-
-## Semantic Retrieval
-
-Semantic vectors are optional:
+Enable vectors only if you want embedding-based retrieval; the deterministic
+lexical and graph core never depends on them. Run the optional embedding pass
+at index time:
 
 ```sh
 atlas index . --enable-vectors
+atlas watch . --enable-vectors   # keep embeddings fresh on each update
 ```
 
-If vectors are disabled or unavailable, Atlas can continue with lexical and
-graph-backed retrieval. Confirm the active mode with `atlas status` or
-`atlas doctor`.
+With vectors enabled (`ATLAS_ENABLE_VECTORS=1` and a repo indexed with
+`--enable-vectors`), `atlas semantic-search` returns nearest symbols by cosine
+similarity. Otherwise it transparently degrades to lexical search and reports
+`degraded=true` / `mode_used=lexical`. By default the embedder is offline
+(deterministic token overlap); set `ATLAS_EMBED_URL` to use a real embedding
+model. See [Configuration](configuration).
 
 ## Excluding Files
 
-Atlas respects `.gitignore` by default. Add Atlas-specific patterns to:
+Exclude generated outputs, dependency caches, and nested repository snapshots
+so they do not pollute search results. Atlas skips paths git ignores by
+default (`--gitignore`, default true); pass `--gitignore=false` to index
+everything. Add Atlas-specific patterns to:
 
 ```text
 .atlasignore
 ```
 
-Avoid indexing generated outputs, dependency caches, benchmark working copies,
-or nested repository snapshots unless they are intentionally part of the
-review surface.
+## Registering Without Indexing
+
+Use `atlas link` when a repo should participate in cross-repo queries and
+appear in `atlas status` before (or without) being indexed on this machine:
+
+```sh
+atlas link org/name --branch main
+```
+
+`REPO` may be a filesystem path, a git remote URL, or a bare `org/name`.
+Linking is idempotent — re-linking updates the registration and reports
+`created=false`. Linking does not populate the graph; run `atlas index` for
+that. To remove a repo from the registry, `atlas repo rm` forgets it entirely:
+snapshots, symbols, edges, embeddings, and lexical documents.
+
+## Database Maintenance
+
+Run maintenance when the database has grown or after an Atlas upgrade.
+
+- `atlas compact` reports reclaimable pages and truncates the WAL. Modern
+  Atlas databases use online incremental auto-vacuum; legacy databases are
+  converted with a one-time full VACUUM that takes an exclusive lock — stop
+  `atlas serve` and watch processes first, or you get a lock error rather
+  than partial work.
+- `atlas compact --full` additionally runs a full VACUUM and rebuilds the
+  lexical (BM25) sidecar when it has outgrown its size bound — the only way
+  dead segments are returned to the OS. Exclusive: quiesce other Atlas
+  processes first.
+- `atlas compact --rebuild-lexical` rebuilds the lexical sidecar regardless of
+  size — the fix for an empty or wedged sidecar, which otherwise silently
+  degrades every search to SQL-only. `atlas doctor` reports when you need it.
+- `atlas migrate` applies storage migrations and reports the active contracts.
+  Both `migrate` and `compact` accept `--all --root DIR` to process every
+  local `.atlas/atlas.db` under a directory.
 
 ## Verify Freshness
+
+Confirm which index is answering before trusting results:
 
 ```sh
 atlas status
@@ -343,18 +654,13 @@ atlas stats
 atlas doctor
 ```
 
-When multiple repositories or databases exist, pin both:
-
-```sh
-atlas --db "sqlite:///absolute/path/.atlas/atlas.db" \
-  --repo /absolute/path status
-```
-
-If a running Atlas server is configured, CLI queries may use that server.
-Unset `ATLAS_SERVER_URL` or pin an explicit database while diagnosing which
-index is answering.
+When multiple repositories or databases exist, pin both `--db` and `--repo`.
+If a running Atlas server is configured, CLI queries may use that server —
+unset `ATLAS_SERVER_URL` or pin an explicit database while diagnosing.
 
 ## Safe Recovery Order
+
+Follow this order so you never destroy data a cheaper step could have fixed:
 
 1. Stop active `serve`, `watch`, and supervised MCP processes.
 2. Run `atlas status` and `atlas doctor`.
@@ -364,7 +670,7 @@ index is answering.
 6. Run `atlas index . --reindex` as the final non-destructive repair.
 7. Delete `.atlas` only when a complete data reset is intended.
 
-See [Troubleshooting](Troubleshooting) before removing data.
+See [Troubleshooting](troubleshooting) before removing data.
 
 ---
 
@@ -373,121 +679,189 @@ URL: https://aziron-ai.github.io/atlas/docs/cli/
 
 # CLI Reference
 
-Run `atlas --help` and `atlas <command> --help` for the authoritative command
-contract installed on the machine.
+Every Atlas capability is a subcommand of the single `atlas` binary. This page
+is the complete map: global flags first, then each command grouped by task,
+with worked examples. For narrative guides, start with
+[Getting Started](getting-started) and [Indexing and Reindexing](indexing).
 
-## Global Scope and Output
+## Global Flags
 
-Common global controls:
+These flags apply to every command and control which database answers, which
+repo is in scope, and how output is shaped.
+
+| Flag | Purpose |
+| --- | --- |
+| `--db` | Storage DSN: `sqlite://PATH` or `postgres://...` (default `sqlite://./.atlas/atlas.db`). |
+| `--detail` | Output depth: `low`, `medium`, `high`, or `xhigh` — how much graph context to return per item. Default `high` for every format; `xhigh` opts into cross-repo context. Retrieval ops (callers/refs/impact) floor at `high`. |
+| `--format` | Output shape: `plain`, `json`, `compact`, or `ndjson` (`json` by default). |
+| `--json` | Shorthand for `--format json`. |
+| `--read-only` | Open the database immutably: no migration, no WAL/journal files, no `telemetry.db` created beside it — artifact bytes hash identically after any query. A missing database errors instead of being created. |
+| `--repo` | Repo workspace: path, `org/name`, or repo_id. Defaults to the current directory; `'*'` means all repos on `search`/`semantic-search`. |
+| `--telemetry-db` | Explicit path for the observability database — required if you want telemetry with `--read-only`. Default: `telemetry.db` beside the graph database. |
+| `--tenant` | Tenant/org scope to isolate repos to (hosted multi-tenant; empty = all repos). |
+
+Combine them freely with any command:
 
 ```sh
 atlas --repo /absolute/path status
-atlas --db "sqlite:///absolute/path/.atlas/atlas.db" status
-atlas --format json status
-atlas --detail high symbol NewServer
+atlas --db "sqlite:///absolute/path/.atlas/atlas.db" --format plain stats
+atlas --detail xhigh explain NewServer
+atlas --repo '*' search "rate limiter"
 ```
-
-Output formats include `plain`, `json`, `compact`, and `ndjson` where supported.
-Detail levels are `low`, `medium`, `high`, and `xhigh`.
-
-Use an explicit `--repo` or repository ID when a shared database contains more
-than one repository.
 
 ## Index and Health
 
+Build the graph, keep it fresh, and verify that storage and schema are sound.
+
+| Command | Purpose |
+| --- | --- |
+| `index` | Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; `--reindex` forces a full rebuild. |
+| `watch` | Index once, then watch the working tree and apply debounced incremental updates on every file change. Foreground until interrupted. |
+| `status` | Storage and version health: schema/index-format contracts and per-repo snapshot format state (`--schema` for contract versions and drift). |
+| `stats` | Graph and index telemetry statistics for an indexed repo. |
+| `doctor` | Report upgrade health and schema/index contract state; `--verify` also checks whether the `atlas` on PATH matches the running binary. |
+| `report` | Compose graph stats, top hubs, and top communities; `--format plain` prints the Markdown report directly. |
+| `migrate` | Apply storage migrations and report the active contracts. |
+| `compact` | Reclaim space and truncate the WAL; `--full` also runs a full VACUUM and rebuilds an oversized lexical sidecar; `--rebuild-lexical` fixes an empty or wedged sidecar. |
+| `link` | Register a repo into the graph without indexing it, so it joins cross-repo queries and appears in `status`. Idempotent. |
+| `repo` | Repo registry maintenance — `repo rm` forgets a repo: snapshots, symbols, edges, embeddings, and lexical docs. |
+
 ```sh
-atlas index .
-atlas index . --reindex
 atlas index . --enable-vectors
 atlas watch .
-atlas status
-atlas stats
-atlas doctor
+atlas doctor --verbose
 atlas report --format plain
 ```
 
-## Search and Context
+## Search and Retrieval
+
+Find code and pull bounded, deterministic context about it.
+
+| Command | Purpose |
+| --- | --- |
+| `search` | Code-aware lexical search (BM25 + trigram) over the symbol index; `--mode lexical\|semantic\|hybrid`, plus `--kind` and `--path` filters. |
+| `semantic-search` | Embedding-based nearest-symbol search; transparently degrades to lexical (`degraded=true`) when vectors are unavailable. |
+| `context` | Bounded review-context bundle for changed/seed paths; budgets via `--intent` (`auto` is 16-32 KiB), per-request flags, or env vars. |
+| `explain` | Deterministic context bundle for a symbol: defs, callers/callees, imports, served routes, cross-repo consumers. |
+| `symbol` | Show a symbol's definition(s) with its callers and callees. |
+| `callers` | List symbols that directly call a symbol; scope overloaded names with `--package`, `--receiver`, or `--arity`. |
+| `refs` | List references to a symbol: call sites plus type-use references (params, fields, returns). |
+| `neighbors` | Depth-1 call neighborhood: a symbol's direct callers and callees. |
+| `path` | Shortest forward call path from one symbol to another (`--max-depth`, default 6). |
 
 ```sh
 atlas search "authentication middleware" --mode lexical --format plain
-atlas context \
-  --paths internal/api/handler.go \
-  --query "review correctness and regression risk" \
-  --intent review
-```
-
-Use search for discovery. Use context when reviewing one or more changed paths
-and you need bounded related code.
-
-## Symbols and Relationships
-
-```sh
-atlas symbol NewServer
-atlas snippet NewServer
-atlas callers NewServer --limit 50
-atlas refs NewServer
+atlas context --paths internal/api/handler.go --intent review \
+  --query "review correctness and regression risk"
+atlas callers NewServer --limit 50 --receiver '*Server'
 atlas path Handler ServeHTTP --max-depth 6
 ```
 
-When a symbol name is overloaded, add package, receiver, or arity filters shown
-by the command help.
+Use `search` for discovery; use `context` when reviewing changed paths and you
+need bounded related code; use `explain`/`symbol` when you already know the
+symbol.
 
-## Impact and Routes
+## Graph Analysis
+
+Measure blast radius, contracts, structure, and change over time.
+
+| Command | Purpose |
+| --- | --- |
+| `impact` | Single-repo blast radius for a change: impacted symbols, files, and tests (`--tests` on by default). |
+| `cross-repo-impact` | Cross-repo blast radius: which other repos call routes the changed handlers serve. |
+| `consumers` | Other repos that call any route this repo serves. |
+| `dependencies` | Producer repos/handlers that serve HTTP calls this repo makes. |
+| `route-contracts` | The producer HTTP routes a repo serves — its public contract. |
+| `coverage` | Real covered/total line ratio when a runtime profile was imported (`coverage import`); otherwise static call-graph reachability. |
+| `hubs` | Rank the graph's hubs ("god nodes") by call-graph degree centrality. |
+| `communities` | Detect deterministic clusters of densely connected symbols. |
+| `history` | Per-commit snapshot timeline for a repo. |
+| `snapshot-diff` | Structural diff between two snapshots: symbols/edges added, removed, modified (alias: `diff`). |
+| `export` | Export the call graph as `json`, `mermaid`, `dot`, or a self-contained interactive `html` page; `--bundle DIR` writes graph.html plus report.md. |
 
 ```sh
 atlas impact --paths internal/api/handler.go --max-depth 3
 atlas cross-repo-impact --paths internal/api/handler.go
-atlas route-contracts
 atlas consumers --max-staleness-days 30
-atlas dependencies
+atlas export --symbol NewServer --depth 2 --format html -o graph.html
 ```
 
-Repository impact follows local code relationships. Cross-repository impact
-depends on linked repositories and indexed service contracts.
+Cross-repository results depend on linked repositories and indexed service
+contracts — see `atlas link` above.
 
-## History and Snapshots
+## Assistants and Surfaces
 
-```sh
-atlas history --limit 20
-atlas snapshot-diff --from HEAD~1 --to HEAD
-```
+Wire Atlas into AI assistants and serve it over MCP or HTTP. See
+[MCP Tools](mcp) and [Dashboard and HTTP API](service).
 
-Snapshot availability depends on local retention and indexing history.
-
-## MCP and Assistant Setup
+| Command | Purpose |
+| --- | --- |
+| `bootstrap` | Register Atlas as an MCP server and install the atlas-first skill and CLAUDE.md directive for all detected assistants (Claude desktop+CLI, Codex, Copilot, Cursor, Gemini). Idempotent. |
+| `install` | Install integration glue piecemeal: `install skill` (assistant registration), `install hook` (git hook that keeps the graph fresh), `install aziron`. |
+| `uninstall` | Reverse `bootstrap` across every assistant it provisions; touches only atlas-managed entries. Idempotent. |
+| `mcp` | Expose graph/search/impact as MCP tools over stdio (default), Streamable HTTP (`--http`), or legacy SSE (`--sse`); `--supervise` runs the warm gateway. |
+| `serve` | Run the REST HTTP API and dashboard on `127.0.0.1:3099`; `--mcp` also mounts MCP over HTTP at `POST /mcp`. |
+| `skill` | Author, test, render, and distribute runbook skills (`new`, `lint`, `test`, `register`, `render`, `push`, `pull`, and more). |
 
 ```sh
 atlas bootstrap --dry-run
-atlas bootstrap
 atlas install skill --agent codex,claude,claude-desktop
-atlas mcp --transport stdio
-atlas serve --mcp
-atlas uninstall --dry-run
+atlas mcp --supervise
+atlas serve --mcp --open=false
 ```
 
-See [AI Assistant Setup](AI-Assistant-Setup) and [MCP Tools](MCP-Tools).
+Both `mcp` and `serve` watch the repo by default to keep the graph fresh;
+disable with `--watch=false` or `ATLAS_NO_WATCH=1`.
 
-## Local Service
+## Fleet and Org
+
+Connect a machine to a central Atlas server and share telemetry or trusted
+automations. See [Privacy and Data Handling](privacy) for what leaves the
+machine at each data level.
+
+| Command | Purpose |
+| --- | --- |
+| `connect` | Register this machine with the central Atlas server under a stable device identity and install capture hooks; `--level off\|telemetry\|interactions\|full` governs what is shared (default `interactions`). |
+| `disconnect` | Disconnect from the central Atlas and remove capture hooks. |
+| `sync` | Fleet telemetry uplink: `sync status` shows configuration, kill switches, and cursors; `sync now` pushes all pending telemetry once. |
+| `recall` | Frequent-prompt mining, replayable automations, and org sync (`clusters`, `promote`, `push`, `pull`, `state`, and more). |
 
 ```sh
-atlas serve
-atlas serve --open=false --watch=false
-atlas serve --mcp
+atlas connect https://atlas.example.com --level interactions
+atlas sync status
+atlas recall clusters
 ```
 
-The default local dashboard and API address is `127.0.0.1:3099`.
+## Utilities
 
-## Maintenance
+| Command | Purpose |
+| --- | --- |
+| `config` | Inspect and persist configuration: `list` every knob with effective value and provenance, `get` one, `set` one into the workspace settings.json. See [Configuration](configuration). |
+| `version` | Print the installed Atlas version. |
+| `completion` | Generate shell completion scripts. |
+
+```sh
+atlas config list
+atlas config get ATLAS_MAX_DB_BYTES
+```
+
+## Maintenance Safety
+
+Stop long-running Atlas processes (`serve`, `watch`, supervised MCP) before
+exclusive maintenance such as `compact --full`. Back up the complete `.atlas/`
+directory before destructive operations like `repo rm`:
 
 ```sh
 atlas migrate
-atlas compact
 atlas compact --full
 atlas repo rm owner/repository --yes
 ```
 
-Stop long-running Atlas processes before exclusive maintenance. Back up the
-complete `.atlas/` directory before destructive data operations.
+## Authoritative Contract
+
+Flags and defaults can change between releases. `atlas --help` and
+`atlas <command> --help` are the authoritative contract for the release
+installed on your machine; prefer them over this page when they disagree.
 
 ---
 
@@ -496,31 +870,46 @@ URL: https://aziron-ai.github.io/atlas/docs/assistants/
 
 # AI Assistant Setup
 
-Atlas can register its MCP server with Claude CLI, Claude Desktop, Codex,
-Cursor, Gemini, and GitHub Copilot. Client behavior and supported transport
-modes vary.
+Atlas registers its MCP server with Claude CLI, Claude Desktop, Codex, Cursor,
+Gemini, and GitHub Copilot, so any of these assistants can query your local
+code graph. This page covers automatic setup, repository-pinned setup, git
+hooks, verification, and removal. For what the tools return once connected,
+see [MCP Tools](mcp).
 
-## Automatic Setup
+## Automatic Setup with Bootstrap
 
-Preview all detected changes:
+Use bootstrap when you want every detected assistant provisioned in one pass.
+In managed environments, always preview first:
 
 ```sh
 atlas bootstrap --dry-run
 ```
 
-Apply them:
+Apply the changes:
 
 ```sh
 atlas bootstrap
 ```
 
-Restrict setup to selected clients:
+Restrict provisioning to selected clients, or exclude some:
 
 ```sh
 atlas bootstrap --only codex,claude,claude-desktop
+atlas bootstrap --skip cursor
 ```
 
-Restart each assistant after changing its MCP configuration.
+Restart each assistant after its MCP configuration changes; most clients read
+MCP configuration only at startup.
+
+### What Bootstrap Writes
+
+Bootstrap registers Atlas as an MCP server and installs the atlas-first skill
+plus a CLAUDE.md directive for all detected assistants. It bakes the absolute
+binary path into each config and registers the supervised gateway with no
+`--db`, so the workspace is resolved at query time rather than pinned at
+install time. The command is idempotent: it is safe to run repeatedly and from
+a package post-install hook. Use `--home` to override the home directory base
+when provisioning a different account's configuration.
 
 ## Repository-Pinned Setup
 
@@ -541,25 +930,20 @@ atlas install skill \
 ## Dynamic Workspace Setup
 
 Bootstrap is appropriate when the assistant supplies the active workspace at
-runtime:
-
-```sh
-atlas bootstrap
-```
-
-Repository-scoped MCP tools still require one of:
+runtime. Repository-scoped MCP tools still require one of:
 
 - a workspace root supplied by the client
 - a `workspace` argument
 - a repository ID
 - a repository pinned when MCP starts
 
-If none is available, Atlas returns `workspace_required` instead of selecting a
-repository silently.
+If none is available, Atlas returns `workspace_required` instead of selecting
+a repository silently.
 
 ## Shared Local Server
 
-For multiple thin clients using one local service:
+Use one local service when multiple thin clients should share a single index
+and watcher:
 
 ```sh
 atlas serve --mcp --open=false
@@ -571,23 +955,36 @@ atlas install skill \
 ```
 
 Use a token before exposing the service beyond loopback. See
-[Dashboard and HTTP API](Dashboard-and-HTTP-API).
+[Dashboard and HTTP API](service).
 
-## Common Configuration Locations
+## Keep the Graph Fresh with a Git Hook
+
+Install a local git hook when you want the index updated as part of your
+normal git workflow rather than by a running watcher:
+
+```sh
+atlas install hook
+```
+
+The hook keeps the Atlas graph fresh in the repository where it is installed.
+
+## Client Configuration Locations
+
+Check these paths when auditing what setup wrote or when a client does not
+pick up the server:
 
 | Client | Typical location |
 | --- | --- |
 | Codex | `~/.codex/config.toml` |
 | Claude CLI | `~/.claude.json` |
-| Claude Desktop on macOS | `~/Library/Application Support/Claude/` |
-
-The Claude Desktop configuration filename is
-`claude_desktop_config.json`.
+| Claude Desktop on macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
 
 Atlas preserves unrelated client configuration. Always review a dry run before
 applying changes in managed environments.
 
 ## Verify
+
+Confirm the integration end to end before relying on it:
 
 ```sh
 atlas doctor --verify atlas
@@ -595,25 +992,27 @@ atlas status
 atlas bootstrap --dry-run
 ```
 
-Then ask the assistant a repository-specific question and confirm that the
-answer includes source file and line references.
+`doctor --verify atlas` also checks for binary drift: whether the `atlas` on
+`PATH` — what assistants launch via `command:"atlas"` — matches the running
+binary. Then ask the assistant a repository-specific question and confirm that
+the answer includes source file and line references.
 
-## Remove Integration
+## Remove the Integration
 
-Preview removal:
+Preview removal, then apply it:
 
 ```sh
 atlas uninstall --dry-run
-```
-
-Apply removal:
-
-```sh
 atlas uninstall
 ```
 
-This removes Atlas-managed assistant entries and skills. It does not remove
-unrelated assistant configuration or repository indexes.
+Uninstall reverses `atlas bootstrap` across every assistant it provisions: it
+removes the atlas MCP server entry from each config, the atlas skill markdown,
+and the atlas-managed block in the global CLAUDE.md. Nothing else is touched —
+other MCP servers, unrelated config keys, and your own CLAUDE.md content
+outside the atlas markers are preserved. Re-running reports `absent` and
+writes nothing. Repository indexes are not deleted; see
+[Privacy and Data Handling](privacy) for data removal.
 
 ---
 
@@ -622,18 +1021,37 @@ URL: https://aziron-ai.github.io/atlas/docs/mcp/
 
 # MCP Tools
 
-Atlas MCP tools provide bounded code context to coding assistants. Start MCP
-over stdio for desktop agents:
+Atlas exposes its graph, search, and impact analysis as MCP tools, so a
+connected assistant answers repository questions with bounded, cited context
+instead of raw file dumps. This page covers the transports, the tool set, how
+workspace scope is resolved, and how to keep responses small.
+
+## Transports
+
+Choose the transport based on how the client launches Atlas. Desktop agents
+spawn a process and speak stdio; shared setups talk HTTP to one long-running
+service.
+
+Stdio (the default; local to the launching assistant):
 
 ```sh
 atlas mcp --transport stdio
 ```
 
-Or expose MCP through the local service:
+HTTP, mounted on the local service at `POST /mcp`:
 
 ```sh
 atlas serve --mcp
 ```
+
+`atlas mcp` can also serve HTTP directly with `--http 127.0.0.1:8765`
+(Streamable HTTP) or `--sse 127.0.0.1:8766` (legacy HTTP+SSE); set
+`ATLAS_API_TOKEN` to require `Authorization: Bearer` on either. With
+`--supervise`, Atlas runs as the supervised warm MCP gateway: it uses the
+workspace database, starts a background watch, and serves `code_query` first.
+By default the MCP process also watches the repository to keep the graph
+fresh (`--watch=false` or `ATLAS_NO_WATCH=1` to disable; `--watch-path` to
+watch a different path).
 
 ## Tool Selection
 
@@ -653,54 +1071,38 @@ atlas serve --mcp
 | `record_feedback` | Record result-quality feedback |
 | `record_task` | Record the outcome of a procedural task |
 
-## Recommended Starting Point
+## Choosing a Tool
 
-Use `code_query` for most repository questions. It checks index readiness and
-returns cited context under a bounded response budget.
+Start with `code_query` for most repository questions: it checks index
+readiness and returns cited context under a bounded response budget. Reach for
+a narrower tool when you already know the shape of the answer:
 
-Example intent:
+- `symbol` when you have a name and want its definition, callers, callees,
+  refs, or coverage. Add package, receiver, or arity filters when the name is
+  overloaded.
+- `context` when reviewing a known set of changed files.
+- `impact` before a change, to size its blast radius.
+- `routes` for service contracts, consumers, and dependencies.
+- `status` when results look empty or stale — it reports index and readiness
+  state, which distinguishes "no index" from "no matches".
 
-```text
-How is checkout authorization enforced, and which tests cover it?
-```
+## Workspace Scoping
 
-Use `context` instead when reviewing a known set of changed files:
+Repository-scoped tools need to know which repository they operate on. Atlas
+accepts scope from, in order of availability:
 
-```text
-changed_paths:
-  - internal/api/handler.go
-intent: review
-query: correctness, regressions, and missing tests
-```
+- a workspace root supplied by the client
+- a `workspace` argument on the call
+- a repository ID
+- a repository pinned at launch time with `--repo`
 
-## Symbol Views
+If none is available, Atlas returns `workspace_required` instead of silently
+choosing a repository.
 
-The `symbol` tool supports views such as:
+## Result Statuses
 
-- `explain`
-- `definition`
-- `snippet`
-- `callers`
-- `callees`
-- `neighbors`
-- `refs`
-- `coverage`
-
-Add package, receiver, or arity filters when a name is overloaded.
-
-## Detail and Budgets
-
-Use:
-
-- `low` for counts and minimal metadata
-- `medium` for names and signatures
-- `high` for repository-local evidence
-- `xhigh` only when broader context is required
-
-Normal budget overflow may trim results and mark them as truncated. Strict
-budget mode refuses an oversized answer instead.
-
-## Common Status Values
+Check the status field before trusting a result — it tells you whether the
+answer is backed by an index at all.
 
 | Status | Meaning |
 | --- | --- |
@@ -711,10 +1113,24 @@ budget mode refuses an oversized answer instead.
 | `budget_exceeded` | Strict output budget was too small |
 | `workspace_required` | Repository scope was not declared |
 
+## Controlling Token Spend
+
+Tune detail and format so results fit the assistant's context window instead
+of trimming after the fact:
+
+- Use `detail=low` when you only need counts or minimal metadata; `medium` for
+  names and signatures; `high` for repository-local evidence; `xhigh` only
+  when broader cross-repo context is required.
+- Use `format=plain` for compact line-oriented output when the client does not
+  need structured JSON.
+- Set `max_tokens` to bound a `code_query` answer; an answer trimmed to fit is
+  marked `truncated:true`. Strict budget mode refuses an oversized answer and
+  returns `budget_exceeded` instead.
+
 ## Transport Security
 
-Stdio MCP is local to the launching assistant. HTTP MCP should stay on loopback
-unless authentication and origin restrictions are configured:
+Stdio MCP is local to the launching assistant. HTTP MCP should stay on
+loopback unless authentication and origin restrictions are configured:
 
 ```sh
 export ATLAS_API_TOKEN='replace-with-a-strong-token'
@@ -722,8 +1138,8 @@ export ATLAS_MCP_ALLOWED_ORIGINS='https://trusted.example'
 atlas serve --mcp --addr 0.0.0.0:3099
 ```
 
-See [Privacy and Data Handling](Privacy-and-Data-Handling) before enabling
-networked access.
+See [Privacy and Data Handling](privacy) before enabling networked access, and
+[Dashboard and HTTP API](service) for the full service surface.
 
 ---
 
@@ -732,13 +1148,17 @@ URL: https://aziron-ai.github.io/atlas/docs/service/
 
 # Dashboard and HTTP API
 
-Atlas can run a local dashboard, HTTP API, repository watcher, and MCP endpoint
-from one process.
+One `atlas serve` process hosts the local dashboard, the HTTP API, the
+repository watcher, and — with `--mcp` — the MCP endpoint. Run it when you
+want a browsable view of the graph, when thin clients should share one index,
+or when other tooling needs a REST surface.
 
 ## Start the Service
 
+Start with MCP mounted so assistants and HTTP clients share the same process:
+
 ```sh
-atlas serve
+atlas serve --mcp
 ```
 
 Useful variants:
@@ -746,22 +1166,31 @@ Useful variants:
 ```sh
 atlas serve --open=false
 atlas serve --open=false --watch=false
-atlas serve --mcp
 ```
 
-Default address:
+Default address and dashboard:
 
 ```text
 http://127.0.0.1:3099
-```
-
-Dashboard:
-
-```text
 http://127.0.0.1:3099/dashboard
 ```
 
+## Serve Flags
+
+| Flag | Default | Effect |
+| --- | --- | --- |
+| `--addr` | `127.0.0.1:3099` | Listen address; loopback by default. Use `0.0.0.0:3099` to expose on the network |
+| `--mcp` | off | Also mount MCP over HTTP at `POST /mcp` |
+| `--open` | `true` | Open the dashboard in your browser once ready (best-effort); `--open=false` for CI/headless |
+| `--watch` | `true` | Keep the graph fresh by watching the repo; `--watch=false` or `ATLAS_NO_WATCH=1` to disable |
+| `--watch-path` | `--repo`, else current dir | Repo path to watch when `--watch` is set |
+
+Global flags such as `--db`, `--repo`, and `--read-only` apply as on any other
+command; see the [CLI Reference](cli).
+
 ## Health and API Discovery
+
+Use these endpoints to script readiness checks and to discover the API:
 
 ```sh
 curl http://127.0.0.1:3099/healthz
@@ -771,7 +1200,9 @@ curl http://127.0.0.1:3099/openapi.json
 
 - `healthz` confirms the process is running.
 - `readyz` confirms Atlas can answer a lightweight engine request.
-- `openapi.json` is the version-specific API contract.
+- `openapi.json` is the version-specific API contract. Generate clients and
+  validate requests against this document rather than copying request shapes
+  from historical examples.
 
 ## Common Requests
 
@@ -781,15 +1212,14 @@ curl http://127.0.0.1:3099/api/v1/stats
 curl "http://127.0.0.1:3099/api/v1/search?q=Checkout"
 ```
 
-Use the OpenAPI document rather than copying old request shapes from historical
-examples.
+## Binding Beyond Loopback
 
-## Protect Network Access
-
-Loopback is the safe default. Before binding to another interface:
+Loopback is the safe default. Before binding to another interface, require a
+bearer token and restrict browser origins:
 
 ```sh
 export ATLAS_API_TOKEN='replace-with-a-strong-token'
+export ATLAS_MCP_ALLOWED_ORIGINS='https://trusted.example'
 atlas serve --mcp --addr 0.0.0.0:3099
 ```
 
@@ -802,24 +1232,28 @@ curl \
 ```
 
 `ATLAS_API_TOKEN` protects `/api/v1/*` and `POST /mcp`. Browser clients from
-additional origins must also be explicitly allowed:
-
-```sh
-export ATLAS_MCP_ALLOWED_ORIGINS='https://trusted.example'
-```
-
-Use TLS at a trusted reverse proxy when traffic leaves the machine.
-
-## Dashboard Authentication
+additional origins must also be explicitly allowed via
+`ATLAS_MCP_ALLOWED_ORIGINS`.
 
 When a token-protected dashboard requests credentials, supply the configured
 Atlas API token. The dashboard uses authenticated API calls and a short-lived
 stream credential for live updates.
 
-Do not place the API token in shared links, logs, screenshots, or source
-control.
+### Token Handling
+
+> **Warning:** Do not place the API token in shared links, logs, screenshots,
+> or source control. Anyone holding the token can query every repository the
+> service indexes.
+
+## TLS
+
+Atlas serves plain HTTP. When traffic leaves the machine, terminate TLS at a
+trusted reverse proxy in front of `atlas serve` rather than exposing the
+listener directly.
 
 ## Service Troubleshooting
+
+Start with Atlas's own diagnostics, then check the port:
 
 ```sh
 atlas status
@@ -827,9 +1261,10 @@ atlas doctor
 lsof -nP -iTCP:3099 -sTCP:LISTEN
 ```
 
-If `healthz` passes but `readyz` fails, indexing or database maintenance may be
-blocking engine requests. Wait for the current operation or stop competing
-Atlas processes before retrying.
+If `healthz` passes but `readyz` fails, indexing or database maintenance may
+be blocking engine requests. Wait for the current operation or stop competing
+Atlas processes before retrying. See [Troubleshooting](troubleshooting) for
+broader diagnosis.
 
 ---
 
@@ -838,74 +1273,122 @@ URL: https://aziron-ai.github.io/atlas/docs/configuration/
 
 # Configuration
 
-Use the CLI to inspect version-specific settings:
-
-```sh
-atlas config list
-atlas config get ATLAS_MAX_DB_BYTES
-```
-
-Persist a setting:
-
-```sh
-atlas config set ATLAS_MAX_DB_BYTES 10GiB
-```
-
-Clear a persisted override:
-
-```sh
-atlas config set ATLAS_MAX_DB_BYTES ""
-```
+Atlas works with zero configuration on a fresh checkout; every knob has a
+compiled default. This page explains where overrides live, which settings
+matter most, and the global flags that select storage, scope, and output
+shape. For the full command surface, see the [CLI Reference](cli).
 
 ## Precedence
 
-Configuration precedence is:
+Know where a value comes from before changing it. Effective configuration is
+resolved in this order (highest wins):
 
-1. environment variable
-2. repository `.atlas/settings.json`
-3. compiled default
+1. Environment variable
+2. Repository `.atlas/settings.json`
+3. Compiled default
 
-Environment variables are appropriate for automation and containers.
-Repository settings are appropriate for stable local policy.
+A deployment environment variable always wins over a persisted edit.
+Environment variables suit automation and containers; repository settings
+suit stable local policy.
 
-## Common Controls
+## Inspecting and Persisting Settings
+
+Use `atlas config` to see every knob's effective value and its provenance —
+not just what is set, but which layer set it:
+
+```sh
+atlas config list                        # every knob, value, and provenance
+atlas config get ATLAS_MAX_DB_BYTES      # one knob's value and origin
+atlas config set ATLAS_MAX_DB_BYTES 10GiB  # persist into .atlas/settings.json
+atlas config set ATLAS_MAX_DB_BYTES ""     # clear a persisted override
+```
+
+## Known Settings
 
 | Setting | Purpose |
 | --- | --- |
-| `ATLAS_ENABLE_VECTORS` | Enable optional semantic retrieval |
-| `ATLAS_EMBED_URL` | Configure an embedding endpoint when used |
-| `ATLAS_NO_WATCH` | Disable automatic file watching |
+| `ATLAS_ENABLE_VECTORS` | Enable optional semantic retrieval (pairs with an index built with `--enable-vectors`) |
+| `ATLAS_EMBED_URL` | Point semantic search at a real embedding model; the default embedder is offline (deterministic token overlap) |
+| `ATLAS_NO_WATCH` | Disable background file watching in `mcp` and `serve` (equivalent to `--watch=false`) |
 | `ATLAS_WATCH_MODE` | Select the watcher mode, including polling |
 | `ATLAS_MEMORY_LIMIT` | Bound Atlas memory use |
 | `ATLAS_GOGC` | Tune Go garbage collection |
 | `ATLAS_MCP_CALL_TIMEOUT` | Bound an MCP tool call |
-| `ATLAS_API_TOKEN` | Protect HTTP API and MCP access |
 | `ATLAS_MCP_ALLOWED_ORIGINS` | Allow additional browser origins |
-| `ATLAS_SERVER_URL` | Route compatible CLI operations through a server |
+| `ATLAS_API_TOKEN` | Require `Authorization: Bearer` on the HTTP API and HTTP/SSE MCP transports |
+| `ATLAS_SERVER_URL` | Route compatible CLI operations through a running server |
+| `ATLAS_SKIP_BOOTSTRAP` | Skip automatic bootstrap provisioning (for example in package post-install automation) |
+| `ATLAS_SYNC_SERVER` | Default central server URL for `atlas connect` |
+| `ATLAS_SYNC_TOKEN` | Bearer token for `atlas connect` |
+| `ATLAS_CONTEXT_LIMIT`, `ATLAS_CONTEXT_MAX_FILES`, `ATLAS_CONTEXT_MAX_EDGES`, `ATLAS_CONTEXT_MAX_DEPTH` | Default budgets for `atlas context`; per-request flags override, intent defaults apply otherwise |
+| `ATLAS_LEXICAL_MAX_RATIO`, `ATLAS_MAX_LEXICAL_BYTES` | Size bound on the lexical (BM25) sidecar that triggers a rebuild during `compact --full` |
+| `ATLAS_MAX_DB_BYTES` | Bound the graph database size |
 
-Run `atlas config list` for current names, defaults, descriptions, and accepted
-values.
+Run `atlas config list` for the complete catalog with current names, defaults,
+descriptions, and accepted values for your installed release.
 
-## Database Selection
+## Storage Selection
 
-Default repository-local database:
+Every command reads and writes one database, selected by `--db`. The DSN
+takes two forms:
 
 ```text
-sqlite://./.atlas/atlas.db
+sqlite://PATH
+postgres://...
 ```
 
-Explicit database:
+The default is `sqlite://./.atlas/atlas.db` — repository-local, relative to
+the working directory. Pin an explicit database when several exist:
 
 ```sh
 atlas --db "sqlite:///absolute/path/.atlas/atlas.db" status
 ```
 
-Use absolute database paths in assistant configuration to avoid resolving a
-relative path from the assistant's process directory.
+Use absolute database paths in assistant configurations: an assistant's
+process directory is rarely your repository root, so a relative DSN resolves
+to the wrong place.
+
+## Scope Selection
+
+When one database holds several repositories, select which repo answers with
+`--repo`. It accepts a filesystem path, an `org/name`, or a repo_id, and
+defaults to the current directory. On `search` and `semantic-search`,
+`--repo '*'` queries all repos. In hosted multi-tenant deployments, `--tenant`
+isolates repos to one tenant/org scope; empty means all repos.
+
+## Output Defaults
+
+Treat output shape and depth as configuration, not per-query ceremony, when
+scripting against Atlas.
+
+- `--format` selects the shape: `plain`, `json` (default), `compact`, or
+  `ndjson`. `--json` is shorthand for `--format json`.
+- `--detail` selects the depth: `low`, `medium`, `high` (default for every
+  format), or `xhigh`, which opts into cross-repo context. Retrieval
+  operations (callers/refs/impact) floor at `high`.
+
+## Read-Only Mode and Telemetry
+
+Use `--read-only` when the database must not change — for example when
+hashing artifacts or querying a shared, immutable index. It opens the
+database immutably: no migration runs, no WAL/journal files are created, and
+no `telemetry.db` is created beside it, so the artifact bytes hash
+identically after any query. A missing database errors instead of being
+created.
+
+Because read-only mode suppresses the default telemetry database, telemetry
+with `--read-only` requires an explicit `--telemetry-db PATH`. Without
+`--read-only`, telemetry defaults to `telemetry.db` beside the graph
+database.
+
+```sh
+atlas --read-only --telemetry-db /srv/atlas/telemetry.db \
+  --db "sqlite:///shared/index/.atlas/atlas.db" search "payment handler"
+```
 
 ## Resource-Constrained Environments
 
-Start with:
+Start conservative and confirm before raising limits:
 
 ```sh
 export ATLAS_MEMORY_LIMIT=2GiB
@@ -914,8 +1397,8 @@ atlas index .
 ```
 
 For very large repositories, exclude generated files and dependency caches
-before increasing limits. Confirm behavior with `atlas status`, `atlas stats`,
-and `atlas doctor`.
+(see [Indexing and Reindexing](indexing)) before increasing limits. Confirm
+behavior with `atlas status`, `atlas stats`, and `atlas doctor`.
 
 ---
 
@@ -924,27 +1407,95 @@ URL: https://aziron-ai.github.io/atlas/docs/privacy/
 
 # Privacy and Data Handling
 
-Atlas indexing and querying run locally by default. The default repository
-index is stored under:
-
-```text
-.atlas/
-```
+Atlas indexes and queries your code locally by default; nothing leaves the
+machine unless you deliberately turn on a network feature. This page defines
+that boundary, what is stored where, how to run Atlas in audit-grade
+read-only mode, and which features are opt-in.
 
 ## What "Local by Default" Means
 
+Use this section to establish the baseline before granting any access:
+
 - Source files are read from the selected workspace.
-- The default index is stored in that workspace.
+- The default index is stored in that workspace under `.atlas/`.
 - CLI queries and stdio MCP do not require a hosted Atlas service.
-- A local dashboard and API bind to loopback by default.
+- The local dashboard and API bind to loopback by default.
 
-This does not mean every tool connected to Atlas is offline. A coding assistant
-may send the snippets returned by MCP to its configured model provider, subject
-to that client's settings and data policy.
+This does not mean every tool connected to Atlas is offline. A coding
+assistant may forward the snippets Atlas returns over MCP to its configured
+model provider, subject to that client's settings and data policy.
 
-## Before Enabling Network Features
+## What Is Stored Where
 
-Review:
+Know the on-disk layout before backing up, moving, or deleting an index. The
+`.atlas/` directory can contain the graph database (`atlas.db` by default),
+supporting retrieval data, settings, telemetry, and transient SQLite files
+(WAL/journal). Treat the directory as one data set: copy, back up, or delete
+it as a unit.
+
+Stop active Atlas processes (`atlas serve`, `atlas watch`, MCP with `--watch`)
+before copying, compacting, or deleting local data.
+
+## Read-Only Mode for Audit-Grade Use
+
+Use `--read-only` when queries must provably not modify the artifact — for
+example when examining a database captured as evidence or shared by another
+team. The flag opens the database immutably:
+
+- no migration runs
+- no WAL or journal files are created
+- no `telemetry.db` is created next to the graph database
+- artifact bytes hash identically after any query
+- a missing database errors instead of being created
+
+```sh
+atlas status --read-only --db "sqlite:///path/to/copy/atlas.db"
+```
+
+## Telemetry
+
+Local observability data is kept separate from the graph. By default it lives
+in `telemetry.db` beside the graph database; set an explicit location with
+`--telemetry-db PATH`. With `--read-only`, no telemetry database is created —
+if you want telemetry in that mode, you must pass `--telemetry-db` explicitly.
+
+## Fleet Features Are Opt-In
+
+Nothing is uplinked unless you run `atlas connect`. Connecting registers the
+machine with a central Atlas server under a stable device identity, writes
+`~/.atlas/config.json`, and installs the Claude/Codex capture hooks
+(`--no-hooks` to skip). There is no default hub: the server URL comes from the
+explicit argument, `ATLAS_SYNC_SERVER`, or the URL the machine is already
+connected to.
+
+What leaves the machine is governed by the data level:
+
+| `--level` | Shares |
+| --- | --- |
+| `off` | Nothing |
+| `telemetry` | Metrics only |
+| `interactions` | Normalized prompts + redacted traces (the default) |
+| `full` | Raw prompts (org opt-in) |
+
+Raw transcripts, tool outputs, answers, and secrets never leave the machine at
+any level. Inspect and drive the uplink explicitly:
+
+```sh
+atlas sync status
+atlas sync now
+```
+
+`sync status` shows uplink configuration, kill switches, and per-stream
+cursors; `sync now` pushes all pending telemetry once. To leave the fleet and
+remove the capture hooks:
+
+```sh
+atlas disconnect
+```
+
+## Before Enabling Network Access
+
+Review this checklist before binding the service beyond loopback:
 
 - the bind address
 - API authentication
@@ -961,15 +1512,8 @@ export ATLAS_MCP_ALLOWED_ORIGINS='https://trusted.example'
 atlas serve --mcp --addr 0.0.0.0:3099
 ```
 
-Do not commit tokens to repository settings or shell scripts.
-
-## Local Data
-
-The `.atlas/` directory can contain the graph database, supporting retrieval
-data, settings, telemetry, and transient SQLite files. Treat the directory as
-one data set when backing up or moving an index.
-
-Stop active Atlas processes before copying, compacting, or deleting local data.
+Do not commit tokens to repository settings or shell scripts. See
+[Dashboard and HTTP API](service) for token and TLS details.
 
 ## Data Removal
 
@@ -980,8 +1524,10 @@ atlas uninstall --dry-run
 atlas uninstall
 ```
 
-Package removal does not automatically delete repository indexes. See
-[Upgrade and Uninstall](Upgrade-and-Uninstall) for explicit data-removal steps.
+Package removal does not automatically delete repository indexes; delete the
+`.atlas/` directory (with Atlas processes stopped) to remove an index, or use
+`atlas repo rm` to forget one repository's snapshots, symbols, edges,
+embeddings, and lexical documents from a shared database.
 
 ## Shared and Connected Environments
 
@@ -1005,11 +1551,15 @@ URL: https://aziron-ai.github.io/atlas/docs/languages/
 # Supported Languages and Formats
 
 Atlas recognizes programming languages, templates, structured project files,
-documents, and content formats. Capability depth varies by format.
+documents, and content formats. Capability depth varies by format: some
+languages carry a reference-validated call graph, others a structural or
+content index only. Use this page to determine what Atlas can prove for the
+languages that matter to you.
 
 ## Capability Levels
 
-Use these distinctions when evaluating a repository:
+Use these distinctions when evaluating a repository — "indexed" alone does not
+tell you whether caller and impact queries will be accurate.
 
 | Level | Typical capability |
 | --- | --- |
@@ -1020,43 +1570,45 @@ Use these distinctions when evaluating a repository:
 Indexing a format does not guarantee identical call-graph or symbol accuracy
 across every language.
 
-## Common Code Languages
+## Language Maturity Ladder
 
-Atlas includes support for major languages such as:
+Consult the ladder before relying on graph queries (`callers`, `impact`,
+`path`) for a language: levels reflect validation depth, not just support. An
+L2 language still indexes and searches; it has not yet reached verified
+call-graph resolution. Atlas covers 40 code languages across these levels:
 
-- Go, Python, JavaScript, and TypeScript
-- Java, C, C++, and C#
-- Rust, Ruby, PHP, Kotlin, and Scala
-- Swift, Objective-C, Dart, Lua, Zig, and Elixir
-- Julia, Fortran, R, SQL, and shell languages
-- Terraform/HCL and several hardware or domain-specific languages
+| Level | Meaning | Languages |
+| --- | --- | --- |
+| L5 — Reference-validated | Call graph cross-checked against an LSP server or SCIP indexer | C, C++, Dart, Fortran, Go, Java, JavaScript, Lua, PHP, Python, Rust, TypeScript, Zig |
+| L4 — Real-repo call graph | Who-calls resolved and proven on a real repository | Apex, Astro, C#, Elixir, ETS, Groovy, Julia, Kotlin, R, Scala, SQL, Svelte, Swift, Verilog, Vue — plus, pending real-repo proof: Bash, Blade, BYOND, EJS, Objective-C, Pascal, PowerShell, Razor, Ruby |
+| L2 — Real-repo tested | Runs on real code; call graph not yet resolved | Delphi, Terraform |
+| L1 — Indexed | Parsed and symbols extracted | P4 |
 
-## Templates and Frontend Formats
+The "pending real-repo proof" languages at L4 have resolved call graphs on
+fixtures but have not yet been proven against a real repository. Treat them as
+L4 capability with weaker evidence until the proof lands.
 
-Supported indexing families include formats such as:
+## Content Formats
 
-- HTML, CSS, Vue, Svelte, Astro, and EJS
-- Razor and Blade
-- Markdown and MDX
+Beyond code, Atlas indexes approximately 24 content formats (JSON, YAML, HTML,
+PDF, and others) for search. These are content and structural indexes, not
+call graphs:
 
-## Structured and Project Files
+- **Templates and frontend:** HTML, CSS, Vue, Svelte, Astro, EJS, Razor,
+  Blade, Markdown, and MDX
+- **Structured and project files:** JSON, YAML, TOML, XML, plist, CSV, TSV,
+  Protocol Buffers, Go module files, .NET project files, Makefiles,
+  Dockerfiles, configuration files, and plain text
+- **Documents and media:** PDF, DOCX, XLSX, PPTX, and common image formats,
+  indexed for content discovery
 
-Atlas can index common repository metadata and structured content, including:
+Treat document and media formats as content indexes rather than
+programming-language call graphs.
 
-- JSON, YAML, TOML, XML, plist, CSV, and TSV
-- Protocol Buffers
-- Go module files and .NET project files
-- Makefiles, Dockerfiles, configuration files, and plain text
+## Check Evidence for Your Own Repositories
 
-## Documents and Media
-
-Selected document and media formats can be indexed for content discovery,
-including PDF, DOCX, XLSX, PPTX, and common image formats. These formats should
-be treated as content indexes rather than programming-language call graphs.
-
-## Check Current Evidence
-
-Language support changes across releases. Use:
+Fixture compatibility is not a substitute for production-repository accuracy —
+verify support on the code you actually work with before depending on it.
 
 ```sh
 atlas index .
@@ -1064,14 +1616,32 @@ atlas stats
 atlas report --format plain
 ```
 
-The public benchmark site includes a dated, evidence-graded compatibility view:
+- `atlas index .` parses symbols, edges, and routes and persists the graph and
+  lexical index.
+- `atlas stats` shows graph and index telemetry statistics for the indexed
+  repository, including recent snapshot telemetry rows.
+- `atlas report` composes the snapshot's graph stats, top hubs, and top
+  communities; `--format plain` prints the Markdown report directly.
 
-- [Language benchmark](https://aziron-ai.github.io/atlas/#languages)
+Low edge counts or missing symbol kinds in `stats` and `report` output are the
+fastest signal that a language sits lower on the ladder than your workflow
+needs. Evaluate important languages on representative repositories and pin the
+Atlas version used for the evaluation.
+
+See [Indexing and Reindexing](indexing) for delta versus full reindex behavior
+and [CLI Reference](cli) for the full command surface.
+
+## Published Compatibility Evidence
+
+Language support changes across releases. The public benchmark site includes a
+dated, evidence-graded compatibility view with an interactive per-language
+matrix:
+
+- [Language benchmark matrix](https://aziron-ai.github.io/atlas/#languages)
 - [Raw language artifacts](https://github.com/aziron-ai/atlas/tree/main/data/raw)
 
-Fixture compatibility is not a substitute for production-repository accuracy.
-Evaluate important languages on representative repositories and pin the Atlas
-version used for the evaluation.
+For how those numbers were measured, what they do and do not prove, and how to
+reproduce them, read [Benchmarks and Methodology](benchmarks).
 
 ---
 
@@ -1081,34 +1651,30 @@ URL: https://aziron-ai.github.io/atlas/docs/benchmarks/
 # Benchmarks and Methodology
 
 Atlas publishes benchmark results for accuracy, token use, latency, language
-compatibility, and agent workflows:
+compatibility, and agent workflows. Use this page to interpret those numbers
+correctly — every result is a dated measurement under stated conditions, not a
+general guarantee.
 
 [Open the Atlas benchmark explorer](https://aziron-ai.github.io/atlas/#benchmarks)
 
-## Download the Data
-
-- [Processed site data](https://github.com/aziron-ai/atlas/blob/main/data/site-data.json)
-- [Raw benchmark artifacts](https://github.com/aziron-ai/atlas/tree/main/data/raw)
-- [Evidence manifests](https://github.com/aziron-ai/atlas/tree/main/data)
-- [Agent benchmark kit](https://github.com/aziron-ai/atlas/tree/main/agent-bench)
-
 ## How to Read a Result
 
-Confirm all of the following before comparing tools:
+Work through this checklist before comparing tools or quoting a number — a
+result you cannot place in it is not evidence:
 
-1. Atlas and baseline tool versions
-2. repository URL and pinned commit
-3. language and query set
-4. hardware and operating system
-5. cold-cache or warm-cache state
-6. repeat count and aggregation method
-7. accuracy oracle or reviewer
-8. token measurement method
-9. failure and timeout handling
+1. **Identify the setup.** Atlas and baseline tool versions, repository URL
+   and pinned commit, language and query set.
+2. **Identify the conditions.** Hardware and operating system, cold-cache or
+   warm-cache state, repeat count and aggregation method.
+3. **Identify the scoring.** The accuracy oracle or reviewer, and the token
+   measurement method (provider-reported usage versus a documented estimate).
+4. **Identify the failure handling.** How failed and timed-out cases were
+   counted. A mean that silently drops failures is not comparable to one that
+   scores them.
 
 ## Evidence Categories
 
-Do not combine these categories into one unsupported headline:
+Keep categories separate — do not combine them into one unsupported headline:
 
 - **Compatibility:** whether a format indexes successfully
 - **Correctness:** precision, recall, or F1 against an oracle
@@ -1116,18 +1682,50 @@ Do not combine these categories into one unsupported headline:
 - **Token use:** measured model/tool usage or a documented estimate
 - **Agent workflow:** end-to-end behavior for a pinned assistant and task set
 
-## Important Limitations
+## Published Headline Results (July 2026)
 
-- Fixture results do not prove production-repository accuracy.
-- One repository does not establish performance across a language.
-- Different assistants may consume the same MCP result differently.
-- Estimated tokens are not equivalent to provider-reported token usage.
-- Warm-cache query latency is not cold-start installation or indexing time.
-- Language support and result quality can differ by syntax and framework.
+These are the current published numbers, each with its evidence conditions:
 
-## Reproduce Agent Tests
+| Result | Conditions |
+| --- | --- |
+| F1 0.757 at 21.2 context tokens, mean across all 37 languages | Fixture-truth ground truth, real-LLM scored (222 cells, 666 model calls) |
+| F1 1.000 at 27.1 tokens on the 28 fully-supported languages | Full-file-dump accuracy at 6.1× fewer tokens; same fixture suite |
+| Graph-tool comparison: 0.539 F1 at 97 tokens | Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens |
+| Query latency ~7.4 ms vs 128 ms for the graph tool | Real repositories, 36 languages; flat from 15 to 39,161 symbols |
 
-The public repository includes a self-contained agent benchmark guide:
+## Agent-Harness Token Benchmark (2026-07-10)
+
+This measures what a real agent actually spends. Claude Code and OpenAI Codex
+ran headless in sirupsen/logrus (@a23d315), restricted to one
+code-intelligence CLI per run, answering 19 caller questions scored against
+gopls call_hierarchy (LSP-truth) at the pinned commit. Token numbers are each
+harness's own usage accounting.
+
+| Agent | Context source | Mean total tokens | Mean tool calls | Mean F1 |
+| --- | --- | --- | --- | --- |
+| claude (claude-sonnet-5) | Atlas | 61,561 | 2 | 0.882 |
+| claude (claude-sonnet-5) | No tool (raw exploration) | 144,385 | 4.9 | 0.569 |
+| claude (claude-sonnet-5) | Graph tool | 370,898 | 10.3 | 0.305 |
+| codex (gpt-5.6-sol) | Atlas | 27,981 | 1 | 0.881 |
+| codex (gpt-5.6-sol) | No tool (raw exploration) | 48,106 | 2.1 | 0.876 |
+| codex (gpt-5.6-sol) | Graph tool | 109,662 | 9.6 | 0.410 |
+
+Cross-agent absolute totals are **not comparable** — the two harnesses use
+different tokenizers and system-prompt floors (see each agent's calibration).
+Compare modes within an agent only.
+
+## Reproduce It Yourself
+
+Every published number is reproducible from committed artifacts — verify
+before you cite:
+
+- [Processed site data (site-data.json)](https://github.com/aziron-ai/atlas/blob/main/data/site-data.json)
+- [Raw benchmark artifacts (data/raw)](https://github.com/aziron-ai/atlas/tree/main/data/raw)
+- [Evidence manifests](https://github.com/aziron-ai/atlas/tree/main/data)
+- [Agent benchmark kit (agent-bench/)](https://github.com/aziron-ai/atlas/tree/main/agent-bench)
+
+The agent suite ships with the pinned commit, frozen gopls question set, and
+isolation flags baked in:
 
 ```sh
 python3 agent-bench/agent_token_bench.py \
@@ -1140,10 +1738,25 @@ python3 agent-bench/agent_token_bench.py \
 Read
 [agent-bench/README.md](https://github.com/aziron-ai/atlas/blob/main/agent-bench/README.md)
 for prerequisites, expected external cost, pinned inputs, and interpretation.
+Per-run records are in
+[AGENT_TOKEN_BENCH_PUBLIC.json](https://aziron-ai.github.io/atlas/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json).
+
+## Important Limitations
+
+- Fixture results do not prove production-repository accuracy.
+- One repository does not establish performance across a language.
+- Different assistants may consume the same MCP result differently.
+- Estimated tokens are not equivalent to provider-reported token usage.
+- Warm-cache query latency is not cold-start installation or indexing time.
+- Language support and result quality can differ by syntax and framework.
+
+Per-language support levels behind these results are summarized in
+[Supported Languages and Formats](languages).
 
 ## Reporting a Comparison
 
-Publish:
+If you publish your own comparison, include everything a reader needs to
+reproduce it:
 
 - exact commands
 - raw machine-readable output
@@ -1152,8 +1765,8 @@ Publish:
 - evidence limitations
 - the Atlas release tag and checksum
 
-Benchmark results are dated evidence under stated conditions, not a guarantee
-for every repository, machine, language, or assistant.
+Benchmark results are dated measurements under published conditions — not a
+guarantee for every repository, machine, language, or assistant.
 
 ---
 
@@ -1162,7 +1775,14 @@ URL: https://aziron-ai.github.io/atlas/docs/troubleshooting/
 
 # Troubleshooting
 
-Start with:
+Most Atlas failures are diagnosable from three read-only commands. Capture the
+evidence first, then act.
+
+## First Response
+
+Before changing any local data, record the facts you will need to diagnose or
+report the problem: the repository path, the database path, the Atlas version,
+and the exact failing command. Then run:
 
 ```sh
 atlas version
@@ -1170,174 +1790,86 @@ atlas status
 atlas doctor
 ```
 
-Record the repository path, database path, Atlas version, and exact command
-before changing data.
+All three are read-only. If you skip this step and start deleting or
+rebuilding, you destroy the evidence that distinguishes a schema problem from
+a stale index from a wedged retrieval sidecar.
 
-## Installation
+## Symptom to Action
 
-### `atlas: command not found`
+Match your symptom, apply the action, and re-run the failing command. Details
+for the harder cases follow the table.
 
-```sh
-command -v atlas
-echo "$PATH"
-```
+| Symptom | Action |
+| --- | --- |
+| `atlas: command not found` | Check `command -v atlas` and `$PATH`; reinstall via your channel — `brew reinstall --cask aziron-ai/atlas/atlas` or `npm install -g @aziron-ai/atlas` (verify `npm prefix -g` is on PATH) |
+| Results are stale or from the wrong repository | `atlas index .` then `atlas status`; pin scope with `atlas --repo /absolute/path status`; if still stale, `atlas doctor` then `atlas index . --reindex` |
+| `workspace_required` from MCP | Supply a workspace root, `workspace`, `repo_id`, or launch-time `--repo`. Atlas does not silently select a repository for scoped requests |
+| SQLite is busy or locked | Stop `atlas serve`, `atlas watch`, and supervised MCP processes; inspect the owner with `lsof "$PWD/.atlas/atlas.db"`; run maintenance serially after all writers exit |
+| Retrieval reports `sql_fallback` | The lexical (BM25) sidecar is empty or wedged while the graph stays readable. Run `atlas doctor` to confirm, stop other Atlas processes, then `atlas compact --rebuild-lexical` and re-check `atlas status` |
+| Assistant does not list Atlas tools | `atlas bootstrap --dry-run` to preview, `atlas doctor --verify atlas` to check binary drift; apply `atlas bootstrap`, then fully restart the assistant |
+| Doctor or status reports schema/index drift | `atlas migrate` applies storage migrations and reports the active contracts; confirm with `atlas status --schema`, then `atlas index . --reindex` if snapshot formats have drifted |
+| Database keeps growing after deletions or reindexes | `atlas compact` reports reclaimable pages and truncates the WAL; `atlas compact --full` also runs a full VACUUM and rebuilds an oversized lexical sidecar. Both `--full` and `--rebuild-lexical` are exclusive — quiesce other Atlas processes first |
+| Semantic search falls back to lexical | Expected when vectors are absent: reindex with `atlas index . --enable-vectors` and verify configuration with `atlas config list` |
 
-For Homebrew:
+Other known cases, kept brief:
 
-```sh
-brew list --cask atlas
-brew reinstall --cask aziron-ai/atlas/atlas
-```
+- **npm binary download fails:** confirm the version exists on
+  [GitHub Releases](https://github.com/aziron-ai/atlas/releases), check proxy
+  and GitHub access, and pin a published version.
+- **macOS blocks a manual binary:** prefer the Homebrew cask; for a trusted,
+  checksum-verified binary run
+  `xattr -dr com.apple.quarantine /usr/local/bin/atlas`.
+- **MCP list is fast but calls are slow:** an index or exclusive maintenance
+  task may be running — check `atlas status` and `atlas doctor`; disable
+  duplicate watchers; adjust `ATLAS_MCP_CALL_TIMEOUT` only after confirming
+  the root cause.
+- **HTTP 401 or 403:** send `Authorization: Bearer $ATLAS_API_TOKEN`; for
+  browser clients also configure `ATLAS_MCP_ALLOWED_ORIGINS`.
+- **Port 3099 in use:** find the owner with
+  `lsof -nP -iTCP:3099 -sTCP:LISTEN`; stop it or choose another address (see
+  `atlas serve --help`).
+- **`healthz` passes but `readyz` fails:** Atlas is running but cannot
+  complete a lightweight engine request — look for an active index, database
+  lock, or maintenance operation.
 
-For npm:
+## Read the Diagnosis
 
-```sh
-npm prefix -g
-npm install -g @aziron-ai/atlas
-```
+Knowing what each diagnostic actually reports keeps you from applying the
+wrong fix.
 
-### npm binary download fails
+- **`atlas doctor`** reports Atlas upgrade health and the schema/index
+  contract state. It also tells you when the lexical sidecar needs
+  `atlas compact --rebuild-lexical` — the condition that otherwise degrades
+  every search to SQL-only silently. Add `--verify atlas` to check binary
+  drift: whether the `atlas` on PATH (what assistants launch) matches the
+  running binary. Add `--all --root DIR` to scan every `.atlas/atlas.db`
+  under a directory.
+- **`atlas status`** reports storage/version health: the schema and
+  index-format contracts plus per-repo snapshot format state. Add `--schema`
+  to see the schema/index-format/lexical/MCP contract versions and per-repo
+  snapshot format drift.
+- **`atlas migrate`** is the corresponding fix for schema findings: it applies
+  storage migrations and reports the active contracts. `--all --root DIR`
+  migrates every local SQLite database under a directory.
 
-Confirm the requested version exists on
-[GitHub Releases](https://github.com/aziron-ai/atlas/releases), then check
-proxy and GitHub access. Pin a published version instead of a version that is
-still being released.
+## Logs and Telemetry
 
-### macOS blocks a manual binary
+When you need runtime evidence rather than a health verdict, look here:
 
-Prefer the Homebrew cask. For a trusted, checksum-verified manual binary:
-
-```sh
-xattr -dr com.apple.quarantine /usr/local/bin/atlas
-```
-
-## Repository and Freshness
-
-### Results come from the wrong repository
-
-Pin scope:
-
-```sh
-atlas --repo /absolute/path status
-```
-
-For a shared database, use the repository ID shown by `atlas status`.
-
-### Results are stale
-
-```sh
-atlas index .
-atlas status
-```
-
-If the status remains stale:
-
-```sh
-atlas doctor
-atlas index . --reindex
-```
-
-### `workspace_required` from MCP
-
-Supply a workspace root, `workspace`, `repo_id`, or launch-time `--repo`.
-Atlas does not silently select a repository for scoped requests.
-
-## Database and Retrieval
-
-### SQLite is busy or locked
-
-Stop `atlas serve`, `atlas watch`, and supervised MCP processes. Inspect the
-owner:
-
-```sh
-lsof "$PWD/.atlas/atlas.db"
-```
-
-Run maintenance serially after all writers exit.
-
-### Retrieval reports `sql_fallback`
-
-This usually means supporting lexical retrieval is unavailable while the graph
-database is still readable:
-
-```sh
-atlas doctor
-atlas compact --rebuild-lexical
-atlas status
-```
-
-Stop competing Atlas processes before rebuilding retrieval data.
-
-### Upgrade reports schema or index drift
-
-```sh
-atlas migrate
-atlas status --schema
-atlas index . --reindex
-```
-
-Back up `.atlas/` before migration or downgrade testing.
-
-### Semantic search falls back to lexical
-
-```sh
-atlas index . --enable-vectors
-atlas status
-```
-
-Also verify semantic retrieval configuration with `atlas config list`.
-
-## MCP and Assistants
-
-### Assistant does not list Atlas tools
-
-```sh
-atlas bootstrap --dry-run
-atlas doctor --verify atlas
-```
-
-Apply bootstrap if needed, then fully restart the assistant.
-
-### MCP list is fast but calls are slow
-
-An index or exclusive maintenance task may be running:
-
-```sh
-atlas status
-atlas doctor
-```
-
-Wait for indexing, disable duplicate watchers, or adjust
-`ATLAS_MCP_CALL_TIMEOUT` only after confirming the root cause.
-
-### HTTP 401 or 403
-
-Supply the bearer token:
-
-```sh
-curl \
-  -H "Authorization: Bearer $ATLAS_API_TOKEN" \
-  http://127.0.0.1:3099/api/v1/status
-```
-
-For browser clients, also configure `ATLAS_MCP_ALLOWED_ORIGINS`.
-
-## Server
-
-### Port 3099 is already in use
-
-```sh
-lsof -nP -iTCP:3099 -sTCP:LISTEN
-```
-
-Stop the existing process or select another address with `atlas serve --help`.
-
-### `healthz` passes but `readyz` fails
-
-Atlas is running but cannot complete a lightweight engine request. Check for an
-active index, database lock, or maintenance operation.
+- **`atlas stats`** shows graph and index telemetry statistics for an indexed
+  repository; `--limit` controls how many recent snapshot telemetry rows are
+  returned (default 20).
+- **Observability database:** telemetry is stored in `telemetry.db` beside the
+  graph database by default; relocate it with `--telemetry-db PATH`. With
+  `--read-only`, no `telemetry.db` is created unless you pass
+  `--telemetry-db` explicitly.
+- **`atlas sync status`** (connected fleets only) shows uplink configuration,
+  kill switches, and per-stream cursors.
 
 ## Before Deleting Data
+
+> **Warning:** Deleting `.atlas/` is irreversible and is almost never the
+> right first move. Complete every step below before removing anything.
 
 1. Stop every Atlas process.
 2. Confirm the exact database and repository paths.
@@ -1345,7 +1877,11 @@ active index, database lock, or maintenance operation.
 4. Run `atlas doctor`.
 5. Attempt migration, lexical rebuild, or reindex first.
 
-Delete local Atlas data only when a complete reset is intended.
+Delete local Atlas data only when a complete reset is intended. For the
+removal procedure itself, see [Upgrade and Uninstall](upgrade). For index
+behavior and reindex options, see [Indexing and Reindexing](indexing); for
+assistant wiring, see [AI Assistant Setup](assistants); for knob provenance,
+see [Configuration](configuration).
 
 ---
 
@@ -1354,7 +1890,16 @@ URL: https://aziron-ai.github.io/atlas/docs/upgrade/
 
 # Upgrade and Uninstall
 
-## Upgrade with Homebrew
+Upgrade the binary through the channel you installed with, then run the
+post-upgrade sequence — the binary and the on-disk data have separate version
+contracts, and skipping the sequence is the most common source of
+post-upgrade drift.
+
+## Upgrade per Channel
+
+Use the same channel you installed from (see [Installation](installation)).
+
+Homebrew:
 
 ```sh
 brew update
@@ -1362,7 +1907,7 @@ brew upgrade --cask aziron-ai/atlas/atlas
 atlas version
 ```
 
-## Upgrade with npm
+npm:
 
 ```sh
 npm install -g @aziron-ai/atlas
@@ -1375,7 +1920,14 @@ Pin a version for reproducible automation:
 npm install -g @aziron-ai/atlas@0.1.36
 ```
 
-## Post-Upgrade Checks
+Archives: download the new tar.gz, .deb, .rpm, or .apk from
+[GitHub Releases](https://github.com/aziron-ai/atlas/releases/latest), replace
+the installed binary, and confirm with `atlas version`.
+
+## Post-Upgrade Sequence
+
+Run these four commands after every upgrade. Each one closes a specific gap
+that a binary swap leaves open:
 
 ```sh
 atlas bootstrap
@@ -1384,10 +1936,29 @@ atlas status --schema
 atlas doctor --verify atlas
 ```
 
-Bootstrap refreshes assistant configuration that contains an absolute Atlas
-binary path. Migration upgrades supported database schemas in place.
+- **`atlas bootstrap`** refreshes the assistant glue: it re-registers Atlas as
+  an MCP server and reinstalls the skill and CLAUDE.md directive for detected
+  assistants, baking in the absolute binary path. It is idempotent — safe to
+  run repeatedly.
+- **`atlas migrate`** applies Atlas storage migrations to the database and
+  reports the active contracts. Use `--all --root DIR` to migrate every
+  `.atlas/atlas.db` under a directory.
+- **`atlas status --schema`** reports the schema/index-format/lexical/MCP
+  contract versions and per-repo snapshot format drift, so you can see
+  whether existing snapshots match what the new binary expects.
+- **`atlas doctor --verify atlas`** reports upgrade health and the
+  schema/index contract state, and additionally checks binary drift — whether
+  the `atlas` on PATH (what assistants launch via `command:"atlas"`) matches
+  the binary you just upgraded.
 
-Run a full rebuild only when status, doctor, or release notes require it:
+## Reading Doctor Output After an Upgrade
+
+Act on what doctor reports rather than rebuilding preemptively. A clean report
+means the upgrade is complete. If doctor or status flags schema or index
+contract drift, run `atlas migrate` and re-check. If doctor reports the
+lexical sidecar needs rebuilding, use `atlas compact --rebuild-lexical` (see
+[Troubleshooting](troubleshooting)). Run a full rebuild only when status,
+doctor, or the release notes require it:
 
 ```sh
 atlas index . --reindex
@@ -1395,70 +1966,66 @@ atlas index . --reindex
 
 ## Before Downgrading
 
-Back up the full `.atlas/` directory. Do not assume an older binary can open a
-database already migrated by a newer release.
+Back up the full `.atlas/` directory first. Do not assume an older binary can
+open a database already migrated by a newer release. Use a separate database
+(`--db`) for downgrade testing when possible.
 
-Use a separate database for downgrade testing when possible.
+## Uninstall
 
-## Remove Assistant Integrations
+Remove Atlas in this order: assistant integrations first, then the package,
+then (only if intended) local data.
 
-Preview:
+### 1. Remove Assistant Integrations
+
+`atlas uninstall` reverses `atlas bootstrap` across every assistant it
+provisions (Claude CLI and desktop, Cursor, Gemini, Codex, Copilot): it
+removes the atlas MCP server entry from each config, the atlas skill
+markdown, and the atlas-managed block in the global CLAUDE.md. Nothing else
+is touched — other MCP servers, unrelated config keys, and your own CLAUDE.md
+content outside the atlas markers are preserved. It is idempotent: re-running
+reports `absent` and writes nothing.
 
 ```sh
 atlas uninstall --dry-run
-```
-
-Apply:
-
-```sh
 atlas uninstall
 ```
 
-Atlas removes the entries and skills it manages while preserving unrelated
-assistant configuration.
-
-## Remove the Package
-
-Homebrew:
+If this machine is connected to a central Atlas server, also disconnect —
+`atlas disconnect` disconnects from the central Atlas and removes the capture
+hooks:
 
 ```sh
-brew uninstall --cask aziron-ai/atlas/atlas
+atlas disconnect
 ```
 
-npm:
+### 2. Remove the Package
 
 ```sh
-npm uninstall -g @aziron-ai/atlas
+brew uninstall --cask aziron-ai/atlas/atlas   # Homebrew
+npm uninstall -g @aziron-ai/atlas             # npm
+sudo rm /usr/local/bin/atlas                  # manual binary
 ```
 
-Manual binary:
+### 3. Remove Local Data — Read First
 
-```sh
-sudo rm /usr/local/bin/atlas
-```
+> **Warning:** Package removal does not delete repository indexes. Every
+> indexed repository keeps its `.atlas/` directory — index, settings,
+> retrieval data, telemetry, and retained snapshots — until you remove it.
+> Stop all Atlas processes and confirm the exact paths before deleting;
+> removal is permanent.
 
-## Remove Repository Data
-
-Package removal does not delete indexes. After stopping all Atlas processes and
-verifying the repository path:
+Per repository, after stopping all Atlas processes and verifying the path:
 
 ```sh
 rm -rf /absolute/path/to/repository/.atlas
 ```
 
-This permanently removes the local index, settings, retrieval data, telemetry,
-and retained snapshots for that repository.
-
-## Remove User-Level Atlas Data
-
-After reviewing the directory:
+User-level data, only when all user-level Atlas data and installed Atlas
+skills should go:
 
 ```sh
 rm -rf "$HOME/.atlas"
 ```
-
-Do this only when all user-level Atlas data and installed Atlas skills should
-be removed.
 
 ## Verify Removal
 
@@ -1467,4 +2034,4 @@ command -v atlas || true
 ```
 
 Also inspect the assistant configuration locations listed in
-[AI Assistant Setup](AI-Assistant-Setup) if a client was configured manually.
+[AI Assistant Setup](assistants) if a client was configured manually.

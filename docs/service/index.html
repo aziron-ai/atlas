@@ -59,46 +59,51 @@
   <main class="wrap">
     <article>
 <h1>Dashboard and HTTP API</h1>
-<p>Atlas can run a local dashboard, HTTP API, repository watcher, and MCP endpoint from one process.</p>
+<p>One <code>atlas serve</code> process hosts the local dashboard, the HTTP API, the repository watcher, and — with <code>--mcp</code> — the MCP endpoint. Run it when you want a browsable view of the graph, when thin clients should share one index, or when other tooling needs a REST surface.</p>
 <h2>Start the Service</h2>
-<pre><code>atlas serve</code></pre>
+<p>Start with MCP mounted so assistants and HTTP clients share the same process:</p>
+<pre><code>atlas serve --mcp</code></pre>
 <p>Useful variants:</p>
 <pre><code>atlas serve --open=false
-atlas serve --open=false --watch=false
-atlas serve --mcp</code></pre>
-<p>Default address:</p>
-<pre><code>http://127.0.0.1:3099</code></pre>
-<p>Dashboard:</p>
-<pre><code>http://127.0.0.1:3099/dashboard</code></pre>
+atlas serve --open=false --watch=false</code></pre>
+<p>Default address and dashboard:</p>
+<pre><code>http://127.0.0.1:3099
+http://127.0.0.1:3099/dashboard</code></pre>
+<h2>Serve Flags</h2>
+<table><thead><tr><th>Flag</th><th>Default</th><th>Effect</th></tr></thead><tbody><tr><td><code>--addr</code></td><td><code>127.0.0.1:3099</code></td><td>Listen address; loopback by default. Use <code>0.0.0.0:3099</code> to expose on the network</td></tr><tr><td><code>--mcp</code></td><td>off</td><td>Also mount MCP over HTTP at <code>POST /mcp</code></td></tr><tr><td><code>--open</code></td><td><code>true</code></td><td>Open the dashboard in your browser once ready (best-effort); <code>--open=false</code> for CI/headless</td></tr><tr><td><code>--watch</code></td><td><code>true</code></td><td>Keep the graph fresh by watching the repo; <code>--watch=false</code> or <code>ATLAS_NO_WATCH=1</code> to disable</td></tr><tr><td><code>--watch-path</code></td><td><code>--repo</code>, else current dir</td><td>Repo path to watch when <code>--watch</code> is set</td></tr></tbody></table>
+<p>Global flags such as <code>--db</code>, <code>--repo</code>, and <code>--read-only</code> apply as on any other command; see the <a href="../cli/">CLI Reference</a>.</p>
 <h2>Health and API Discovery</h2>
+<p>Use these endpoints to script readiness checks and to discover the API:</p>
 <pre><code>curl http://127.0.0.1:3099/healthz
 curl http://127.0.0.1:3099/readyz
 curl http://127.0.0.1:3099/openapi.json</code></pre>
-<ul><li><code>healthz</code> confirms the process is running.</li><li><code>readyz</code> confirms Atlas can answer a lightweight engine request.</li><li><code>openapi.json</code> is the version-specific API contract.</li></ul>
+<ul><li><code>healthz</code> confirms the process is running.</li><li><code>readyz</code> confirms Atlas can answer a lightweight engine request.</li><li><code>openapi.json</code> is the version-specific API contract. Generate clients and</li></ul>
+<p>  validate requests against this document rather than copying request shapes   from historical examples.</p>
 <h2>Common Requests</h2>
 <pre><code>curl http://127.0.0.1:3099/api/v1/status
 curl http://127.0.0.1:3099/api/v1/stats
 curl &quot;http://127.0.0.1:3099/api/v1/search?q=Checkout&quot;</code></pre>
-<p>Use the OpenAPI document rather than copying old request shapes from historical examples.</p>
-<h2>Protect Network Access</h2>
-<p>Loopback is the safe default. Before binding to another interface:</p>
+<h2>Binding Beyond Loopback</h2>
+<p>Loopback is the safe default. Before binding to another interface, require a bearer token and restrict browser origins:</p>
 <pre><code>export ATLAS_API_TOKEN='replace-with-a-strong-token'
+export ATLAS_MCP_ALLOWED_ORIGINS='https://trusted.example'
 atlas serve --mcp --addr 0.0.0.0:3099</code></pre>
 <p>Authenticated request:</p>
 <pre><code>curl \
   -H &quot;Authorization: Bearer $ATLAS_API_TOKEN&quot; \
   http://host:3099/api/v1/status</code></pre>
-<p><code>ATLAS_API_TOKEN</code> protects <code>/api/v1/*</code> and <code>POST /mcp</code>. Browser clients from additional origins must also be explicitly allowed:</p>
-<pre><code>export ATLAS_MCP_ALLOWED_ORIGINS='https://trusted.example'</code></pre>
-<p>Use TLS at a trusted reverse proxy when traffic leaves the machine.</p>
-<h2>Dashboard Authentication</h2>
+<p><code>ATLAS_API_TOKEN</code> protects <code>/api/v1/*</code> and <code>POST /mcp</code>. Browser clients from additional origins must also be explicitly allowed via <code>ATLAS_MCP_ALLOWED_ORIGINS</code>.</p>
 <p>When a token-protected dashboard requests credentials, supply the configured Atlas API token. The dashboard uses authenticated API calls and a short-lived stream credential for live updates.</p>
-<p>Do not place the API token in shared links, logs, screenshots, or source control.</p>
+<h3>Token Handling</h3>
+<p>&gt; <strong>Warning:</strong> Do not place the API token in shared links, logs, screenshots, &gt; or source control. Anyone holding the token can query every repository the &gt; service indexes.</p>
+<h2>TLS</h2>
+<p>Atlas serves plain HTTP. When traffic leaves the machine, terminate TLS at a trusted reverse proxy in front of <code>atlas serve</code> rather than exposing the listener directly.</p>
 <h2>Service Troubleshooting</h2>
+<p>Start with Atlas's own diagnostics, then check the port:</p>
 <pre><code>atlas status
 atlas doctor
 lsof -nP -iTCP:3099 -sTCP:LISTEN</code></pre>
-<p>If <code>healthz</code> passes but <code>readyz</code> fails, indexing or database maintenance may be blocking engine requests. Wait for the current operation or stop competing Atlas processes before retrying.</p>
+<p>If <code>healthz</code> passes but <code>readyz</code> fails, indexing or database maintenance may be blocking engine requests. Wait for the current operation or stop competing Atlas processes before retrying. See <a href="../troubleshooting/">Troubleshooting</a> for broader diagnosis.</p>
     </article>
     <nav class="prevnext">
       <span><a href="../mcp/">← MCP Tools</a></span>
@@ -107,6 +112,7 @@ lsof -nP -iTCP:3099 -sTCP:LISTEN</code></pre>
     <nav class="doclist" aria-label="All documentation">
         <a href="../getting-started/">Getting Started</a>
         <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
         <a href="../indexing/">Indexing and Reindexing</a>
         <a href="../cli/">CLI Reference</a>
         <a href="../assistants/">AI Assistant Setup</a>

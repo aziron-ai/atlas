@@ -59,32 +59,46 @@
   <main class="wrap">
     <article>
 <h1>Configuration</h1>
-<p>Use the CLI to inspect version-specific settings:</p>
-<pre><code>atlas config list
-atlas config get ATLAS_MAX_DB_BYTES</code></pre>
-<p>Persist a setting:</p>
-<pre><code>atlas config set ATLAS_MAX_DB_BYTES 10GiB</code></pre>
-<p>Clear a persisted override:</p>
-<pre><code>atlas config set ATLAS_MAX_DB_BYTES &quot;&quot;</code></pre>
+<p>Atlas works with zero configuration on a fresh checkout; every knob has a compiled default. This page explains where overrides live, which settings matter most, and the global flags that select storage, scope, and output shape. For the full command surface, see the <a href="../cli/">CLI Reference</a>.</p>
 <h2>Precedence</h2>
-<p>Configuration precedence is:</p>
-<p>1. environment variable 2. repository <code>.atlas/settings.json</code> 3. compiled default</p>
-<p>Environment variables are appropriate for automation and containers. Repository settings are appropriate for stable local policy.</p>
-<h2>Common Controls</h2>
-<table><thead><tr><th>Setting</th><th>Purpose</th></tr></thead><tbody><tr><td><code>ATLAS_ENABLE_VECTORS</code></td><td>Enable optional semantic retrieval</td></tr><tr><td><code>ATLAS_EMBED_URL</code></td><td>Configure an embedding endpoint when used</td></tr><tr><td><code>ATLAS_NO_WATCH</code></td><td>Disable automatic file watching</td></tr><tr><td><code>ATLAS_WATCH_MODE</code></td><td>Select the watcher mode, including polling</td></tr><tr><td><code>ATLAS_MEMORY_LIMIT</code></td><td>Bound Atlas memory use</td></tr><tr><td><code>ATLAS_GOGC</code></td><td>Tune Go garbage collection</td></tr><tr><td><code>ATLAS_MCP_CALL_TIMEOUT</code></td><td>Bound an MCP tool call</td></tr><tr><td><code>ATLAS_API_TOKEN</code></td><td>Protect HTTP API and MCP access</td></tr><tr><td><code>ATLAS_MCP_ALLOWED_ORIGINS</code></td><td>Allow additional browser origins</td></tr><tr><td><code>ATLAS_SERVER_URL</code></td><td>Route compatible CLI operations through a server</td></tr></tbody></table>
-<p>Run <code>atlas config list</code> for current names, defaults, descriptions, and accepted values.</p>
-<h2>Database Selection</h2>
-<p>Default repository-local database:</p>
-<pre><code>sqlite://./.atlas/atlas.db</code></pre>
-<p>Explicit database:</p>
+<p>Know where a value comes from before changing it. Effective configuration is resolved in this order (highest wins):</p>
+<p>1. Environment variable 2. Repository <code>.atlas/settings.json</code> 3. Compiled default</p>
+<p>A deployment environment variable always wins over a persisted edit. Environment variables suit automation and containers; repository settings suit stable local policy.</p>
+<h2>Inspecting and Persisting Settings</h2>
+<p>Use <code>atlas config</code> to see every knob's effective value and its provenance — not just what is set, but which layer set it:</p>
+<pre><code>atlas config list                        # every knob, value, and provenance
+atlas config get ATLAS_MAX_DB_BYTES      # one knob's value and origin
+atlas config set ATLAS_MAX_DB_BYTES 10GiB  # persist into .atlas/settings.json
+atlas config set ATLAS_MAX_DB_BYTES &quot;&quot;     # clear a persisted override</code></pre>
+<h2>Known Settings</h2>
+<table><thead><tr><th>Setting</th><th>Purpose</th></tr></thead><tbody><tr><td><code>ATLAS_ENABLE_VECTORS</code></td><td>Enable optional semantic retrieval (pairs with an index built with <code>--enable-vectors</code>)</td></tr><tr><td><code>ATLAS_EMBED_URL</code></td><td>Point semantic search at a real embedding model; the default embedder is offline (deterministic token overlap)</td></tr><tr><td><code>ATLAS_NO_WATCH</code></td><td>Disable background file watching in <code>mcp</code> and <code>serve</code> (equivalent to <code>--watch=false</code>)</td></tr><tr><td><code>ATLAS_WATCH_MODE</code></td><td>Select the watcher mode, including polling</td></tr><tr><td><code>ATLAS_MEMORY_LIMIT</code></td><td>Bound Atlas memory use</td></tr><tr><td><code>ATLAS_GOGC</code></td><td>Tune Go garbage collection</td></tr><tr><td><code>ATLAS_MCP_CALL_TIMEOUT</code></td><td>Bound an MCP tool call</td></tr><tr><td><code>ATLAS_MCP_ALLOWED_ORIGINS</code></td><td>Allow additional browser origins</td></tr><tr><td><code>ATLAS_API_TOKEN</code></td><td>Require <code>Authorization: Bearer</code> on the HTTP API and HTTP/SSE MCP transports</td></tr><tr><td><code>ATLAS_SERVER_URL</code></td><td>Route compatible CLI operations through a running server</td></tr><tr><td><code>ATLAS_SKIP_BOOTSTRAP</code></td><td>Skip automatic bootstrap provisioning (for example in package post-install automation)</td></tr><tr><td><code>ATLAS_SYNC_SERVER</code></td><td>Default central server URL for <code>atlas connect</code></td></tr><tr><td><code>ATLAS_SYNC_TOKEN</code></td><td>Bearer token for <code>atlas connect</code></td></tr><tr><td><code>ATLAS_CONTEXT_LIMIT</code>, <code>ATLAS_CONTEXT_MAX_FILES</code>, <code>ATLAS_CONTEXT_MAX_EDGES</code>, <code>ATLAS_CONTEXT_MAX_DEPTH</code></td><td>Default budgets for <code>atlas context</code>; per-request flags override, intent defaults apply otherwise</td></tr><tr><td><code>ATLAS_LEXICAL_MAX_RATIO</code>, <code>ATLAS_MAX_LEXICAL_BYTES</code></td><td>Size bound on the lexical (BM25) sidecar that triggers a rebuild during <code>compact --full</code></td></tr><tr><td><code>ATLAS_MAX_DB_BYTES</code></td><td>Bound the graph database size</td></tr></tbody></table>
+<p>Run <code>atlas config list</code> for the complete catalog with current names, defaults, descriptions, and accepted values for your installed release.</p>
+<h2>Storage Selection</h2>
+<p>Every command reads and writes one database, selected by <code>--db</code>. The DSN takes two forms:</p>
+<pre><code>sqlite://PATH
+postgres://...</code></pre>
+<p>The default is <code>sqlite://./.atlas/atlas.db</code> — repository-local, relative to the working directory. Pin an explicit database when several exist:</p>
 <pre><code>atlas --db &quot;sqlite:///absolute/path/.atlas/atlas.db&quot; status</code></pre>
-<p>Use absolute database paths in assistant configuration to avoid resolving a relative path from the assistant's process directory.</p>
+<p>Use absolute database paths in assistant configurations: an assistant's process directory is rarely your repository root, so a relative DSN resolves to the wrong place.</p>
+<h2>Scope Selection</h2>
+<p>When one database holds several repositories, select which repo answers with <code>--repo</code>. It accepts a filesystem path, an <code>org/name</code>, or a repo_id, and defaults to the current directory. On <code>search</code> and <code>semantic-search</code>, <code>--repo '*'</code> queries all repos. In hosted multi-tenant deployments, <code>--tenant</code> isolates repos to one tenant/org scope; empty means all repos.</p>
+<h2>Output Defaults</h2>
+<p>Treat output shape and depth as configuration, not per-query ceremony, when scripting against Atlas.</p>
+<ul><li><code>--format</code> selects the shape: <code>plain</code>, <code>json</code> (default), <code>compact</code>, or</li></ul>
+<p>  <code>ndjson</code>. <code>--json</code> is shorthand for <code>--format json</code>.</p>
+<ul><li><code>--detail</code> selects the depth: <code>low</code>, <code>medium</code>, <code>high</code> (default for every</li></ul>
+<p>  format), or <code>xhigh</code>, which opts into cross-repo context. Retrieval   operations (callers/refs/impact) floor at <code>high</code>.</p>
+<h2>Read-Only Mode and Telemetry</h2>
+<p>Use <code>--read-only</code> when the database must not change — for example when hashing artifacts or querying a shared, immutable index. It opens the database immutably: no migration runs, no WAL/journal files are created, and no <code>telemetry.db</code> is created beside it, so the artifact bytes hash identically after any query. A missing database errors instead of being created.</p>
+<p>Because read-only mode suppresses the default telemetry database, telemetry with <code>--read-only</code> requires an explicit <code>--telemetry-db PATH</code>. Without <code>--read-only</code>, telemetry defaults to <code>telemetry.db</code> beside the graph database.</p>
+<pre><code>atlas --read-only --telemetry-db /srv/atlas/telemetry.db \
+  --db &quot;sqlite:///shared/index/.atlas/atlas.db&quot; search &quot;payment handler&quot;</code></pre>
 <h2>Resource-Constrained Environments</h2>
-<p>Start with:</p>
+<p>Start conservative and confirm before raising limits:</p>
 <pre><code>export ATLAS_MEMORY_LIMIT=2GiB
 export ATLAS_NO_WATCH=1
 atlas index .</code></pre>
-<p>For very large repositories, exclude generated files and dependency caches before increasing limits. Confirm behavior with <code>atlas status</code>, <code>atlas stats</code>, and <code>atlas doctor</code>.</p>
+<p>For very large repositories, exclude generated files and dependency caches (see <a href="../indexing/">Indexing and Reindexing</a>) before increasing limits. Confirm behavior with <code>atlas status</code>, <code>atlas stats</code>, and <code>atlas doctor</code>.</p>
     </article>
     <nav class="prevnext">
       <span><a href="../service/">← Dashboard and HTTP API</a></span>
@@ -93,6 +107,7 @@ atlas index .</code></pre>
     <nav class="doclist" aria-label="All documentation">
         <a href="../getting-started/">Getting Started</a>
         <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
         <a href="../indexing/">Indexing and Reindexing</a>
         <a href="../cli/">CLI Reference</a>
         <a href="../assistants/">AI Assistant Setup</a>

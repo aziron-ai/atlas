@@ -59,45 +59,58 @@
   <main class="wrap">
     <article>
 <h1>Getting Started</h1>
-<p>This guide creates a local Atlas index, runs the first queries, and prepares an AI assistant integration.</p>
-<h2>1. Open a Repository</h2>
+<p>This guide takes a repository from unindexed to queryable: build the local index, verify it is healthy, run the core queries, and connect an AI assistant. Atlas is local-first — everything below runs on your machine against an embedded database, with no server or account required. For the mental model behind these commands, see <a href="../concepts/">Core Concepts</a>.</p>
+<h2>1. Check Prerequisites</h2>
+<p>Confirm the binary is installed and on <code>PATH</code> before anything else, because assistants and scripts resolve <code>atlas</code> from <code>PATH</code> too.</p>
+<pre><code>command -v atlas
+atlas version</code></pre>
+<p>If either command fails, follow <a href="../installation/">Installation</a> first. You also need a local checkout of the repository you want to index; a git repository is required for commit-pinned indexing (<code>--ref</code>) and the per-commit snapshot history.</p>
+<h2>2. Index a Repository</h2>
+<p>Indexing builds everything Atlas knows about a repository: it parses symbols, call edges, and routes, and persists the <strong>knowledge graph</strong> plus a lexical search index.</p>
 <pre><code>cd /path/to/repository
-git status --short</code></pre>
-<p>Atlas uses the current repository when no explicit repository is supplied.</p>
-<h2>2. Create the Index</h2>
-<pre><code>atlas index .</code></pre>
-<p>The command reports discovery and indexing progress. The default local database is stored under:</p>
+atlas index .</code></pre>
+<p>Progress is printed to stderr while the run reports discovery and completion stats. Results are stored in an embedded SQLite database in the repository:</p>
 <pre><code>.atlas/atlas.db</code></pre>
-<p>The first index parses the repository. Later runs can update only changed files.</p>
-<h2>3. Confirm Status</h2>
+<p>By default the indexer skips paths git ignores (build output, caches, vendored runtimes); pass <code>--gitignore=false</code> to index everything. The first run parses the whole repository; later runs are incremental deltas. Use <code>--reindex</code> to force a full rebuild, and <code>--ref</code> to index a specific commit or branch instead of the working tree. See <a href="../indexing/">Indexing and Reindexing</a> for exclusions, watch mode, and the optional embedding pass (<code>--enable-vectors</code>).</p>
+<h2>3. Confirm Readiness</h2>
+<p>Verify the index before relying on query results, so an empty or drifted database does not silently return nothing.</p>
 <pre><code>atlas status
 atlas stats</code></pre>
-<p>Check the repository identity, indexed snapshot, file and symbol counts, and retrieval health before relying on results.</p>
+<p><code>atlas status</code> reports storage and version health: the schema and index-format contracts and the per-repo snapshot format state. <code>atlas stats</code> reports graph and index telemetry for the indexed repository. Look for your repository identity, a current snapshot, and non-zero symbol and edge counts. Zero counts or a missing repository mean the index did not build — see <a href="../troubleshooting/">Troubleshooting</a>.</p>
 <h2>4. Run the First Queries</h2>
-<pre><code>atlas search &quot;authentication middleware&quot; --format plain
-atlas symbol NewServer
-atlas callers NewServer --limit 25
-atlas refs NewServer</code></pre>
-<p>For change-review context:</p>
+<p>Each query answers a different question; pick the one that matches what you already know.</p>
+<p>Use <code>search</code> when you know words or phrases but not exact names — it is code-aware lexical search (BM25 + trigram) over the symbol index:</p>
+<pre><code>atlas search &quot;authentication middleware&quot; --format plain</code></pre>
+<p>Use <code>symbol</code> when you know a name and want its definition(s) together with its callers and callees:</p>
+<pre><code>atlas symbol NewServer</code></pre>
+<p>Use <code>callers</code> before changing a function's behavior or signature, to see exactly which symbols call it directly:</p>
+<pre><code>atlas callers NewServer --limit 25</code></pre>
+<p>Use <code>refs</code> when a rename or type change is on the table — it lists call sites plus type-use references (params, fields, returns):</p>
+<pre><code>atlas refs NewServer</code></pre>
+<p>Use <code>context</code> when reviewing a change — it builds a bounded review-context bundle (16–32 KiB with the default <code>auto</code> intent) around the changed files:</p>
 <pre><code>atlas context \
   --paths path/to/changed-file.go \
   --query &quot;review correctness and regression risk&quot; \
   --format json</code></pre>
-<p>For likely impact:</p>
+<p>For the blast radius of a change — impacted symbols, files, and covering tests — use <code>impact</code>:</p>
 <pre><code>atlas impact --paths path/to/changed-file.go</code></pre>
-<p>Use <code>atlas &lt;command&gt; --help</code> for version-specific flags.</p>
-<h2>5. Configure an AI Assistant</h2>
-<p>Preview detected integrations:</p>
+<p>Run <code>atlas &lt;command&gt; --help</code> for the full flag list of your installed version, or see the <a href="../cli/">CLI Reference</a>.</p>
+<h2>5. Connect an AI Assistant</h2>
+<p>Bootstrap registers Atlas as an MCP server and installs the atlas-first skill and CLAUDE.md directive for every detected assistant (Claude desktop and CLI, Codex, Copilot, Cursor, Gemini), so assistants query the graph instead of grepping. Preview what would be written first:</p>
 <pre><code>atlas bootstrap --dry-run</code></pre>
-<p>Apply the configuration:</p>
+<p>Then apply it:</p>
 <pre><code>atlas bootstrap</code></pre>
-<p>Restart the assistant after configuration changes. See <a href="../assistants/">AI Assistant Setup</a> for client-specific paths and modes.</p>
-<h2>6. Keep Results Fresh</h2>
-<p>Run an incremental update after important changes:</p>
+<p>Bootstrap is idempotent — safe to run repeatedly. Use <code>--only</code> or <code>--skip</code> (comma-separated agent lists) to limit which assistants are provisioned. Restart the assistant after configuration changes, and run <code>atlas doctor --verify atlas</code> to confirm the <code>atlas</code> on <code>PATH</code> — what assistants launch — matches the binary you installed. See <a href="../mcp/">MCP Tools</a> for the tool surface assistants receive.</p>
+<h2>6. Keep the Index Fresh</h2>
+<p>Query results are only as current as the last index run. After meaningful changes, run an incremental update:</p>
 <pre><code>atlas index .</code></pre>
-<p>Use a forced rebuild only when the index format changed or troubleshooting recommends it:</p>
-<pre><code>atlas index . --reindex</code></pre>
-<p>See <a href="../indexing/">Indexing and Reindexing</a> for exclusions, watch mode, semantic retrieval, and recovery guidance.</p>
+<p>For a foreground process that re-indexes on every file change (edits within 250 ms are coalesced into one update):</p>
+<pre><code>atlas watch</code></pre>
+<p>Reserve <code>atlas index . --reindex</code> for format changes or recovery, per <a href="../indexing/">Indexing and Reindexing</a>.</p>
+<h2>Where to Go Next</h2>
+<ul><li><a href="../concepts/">Core Concepts</a> — the graph, snapshots, workspaces, and output</li></ul>
+<p>  control that every command shares.</p>
+<ul><li><a href="../cli/">CLI Reference</a> — every command and flag.</li><li><a href="../mcp/">MCP Tools</a> — what assistants can call after bootstrap.</li><li><a href="../configuration/">Configuration</a> — knob precedence and <code>atlas config</code>.</li><li><a href="../troubleshooting/">Troubleshooting</a> — empty results, drift, and recovery.</li></ul>
     </article>
     <nav class="prevnext">
       <span></span>
@@ -106,6 +119,7 @@ atlas refs NewServer</code></pre>
     <nav class="doclist" aria-label="All documentation">
         <a href="../getting-started/">Getting Started</a>
         <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
         <a href="../indexing/">Indexing and Reindexing</a>
         <a href="../cli/">CLI Reference</a>
         <a href="../assistants/">AI Assistant Setup</a>

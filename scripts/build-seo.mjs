@@ -51,6 +51,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 const DOCS = [
   { slug: "getting-started", title: "Getting Started", desc: "Create a local Atlas index, run the first cited queries, and connect an AI coding assistant." },
   { slug: "installation", title: "Installation", desc: "Install Atlas via Homebrew, npm, release archives, or native Linux packages, then verify it." },
+  { slug: "concepts", title: "Core Concepts", desc: "The Atlas mental model: the code knowledge graph, snapshots, workspace resolution, output control, and the CLI, HTTP, and MCP surfaces." },
   { slug: "indexing", title: "Indexing and Reindexing", desc: "Keep the Atlas index fresh: incremental updates, watch mode, exclusions, and recovery." },
   { slug: "cli", title: "CLI Reference", desc: "Atlas command-line reference: search, symbols, relationships, impact, routes, and maintenance." },
   { slug: "assistants", title: "AI Assistant Setup", desc: "Connect Claude, Codex, and other MCP-compatible assistants to Atlas." },
@@ -67,7 +68,7 @@ const DOCS = [
 // Wiki page name -> doc slug, for rewriting the guides' internal links.
 const WIKI_TO_SLUG = {
   "Getting-Started": "getting-started", "Installation": "installation",
-  "Indexing-and-Reindexing": "indexing", "CLI-Reference": "cli",
+  "Indexing-and-Reindexing": "indexing", "CLI-Reference": "cli", "Core-Concepts": "concepts",
   "AI-Assistant-Setup": "assistants", "MCP-Tools": "mcp",
   "Dashboard-and-HTTP-API": "service", "Configuration": "configuration",
   "Privacy-and-Data-Handling": "privacy", "Supported-Languages": "languages",

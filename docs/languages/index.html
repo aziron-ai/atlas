@@ -59,30 +59,41 @@
   <main class="wrap">
     <article>
 <h1>Supported Languages and Formats</h1>
-<p>Atlas recognizes programming languages, templates, structured project files, documents, and content formats. Capability depth varies by format.</p>
+<p>Atlas recognizes programming languages, templates, structured project files, documents, and content formats. Capability depth varies by format: some languages carry a reference-validated call graph, others a structural or content index only. Use this page to determine what Atlas can prove for the languages that matter to you.</p>
 <h2>Capability Levels</h2>
-<p>Use these distinctions when evaluating a repository:</p>
+<p>Use these distinctions when evaluating a repository — &quot;indexed&quot; alone does not tell you whether caller and impact queries will be accurate.</p>
 <table><thead><tr><th>Level</th><th>Typical capability</th></tr></thead><tbody><tr><td>Code graph</td><td>Symbols, references, calls, and related-code context</td></tr><tr><td>Structural index</td><td>Named constructs and searchable structure</td></tr><tr><td>Content index</td><td>Searchable text or extracted document content</td></tr></tbody></table>
 <p>Indexing a format does not guarantee identical call-graph or symbol accuracy across every language.</p>
-<h2>Common Code Languages</h2>
-<p>Atlas includes support for major languages such as:</p>
-<ul><li>Go, Python, JavaScript, and TypeScript</li><li>Java, C, C++, and C#</li><li>Rust, Ruby, PHP, Kotlin, and Scala</li><li>Swift, Objective-C, Dart, Lua, Zig, and Elixir</li><li>Julia, Fortran, R, SQL, and shell languages</li><li>Terraform/HCL and several hardware or domain-specific languages</li></ul>
-<h2>Templates and Frontend Formats</h2>
-<p>Supported indexing families include formats such as:</p>
-<ul><li>HTML, CSS, Vue, Svelte, Astro, and EJS</li><li>Razor and Blade</li><li>Markdown and MDX</li></ul>
-<h2>Structured and Project Files</h2>
-<p>Atlas can index common repository metadata and structured content, including:</p>
-<ul><li>JSON, YAML, TOML, XML, plist, CSV, and TSV</li><li>Protocol Buffers</li><li>Go module files and .NET project files</li><li>Makefiles, Dockerfiles, configuration files, and plain text</li></ul>
-<h2>Documents and Media</h2>
-<p>Selected document and media formats can be indexed for content discovery, including PDF, DOCX, XLSX, PPTX, and common image formats. These formats should be treated as content indexes rather than programming-language call graphs.</p>
-<h2>Check Current Evidence</h2>
-<p>Language support changes across releases. Use:</p>
+<h2>Language Maturity Ladder</h2>
+<p>Consult the ladder before relying on graph queries (<code>callers</code>, <code>impact</code>, <code>path</code>) for a language: levels reflect validation depth, not just support. An L2 language still indexes and searches; it has not yet reached verified call-graph resolution. Atlas covers 40 code languages across these levels:</p>
+<table><thead><tr><th>Level</th><th>Meaning</th><th>Languages</th></tr></thead><tbody><tr><td>L5 — Reference-validated</td><td>Call graph cross-checked against an LSP server or SCIP indexer</td><td>C, C++, Dart, Fortran, Go, Java, JavaScript, Lua, PHP, Python, Rust, TypeScript, Zig</td></tr><tr><td>L4 — Real-repo call graph</td><td>Who-calls resolved and proven on a real repository</td><td>Apex, Astro, C#, Elixir, ETS, Groovy, Julia, Kotlin, R, Scala, SQL, Svelte, Swift, Verilog, Vue — plus, pending real-repo proof: Bash, Blade, BYOND, EJS, Objective-C, Pascal, PowerShell, Razor, Ruby</td></tr><tr><td>L2 — Real-repo tested</td><td>Runs on real code; call graph not yet resolved</td><td>Delphi, Terraform</td></tr><tr><td>L1 — Indexed</td><td>Parsed and symbols extracted</td><td>P4</td></tr></tbody></table>
+<p>The &quot;pending real-repo proof&quot; languages at L4 have resolved call graphs on fixtures but have not yet been proven against a real repository. Treat them as L4 capability with weaker evidence until the proof lands.</p>
+<h2>Content Formats</h2>
+<p>Beyond code, Atlas indexes approximately 24 content formats (JSON, YAML, HTML, PDF, and others) for search. These are content and structural indexes, not call graphs:</p>
+<ul><li><strong>Templates and frontend:</strong> HTML, CSS, Vue, Svelte, Astro, EJS, Razor,</li></ul>
+<p>  Blade, Markdown, and MDX</p>
+<ul><li><strong>Structured and project files:</strong> JSON, YAML, TOML, XML, plist, CSV, TSV,</li></ul>
+<p>  Protocol Buffers, Go module files, .NET project files, Makefiles,   Dockerfiles, configuration files, and plain text</p>
+<ul><li><strong>Documents and media:</strong> PDF, DOCX, XLSX, PPTX, and common image formats,</li></ul>
+<p>  indexed for content discovery</p>
+<p>Treat document and media formats as content indexes rather than programming-language call graphs.</p>
+<h2>Check Evidence for Your Own Repositories</h2>
+<p>Fixture compatibility is not a substitute for production-repository accuracy — verify support on the code you actually work with before depending on it.</p>
 <pre><code>atlas index .
 atlas stats
 atlas report --format plain</code></pre>
-<p>The public benchmark site includes a dated, evidence-graded compatibility view:</p>
-<ul><li><a href="https://aziron-ai.github.io/atlas/#languages">Language benchmark</a></li><li><a href="https://github.com/aziron-ai/atlas/tree/main/data/raw">Raw language artifacts</a></li></ul>
-<p>Fixture compatibility is not a substitute for production-repository accuracy. Evaluate important languages on representative repositories and pin the Atlas version used for the evaluation.</p>
+<ul><li><code>atlas index .</code> parses symbols, edges, and routes and persists the graph and</li></ul>
+<p>  lexical index.</p>
+<ul><li><code>atlas stats</code> shows graph and index telemetry statistics for the indexed</li></ul>
+<p>  repository, including recent snapshot telemetry rows.</p>
+<ul><li><code>atlas report</code> composes the snapshot's graph stats, top hubs, and top</li></ul>
+<p>  communities; <code>--format plain</code> prints the Markdown report directly.</p>
+<p>Low edge counts or missing symbol kinds in <code>stats</code> and <code>report</code> output are the fastest signal that a language sits lower on the ladder than your workflow needs. Evaluate important languages on representative repositories and pin the Atlas version used for the evaluation.</p>
+<p>See <a href="../indexing/">Indexing and Reindexing</a> for delta versus full reindex behavior and <a href="../cli/">CLI Reference</a> for the full command surface.</p>
+<h2>Published Compatibility Evidence</h2>
+<p>Language support changes across releases. The public benchmark site includes a dated, evidence-graded compatibility view with an interactive per-language matrix:</p>
+<ul><li><a href="https://aziron-ai.github.io/atlas/#languages">Language benchmark matrix</a></li><li><a href="https://github.com/aziron-ai/atlas/tree/main/data/raw">Raw language artifacts</a></li></ul>
+<p>For how those numbers were measured, what they do and do not prove, and how to reproduce them, read <a href="../benchmarks/">Benchmarks and Methodology</a>.</p>
     </article>
     <nav class="prevnext">
       <span><a href="../privacy/">← Privacy and Data Handling</a></span>
@@ -91,6 +102,7 @@ atlas report --format plain</code></pre>
     <nav class="doclist" aria-label="All documentation">
         <a href="../getting-started/">Getting Started</a>
         <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
         <a href="../indexing/">Indexing and Reindexing</a>
         <a href="../cli/">CLI Reference</a>
         <a href="../assistants/">AI Assistant Setup</a>

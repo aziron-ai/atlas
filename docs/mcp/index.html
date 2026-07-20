@@ -59,37 +59,43 @@
   <main class="wrap">
     <article>
 <h1>MCP Tools</h1>
-<p>Atlas MCP tools provide bounded code context to coding assistants. Start MCP over stdio for desktop agents:</p>
+<p>Atlas exposes its graph, search, and impact analysis as MCP tools, so a connected assistant answers repository questions with bounded, cited context instead of raw file dumps. This page covers the transports, the tool set, how workspace scope is resolved, and how to keep responses small.</p>
+<h2>Transports</h2>
+<p>Choose the transport based on how the client launches Atlas. Desktop agents spawn a process and speak stdio; shared setups talk HTTP to one long-running service.</p>
+<p>Stdio (the default; local to the launching assistant):</p>
 <pre><code>atlas mcp --transport stdio</code></pre>
-<p>Or expose MCP through the local service:</p>
+<p>HTTP, mounted on the local service at <code>POST /mcp</code>:</p>
 <pre><code>atlas serve --mcp</code></pre>
+<p><code>atlas mcp</code> can also serve HTTP directly with <code>--http 127.0.0.1:8765</code> (Streamable HTTP) or <code>--sse 127.0.0.1:8766</code> (legacy HTTP+SSE); set <code>ATLAS_API_TOKEN</code> to require <code>Authorization: Bearer</code> on either. With <code>--supervise</code>, Atlas runs as the supervised warm MCP gateway: it uses the workspace database, starts a background watch, and serves <code>code_query</code> first. By default the MCP process also watches the repository to keep the graph fresh (<code>--watch=false</code> or <code>ATLAS_NO_WATCH=1</code> to disable; <code>--watch-path</code> to watch a different path).</p>
 <h2>Tool Selection</h2>
 <table><thead><tr><th>Tool</th><th>Use it for</th></tr></thead><tbody><tr><td><code>code_query</code></td><td>Natural-language questions about a repository</td></tr><tr><td><code>search</code></td><td>Focused lexical or semantic discovery</td></tr><tr><td><code>symbol</code></td><td>Definitions, snippets, callers, callees, refs, and coverage</td></tr><tr><td><code>graph</code></td><td>Paths or neighborhoods between symbols</td></tr><tr><td><code>impact</code></td><td>Repository or cross-repository blast radius</td></tr><tr><td><code>routes</code></td><td>Served routes, consumers, and dependencies</td></tr><tr><td><code>context</code></td><td>Code-review context for changed paths</td></tr><tr><td><code>report</code></td><td>Repository-level code intelligence reports</td></tr><tr><td><code>history</code></td><td>Indexed history and graph changes</td></tr><tr><td><code>status</code></td><td>Index, readiness, and retrieval state</td></tr><tr><td><code>link</code></td><td>Register a repository for workspace or cross-repository analysis</td></tr><tr><td><code>record_feedback</code></td><td>Record result-quality feedback</td></tr><tr><td><code>record_task</code></td><td>Record the outcome of a procedural task</td></tr></tbody></table>
-<h2>Recommended Starting Point</h2>
-<p>Use <code>code_query</code> for most repository questions. It checks index readiness and returns cited context under a bounded response budget.</p>
-<p>Example intent:</p>
-<pre><code>How is checkout authorization enforced, and which tests cover it?</code></pre>
-<p>Use <code>context</code> instead when reviewing a known set of changed files:</p>
-<pre><code>changed_paths:
-  - internal/api/handler.go
-intent: review
-query: correctness, regressions, and missing tests</code></pre>
-<h2>Symbol Views</h2>
-<p>The <code>symbol</code> tool supports views such as:</p>
-<ul><li><code>explain</code></li><li><code>definition</code></li><li><code>snippet</code></li><li><code>callers</code></li><li><code>callees</code></li><li><code>neighbors</code></li><li><code>refs</code></li><li><code>coverage</code></li></ul>
-<p>Add package, receiver, or arity filters when a name is overloaded.</p>
-<h2>Detail and Budgets</h2>
-<p>Use:</p>
-<ul><li><code>low</code> for counts and minimal metadata</li><li><code>medium</code> for names and signatures</li><li><code>high</code> for repository-local evidence</li><li><code>xhigh</code> only when broader context is required</li></ul>
-<p>Normal budget overflow may trim results and mark them as truncated. Strict budget mode refuses an oversized answer instead.</p>
-<h2>Common Status Values</h2>
+<h2>Choosing a Tool</h2>
+<p>Start with <code>code_query</code> for most repository questions: it checks index readiness and returns cited context under a bounded response budget. Reach for a narrower tool when you already know the shape of the answer:</p>
+<ul><li><code>symbol</code> when you have a name and want its definition, callers, callees,</li></ul>
+<p>  refs, or coverage. Add package, receiver, or arity filters when the name is   overloaded.</p>
+<ul><li><code>context</code> when reviewing a known set of changed files.</li><li><code>impact</code> before a change, to size its blast radius.</li><li><code>routes</code> for service contracts, consumers, and dependencies.</li><li><code>status</code> when results look empty or stale — it reports index and readiness</li></ul>
+<p>  state, which distinguishes &quot;no index&quot; from &quot;no matches&quot;.</p>
+<h2>Workspace Scoping</h2>
+<p>Repository-scoped tools need to know which repository they operate on. Atlas accepts scope from, in order of availability:</p>
+<ul><li>a workspace root supplied by the client</li><li>a <code>workspace</code> argument on the call</li><li>a repository ID</li><li>a repository pinned at launch time with <code>--repo</code></li></ul>
+<p>If none is available, Atlas returns <code>workspace_required</code> instead of silently choosing a repository.</p>
+<h2>Result Statuses</h2>
+<p>Check the status field before trusting a result — it tells you whether the answer is backed by an index at all.</p>
 <table><thead><tr><th>Status</th><th>Meaning</th></tr></thead><tbody><tr><td><code>ok</code></td><td>Atlas returned cited context</td></tr><tr><td><code>indexing</code></td><td>An index was started or is still running</td></tr><tr><td><code>no_index</code></td><td>No usable index exists for the workspace</td></tr><tr><td><code>insufficient</code></td><td>The index could not support a cited answer</td></tr><tr><td><code>budget_exceeded</code></td><td>Strict output budget was too small</td></tr><tr><td><code>workspace_required</code></td><td>Repository scope was not declared</td></tr></tbody></table>
+<h2>Controlling Token Spend</h2>
+<p>Tune detail and format so results fit the assistant's context window instead of trimming after the fact:</p>
+<ul><li>Use <code>detail=low</code> when you only need counts or minimal metadata; <code>medium</code> for</li></ul>
+<p>  names and signatures; <code>high</code> for repository-local evidence; <code>xhigh</code> only   when broader cross-repo context is required.</p>
+<ul><li>Use <code>format=plain</code> for compact line-oriented output when the client does not</li></ul>
+<p>  need structured JSON.</p>
+<ul><li>Set <code>max_tokens</code> to bound a <code>code_query</code> answer; an answer trimmed to fit is</li></ul>
+<p>  marked <code>truncated:true</code>. Strict budget mode refuses an oversized answer and   returns <code>budget_exceeded</code> instead.</p>
 <h2>Transport Security</h2>
 <p>Stdio MCP is local to the launching assistant. HTTP MCP should stay on loopback unless authentication and origin restrictions are configured:</p>
 <pre><code>export ATLAS_API_TOKEN='replace-with-a-strong-token'
 export ATLAS_MCP_ALLOWED_ORIGINS='https://trusted.example'
 atlas serve --mcp --addr 0.0.0.0:3099</code></pre>
-<p>See <a href="../privacy/">Privacy and Data Handling</a> before enabling networked access.</p>
+<p>See <a href="../privacy/">Privacy and Data Handling</a> before enabling networked access, and <a href="../service/">Dashboard and HTTP API</a> for the full service surface.</p>
     </article>
     <nav class="prevnext">
       <span><a href="../assistants/">← AI Assistant Setup</a></span>
@@ -98,6 +104,7 @@ atlas serve --mcp --addr 0.0.0.0:3099</code></pre>
     <nav class="doclist" aria-label="All documentation">
         <a href="../getting-started/">Getting Started</a>
         <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
         <a href="../indexing/">Indexing and Reindexing</a>
         <a href="../cli/">CLI Reference</a>
         <a href="../assistants/">AI Assistant Setup</a>

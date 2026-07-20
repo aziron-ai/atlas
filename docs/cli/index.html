@@ -59,68 +59,64 @@
   <main class="wrap">
     <article>
 <h1>CLI Reference</h1>
-<p>Run <code>atlas --help</code> and <code>atlas &lt;command&gt; --help</code> for the authoritative command contract installed on the machine.</p>
-<h2>Global Scope and Output</h2>
-<p>Common global controls:</p>
+<p>Every Atlas capability is a subcommand of the single <code>atlas</code> binary. This page is the complete map: global flags first, then each command grouped by task, with worked examples. For narrative guides, start with <a href="../getting-started/">Getting Started</a> and <a href="../indexing/">Indexing and Reindexing</a>.</p>
+<h2>Global Flags</h2>
+<p>These flags apply to every command and control which database answers, which repo is in scope, and how output is shaped.</p>
+<table><thead><tr><th>Flag</th><th>Purpose</th></tr></thead><tbody><tr><td><code>--db</code></td><td>Storage DSN: <code>sqlite://PATH</code> or <code>postgres://...</code> (default <code>sqlite://./.atlas/atlas.db</code>).</td></tr><tr><td><code>--detail</code></td><td>Output depth: <code>low</code>, <code>medium</code>, <code>high</code>, or <code>xhigh</code> — how much graph context to return per item. Default <code>high</code> for every format; <code>xhigh</code> opts into cross-repo context. Retrieval ops (callers/refs/impact) floor at <code>high</code>.</td></tr><tr><td><code>--format</code></td><td>Output shape: <code>plain</code>, <code>json</code>, <code>compact</code>, or <code>ndjson</code> (<code>json</code> by default).</td></tr><tr><td><code>--json</code></td><td>Shorthand for <code>--format json</code>.</td></tr><tr><td><code>--read-only</code></td><td>Open the database immutably: no migration, no WAL/journal files, no <code>telemetry.db</code> created beside it — artifact bytes hash identically after any query. A missing database errors instead of being created.</td></tr><tr><td><code>--repo</code></td><td>Repo workspace: path, <code>org/name</code>, or repo_id. Defaults to the current directory; <code>'*'</code> means all repos on <code>search</code>/<code>semantic-search</code>.</td></tr><tr><td><code>--telemetry-db</code></td><td>Explicit path for the observability database — required if you want telemetry with <code>--read-only</code>. Default: <code>telemetry.db</code> beside the graph database.</td></tr><tr><td><code>--tenant</code></td><td>Tenant/org scope to isolate repos to (hosted multi-tenant; empty = all repos).</td></tr></tbody></table>
+<p>Combine them freely with any command:</p>
 <pre><code>atlas --repo /absolute/path status
-atlas --db &quot;sqlite:///absolute/path/.atlas/atlas.db&quot; status
-atlas --format json status
-atlas --detail high symbol NewServer</code></pre>
-<p>Output formats include <code>plain</code>, <code>json</code>, <code>compact</code>, and <code>ndjson</code> where supported. Detail levels are <code>low</code>, <code>medium</code>, <code>high</code>, and <code>xhigh</code>.</p>
-<p>Use an explicit <code>--repo</code> or repository ID when a shared database contains more than one repository.</p>
+atlas --db &quot;sqlite:///absolute/path/.atlas/atlas.db&quot; --format plain stats
+atlas --detail xhigh explain NewServer
+atlas --repo '*' search &quot;rate limiter&quot;</code></pre>
 <h2>Index and Health</h2>
-<pre><code>atlas index .
-atlas index . --reindex
-atlas index . --enable-vectors
+<p>Build the graph, keep it fresh, and verify that storage and schema are sound.</p>
+<table><thead><tr><th>Command</th><th>Purpose</th></tr></thead><tbody><tr><td><code>index</code></td><td>Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; <code>--reindex</code> forces a full rebuild.</td></tr><tr><td><code>watch</code></td><td>Index once, then watch the working tree and apply debounced incremental updates on every file change. Foreground until interrupted.</td></tr><tr><td><code>status</code></td><td>Storage and version health: schema/index-format contracts and per-repo snapshot format state (<code>--schema</code> for contract versions and drift).</td></tr><tr><td><code>stats</code></td><td>Graph and index telemetry statistics for an indexed repo.</td></tr><tr><td><code>doctor</code></td><td>Report upgrade health and schema/index contract state; <code>--verify</code> also checks whether the <code>atlas</code> on PATH matches the running binary.</td></tr><tr><td><code>report</code></td><td>Compose graph stats, top hubs, and top communities; <code>--format plain</code> prints the Markdown report directly.</td></tr><tr><td><code>migrate</code></td><td>Apply storage migrations and report the active contracts.</td></tr><tr><td><code>compact</code></td><td>Reclaim space and truncate the WAL; <code>--full</code> also runs a full VACUUM and rebuilds an oversized lexical sidecar; <code>--rebuild-lexical</code> fixes an empty or wedged sidecar.</td></tr><tr><td><code>link</code></td><td>Register a repo into the graph without indexing it, so it joins cross-repo queries and appears in <code>status</code>. Idempotent.</td></tr><tr><td><code>repo</code></td><td>Repo registry maintenance — <code>repo rm</code> forgets a repo: snapshots, symbols, edges, embeddings, and lexical docs.</td></tr></tbody></table>
+<pre><code>atlas index . --enable-vectors
 atlas watch .
-atlas status
-atlas stats
-atlas doctor
+atlas doctor --verbose
 atlas report --format plain</code></pre>
-<h2>Search and Context</h2>
+<h2>Search and Retrieval</h2>
+<p>Find code and pull bounded, deterministic context about it.</p>
+<table><thead><tr><th>Command</th><th>Purpose</th></tr></thead><tbody><tr><td><code>search</code></td><td>Code-aware lexical search (BM25 + trigram) over the symbol index; `--mode lexical\</td><td>semantic\</td><td>hybrid<code>, plus </code>--kind<code> and </code>--path` filters.</td></tr><tr><td><code>semantic-search</code></td><td>Embedding-based nearest-symbol search; transparently degrades to lexical (<code>degraded=true</code>) when vectors are unavailable.</td></tr><tr><td><code>context</code></td><td>Bounded review-context bundle for changed/seed paths; budgets via <code>--intent</code> (<code>auto</code> is 16-32 KiB), per-request flags, or env vars.</td></tr><tr><td><code>explain</code></td><td>Deterministic context bundle for a symbol: defs, callers/callees, imports, served routes, cross-repo consumers.</td></tr><tr><td><code>symbol</code></td><td>Show a symbol's definition(s) with its callers and callees.</td></tr><tr><td><code>callers</code></td><td>List symbols that directly call a symbol; scope overloaded names with <code>--package</code>, <code>--receiver</code>, or <code>--arity</code>.</td></tr><tr><td><code>refs</code></td><td>List references to a symbol: call sites plus type-use references (params, fields, returns).</td></tr><tr><td><code>neighbors</code></td><td>Depth-1 call neighborhood: a symbol's direct callers and callees.</td></tr><tr><td><code>path</code></td><td>Shortest forward call path from one symbol to another (<code>--max-depth</code>, default 6).</td></tr></tbody></table>
 <pre><code>atlas search &quot;authentication middleware&quot; --mode lexical --format plain
-atlas context \
-  --paths internal/api/handler.go \
-  --query &quot;review correctness and regression risk&quot; \
-  --intent review</code></pre>
-<p>Use search for discovery. Use context when reviewing one or more changed paths and you need bounded related code.</p>
-<h2>Symbols and Relationships</h2>
-<pre><code>atlas symbol NewServer
-atlas snippet NewServer
-atlas callers NewServer --limit 50
-atlas refs NewServer
+atlas context --paths internal/api/handler.go --intent review \
+  --query &quot;review correctness and regression risk&quot;
+atlas callers NewServer --limit 50 --receiver '*Server'
 atlas path Handler ServeHTTP --max-depth 6</code></pre>
-<p>When a symbol name is overloaded, add package, receiver, or arity filters shown by the command help.</p>
-<h2>Impact and Routes</h2>
+<p>Use <code>search</code> for discovery; use <code>context</code> when reviewing changed paths and you need bounded related code; use <code>explain</code>/<code>symbol</code> when you already know the symbol.</p>
+<h2>Graph Analysis</h2>
+<p>Measure blast radius, contracts, structure, and change over time.</p>
+<table><thead><tr><th>Command</th><th>Purpose</th></tr></thead><tbody><tr><td><code>impact</code></td><td>Single-repo blast radius for a change: impacted symbols, files, and tests (<code>--tests</code> on by default).</td></tr><tr><td><code>cross-repo-impact</code></td><td>Cross-repo blast radius: which other repos call routes the changed handlers serve.</td></tr><tr><td><code>consumers</code></td><td>Other repos that call any route this repo serves.</td></tr><tr><td><code>dependencies</code></td><td>Producer repos/handlers that serve HTTP calls this repo makes.</td></tr><tr><td><code>route-contracts</code></td><td>The producer HTTP routes a repo serves — its public contract.</td></tr><tr><td><code>coverage</code></td><td>Real covered/total line ratio when a runtime profile was imported (<code>coverage import</code>); otherwise static call-graph reachability.</td></tr><tr><td><code>hubs</code></td><td>Rank the graph's hubs (&quot;god nodes&quot;) by call-graph degree centrality.</td></tr><tr><td><code>communities</code></td><td>Detect deterministic clusters of densely connected symbols.</td></tr><tr><td><code>history</code></td><td>Per-commit snapshot timeline for a repo.</td></tr><tr><td><code>snapshot-diff</code></td><td>Structural diff between two snapshots: symbols/edges added, removed, modified (alias: <code>diff</code>).</td></tr><tr><td><code>export</code></td><td>Export the call graph as <code>json</code>, <code>mermaid</code>, <code>dot</code>, or a self-contained interactive <code>html</code> page; <code>--bundle DIR</code> writes graph.html plus report.md.</td></tr></tbody></table>
 <pre><code>atlas impact --paths internal/api/handler.go --max-depth 3
 atlas cross-repo-impact --paths internal/api/handler.go
-atlas route-contracts
 atlas consumers --max-staleness-days 30
-atlas dependencies</code></pre>
-<p>Repository impact follows local code relationships. Cross-repository impact depends on linked repositories and indexed service contracts.</p>
-<h2>History and Snapshots</h2>
-<pre><code>atlas history --limit 20
-atlas snapshot-diff --from HEAD~1 --to HEAD</code></pre>
-<p>Snapshot availability depends on local retention and indexing history.</p>
-<h2>MCP and Assistant Setup</h2>
+atlas export --symbol NewServer --depth 2 --format html -o graph.html</code></pre>
+<p>Cross-repository results depend on linked repositories and indexed service contracts — see <code>atlas link</code> above.</p>
+<h2>Assistants and Surfaces</h2>
+<p>Wire Atlas into AI assistants and serve it over MCP or HTTP. See <a href="../mcp/">MCP Tools</a> and <a href="../service/">Dashboard and HTTP API</a>.</p>
+<table><thead><tr><th>Command</th><th>Purpose</th></tr></thead><tbody><tr><td><code>bootstrap</code></td><td>Register Atlas as an MCP server and install the atlas-first skill and CLAUDE.md directive for all detected assistants (Claude desktop+CLI, Codex, Copilot, Cursor, Gemini). Idempotent.</td></tr><tr><td><code>install</code></td><td>Install integration glue piecemeal: <code>install skill</code> (assistant registration), <code>install hook</code> (git hook that keeps the graph fresh), <code>install aziron</code>.</td></tr><tr><td><code>uninstall</code></td><td>Reverse <code>bootstrap</code> across every assistant it provisions; touches only atlas-managed entries. Idempotent.</td></tr><tr><td><code>mcp</code></td><td>Expose graph/search/impact as MCP tools over stdio (default), Streamable HTTP (<code>--http</code>), or legacy SSE (<code>--sse</code>); <code>--supervise</code> runs the warm gateway.</td></tr><tr><td><code>serve</code></td><td>Run the REST HTTP API and dashboard on <code>127.0.0.1:3099</code>; <code>--mcp</code> also mounts MCP over HTTP at <code>POST /mcp</code>.</td></tr><tr><td><code>skill</code></td><td>Author, test, render, and distribute runbook skills (<code>new</code>, <code>lint</code>, <code>test</code>, <code>register</code>, <code>render</code>, <code>push</code>, <code>pull</code>, and more).</td></tr></tbody></table>
 <pre><code>atlas bootstrap --dry-run
-atlas bootstrap
 atlas install skill --agent codex,claude,claude-desktop
-atlas mcp --transport stdio
-atlas serve --mcp
-atlas uninstall --dry-run</code></pre>
-<p>See <a href="../assistants/">AI Assistant Setup</a> and <a href="../mcp/">MCP Tools</a>.</p>
-<h2>Local Service</h2>
-<pre><code>atlas serve
-atlas serve --open=false --watch=false
-atlas serve --mcp</code></pre>
-<p>The default local dashboard and API address is <code>127.0.0.1:3099</code>.</p>
-<h2>Maintenance</h2>
+atlas mcp --supervise
+atlas serve --mcp --open=false</code></pre>
+<p>Both <code>mcp</code> and <code>serve</code> watch the repo by default to keep the graph fresh; disable with <code>--watch=false</code> or <code>ATLAS_NO_WATCH=1</code>.</p>
+<h2>Fleet and Org</h2>
+<p>Connect a machine to a central Atlas server and share telemetry or trusted automations. See <a href="../privacy/">Privacy and Data Handling</a> for what leaves the machine at each data level.</p>
+<table><thead><tr><th>Command</th><th>Purpose</th></tr></thead><tbody><tr><td><code>connect</code></td><td>Register this machine with the central Atlas server under a stable device identity and install capture hooks; `--level off\</td><td>telemetry\</td><td>interactions\</td><td>full<code> governs what is shared (default </code>interactions`).</td></tr><tr><td><code>disconnect</code></td><td>Disconnect from the central Atlas and remove capture hooks.</td></tr><tr><td><code>sync</code></td><td>Fleet telemetry uplink: <code>sync status</code> shows configuration, kill switches, and cursors; <code>sync now</code> pushes all pending telemetry once.</td></tr><tr><td><code>recall</code></td><td>Frequent-prompt mining, replayable automations, and org sync (<code>clusters</code>, <code>promote</code>, <code>push</code>, <code>pull</code>, <code>state</code>, and more).</td></tr></tbody></table>
+<pre><code>atlas connect https://atlas.example.com --level interactions
+atlas sync status
+atlas recall clusters</code></pre>
+<h2>Utilities</h2>
+<table><thead><tr><th>Command</th><th>Purpose</th></tr></thead><tbody><tr><td><code>config</code></td><td>Inspect and persist configuration: <code>list</code> every knob with effective value and provenance, <code>get</code> one, <code>set</code> one into the workspace settings.json. See <a href="../configuration/">Configuration</a>.</td></tr><tr><td><code>version</code></td><td>Print the installed Atlas version.</td></tr><tr><td><code>completion</code></td><td>Generate shell completion scripts.</td></tr></tbody></table>
+<pre><code>atlas config list
+atlas config get ATLAS_MAX_DB_BYTES</code></pre>
+<h2>Maintenance Safety</h2>
+<p>Stop long-running Atlas processes (<code>serve</code>, <code>watch</code>, supervised MCP) before exclusive maintenance such as <code>compact --full</code>. Back up the complete <code>.atlas/</code> directory before destructive operations like <code>repo rm</code>:</p>
 <pre><code>atlas migrate
-atlas compact
 atlas compact --full
 atlas repo rm owner/repository --yes</code></pre>
-<p>Stop long-running Atlas processes before exclusive maintenance. Back up the complete <code>.atlas/</code> directory before destructive data operations.</p>
+<h2>Authoritative Contract</h2>
+<p>Flags and defaults can change between releases. <code>atlas --help</code> and <code>atlas &lt;command&gt; --help</code> are the authoritative contract for the release installed on your machine; prefer them over this page when they disagree.</p>
     </article>
     <nav class="prevnext">
       <span><a href="../indexing/">← Indexing and Reindexing</a></span>
@@ -129,6 +125,7 @@ atlas repo rm owner/repository --yes</code></pre>
     <nav class="doclist" aria-label="All documentation">
         <a href="../getting-started/">Getting Started</a>
         <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
         <a href="../indexing/">Indexing and Reindexing</a>
         <a href="../cli/">CLI Reference</a>
         <a href="../assistants/">AI Assistant Setup</a>

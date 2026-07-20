@@ -59,30 +59,38 @@
   <main class="wrap">
     <article>
 <h1>Benchmarks and Methodology</h1>
-<p>Atlas publishes benchmark results for accuracy, token use, latency, language compatibility, and agent workflows:</p>
+<p>Atlas publishes benchmark results for accuracy, token use, latency, language compatibility, and agent workflows. Use this page to interpret those numbers correctly — every result is a dated measurement under stated conditions, not a general guarantee.</p>
 <p><a href="https://aziron-ai.github.io/atlas/#benchmarks">Open the Atlas benchmark explorer</a></p>
-<h2>Download the Data</h2>
-<ul><li><a href="https://github.com/aziron-ai/atlas/blob/main/data/site-data.json">Processed site data</a></li><li><a href="https://github.com/aziron-ai/atlas/tree/main/data/raw">Raw benchmark artifacts</a></li><li><a href="https://github.com/aziron-ai/atlas/tree/main/data">Evidence manifests</a></li><li><a href="https://github.com/aziron-ai/atlas/tree/main/agent-bench">Agent benchmark kit</a></li></ul>
 <h2>How to Read a Result</h2>
-<p>Confirm all of the following before comparing tools:</p>
-<p>1. Atlas and baseline tool versions 2. repository URL and pinned commit 3. language and query set 4. hardware and operating system 5. cold-cache or warm-cache state 6. repeat count and aggregation method 7. accuracy oracle or reviewer 8. token measurement method 9. failure and timeout handling</p>
+<p>Work through this checklist before comparing tools or quoting a number — a result you cannot place in it is not evidence:</p>
+<p>1. <strong>Identify the setup.</strong> Atlas and baseline tool versions, repository URL    and pinned commit, language and query set. 2. <strong>Identify the conditions.</strong> Hardware and operating system, cold-cache or    warm-cache state, repeat count and aggregation method. 3. <strong>Identify the scoring.</strong> The accuracy oracle or reviewer, and the token    measurement method (provider-reported usage versus a documented estimate). 4. <strong>Identify the failure handling.</strong> How failed and timed-out cases were    counted. A mean that silently drops failures is not comparable to one that    scores them.</p>
 <h2>Evidence Categories</h2>
-<p>Do not combine these categories into one unsupported headline:</p>
+<p>Keep categories separate — do not combine them into one unsupported headline:</p>
 <ul><li><strong>Compatibility:</strong> whether a format indexes successfully</li><li><strong>Correctness:</strong> precision, recall, or F1 against an oracle</li><li><strong>Latency:</strong> elapsed index or query time under stated cache conditions</li><li><strong>Token use:</strong> measured model/tool usage or a documented estimate</li><li><strong>Agent workflow:</strong> end-to-end behavior for a pinned assistant and task set</li></ul>
-<h2>Important Limitations</h2>
-<ul><li>Fixture results do not prove production-repository accuracy.</li><li>One repository does not establish performance across a language.</li><li>Different assistants may consume the same MCP result differently.</li><li>Estimated tokens are not equivalent to provider-reported token usage.</li><li>Warm-cache query latency is not cold-start installation or indexing time.</li><li>Language support and result quality can differ by syntax and framework.</li></ul>
-<h2>Reproduce Agent Tests</h2>
-<p>The public repository includes a self-contained agent benchmark guide:</p>
+<h2>Published Headline Results (July 2026)</h2>
+<p>These are the current published numbers, each with its evidence conditions:</p>
+<table><thead><tr><th>Result</th><th>Conditions</th></tr></thead><tbody><tr><td>F1 0.757 at 21.2 context tokens, mean across all 37 languages</td><td>Fixture-truth ground truth, real-LLM scored (222 cells, 666 model calls)</td></tr><tr><td>F1 1.000 at 27.1 tokens on the 28 fully-supported languages</td><td>Full-file-dump accuracy at 6.1× fewer tokens; same fixture suite</td></tr><tr><td>Graph-tool comparison: 0.539 F1 at 97 tokens</td><td>Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens</td></tr><tr><td>Query latency ~7.4 ms vs 128 ms for the graph tool</td><td>Real repositories, 36 languages; flat from 15 to 39,161 symbols</td></tr></tbody></table>
+<h2>Agent-Harness Token Benchmark (2026-07-10)</h2>
+<p>This measures what a real agent actually spends. Claude Code and OpenAI Codex ran headless in sirupsen/logrus (@a23d315), restricted to one code-intelligence CLI per run, answering 19 caller questions scored against gopls call_hierarchy (LSP-truth) at the pinned commit. Token numbers are each harness's own usage accounting.</p>
+<table><thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Mean tool calls</th><th>Mean F1</th></tr></thead><tbody><tr><td>claude (claude-sonnet-5)</td><td>Atlas</td><td>61,561</td><td>2</td><td>0.882</td></tr><tr><td>claude (claude-sonnet-5)</td><td>No tool (raw exploration)</td><td>144,385</td><td>4.9</td><td>0.569</td></tr><tr><td>claude (claude-sonnet-5)</td><td>Graph tool</td><td>370,898</td><td>10.3</td><td>0.305</td></tr><tr><td>codex (gpt-5.6-sol)</td><td>Atlas</td><td>27,981</td><td>1</td><td>0.881</td></tr><tr><td>codex (gpt-5.6-sol)</td><td>No tool (raw exploration)</td><td>48,106</td><td>2.1</td><td>0.876</td></tr><tr><td>codex (gpt-5.6-sol)</td><td>Graph tool</td><td>109,662</td><td>9.6</td><td>0.410</td></tr></tbody></table>
+<p>Cross-agent absolute totals are <strong>not comparable</strong> — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent only.</p>
+<h2>Reproduce It Yourself</h2>
+<p>Every published number is reproducible from committed artifacts — verify before you cite:</p>
+<ul><li><a href="https://github.com/aziron-ai/atlas/blob/main/data/site-data.json">Processed site data (site-data.json)</a></li><li><a href="https://github.com/aziron-ai/atlas/tree/main/data/raw">Raw benchmark artifacts (data/raw)</a></li><li><a href="https://github.com/aziron-ai/atlas/tree/main/data">Evidence manifests</a></li><li><a href="https://github.com/aziron-ai/atlas/tree/main/agent-bench">Agent benchmark kit (agent-bench/)</a></li></ul>
+<p>The agent suite ships with the pinned commit, frozen gopls question set, and isolation flags baked in:</p>
 <pre><code>python3 agent-bench/agent_token_bench.py \
   --setup \
   --agents auto \
   --qa-set agent-bench/QA_SET_logrus.json \
   --workdir agentbench-work</code></pre>
-<p>Read <a href="https://github.com/aziron-ai/atlas/blob/main/agent-bench/README.md">agent-bench/README.md</a> for prerequisites, expected external cost, pinned inputs, and interpretation.</p>
+<p>Read <a href="https://github.com/aziron-ai/atlas/blob/main/agent-bench/README.md">agent-bench/README.md</a> for prerequisites, expected external cost, pinned inputs, and interpretation. Per-run records are in <a href="https://aziron-ai.github.io/atlas/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json">AGENT_TOKEN_BENCH_PUBLIC.json</a>.</p>
+<h2>Important Limitations</h2>
+<ul><li>Fixture results do not prove production-repository accuracy.</li><li>One repository does not establish performance across a language.</li><li>Different assistants may consume the same MCP result differently.</li><li>Estimated tokens are not equivalent to provider-reported token usage.</li><li>Warm-cache query latency is not cold-start installation or indexing time.</li><li>Language support and result quality can differ by syntax and framework.</li></ul>
+<p>Per-language support levels behind these results are summarized in <a href="../languages/">Supported Languages and Formats</a>.</p>
 <h2>Reporting a Comparison</h2>
-<p>Publish:</p>
+<p>If you publish your own comparison, include everything a reader needs to reproduce it:</p>
 <ul><li>exact commands</li><li>raw machine-readable output</li><li>all failed and timed-out cases</li><li>environment metadata</li><li>evidence limitations</li><li>the Atlas release tag and checksum</li></ul>
-<p>Benchmark results are dated evidence under stated conditions, not a guarantee for every repository, machine, language, or assistant.</p>
+<p>Benchmark results are dated measurements under published conditions — not a guarantee for every repository, machine, language, or assistant.</p>
     </article>
     <nav class="prevnext">
       <span><a href="../languages/">← Supported Languages and Formats</a></span>
@@ -91,6 +99,7 @@
     <nav class="doclist" aria-label="All documentation">
         <a href="../getting-started/">Getting Started</a>
         <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
         <a href="../indexing/">Indexing and Reindexing</a>
         <a href="../cli/">CLI Reference</a>
         <a href="../assistants/">AI Assistant Setup</a>
