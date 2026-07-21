@@ -5,7 +5,7 @@
 > context queries (definition, callers, callees, imports, routes) in
 > ~7.4 ms and ~21.2 tokens. Benchmark (July 2026, real-LLM
 > scored, 37 languages): Atlas F1 0.757 @ 21.2 tokens vs graph tool
-> 0.539 @ 97 tokens. Version 0.1.36.
+> 0.539 @ 97 tokens. Version 0.1.38.
 >
 > This file inlines the complete consumer documentation. Canonical HTML pages
 > live at https://aziron-ai.github.io/atlas/docs/<slug>/ ; the interactive site is at https://aziron-ai.github.io/atlas/.
@@ -242,7 +242,7 @@ atlas version
 Pin an exact version for reproducible environments:
 
 ```sh
-npm install -g @aziron-ai/atlas@0.1.36
+npm install -g @aziron-ai/atlas@0.1.38
 ```
 
 The npm package is a wrapper that downloads the native Atlas binary for the
@@ -257,7 +257,7 @@ version and platform from
 [GitHub Releases](https://github.com/aziron-ai/atlas/releases/latest):
 
 ```sh
-VERSION=0.1.36
+VERSION=0.1.38
 OS=darwin       # darwin or linux
 ARCH=arm64      # arm64 or amd64
 ASSET="atlas_${VERSION}_${OS}_${ARCH}.tar.gz"
@@ -287,13 +287,13 @@ and arm64. Download the matching package from the release page, then install:
 
 ```sh
 # Debian or Ubuntu
-sudo dpkg -i atlas_0.1.36_linux_amd64.deb
+sudo dpkg -i atlas_0.1.38_linux_amd64.deb
 
 # Fedora or RHEL
-sudo rpm -U atlas_0.1.36_linux_amd64.rpm
+sudo rpm -U atlas_0.1.38_linux_amd64.rpm
 
 # Alpine
-sudo apk add --allow-untrusted atlas_0.1.36_linux_amd64.apk
+sudo apk add --allow-untrusted atlas_0.1.38_linux_amd64.apk
 ```
 
 ## Post-Install: Assistant Bootstrap
@@ -1917,7 +1917,7 @@ atlas version
 Pin a version for reproducible automation:
 
 ```sh
-npm install -g @aziron-ai/atlas@0.1.36
+npm install -g @aziron-ai/atlas@0.1.38
 ```
 
 Archives: download the new tar.gz, .deb, .rpm, or .apk from

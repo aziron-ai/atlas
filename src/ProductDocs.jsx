@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import SurveyChart, { LatencyScaleBar } from "./SurveyChart";
 
-const RELEASE = "0.1.36";
+const RELEASE = "0.1.38";
 const GITHUB = "https://github.com/aziron-ai/atlas";
 const WIKI = `${GITHUB}/wiki`;
 
@@ -571,7 +571,7 @@ function DocsPage({ slug }) {
             <p>Use npm when Atlas should install through an existing Node toolchain or CI pipeline. The package is published to GitHub Packages, not the public npm registry, so npm must be pointed at the <code>@aziron-ai</code> scope with a GitHub token that has the <code>read:packages</code> scope — GitHub Packages requires authentication even for public packages:</p>
             <Command>{`npm config set @aziron-ai:registry https://npm.pkg.github.com\nnpm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN\nnpm install -g @aziron-ai/atlas\natlas version`}</Command>
             <p>Pin an exact version for reproducible environments:</p>
-            <Command>{`npm install -g @aziron-ai/atlas@0.1.36`}</Command>
+            <Command>{`npm install -g @aziron-ai/atlas@0.1.38`}</Command>
             <p>The npm package is a wrapper that downloads the native Atlas binary for the current platform.</p>
             <Callout kind="tip" label="Simpler path">
               <p>If you do not need npm specifically, Homebrew is the simpler path.</p>
@@ -579,13 +579,13 @@ function DocsPage({ slug }) {
           </ProseSection>
           <ProseSection title="Release Archives">
             <p>Use a release archive when no package manager is available, on air-gapped hosts, or when you need to pin and checksum exact bytes. Choose the current version and platform from <a className="text-link" href="https://github.com/aziron-ai/atlas/releases/latest" target="_blank" rel="noreferrer">GitHub Releases</a>:</p>
-            <Command>{`VERSION=0.1.36\nOS=darwin       # darwin or linux\nARCH=arm64      # arm64 or amd64\nASSET="atlas_\${VERSION}_\${OS}_\${ARCH}.tar.gz"\nBASE="https://github.com/aziron-ai/atlas/releases/download/v\${VERSION}"\n\ncurl -fLO "$BASE/$ASSET"\ncurl -fLO "$BASE/checksums.txt"\ngrep " $ASSET\\$" checksums.txt | shasum -a 256 -c -\ntar -xzf "$ASSET"\nsudo install -m 0755 atlas /usr/local/bin/atlas\natlas version`}</Command>
+            <Command>{`VERSION=0.1.38\nOS=darwin       # darwin or linux\nARCH=arm64      # arm64 or amd64\nASSET="atlas_\${VERSION}_\${OS}_\${ARCH}.tar.gz"\nBASE="https://github.com/aziron-ai/atlas/releases/download/v\${VERSION}"\n\ncurl -fLO "$BASE/$ASSET"\ncurl -fLO "$BASE/checksums.txt"\ngrep " $ASSET\\$" checksums.txt | shasum -a 256 -c -\ntar -xzf "$ASSET"\nsudo install -m 0755 atlas /usr/local/bin/atlas\natlas version`}</Command>
             <p>On Linux, replace the checksum command with <code>sha256sum -c -</code> when available.</p>
             <p><strong>Windows.</strong> Each release also includes a Windows amd64 archive. Download it from the same release page, extract the <code>atlas</code> executable, and add its directory to <code>PATH</code>. Alternatively, the npm channel above supports Windows x64.</p>
           </ProseSection>
           <ProseSection title="Native Linux Packages">
             <p>Use native packages when your fleet is managed through a distribution package manager. Each release includes <code>.deb</code>, <code>.rpm</code>, and <code>.apk</code> packages for amd64 and arm64. Download the matching package from the release page, then install:</p>
-            <Command>{`# Debian or Ubuntu\nsudo dpkg -i atlas_0.1.36_linux_amd64.deb\n\n# Fedora or RHEL\nsudo rpm -U atlas_0.1.36_linux_amd64.rpm\n\n# Alpine\nsudo apk add --allow-untrusted atlas_0.1.36_linux_amd64.apk`}</Command>
+            <Command>{`# Debian or Ubuntu\nsudo dpkg -i atlas_0.1.38_linux_amd64.deb\n\n# Fedora or RHEL\nsudo rpm -U atlas_0.1.38_linux_amd64.rpm\n\n# Alpine\nsudo apk add --allow-untrusted atlas_0.1.38_linux_amd64.apk`}</Command>
           </ProseSection>
           <ProseSection title="Post-Install: Assistant Bootstrap">
             <p>Homebrew and npm installations run <code>atlas bootstrap</code> after install. Bootstrap registers Atlas as an MCP server and installs the atlas-first skill and CLAUDE.md directive for every detected assistant (Claude desktop and CLI, Codex, Copilot, Cursor, Gemini). It is idempotent — safe to run repeatedly and from a package post-install hook. Inspect the proposed changes at any time without writing anything:</p>
@@ -1400,7 +1400,7 @@ function DocsPage({ slug }) {
             <p>npm:</p>
             <Command>{`npm install -g @aziron-ai/atlas\natlas version`}</Command>
             <p>Pin a version for reproducible automation:</p>
-            <Command>{`npm install -g @aziron-ai/atlas@0.1.36`}</Command>
+            <Command>{`npm install -g @aziron-ai/atlas@0.1.38`}</Command>
             <p>Archives: download the new tar.gz, .deb, .rpm, or .apk from <a className="text-link" href="https://github.com/aziron-ai/atlas/releases/latest" target="_blank" rel="noreferrer">GitHub Releases</a>, replace the installed binary, and confirm with <code>atlas version</code>.</p>
           </ProseSection>
           <ProseSection title="Post-Upgrade Sequence">

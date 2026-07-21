@@ -27,7 +27,7 @@ atlas version
 Pin a version for reproducible automation:
 
 ```sh
-npm install -g @aziron-ai/atlas@0.1.36
+npm install -g @aziron-ai/atlas@0.1.38
 ```
 
 Archives: download the new tar.gz, .deb, .rpm, or .apk from
