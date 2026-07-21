@@ -1670,7 +1670,7 @@ const installTabs = (v) => ({
   npm: {
     label: "npm",
     sub: "node wrapper",
-    lines: ["npm install -g @aziron-ai/atlas", "atlas version"],
+    lines: ["npm install -g @aziron/atlas", "atlas version"],
   },
   linux: {
     label: "Linux",

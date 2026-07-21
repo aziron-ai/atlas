@@ -15,7 +15,7 @@ const BANNED = [/\/Users\//, /damirdarasu/, /\/tmp\/atlas-live/, /MsysTechnologi
 // Install commands that must appear VERBATIM under #install.
 const INSTALL_COMMANDS = [
   "brew install --cask aziron-ai/atlas/atlas",
-  "npm install -g @aziron-ai/atlas",
+  "npm install -g @aziron/atlas",
   "atlas index .",
   "atlas mcp --transport stdio",
 ];
@@ -58,6 +58,7 @@ test.describe("atlas product and documentation", () => {
   test("installation and assistant setup use current public coordinates", async ({ page }) => {
     await page.goto(`${baseURL}#docs/installation`, { waitUntil: "networkidle" });
     await expect(page.getByTestId("docs-article")).toContainText("aziron-ai/atlas/atlas");
+    await expect(page.getByTestId("docs-article")).toContainText("@aziron/atlas");
     await expect(page.getByTestId("docs-article")).toContainText("@aziron-ai/atlas");
     await expect(page.getByTestId("docs-article")).toContainText(`@${site.version}`);
 

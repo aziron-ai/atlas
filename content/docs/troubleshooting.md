@@ -26,7 +26,7 @@ for the harder cases follow the table.
 
 | Symptom | Action |
 | --- | --- |
-| `atlas: command not found` | Check `command -v atlas` and `$PATH`; reinstall via your channel — `brew reinstall --cask aziron-ai/atlas/atlas` or `npm install -g @aziron-ai/atlas` (verify `npm prefix -g` is on PATH) |
+| `atlas: command not found` | Check `command -v atlas` and `$PATH`; reinstall via your channel — `brew reinstall --cask aziron-ai/atlas/atlas` or `npm install -g @aziron/atlas` (verify `npm prefix -g` is on PATH) |
 | Results are stale or from the wrong repository | `atlas index .` then `atlas status`; pin scope with `atlas --repo /absolute/path status`; if still stale, `atlas doctor` then `atlas index . --reindex` |
 | `workspace_required` from MCP | Supply a workspace root, `workspace`, `repo_id`, or launch-time `--repo`. Atlas does not silently select a repository for scoped requests |
 | SQLite is busy or locked | Stop `atlas serve`, `atlas watch`, and supervised MCP processes; inspect the owner with `lsof "$PWD/.atlas/atlas.db"`; run maintenance serially after all writers exit |

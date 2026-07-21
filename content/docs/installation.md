@@ -1,12 +1,13 @@
 # Installation
 
-Atlas ships through four channels that all install the same native binary.
+Atlas ships through five channels that all install the same native binary.
 Pick the channel that matches how you manage software on the target machine:
 
 | Channel | Best for | Platforms |
 | --- | --- | --- |
 | Homebrew | macOS/Linux workstations; managed upgrades | macOS/Linux amd64 and arm64 |
-| npm (GitHub Packages) | Node toolchains and CI that already hold a GitHub token | macOS/Linux x64 and arm64; Windows x64 |
+| npm (public registry) | Node toolchains, workstations, and public CI | macOS/Linux x64 and arm64; Windows x64 |
+| npm (GitHub Packages) | Organization CI that already uses GitHub Packages | macOS/Linux x64 and arm64; Windows x64 |
 | Release archive | Air-gapped hosts, exact-version pinning, Windows | macOS/Linux amd64 and arm64; Windows amd64 |
 | Linux package | Fleet management with `.deb`/`.rpm`/`.apk` | amd64 and arm64 |
 
@@ -24,13 +25,27 @@ Homebrew names fully qualified casks as `<owner>/<tap>/<cask>`. The repository
 `aziron-ai/homebrew-atlas` becomes the tap `aziron-ai/atlas`; the cask and the
 installed executable are both named `atlas`.
 
-## npm (GitHub Packages)
+## npm (public registry)
 
 Use npm when Atlas should install through an existing Node toolchain or CI
-pipeline. The package is published to GitHub Packages, not the public npm
-registry, so npm must be pointed at the `@aziron-ai` scope with a GitHub token
-that has the `read:packages` scope — GitHub Packages requires authentication
-even for public packages:
+pipeline. The public package needs no registry configuration or GitHub token:
+
+```sh
+npm install -g @aziron/atlas
+atlas version
+```
+
+Pin an exact version for reproducible environments:
+
+```sh
+npm install -g @aziron/atlas@0.1.39
+```
+
+### GitHub Packages alternative
+
+Atlas is also published to GitHub Packages as `@aziron-ai/atlas`. Use this
+coordinate when organization CI already authenticates to GitHub Packages.
+Point the `@aziron-ai` scope at GitHub and use a token with `read:packages`:
 
 ```sh
 npm config set @aziron-ai:registry https://npm.pkg.github.com
@@ -39,15 +54,13 @@ npm install -g @aziron-ai/atlas
 atlas version
 ```
 
-Pin an exact version for reproducible environments:
-
 ```sh
-npm install -g @aziron-ai/atlas@0.1.38
+npm install -g @aziron-ai/atlas@0.1.39
 ```
 
-The npm package is a wrapper that downloads the native Atlas binary for the
-current platform. If you do not need npm specifically, Homebrew is the
-simpler path.
+Both npm coordinates install the same wrapper and native Atlas binary for the
+current platform. If you do not need npm specifically, Homebrew is the simpler
+path on macOS and Linux.
 
 ## Release Archives
 
@@ -57,7 +70,7 @@ version and platform from
 [GitHub Releases](https://github.com/aziron-ai/atlas/releases/latest):
 
 ```sh
-VERSION=0.1.38
+VERSION=0.1.39
 OS=darwin       # darwin or linux
 ARCH=arm64      # arm64 or amd64
 ASSET="atlas_${VERSION}_${OS}_${ARCH}.tar.gz"
@@ -87,13 +100,13 @@ and arm64. Download the matching package from the release page, then install:
 
 ```sh
 # Debian or Ubuntu
-sudo dpkg -i atlas_0.1.38_linux_amd64.deb
+sudo dpkg -i atlas_0.1.39_linux_amd64.deb
 
 # Fedora or RHEL
-sudo rpm -U atlas_0.1.38_linux_amd64.rpm
+sudo rpm -U atlas_0.1.39_linux_amd64.rpm
 
 # Alpine
-sudo apk add --allow-untrusted atlas_0.1.38_linux_amd64.apk
+sudo apk add --allow-untrusted atlas_0.1.39_linux_amd64.apk
 ```
 
 ## Post-Install: Assistant Bootstrap
@@ -112,7 +125,7 @@ atlas bootstrap --dry-run
 To prevent the npm post-install bootstrap in managed environments:
 
 ```sh
-ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron-ai/atlas
+ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron/atlas
 ```
 
 Archive and Linux-package installs do not configure assistants automatically;

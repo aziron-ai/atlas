@@ -239,9 +239,10 @@ const body = `
            <a href="data/site-data.json">Benchmark data (JSON)</a></p>
 
         <h2>Get started</h2>
-        <p>Install with <code>brew install --cask aziron-ai/atlas/atlas</code> or, via GitHub
-           Packages, <code>npm install -g @aziron-ai/atlas</code> (see the
-           <a href="docs/installation/">installation guide</a> for the one-time npm registry setup).
+        <p>Install with <code>brew install --cask aziron-ai/atlas/atlas</code> or from the public
+           npm registry with <code>npm install -g @aziron/atlas</code>. The
+           <a href="docs/installation/">installation guide</a> also covers the authenticated
+           GitHub Packages coordinate.
            Then run <code>atlas index .</code>,
            inspect readiness with <code>atlas status</code>, and preview assistant setup with
            <code>atlas bootstrap --dry-run</code>.</p>
@@ -295,7 +296,7 @@ ${agentBenchBlock}
 
         <h2>Install</h2>
         <p>Homebrew: <code>brew install --cask aziron-ai/atlas/atlas</code> ·
-           npm (GitHub Packages): <code>npm install -g @aziron-ai/atlas</code> ·
+           npm: <code>npm install -g @aziron/atlas</code> ·
            Linux: <a href="https://github.com/aziron-ai/atlas/releases/latest">tar.gz / .deb / .rpm / .apk from releases</a>.
            Then <code>atlas index .</code> and <code>atlas mcp --transport stdio</code> for agents.</p>
         <p>Every number above is reproducible from the committed artifacts under <a href="data/">data/</a>.
@@ -376,7 +377,8 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intellig
 - [Benchmark & comparison](${BASE}#benchmarks): interactive version of the published evidence
 - [GitHub repository](https://github.com/aziron-ai/atlas): releases (macOS, Linux, Windows), issues
 - [GitHub Wiki](https://github.com/aziron-ai/atlas/wiki): mirror of the consumer product guide
-- [npm package](https://github.com/aziron-ai/atlas/pkgs/npm/atlas): \`npm install -g @aziron-ai/atlas\`
+- [npm package](https://www.npmjs.com/package/@aziron/atlas): \`npm install -g @aziron/atlas\`
+- [GitHub Packages](https://github.com/aziron-ai/atlas/pkgs/npm/atlas): authenticated alternative \`@aziron-ai/atlas\`
 `);
 
 /* --------------------- per-doc indexable pages -------------------------- */
@@ -539,7 +541,8 @@ const llmsFull = `# Atlas — full documentation for LLMs
 - Benchmarks: ${BASE}#benchmarks
 - GitHub: https://github.com/aziron-ai/atlas
 - Wiki: https://github.com/aziron-ai/atlas/wiki
-- npm: https://github.com/aziron-ai/atlas/pkgs/npm/atlas
+- npm: https://www.npmjs.com/package/@aziron/atlas
+- GitHub Packages: https://github.com/aziron-ai/atlas/pkgs/npm/atlas
 
 ${DOCS.map((d) => {
   const md = fs.readFileSync(path.join(repoRoot, "content", "docs", `${d.slug}.md`), "utf8").trim();

@@ -20,15 +20,18 @@ atlas version
 npm:
 
 ```sh
-npm install -g @aziron-ai/atlas
+npm install -g @aziron/atlas
 atlas version
 ```
 
 Pin a version for reproducible automation:
 
 ```sh
-npm install -g @aziron-ai/atlas@0.1.38
+npm install -g @aziron/atlas@0.1.39
 ```
+
+For installations sourced from GitHub Packages, use the equivalent
+`@aziron-ai/atlas@0.1.39` coordinate with the existing registry authentication.
 
 Archives: download the new tar.gz, .deb, .rpm, or .apk from
 [GitHub Releases](https://github.com/aziron-ai/atlas/releases/latest), replace
@@ -112,7 +115,8 @@ atlas disconnect
 
 ```sh
 brew uninstall --cask aziron-ai/atlas/atlas   # Homebrew
-npm uninstall -g @aziron-ai/atlas             # npm
+npm uninstall -g @aziron/atlas                # public npm
+npm uninstall -g @aziron-ai/atlas             # GitHub Packages
 sudo rm /usr/local/bin/atlas                  # manual binary
 ```
 

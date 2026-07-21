@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import SurveyChart, { LatencyScaleBar } from "./SurveyChart";
 
-const RELEASE = "0.1.38";
+const RELEASE = "0.1.39";
 const GITHUB = "https://github.com/aziron-ai/atlas";
 const WIKI = `${GITHUB}/wiki`;
 
@@ -182,7 +182,7 @@ function Command({ children, label = "Terminal" }) {
 function InstallSwitcher() {
   const options = {
     Homebrew: "brew install --cask aziron-ai/atlas/atlas",
-    npm: "npm install -g @aziron-ai/atlas",
+    npm: "npm install -g @aziron/atlas",
     Linux: `curl -LO ${GITHUB}/releases/download/v${RELEASE}/atlas_${RELEASE}_linux_amd64.tar.gz`,
   };
   const [active, setActive] = useState("Homebrew");
@@ -555,10 +555,11 @@ function DocsPage({ slug }) {
     case "installation":
       return (
         <>
-          <p className="docs-lead">Atlas ships through four channels that all install the same native binary. Pick the channel that matches how you manage software on the target machine:</p>
+          <p className="docs-lead">Atlas ships through five channels that all install the same native binary. Pick the channel that matches how you manage software on the target machine:</p>
           <div className="docs-table-wrap"><table><thead><tr><th>Channel</th><th>Best for</th><th>Platforms</th></tr></thead><tbody>
             <tr><td>Homebrew</td><td>macOS/Linux workstations; managed upgrades</td><td>macOS/Linux amd64 and arm64</td></tr>
-            <tr><td>npm (GitHub Packages)</td><td>Node toolchains and CI that already hold a GitHub token</td><td>macOS/Linux x64 and arm64; Windows x64</td></tr>
+            <tr><td>npm (public registry)</td><td>Node toolchains, workstations, and public CI</td><td>macOS/Linux x64 and arm64; Windows x64</td></tr>
+            <tr><td>npm (GitHub Packages)</td><td>Organization CI that already uses GitHub Packages</td><td>macOS/Linux x64 and arm64; Windows x64</td></tr>
             <tr><td>Release archive</td><td>Air-gapped hosts, exact-version pinning, Windows</td><td>macOS/Linux amd64 and arm64; Windows amd64</td></tr>
             <tr><td>Linux package</td><td>Fleet management with <code>.deb</code>/<code>.rpm</code>/<code>.apk</code></td><td>amd64 and arm64</td></tr>
           </tbody></table></div>
@@ -567,31 +568,35 @@ function DocsPage({ slug }) {
             <Command>{`brew install --cask aziron-ai/atlas/atlas\natlas version`}</Command>
             <p>Homebrew names fully qualified casks as <code>&lt;owner&gt;/&lt;tap&gt;/&lt;cask&gt;</code>. The repository <code>aziron-ai/homebrew-atlas</code> becomes the tap <code>aziron-ai/atlas</code>; the cask and the installed executable are both named <code>atlas</code>.</p>
           </ProseSection>
-          <ProseSection title="npm (GitHub Packages)">
-            <p>Use npm when Atlas should install through an existing Node toolchain or CI pipeline. The package is published to GitHub Packages, not the public npm registry, so npm must be pointed at the <code>@aziron-ai</code> scope with a GitHub token that has the <code>read:packages</code> scope — GitHub Packages requires authentication even for public packages:</p>
-            <Command>{`npm config set @aziron-ai:registry https://npm.pkg.github.com\nnpm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN\nnpm install -g @aziron-ai/atlas\natlas version`}</Command>
+          <ProseSection title="npm (public registry)">
+            <p>Use npm when Atlas should install through an existing Node toolchain or CI pipeline. The public package needs no registry configuration or GitHub token:</p>
+            <Command>{`npm install -g @aziron/atlas\natlas version`}</Command>
             <p>Pin an exact version for reproducible environments:</p>
-            <Command>{`npm install -g @aziron-ai/atlas@0.1.38`}</Command>
-            <p>The npm package is a wrapper that downloads the native Atlas binary for the current platform.</p>
+            <Command>{`npm install -g @aziron/atlas@${RELEASE}`}</Command>
+            <h3>GitHub Packages alternative</h3>
+            <p>Atlas is also published to GitHub Packages as <code>@aziron-ai/atlas</code>. Use this coordinate when organization CI already authenticates to GitHub Packages. Point the <code>@aziron-ai</code> scope at GitHub and use a token with <code>read:packages</code>:</p>
+            <Command>{`npm config set @aziron-ai:registry https://npm.pkg.github.com\nnpm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN\nnpm install -g @aziron-ai/atlas\natlas version`}</Command>
+            <Command>{`npm install -g @aziron-ai/atlas@${RELEASE}`}</Command>
+            <p>Both npm coordinates install the same wrapper and native Atlas binary for the current platform.</p>
             <Callout kind="tip" label="Simpler path">
               <p>If you do not need npm specifically, Homebrew is the simpler path.</p>
             </Callout>
           </ProseSection>
           <ProseSection title="Release Archives">
             <p>Use a release archive when no package manager is available, on air-gapped hosts, or when you need to pin and checksum exact bytes. Choose the current version and platform from <a className="text-link" href="https://github.com/aziron-ai/atlas/releases/latest" target="_blank" rel="noreferrer">GitHub Releases</a>:</p>
-            <Command>{`VERSION=0.1.38\nOS=darwin       # darwin or linux\nARCH=arm64      # arm64 or amd64\nASSET="atlas_\${VERSION}_\${OS}_\${ARCH}.tar.gz"\nBASE="https://github.com/aziron-ai/atlas/releases/download/v\${VERSION}"\n\ncurl -fLO "$BASE/$ASSET"\ncurl -fLO "$BASE/checksums.txt"\ngrep " $ASSET\\$" checksums.txt | shasum -a 256 -c -\ntar -xzf "$ASSET"\nsudo install -m 0755 atlas /usr/local/bin/atlas\natlas version`}</Command>
+            <Command>{`VERSION=${RELEASE}\nOS=darwin       # darwin or linux\nARCH=arm64      # arm64 or amd64\nASSET="atlas_\${VERSION}_\${OS}_\${ARCH}.tar.gz"\nBASE="https://github.com/aziron-ai/atlas/releases/download/v\${VERSION}"\n\ncurl -fLO "$BASE/$ASSET"\ncurl -fLO "$BASE/checksums.txt"\ngrep " $ASSET\\$" checksums.txt | shasum -a 256 -c -\ntar -xzf "$ASSET"\nsudo install -m 0755 atlas /usr/local/bin/atlas\natlas version`}</Command>
             <p>On Linux, replace the checksum command with <code>sha256sum -c -</code> when available.</p>
             <p><strong>Windows.</strong> Each release also includes a Windows amd64 archive. Download it from the same release page, extract the <code>atlas</code> executable, and add its directory to <code>PATH</code>. Alternatively, the npm channel above supports Windows x64.</p>
           </ProseSection>
           <ProseSection title="Native Linux Packages">
             <p>Use native packages when your fleet is managed through a distribution package manager. Each release includes <code>.deb</code>, <code>.rpm</code>, and <code>.apk</code> packages for amd64 and arm64. Download the matching package from the release page, then install:</p>
-            <Command>{`# Debian or Ubuntu\nsudo dpkg -i atlas_0.1.38_linux_amd64.deb\n\n# Fedora or RHEL\nsudo rpm -U atlas_0.1.38_linux_amd64.rpm\n\n# Alpine\nsudo apk add --allow-untrusted atlas_0.1.38_linux_amd64.apk`}</Command>
+            <Command>{`# Debian or Ubuntu\nsudo dpkg -i atlas_${RELEASE}_linux_amd64.deb\n\n# Fedora or RHEL\nsudo rpm -U atlas_${RELEASE}_linux_amd64.rpm\n\n# Alpine\nsudo apk add --allow-untrusted atlas_${RELEASE}_linux_amd64.apk`}</Command>
           </ProseSection>
           <ProseSection title="Post-Install: Assistant Bootstrap">
             <p>Homebrew and npm installations run <code>atlas bootstrap</code> after install. Bootstrap registers Atlas as an MCP server and installs the atlas-first skill and CLAUDE.md directive for every detected assistant (Claude desktop and CLI, Codex, Copilot, Cursor, Gemini). It is idempotent — safe to run repeatedly and from a package post-install hook. Inspect the proposed changes at any time without writing anything:</p>
             <Command>{`atlas bootstrap --dry-run`}</Command>
             <p>To prevent the npm post-install bootstrap in managed environments:</p>
-            <Command>{`ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron-ai/atlas`}</Command>
+            <Command>{`ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron/atlas`}</Command>
             <p>Archive and Linux-package installs do not configure assistants automatically; run <code>atlas bootstrap</code> yourself when you want them connected.</p>
           </ProseSection>
           <ProseSection title="PATH Note">
@@ -1338,7 +1343,7 @@ function DocsPage({ slug }) {
           <ProseSection title="Symptom to Action">
             <p>Match your symptom, apply the action, and re-run the failing command. Details for the harder cases follow the table.</p>
             <div className="docs-table-wrap"><table><thead><tr><th>Symptom</th><th>Action</th></tr></thead><tbody>
-              <tr><td><code>atlas: command not found</code></td><td>Check <code>command -v atlas</code> and <code>$PATH</code>; reinstall via your channel — <code>brew reinstall --cask aziron-ai/atlas/atlas</code> or <code>npm install -g @aziron-ai/atlas</code> (verify <code>npm prefix -g</code> is on PATH)</td></tr>
+              <tr><td><code>atlas: command not found</code></td><td>Check <code>command -v atlas</code> and <code>$PATH</code>; reinstall via your channel — <code>brew reinstall --cask aziron-ai/atlas/atlas</code> or <code>npm install -g @aziron/atlas</code> (verify <code>npm prefix -g</code> is on PATH)</td></tr>
               <tr><td>Results are stale or from the wrong repository</td><td><code>atlas index .</code> then <code>atlas status</code>; pin scope with <code>atlas --repo /absolute/path status</code>; if still stale, <code>atlas doctor</code> then <code>atlas index . --reindex</code></td></tr>
               <tr><td><code>workspace_required</code> from MCP</td><td>Supply a workspace root, <code>workspace</code>, <code>repo_id</code>, or launch-time <code>--repo</code>. Atlas does not silently select a repository for scoped requests</td></tr>
               <tr><td>SQLite is busy or locked</td><td>Stop <code>atlas serve</code>, <code>atlas watch</code>, and supervised MCP processes; inspect the owner with <code>lsof "$PWD/.atlas/atlas.db"</code>; run maintenance serially after all writers exit</td></tr>
@@ -1413,9 +1418,10 @@ function DocsPage({ slug }) {
             <p>Homebrew:</p>
             <Command>{`brew update\nbrew upgrade --cask aziron-ai/atlas/atlas\natlas version`}</Command>
             <p>npm:</p>
-            <Command>{`npm install -g @aziron-ai/atlas\natlas version`}</Command>
+            <Command>{`npm install -g @aziron/atlas\natlas version`}</Command>
             <p>Pin a version for reproducible automation:</p>
-            <Command>{`npm install -g @aziron-ai/atlas@0.1.38`}</Command>
+            <Command>{`npm install -g @aziron/atlas@${RELEASE}`}</Command>
+            <p>For GitHub Packages, use <code>{`@aziron-ai/atlas@${RELEASE}`}</code> with the existing registry authentication.</p>
             <p>Archives: download the new tar.gz, .deb, .rpm, or .apk from <a className="text-link" href="https://github.com/aziron-ai/atlas/releases/latest" target="_blank" rel="noreferrer">GitHub Releases</a>, replace the installed binary, and confirm with <code>atlas version</code>.</p>
           </ProseSection>
           <ProseSection title="Post-Upgrade Sequence">
@@ -1442,7 +1448,7 @@ function DocsPage({ slug }) {
             <p>If this machine is connected to a central Atlas server, also disconnect — <code>atlas disconnect</code> disconnects from the central Atlas and removes the capture hooks:</p>
             <Command>{`atlas disconnect`}</Command>
             <p><strong>2. Remove the package.</strong></p>
-            <Command>{`brew uninstall --cask aziron-ai/atlas/atlas   # Homebrew\nnpm uninstall -g @aziron-ai/atlas             # npm\nsudo rm /usr/local/bin/atlas                  # manual binary`}</Command>
+            <Command>{`brew uninstall --cask aziron-ai/atlas/atlas   # Homebrew\nnpm uninstall -g @aziron/atlas                # public npm\nnpm uninstall -g @aziron-ai/atlas             # GitHub Packages\nsudo rm /usr/local/bin/atlas                  # manual binary`}</Command>
             <p><strong>3. Remove local data — read first.</strong></p>
             <Callout kind="warn" label="Local data survives the package">
               <p>Package removal does not delete repository indexes. Every indexed repository keeps its <code>.atlas/</code> directory — index, settings, retrieval data, telemetry, and retained snapshots — until you remove it. Stop all Atlas processes and confirm the exact paths before deleting; removal is permanent.</p>
