@@ -1805,7 +1805,8 @@ for the harder cases follow the table.
 | Results are stale or from the wrong repository | `atlas index .` then `atlas status`; pin scope with `atlas --repo /absolute/path status`; if still stale, `atlas doctor` then `atlas index . --reindex` |
 | `workspace_required` from MCP | Supply a workspace root, `workspace`, `repo_id`, or launch-time `--repo`. Atlas does not silently select a repository for scoped requests |
 | SQLite is busy or locked | Stop `atlas serve`, `atlas watch`, and supervised MCP processes; inspect the owner with `lsof "$PWD/.atlas/atlas.db"`; run maintenance serially after all writers exit |
-| Retrieval reports `sql_fallback` | The lexical (BM25) sidecar is empty or wedged while the graph stays readable. Run `atlas doctor` to confirm, stop other Atlas processes, then `atlas compact --rebuild-lexical` and re-check `atlas status` |
+| Retrieval reports `sql_fallback` | The lexical (BM25) sidecar is empty or wedged while the graph stays readable. Run `atlas doctor` to confirm, stop other Atlas processes, then `atlas compact --rebuild-lexical` and re-check with `atlas doctor` |
+| `index` warns `lexical sidecar unavailable, indexing without it` | A warning, not a failure — the graph indexed fine. Another Atlas process held the sidecar lock (~2s timeout). It self-heals via lazy backfill; or stop other Atlas processes and run `atlas compact --rebuild-lexical`. See **The lexical sidecar** below |
 | Assistant does not list Atlas tools | `atlas bootstrap --dry-run` to preview, `atlas doctor --verify atlas` to check binary drift; apply `atlas bootstrap`, then fully restart the assistant |
 | Doctor or status reports schema/index drift | `atlas migrate` applies storage migrations and reports the active contracts; confirm with `atlas status --schema`, then `atlas index . --reindex` if snapshot formats have drifted |
 | Database keeps growing after deletions or reindexes | `atlas compact` reports reclaimable pages and truncates the WAL; `atlas compact --full` also runs a full VACUUM and rebuilds an oversized lexical sidecar. Both `--full` and `--rebuild-lexical` are exclusive — quiesce other Atlas processes first |
@@ -1831,6 +1832,46 @@ Other known cases, kept brief:
 - **`healthz` passes but `readyz` fails:** Atlas is running but cannot
   complete a lightweight engine request — look for an active index, database
   lock, or maintenance operation.
+
+## The Lexical Sidecar (and the SQL Fallback)
+
+Atlas keeps two things under `.atlas/`. The **graph database** (`atlas.db`,
+SQLite) holds symbols, callers, references, routes, and change impact. A
+separate **lexical sidecar** (`.atlas/lexical/`, a Bleve BM25 index) powers
+fast text search. Graph queries never need the sidecar — only text and keyword
+search does.
+
+During `atlas index` you may see this line on stderr. It is a **warning, not a
+failure** — the graph index still built:
+
+```text
+atlas: index <repo>: lexical sidecar unavailable, indexing without it (lazy backfill will heal): <reason>
+```
+
+- **Why it happens:** another Atlas process — a running `atlas serve`,
+  `atlas watch`, or a supervised/stale MCP session — holds the sidecar's
+  exclusive lock. Atlas waits about two seconds for it (a bounded lock timeout),
+  then indexes *without* the sidecar rather than failing the whole run. The
+  usual trigger is running `atlas index` by hand while a server is already
+  watching the same repo.
+- **What it means:** until the sidecar is populated, text search answers from a
+  SQL scan instead of BM25. Those results are honestly labelled — `degraded:
+  true` and `retrieval_mode: sql_fallback` — and are correct but slower and
+  lower quality. Symbol, caller, ref, route, and impact queries are unaffected.
+- **It heals on its own:** in serve/watch mode a lazy backfill rebuilds the
+  sidecar once the lock frees. To fix it now, stop the other Atlas processes and
+  run `atlas compact --rebuild-lexical`, then confirm with `atlas doctor`.
+- **To avoid it:** do not run a manual `atlas index` while `serve`/`watch`/an
+  MCP session holds the same `.atlas` — stop them first, or let the running
+  server's watch pick up the change.
+
+**Why `atlas status` looked clean but `atlas doctor` caught it:** `atlas status`
+reports **version and contract health only** — schema, index-format, lexical,
+and MCP contract versions plus per-repo snapshot format. It never opens the
+sidecar, so a wedged or empty sidecar leaves `status` green. `atlas doctor`
+checks **runtime health**, opens the sidecar, and reports `lexical_degraded`
+when it is empty or wedged. That split is by design: if search behaves oddly but
+`status` is clean, run `atlas doctor`.
 
 ## Read the Diagnosis
 
