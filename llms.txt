@@ -6,7 +6,7 @@
 > Benchmark (July 2026, real-LLM scored, 37 languages): Atlas F1 0.757 @ 21.2 tokens vs
 > graph tool 0.539 @ 97 tokens — 6.4× accuracy per token, 36× fewer tokens.
 > Real-repo (gopls ground truth): Atlas F1 0.975 vs graph tool 0.084. 40 code languages on a
-> five-level maturity ladder. Version 0.1.38.
+> five-level maturity ladder. Version 0.1.39.
 
 ## Benchmark data
 - [site-data.json](https://aziron-ai.github.io/atlas/data/site-data.json): the full payload the page renders — headline table, efficiency frontier, detail knob, maturity ladder, scorecard, per-language results
@@ -20,4 +20,5 @@
 - [Benchmark & comparison](https://aziron-ai.github.io/atlas/#benchmarks): interactive version of the published evidence
 - [GitHub repository](https://github.com/aziron-ai/atlas): releases (macOS, Linux, Windows), issues
 - [GitHub Wiki](https://github.com/aziron-ai/atlas/wiki): mirror of the consumer product guide
-- [npm package](https://github.com/aziron-ai/atlas/pkgs/npm/atlas): `npm install -g @aziron-ai/atlas`
+- [npm package](https://www.npmjs.com/package/@aziron/atlas): `npm install -g @aziron/atlas`
+- [GitHub Packages](https://github.com/aziron-ai/atlas/pkgs/npm/atlas): authenticated alternative `@aziron-ai/atlas`

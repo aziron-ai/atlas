@@ -59,25 +59,30 @@
   <main class="wrap">
     <article>
 <h1>Installation</h1>
-<p>Atlas ships through four channels that all install the same native binary. Pick the channel that matches how you manage software on the target machine:</p>
-<table><thead><tr><th>Channel</th><th>Best for</th><th>Platforms</th></tr></thead><tbody><tr><td>Homebrew</td><td>macOS/Linux workstations; managed upgrades</td><td>macOS/Linux amd64 and arm64</td></tr><tr><td>npm (GitHub Packages)</td><td>Node toolchains and CI that already hold a GitHub token</td><td>macOS/Linux x64 and arm64; Windows x64</td></tr><tr><td>Release archive</td><td>Air-gapped hosts, exact-version pinning, Windows</td><td>macOS/Linux amd64 and arm64; Windows amd64</td></tr><tr><td>Linux package</td><td>Fleet management with <code>.deb</code>/<code>.rpm</code>/<code>.apk</code></td><td>amd64 and arm64</td></tr></tbody></table>
+<p>Atlas ships through five channels that all install the same native binary. Pick the channel that matches how you manage software on the target machine:</p>
+<table><thead><tr><th>Channel</th><th>Best for</th><th>Platforms</th></tr></thead><tbody><tr><td>Homebrew</td><td>macOS/Linux workstations; managed upgrades</td><td>macOS/Linux amd64 and arm64</td></tr><tr><td>npm (public registry)</td><td>Node toolchains, workstations, and public CI</td><td>macOS/Linux x64 and arm64; Windows x64</td></tr><tr><td>npm (GitHub Packages)</td><td>Organization CI that already uses GitHub Packages</td><td>macOS/Linux x64 and arm64; Windows x64</td></tr><tr><td>Release archive</td><td>Air-gapped hosts, exact-version pinning, Windows</td><td>macOS/Linux amd64 and arm64; Windows amd64</td></tr><tr><td>Linux package</td><td>Fleet management with <code>.deb</code>/<code>.rpm</code>/<code>.apk</code></td><td>amd64 and arm64</td></tr></tbody></table>
 <h2>Homebrew (macOS and Linux)</h2>
 <p>Use Homebrew when you want the shortest path and automatic upgrades alongside your other tooling.</p>
 <pre><code>brew install --cask aziron-ai/atlas/atlas
 atlas version</code></pre>
 <p>Homebrew names fully qualified casks as <code>&lt;owner&gt;/&lt;tap&gt;/&lt;cask&gt;</code>. The repository <code>aziron-ai/homebrew-atlas</code> becomes the tap <code>aziron-ai/atlas</code>; the cask and the installed executable are both named <code>atlas</code>.</p>
-<h2>npm (GitHub Packages)</h2>
-<p>Use npm when Atlas should install through an existing Node toolchain or CI pipeline. The package is published to GitHub Packages, not the public npm registry, so npm must be pointed at the <code>@aziron-ai</code> scope with a GitHub token that has the <code>read:packages</code> scope — GitHub Packages requires authentication even for public packages:</p>
+<h2>npm (public registry)</h2>
+<p>Use npm when Atlas should install through an existing Node toolchain or CI pipeline. The public package needs no registry configuration or GitHub token:</p>
+<pre><code>npm install -g @aziron/atlas
+atlas version</code></pre>
+<p>Pin an exact version for reproducible environments:</p>
+<pre><code>npm install -g @aziron/atlas@0.1.39</code></pre>
+<h3>GitHub Packages alternative</h3>
+<p>Atlas is also published to GitHub Packages as <code>@aziron-ai/atlas</code>. Use this coordinate when organization CI already authenticates to GitHub Packages. Point the <code>@aziron-ai</code> scope at GitHub and use a token with <code>read:packages</code>:</p>
 <pre><code>npm config set @aziron-ai:registry https://npm.pkg.github.com
 npm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN
 npm install -g @aziron-ai/atlas
 atlas version</code></pre>
-<p>Pin an exact version for reproducible environments:</p>
-<pre><code>npm install -g @aziron-ai/atlas@0.1.38</code></pre>
-<p>The npm package is a wrapper that downloads the native Atlas binary for the current platform. If you do not need npm specifically, Homebrew is the simpler path.</p>
+<pre><code>npm install -g @aziron-ai/atlas@0.1.39</code></pre>
+<p>Both npm coordinates install the same wrapper and native Atlas binary for the current platform. If you do not need npm specifically, Homebrew is the simpler path on macOS and Linux.</p>
 <h2>Release Archives</h2>
 <p>Use a release archive when no package manager is available, on air-gapped hosts, or when you need to pin and checksum exact bytes. Choose the current version and platform from <a href="https://github.com/aziron-ai/atlas/releases/latest">GitHub Releases</a>:</p>
-<pre><code>VERSION=0.1.38
+<pre><code>VERSION=0.1.39
 OS=darwin       # darwin or linux
 ARCH=arm64      # arm64 or amd64
 ASSET=&quot;atlas_${VERSION}_${OS}_${ARCH}.tar.gz&quot;
@@ -95,18 +100,18 @@ atlas version</code></pre>
 <h2>Native Linux Packages</h2>
 <p>Use native packages when your fleet is managed through a distribution package manager. Each release includes <code>.deb</code>, <code>.rpm</code>, and <code>.apk</code> packages for amd64 and arm64. Download the matching package from the release page, then install:</p>
 <pre><code># Debian or Ubuntu
-sudo dpkg -i atlas_0.1.38_linux_amd64.deb
+sudo dpkg -i atlas_0.1.39_linux_amd64.deb
 
 # Fedora or RHEL
-sudo rpm -U atlas_0.1.38_linux_amd64.rpm
+sudo rpm -U atlas_0.1.39_linux_amd64.rpm
 
 # Alpine
-sudo apk add --allow-untrusted atlas_0.1.38_linux_amd64.apk</code></pre>
+sudo apk add --allow-untrusted atlas_0.1.39_linux_amd64.apk</code></pre>
 <h2>Post-Install: Assistant Bootstrap</h2>
 <p>Homebrew and npm installations run <code>atlas bootstrap</code> after install. Bootstrap registers Atlas as an MCP server and installs the atlas-first skill and CLAUDE.md directive for every detected assistant (Claude desktop and CLI, Codex, Copilot, Cursor, Gemini). It is idempotent — safe to run repeatedly and from a package post-install hook. Inspect the proposed changes at any time without writing anything:</p>
 <pre><code>atlas bootstrap --dry-run</code></pre>
 <p>To prevent the npm post-install bootstrap in managed environments:</p>
-<pre><code>ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron-ai/atlas</code></pre>
+<pre><code>ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron/atlas</code></pre>
 <p>Archive and Linux-package installs do not configure assistants automatically; run <code>atlas bootstrap</code> yourself when you want them connected.</p>
 <h2>PATH Note</h2>
 <p>Assistants launch Atlas by resolving <code>atlas</code> from <code>PATH</code>, so the binary must be reachable from a login shell — not only your current session. Homebrew and the Linux packages handle this; for archives, <code>/usr/local/bin</code> (used above) is on <code>PATH</code> by default on most systems. For npm installs, ensure npm's global bin directory is on <code>PATH</code>.</p>
@@ -139,7 +144,7 @@ atlas doctor --verify atlas</code></pre>
         <a href="../upgrade/">Upgrade and Uninstall</a>
     </nav>
     <footer class="site">
-      Atlas v0.1.38 · <a href="https://aziron-ai.github.io/atlas/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      Atlas v0.1.39 · <a href="https://aziron-ai.github.io/atlas/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
       This page mirrors the interactive documentation for search engines and AI assistants.
     </footer>
   </main>
