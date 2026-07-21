@@ -1009,7 +1009,7 @@ function DocsPage({ slug }) {
             <div className="docs-table-wrap"><table><thead><tr><th>Flag</th><th>Default</th><th>Effect</th></tr></thead><tbody>
               <tr><td><code>--addr</code></td><td><code>127.0.0.1:3099</code></td><td>Listen address; loopback by default. Use <code>0.0.0.0:3099</code> to expose on the network</td></tr>
               <tr><td><code>--mcp</code></td><td>off</td><td>Also mount MCP over HTTP at <code>POST /mcp</code></td></tr>
-              <tr><td><code>--open</code></td><td><code>true</code></td><td>Open the dashboard in your browser once ready (best-effort); <code>--open=false</code> for CI/headless</td></tr>
+              <tr><td><code>--open</code></td><td><code>false</code></td><td>Auto-open the dashboard in your browser once ready (off by default; pass <code>--open</code> to enable). <code>serve</code> hosts the dashboard either way</td></tr>
               <tr><td><code>--watch</code></td><td><code>true</code></td><td>Keep the graph fresh by watching the repo; <code>--watch=false</code> or <code>ATLAS_NO_WATCH=1</code> to disable</td></tr>
               <tr><td><code>--watch-path</code></td><td><code>--repo</code>, else current dir</td><td>Repo path to watch when <code>--watch</code> is set</td></tr>
             </tbody></table></div>
