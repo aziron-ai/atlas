@@ -42,7 +42,7 @@ atlas version
 Pin an exact version for reproducible environments:
 
 ```sh
-npm install -g @aziron-ai/atlas@0.1.36
+npm install -g @aziron-ai/atlas@0.1.38
 ```
 
 The npm package is a wrapper that downloads the native Atlas binary for the
@@ -57,7 +57,7 @@ version and platform from
 [GitHub Releases](https://github.com/aziron-ai/atlas/releases/latest):
 
 ```sh
-VERSION=0.1.36
+VERSION=0.1.38
 OS=darwin       # darwin or linux
 ARCH=arm64      # arm64 or amd64
 ASSET="atlas_${VERSION}_${OS}_${ARCH}.tar.gz"
@@ -87,13 +87,13 @@ and arm64. Download the matching package from the release page, then install:
 
 ```sh
 # Debian or Ubuntu
-sudo dpkg -i atlas_0.1.36_linux_amd64.deb
+sudo dpkg -i atlas_0.1.38_linux_amd64.deb
 
 # Fedora or RHEL
-sudo rpm -U atlas_0.1.36_linux_amd64.rpm
+sudo rpm -U atlas_0.1.38_linux_amd64.rpm
 
 # Alpine
-sudo apk add --allow-untrusted atlas_0.1.36_linux_amd64.apk
+sudo apk add --allow-untrusted atlas_0.1.38_linux_amd64.apk
 ```
 
 ## Post-Install: Assistant Bootstrap
