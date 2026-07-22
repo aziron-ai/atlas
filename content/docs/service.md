@@ -16,8 +16,8 @@ atlas serve --mcp
 Useful variants:
 
 ```sh
-atlas serve --open=false
-atlas serve --open=false --watch=false
+atlas serve --open        # also auto-open the dashboard in your browser
+atlas serve --watch=false  # do not keep the graph fresh in the background
 ```
 
 Default address and dashboard:
@@ -33,7 +33,7 @@ http://127.0.0.1:3099/dashboard
 | --- | --- | --- |
 | `--addr` | `127.0.0.1:3099` | Listen address; loopback by default. Use `0.0.0.0:3099` to expose on the network |
 | `--mcp` | off | Also mount MCP over HTTP at `POST /mcp` |
-| `--open` | `true` | Open the dashboard in your browser once ready (best-effort); `--open=false` for CI/headless |
+| `--open` | `false` | Auto-open the dashboard in your browser once ready (off by default; pass `--open` to enable). `serve` hosts the dashboard either way |
 | `--watch` | `true` | Keep the graph fresh by watching the repo; `--watch=false` or `ATLAS_NO_WATCH=1` to disable |
 | `--watch-path` | `--repo`, else current dir | Repo path to watch when `--watch` is set |
 

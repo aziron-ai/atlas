@@ -119,7 +119,7 @@ atlas uninstall
 
 Package removal does not automatically delete repository indexes; delete the
 `.atlas/` directory (with Atlas processes stopped) to remove an index, or use
-`atlas repo rm` to forget one repository's snapshots, symbols, edges,
+`atlas uninstall --purge` to delete the index databases automatically (the global `~/.atlas` and every registry-known repo's `.atlas`, with a blast-radius report and confirmation), or `atlas repo rm` to forget one repository's snapshots, symbols, edges,
 embeddings, and lexical documents from a shared database.
 
 ## Shared and Connected Environments

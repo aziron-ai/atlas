@@ -36,11 +36,11 @@ Build the graph, keep it fresh, and verify that storage and schema are sound.
 
 | Command | Purpose |
 | --- | --- |
-| `index` | Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; `--reindex` forces a full rebuild. |
+| `index` | Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; `--reindex` forces a full rebuild; `--workers N` (or `ATLAS_INDEX_WORKERS`; 0 = all cores) caps the parse/hash pool to bound CPU on a large index. |
 | `watch` | Index once, then watch the working tree and apply debounced incremental updates on every file change. Foreground until interrupted. |
 | `status` | Storage and version health: schema/index-format contracts and per-repo snapshot format state (`--schema` for contract versions and drift). |
 | `stats` | Graph and index telemetry statistics for an indexed repo. |
-| `doctor` | Report upgrade health and schema/index contract state; `--verify` also checks whether the `atlas` on PATH matches the running binary. |
+| `doctor` | Report upgrade health and schema/index contract state; `--verify` also checks whether the `atlas` on PATH matches the running binary; `--deep` runs a page-level integrity scan (`PRAGMA quick_check`) to catch on-disk corruption reads silently tolerate. |
 | `report` | Compose graph stats, top hubs, and top communities; `--format plain` prints the Markdown report directly. |
 | `migrate` | Apply storage migrations and report the active contracts. |
 | `compact` | Reclaim space and truncate the WAL; `--full` also runs a full VACUUM and rebuilds an oversized lexical sidecar; `--rebuild-lexical` fixes an empty or wedged sidecar. |
@@ -120,7 +120,7 @@ Wire Atlas into AI assistants and serve it over MCP or HTTP. See
 | --- | --- |
 | `bootstrap` | Register Atlas as an MCP server and install the atlas-first skill and CLAUDE.md directive for all detected assistants (Claude desktop+CLI, Codex, Copilot, Cursor, Gemini). Idempotent. |
 | `install` | Install integration glue piecemeal: `install skill` (assistant registration), `install hook` (git hook that keeps the graph fresh), `install aziron`. |
-| `uninstall` | Reverse `bootstrap` across every assistant it provisions; touches only atlas-managed entries. Idempotent. |
+| `uninstall` | Reverse `bootstrap` across every assistant it provisions; touches only atlas-managed entries. `--purge` also deletes the `.atlas` index databases (global `~/.atlas` + registry repo roots), showing the blast radius and requiring `--yes` (or `--dry-run`). Idempotent. |
 | `mcp` | Expose graph/search/impact as MCP tools over stdio (default), Streamable HTTP (`--http`), or legacy SSE (`--sse`); `--supervise` runs the warm gateway. |
 | `serve` | Run the REST HTTP API and dashboard on `127.0.0.1:3099`; `--mcp` also mounts MCP over HTTP at `POST /mcp`. |
 | `skill` | Author, test, render, and distribute runbook skills (`new`, `lint`, `test`, `register`, `render`, `push`, `pull`, and more). |
@@ -129,7 +129,7 @@ Wire Atlas into AI assistants and serve it over MCP or HTTP. See
 atlas bootstrap --dry-run
 atlas install skill --agent codex,claude,claude-desktop
 atlas mcp --supervise
-atlas serve --mcp --open=false
+atlas serve --mcp
 ```
 
 Both `mcp` and `serve` watch the repo by default to keep the graph fresh;
