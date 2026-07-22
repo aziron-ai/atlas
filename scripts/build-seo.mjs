@@ -301,6 +301,9 @@ ${agentBenchBlock}
            Then <code>atlas index .</code> and <code>atlas mcp --transport stdio</code> for agents.</p>
         <p>Every number above is reproducible from the committed artifacts under <a href="data/">data/</a>.
            This static digest is replaced by the interactive page when JavaScript is available.</p>
+
+        <h2>Community</h2>
+        <p><a href="https://www.producthunt.com/products/atlas-44?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-atlas-47" target="_blank" rel="noopener noreferrer"><img alt="Atlas - Local code intelligence for developers and AI assistants | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1203538&amp;theme=light&amp;t=1784726889410"></a></p>
       </div>
 `;
 
@@ -384,7 +387,7 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intellig
 /* --------------------- per-doc indexable pages -------------------------- */
 
 const DOC_CSS = `
-  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#111827; --muted:#64748b; --line:#e2e8f0; --primary:#2563eb; --link:#0284c7; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
   .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
