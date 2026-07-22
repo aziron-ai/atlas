@@ -9,20 +9,20 @@ import React from "react";
    ============================================================ */
 
 const C = {
-  contour: "rgba(122,168,194,0.20)",
-  contourSoft: "rgba(122,168,194,0.11)",
-  ink: "#EDF3F5",
-  muted: "#AFC6D2",
-  faint: "#7E9BB0",
-  signal: "#E9B44C",
-  route: "#BFD6DE",
-  impact: "#E2725B",
-  settlement: "#CFE0E6",
-  ground: "#0B2130",
+  contour: "rgba(148,163,184,0.34)",
+  contourSoft: "rgba(148,163,184,0.18)",
+  ink: "#111827",
+  muted: "#64748B",
+  faint: "#94A3B8",
+  signal: "#2563EB",
+  route: "#475569",
+  impact: "#DC2626",
+  settlement: "#334155",
+  ground: "#F9FAFB",
 };
 
 const MONO = 'ui-monospace, "SF Mono", Menlo, Consolas, monospace';
-const DISP = '"Futura", "Avenir Next", "Trebuchet MS", sans-serif';
+const DISP = 'Inter, system-ui, -apple-system, "Segoe UI", sans-serif';
 
 /* Catmull-Rom closed loop -> cubic beziers */
 function blobPath(pts) {
@@ -210,7 +210,7 @@ export default function SurveyChart() {
               <path
                 key={f}
                 d={blobPath(f === 1 ? t.pts : shrink(t.pts, f))}
-                fill={j === 0 ? "rgba(122,168,194,0.045)" : "none"}
+                fill={j === 0 ? "rgba(148,163,184,0.08)" : "none"}
                 stroke={C.contour}
                 strokeWidth={j === 0 ? 1.1 : 0.7}
               />
@@ -298,7 +298,7 @@ export default function SurveyChart() {
 
         {/* cartouche: the query that produced this figure */}
         <g>
-          <rect x={M + 14} y={H - M - 58} width="268" height="44" fill="#0E2A3D" stroke={C.contour} />
+          <rect x={M + 14} y={H - M - 58} width="268" height="44" fill="#FFFFFF" stroke={C.contour} />
           <rect x={M + 17} y={H - M - 55} width="262" height="38" fill="none" stroke={C.contourSoft} />
           <text x={M + 28} y={H - M - 41} fill={C.faint} fontSize="8" fontFamily={DISP} letterSpacing="0.24em">
             SURVEY OF ONE QUERY
@@ -337,7 +337,7 @@ export function LatencyScaleBar() {
           y={axisY - 4}
           width={sx(10) - sx(0)}
           height="8"
-          fill={i % 2 ? "rgba(122,168,194,0.10)" : "rgba(122,168,194,0.32)"}
+          fill={i % 2 ? "rgba(148,163,184,0.14)" : "rgba(148,163,184,0.34)"}
           stroke={C.contour}
           strokeWidth="0.5"
         />
