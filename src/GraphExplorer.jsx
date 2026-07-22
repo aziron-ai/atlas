@@ -17,11 +17,11 @@ const COMMUNITY_COLORS = [
 const PALETTE = {
   bg: "#F9FAFB",
   surface: "#FFFFFF",
-  line: "#E2E8F0",
-  lineStrong: "#CBD5E1",
-  text: "#111827",
-  muted: "#64748B",
-  faint: "#94A3B8",
+  line: "#D8E0EA",
+  lineStrong: "#B8C4D2",
+  text: "#0F172A",
+  muted: "#475569",
+  faint: "#526277",
   primary: "#2563EB",
 };
 

@@ -475,6 +475,36 @@ export function ProductHome({ data }) {
             </div>
           </div>
         </section>
+
+        {/* =================== H·1 community recognition =================== */}
+        <section className="producthunt-band hairline" aria-labelledby="producthunt-title">
+          <div className="shell py-12">
+            <div className="producthunt-card">
+              <div>
+                <div className="kicker">Community recognition</div>
+                <h2 id="producthunt-title">Atlas is live on Product Hunt</h2>
+                <p>Explore the launch, share feedback, and help more developers discover local-first code intelligence.</p>
+              </div>
+              <a
+                className="producthunt-badge focusring"
+                data-testid="producthunt-badge"
+                href="https://www.producthunt.com/products/atlas-44?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-atlas-47"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View Atlas on Product Hunt"
+              >
+                <img
+                  alt="Atlas - Local code intelligence for developers and AI assistants | Product Hunt"
+                  width="250"
+                  height="54"
+                  loading="lazy"
+                  decoding="async"
+                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1203538&theme=light&t=1784726889410"
+                />
+              </a>
+            </div>
+          </div>
+        </section>
       </main>
       <ProductFooter version={data.version} />
     </>

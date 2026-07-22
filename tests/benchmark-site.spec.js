@@ -43,6 +43,10 @@ test.describe("atlas product and documentation", () => {
     );
     await expect(page.getByTestId("product-nav")).toContainText(`v${site.version}`);
     await expect(page.getByRole("link", { name: /View benchmark evidence/ })).toHaveAttribute("href", "#benchmarks");
+    const productHuntBadge = page.getByTestId("producthunt-badge");
+    await expect(productHuntBadge).toBeVisible();
+    await expect(productHuntBadge).toHaveAttribute("href", /producthunt\.com\/products\/atlas-44/);
+    await expect(productHuntBadge.locator("img")).toHaveAttribute("width", "250");
   });
 
   test("all consumer documentation pages render with task content", async ({ page }) => {
