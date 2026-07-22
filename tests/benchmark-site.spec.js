@@ -43,6 +43,9 @@ test.describe("atlas product and documentation", () => {
     );
     await expect(page.getByTestId("product-nav")).toContainText(`v${site.version}`);
     await expect(page.getByRole("link", { name: /View benchmark evidence/ })).toHaveAttribute("href", "#benchmarks");
+    await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute("href", "assets/atlas-mark.svg");
+    await expect(page.locator("img.brand-mark")).toHaveCount(2);
+    await expect(page.locator("img.brand-mark").first()).toHaveAttribute("src", "assets/atlas-mark.svg");
     const productHuntBadge = page.getByTestId("producthunt-badge");
     await expect(productHuntBadge).toBeVisible();
     await expect(productHuntBadge).toHaveAttribute("href", /producthunt\.com\/products\/atlas-44/);
