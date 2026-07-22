@@ -132,6 +132,32 @@ When you need runtime evidence rather than a health verdict, look here:
 - **`atlas sync status`** (connected fleets only) shows uplink configuration,
   kill switches, and per-stream cursors.
 
+## Two Atlas Writers at Once
+
+A different sidecar line means two Atlas processes raced to WRITE it:
+
+```text
+atlas: lexical segment-version probe failed (…: timeout) — opening anyway
+```
+
+This is writer-vs-writer contention — typically a manual `atlas index` while a
+`serve` or `watch` daemon owns the same sidecar. It is a one-off warning and
+self-heals exactly like the sidecar-unavailable case above: the run continues,
+and the next uncontended index or `atlas compact --rebuild-lexical` restores
+BM25. If it recurs constantly, quiesce the extra writer (stop the manual
+reindex loop, or let the daemon own freshness).
+
+## Silent Disk Corruption (and `doctor --deep`)
+
+SQLite reads pages lazily, so a store with corrupted interior pages can keep
+answering reads — `doctor`, `status`, and queries all look healthy — until the
+next write fails with `database disk image is malformed (11)`. From v0.1.43,
+`atlas doctor --deep` runs the page-level integrity scan (`PRAGMA
+quick_check`) and escalates to `status: "db_corrupt"` with the damaged pages
+named. It is a full-file scan (seconds on GB-scale stores), so it is opt-in —
+run it when hardware, filesystem, or sync tooling is suspect. Recovery: restore
+`.atlas` from a backup, or delete `.atlas` and run `atlas index --reindex`.
+
 ## Before Deleting Data
 
 > **Warning:** Deleting `.atlas/` is irreversible and is almost never the

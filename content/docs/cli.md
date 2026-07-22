@@ -65,6 +65,7 @@ Find code and pull bounded, deterministic context about it.
 | `context` | Bounded review-context bundle for changed/seed paths; budgets via `--intent` (`auto` is 16-32 KiB), per-request flags, or env vars. |
 | `explain` | Deterministic context bundle for a symbol: defs, callers/callees, imports, served routes, cross-repo consumers. |
 | `symbol` | Show a symbol's definition(s) with its callers and callees. |
+| `snippet` | Show a symbol's bounded implementation body (path:line, signature, source excerpt). |
 | `callers` | List symbols that directly call a symbol; scope overloaded names with `--package`, `--receiver`, or `--arity`. |
 | `refs` | List references to a symbol: call sites plus type-use references (params, fields, returns). |
 | `neighbors` | Depth-1 call neighborhood: a symbol's direct callers and callees. |
