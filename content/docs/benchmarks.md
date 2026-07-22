@@ -43,6 +43,8 @@ These are the current published numbers, each with its evidence conditions:
 | Graph-tool comparison: 0.539 F1 at 97 tokens | Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens |
 | Query latency ~7.4 ms vs 128 ms for the graph tool | Real repositories, 36 languages; flat from 15 to 39,161 symbols |
 
+*Measurement layer:* the 7.4 ms figure is warm **in-process engine latency** (the number an MCP/serve session experiences per call). End-to-end **CLI** latency adds ~30 ms of process spawn on both sides — roughly 44 ms vs 450 ms (~9×) — so shell-loop reproductions should expect the CLI numbers, not 7.4 ms.
+
 ## Agent-Harness Token Benchmark (2026-07-10)
 
 This measures what a real agent actually spends. Claude Code and OpenAI Codex

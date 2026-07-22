@@ -123,6 +123,24 @@ Linking is idempotent — re-linking updates the registration and reports
 that. To remove a repo from the registry, `atlas repo rm` forgets it entirely:
 snapshots, symbols, edges, embeddings, and lexical documents.
 
+## Performance Envelope
+
+Two behaviors worth knowing on large or memory-constrained machines:
+
+- **Streaming index (v0.1.42+).** Full indexes of repos over ~15,000 candidate
+  files automatically stream in bounded batches instead of holding the whole
+  graph in memory — the Linux kernel (81k files, 1.86M symbols, 6.8M edges)
+  indexes at ~1.3 GiB peak RSS. Force it at any size with
+  `ATLAS_STREAM_INDEX=1` (or off with `0`); tune with
+  `ATLAS_STREAM_INDEX_THRESHOLD` and `ATLAS_STREAM_INDEX_BATCH`. `ATLAS_GOGC`
+  and `ATLAS_MEMORY_LIMIT` further bound the Go runtime on CI runners.
+- **Deletions cost more than edits.** Adding or modifying files takes the
+  scoped delta path (sub-second, tens of MB). Deleting a Go file currently
+  forces the whole-module type-check fallback — correctness requires
+  re-deriving reverse-dependency edges — so a delete delta can approach
+  cold-build time and RAM on Go-heavy repos. A scoped-deletion analyzer is
+  planned; until then, batch deletions together when you can.
+
 ## Database Maintenance
 
 Run maintenance when the database has grown or after an Atlas upgrade.

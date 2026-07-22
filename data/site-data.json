@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "generatedAt": "2026-07-19T07:40:30.897Z",
-  "version": "0.1.39",
+  "version": "0.1.42",
   "report": {
-    "label": "Benchmark & Field Comparison — July 2026",
+    "label": "Benchmark & Field Comparison \u2014 July 2026",
     "method": {
       "scoringModel": "claude-haiku-4-5",
-      "sampling": "temperature 0 · 3 samples/cell · majority vote · no tools",
+      "sampling": "temperature 0 \u00b7 3 samples/cell \u00b7 majority vote \u00b7 no tools",
       "cells": 222,
       "modelCalls": 666,
-      "fixture": "per language: a function `target`, exactly 15 direct callers c01–c15, 3 decoys n01–n03 — truth by construction",
+      "fixture": "per language: a function `target`, exactly 15 direct callers c01\u2013c15, 3 decoys n01\u2013n03 \u2014 truth by construction",
       "evidenceClasses": [
         {
           "id": "fixture-truth",
@@ -160,7 +160,7 @@
     "detailKnob": {
       "flag": "--detail low|medium|high|xhigh",
       "defaultLevel": "high",
-      "floorNote": "Retrieval operations floor at high — an agent is never handed a truncated, and therefore wrong, caller list.",
+      "floorNote": "Retrieval operations floor at high \u2014 an agent is never handed a truncated, and therefore wrong, caller list.",
       "levels": [
         {
           "id": "low",
@@ -181,14 +181,14 @@
           "tokens": 21,
           "f1": 0.76,
           "what": "full uncapped caller list",
-          "note": "the default — all the accuracy at 1/13th of xhigh's tokens"
+          "note": "the default \u2014 all the accuracy at 1/13th of xhigh's tokens"
         },
         {
           "id": "xhigh",
           "tokens": 288,
           "f1": 0.76,
           "what": "+ stable IDs, docs, scores",
-          "note": "14× the tokens for no accuracy gain — dominated by high"
+          "note": "14\u00d7 the tokens for no accuracy gain \u2014 dominated by high"
         }
       ]
     },
@@ -223,15 +223,15 @@
         },
         {
           "label": "Faster queries",
-          "value": "17×"
+          "value": "17\u00d7"
         },
         {
           "label": "Fewer query tokens",
-          "value": "36×"
+          "value": "36\u00d7"
         },
         {
           "label": "Faster cold index",
-          "value": "2.3×"
+          "value": "2.3\u00d7"
         }
       ],
       "rows": [
@@ -240,59 +240,59 @@
           "atlas": "0.757",
           "graphify": "0.539",
           "advantage": "+40%",
-          "evidence": "fixtures · 37 langs"
+          "evidence": "fixtures \u00b7 37 langs"
         },
         {
           "metric": "Query latency",
           "atlas": "7.4 ms",
           "graphify": "128 ms",
-          "advantage": "17× faster",
-          "evidence": "real repos · 36 langs"
+          "advantage": "17\u00d7 faster",
+          "evidence": "real repos \u00b7 36 langs"
         },
         {
           "metric": "Query tokens (per answer)",
           "atlas": "2.6",
           "graphify": "92.8",
-          "advantage": "36× fewer",
-          "evidence": "real repos · 36 langs"
+          "advantage": "36\u00d7 fewer",
+          "evidence": "real repos \u00b7 36 langs"
         },
         {
           "metric": "Answer context size",
           "atlas": "21.2 tok",
           "graphify": "96 tok",
-          "advantage": "4.5× smaller",
-          "evidence": "fixtures · 37 langs"
+          "advantage": "4.5\u00d7 smaller",
+          "evidence": "fixtures \u00b7 37 langs"
         },
         {
           "metric": "Cold index build",
           "atlas": "0.62 s",
           "graphify": "1.39 s",
-          "advantage": "2.3× faster",
-          "evidence": "real repos · 36 langs"
+          "advantage": "2.3\u00d7 faster",
+          "evidence": "real repos \u00b7 36 langs"
         },
         {
           "metric": "Incremental re-index",
           "atlas": "0.10 s",
           "graphify": "1.39 s",
-          "advantage": "14× faster",
-          "evidence": "real repos · Graphify rebuilds fully"
+          "advantage": "14\u00d7 faster",
+          "evidence": "real repos \u00b7 Graphify rebuilds fully"
         },
         {
           "metric": "Call edges extracted",
           "atlas": "9,157",
           "graphify": "1,161",
-          "advantage": "7.9× more",
-          "evidence": "real repo · typelevel/cats"
+          "advantage": "7.9\u00d7 more",
+          "evidence": "real repo \u00b7 typelevel/cats"
         },
         {
           "metric": "Coverage vs native AST",
           "atlas": "100.2%",
           "graphify": "100%",
           "advantage": "parity",
-          "evidence": "real repo · cats (tree-sitter)"
+          "evidence": "real repo \u00b7 cats (tree-sitter)"
         }
       ],
-      "note": "Atlas is deterministic and LLM-free — the tool itself spends no tokens and never hallucinates. Only the agent reading its output spends tokens, and Atlas keeps that context small."
+      "note": "Atlas is deterministic and LLM-free \u2014 the tool itself spends no tokens and never hallucinates. Only the agent reading its output spends tokens, and Atlas keeps that context small."
     },
     "field": [
       {
@@ -374,19 +374,19 @@
         "oneTool": false
       }
     ],
-    "fieldNote": "Matching Atlas's coverage with the accurate alternatives means running 5 separate LSP servers or 4 separate SCIP indexers. They are precise by construction and serve as the accuracy reference — Atlas's aim is to match them as one fast multi-language tool (F1 0.975 vs gopls on Go).",
+    "fieldNote": "Matching Atlas's coverage with the accurate alternatives means running 5 separate LSP servers or 4 separate SCIP indexers. They are precise by construction and serve as the accuracy reference \u2014 Atlas's aim is to match them as one fast multi-language tool (F1 0.975 vs gopls on Go).",
     "latencyAtScale": {
       "meanMs": 7.4,
       "minMs": 0.5,
       "maxMs": 15,
       "largestSymbols": 39161,
       "sizeRange": 2611,
-      "why": "Answering `who calls X` costs proportional to the number of callers returned, not the size of the codebase — indexing absorbs scale up front."
+      "why": "Answering `who calls X` costs proportional to the number of callers returned, not the size of the codebase \u2014 indexing absorbs scale up front."
     },
     "crossModel": {
       "rows": [
         {
-          "source": "Atlas — explain high",
+          "source": "Atlas \u2014 explain high",
           "haiku": 0.757,
           "sonnet": 0.757,
           "agreement": "identical"
@@ -404,12 +404,12 @@
           "agreement": "identical"
         }
       ],
-      "note": "Two independent models — one small, one large — score Atlas's high-detail context identically and rank the tools the same way: the result is a property of the context, not of any single model."
+      "note": "Two independent models \u2014 one small, one large \u2014 score Atlas's high-detail context identically and rank the tools the same way: the result is a property of the context, not of any single model."
     },
     "limits": [
-      "9 of 37 languages had parser gaps at report time (bash, blade, byond, ejs, objc, pascal, powershell, razor, ruby) — template/edge dialects pending native call-edge extraction. The Linux saturation run has since fixed all 9 on fixture-truth; real-repo proof is pending.",
-      "On 3 gap languages the graph tool still answered — by dumping full source at ~161 tokens. Where Atlas parses a language it wins on cost and accuracy.",
-      "Scoring correction disclosed: an earlier scorer under-credited the graph tool on Scala (rejected `c01()` for parentheses). The corrected scorer raised the competitor's score from 0.000 to 1.000 — the report carries the corrected number."
+      "9 of 37 languages had parser gaps at report time (bash, blade, byond, ejs, objc, pascal, powershell, razor, ruby) \u2014 template/edge dialects pending native call-edge extraction. The Linux saturation run has since fixed all 9 on fixture-truth; real-repo proof is pending.",
+      "On 3 gap languages the graph tool still answered \u2014 by dumping full source at ~161 tokens. Where Atlas parses a language it wins on cost and accuracy.",
+      "Scoring correction disclosed: an earlier scorer under-credited the graph tool on Scala (rejected `c01()` for parentheses). The corrected scorer raised the competitor's score from 0.000 to 1.000 \u2014 the report carries the corrected number."
     ],
     "perLanguage": [
       {
@@ -712,7 +712,7 @@
     "maturity": {
       "totalCodeLanguages": 40,
       "contentFormats": 24,
-      "note": "Levels reflect validation depth, not just support — an L2 language still indexes and searches; it simply has not reached verified call-graph resolution.",
+      "note": "Levels reflect validation depth, not just support \u2014 an L2 language still indexes and searches; it simply has not reached verified call-graph resolution.",
       "levels": [
         {
           "id": "L5",
@@ -789,7 +789,7 @@
       ],
       "pending": {
         "toLevel": "L4",
-        "badge": "L4 · pending real-repo proof",
+        "badge": "L4 \u00b7 pending real-repo proof",
         "langs": [
           "bash",
           "blade",
@@ -812,14 +812,14 @@
           "rust",
           "zig"
         ],
-        "evidence": "call graph cross-checked against the language's own LSP server on a real public repository — see the promotion run"
+        "evidence": "call graph cross-checked against the language's own LSP server on a real public repository \u2014 see the promotion run"
       }
     }
   },
   "fresh": {
     "label": "Linux corroboration run",
     "platform": "Linux 6.18.5 x86_64",
-    "what": "deterministic re-run of the fixture-truth, LSP-truth and cross-repo benches on independent hardware — corroborates the report, does not replace it",
+    "what": "deterministic re-run of the fixture-truth, LSP-truth and cross-repo benches on independent hardware \u2014 corroborates the report, does not replace it",
     "saturation": {
       "perfect": 37,
       "total": 37,
@@ -855,7 +855,7 @@
       "truth": "gopls call_hierarchy"
     },
     "crossRepo": {
-      "note": "a real 2-repo workspace — a Go API server and the React app that calls it — indexed together",
+      "note": "a real 2-repo workspace \u2014 a Go API server and the React app that calls it \u2014 indexed together",
       "producerRoutes": 355,
       "consumerRefs": 738,
       "queries": {
@@ -1716,7 +1716,7 @@
     }
   ],
   "agentBench": {
-    "label": "Agent-harness token benchmark — 2026-07-10",
+    "label": "Agent-harness token benchmark \u2014 2026-07-10",
     "repo": "sirupsen/logrus",
     "commit7": "a23d315",
     "nQuestions": 19,
@@ -1836,14 +1836,14 @@
         "n": 19
       }
     ],
-    "caveat": "Cross-agent absolute totals are not comparable — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent.",
+    "caveat": "Cross-agent absolute totals are not comparable \u2014 the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent.",
     "billedProxyNote": "billed-proxy = fresh input + cache writes + output; cache reads bill at ~10% and are excluded.",
     "artifact": "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json",
     "suiteCmd": "python3 agent-bench/agent_token_bench.py --setup --agents auto \\\n    --qa-set agent-bench/QA_SET_logrus.json --workdir agentbench-work",
     "suiteNeeds": "python3, git, atlas on PATH, graphify (uv tool install graphifyy), and claude and/or codex logged in"
   },
   "l5run": {
-    "label": "L4 → L5 promotion run — July 2026 · macOS arm64",
+    "label": "L4 \u2192 L5 promotion run \u2014 July 2026 \u00b7 macOS arm64",
     "truth": "per-language LSP reference server on a real public repository (callHierarchy preferred, references+documentSymbol enclosure fallback)",
     "truthFilter": "both sides restricted to textually-defined callers; macro/codegen-expanded caller names (no textual definition in the repo) excluded and listed per symbol",
     "scoring": "deterministic simple-name set comparison; no LLM",
@@ -2254,7 +2254,7 @@
       "name": "L5_MATRIX_PUBLIC.json",
       "path": "data/raw/L5_MATRIX_PUBLIC.json",
       "tier": "fresh",
-      "note": "L4→L5 promotion run — per-language LSP-truth callers F1 + query-cost multipliers (macOS)"
+      "note": "L4\u2192L5 promotion run \u2014 per-language LSP-truth callers F1 + query-cost multipliers (macOS)"
     },
     {
       "name": "site-data.json",

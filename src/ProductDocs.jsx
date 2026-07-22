@@ -353,8 +353,9 @@ export function ProductHome({ data }) {
             </div>
 
             <div className="scalebar-block">
-              <span className="kicker">Scale of latencies — mean milliseconds per query (M-02)</span>
+              <span className="kicker">Scale of latencies — mean milliseconds per query, warm in-process engine (M-02)</span>
               <LatencyScaleBar />
+              <span className="kicker">End-to-end CLI adds ~30 ms of process spawn per side: ≈44 ms vs ≈450 ms (~9×) — expect the CLI numbers when reproducing from a shell loop.</span>
             </div>
 
             <p className="survey-foot">
@@ -794,6 +795,7 @@ function DocsPage({ slug }) {
               <tr><td><code>context</code></td><td>Bounded review-context bundle for changed/seed paths; budgets via <code>--intent</code> (<code>auto</code> is 16-32 KiB), per-request flags, or env vars.</td></tr>
               <tr><td><code>explain</code></td><td>Deterministic context bundle for a symbol: defs, callers/callees, imports, served routes, cross-repo consumers.</td></tr>
               <tr><td><code>symbol</code></td><td>Show a symbol's definition(s) with its callers and callees.</td></tr>
+              <tr><td><code>snippet</code></td><td>Show a symbol's bounded implementation body (path:line, signature, source excerpt).</td></tr>
               <tr><td><code>callers</code></td><td>List symbols that directly call a symbol; scope overloaded names with <code>--package</code>, <code>--receiver</code>, or <code>--arity</code>.</td></tr>
               <tr><td><code>refs</code></td><td>List references to a symbol: call sites plus type-use references (params, fields, returns).</td></tr>
               <tr><td><code>neighbors</code></td><td>Depth-1 call neighborhood: a symbol's direct callers and callees.</td></tr>
@@ -1349,6 +1351,8 @@ function DocsPage({ slug }) {
               <tr><td>SQLite is busy or locked</td><td>Stop <code>atlas serve</code>, <code>atlas watch</code>, and supervised MCP processes; inspect the owner with <code>lsof "$PWD/.atlas/atlas.db"</code>; run maintenance serially after all writers exit</td></tr>
               <tr><td>Retrieval reports <code>sql_fallback</code></td><td>The lexical (BM25) sidecar is empty or wedged while the graph stays readable. Run <code>atlas doctor</code> to confirm, stop other Atlas processes, then <code>atlas compact --rebuild-lexical</code> and re-check with <code>atlas doctor</code></td></tr>
               <tr><td><code>index</code> warns <code>lexical sidecar unavailable, indexing without it</code></td><td>A warning, not a failure — the graph indexed fine. Another Atlas process held the sidecar lock (~2s timeout). It self-heals via lazy backfill; or stop other Atlas processes and run <code>atlas compact --rebuild-lexical</code>. See <strong>The lexical sidecar</strong> below</td></tr>
+              <tr><td><code>index</code> warns <code>lexical segment-version probe failed (…) — opening anyway</code></td><td>Two Atlas processes raced to <em>write</em> the sidecar (e.g. a manual reindex beside a running <code>serve</code>/<code>watch</code>). One-off and self-healing like the row above; if it recurs constantly, quiesce the extra writer, then <code>atlas compact --rebuild-lexical</code></td></tr>
+              <tr><td>Writes fail with <code>database disk image is malformed (11)</code> after reads looked healthy</td><td>On-disk corruption that lazy reads silently tolerated. <code>atlas doctor --deep</code> (v0.1.43+) runs the page-level scan (<code>PRAGMA quick_check</code>) and names the damaged pages before a write trips over them. Restore <code>.atlas</code> from a backup, or delete it and reindex</td></tr>
               <tr><td>Assistant does not list Atlas tools</td><td><code>atlas bootstrap --dry-run</code> to preview, <code>atlas doctor --verify atlas</code> to check binary drift; apply <code>atlas bootstrap</code>, then fully restart the assistant</td></tr>
               <tr><td>Doctor or status reports schema/index drift</td><td><code>atlas migrate</code> applies storage migrations and reports the active contracts; confirm with <code>atlas status --schema</code>, then <code>atlas index . --reindex</code> if snapshot formats have drifted</td></tr>
               <tr><td>Database keeps growing after deletions or reindexes</td><td><code>atlas compact</code> reports reclaimable pages and truncates the WAL; <code>atlas compact --full</code> also runs a full VACUUM and rebuilds an oversized lexical sidecar. Both <code>--full</code> and <code>--rebuild-lexical</code> are exclusive — quiesce other Atlas processes first</td></tr>

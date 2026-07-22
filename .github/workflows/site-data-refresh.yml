@@ -1,0 +1,46 @@
+# Keeps the site's displayed release version in lockstep with GitHub Releases
+# (Aziron#462 finding 3: the site said v0.1.39 while v0.1.42 was latest —
+# docs regeneration was a manual step nobody ran). Releases are published on
+# THIS repository, so the release event can update the two version fields and
+# request a Pages build directly; workflow_dispatch covers manual re-syncs.
+name: site-data-refresh
+on:
+  release:
+    types: [published]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+  pages: write
+jobs:
+  refresh-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - name: Sync version fields to the latest release tag
+        run: |
+          set -eu
+          TAG="${{ github.event.release.tag_name }}"
+          if [ -z "$TAG" ]; then
+            TAG="$(curl -sf -H "Authorization: Bearer ${{ github.token }}" \
+              "https://api.github.com/repos/${{ github.repository }}/releases/latest" | jq -r .tag_name)"
+          fi
+          VER="${TAG#v}"
+          node -e '
+            const fs = require("fs");
+            for (const f of ["package.json", "data/site-data.json"]) {
+              const d = JSON.parse(fs.readFileSync(f, "utf8"));
+              d.version = process.argv[1];
+              fs.writeFileSync(f, JSON.stringify(d, null, 2) + "\n");
+            }
+          ' "$VER"
+          if git diff --quiet; then echo "already in sync ($VER)"; exit 0; fi
+          git config user.name "atlas-site-bot"
+          git config user.email "atlas-site-bot@users.noreply.github.com"
+          git commit -am "site-data: version $VER (release sync)"
+          git push origin main
+      - name: Request a Pages build (pushes by GITHUB_TOKEN skip workflow triggers)
+        run: |
+          curl -sf -X POST -H "Authorization: Bearer ${{ github.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages/builds" || true
