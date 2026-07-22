@@ -6,23 +6,23 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 
 // Community accent hues, matching the Cartograph tokens g0..g5.
 const COMMUNITY_COLORS = [
-  "#E9B44C", // g0 survey gold
-  "#8FC1DC", // g1 chart blue
-  "#C792EA", // g2 violet
-  "#63C58C", // g3 green
-  "#E2725B", // g4 coral
-  "#67E8F9", // g5 cyan
+  "#2563EB", // g0 Aziron blue
+  "#0284C7", // g1 sky
+  "#7C3AED", // g2 violet
+  "#16A34A", // g3 green
+  "#DC2626", // g4 red
+  "#0891B2", // g5 cyan
 ];
 
 const PALETTE = {
-  bg: "#0B2130",
-  surface: "#0E2A3D",
-  line: "#1C3D53",
-  lineStrong: "#2A5674",
-  text: "#EDF3F5",
-  muted: "#9DB6C3",
-  faint: "#6C8BA0",
-  primary: "#E9B44C",
+  bg: "#F9FAFB",
+  surface: "#FFFFFF",
+  line: "#E2E8F0",
+  lineStrong: "#CBD5E1",
+  text: "#111827",
+  muted: "#64748B",
+  faint: "#94A3B8",
+  primary: "#2563EB",
 };
 
 // ----- deterministic PRNG -------------------------------------------------
@@ -420,8 +420,8 @@ export default function GraphExplorer({ className = "" }) {
         H * 0.42,
         Math.max(W, H) * 0.6
       );
-      glow.addColorStop(0, "rgba(233,180,76,0.06)");
-      glow.addColorStop(1, "rgba(233,180,76,0)");
+      glow.addColorStop(0, "rgba(37,99,235,0.08)");
+      glow.addColorStop(1, "rgba(37,99,235,0)");
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, W, H);
 
@@ -439,11 +439,11 @@ export default function GraphExplorer({ className = "" }) {
         const incident =
           activeIdx != null && (e.s === activeIdx || e.t === activeIdx);
         if (activeIdx != null && !incident) {
-          ctx.strokeStyle = "rgba(120,130,150,0.04)";
+          ctx.strokeStyle = "rgba(100,116,139,0.08)";
         } else if (incident) {
-          ctx.strokeStyle = "rgba(233,180,76,0.45)";
+          ctx.strokeStyle = "rgba(37,99,235,0.5)";
         } else {
-          ctx.strokeStyle = "rgba(120,130,150,0.10)";
+          ctx.strokeStyle = "rgba(100,116,139,0.18)";
         }
         const sa = worldToScreen(a.x, a.y);
         const sb = worldToScreen(b.x, b.y);
@@ -478,7 +478,7 @@ export default function GraphExplorer({ className = "" }) {
         if (activeIdx != null && (i === activeIdx || (neighbors && neighbors.has(i)))) {
           ctx.globalAlpha = 1;
           ctx.lineWidth = i === activeIdx ? 2 : 1;
-          ctx.strokeStyle = i === activeIdx ? PALETTE.text : "rgba(232,236,242,0.5)";
+          ctx.strokeStyle = i === activeIdx ? PALETTE.text : "rgba(51,65,85,0.42)";
           ctx.stroke();
         }
         ctx.globalAlpha = 1;
@@ -808,7 +808,7 @@ export default function GraphExplorer({ className = "" }) {
               top: Math.min(tooltipPos.pointerY + 14, (tooltipPos.height || 0) - 110),
               pointerEvents: "none",
               maxWidth: 240,
-              background: "rgba(16,19,26,0.96)",
+              background: "rgba(255,255,255,0.98)",
               border: `1px solid ${PALETTE.lineStrong}`,
               borderRadius: 8,
               padding: "8px 10px",
@@ -816,7 +816,7 @@ export default function GraphExplorer({ className = "" }) {
               fontSize: 12,
               lineHeight: 1.45,
               color: PALETTE.text,
-              boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+              boxShadow: "0 10px 24px rgba(15,23,42,0.14)",
               zIndex: 5,
             }}
           >
@@ -983,7 +983,7 @@ export default function GraphExplorer({ className = "" }) {
                     borderRadius: 6,
                     cursor: "pointer",
                     border: `1px solid ${active ? PALETTE.primary : PALETTE.line}`,
-                    background: active ? "rgba(233,180,76,0.12)" : PALETTE.surface,
+                    background: active ? "rgba(37,99,235,0.1)" : PALETTE.surface,
                     color: active ? PALETTE.primary : PALETTE.muted,
                   }}
                 >
