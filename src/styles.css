@@ -3,46 +3,47 @@
 @tailwind utilities;
 
 /* ============================================================
-   Atlas — Cartograph
-   The codebase as surveyed territory: deep atlas-blue chart
-   ground, contour linework, survey-gold signal, coral reserved
-   for impact/danger. No external font CDN: display = Futura
-   stack, body = Seravek/Gill Sans stack, mono = ui-monospace.
+   Atlas — Aziron workspace theme
+   A bright, quiet application shell aligned with the Aziron
+   dashboard: cool neutral surfaces, crisp blue signals, subtle
+   borders, soft elevation, and Inter-first typography.
    ============================================================ */
 
 @layer base {
   :root {
-    --bg: #0b2130;
-    --bg2: #081826;
-    --surface: #0e2a3d;
-    --surface-raised: #123349;
-    --line: #1c3d53;
-    --line-strong: #2a5674;
-    /* Foreground text tiers — contrast-tuned for the chart-blue panels. */
-    --text: #edf3f5;
-    --body-ink: #c9d8e0;
-    --muted: #afc6d2;
-    --faint: #7e9bb0;
-    --primary: #e9b44c;
-    --primary-dim: #c99230;
-    --secondary: #8fc1dc;
-    --success: #63c58c;
-    --warning: #f2b43a;
-    --danger: #e2725b;
-    --not-comparable: #8ca3b5;
-    --grid: #0f2938;
-    --g0: #e9b44c;
-    --g1: #8fc1dc;
-    --g2: #c792ea;
-    --g3: #63c58c;
-    --g4: #e2725b;
-    --g5: #67e8f9;
-    --contour: rgba(122, 168, 194, 0.18);
-    --contour-2: rgba(122, 168, 194, 0.34);
-    --sans-display: "Futura", "Avenir Next", "Century Gothic", "Trebuchet MS",
-      "Segoe UI", system-ui, sans-serif;
-    --sans-body: "Seravek", "Gill Sans", "Gill Sans MT", "Segoe UI", Candara,
-      Calibri, system-ui, sans-serif;
+    --bg: #f9fafb;
+    --bg2: #f3f5f7;
+    --surface: #ffffff;
+    --surface-raised: #f8fafc;
+    --line: #e2e8f0;
+    --line-strong: #cbd5e1;
+    --text: #111827;
+    --body-ink: #334155;
+    --muted: #64748b;
+    --faint: #94a3b8;
+    --primary: #2563eb;
+    --primary-dim: #1d4ed8;
+    --secondary: #0284c7;
+    --success: #16a34a;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --not-comparable: #94a3b8;
+    --grid: #e8eef7;
+    --g0: #2563eb;
+    --g1: #0284c7;
+    --g2: #7c3aed;
+    --g3: #16a34a;
+    --g4: #dc2626;
+    --g5: #0891b2;
+    --contour: rgba(148, 163, 184, 0.22);
+    --contour-2: rgba(148, 163, 184, 0.42);
+    --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.08);
+    --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.08);
+    --sans-display: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+    --sans-body: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
   }
 
   * {
@@ -52,7 +53,7 @@
   html {
     scroll-behavior: smooth;
     background: var(--bg);
-    scrollbar-color: #35566b var(--bg);
+    scrollbar-color: #cbd5e1 var(--bg);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -78,7 +79,7 @@
   }
 
   ::selection {
-    background: rgba(233, 180, 76, 0.28);
+    background: rgba(37, 99, 235, 0.18);
     color: var(--text);
   }
 
@@ -104,7 +105,7 @@
     @apply absolute left-4 z-50 px-3 py-2 text-sm font-semibold;
     top: -4rem;
     background: var(--primary);
-    color: #1e1607;
+    color: #ffffff;
     font-family: var(--sans-display);
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -147,7 +148,7 @@
   .measure-grid {
     background-image: radial-gradient(
         circle at center,
-        rgba(233, 180, 76, 0.05),
+        rgba(37, 99, 235, 0.05),
         transparent 60%
       ),
       radial-gradient(var(--grid) 1px, transparent 1px);
@@ -162,13 +163,14 @@
   .panel {
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: 4px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-xs);
   }
 
   .panel-raised {
     background: var(--surface-raised);
     border: 1px solid var(--line);
-    border-radius: 3px;
+    border-radius: 8px;
   }
 
   .hairline {
@@ -179,7 +181,7 @@
   .term {
     background: var(--bg2);
     border: 1px solid var(--line);
-    border-radius: 3px;
+    border-radius: 8px;
     overflow: hidden;
   }
   .term-body {
@@ -200,8 +202,9 @@
   .tablewrap {
     @apply min-w-0 max-w-full overflow-x-auto;
     border: 1px solid var(--line);
-    border-radius: 3px;
+    border-radius: 10px;
     background: var(--surface);
+    box-shadow: var(--shadow-xs);
   }
   .dtable {
     @apply w-full border-collapse text-left;
@@ -251,10 +254,10 @@
     }
   }
   .dtable tbody tr:nth-child(even) td {
-    background: rgba(255, 255, 255, 0.018);
+    background: #f8fafc;
   }
   .dtable tbody tr:hover td {
-    background: rgba(233, 180, 76, 0.05);
+    background: rgba(37, 99, 235, 0.05);
   }
 
   .num {
@@ -271,31 +274,30 @@
     border: 1px solid var(--line-strong);
     background: var(--surface-raised);
     color: var(--muted);
-    border-radius: 2px;
+    border-radius: 6px;
   }
 
   /* focusable interactive primitives — consistent keyboard ring */
   .focusring:focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
-    border-radius: 2px;
+    border-radius: 6px;
   }
 
   .btn {
     @apply inline-flex min-h-10 items-center justify-center gap-2 px-4 text-sm font-semibold transition;
     font-family: var(--sans-display);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-size: 13px;
-    border-radius: 2px;
+    letter-spacing: 0.01em;
+    font-size: 14px;
+    border-radius: 8px;
   }
   .btn-primary {
     background: var(--primary);
-    color: #1e1607;
+    color: #ffffff;
     border: 1px solid var(--primary-dim);
   }
   .btn-primary:hover {
-    background: #f2c466;
+    background: #1d4ed8;
   }
   .btn-ghost {
     background: transparent;
@@ -310,7 +312,7 @@
   .navlink {
     @apply relative px-3 py-2 text-sm font-medium transition;
     color: var(--muted);
-    border-radius: 2px;
+    border-radius: 6px;
   }
   .navlink:hover {
     color: var(--text);
@@ -333,7 +335,7 @@
     @apply inline-flex p-0.5;
     background: var(--bg2);
     border: 1px solid var(--line);
-    border-radius: 3px;
+    border-radius: 8px;
   }
   .seg-btn {
     @apply mono px-3 py-1.5 transition;
@@ -341,14 +343,14 @@
     font-weight: 600;
     color: var(--muted);
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 6px;
   }
   .seg-btn:hover:not([data-active="true"]) {
     color: var(--text);
     background: var(--surface);
   }
   .seg-btn[data-active="true"] {
-    background: rgba(233, 180, 76, 0.16);
+    background: rgba(37, 99, 235, 0.1);
     color: var(--text);
     box-shadow: inset 0 0 0 1px var(--primary-dim);
   }
@@ -359,7 +361,7 @@
     background: var(--bg2);
     border: 1px solid var(--line);
     color: var(--text);
-    border-radius: 2px;
+    border-radius: 8px;
   }
   .field::placeholder {
     color: var(--faint);
@@ -414,7 +416,8 @@ section[id] {
   color: var(--primary);
   border: 1px solid var(--primary-dim);
   padding: 0.18rem 0.5rem;
-  background: rgba(233, 180, 76, 0.07);
+  background: rgba(37, 99, 235, 0.07);
+  border-radius: 6px;
   white-space: nowrap;
 }
 .gridref .name {
@@ -440,8 +443,9 @@ section[id] {
 
 .product-header {
   height: 64px;
-  background: rgba(11, 33, 48, 0.9);
-  border-bottom: 1px solid var(--contour-2);
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid var(--line);
+  box-shadow: var(--shadow-xs);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -460,8 +464,7 @@ section[id] {
   font-family: var(--sans-display);
   font-size: 12.5px;
   font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
   border-bottom: 2px solid transparent;
 }
 
@@ -482,7 +485,7 @@ section[id] {
   justify-content: center;
   flex: 0 0 auto;
   border: 1px solid var(--line-strong);
-  border-radius: 2px;
+  border-radius: 8px;
   background: var(--surface);
   color: var(--muted);
   transition: 150ms ease;
@@ -512,8 +515,8 @@ section[id] {
   display: flex;
   align-items: center;
   background:
-    repeating-linear-gradient(0deg, transparent 0 79px, rgba(122, 168, 194, 0.03) 79px 80px),
-    repeating-linear-gradient(90deg, transparent 0 79px, rgba(122, 168, 194, 0.03) 79px 80px),
+    repeating-linear-gradient(0deg, transparent 0 79px, rgba(148, 163, 184, 0.08) 79px 80px),
+    repeating-linear-gradient(90deg, transparent 0 79px, rgba(148, 163, 184, 0.08) 79px 80px),
     var(--bg);
 }
 
@@ -547,7 +550,7 @@ section[id] {
   height: 7px;
   border-radius: 50%;
   background: var(--primary);
-  box-shadow: 0 0 0 4px rgba(233, 180, 76, 0.12);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
 .hero-facts {
@@ -570,7 +573,9 @@ section[id] {
   min-width: 0;
   background: var(--surface);
   border: 1px solid var(--contour-2);
-  box-shadow: 0 0 0 4px var(--surface), 0 0 0 5px var(--contour);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
 }
 .chart-head {
   display: flex;
@@ -697,6 +702,8 @@ section[id] {
   overflow-x: auto;
   border: 1px solid var(--contour-2);
   background: var(--surface);
+  border-radius: 10px;
+  box-shadow: var(--shadow-xs);
 }
 table.survey {
   width: 100%;
@@ -787,19 +794,22 @@ table.survey td.measure-name {
 /* capabilities */
 .cap-grid {
   display: grid;
-  gap: 1px;
+  gap: 16px;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  background: var(--contour-2);
-  border: 1px solid var(--contour-2);
+  background: transparent;
+  border: 0;
 }
 .cap {
   min-width: 0;
-  background: var(--bg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow-xs);
   padding: 1.6rem 1.5rem 1.8rem;
   transition: background 150ms ease;
 }
 .cap:hover {
-  background: var(--surface);
+  background: var(--surface-raised);
 }
 .cap h3 {
   font-size: 1.05rem;
@@ -822,7 +832,7 @@ table.survey td.measure-name {
   align-items: center;
   justify-content: center;
   border: 1px solid var(--line-strong);
-  border-radius: 2px;
+  border-radius: 8px;
   background: var(--surface-raised);
   color: var(--primary);
 }
@@ -838,6 +848,8 @@ table.survey td.measure-name {
   border: 1px solid var(--contour-2);
   background: var(--surface);
   padding: 1.4rem 1.4rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: var(--shadow-xs);
 }
 .leg-mark {
   display: flex;
@@ -885,6 +897,7 @@ table.survey td.measure-name {
   border: 1px solid var(--contour-2);
   padding: 0.6rem 0.75rem;
   min-width: 0;
+  border-radius: 8px;
 }
 .cmd code {
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
@@ -905,27 +918,32 @@ table.survey td.measure-name {
   padding: 22px;
   border: 1px solid var(--contour-2);
   background: var(--surface);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
 }
 
 /* docs index: adjoining sheets grid */
 .sheets-grid {
   display: grid;
-  gap: 1px;
+  gap: 16px;
   grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
-  background: var(--contour-2);
-  border: 1px solid var(--contour-2);
+  background: transparent;
+  border: 0;
 }
 a.sheet-cell {
   display: block;
   min-width: 0;
   text-decoration: none;
-  background: var(--bg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow-xs);
   padding: 1.15rem 1.25rem 1.3rem;
   color: inherit;
   transition: background 150ms ease;
 }
 a.sheet-cell:hover {
-  background: var(--surface);
+  background: var(--surface-raised);
 }
 a.sheet-cell .no {
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
@@ -956,7 +974,8 @@ a.sheet-cell:hover .go {
 /* privacy: the trust boundary */
 .boundary {
   border: 2px dashed var(--primary-dim);
-  background: rgba(233, 180, 76, 0.045);
+  background: rgba(37, 99, 235, 0.045);
+  border-radius: 12px;
   padding: clamp(1.6rem, 4vw, 2.6rem);
   display: grid;
   gap: 1.6rem;
@@ -998,7 +1017,7 @@ a.sheet-cell:hover .go {
 
 /* footer colophon */
 .product-footer {
-  background: var(--bg2);
+  background: var(--surface);
 }
 
 .colophon-orn {
@@ -1065,21 +1084,25 @@ a.sheet-cell:hover .go {
   align-self: start;
   max-height: calc(100vh - 108px);
   overflow-y: auto;
-  padding-right: 10px;
-  padding-bottom: 12px;
+  padding: 14px;
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow-xs);
   scrollbar-width: thin;
-  scrollbar-color: rgba(122, 168, 194, 0.45) transparent;
+  scrollbar-color: rgba(148, 163, 184, 0.45) transparent;
 }
 
 .docs-sidebar .filter {
   width: 100%;
-  background: var(--bg2);
+  background: var(--surface);
   border: 1px solid var(--contour-2);
   color: var(--text);
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
   font-size: 0.75rem;
   padding: 0.5rem 0.65rem;
   margin-bottom: 1.1rem;
+  border-radius: 8px;
 }
 .docs-sidebar .filter::placeholder {
   color: var(--faint);
@@ -1118,6 +1141,7 @@ a.sheet-cell:hover .go {
   padding: 0.42rem 0.5rem 0.42rem 0.35rem;
   border-left: 2px solid transparent;
   color: inherit;
+  border-radius: 6px;
 }
 .sb-link:hover {
   background: var(--surface);
@@ -1128,7 +1152,7 @@ a.sheet-cell:hover .go {
 }
 .sb-link[data-active="true"] {
   border-left-color: var(--primary);
-  background: rgba(233, 180, 76, 0.06);
+  background: rgba(37, 99, 235, 0.08);
 }
 .sb-link[data-active="true"] .station {
   opacity: 1;
@@ -1169,6 +1193,11 @@ a.sheet-cell:hover .go {
   position: sticky;
   top: 88px;
   align-self: start;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow-xs);
 }
 .toc-rail .toc-title {
   font-family: var(--sans-display);
@@ -1273,6 +1302,7 @@ a.sheet-cell:hover .go {
   font-size: 1.02rem;
   line-height: 1.65;
   max-width: 46em;
+  border-radius: 0 8px 8px 0;
 }
 
 .docs-prose-section {
@@ -1304,9 +1334,9 @@ a.sheet-cell:hover .go {
 }
 
 .docs-prose code:not(.product-command code) {
-  border: 1px solid rgba(122, 168, 194, 0.16);
+  border: 1px solid rgba(148, 163, 184, 0.22);
   padding: 1px 5px;
-  background: rgba(122, 168, 194, 0.1);
+  background: rgba(148, 163, 184, 0.12);
   color: var(--text);
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
   font-size: 0.88em;
@@ -1318,6 +1348,7 @@ a.sheet-cell:hover .go {
   overflow: hidden;
   border: 1px solid var(--contour-2);
   background: var(--bg2);
+  border-radius: 8px;
 }
 
 .product-command > div {
@@ -1421,6 +1452,7 @@ a.sheet-cell:hover .go {
   margin-top: 1.1rem;
   padding: 0.9rem 1.1rem;
   max-width: 48em;
+  border-radius: 8px;
 }
 .callout .co-label {
   display: block;
@@ -1436,7 +1468,7 @@ a.sheet-cell:hover .go {
 }
 .callout.warn {
   border: 2px dashed var(--danger);
-  background: rgba(226, 114, 91, 0.06);
+  background: rgba(220, 38, 38, 0.06);
 }
 .callout.warn .co-label {
   color: var(--danger);
@@ -1444,7 +1476,7 @@ a.sheet-cell:hover .go {
 .callout.tip {
   border: 1px solid var(--contour-2);
   border-left: 3px solid var(--contour-2);
-  background: rgba(122, 168, 194, 0.06);
+  background: rgba(148, 163, 184, 0.1);
 }
 .callout.tip .co-label {
   color: var(--muted);
@@ -1457,6 +1489,7 @@ a.sheet-cell:hover .go {
   background: var(--surface);
   margin-top: 16px;
   scrollbar-width: thin;
+  border-radius: 8px;
 }
 
 .docs-table-wrap table {
@@ -1520,6 +1553,8 @@ a.sheet-cell:hover .go {
   padding: 0.9rem 1.1rem;
   color: inherit;
   transition: background 150ms ease;
+  border-radius: 8px;
+  box-shadow: var(--shadow-xs);
 }
 .adj-card:hover {
   background: var(--surface-raised);
@@ -1610,6 +1645,7 @@ a.sheet-cell:hover .go {
     padding: 0 12px;
     background: var(--surface);
     color: var(--text);
+    border-radius: 8px;
   }
 }
 

@@ -201,7 +201,7 @@ function ConsoleBar({ active }) {
       className="sticky z-30"
       style={{
         top: 64,
-        background: "rgba(8,9,12,0.72)",
+        background: "rgba(255,255,255,0.88)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         borderBottom: "1px solid var(--line)",
@@ -262,8 +262,8 @@ function FrontierChart({ frontier }) {
           font stacks */}
       <defs>
         <radialGradient id="idealGlow" cx="0" cy="0" r="1">
-          <stop offset="0" stopColor="rgba(233,180,76,0.11)" />
-          <stop offset="1" stopColor="rgba(233,180,76,0)" />
+          <stop offset="0" stopColor="rgba(37,99,235,0.11)" />
+          <stop offset="1" stopColor="rgba(37,99,235,0)" />
         </radialGradient>
       </defs>
       <rect x={L} y={T} width={x(120) - L} height={y(0.55) - T} fill="url(#idealGlow)" />
@@ -553,17 +553,17 @@ function KnobChart({ levels }) {
         </g>
       ))}
       {[0, 100, 200, 300].map((t) => (
-        <text key={t} x={R + 8} y={yTok(t) + 4} textAnchor="start" className="mono" fontSize="10" fill="rgba(242,180,58,0.7)">{t}</text>
+        <text key={t} x={R + 8} y={yTok(t) + 4} textAnchor="start" className="mono" fontSize="10" fill="rgba(217,119,6,0.72)">{t}</text>
       ))}
       <line x1={L} x2={R} y1={B} y2={B} stroke="var(--line-strong)" />
 
       {/* default halo behind high */}
-      <rect x={slot(2) - barW / 2 - 12} y={T - 4} width={barW + 24} height={B - T + 30} rx={10} fill="rgba(233,180,76,0.06)" stroke="rgba(233,180,76,0.3)" strokeDasharray="4 4" />
+      <rect x={slot(2) - barW / 2 - 12} y={T - 4} width={barW + 24} height={B - T + 30} rx={10} fill="rgba(37,99,235,0.06)" stroke="rgba(37,99,235,0.3)" strokeDasharray="4 4" />
 
       {/* token bars */}
       {levels.map((lv, i) => (
         <g key={lv.id}>
-          <rect x={slot(i) - barW / 2} y={yTok(lv.tokens)} width={barW} height={Math.max(B - yTok(lv.tokens), 2)} rx={Math.min(5, Math.max(B - yTok(lv.tokens), 2) / 2)} fill="rgba(242,180,58,0.4)" stroke="rgba(242,180,58,0.8)" />
+          <rect x={slot(i) - barW / 2} y={yTok(lv.tokens)} width={barW} height={Math.max(B - yTok(lv.tokens), 2)} rx={Math.min(5, Math.max(B - yTok(lv.tokens), 2) / 2)} fill="rgba(217,119,6,0.28)" stroke="rgba(217,119,6,0.72)" />
           <text x={slot(i)} y={yTok(lv.tokens) - 7} textAnchor="middle" className="mono" fontSize="11" fontWeight="600" fill="var(--warning)">
             {lv.tokens}t
           </text>
@@ -669,9 +669,9 @@ function DetailKnob({ data }) {
 /* ============ languages by maturity — the ladder, viz + table =========== */
 
 const LEVEL_STYLE = {
-  L5: { color: "var(--primary)", fill: "rgba(233,180,76,0.12)" },
+  L5: { color: "var(--primary)", fill: "rgba(37,99,235,0.12)" },
   L4: { color: "var(--secondary)", fill: "rgba(122,162,255,0.12)" },
-  L2: { color: "var(--warning)", fill: "rgba(242,180,58,0.10)" },
+  L2: { color: "var(--warning)", fill: "rgba(217,119,6,0.1)" },
   L1: { color: "var(--muted)", fill: "rgba(154,163,179,0.10)" },
 };
 
@@ -690,7 +690,7 @@ function LangChip({ lang, level, pending, promoted }) {
         fontSize: 12,
         fontWeight: 600,
         color: pending ? "var(--warning)" : "var(--text)",
-        background: pending ? "rgba(242,180,58,0.07)" : st.fill,
+        background: pending ? "rgba(217,119,6,0.08)" : st.fill,
         border: `1px ${pending ? "dashed" : "solid"} ${pending ? "var(--warning)" : promoted ? "var(--primary)" : "var(--line-strong)"}`,
       }}
     >
@@ -1003,9 +1003,9 @@ function WinMap({ perLanguage, fresh }) {
     return "neither";
   };
   const C = {
-    atlas: { bg: "rgba(233,180,76,0.16)", border: "var(--primary)", label: "Atlas only" },
+    atlas: { bg: "rgba(37,99,235,0.14)", border: "var(--primary)", label: "Atlas only" },
     both: { bg: "rgba(122,162,255,0.14)", border: "var(--secondary)", label: "both perfect" },
-    graph: { bg: "rgba(242,180,58,0.13)", border: "var(--warning)", label: "graph tool only (full-source dump)" },
+    graph: { bg: "rgba(217,119,6,0.12)", border: "var(--warning)", label: "graph tool only (full-source dump)" },
     neither: { bg: "transparent", border: "var(--line-strong)", label: "neither (report) — fixed in fresh run" },
   };
   const counts = { atlas: 0, both: 0, graph: 0, neither: 0 };
