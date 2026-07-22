@@ -54,16 +54,10 @@ export function useSiteRoute() {
   return route;
 }
 
-/* compass-rose brand mark */
 function Brand() {
   return (
     <span className="flex min-w-0 items-center gap-2.5">
-      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden>
-        <circle cx="13" cy="13" r="11.5" fill="none" stroke="var(--primary)" strokeWidth="1.4" />
-        <circle cx="13" cy="13" r="7" fill="none" stroke="var(--primary)" strokeWidth="0.7" opacity="0.55" />
-        <path d="M13 3.5 L15 13 L13 22.5 L11 13 Z" fill="var(--primary)" />
-        <path d="M3.5 13 L13 11 L22.5 13 L13 15 Z" fill="var(--text)" opacity="0.85" />
-      </svg>
+      <img className="brand-mark" src="assets/atlas-mark.svg" alt="" width="31" height="26" aria-hidden="true" />
       <span className="brand-word">ATLAS</span>
     </span>
   );
