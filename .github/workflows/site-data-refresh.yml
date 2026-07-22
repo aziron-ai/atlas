@@ -33,6 +33,15 @@ jobs:
               d.version = process.argv[1];
               fs.writeFileSync(f, JSON.stringify(d, null, 2) + "\n");
             }
+            // The install/upgrade docs render a module-level RELEASE constant
+            // (fetched site-data is not in scope there); bump it here too so
+            // version strings never drift from the release again.
+            const jsx = "src/ProductDocs.jsx";
+            const src = fs.readFileSync(jsx, "utf8").replace(
+              /const RELEASE = "[^"]*";/,
+              `const RELEASE = "${process.argv[1]}";`
+            );
+            fs.writeFileSync(jsx, src);
           ' "$VER"
           if git diff --quiet; then echo "already in sync ($VER)"; exit 0; fi
           git config user.name "atlas-site-bot"

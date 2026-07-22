@@ -50,6 +50,8 @@ atlas config set ATLAS_MAX_DB_BYTES ""     # clear a persisted override
 | `ATLAS_CONTEXT_LIMIT`, `ATLAS_CONTEXT_MAX_FILES`, `ATLAS_CONTEXT_MAX_EDGES`, `ATLAS_CONTEXT_MAX_DEPTH` | Default budgets for `atlas context`; per-request flags override, intent defaults apply otherwise |
 | `ATLAS_LEXICAL_MAX_RATIO`, `ATLAS_MAX_LEXICAL_BYTES` | Size bound on the lexical (BM25) sidecar that triggers a rebuild during `compact --full` |
 | `ATLAS_MAX_DB_BYTES` | Bound the graph database size |
+| `ATLAS_INDEX_WORKERS` | Cap the parse/hash worker pool during indexing (0 = all cores); CLI equivalent `atlas index --workers N`. Lower it to bound CPU on a large index |
+| `ATLAS_STREAM_INDEX`, `ATLAS_STREAM_INDEX_THRESHOLD`, `ATLAS_STREAM_INDEX_BATCH` | Force/tune the streaming index that bounds memory on large repos (auto-engages above ~15,000 candidate files) |
 
 Run `atlas config list` for the complete catalog with current names, defaults,
 descriptions, and accepted values for your installed release.
@@ -120,7 +122,7 @@ Start conservative and confirm before raising limits:
 ```sh
 export ATLAS_MEMORY_LIMIT=2GiB
 export ATLAS_NO_WATCH=1
-atlas index .
+atlas index . --workers 4
 ```
 
 For very large repositories, exclude generated files and dependency caches

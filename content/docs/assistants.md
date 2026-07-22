@@ -37,7 +37,7 @@ Bootstrap registers Atlas as an MCP server and installs the atlas-first skill
 plus a CLAUDE.md directive for all detected assistants. It bakes the absolute
 binary path into each config and registers the supervised gateway with no
 `--db`, so the workspace is resolved at query time rather than pinned at
-install time. The command is idempotent: it is safe to run repeatedly and from
+install time. The command merges the existing atlas entry rather than replacing it, so a `--db` pin, extra args, or an `env` block you configured are preserved. It is idempotent: safe to run repeatedly and from
 a package post-install hook. Use `--home` to override the home directory base
 when provisioning a different account's configuration.
 
@@ -76,7 +76,7 @@ Use one local service when multiple thin clients should share a single index
 and watcher:
 
 ```sh
-atlas serve --mcp --open=false
+atlas serve --mcp
 
 atlas install skill \
   --agent codex,claude,claude-desktop \
@@ -141,5 +141,5 @@ removes the atlas MCP server entry from each config, the atlas skill markdown,
 and the atlas-managed block in the global CLAUDE.md. Nothing else is touched —
 other MCP servers, unrelated config keys, and your own CLAUDE.md content
 outside the atlas markers are preserved. Re-running reports `absent` and
-writes nothing. Repository indexes are not deleted; see
+writes nothing. By default repository indexes are not deleted; `atlas uninstall --purge` also removes the `.atlas` index directories (global `~/.atlas` + every registry repo root), printing the blast radius and total reclaimed first and requiring confirmation (`--yes` to skip, `--dry-run` to preview). See
 [Privacy and Data Handling](privacy) for data removal.

@@ -106,7 +106,7 @@ wrong fix.
 - **`atlas doctor`** reports Atlas upgrade health and the schema/index
   contract state. It also tells you when the lexical sidecar needs
   `atlas compact --rebuild-lexical` — the condition that otherwise degrades
-  every search to SQL-only silently. Add `--verify atlas` to check binary
+  every search to SQL-only silently. It also reports `mcp_registrations` health — flagging assistant MCP configs that launch a nonexistent binary (broken now) or a version-pinned path that breaks on the next upgrade, with `atlas bootstrap` as the fix. Add `--deep` for a page-level integrity scan (`PRAGMA quick_check`) that catches on-disk corruption. Add `--verify atlas` to check binary
   drift: whether the `atlas` on PATH (what assistants launch) matches the
   running binary. Add `--all --root DIR` to scan every `.atlas/atlas.db`
   under a directory.

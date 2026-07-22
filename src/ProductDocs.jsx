@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import SurveyChart, { LatencyScaleBar } from "./SurveyChart";
 
-const RELEASE = "0.1.39";
+const RELEASE = "0.1.43";
 const GITHUB = "https://github.com/aziron-ai/atlas";
 const WIKI = `${GITHUB}/wiki`;
 
@@ -654,7 +654,7 @@ function DocsPage({ slug }) {
             <p>The same graph is exposed three ways, so humans, services, and AI agents each get a native interface without separate infrastructure.</p>
             <Bullets>
               <li><strong>CLI</strong> — the commands in this documentation; scriptable via <code>--format</code>.</li>
-              <li><strong>REST HTTP API</strong> — <code>atlas serve</code> runs the HTTP API on <code>127.0.0.1:3099</code> by default (use <code>--addr 0.0.0.0:3099</code> to expose it) and opens the dashboard; <code>--mcp</code> also mounts MCP over HTTP at <code>POST /mcp</code>.</li>
+              <li><strong>REST HTTP API</strong> — <code>atlas serve</code> runs the HTTP API on <code>127.0.0.1:3099</code> by default (use <code>--addr 0.0.0.0:3099</code> to expose it) and hosts the dashboard at that URL (pass <code>--open</code> to auto-open it in your browser); <code>--mcp</code> also mounts MCP over HTTP at <code>POST /mcp</code>.</li>
               <li><strong>MCP</strong> — <code>atlas mcp</code> exposes graph, search, and impact as MCP tools to LLM agents over stdio by default, with <code>--http</code>/<code>--sse</code> transports available. Both <code>serve</code> and <code>mcp</code> keep the graph fresh with a background repo watch (<code>--watch</code>, on by default; disable with <code>--watch=false</code> or <code>ATLAS_NO_WATCH=1</code>). <a className="text-link" href="#docs/getting-started">Getting Started</a> covers wiring assistants via <code>atlas bootstrap</code>; <a className="text-link" href="#docs/mcp">MCP Tools</a> covers the tool surface.</li>
             </Bullets>
             <Command>{`atlas serve --mcp`}</Command>
@@ -721,6 +721,14 @@ function DocsPage({ slug }) {
             <Command>{`atlas link org/name --branch main`}</Command>
             <p><code>REPO</code> may be a filesystem path, a git remote URL, or a bare <code>org/name</code>. Linking is idempotent — re-linking updates the registration and reports <code>created=false</code>. Linking does not populate the graph; run <code>atlas index</code> for that. To remove a repo from the registry, <code>atlas repo rm</code> forgets it entirely: snapshots, symbols, edges, embeddings, and lexical documents.</p>
           </ProseSection>
+          <ProseSection title="Performance Envelope">
+            <p>Two behaviors matter on large or resource-constrained machines:</p>
+            <Bullets>
+              <li><strong>Streaming index.</strong> Full indexes of repos over ~15,000 candidate files automatically stream in bounded batches instead of holding the whole graph in memory — the Linux kernel (81k files, 1.86M symbols, 6.8M edges) indexes at ~1.3&nbsp;GiB peak RSS. Force it at any size with <code>ATLAS_STREAM_INDEX=1</code> (or off with <code>0</code>); tune with <code>ATLAS_STREAM_INDEX_THRESHOLD</code> and <code>ATLAS_STREAM_INDEX_BATCH</code>.</li>
+              <li><strong>CPU ceiling.</strong> The parse/hash pool defaults to all cores. Cap it with <code>atlas index --workers N</code> or <code>ATLAS_INDEX_WORKERS</code> — e.g. <code>--workers 4</code> trades a little wall-time for headroom; <code>1</code> pins the run to a single core. (Go repos also run <code>go/types</code>, which spawns its own compilers outside this pool; other tree-sitter languages are fully bounded by it.)</li>
+              <li><strong>Deletions cost more than edits.</strong> Adding or modifying files takes the fast scoped delta; deleting a Go file forces the whole-module type-check fallback (reverse-dependency edges must be re-derived), so a delete delta can approach cold-build time on Go-heavy repos. Batch deletions when you can.</li>
+            </Bullets>
+          </ProseSection>
           <ProseSection title="Database Maintenance">
             <p>Run maintenance when the database has grown or after an Atlas upgrade.</p>
             <Bullets>
@@ -774,11 +782,11 @@ function DocsPage({ slug }) {
           <ProseSection title="Index and Health">
             <p>Build the graph, keep it fresh, and verify that storage and schema are sound.</p>
             <div className="docs-table-wrap"><table><thead><tr><th>Command</th><th>Purpose</th></tr></thead><tbody>
-              <tr><td><code>index</code></td><td>Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; <code>--reindex</code> forces a full rebuild.</td></tr>
+              <tr><td><code>index</code></td><td>Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; <code>--reindex</code> forces a full rebuild; <code>--workers N</code> (or <code>ATLAS_INDEX_WORKERS</code>; 0 = all cores) caps the parse/hash pool to bound CPU on a large index.</td></tr>
               <tr><td><code>watch</code></td><td>Index once, then watch the working tree and apply debounced incremental updates on every file change. Foreground until interrupted.</td></tr>
               <tr><td><code>status</code></td><td>Storage and version health: schema/index-format contracts and per-repo snapshot format state (<code>--schema</code> for contract versions and drift).</td></tr>
               <tr><td><code>stats</code></td><td>Graph and index telemetry statistics for an indexed repo.</td></tr>
-              <tr><td><code>doctor</code></td><td>Report upgrade health and schema/index contract state; <code>--verify</code> also checks whether the <code>atlas</code> on PATH matches the running binary.</td></tr>
+              <tr><td><code>doctor</code></td><td>Report upgrade health and schema/index contract state; <code>--verify</code> also checks whether the <code>atlas</code> on PATH matches the running binary; <code>--deep</code> runs a page-level integrity scan (<code>PRAGMA quick_check</code>) to catch on-disk corruption that reads silently tolerate.</td></tr>
               <tr><td><code>report</code></td><td>Compose graph stats, top hubs, and top communities; <code>--format plain</code> prints the Markdown report directly.</td></tr>
               <tr><td><code>migrate</code></td><td>Apply storage migrations and report the active contracts.</td></tr>
               <tr><td><code>compact</code></td><td>Reclaim space and truncate the WAL; <code>--full</code> also runs a full VACUUM and rebuilds an oversized lexical sidecar; <code>--rebuild-lexical</code> fixes an empty or wedged sidecar.</td></tr>
@@ -827,12 +835,12 @@ function DocsPage({ slug }) {
             <div className="docs-table-wrap"><table><thead><tr><th>Command</th><th>Purpose</th></tr></thead><tbody>
               <tr><td><code>bootstrap</code></td><td>Register Atlas as an MCP server and install the atlas-first skill and CLAUDE.md directive for all detected assistants (Claude desktop+CLI, Codex, Copilot, Cursor, Gemini). Idempotent.</td></tr>
               <tr><td><code>install</code></td><td>Install integration glue piecemeal: <code>install skill</code> (assistant registration), <code>install hook</code> (git hook that keeps the graph fresh), <code>install aziron</code>.</td></tr>
-              <tr><td><code>uninstall</code></td><td>Reverse <code>bootstrap</code> across every assistant it provisions; touches only atlas-managed entries. Idempotent.</td></tr>
+              <tr><td><code>uninstall</code></td><td>Reverse <code>bootstrap</code> across every assistant it provisions; touches only atlas-managed entries. <code>--purge</code> also deletes the <code>.atlas</code> index databases (the global <code>~/.atlas</code> and every registry-known repo’s <code>.atlas</code>), showing the blast radius and reclaimed total and requiring <code>--yes</code> (or <code>--dry-run</code>). Idempotent.</td></tr>
               <tr><td><code>mcp</code></td><td>Expose graph/search/impact as MCP tools over stdio (default), Streamable HTTP (<code>--http</code>), or legacy SSE (<code>--sse</code>); <code>--supervise</code> runs the warm gateway.</td></tr>
               <tr><td><code>serve</code></td><td>Run the REST HTTP API and dashboard on <code>127.0.0.1:3099</code>; <code>--mcp</code> also mounts MCP over HTTP at <code>POST /mcp</code>.</td></tr>
               <tr><td><code>skill</code></td><td>Author, test, render, and distribute runbook skills (<code>new</code>, <code>lint</code>, <code>test</code>, <code>register</code>, <code>render</code>, <code>push</code>, <code>pull</code>, and more).</td></tr>
             </tbody></table></div>
-            <Command>{`atlas bootstrap --dry-run\natlas install skill --agent codex,claude,claude-desktop\natlas mcp --supervise\natlas serve --mcp --open=false`}</Command>
+            <Command>{`atlas bootstrap --dry-run\natlas install skill --agent codex,claude,claude-desktop\natlas mcp --supervise\natlas serve --mcp`}</Command>
             <p>Both <code>mcp</code> and <code>serve</code> watch the repo by default to keep the graph fresh; disable with <code>--watch=false</code> or <code>ATLAS_NO_WATCH=1</code>.</p>
           </ProseSection>
           <ProseSection title="Fleet and Org">
@@ -874,7 +882,7 @@ function DocsPage({ slug }) {
             <p>Restrict provisioning to selected clients, or exclude some:</p>
             <Command>{`atlas bootstrap --only codex,claude,claude-desktop\natlas bootstrap --skip cursor`}</Command>
             <p>Restart each assistant after its MCP configuration changes; most clients read MCP configuration only at startup.</p>
-            <p><strong>What bootstrap writes.</strong> Bootstrap registers Atlas as an MCP server and installs the atlas-first skill plus a CLAUDE.md directive for all detected assistants. It bakes the absolute binary path into each config and registers the supervised gateway with no <code>--db</code>, so the workspace is resolved at query time rather than pinned at install time. The command is idempotent: it is safe to run repeatedly and from a package post-install hook. Use <code>--home</code> to override the home directory base when provisioning a different account's configuration.</p>
+            <p><strong>What bootstrap writes.</strong> Bootstrap registers Atlas as an MCP server and installs the atlas-first skill plus a CLAUDE.md directive for all detected assistants. It bakes the absolute binary path into each config and registers the supervised gateway with no <code>--db</code>, so the workspace is resolved at query time rather than pinned at install time. The command is idempotent: it is safe to run repeatedly and from a package post-install hook. Re-running <em>merges</em> the existing atlas entry rather than replacing it, so a <code>--db</code> pin, extra args, or an <code>env</code> block you configured (for example via a repository-pinned <code>install skill --db</code>) are preserved. Use <code>--home</code> to override the home directory base when provisioning a different account's configuration.</p>
           </ProseSection>
           <ProseSection title="Repository-Pinned Setup">
             <p>Use a repository-pinned local MCP configuration when one assistant should always query one index:</p>
@@ -892,7 +900,7 @@ function DocsPage({ slug }) {
           </ProseSection>
           <ProseSection title="Shared Local Server">
             <p>Use one local service when multiple thin clients should share a single index and watcher:</p>
-            <Command>{`atlas serve --mcp --open=false\n\natlas install skill \\\n  --agent codex,claude,claude-desktop \\\n  --repo "$PWD" \\\n  --server-url http://127.0.0.1:3099`}</Command>
+            <Command>{`atlas serve --mcp\n\natlas install skill \\\n  --agent codex,claude,claude-desktop \\\n  --repo "$PWD" \\\n  --server-url http://127.0.0.1:3099`}</Command>
             <p>Use a token before exposing the service beyond loopback. See <a className="text-link" href="#docs/service">Dashboard and HTTP API</a>.</p>
           </ProseSection>
           <ProseSection title="Keep the Graph Fresh with a Git Hook">
@@ -917,7 +925,7 @@ function DocsPage({ slug }) {
           <ProseSection title="Remove the Integration">
             <p>Preview removal, then apply it:</p>
             <Command>{`atlas uninstall --dry-run\natlas uninstall`}</Command>
-            <p>Uninstall reverses <code>atlas bootstrap</code> across every assistant it provisions: it removes the atlas MCP server entry from each config, the atlas skill markdown, and the atlas-managed block in the global CLAUDE.md. Nothing else is touched — other MCP servers, unrelated config keys, and your own CLAUDE.md content outside the atlas markers are preserved. Re-running reports <code>absent</code> and writes nothing. Repository indexes are not deleted; see <a className="text-link" href="#docs/privacy">Privacy and Data Handling</a> for data removal.</p>
+            <p>Uninstall reverses <code>atlas bootstrap</code> across every assistant it provisions: it removes the atlas MCP server entry from each config, the atlas skill markdown, and the atlas-managed block in the global CLAUDE.md. Nothing else is touched — other MCP servers, unrelated config keys, and your own CLAUDE.md content outside the atlas markers are preserved. Re-running reports <code>absent</code> and writes nothing. By default repository indexes are not deleted; <code>atlas uninstall --purge</code> also removes the <code>.atlas</code> index directories (the global <code>~/.atlas</code> and every registry-known repo’s <code>.atlas</code>), printing the blast radius and total reclaimed space first and requiring confirmation (<code>--yes</code> to skip it, <code>--dry-run</code> to preview). See <a className="text-link" href="#docs/privacy">Privacy and Data Handling</a> for data removal.</p>
           </ProseSection>
         </>
       );
@@ -968,7 +976,7 @@ function DocsPage({ slug }) {
               <li>a repository ID</li>
               <li>a repository pinned at launch time with <code>--repo</code></li>
             </Bullets>
-            <p>If none is available, Atlas returns <code>workspace_required</code> instead of silently choosing a repository.</p>
+            <p>If none is available, Atlas returns <code>workspace_required</code> instead of silently choosing a repository. In <code>--supervise</code> mode the gateway resolves the workspace per call and routes a <code>workspace</code> argument that names a <em>different</em> indexed repository to that repository’s own <code>.atlas</code> store (read-only), so one warm gateway can answer queries across every repo you have indexed.</p>
           </ProseSection>
           <ProseSection title="Result Statuses">
             <p>Check the status field before trusting a result — it tells you whether the answer is backed by an index at all.</p>
@@ -1004,7 +1012,7 @@ function DocsPage({ slug }) {
             <p>Start with MCP mounted so assistants and HTTP clients share the same process:</p>
             <Command>{`atlas serve --mcp`}</Command>
             <p>Useful variants:</p>
-            <Command>{`atlas serve --open=false\natlas serve --open=false --watch=false`}</Command>
+            <Command>{`atlas serve --open        # also auto-open the dashboard in your browser\natlas serve --watch=false  # do not keep the graph fresh in the background`}</Command>
             <p>The default address is <code>http://127.0.0.1:3099</code>, with the dashboard at <code>http://127.0.0.1:3099/dashboard</code>.</p>
           </ProseSection>
           <ProseSection title="Serve Flags">
@@ -1085,6 +1093,8 @@ function DocsPage({ slug }) {
               <tr><td><code>ATLAS_CONTEXT_LIMIT</code>, <code>ATLAS_CONTEXT_MAX_FILES</code>, <code>ATLAS_CONTEXT_MAX_EDGES</code>, <code>ATLAS_CONTEXT_MAX_DEPTH</code></td><td>Default budgets for <code>atlas context</code>; per-request flags override, intent defaults apply otherwise</td></tr>
               <tr><td><code>ATLAS_LEXICAL_MAX_RATIO</code>, <code>ATLAS_MAX_LEXICAL_BYTES</code></td><td>Size bound on the lexical (BM25) sidecar that triggers a rebuild during <code>compact --full</code></td></tr>
               <tr><td><code>ATLAS_MAX_DB_BYTES</code></td><td>Bound the graph database size</td></tr>
+              <tr><td><code>ATLAS_INDEX_WORKERS</code></td><td>Cap the parse/hash worker pool during indexing (0 = all cores); CLI equivalent <code>atlas index --workers N</code>. Lower it to bound CPU on a large index</td></tr>
+              <tr><td><code>ATLAS_STREAM_INDEX</code>, <code>ATLAS_STREAM_INDEX_THRESHOLD</code>, <code>ATLAS_STREAM_INDEX_BATCH</code></td><td>Force/tune the streaming index that bounds memory on large repos (auto-engages above ~15,000 candidate files)</td></tr>
             </tbody></table></div>
             <p>Run <code>atlas config list</code> for the complete catalog with current names, defaults, descriptions, and accepted values for your installed release.</p>
           </ProseSection>
@@ -1113,7 +1123,8 @@ function DocsPage({ slug }) {
           </ProseSection>
           <ProseSection title="Resource-Constrained Environments">
             <p>Start conservative and confirm before raising limits:</p>
-            <Command>{`export ATLAS_MEMORY_LIMIT=2GiB\nexport ATLAS_NO_WATCH=1\natlas index .`}</Command>
+            <Command>{`export ATLAS_MEMORY_LIMIT=2GiB\nexport ATLAS_NO_WATCH=1\natlas index . --workers 4`}</Command>
+            <p>On a large repo, <code>--workers N</code> (or <code>ATLAS_INDEX_WORKERS</code>) caps indexing CPU, and the streaming index (auto above ~15,000 files; force with <code>ATLAS_STREAM_INDEX=1</code>) bounds peak memory.</p>
             <p>For very large repositories, exclude generated files and dependency caches (see <a className="text-link" href="#docs/indexing">Indexing and Reindexing</a>) before increasing limits. Confirm behavior with <code>atlas status</code>, <code>atlas stats</code>, and <code>atlas doctor</code>.</p>
           </ProseSection>
         </>
@@ -1183,7 +1194,7 @@ function DocsPage({ slug }) {
           <ProseSection title="Data Removal">
             <p>Remove Atlas-managed assistant configuration first:</p>
             <Command>{`atlas uninstall --dry-run\natlas uninstall`}</Command>
-            <p>Package removal does not automatically delete repository indexes; delete the <code>.atlas/</code> directory (with Atlas processes stopped) to remove an index, or use <code>atlas repo rm</code> to forget one repository's snapshots, symbols, edges, embeddings, and lexical documents from a shared database.</p>
+            <p>Package removal does not automatically delete repository indexes; run <code>atlas uninstall --purge</code> to delete the index databases automatically (the global <code>~/.atlas</code> and every registry-known repo’s <code>.atlas</code>, with a blast-radius report and confirmation), delete a <code>.atlas/</code> directory manually (with Atlas processes stopped) to remove one index, or use <code>atlas repo rm</code> to forget one repository's snapshots, symbols, edges, embeddings, and lexical documents from a shared database.</p>
           </ProseSection>
           <ProseSection title="Shared and Connected Environments">
             <p>When multiple users or repositories share an Atlas service:</p>
@@ -1283,6 +1294,7 @@ function DocsPage({ slug }) {
               <tr><td>Graph-tool comparison: 0.539 F1 at 97 tokens</td><td>Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens</td></tr>
               <tr><td>Query latency ~7.4 ms vs 128 ms for the graph tool</td><td>Real repositories, 36 languages; flat from 15 to 39,161 symbols</td></tr>
             </tbody></table></div>
+            <p><em>Measurement layer:</em> the 7.4&nbsp;ms figure is warm <strong>in-process</strong> engine latency (what an MCP/serve session experiences per call). End-to-end <strong>CLI</strong> latency adds ~30&nbsp;ms of process spawn per side — roughly 44&nbsp;ms vs 450&nbsp;ms (~9×) — so shell-loop reproductions should expect the CLI numbers, not 7.4&nbsp;ms.</p>
           </ProseSection>
           <ProseSection title="Agent-Harness Token Benchmark (2026-07-10)">
             <p>This measures what a real agent actually spends. Claude Code and OpenAI Codex ran headless in sirupsen/logrus (@a23d315), restricted to one code-intelligence CLI per run, answering 19 caller questions scored against gopls call_hierarchy (LSP-truth) at the pinned commit. Token numbers are each harness's own usage accounting.</p>
@@ -1385,7 +1397,7 @@ function DocsPage({ slug }) {
           <ProseSection title="Read the Diagnosis">
             <p>Knowing what each diagnostic actually reports keeps you from applying the wrong fix.</p>
             <Bullets>
-              <li><strong><code>atlas doctor</code></strong> reports Atlas upgrade health and the schema/index contract state. It also tells you when the lexical sidecar needs <code>atlas compact --rebuild-lexical</code> — the condition that otherwise degrades every search to SQL-only silently. Add <code>--verify atlas</code> to check binary drift: whether the <code>atlas</code> on PATH (what assistants launch) matches the running binary. Add <code>--all --root DIR</code> to scan every <code>.atlas/atlas.db</code> under a directory.</li>
+              <li><strong><code>atlas doctor</code></strong> reports Atlas upgrade health and the schema/index contract state. It also tells you when the lexical sidecar needs <code>atlas compact --rebuild-lexical</code> — the condition that otherwise degrades every search to SQL-only silently. It also reports <code>mcp_registrations</code> health — flagging assistant MCP configs that launch a nonexistent binary (broken now) or a version-pinned path that breaks on the next upgrade, with <code>atlas bootstrap</code> as the one-line fix. Add <code>--verify atlas</code> to check binary drift: whether the <code>atlas</code> on PATH (what assistants launch) matches the running binary. Add <code>--deep</code> to run a page-level integrity scan (<code>PRAGMA quick_check</code>) that catches on-disk corruption reads silently tolerate. Add <code>--all --root DIR</code> to scan every <code>.atlas/atlas.db</code> under a directory.</li>
               <li><strong><code>atlas status</code></strong> reports storage/version health: the schema and index-format contracts plus per-repo snapshot format state. Add <code>--schema</code> to see the schema/index-format/lexical/MCP contract versions and per-repo snapshot format drift.</li>
               <li><strong><code>atlas migrate</code></strong> is the corresponding fix for schema findings: it applies storage migrations and reports the active contracts. <code>--all --root DIR</code> migrates every local SQLite database under a directory.</li>
             </Bullets>
@@ -1457,7 +1469,7 @@ function DocsPage({ slug }) {
             <Callout kind="warn" label="Local data survives the package">
               <p>Package removal does not delete repository indexes. Every indexed repository keeps its <code>.atlas/</code> directory — index, settings, retrieval data, telemetry, and retained snapshots — until you remove it. Stop all Atlas processes and confirm the exact paths before deleting; removal is permanent.</p>
             </Callout>
-            <p>Per repository, after stopping all Atlas processes and verifying the path:</p>
+            <p><code>atlas uninstall --purge</code> removes the <code>.atlas</code> index directories for you — the global <code>~/.atlas</code> and every registry-known repo’s <code>.atlas</code> — printing the blast radius and total reclaimed space first, and requiring confirmation (<code>--yes</code> to skip it, <code>--dry-run</code> to preview). To remove them by hand instead, per repository, after stopping all Atlas processes and verifying the path:</p>
             <Command>{`rm -rf /absolute/path/to/repository/.atlas`}</Command>
             <p>User-level data, only when all user-level Atlas data and installed Atlas skills should go:</p>
             <Command>{`rm -rf "$HOME/.atlas"`}</Command>

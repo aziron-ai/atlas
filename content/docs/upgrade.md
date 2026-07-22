@@ -27,11 +27,11 @@ atlas version
 Pin a version for reproducible automation:
 
 ```sh
-npm install -g @aziron/atlas@0.1.39
+npm install -g @aziron/atlas@0.1.43
 ```
 
 For installations sourced from GitHub Packages, use the equivalent
-`@aziron-ai/atlas@0.1.39` coordinate with the existing registry authentication.
+`@aziron-ai/atlas@0.1.43` coordinate with the existing registry authentication.
 
 Archives: download the new tar.gz, .deb, .rpm, or .apk from
 [GitHub Releases](https://github.com/aziron-ai/atlas/releases/latest), replace
@@ -128,7 +128,7 @@ sudo rm /usr/local/bin/atlas                  # manual binary
 > Stop all Atlas processes and confirm the exact paths before deleting;
 > removal is permanent.
 
-Per repository, after stopping all Atlas processes and verifying the path:
+`atlas uninstall --purge` removes the `.atlas` index directories for you — the global `~/.atlas` and every registry-known repo’s `.atlas` — printing the blast radius and total reclaimed space first, and requiring confirmation (`--yes` to skip, `--dry-run` to preview). To remove them by hand instead, per repository, after stopping all Atlas processes and verifying the path:
 
 ```sh
 rm -rf /absolute/path/to/repository/.atlas

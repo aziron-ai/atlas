@@ -88,8 +88,8 @@ get a native interface without separate infrastructure.
 
 - **CLI** — the commands in this documentation; scriptable via `--format`.
 - **REST HTTP API** — `atlas serve` runs the HTTP API on `127.0.0.1:3099` by
-  default (use `--addr 0.0.0.0:3099` to expose it) and opens the dashboard;
-  `--mcp` also mounts MCP over HTTP at `POST /mcp`.
+  default (use `--addr 0.0.0.0:3099` to expose it) and hosts the dashboard at that
+  URL (pass `--open` to auto-open it in your browser); `--mcp` also mounts MCP over HTTP at `POST /mcp`.
 - **MCP** — `atlas mcp` exposes graph, search, and impact as MCP tools to LLM
   agents over stdio by default, with `--http`/`--sse` transports available.
   Both `serve` and `mcp` keep the graph fresh with a background repo watch
