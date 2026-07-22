@@ -301,6 +301,9 @@ ${agentBenchBlock}
            Then <code>atlas index .</code> and <code>atlas mcp --transport stdio</code> for agents.</p>
         <p>Every number above is reproducible from the committed artifacts under <a href="data/">data/</a>.
            This static digest is replaced by the interactive page when JavaScript is available.</p>
+
+        <h2>Community</h2>
+        <p><a href="https://www.producthunt.com/products/atlas-44?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-atlas-47" target="_blank" rel="noopener noreferrer"><img alt="Atlas - Local code intelligence for developers and AI assistants | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1203538&amp;theme=light&amp;t=1784726889410"></a></p>
       </div>
 `;
 
@@ -384,7 +387,7 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intellig
 /* --------------------- per-doc indexable pages -------------------------- */
 
 const DOC_CSS = `
-  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#111827; --muted:#64748b; --line:#e2e8f0; --primary:#2563eb; --link:#0284c7; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
   .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
@@ -392,7 +395,8 @@ const DOC_CSS = `
   header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
   header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
   .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
-  .mark { width:24px; height:24px; border-radius:6px; background:var(--primary); color:#fff; display:grid; place-items:center; font-weight:800; }
+  .brand-logo { display:block; width:29px; height:24px; object-fit:contain; }
+  .brand-word { font-size:14px; letter-spacing:.22em; }
   nav.crumbs { color:var(--muted); font-size:14px; }
   nav.crumbs a { color:var(--muted); }
   .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
@@ -438,7 +442,9 @@ const docPage = (doc, idx) => {
   <meta name="description" content="${esc(doc.desc)}">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="color-scheme" content="light">
-  <link rel="icon" href="../../assets/og.png" type="image/png">
+  <link rel="icon" href="../../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../../assets/atlas-icon-128.png">
   <link rel="canonical" href="${url}">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Aziron Atlas">
@@ -456,7 +462,7 @@ const docPage = (doc, idx) => {
 <body>
   <header class="site">
     <div class="row">
-      <a class="brand" href="${BASE}"><span class="mark">A</span> ATLAS</a>
+      <a class="brand" href="${BASE}"><img class="brand-logo" src="../../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
       <nav class="crumbs" aria-label="Breadcrumb"><a href="${BASE}">Home</a> / <a href="${BASE}docs/">Docs</a> / ${esc(doc.title)}</nav>
       <a class="open-app" href="${BASE}#docs/${doc.slug}">Open interactive docs →</a>
     </div>
@@ -499,12 +505,14 @@ const docsIndex = `<!doctype html>
   <meta name="robots" content="index,follow">
   <meta name="color-scheme" content="light">
   <link rel="canonical" href="${BASE}docs/">
-  <link rel="icon" href="../assets/og.png" type="image/png">
+  <link rel="icon" href="../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../assets/atlas-icon-128.png">
   <style>${DOC_CSS}</style>
 </head>
 <body>
   <header class="site"><div class="row">
-    <a class="brand" href="${BASE}"><span class="mark">A</span> ATLAS</a>
+    <a class="brand" href="${BASE}"><img class="brand-logo" src="../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
     <nav class="crumbs"><a href="${BASE}">Home</a> / Docs</nav>
     <a class="open-app" href="${BASE}#docs/getting-started">Open interactive docs →</a>
   </div></header>

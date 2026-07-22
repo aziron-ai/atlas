@@ -9,13 +9,13 @@ import React from "react";
    ============================================================ */
 
 const C = {
-  contour: "rgba(148,163,184,0.34)",
-  contourSoft: "rgba(148,163,184,0.18)",
-  ink: "#111827",
-  muted: "#64748B",
-  faint: "#94A3B8",
+  contour: "rgba(82,98,119,0.42)",
+  contourSoft: "rgba(82,98,119,0.22)",
+  ink: "#0F172A",
+  muted: "#475569",
+  faint: "#526277",
   signal: "#2563EB",
-  route: "#475569",
+  route: "#334155",
   impact: "#DC2626",
   settlement: "#334155",
   ground: "#F9FAFB",
