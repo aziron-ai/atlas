@@ -134,6 +134,13 @@ Two behaviors worth knowing on large or memory-constrained machines:
   `ATLAS_STREAM_INDEX=1` (or off with `0`); tune with
   `ATLAS_STREAM_INDEX_THRESHOLD` and `ATLAS_STREAM_INDEX_BATCH`. `ATLAS_GOGC`
   and `ATLAS_MEMORY_LIMIT` further bound the Go runtime on CI runners.
+- **CPU ceiling (v0.1.43+).** The parse/hash pool defaults to all cores, so a
+  large index can saturate the machine (a Chromium index drove one reporter's
+  CPU past 300%). Cap it with `atlas index --workers N` or the
+  `ATLAS_INDEX_WORKERS` env var — e.g. `--workers 4` trades a little wall-time
+  for headroom. Setting it to 1 pins the run to a single core. (Go repos also
+  run `go/types`, which spawns its own compilers outside this pool; C/C++/other
+  tree-sitter languages are fully bounded by it.)
 - **Deletions cost more than edits.** Adding or modifying files takes the
   scoped delta path (sub-second, tens of MB). Deleting a Go file currently
   forces the whole-module type-check fallback — correctness requires
