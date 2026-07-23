@@ -5,7 +5,7 @@
 > context queries (definition, callers, callees, imports, routes) in
 > ~7.4 ms and ~21.2 tokens. Benchmark (July 2026, real-LLM
 > scored, 37 languages): Atlas F1 0.757 @ 21.2 tokens vs graph tool
-> 0.539 @ 97 tokens. Version 0.1.39.
+> 0.539 @ 97 tokens. Version 0.1.45.
 >
 > This file inlines the complete consumer documentation. Canonical HTML pages
 > live at https://aziron-ai.github.io/atlas/docs/<slug>/ ; the interactive site is at https://aziron-ai.github.io/atlas/.
@@ -239,7 +239,7 @@ atlas version
 Pin an exact version for reproducible environments:
 
 ```sh
-npm install -g @aziron/atlas@0.1.39
+npm install -g @aziron/atlas@0.1.43
 ```
 
 ### GitHub Packages alternative
@@ -256,7 +256,7 @@ atlas version
 ```
 
 ```sh
-npm install -g @aziron-ai/atlas@0.1.39
+npm install -g @aziron-ai/atlas@0.1.43
 ```
 
 Both npm coordinates install the same wrapper and native Atlas binary for the
@@ -271,7 +271,7 @@ version and platform from
 [GitHub Releases](https://github.com/aziron-ai/atlas/releases/latest):
 
 ```sh
-VERSION=0.1.39
+VERSION=0.1.43
 OS=darwin       # darwin or linux
 ARCH=arm64      # arm64 or amd64
 ASSET="atlas_${VERSION}_${OS}_${ARCH}.tar.gz"
@@ -301,13 +301,13 @@ and arm64. Download the matching package from the release page, then install:
 
 ```sh
 # Debian or Ubuntu
-sudo dpkg -i atlas_0.1.39_linux_amd64.deb
+sudo dpkg -i atlas_0.1.43_linux_amd64.deb
 
 # Fedora or RHEL
-sudo rpm -U atlas_0.1.39_linux_amd64.rpm
+sudo rpm -U atlas_0.1.43_linux_amd64.rpm
 
 # Alpine
-sudo apk add --allow-untrusted atlas_0.1.39_linux_amd64.apk
+sudo apk add --allow-untrusted atlas_0.1.43_linux_amd64.apk
 ```
 
 ## Post-Install: Assistant Bootstrap
@@ -455,8 +455,8 @@ get a native interface without separate infrastructure.
 
 - **CLI** — the commands in this documentation; scriptable via `--format`.
 - **REST HTTP API** — `atlas serve` runs the HTTP API on `127.0.0.1:3099` by
-  default (use `--addr 0.0.0.0:3099` to expose it) and opens the dashboard;
-  `--mcp` also mounts MCP over HTTP at `POST /mcp`.
+  default (use `--addr 0.0.0.0:3099` to expose it) and hosts the dashboard at that
+  URL (pass `--open` to auto-open it in your browser); `--mcp` also mounts MCP over HTTP at `POST /mcp`.
 - **MCP** — `atlas mcp` exposes graph, search, and impact as MCP tools to LLM
   agents over stdio by default, with `--http`/`--sse` transports available.
   Both `serve` and `mcp` keep the graph fresh with a background repo watch
@@ -638,6 +638,31 @@ Linking is idempotent — re-linking updates the registration and reports
 that. To remove a repo from the registry, `atlas repo rm` forgets it entirely:
 snapshots, symbols, edges, embeddings, and lexical documents.
 
+## Performance Envelope
+
+Two behaviors worth knowing on large or memory-constrained machines:
+
+- **Streaming index (v0.1.42+).** Full indexes of repos over ~15,000 candidate
+  files automatically stream in bounded batches instead of holding the whole
+  graph in memory — the Linux kernel (81k files, 1.86M symbols, 6.8M edges)
+  indexes at ~1.3 GiB peak RSS. Force it at any size with
+  `ATLAS_STREAM_INDEX=1` (or off with `0`); tune with
+  `ATLAS_STREAM_INDEX_THRESHOLD` and `ATLAS_STREAM_INDEX_BATCH`. `ATLAS_GOGC`
+  and `ATLAS_MEMORY_LIMIT` further bound the Go runtime on CI runners.
+- **CPU ceiling (v0.1.43+).** The parse/hash pool defaults to all cores, so a
+  large index can saturate the machine (a Chromium index drove one reporter's
+  CPU past 300%). Cap it with `atlas index --workers N` or the
+  `ATLAS_INDEX_WORKERS` env var — e.g. `--workers 4` trades a little wall-time
+  for headroom. Setting it to 1 pins the run to a single core. (Go repos also
+  run `go/types`, which spawns its own compilers outside this pool; C/C++/other
+  tree-sitter languages are fully bounded by it.)
+- **Deletions cost more than edits.** Adding or modifying files takes the
+  scoped delta path (sub-second, tens of MB). Deleting a Go file currently
+  forces the whole-module type-check fallback — correctness requires
+  re-deriving reverse-dependency edges — so a delete delta can approach
+  cold-build time and RAM on Go-heavy repos. A scoped-deletion analyzer is
+  planned; until then, batch deletions together when you can.
+
 ## Database Maintenance
 
 Run maintenance when the database has grown or after an Atlas upgrade.
@@ -729,11 +754,11 @@ Build the graph, keep it fresh, and verify that storage and schema are sound.
 
 | Command | Purpose |
 | --- | --- |
-| `index` | Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; `--reindex` forces a full rebuild. |
+| `index` | Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; `--reindex` forces a full rebuild; `--workers N` (or `ATLAS_INDEX_WORKERS`; 0 = all cores) caps the parse/hash pool to bound CPU on a large index. |
 | `watch` | Index once, then watch the working tree and apply debounced incremental updates on every file change. Foreground until interrupted. |
 | `status` | Storage and version health: schema/index-format contracts and per-repo snapshot format state (`--schema` for contract versions and drift). |
 | `stats` | Graph and index telemetry statistics for an indexed repo. |
-| `doctor` | Report upgrade health and schema/index contract state; `--verify` also checks whether the `atlas` on PATH matches the running binary. |
+| `doctor` | Report upgrade health and schema/index contract state; `--verify` also checks whether the `atlas` on PATH matches the running binary; `--deep` runs a page-level integrity scan (`PRAGMA quick_check`) to catch on-disk corruption reads silently tolerate. |
 | `report` | Compose graph stats, top hubs, and top communities; `--format plain` prints the Markdown report directly. |
 | `migrate` | Apply storage migrations and report the active contracts. |
 | `compact` | Reclaim space and truncate the WAL; `--full` also runs a full VACUUM and rebuilds an oversized lexical sidecar; `--rebuild-lexical` fixes an empty or wedged sidecar. |
@@ -758,6 +783,7 @@ Find code and pull bounded, deterministic context about it.
 | `context` | Bounded review-context bundle for changed/seed paths; budgets via `--intent` (`auto` is 16-32 KiB), per-request flags, or env vars. |
 | `explain` | Deterministic context bundle for a symbol: defs, callers/callees, imports, served routes, cross-repo consumers. |
 | `symbol` | Show a symbol's definition(s) with its callers and callees. |
+| `snippet` | Show a symbol's bounded implementation body (path:line, signature, source excerpt). |
 | `callers` | List symbols that directly call a symbol; scope overloaded names with `--package`, `--receiver`, or `--arity`. |
 | `refs` | List references to a symbol: call sites plus type-use references (params, fields, returns). |
 | `neighbors` | Depth-1 call neighborhood: a symbol's direct callers and callees. |
@@ -812,7 +838,7 @@ Wire Atlas into AI assistants and serve it over MCP or HTTP. See
 | --- | --- |
 | `bootstrap` | Register Atlas as an MCP server and install the atlas-first skill and CLAUDE.md directive for all detected assistants (Claude desktop+CLI, Codex, Copilot, Cursor, Gemini). Idempotent. |
 | `install` | Install integration glue piecemeal: `install skill` (assistant registration), `install hook` (git hook that keeps the graph fresh), `install aziron`. |
-| `uninstall` | Reverse `bootstrap` across every assistant it provisions; touches only atlas-managed entries. Idempotent. |
+| `uninstall` | Reverse `bootstrap` across every assistant it provisions; touches only atlas-managed entries. `--purge` also deletes the `.atlas` index databases (global `~/.atlas` + registry repo roots), showing the blast radius and requiring `--yes` (or `--dry-run`). Idempotent. |
 | `mcp` | Expose graph/search/impact as MCP tools over stdio (default), Streamable HTTP (`--http`), or legacy SSE (`--sse`); `--supervise` runs the warm gateway. |
 | `serve` | Run the REST HTTP API and dashboard on `127.0.0.1:3099`; `--mcp` also mounts MCP over HTTP at `POST /mcp`. |
 | `skill` | Author, test, render, and distribute runbook skills (`new`, `lint`, `test`, `register`, `render`, `push`, `pull`, and more). |
@@ -821,7 +847,7 @@ Wire Atlas into AI assistants and serve it over MCP or HTTP. See
 atlas bootstrap --dry-run
 atlas install skill --agent codex,claude,claude-desktop
 atlas mcp --supervise
-atlas serve --mcp --open=false
+atlas serve --mcp
 ```
 
 Both `mcp` and `serve` watch the repo by default to keep the graph fresh;
@@ -921,7 +947,7 @@ Bootstrap registers Atlas as an MCP server and installs the atlas-first skill
 plus a CLAUDE.md directive for all detected assistants. It bakes the absolute
 binary path into each config and registers the supervised gateway with no
 `--db`, so the workspace is resolved at query time rather than pinned at
-install time. The command is idempotent: it is safe to run repeatedly and from
+install time. The command merges the existing atlas entry rather than replacing it, so a `--db` pin, extra args, or an `env` block you configured are preserved. It is idempotent: safe to run repeatedly and from
 a package post-install hook. Use `--home` to override the home directory base
 when provisioning a different account's configuration.
 
@@ -960,7 +986,7 @@ Use one local service when multiple thin clients should share a single index
 and watcher:
 
 ```sh
-atlas serve --mcp --open=false
+atlas serve --mcp
 
 atlas install skill \
   --agent codex,claude,claude-desktop \
@@ -1025,7 +1051,7 @@ removes the atlas MCP server entry from each config, the atlas skill markdown,
 and the atlas-managed block in the global CLAUDE.md. Nothing else is touched —
 other MCP servers, unrelated config keys, and your own CLAUDE.md content
 outside the atlas markers are preserved. Re-running reports `absent` and
-writes nothing. Repository indexes are not deleted; see
+writes nothing. By default repository indexes are not deleted; `atlas uninstall --purge` also removes the `.atlas` index directories (global `~/.atlas` + every registry repo root), printing the blast radius and total reclaimed first and requiring confirmation (`--yes` to skip, `--dry-run` to preview). See
 [Privacy and Data Handling](privacy) for data removal.
 
 ---
@@ -1178,8 +1204,8 @@ atlas serve --mcp
 Useful variants:
 
 ```sh
-atlas serve --open=false
-atlas serve --open=false --watch=false
+atlas serve --open        # also auto-open the dashboard in your browser
+atlas serve --watch=false  # do not keep the graph fresh in the background
 ```
 
 Default address and dashboard:
@@ -1195,7 +1221,7 @@ http://127.0.0.1:3099/dashboard
 | --- | --- | --- |
 | `--addr` | `127.0.0.1:3099` | Listen address; loopback by default. Use `0.0.0.0:3099` to expose on the network |
 | `--mcp` | off | Also mount MCP over HTTP at `POST /mcp` |
-| `--open` | `true` | Open the dashboard in your browser once ready (best-effort); `--open=false` for CI/headless |
+| `--open` | `false` | Auto-open the dashboard in your browser once ready (off by default; pass `--open` to enable). `serve` hosts the dashboard either way |
 | `--watch` | `true` | Keep the graph fresh by watching the repo; `--watch=false` or `ATLAS_NO_WATCH=1` to disable |
 | `--watch-path` | `--repo`, else current dir | Repo path to watch when `--watch` is set |
 
@@ -1337,6 +1363,8 @@ atlas config set ATLAS_MAX_DB_BYTES ""     # clear a persisted override
 | `ATLAS_CONTEXT_LIMIT`, `ATLAS_CONTEXT_MAX_FILES`, `ATLAS_CONTEXT_MAX_EDGES`, `ATLAS_CONTEXT_MAX_DEPTH` | Default budgets for `atlas context`; per-request flags override, intent defaults apply otherwise |
 | `ATLAS_LEXICAL_MAX_RATIO`, `ATLAS_MAX_LEXICAL_BYTES` | Size bound on the lexical (BM25) sidecar that triggers a rebuild during `compact --full` |
 | `ATLAS_MAX_DB_BYTES` | Bound the graph database size |
+| `ATLAS_INDEX_WORKERS` | Cap the parse/hash worker pool during indexing (0 = all cores); CLI equivalent `atlas index --workers N`. Lower it to bound CPU on a large index |
+| `ATLAS_STREAM_INDEX`, `ATLAS_STREAM_INDEX_THRESHOLD`, `ATLAS_STREAM_INDEX_BATCH` | Force/tune the streaming index that bounds memory on large repos (auto-engages above ~15,000 candidate files) |
 
 Run `atlas config list` for the complete catalog with current names, defaults,
 descriptions, and accepted values for your installed release.
@@ -1407,7 +1435,7 @@ Start conservative and confirm before raising limits:
 ```sh
 export ATLAS_MEMORY_LIMIT=2GiB
 export ATLAS_NO_WATCH=1
-atlas index .
+atlas index . --workers 4
 ```
 
 For very large repositories, exclude generated files and dependency caches
@@ -1540,7 +1568,7 @@ atlas uninstall
 
 Package removal does not automatically delete repository indexes; delete the
 `.atlas/` directory (with Atlas processes stopped) to remove an index, or use
-`atlas repo rm` to forget one repository's snapshots, symbols, edges,
+`atlas uninstall --purge` to delete the index databases automatically (the global `~/.atlas` and every registry-known repo's `.atlas`, with a blast-radius report and confirmation), or `atlas repo rm` to forget one repository's snapshots, symbols, edges,
 embeddings, and lexical documents from a shared database.
 
 ## Shared and Connected Environments
@@ -1706,6 +1734,8 @@ These are the current published numbers, each with its evidence conditions:
 | F1 1.000 at 27.1 tokens on the 28 fully-supported languages | Full-file-dump accuracy at 6.1× fewer tokens; same fixture suite |
 | Graph-tool comparison: 0.539 F1 at 97 tokens | Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens |
 | Query latency ~7.4 ms vs 128 ms for the graph tool | Real repositories, 36 languages; flat from 15 to 39,161 symbols |
+
+*Measurement layer:* the 7.4 ms figure is warm **in-process engine latency** (the number an MCP/serve session experiences per call). End-to-end **CLI** latency adds ~30 ms of process spawn on both sides — roughly 44 ms vs 450 ms (~9×) — so shell-loop reproductions should expect the CLI numbers, not 7.4 ms.
 
 ## Agent-Harness Token Benchmark (2026-07-10)
 
@@ -1895,7 +1925,7 @@ wrong fix.
 - **`atlas doctor`** reports Atlas upgrade health and the schema/index
   contract state. It also tells you when the lexical sidecar needs
   `atlas compact --rebuild-lexical` — the condition that otherwise degrades
-  every search to SQL-only silently. Add `--verify atlas` to check binary
+  every search to SQL-only silently. It also reports `mcp_registrations` health — flagging assistant MCP configs that launch a nonexistent binary (broken now) or a version-pinned path that breaks on the next upgrade, with `atlas bootstrap` as the fix. Add `--deep` for a page-level integrity scan (`PRAGMA quick_check`) that catches on-disk corruption. Add `--verify atlas` to check binary
   drift: whether the `atlas` on PATH (what assistants launch) matches the
   running binary. Add `--all --root DIR` to scan every `.atlas/atlas.db`
   under a directory.
@@ -1920,6 +1950,32 @@ When you need runtime evidence rather than a health verdict, look here:
   `--telemetry-db` explicitly.
 - **`atlas sync status`** (connected fleets only) shows uplink configuration,
   kill switches, and per-stream cursors.
+
+## Two Atlas Writers at Once
+
+A different sidecar line means two Atlas processes raced to WRITE it:
+
+```text
+atlas: lexical segment-version probe failed (…: timeout) — opening anyway
+```
+
+This is writer-vs-writer contention — typically a manual `atlas index` while a
+`serve` or `watch` daemon owns the same sidecar. It is a one-off warning and
+self-heals exactly like the sidecar-unavailable case above: the run continues,
+and the next uncontended index or `atlas compact --rebuild-lexical` restores
+BM25. If it recurs constantly, quiesce the extra writer (stop the manual
+reindex loop, or let the daemon own freshness).
+
+## Silent Disk Corruption (and `doctor --deep`)
+
+SQLite reads pages lazily, so a store with corrupted interior pages can keep
+answering reads — `doctor`, `status`, and queries all look healthy — until the
+next write fails with `database disk image is malformed (11)`. From v0.1.43,
+`atlas doctor --deep` runs the page-level integrity scan (`PRAGMA
+quick_check`) and escalates to `status: "db_corrupt"` with the damaged pages
+named. It is a full-file scan (seconds on GB-scale stores), so it is opt-in —
+run it when hardware, filesystem, or sync tooling is suspect. Recovery: restore
+`.atlas` from a backup, or delete `.atlas` and run `atlas index --reindex`.
 
 ## Before Deleting Data
 
@@ -1972,11 +2028,11 @@ atlas version
 Pin a version for reproducible automation:
 
 ```sh
-npm install -g @aziron/atlas@0.1.39
+npm install -g @aziron/atlas@0.1.43
 ```
 
 For installations sourced from GitHub Packages, use the equivalent
-`@aziron-ai/atlas@0.1.39` coordinate with the existing registry authentication.
+`@aziron-ai/atlas@0.1.43` coordinate with the existing registry authentication.
 
 Archives: download the new tar.gz, .deb, .rpm, or .apk from
 [GitHub Releases](https://github.com/aziron-ai/atlas/releases/latest), replace
@@ -2073,7 +2129,7 @@ sudo rm /usr/local/bin/atlas                  # manual binary
 > Stop all Atlas processes and confirm the exact paths before deleting;
 > removal is permanent.
 
-Per repository, after stopping all Atlas processes and verifying the path:
+`atlas uninstall --purge` removes the `.atlas` index directories for you — the global `~/.atlas` and every registry-known repo’s `.atlas` — printing the blast radius and total reclaimed space first, and requiring confirmation (`--yes` to skip, `--dry-run` to preview). To remove them by hand instead, per repository, after stopping all Atlas processes and verifying the path:
 
 ```sh
 rm -rf /absolute/path/to/repository/.atlas
