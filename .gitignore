@@ -3,3 +3,6 @@ output/
 test-results/
 playwright-report/
 
+
+# Atlas local index stores must never be committed
+.atlas/
