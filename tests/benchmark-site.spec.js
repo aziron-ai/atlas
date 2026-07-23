@@ -31,6 +31,21 @@ const DOC_PAGES = [
   "troubleshooting", "upgrade",
 ];
 
+const ROOT_HELP_COMMANDS = [
+  "bootstrap", "callers", "communities", "compact", "completion", "config",
+  "connect", "consumers", "context", "coverage", "cross-repo-impact",
+  "dependencies", "disconnect", "doctor", "explain", "export", "help", "history",
+  "hubs", "impact", "index", "install", "link", "mcp", "migrate", "neighbors",
+  "path", "recall", "refs", "repo", "report", "route-contracts", "search",
+  "semantic-search", "serve", "skill", "snapshot-diff", "snippet", "stats",
+  "status", "symbol", "sync", "uninstall", "version", "watch",
+];
+
+const ROOT_HELP_FLAGS = [
+  "--db", "--detail", "--format", "--help", "--json", "--read-only", "--repo",
+  "--telemetry-db", "--tenant", "--version",
+];
+
 test.describe("atlas product and documentation", () => {
   test("overview makes the product, local model, and evidence paths clear", async ({ page }) => {
     await page.goto(`${baseURL}#overview`, { waitUntil: "networkidle" });
@@ -72,6 +87,33 @@ test.describe("atlas product and documentation", () => {
     await page.goto(`${baseURL}#docs/assistants`, { waitUntil: "networkidle" });
     await expect(page.getByTestId("docs-article")).toContainText("atlas bootstrap --dry-run");
     await expect(page.getByTestId("docs-article")).toContainText("codex,claude,claude-desktop");
+  });
+
+  test("CLI reference covers every command and global flag in root help", async ({ page }) => {
+    const cliSource = fs.readFileSync(
+      path.join(__dirname, "..", "content", "docs", "cli.md"),
+      "utf8"
+    );
+
+    for (const command of ROOT_HELP_COMMANDS) {
+      expect(cliSource, `missing CLI command row: ${command}`).toContain(`| \`${command}\` |`);
+    }
+    for (const flag of ROOT_HELP_FLAGS) {
+      expect(cliSource, `missing global flag: ${flag}`).toContain(`\`${flag}\``);
+    }
+    expect(cliSource).toContain("changed symbols with body excerpts");
+    expect(cliSource).toContain("atlas completion powershell");
+
+    await page.goto(`${baseURL}#docs/cli`, { waitUntil: "networkidle" });
+    const interactiveText = await page.getByTestId("docs-article").innerText();
+    for (const command of ROOT_HELP_COMMANDS) {
+      expect(interactiveText, `interactive docs missing command: ${command}`).toContain(command);
+    }
+    for (const flag of ROOT_HELP_FLAGS) {
+      expect(interactiveText, `interactive docs missing flag: ${flag}`).toContain(flag);
+    }
+    expect(interactiveText).toContain("changed symbols with body excerpts");
+    expect(interactiveText).toContain("atlas completion powershell");
   });
 
   test("primary navigation reaches docs, benchmarks, and downloadable data", async ({ page, request }) => {

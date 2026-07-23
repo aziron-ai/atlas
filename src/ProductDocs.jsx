@@ -794,11 +794,13 @@ function DocsPage({ slug }) {
               <tr><td><code>--db</code></td><td>Storage DSN: <code>sqlite://PATH</code> or <code>postgres://...</code> (default <code>sqlite://./.atlas/atlas.db</code>).</td></tr>
               <tr><td><code>--detail</code></td><td>Output depth: <code>low</code>, <code>medium</code>, <code>high</code>, or <code>xhigh</code> — how much graph context to return per item. Default <code>high</code> for every format; <code>xhigh</code> opts into cross-repo context. Retrieval ops (callers/refs/impact) floor at <code>high</code>.</td></tr>
               <tr><td><code>--format</code></td><td>Output shape: <code>plain</code>, <code>json</code>, <code>compact</code>, or <code>ndjson</code> (<code>json</code> by default).</td></tr>
+              <tr><td><code>-h</code>, <code>--help</code></td><td>Show help for Atlas. Use <code>atlas help &lt;command&gt;</code> or <code>atlas &lt;command&gt; --help</code> for command-specific help.</td></tr>
               <tr><td><code>--json</code></td><td>Shorthand for <code>--format json</code>.</td></tr>
               <tr><td><code>--read-only</code></td><td>Open the database immutably: no migration, no WAL/journal files, no <code>telemetry.db</code> created beside it — artifact bytes hash identically after any query. A missing database errors instead of being created.</td></tr>
               <tr><td><code>--repo</code></td><td>Repo workspace: path, <code>org/name</code>, or repo_id. Defaults to the current directory; <code>'*'</code> means all repos on <code>search</code>/<code>semantic-search</code>.</td></tr>
               <tr><td><code>--telemetry-db</code></td><td>Explicit path for the observability database — required if you want telemetry with <code>--read-only</code>. Default: <code>telemetry.db</code> beside the graph database.</td></tr>
               <tr><td><code>--tenant</code></td><td>Tenant/org scope to isolate repos to (hosted multi-tenant; empty = all repos).</td></tr>
+              <tr><td><code>-v</code>, <code>--version</code></td><td>Print the installed Atlas version and exit. Equivalent to <code>atlas version</code>.</td></tr>
             </tbody></table></div>
             <p>Combine them freely with any command:</p>
             <Command>{`atlas --repo /absolute/path status\natlas --db "sqlite:///absolute/path/.atlas/atlas.db" --format plain stats\natlas --detail xhigh explain NewServer\natlas --repo '*' search "rate limiter"`}</Command>
@@ -824,7 +826,7 @@ function DocsPage({ slug }) {
             <div className="docs-table-wrap"><table><thead><tr><th>Command</th><th>Purpose</th></tr></thead><tbody>
               <tr><td><code>search</code></td><td>Code-aware lexical search (BM25 + trigram) over the symbol index; <code>--mode lexical|semantic|hybrid</code>, plus <code>--kind</code> and <code>--path</code> filters.</td></tr>
               <tr><td><code>semantic-search</code></td><td>Embedding-based nearest-symbol search; transparently degrades to lexical (<code>degraded=true</code>) when vectors are unavailable.</td></tr>
-              <tr><td><code>context</code></td><td>Bounded review-context bundle for changed/seed paths; budgets via <code>--intent</code> (<code>auto</code> is 16-32 KiB), per-request flags, or env vars.</td></tr>
+              <tr><td><code>context</code></td><td>Token-budgeted review context for changed/seed paths: changed symbols with body excerpts, retrieval hits, impacted files, and scoped edges. Budgets come from <code>--intent</code> (<code>auto</code> is 16-32 KiB), per-request flags, or env vars.</td></tr>
               <tr><td><code>explain</code></td><td>Deterministic context bundle for a symbol: defs, callers/callees, imports, served routes, cross-repo consumers.</td></tr>
               <tr><td><code>symbol</code></td><td>Show a symbol's definition(s) with its callers and callees.</td></tr>
               <tr><td><code>snippet</code></td><td>Show a symbol's bounded implementation body (path:line, signature, source excerpt).</td></tr>
@@ -879,18 +881,19 @@ function DocsPage({ slug }) {
           </ProseSection>
           <ProseSection title="Utilities">
             <div className="docs-table-wrap"><table><thead><tr><th>Command</th><th>Purpose</th></tr></thead><tbody>
+              <tr><td><code>help</code></td><td>Show help for Atlas or any command. <code>atlas help &lt;command&gt;</code> and <code>atlas &lt;command&gt; --help</code> display the same command-specific contract.</td></tr>
               <tr><td><code>config</code></td><td>Inspect and persist configuration: <code>list</code> every knob with effective value and provenance, <code>get</code> one, <code>set</code> one into the workspace settings.json. See <a className="text-link" href="#docs/configuration">Configuration</a>.</td></tr>
               <tr><td><code>version</code></td><td>Print the installed Atlas version.</td></tr>
-              <tr><td><code>completion</code></td><td>Generate shell completion scripts.</td></tr>
+              <tr><td><code>completion</code></td><td>Generate autocompletion scripts for Bash, Zsh, Fish, or PowerShell. Each shell subcommand's <code>--help</code> includes current-session and persistent-install instructions.</td></tr>
             </tbody></table></div>
-            <Command>{`atlas config list\natlas config get ATLAS_MAX_DB_BYTES`}</Command>
+            <Command>{`atlas help context\natlas config list\natlas config get ATLAS_MAX_DB_BYTES\nsource <(atlas completion bash)\nsource <(atlas completion zsh)\natlas completion fish | source\natlas completion powershell | Out-String | Invoke-Expression`}</Command>
           </ProseSection>
           <ProseSection title="Maintenance Safety">
             <p>Stop long-running Atlas processes (<code>serve</code>, <code>watch</code>, supervised MCP) before exclusive maintenance such as <code>compact --full</code>. Back up the complete <code>.atlas/</code> directory before destructive operations like <code>repo rm</code>:</p>
             <Command>{`atlas migrate\natlas compact --full\natlas repo rm owner/repository --yes`}</Command>
           </ProseSection>
           <ProseSection title="Authoritative Contract">
-            <p>Flags and defaults can change between releases. <code>atlas --help</code> and <code>atlas &lt;command&gt; --help</code> are the authoritative contract for the release installed on your machine; prefer them over this page when they disagree.</p>
+            <p>Flags and defaults can change between releases. <code>atlas --help</code>, <code>atlas help &lt;command&gt;</code>, and <code>atlas &lt;command&gt; --help</code> are the authoritative contract for the release installed on your machine; prefer them over this page when they disagree. Use <code>atlas --version</code>, <code>atlas -v</code>, or <code>atlas version</code> to confirm which release you are reading about.</p>
           </ProseSection>
         </>
       );
@@ -1534,7 +1537,7 @@ function DocsPage({ slug }) {
             <Command>{`atlas callers NewServer --limit 25`}</Command>
             <p>Use <code>refs</code> when a rename or type change is on the table — it lists call sites plus type-use references (params, fields, returns):</p>
             <Command>{`atlas refs NewServer`}</Command>
-            <p>Use <code>context</code> when reviewing a change — it builds a bounded review-context bundle (16–32 KiB with the default <code>auto</code> intent) around the changed files:</p>
+            <p>Use <code>context</code> when reviewing a change — it builds a bounded review-context bundle (16–32 KiB with the default <code>auto</code> intent) around the changed files, including changed symbols with body excerpts, retrieval hits, impacted files, and scoped edges:</p>
             <Command>{`atlas context \\\n  --paths path/to/changed-file.go \\\n  --query "review correctness and regression risk" \\\n  --format json`}</Command>
             <p>For the blast radius of a change — impacted symbols, files, and covering tests — use <code>impact</code>:</p>
             <Command>{`atlas impact --paths path/to/changed-file.go`}</Command>

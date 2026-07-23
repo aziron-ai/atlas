@@ -90,7 +90,7 @@ atlas stats</code></pre>
 <pre><code>atlas callers NewServer --limit 25</code></pre>
 <p>Use <code>refs</code> when a rename or type change is on the table — it lists call sites plus type-use references (params, fields, returns):</p>
 <pre><code>atlas refs NewServer</code></pre>
-<p>Use <code>context</code> when reviewing a change — it builds a bounded review-context bundle (16–32 KiB with the default <code>auto</code> intent) around the changed files:</p>
+<p>Use <code>context</code> when reviewing a change — it builds a bounded review-context bundle (16–32 KiB with the default <code>auto</code> intent) around the changed files, including changed symbols with body excerpts, retrieval hits, impacted files, and scoped edges:</p>
 <pre><code>atlas context \
   --paths path/to/changed-file.go \
   --query &quot;review correctness and regression risk&quot; \

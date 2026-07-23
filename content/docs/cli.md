@@ -15,11 +15,13 @@ repo is in scope, and how output is shaped.
 | `--db` | Storage DSN: `sqlite://PATH` or `postgres://...` (default `sqlite://./.atlas/atlas.db`). |
 | `--detail` | Output depth: `low`, `medium`, `high`, or `xhigh` — how much graph context to return per item. Default `high` for every format; `xhigh` opts into cross-repo context. Retrieval ops (callers/refs/impact) floor at `high`. |
 | `--format` | Output shape: `plain`, `json`, `compact`, or `ndjson` (`json` by default). |
+| `-h`, `--help` | Show help for Atlas. Use `atlas help <command>` or `atlas <command> --help` for command-specific help. |
 | `--json` | Shorthand for `--format json`. |
 | `--read-only` | Open the database immutably: no migration, no WAL/journal files, no `telemetry.db` created beside it — artifact bytes hash identically after any query. A missing database errors instead of being created. |
 | `--repo` | Repo workspace: path, `org/name`, or repo_id. Defaults to the current directory; `'*'` means all repos on `search`/`semantic-search`. |
 | `--telemetry-db` | Explicit path for the observability database — required if you want telemetry with `--read-only`. Default: `telemetry.db` beside the graph database. |
 | `--tenant` | Tenant/org scope to isolate repos to (hosted multi-tenant; empty = all repos). |
+| `-v`, `--version` | Print the installed Atlas version and exit. Equivalent to `atlas version`. |
 
 Combine them freely with any command:
 
@@ -62,7 +64,7 @@ Find code and pull bounded, deterministic context about it.
 | --- | --- |
 | `search` | Code-aware lexical search (BM25 + trigram) over the symbol index; `--mode lexical\|semantic\|hybrid`, plus `--kind` and `--path` filters. |
 | `semantic-search` | Embedding-based nearest-symbol search; transparently degrades to lexical (`degraded=true`) when vectors are unavailable. |
-| `context` | Bounded review-context bundle for changed/seed paths; budgets via `--intent` (`auto` is 16-32 KiB), per-request flags, or env vars. |
+| `context` | Token-budgeted review context for changed/seed paths: changed symbols with body excerpts, retrieval hits, impacted files, and scoped edges. Budgets come from `--intent` (`auto` is 16-32 KiB), per-request flags, or env vars. |
 | `explain` | Deterministic context bundle for a symbol: defs, callers/callees, imports, served routes, cross-repo consumers. |
 | `symbol` | Show a symbol's definition(s) with its callers and callees. |
 | `snippet` | Show a symbol's bounded implementation body (path:line, signature, source excerpt). |
@@ -158,13 +160,19 @@ atlas recall clusters
 
 | Command | Purpose |
 | --- | --- |
+| `help` | Show help for Atlas or any command. `atlas help <command>` and `atlas <command> --help` display the same command-specific contract. |
 | `config` | Inspect and persist configuration: `list` every knob with effective value and provenance, `get` one, `set` one into the workspace settings.json. See [Configuration](configuration). |
 | `version` | Print the installed Atlas version. |
-| `completion` | Generate shell completion scripts. |
+| `completion` | Generate autocompletion scripts for Bash, Zsh, Fish, or PowerShell. Each shell subcommand's `--help` includes current-session and persistent-install instructions. |
 
 ```sh
+atlas help context
 atlas config list
 atlas config get ATLAS_MAX_DB_BYTES
+source <(atlas completion bash)
+source <(atlas completion zsh)
+atlas completion fish | source
+atlas completion powershell | Out-String | Invoke-Expression
 ```
 
 ## Maintenance Safety
@@ -181,6 +189,8 @@ atlas repo rm owner/repository --yes
 
 ## Authoritative Contract
 
-Flags and defaults can change between releases. `atlas --help` and
-`atlas <command> --help` are the authoritative contract for the release
-installed on your machine; prefer them over this page when they disagree.
+Flags and defaults can change between releases. `atlas --help`,
+`atlas help <command>`, and `atlas <command> --help` are the authoritative
+contract for the release installed on your machine; prefer them over this page
+when they disagree. Use `atlas --version`, `atlas -v`, or `atlas version` to
+confirm which release you are reading about.

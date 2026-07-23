@@ -98,7 +98,9 @@ atlas refs NewServer
 ```
 
 Use `context` when reviewing a change — it builds a bounded review-context
-bundle (16–32 KiB with the default `auto` intent) around the changed files:
+bundle (16–32 KiB with the default `auto` intent) around the changed files,
+including changed symbols with body excerpts, retrieval hits, impacted files,
+and scoped edges:
 
 ```sh
 atlas context \
