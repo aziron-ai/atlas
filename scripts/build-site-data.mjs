@@ -47,7 +47,7 @@ const report = {
     modelCalls: 666,
     fixture: "per language: a function `target`, exactly 15 direct callers c01–c15, 3 decoys n01–n03 — truth by construction",
     evidenceClasses: [
-      { id: "fixture-truth", desc: "constructed repos, ground truth by construction, 37 languages" },
+      { id: "fixture-truth", desc: "native benchmark, ground truth by construction, 37 languages" },
       { id: "LSP-truth", desc: "independent language-server ground truth on a real repository" },
       { id: "perf-only", desc: "token / latency / build-time measurements, no accuracy claim" },
     ],
@@ -150,7 +150,7 @@ const report = {
     note: "Two independent models — one small, one large — score Atlas's high-detail context identically and rank the tools the same way: the result is a property of the context, not of any single model.",
   },
   limits: [
-    "9 of 37 languages had parser gaps at report time (bash, blade, byond, ejs, objc, pascal, powershell, razor, ruby) — template/edge dialects pending native call-edge extraction. The Linux saturation run has since fixed all 9 on fixture-truth; real-repo proof is pending.",
+    "9 of 37 languages had parser gaps at report time (bash, blade, byond, ejs, objc, pascal, powershell, razor, ruby) — template/edge dialects pending native call-edge extraction. The Linux saturation run has since fixed all 9 with native evidence; real-repo proof is pending.",
     "On 3 gap languages the graph tool still answered — by dumping full source at ~161 tokens. Where Atlas parses a language it wins on cost and accuracy.",
     "Scoring correction disclosed: an earlier scorer under-credited the graph tool on Scala (rejected `c01()` for parentheses). The corrected scorer raised the competitor's score from 0.000 to 1.000 — the report carries the corrected number.",
   ],
@@ -207,7 +207,7 @@ const report = {
       toLevel: "L4",
       badge: "L4 · pending real-repo proof",
       langs: ["bash", "blade", "byond", "ejs", "objc", "pascal", "powershell", "razor", "ruby"],
-      evidence: "fixture-truth F1 1.000 each on the Linux saturation run (CALLERS_F1_AFTER.json); real-repo call-graph validation not yet run",
+      evidence: "native F1 1.000 each on the Linux saturation run (CALLERS_F1_AFTER.json); real-repo call-graph validation not yet run",
     },
   },
 };
@@ -237,7 +237,7 @@ const consumerRefs = Object.values(xe).reduce((s, r) => s + (r.consumer || 0), 0
 const fresh = {
   label: "Linux corroboration run",
   platform: (toolsLinux.platform || "Linux x86_64").replace(/\s+\S*$/, " x86_64"),
-  what: "deterministic re-run of the fixture-truth, LSP-truth and cross-repo benches on independent hardware — corroborates the report, does not replace it",
+  what: "deterministic re-run of the native, LSP-truth and cross-repo benches on independent hardware — corroborates the report, does not replace it",
   saturation: {
     perfect: after.perfect_languages,
     total: after.total_languages,
@@ -399,7 +399,7 @@ const artifacts = [
   { name: "MATRIX_REPORT.json", path: "data/raw/MATRIX_REPORT.json", tier: "report", note: "core 7-language tool matrix" },
   { name: "SATURATION_REPORT.json", path: "data/raw/SATURATION_REPORT.json", tier: "report", note: "language saturation status" },
   { name: "GRAPHIFY_LANGUAGE_DISCOVERY.json", path: "data/raw/GRAPHIFY_LANGUAGE_DISCOVERY.json", tier: "report", note: "graphify per-language support probe" },
-  { name: "CALLERS_F1_AFTER.json", path: "data/raw/CALLERS_F1_AFTER.json", tier: "fresh", note: "37/37 fixture-truth callers F1 (Linux)" },
+  { name: "CALLERS_F1_AFTER.json", path: "data/raw/CALLERS_F1_AFTER.json", tier: "fresh", note: "37/37 native callers F1 (Linux)" },
   { name: "DIMENSIONS_BENCH_PUBLIC.json", path: "data/raw/DIMENSIONS_BENCH_PUBLIC.json", tier: "fresh", note: "per-language F1 / tokens / latency / index (Linux)" },
   { name: "LSP_F1_SUMMARY.json", path: "data/raw/LSP_F1_SUMMARY.json", tier: "fresh", note: "gopls LSP-truth aggregate (Linux)" },
   { name: "MATRIX_TOOL_VERSIONS_LINUX.json", path: "data/raw/MATRIX_TOOL_VERSIONS_LINUX.json", tier: "fresh", note: "tool pins for the Linux run" },

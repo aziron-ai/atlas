@@ -72,7 +72,7 @@
 <ul><li><strong>Compatibility:</strong> whether a format indexes successfully</li><li><strong>Correctness:</strong> precision, recall, or F1 against an oracle</li><li><strong>Latency:</strong> elapsed index or query time under stated cache conditions</li><li><strong>Token use:</strong> measured model/tool usage or a documented estimate</li><li><strong>Agent workflow:</strong> end-to-end behavior for a pinned assistant and task set</li></ul>
 <h2>Published Headline Results (July 2026)</h2>
 <p>These are the current published numbers, each with its evidence conditions:</p>
-<table><thead><tr><th>Result</th><th>Conditions</th></tr></thead><tbody><tr><td>F1 0.757 at 21.2 context tokens, mean across all 37 languages</td><td>Fixture-truth ground truth, real-LLM scored (222 cells, 666 model calls)</td></tr><tr><td>F1 1.000 at 27.1 tokens on the 28 fully-supported languages</td><td>Full-file-dump accuracy at 6.1× fewer tokens; same fixture suite</td></tr><tr><td>Graph-tool comparison: 0.539 F1 at 97 tokens</td><td>Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens</td></tr><tr><td>Query latency ~7.4 ms vs 128 ms for the graph tool</td><td>Real repositories, 36 languages; flat from 15 to 39,161 symbols</td></tr></tbody></table>
+<table><thead><tr><th>Result</th><th>Conditions</th></tr></thead><tbody><tr><td>F1 0.757 at 21.2 context tokens, mean across all 37 languages</td><td>Native ground truth, real-LLM scored (222 cells, 666 model calls)</td></tr><tr><td>F1 1.000 at 27.1 tokens on the 28 fully-supported languages</td><td>Full-file-dump accuracy at 6.1× fewer tokens; same fixture suite</td></tr><tr><td>Graph-tool comparison: 0.539 F1 at 97 tokens</td><td>Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens</td></tr><tr><td>Query latency ~7.4 ms vs 128 ms for the graph tool</td><td>Real repositories, 36 languages; flat from 15 to 39,161 symbols</td></tr></tbody></table>
 <p>*Measurement layer:* the 7.4 ms figure is warm <strong>in-process engine latency</strong> (the number an MCP/serve session experiences per call). End-to-end <strong>CLI</strong> latency adds ~30 ms of process spawn on both sides — roughly 44 ms vs 450 ms (~9×) — so shell-loop reproductions should expect the CLI numbers, not 7.4 ms.</p>
 <h2>Agent-Harness Token Benchmark (2026-07-10)</h2>
 <p>This measures what a real agent actually spends. Claude Code and OpenAI Codex ran headless in sirupsen/logrus (@a23d315), restricted to one code-intelligence CLI per run, answering 19 caller questions scored against gopls call_hierarchy (LSP-truth) at the pinned commit. Token numbers are each harness's own usage accounting.</p>
@@ -117,7 +117,7 @@
         <a href="../upgrade/">Upgrade and Uninstall</a>
     </nav>
     <footer class="site">
-      Atlas v0.1.43 · <a href="https://aziron-ai.github.io/atlas/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      Atlas v0.1.46 · <a href="https://aziron-ai.github.io/atlas/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
       This page mirrors the interactive documentation for search engines and AI assistants.
     </footer>
   </main>

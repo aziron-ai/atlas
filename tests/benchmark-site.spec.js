@@ -36,20 +36,49 @@ test.describe("atlas product and documentation", () => {
     await page.goto(`${baseURL}#overview`, { waitUntil: "networkidle" });
     const hero = page.getByTestId("product-hero");
     await expect(hero.getByRole("heading", { level: 1 })).toContainText("Atlas is the map");
-    await expect(hero).toContainText("precise repository context");
-    await expect(hero).toContainText("One local binary");
+    await expect(hero).toContainText("few coordinates that matter");
+    await expect(hero).toContainText("Local SQLite index");
     await expect(page.getByTestId("product-install")).toContainText(
       "brew install --cask aziron-ai/atlas/atlas"
     );
     await expect(page.getByTestId("product-nav")).toContainText(`v${site.version}`);
-    await expect(page.getByRole("link", { name: /View benchmark evidence/ })).toHaveAttribute("href", "#benchmarks");
+    await expect(page.getByRole("link", { name: /See the evidence/ })).toHaveAttribute("href", "#benchmarks");
+    await expect(page.getByRole("link", { name: /Install Atlas/ }).first()).toHaveAttribute("href", "#docs/installation");
     await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute("href", "assets/atlas-mark.svg");
     await expect(page.locator("img.brand-mark")).toHaveCount(2);
     await expect(page.locator("img.brand-mark").first()).toHaveAttribute("src", "assets/atlas-mark.svg");
-    const productHuntBadge = page.getByTestId("producthunt-badge");
+    await expect(page.locator(".producthunt-band")).toHaveCount(0);
+    const productHuntBadge = page.locator("footer.product-footer").getByTestId("producthunt-badge");
     await expect(productHuntBadge).toBeVisible();
     await expect(productHuntBadge).toHaveAttribute("href", /producthunt\.com\/products\/atlas-44/);
+    await expect(productHuntBadge.locator(".producthunt-badge-fallback")).toBeVisible();
     await expect(productHuntBadge.locator("img")).toHaveAttribute("width", "250");
+  });
+
+  test("theme persists and mobile navigation does not overlap the product rail", async ({ page }) => {
+    await page.goto(`${baseURL}#overview`, { waitUntil: "networkidle" });
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+
+    await page.getByRole("button", { name: "Switch to light theme" }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await page.reload({ waitUntil: "networkidle" });
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(page.locator(".product-nav-left .product-rail")).toBeHidden();
+    const mobileToggle = page.getByRole("button", { name: "Toggle navigation" });
+    await expect(mobileToggle).toBeVisible();
+    await mobileToggle.click();
+    await expect(page.locator(".mobile-product-nav")).toBeVisible();
+    await expect(page.locator(".mobile-product-nav").getByRole("link", { name: "Install Atlas" })).toBeVisible();
+  });
+
+  test("scroll enhancement never makes landing sections invisible", async ({ page }) => {
+    await page.goto(`${baseURL}#overview`, { waitUntil: "networkidle" });
+    const invisibleSections = await page.locator("#main > section").evaluateAll((sections) =>
+      sections.filter((section) => getComputedStyle(section).opacity === "0").length
+    );
+    expect(invisibleSections).toBe(0);
   });
 
   test("all consumer documentation pages render with task content", async ({ page }) => {
@@ -76,7 +105,7 @@ test.describe("atlas product and documentation", () => {
 
   test("primary navigation reaches docs, benchmarks, and downloadable data", async ({ page, request }) => {
     await page.goto(`${baseURL}#overview`, { waitUntil: "networkidle" });
-    await page.getByTestId("product-nav").getByRole("link", { name: "Documentation", exact: true }).click();
+    await page.getByTestId("product-nav").getByRole("link", { name: "Docs", exact: true }).click();
     await expect(page).toHaveURL(/#docs\/getting-started$/);
     await expect(page.getByTestId("docs-article")).toBeVisible();
 
@@ -96,6 +125,11 @@ test.describe("atlas benchmark evidence", () => {
     for (const id of SECTIONS) {
       await expect(page.locator(`#${id}`), id).toHaveCount(1);
     }
+  });
+
+  test("uses the native evidence label in user-facing benchmark copy", async ({ page }) => {
+    await expect(page.getByText("native", { exact: true }).first()).toBeVisible();
+    await expect(page.locator("body")).not.toContainText(/fixture[- ]truth/i);
   });
 
   test("agent-harness section: one panel per agent, honest caveat, runnable suite", async ({ page }) => {
@@ -208,8 +242,9 @@ test.describe("atlas benchmark evidence", () => {
     const ctx = await page.context().browser().newContext({ javaScriptEnabled: false });
     const nojs = await ctx.newPage();
     await nojs.goto(baseURL, { waitUntil: "domcontentloaded" });
-    await expect(nojs.locator("h1")).toHaveText("Atlas");
+    await expect(nojs.locator("h1")).toContainText("Atlas is the map");
     await expect(nojs.locator("body")).toContainText("Product documentation");
+    await expect(nojs.locator("a.btn-primary").first()).toBeVisible();
     await expect(nojs.locator("table").first()).toBeVisible();
     await ctx.close();
   });
