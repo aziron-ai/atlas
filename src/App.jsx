@@ -195,7 +195,7 @@ const NAV_ITEMS = [
 ];
 
 // Secondary in-page navigation for the long benchmark report. The primary
-// site nav (Docs / Evidence on the product rail; GitHub / Data / Install on the project rail) is provided by the
+// site nav (Overview / Documentation / Benchmarks / Data) is provided by the
 // shared <ProductHeader>, which stays consistent across every view — this
 // strip only jumps between sections of the benchmark page and sits beneath it.
 function ConsoleBar({ active }) {
@@ -205,7 +205,7 @@ function ConsoleBar({ active }) {
       className="sticky z-30"
       style={{
         top: 64,
-        background: "var(--glass-bg)",
+        background: "rgba(255,255,255,0.88)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         borderBottom: "1px solid var(--line)",
@@ -1841,8 +1841,23 @@ function BenchmarkExperience({ data }) {
   );
 }
 
-function App({ data, error }) {
+function App() {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
   const route = useSiteRoute();
+
+  useEffect(() => {
+    fetch("data/site-data.json", { cache: "no-store" })
+      .then((r) => {
+        if (!r.ok) throw new Error(`Unable to load site data: ${r.status}`);
+        return r.json();
+      })
+      .then(setData)
+      .catch((e) => {
+        console.error(e);
+        setError(e);
+      });
+  }, []);
 
   if (error) {
     return (
@@ -1855,23 +1870,27 @@ function App({ data, error }) {
     );
   }
 
+  if (!data) {
+    return (
+      <main className="shell py-24" aria-busy="true">
+        <div className="panel p-6">
+          <div className="kicker">loading</div>
+          <div className="mt-4 flex flex-col gap-3">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="h-3 rounded" style={{ background: "var(--surface-raised)", width: `${80 - i * 18}%` }} />
+            ))}
+          </div>
+          <p className="mono mt-5" style={{ fontSize: 12, color: "var(--faint)" }}>
+            fetching data/site-data.json…
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   if (route.view === "docs") return <Documentation data={data} page={route.page} />;
   if (route.view === "benchmarks") return <BenchmarkExperience data={data} />;
   return <ProductHome data={data} />;
 }
 
-/* Fetch site data before mounting so the designed SEO first-paint in
-   index.html stays visible until ProductHome (or docs/benchmarks) can replace it. */
-const rootEl = document.getElementById("root");
-fetch("data/site-data.json", { cache: "no-store" })
-  .then((r) => {
-    if (!r.ok) throw new Error(`Unable to load site data: ${r.status}`);
-    return r.json();
-  })
-  .then((data) => {
-    createRoot(rootEl).render(<App data={data} />);
-  })
-  .catch((error) => {
-    console.error(error);
-    createRoot(rootEl).render(<App error={error} />);
-  });
+createRoot(document.getElementById("root")).render(<App />);

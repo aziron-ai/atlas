@@ -23,7 +23,7 @@
     <meta name="twitter:title" content="Atlas | Local code intelligence for developers and AI assistants">
     <meta name="twitter:description" content="Atlas indexes repositories locally and returns focused, source-grounded context about symbols, callers, references, routes, and change impact through CLI, MCP, and HTTP.">
     <meta name="twitter:image" content="https://aziron-ai.github.io/atlas/assets/og.png">
-    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Atlas","applicationCategory":"DeveloperApplication","operatingSystem":"macOS, Linux, Windows","softwareVersion":"0.1.46","url":"https://aziron-ai.github.io/atlas/","downloadUrl":"https://github.com/aziron-ai/atlas/releases/download/v0.1.46/atlas_0.1.46_linux_amd64.tar.gz","installUrl":"https://github.com/aziron-ai/atlas/releases/latest","description":"Atlas indexes repositories locally and returns focused, source-grounded context about symbols, callers, references, routes, and change impact through CLI, MCP, and HTTP.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"}},{"@context":"https://schema.org","@type":"Dataset","name":"Atlas Benchmark & Field Comparison — July 2026","description":"Per-language code-intelligence benchmark: answer accuracy (F1), context tokens, query latency and index speed for Atlas vs a graph tool, an LSP-truth real-repository flagship, and a 40-language maturity ladder. Native ground truth by construction; real-LLM scored (222 cells, 666 model calls).","url":"https://aziron-ai.github.io/atlas/","isAccessibleForFree":true,"creator":{"@type":"Organization","name":"Aziron"},"distribution":[{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://aziron-ai.github.io/atlas/data/site-data.json"},{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://aziron-ai.github.io/atlas/data/raw/CALLERS_F1_AFTER.json"},{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://aziron-ai.github.io/atlas/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json"}]}]</script>
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Atlas","applicationCategory":"DeveloperApplication","operatingSystem":"macOS, Linux, Windows","softwareVersion":"0.1.43","url":"https://aziron-ai.github.io/atlas/","downloadUrl":"https://github.com/aziron-ai/atlas/releases/download/v0.1.43/atlas_0.1.43_linux_amd64.tar.gz","installUrl":"https://github.com/aziron-ai/atlas/releases/latest","description":"Atlas indexes repositories locally and returns focused, source-grounded context about symbols, callers, references, routes, and change impact through CLI, MCP, and HTTP.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"}},{"@context":"https://schema.org","@type":"Dataset","name":"Atlas Benchmark & Field Comparison — July 2026","description":"Per-language code-intelligence benchmark: answer accuracy (F1), context tokens, query latency and index speed for Atlas vs a graph tool, an LSP-truth real-repository flagship, and a 40-language maturity ladder. Native ground truth by construction; real-LLM scored (222 cells, 666 model calls).","url":"https://aziron-ai.github.io/atlas/","isAccessibleForFree":true,"creator":{"@type":"Organization","name":"Aziron"},"distribution":[{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://aziron-ai.github.io/atlas/data/site-data.json"},{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://aziron-ai.github.io/atlas/data/raw/CALLERS_F1_AFTER.json"},{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://aziron-ai.github.io/atlas/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json"}]}]</script>
     <!-- seo-head:end -->
     <link rel="stylesheet" href="assets/styles.css">
     <script defer src="assets/app.js"></script>
@@ -31,239 +31,112 @@
   <body>
     <div id="root">
     <!-- seo-body:start -->
-      <a class="skip-link" href="#main">Skip to content</a>
-      <header class="product-header seo-header">
-        <nav class="shell flex h-16 items-center justify-between gap-3" aria-label="Primary navigation">
-          <a class="focusring text-inherit no-underline" href="https://aziron-ai.github.io/atlas/" aria-label="Atlas home">
-            <span class="flex min-w-0 items-center gap-2.5">
-              <img class="brand-mark" src="assets/atlas-mark.svg" alt="" width="31" height="26">
-              <span class="brand-word">ATLAS</span>
-            </span>
-          </a>
-          <div class="seo-nav-links">
-            <div class="product-rail" aria-label="Product">
-              <div class="product-rail-links">
-                <a class="product-navlink focusring" href="#overview" data-active="true" aria-current="page">Overview</a>
-                <a class="product-navlink focusring" href="docs/">Docs</a>
-                <a class="product-navlink focusring" href="#benchmarks">Benchmark</a>
-                <a class="product-navlink focusring" href="data/site-data.json" download aria-label="Download benchmark data (JSON)">Data</a>
-              </div>
-            </div>
-            <span class="version-meta" title="Atlas edition v0.1.46">v0.1.46</span>
-            <div class="product-tool-strip" role="group" aria-label="Project tools">
-              <a class="tool-btn focusring" href="https://github.com/aziron-ai/atlas" target="_blank" rel="noreferrer" aria-label="Atlas on GitHub" title="GitHub">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
-                </svg>
-                <span>GitHub</span>
-              </a>
-            </div>
-            <span class="product-nav-divider" aria-hidden="true"></span>
-            <a class="btn btn-primary focusring" href="docs/installation/">Install</a>
-          </div>
-        </nav>
-      </header>
-      <main id="main" class="seo-digest">
-        <section class="product-hero seo-hero" aria-labelledby="seo-hero-title">
-          <div class="shell py-10 lg:py-14">
-            <div class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Local code intelligence</div>
-            <h1 id="seo-hero-title" class="mt-4">Your codebase is a territory. <span class="accent">Atlas is the map.</span></h1>
-            <p class="lede mt-4 text-lg leading-relaxed">
-              Give assistants the few coordinates that matter — symbols, callers, impact — without dumping the repo into the prompt.
-            </p>
-            <div class="mt-7 flex flex-wrap gap-3">
-              <a class="btn btn-primary focusring" href="docs/installation/">Install Atlas</a>
-              <a class="btn btn-ghost focusring" href="docs/getting-started/">Read the docs</a>
-            </div>
-            <div class="hero-facts mt-6">
-              <span>~7.4 ms queries</span>
-              <span>36× fewer tokens</span>
-              <span>Local SQLite index</span>
-            </div>
-          </div>
-        </section>
+      <div class="shell" style="padding:48px 0 64px;max-width:820px">
+        <h1>Atlas</h1>
+        <p>Atlas indexes repositories locally and returns focused, source-grounded context about symbols, callers, references, routes, and change impact through CLI, MCP, and HTTP.</p>
+        <p><a href="https://github.com/aziron-ai/atlas">GitHub</a> ·
+           <a href="https://github.com/aziron-ai/atlas/releases/latest">Download v0.1.43</a> ·
+           <a href="data/site-data.json">Benchmark data (JSON)</a></p>
 
-        <section class="hairline" aria-labelledby="seo-install-title">
-          <div class="shell seo-section">
-            <h2 id="seo-install-title">Install</h2>
-            <p class="lede">Homebrew, npm, native Linux packages, and release archives all expose the same <code>atlas</code> command. Full steps in the <a href="docs/installation/">installation guide</a> (includes GitHub Packages).</p>
-            <div class="seo-commands">
-              <div class="product-command">
-                <div class="flex items-center" style="min-height:42px;padding:0 12px">
-                  <span class="cmd-label">Homebrew</span>
-                </div>
-                <pre><code>brew install --cask aziron-ai/atlas/atlas</code></pre>
-              </div>
-              <div class="product-command">
-                <div class="flex items-center" style="min-height:42px;padding:0 12px">
-                  <span class="cmd-label">npm</span>
-                </div>
-                <pre><code>npm install -g @aziron/atlas</code></pre>
-              </div>
-            </div>
-            <p>Then run <code>atlas index .</code>, check <code>atlas status</code>, and preview assistants with <code>atlas bootstrap --dry-run</code>.
-               Linux packages and archives: <a href="https://github.com/aziron-ai/atlas/releases/latest">Download v0.1.46</a>.</p>
-          </div>
-        </section>
+        <h2>Get started</h2>
+        <p>Install with <code>brew install --cask aziron-ai/atlas/atlas</code> or from the public
+           npm registry with <code>npm install -g @aziron/atlas</code>. The
+           <a href="docs/installation/">installation guide</a> also covers the authenticated
+           GitHub Packages coordinate.
+           Then run <code>atlas index .</code>,
+           inspect readiness with <code>atlas status</code>, and preview assistant setup with
+           <code>atlas bootstrap --dry-run</code>.</p>
 
-        <section class="product-band hairline" aria-labelledby="seo-docs-title">
-          <div class="shell seo-section">
-            <h2 id="seo-docs-title">Product documentation</h2>
-            <ul class="seo-doc-list">
-              <li><a href="docs/getting-started/">Getting started</a> — first index, query, and assistant connection.</li>
-              <li><a href="docs/installation/">Installation</a> — Homebrew, npm, archives, and Linux packages.</li>
-              <li><a href="docs/indexing/">Indexing and reindexing</a> — freshness, watch mode, and recovery.</li>
-              <li><a href="docs/cli/">CLI reference</a> — search, symbols, relationships, impact, and routes.</li>
-              <li><a href="docs/assistants/">AI assistant setup</a> and <a href="docs/mcp/">MCP tools</a>.</li>
-              <li><a href="docs/troubleshooting/">Troubleshooting</a>, <a href="docs/privacy/">privacy</a>, <a href="docs/configuration/">configuration</a>, and <a href="docs/upgrade/">upgrades</a>.</li>
-              <li><a href="docs/">Browse all documentation →</a></li>
-            </ul>
-          </div>
-        </section>
+        <h2>Product documentation</h2>
+        <ul>
+          <li><a href="docs/getting-started/">Getting started</a> — first index, query, and assistant connection.</li>
+          <li><a href="docs/installation/">Installation</a> — Homebrew, npm, archives, and Linux packages.</li>
+          <li><a href="docs/indexing/">Indexing and reindexing</a> — freshness, watch mode, and recovery.</li>
+          <li><a href="docs/cli/">CLI reference</a> — search, symbols, relationships, impact, and routes.</li>
+          <li><a href="docs/assistants/">AI assistant setup</a> and <a href="docs/mcp/">MCP tools</a>.</li>
+          <li><a href="docs/troubleshooting/">Troubleshooting</a>, <a href="docs/privacy/">privacy</a>, <a href="docs/configuration/">configuration</a>, and <a href="docs/upgrade/">upgrades</a>.</li>
+          <li><a href="docs/">Browse all documentation →</a></li>
+        </ul>
 
-        <section class="hairline" aria-labelledby="seo-evidence-title" id="benchmarks">
-          <div class="shell seo-section">
-            <h2 id="seo-evidence-title">Headline results — Benchmark &amp; Field Comparison — July 2026</h2>
-            <p class="lede">Three published measurements; full methodology and raw artifacts below.</p>
-            <div class="seo-metric-row" role="list">
-              <div class="seo-metric" role="listitem">
-                <div class="seo-metric-value">0.757</div>
-                <div class="seo-metric-label">Atlas F1 · 37 langs</div>
-                <div class="seo-metric-sub">@ 21.2 tokens</div>
-              </div>
-              <div class="seo-metric" role="listitem">
-                <div class="seo-metric-value">36×</div>
-                <div class="seo-metric-label">Fewer query tokens</div>
-                <div class="seo-metric-sub">vs graph tool</div>
-              </div>
-              <div class="seo-metric" role="listitem">
-                <div class="seo-metric-value">7.4&nbsp;ms</div>
-                <div class="seo-metric-label">Mean query latency</div>
-                <div class="seo-metric-sub">flat across 36 repos</div>
-              </div>
-            </div>
-            <details class="seo-details">
-              <summary>Full headline notes</summary>
-              <ul>
-                <li>Atlas F1 0.757 at 21.2 context tokens, mean across all 37 languages (native, real-LLM scored, 222 cells / 666 model calls).</li>
-                <li>F1 1.000 at 27.1 tokens on the 28 fully-supported languages — full-file-dump accuracy at 6.1× fewer tokens.</li>
-                <li>Graph-tool comparison: 0.539 F1 at 97 tokens — Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens.</li>
-                <li>Real repository (sirupsen/logrus, gopls call-hierarchy ground truth): Atlas F1 0.975 vs graph tool 0.084 vs raw file 0.017.</li>
-                <li>Query latency ~7.4 ms, flat from 15 to 39,161 symbols across 36 real repositories.</li>
-                <li>Corroborated by an independent Linux re-run: 37/37 languages fixture-perfect, 9× faster queries than the graph tool, gopls-truth F1 0.933.</li>
-              </ul>
-            </details>
+        <h2>Headline results — Benchmark &amp; Field Comparison — July 2026</h2>
+        <ul>
+          <li>Atlas F1 0.757 at 21.2 context tokens, mean across all 37 languages (native, real-LLM scored, 222 cells / 666 model calls).</li>
+          <li>F1 1.000 at 27.1 tokens on the 28 fully-supported languages — full-file-dump accuracy at 6.1× fewer tokens.</li>
+          <li>Graph-tool comparison: 0.539 F1 at 97 tokens — Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens.</li>
+          <li>Real repository (sirupsen/logrus, gopls call-hierarchy ground truth): Atlas F1 0.975 vs graph tool 0.084 vs raw file 0.017.</li>
+          <li>Query latency ~7.4 ms, flat from 15 to 39,161 symbols across 36 real repositories.</li>
+          <li>Corroborated by an independent Linux re-run: 37/37 languages fixture-perfect, 9× faster queries than the graph tool, gopls-truth F1 0.933.</li>
+        </ul>
 
-            <h3>Atlas vs Graphify — scorecard</h3>
-            <div class="seo-table-wrap">
-              <table>
-                <caption>Atlas vs Graphify published scorecard</caption>
-                <thead><tr><th scope="col">Metric</th><th scope="col">Atlas</th><th scope="col">Graphify</th><th scope="col">Advantage</th><th scope="col">Evidence</th></tr></thead>
-                <tbody>
-                <tr><th scope="row">Answer accuracy (F1)</th><td>0.757</td><td>0.539</td><td>+40%</td><td>fixtures · 37 langs</td></tr>
-          <tr><th scope="row">Query latency</th><td>7.4 ms</td><td>128 ms</td><td>17× faster</td><td>real repos · 36 langs</td></tr>
-          <tr><th scope="row">Query tokens (per answer)</th><td>2.6</td><td>92.8</td><td>36× fewer</td><td>real repos · 36 langs</td></tr>
-          <tr><th scope="row">Answer context size</th><td>21.2 tok</td><td>96 tok</td><td>4.5× smaller</td><td>fixtures · 37 langs</td></tr>
-          <tr><th scope="row">Cold index build</th><td>0.62 s</td><td>1.39 s</td><td>2.3× faster</td><td>real repos · 36 langs</td></tr>
-          <tr><th scope="row">Incremental re-index</th><td>0.10 s</td><td>1.39 s</td><td>14× faster</td><td>real repos · Graphify rebuilds fully</td></tr>
-          <tr><th scope="row">Call edges extracted</th><td>9,157</td><td>1,161</td><td>7.9× more</td><td>real repo · typelevel/cats</td></tr>
-          <tr><th scope="row">Coverage vs native AST</th><td>100.2%</td><td>100%</td><td>parity</td><td>real repo · cats (tree-sitter)</td></tr>
-                </tbody>
-              </table>
-            </div>
+        <h2>Atlas vs Graphify — scorecard</h2>
+        <table>
+          <thead><tr><th>Metric</th><th>Atlas</th><th>Graphify</th><th>Advantage</th><th>Evidence</th></tr></thead>
+          <tbody>
+          <tr><td>Answer accuracy (F1)</td><td>0.757</td><td>0.539</td><td>+40%</td><td>fixtures · 37 langs</td></tr>
+          <tr><td>Query latency</td><td>7.4 ms</td><td>128 ms</td><td>17× faster</td><td>real repos · 36 langs</td></tr>
+          <tr><td>Query tokens (per answer)</td><td>2.6</td><td>92.8</td><td>36× fewer</td><td>real repos · 36 langs</td></tr>
+          <tr><td>Answer context size</td><td>21.2 tok</td><td>96 tok</td><td>4.5× smaller</td><td>fixtures · 37 langs</td></tr>
+          <tr><td>Cold index build</td><td>0.62 s</td><td>1.39 s</td><td>2.3× faster</td><td>real repos · 36 langs</td></tr>
+          <tr><td>Incremental re-index</td><td>0.10 s</td><td>1.39 s</td><td>14× faster</td><td>real repos · Graphify rebuilds fully</td></tr>
+          <tr><td>Call edges extracted</td><td>9,157</td><td>1,161</td><td>7.9× more</td><td>real repo · typelevel/cats</td></tr>
+          <tr><td>Coverage vs native AST</td><td>100.2%</td><td>100%</td><td>parity</td><td>real repo · cats (tree-sitter)</td></tr>
+          </tbody>
+        </table>
 
-        <h3>What a real agent actually spends — Agent-harness token benchmark — 2026-07-10</h3>
+        <h2>What a real agent actually spends — Agent-harness token benchmark — 2026-07-10</h2>
         <p>Claude Code and OpenAI Codex, run headless in sirupsen/logrus (@a23d315) and restricted to one
            code-intelligence CLI per run; token numbers are each harness's own usage accounting over
            19 caller questions with gopls call_hierarchy (LSP-truth), frozen at the pinned commit. Cross-agent absolute totals are not comparable — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent.</p>
-        <div class="seo-table-wrap">
-          <table>
-            <caption>Agent-harness token benchmark by context source</caption>
-            <thead><tr><th scope="col">Agent</th><th scope="col">Context source</th><th scope="col">Mean total tokens</th><th scope="col">Mean tool calls</th><th scope="col">Mean F1</th></tr></thead>
-            <tbody>
-            <tr><td>claude (claude-sonnet-5)</td><td>Atlas</td><td>61,561</td><td>2</td><td>0.882</td></tr>
-            <tr><td>claude (claude-sonnet-5)</td><td>No tool (raw exploration)</td><td>144,385</td><td>4.9</td><td>0.569</td></tr>
-            <tr><td>claude (claude-sonnet-5)</td><td>Graph tool</td><td>370,898</td><td>10.3</td><td>0.305</td></tr>
-            <tr><td>codex (gpt-5.6-sol)</td><td>Atlas</td><td>27,981</td><td>1</td><td>0.881</td></tr>
-            <tr><td>codex (gpt-5.6-sol)</td><td>No tool (raw exploration)</td><td>48,106</td><td>2.1</td><td>0.876</td></tr>
-            <tr><td>codex (gpt-5.6-sol)</td><td>Graph tool</td><td>109,662</td><td>9.6</td><td>0.410</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <table>
+          <thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Mean tool calls</th><th>Mean F1</th></tr></thead>
+          <tbody>
+          <tr><td>claude (claude-sonnet-5)</td><td>Atlas</td><td>61,561</td><td>2</td><td>0.882</td></tr>
+          <tr><td>claude (claude-sonnet-5)</td><td>No tool (raw exploration)</td><td>144,385</td><td>4.9</td><td>0.569</td></tr>
+          <tr><td>claude (claude-sonnet-5)</td><td>Graph tool</td><td>370,898</td><td>10.3</td><td>0.305</td></tr>
+          <tr><td>codex (gpt-5.6-sol)</td><td>Atlas</td><td>27,981</td><td>1</td><td>0.881</td></tr>
+          <tr><td>codex (gpt-5.6-sol)</td><td>No tool (raw exploration)</td><td>48,106</td><td>2.1</td><td>0.876</td></tr>
+          <tr><td>codex (gpt-5.6-sol)</td><td>Graph tool</td><td>109,662</td><td>9.6</td><td>0.410</td></tr>
+          </tbody>
+        </table>
         <p>Reproducible from any machine: the suite ships in
            <a href="https://github.com/aziron-ai/atlas/tree/main/agent-bench">agent-bench/</a> (pinned commit, frozen
            gopls question set, isolation flags baked in); per-run records in
            <a href="data/raw/AGENT_TOKEN_BENCH_PUBLIC.json">AGENT_TOKEN_BENCH_PUBLIC.json</a>.</p>
-            <h3>The --detail knob</h3>
-            <p>Retrieval operations floor at high — an agent is never handed a truncated, and therefore wrong, caller list.</p>
-            <div class="seo-table-wrap">
-              <table>
-                <caption>Detail levels: tokens and F1</caption>
-                <thead><tr><th scope="col">Level</th><th scope="col">What the agent sees</th><th scope="col">Tokens</th><th scope="col">F1</th></tr></thead>
-                <tbody>
-                <tr><th scope="row">--detail low</th><td>name + location stub</td><td>3</td><td>0.00</td></tr>
-          <tr><th scope="row">--detail medium</th><td>+ signatures / explained names</td><td>20</td><td>0.67</td></tr>
-          <tr><th scope="row">--detail high (default)</th><td>full uncapped caller list</td><td>21</td><td>0.76</td></tr>
-          <tr><th scope="row">--detail xhigh</th><td>+ stable IDs, docs, scores</td><td>288</td><td>0.76</td></tr>
-                </tbody>
-              </table>
-            </div>
+        <h2>The --detail knob</h2>
+        <p>Retrieval operations floor at high — an agent is never handed a truncated, and therefore wrong, caller list.</p>
+        <table>
+          <thead><tr><th>Level</th><th>What the agent sees</th><th>Tokens</th><th>F1</th></tr></thead>
+          <tbody>
+          <tr><td>--detail low</td><td>name + location stub</td><td>3</td><td>0.00</td></tr>
+          <tr><td>--detail medium</td><td>+ signatures / explained names</td><td>20</td><td>0.67</td></tr>
+          <tr><td>--detail high (default)</td><td>full uncapped caller list</td><td>21</td><td>0.76</td></tr>
+          <tr><td>--detail xhigh</td><td>+ stable IDs, docs, scores</td><td>288</td><td>0.76</td></tr>
+          </tbody>
+        </table>
 
-            <h3>Language maturity ladder — 40 code languages</h3>
-            <p>Levels reflect validation depth, not just support — an L2 language still indexes and searches; it simply has not reached verified call-graph resolution. Atlas also indexes ~24 content formats (JSON, YAML, HTML, PDF, …) for search.</p>
-            <div class="seo-table-wrap">
-              <table>
-                <caption>Language maturity ladder by validation depth</caption>
-                <thead><tr><th scope="col">Level</th><th scope="col">Meaning</th><th scope="col">Languages</th></tr></thead>
-                <tbody>
-                <tr><th scope="row">L5 — Reference-validated</th><td>call graph cross-checked against an LSP server or SCIP indexer</td><td>C, C++, Dart, Fortran, Go, Java, JavaScript, Lua, PHP, Python, Rust, TypeScript, Zig</td></tr>
-          <tr><th scope="row">L4 — Real-repo call graph</th><td>who-calls resolved and proven on a real repository</td><td>Apex, Astro, C#, Elixir, ETS, Groovy, Julia, Kotlin, and 7 more; 9 more pending real-repo proof. See <a href="docs/languages/">languages guide</a>.</td></tr>
-          <tr><th scope="row">L2 — Real-repo tested</th><td>runs on real code; call graph not yet resolved</td><td>Delphi, Terraform</td></tr>
-          <tr><th scope="row">L1 — Indexed</th><td>parsed and symbols extracted</td><td>P4</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p>Every number above is reproducible from the committed artifacts under <a href="data/">data/</a>
-               (<a href="data/site-data.json">site-data.json</a>). Interactive charts load when JavaScript is available.</p>
-          </div>
-        </section>
+        <h2>Language maturity ladder — 40 code languages</h2>
+        <p>Levels reflect validation depth, not just support — an L2 language still indexes and searches; it simply has not reached verified call-graph resolution. Atlas also indexes ~24 content formats (JSON, YAML, HTML, PDF, …) for search.</p>
+        <table>
+          <thead><tr><th>Level</th><th>Meaning</th><th>Languages</th></tr></thead>
+          <tbody>
+          <tr><td>L5 — Reference-validated</td><td>call graph cross-checked against an LSP server or SCIP indexer</td><td>C, C++, Dart, Fortran, Go, Java, JavaScript, Lua, PHP, Python, Rust, TypeScript, Zig</td></tr>
+          <tr><td>L4 — Real-repo call graph</td><td>who-calls resolved and proven on a real repository</td><td>Apex, Astro, C#, Elixir, ETS, Groovy, Julia, Kotlin, R, Scala, SQL, Svelte, Swift, Verilog, Vue, Bash (pending real-repo proof), Blade (pending real-repo proof), BYOND (pending real-repo proof), EJS (pending real-repo proof), Objective-C (pending real-repo proof), Pascal (pending real-repo proof), PowerShell (pending real-repo proof), Razor (pending real-repo proof), Ruby (pending real-repo proof)</td></tr>
+          <tr><td>L2 — Real-repo tested</td><td>runs on real code; call graph not yet resolved</td><td>Delphi, Terraform</td></tr>
+          <tr><td>L1 — Indexed</td><td>parsed and symbols extracted</td><td>P4</td></tr>
+          </tbody>
+        </table>
 
-      </main>
-      <footer class="product-footer hairline">
-        <div class="shell grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr]">
-          <div>
-            <span class="flex min-w-0 items-center gap-2.5">
-              <img class="brand-mark" src="assets/atlas-mark.svg" alt="" width="31" height="26">
-              <span class="brand-word">ATLAS</span>
-            </span>
-            <p class="mt-3 max-w-sm text-sm" style="color:var(--muted)">Local code intelligence for developers and AI coding assistants.</p>
-            <span class="chip mt-4">v0.1.46</span>
-            <a class="producthunt-badge focusring" href="https://www.producthunt.com/products/atlas-44?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-atlas-47" target="_blank" rel="noopener noreferrer" aria-label="View Atlas on Product Hunt">
-              <span class="producthunt-badge-fallback" aria-hidden="true">
-                <span class="producthunt-badge-mark">P</span>
-                <span><small>Find us on</small><strong>Product Hunt</strong></span>
-              </span>
-              <img alt="Atlas - Local code intelligence for developers and AI assistants | Product Hunt" width="250" height="54" loading="lazy" decoding="async" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1203538&amp;theme=light&amp;t=1784726889410">
-            </a>
-          </div>
-          <div>
-            <div class="kicker mb-3">Product</div>
-            <div class="footer-links">
-              <a href="docs/getting-started/">Documentation</a>
-              <a href="#benchmarks">Benchmark</a>
-              <a href="data/site-data.json" download>Download data</a>
-            </div>
-          </div>
-          <div>
-            <div class="kicker mb-3">Project</div>
-            <div class="footer-links">
-              <a href="https://github.com/aziron-ai/atlas">GitHub repository</a>
-              <a href="https://github.com/aziron-ai/atlas/releases/latest">Download v0.1.46</a>
-              <a href="https://github.com/aziron-ai/atlas/pkgs/npm/atlas">npm package</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+        <h2>Install</h2>
+        <p>Homebrew: <code>brew install --cask aziron-ai/atlas/atlas</code> ·
+           npm: <code>npm install -g @aziron/atlas</code> ·
+           Linux: <a href="https://github.com/aziron-ai/atlas/releases/latest">tar.gz / .deb / .rpm / .apk from releases</a>.
+           Then <code>atlas index .</code> and <code>atlas mcp --transport stdio</code> for agents.</p>
+        <p>Every number above is reproducible from the committed artifacts under <a href="data/">data/</a>.
+           This static digest is replaced by the interactive page when JavaScript is available.</p>
+
+        <h2>Community</h2>
+        <p><a href="https://www.producthunt.com/products/atlas-44?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-atlas-47" target="_blank" rel="noopener noreferrer"><img alt="Atlas - Local code intelligence for developers and AI assistants | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1203538&amp;theme=light&amp;t=1784726889410"></a></p>
+      </div>
     <!-- seo-body:end --></div>
   </body>
 </html>

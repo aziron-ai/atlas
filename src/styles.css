@@ -37,8 +37,6 @@
     --g5: #0891b2;
     --contour: rgba(82, 98, 119, 0.28);
     --contour-2: rgba(82, 98, 119, 0.46);
-    --band-base: rgba(241, 245, 251, 0.72);
-    --glass-bg: rgba(255, 255, 255, 0.88);
     --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
     --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.08);
     --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.08);
@@ -46,63 +44,6 @@
       sans-serif;
     --sans-body: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
       sans-serif;
-  }
-
-  /* ---------- Dark theme ----------
-     A deep navy survey sheet. Same variable contract as the light theme, so
-     every component re-themes from these tokens. Set via data-theme (the head
-     script applies it before paint); a no-JS system fallback follows. */
-  html[data-theme="dark"] {
-    --bg: #0a1020;
-    --bg2: #0e1526;
-    --surface: #131c30;
-    --surface-raised: #1a2540;
-    --line: #26324c;
-    --line-strong: #3a4a68;
-    --text: #eaeff8;
-    --body-ink: #d3ddec;
-    --muted: #a4b4cb;
-    --faint: #8698b2;
-    --primary: #5c92ff;
-    --primary-dim: #4f80e6;
-    --secondary: #38bdf8;
-    --grid: #1b2740;
-    --contour: rgba(148, 163, 184, 0.2);
-    --contour-2: rgba(148, 163, 184, 0.34);
-    --band-base: rgba(14, 21, 38, 0.55);
-    --glass-bg: rgba(10, 16, 32, 0.82);
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.5);
-    --shadow-md: 0 4px 10px -2px rgba(0, 0, 0, 0.55), 0 2px 6px -2px rgba(0, 0, 0, 0.5);
-    color-scheme: dark;
-    scrollbar-color: #3a4a68 #0a1020;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    html:not([data-theme]) {
-      --bg: #0a1020;
-      --bg2: #0e1526;
-      --surface: #131c30;
-      --surface-raised: #1a2540;
-      --line: #26324c;
-      --line-strong: #3a4a68;
-      --text: #eaeff8;
-      --body-ink: #d3ddec;
-      --muted: #a4b4cb;
-      --faint: #8698b2;
-      --primary: #5c92ff;
-      --primary-dim: #4f80e6;
-      --secondary: #38bdf8;
-      --grid: #1b2740;
-      --contour: rgba(148, 163, 184, 0.2);
-      --contour-2: rgba(148, 163, 184, 0.34);
-      --band-base: rgba(14, 21, 38, 0.55);
-    --glass-bg: rgba(10, 16, 32, 0.82);
-      --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.5);
-      --shadow-md: 0 4px 10px -2px rgba(0, 0, 0, 0.55), 0 2px 6px -2px rgba(0, 0, 0, 0.5);
-      color-scheme: dark;
-    }
   }
 
   * {
@@ -509,111 +450,6 @@ section[id] {
   -webkit-backdrop-filter: blur(12px);
 }
 
-.product-header:has(.mobile-product-nav) {
-  height: auto;
-  min-height: 64px;
-}
-
-.product-nav-shell {
-  display: flex;
-  height: 64px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.product-nav-left {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-.product-nav-right {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.product-tool-strip {
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.product-nav-divider {
-  width: 1px;
-  height: 22px;
-  margin: 0 0.15rem;
-  background: var(--line-strong);
-}
-
-.product-nav-right .version-meta {
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--faint);
-  line-height: 1;
-  user-select: text;
-  cursor: default;
-  pointer-events: none;
-}
-
-.product-nav-right .icon-btn {
-  width: 36px;
-  height: 36px;
-}
-
-.tool-btn {
-  display: inline-flex;
-  height: 36px;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0 10px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--muted);
-  font-family: var(--sans-display);
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  text-decoration: none;
-  transition: 150ms ease;
-}
-
-.tool-btn:hover {
-  background: var(--surface-raised);
-  color: var(--text);
-}
-
-.product-nav-right .btn {
-  min-height: 36px;
-  padding-left: 14px;
-  padding-right: 14px;
-}
-
-.product-rail {
-  display: flex;
-  align-items: center;
-  padding-left: 1.1rem;
-  border-left: 1px solid var(--line);
-  min-height: 36px;
-}
-
-@media (max-width: 767px) {
-  .product-nav-left .product-rail {
-    display: none;
-  }
-}
-
-.product-rail-links {
-  display: flex;
-  align-items: center;
-  gap: 0.15rem;
-}
-
 .brand-word {
   font-family: var(--sans-display);
   font-weight: 700;
@@ -631,14 +467,13 @@ section[id] {
 
 .product-navlink {
   position: relative;
-  padding: 6px 10px;
+  padding: 9px 12px;
   color: var(--muted);
   font-family: var(--sans-display);
   font-size: 12.5px;
   font-weight: 600;
   letter-spacing: 0.01em;
   border-bottom: 2px solid transparent;
-  text-decoration: none;
 }
 
 .product-navlink:hover {
@@ -671,7 +506,7 @@ section[id] {
 
 .mobile-product-nav {
   display: grid;
-  gap: 2px;
+  gap: 4px;
   border-top: 1px solid var(--line);
   background: var(--bg);
 }
@@ -680,51 +515,21 @@ section[id] {
   padding: 11px 8px;
   color: var(--muted);
   font-size: 14px;
-  text-decoration: none;
-}
-
-.mobile-product-nav a:hover {
-  color: var(--text);
-}
-
-.mobile-rail-label {
-  margin-top: 0.65rem;
-  padding: 4px 8px 2px;
-  font-family: var(--sans-display);
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--faint);
-}
-
-.mobile-rail-label:first-child {
-  margin-top: 0.35rem;
 }
 
 /* -------- landing hero: the survey sheet -------- */
-
-/* One continuous survey sheet runs behind the whole overview: a faint
-   graticule on map paper. Sections layer translucent washes on top so the
-   grid reads as one coordinate system from hero to footer. */
-#main:not(.seo-digest) {
-  position: relative;
-  background:
-    repeating-linear-gradient(0deg, transparent 0 79px, rgba(37, 99, 235, 0.055) 79px 80px),
-    repeating-linear-gradient(90deg, transparent 0 79px, rgba(37, 99, 235, 0.055) 79px 80px),
-    var(--bg);
-}
 
 .product-hero {
   display: flex;
   align-items: center;
   background:
-    radial-gradient(120% 92% at 100% 0%, rgba(37, 99, 235, 0.14) 0%, rgba(37, 99, 235, 0) 58%),
-    linear-gradient(180deg, rgba(37, 99, 235, 0.06) 0%, rgba(37, 99, 235, 0) 46%);
+    repeating-linear-gradient(0deg, transparent 0 79px, rgba(148, 163, 184, 0.08) 79px 80px),
+    repeating-linear-gradient(90deg, transparent 0 79px, rgba(148, 163, 184, 0.08) 79px 80px),
+    var(--bg);
 }
 
 .product-hero h1 {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2.3rem, 4.6vw, 3.5rem);
   line-height: 1.08;
   font-weight: 700;
   letter-spacing: 0.005em;
@@ -741,9 +546,9 @@ section[id] {
   gap: 9px;
   color: var(--primary);
   font-family: var(--sans-display);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
 }
 
@@ -779,45 +584,6 @@ section[id] {
   border-radius: 12px;
   box-shadow: var(--shadow-md);
   overflow: hidden;
-  animation: cartograph-appear 0.7s ease 0.08s both;
-}
-
-.chart-panel-compact {
-  align-self: stretch;
-}
-
-.chart-panel-compact .chart-head {
-  padding: 0.55rem 0.85rem;
-}
-
-.chart-panel-compact svg {
-  max-height: min(340px, 42vh);
-  margin-inline: auto;
-}
-
-/* compact hero legend: a single-row key strip.
-   Colored, count-bearing labels; the query lives in the header. */
-.chart-legend-compact {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.55rem 0.85rem 0.65rem;
-  font-size: 0.7rem;
-}
-
-.chart-legend-compact .lg {
-  gap: 0.35rem;
-  min-width: 0;
-}
-
-.chart-legend-compact .lg svg {
-  width: 24px;
-}
-
-.chart-legend-compact .lg span {
-  white-space: nowrap;
 }
 .chart-head {
   display: flex;
@@ -873,25 +639,15 @@ section[id] {
   border-top: 1px dashed var(--contour);
 }
 
-/* survey-chart reveal — plotted as a survey being drawn, motion-gated.
-   Order: contours fade -> caller routes draw -> station locks in -> impacts. */
+/* survey-chart route drawing — motion-gated */
 .route-anim {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  animation: cartograph-draw 1s ease 0.25s forwards;
+  animation: cartograph-draw 1.6s ease 0.3s forwards;
 }
 .fade-anim {
   opacity: 0;
-  animation: cartograph-appear 0.8s ease 0.45s forwards;
-}
-.station-lock {
-  opacity: 0;
-  animation: cartograph-lockin 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) 0.85s forwards;
-}
-.station-ping {
-  transform-box: view-box;
-  transform-origin: center;
-  animation: cartograph-ping 1.1s ease-out 1.2s 1 both;
+  animation: cartograph-appear 0.8s ease 1.6s forwards;
 }
 @keyframes cartograph-draw {
   to {
@@ -903,98 +659,22 @@ section[id] {
     opacity: 1;
   }
 }
-@keyframes cartograph-lockin {
-  0% {
-    opacity: 0;
-    transform: scale(0.86);
-  }
-  60% {
-    opacity: 1;
-    transform: scale(1.06);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-@keyframes cartograph-ping {
-  0% {
-    opacity: 0.35;
-    transform: scale(1);
-  }
-  70%,
-  100% {
-    opacity: 0;
-    transform: scale(1.85);
-  }
-}
 @media (prefers-reduced-motion: reduce) {
-  .chart-panel,
-  .route-anim,
-  .fade-anim,
-  .station-lock,
-  .station-ping {
+  .route-anim {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .fade-anim {
     animation: none;
     opacity: 1;
   }
-  .route-anim {
-    stroke-dashoffset: 0;
-  }
-  .station-lock {
-    transform: none;
-  }
 }
 
-/* Alternating "map sheet" bands. Translucent so the page graticule shows
-   through; a faint blue wash keeps the whole body on the cartographic theme
-   instead of dropping to flat grey between the themed sections. */
 .product-band {
-  position: relative;
-  background:
-    linear-gradient(180deg, rgba(37, 99, 235, 0.075) 0%, rgba(37, 99, 235, 0.025) 100%),
-    var(--band-base);
-}
-
-/* flagship survey-data band: a richer blue wash, tinted from the top-right
-   so the section reads as the primary "on the map" evidence sheet. */
-.product-band-blue {
-  background:
-    radial-gradient(130% 100% at 100% 0%, rgba(37, 99, 235, 0.17) 0%, rgba(37, 99, 235, 0) 56%),
-    linear-gradient(180deg, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0.03) 62%),
-    var(--band-base);
-}
-
-/* Contour-line motif: faint topographic rings drift off the top-right of
-   every overview section, echoing the module contours in the hero chart so
-   each section header reads as a surveyed hill. Sits under the content. */
-#main:not(.seo-digest) > section:not(.product-hero) {
-  position: relative;
-  overflow: hidden;
-}
-#main:not(.seo-digest) > section:not(.product-hero) > .shell {
-  position: relative;
-  z-index: 1;
-}
-#main:not(.seo-digest) > section:not(.product-hero)::before {
-  content: "";
-  position: absolute;
-  top: -46px;
-  right: -34px;
-  width: 340px;
-  height: 260px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='260' viewBox='0 0 340 260'%3E%3Cg fill='none' stroke='%232563eb' stroke-width='1' transform='rotate(-14 190 120)'%3E%3Cellipse cx='190' cy='120' rx='150' ry='98'/%3E%3Cellipse cx='190' cy='120' rx='120' ry='77'/%3E%3Cellipse cx='190' cy='120' rx='92' ry='57'/%3E%3Cellipse cx='190' cy='120' rx='66' ry='40'/%3E%3Cellipse cx='190' cy='120' rx='42' ry='25'/%3E%3Cellipse cx='190' cy='120' rx='20' ry='11'/%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-size: contain;
-  opacity: 0.12;
-  pointer-events: none;
-  z-index: 0;
-}
-#main:not(.seo-digest) > section.product-band-blue::before {
-  opacity: 0.2;
+  background: var(--bg2);
 }
 
 .product-section-head {
-  position: relative;
   display: flex;
   align-items: end;
   justify-content: space-between;
@@ -1134,6 +814,7 @@ table.survey td.measure-name {
   border-radius: 10px;
   box-shadow: var(--shadow-xs);
   padding: 1.6rem 1.5rem 1.8rem;
+  transition: background 150ms ease;
 }
 .cap:hover {
   background: var(--surface-raised);
@@ -1272,57 +953,6 @@ a.sheet-cell {
 a.sheet-cell:hover {
   background: var(--surface-raised);
 }
-
-/* Shared map-cell treatment: every card on the overview is a survey cell —
-   a coordinate tick in the top-right corner and a blue "you are here" lift
-   on hover. Keeps capability cards, route legs, and doc sheets cohesive. */
-.cap,
-.leg,
-a.sheet-cell {
-  position: relative;
-  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease,
-    background 150ms ease;
-}
-.cap::after,
-.leg::after,
-a.sheet-cell::after {
-  content: "";
-  position: absolute;
-  top: 0.7rem;
-  right: 0.7rem;
-  width: 9px;
-  height: 9px;
-  border-top: 1.5px solid var(--contour);
-  border-right: 1.5px solid var(--contour);
-  opacity: 0.7;
-  transition: border-color 160ms ease, opacity 160ms ease;
-  pointer-events: none;
-}
-.cap:hover,
-.leg:hover,
-a.sheet-cell:hover {
-  transform: translateY(-2px);
-  border-color: var(--primary);
-  box-shadow: var(--shadow-md);
-}
-.cap:hover::after,
-.leg:hover::after,
-a.sheet-cell:hover::after {
-  border-color: var(--primary);
-  opacity: 1;
-}
-@media (prefers-reduced-motion: reduce) {
-  .cap,
-  .leg,
-  a.sheet-cell {
-    transition: border-color 160ms ease, box-shadow 160ms ease, background 150ms ease;
-  }
-  .cap:hover,
-  .leg:hover,
-  a.sheet-cell:hover {
-    transform: none;
-  }
-}
 a.sheet-cell .no {
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
   font-size: 0.66rem;
@@ -1390,7 +1020,7 @@ a.sheet-cell:hover .go {
 }
 
 .privacy-band {
-  background: transparent;
+  background: var(--bg);
 }
 
 /* footer colophon */
@@ -1401,318 +1031,79 @@ a.sheet-cell:hover .go {
 /* Product Hunt recognition sits at the end of the overview narrative, before
    the global footer. It reads as social proof without competing with the
    primary install CTA. */
-/* -------- static SEO digest (index.html first paint / no-JS) -------- */
-
-.seo-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  height: auto;
-  min-height: 64px;
+.producthunt-band {
+  background: var(--bg2);
 }
 
-.seo-nav-links {
+.producthunt-card {
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
+  justify-content: space-between;
+  gap: 2rem;
+  overflow: hidden;
+  padding: clamp(1.4rem, 3vw, 2rem);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
 }
 
-.seo-nav-links .product-rail {
-  margin-right: 0.15rem;
+.producthunt-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--primary);
 }
 
-.seo-nav-links .version-meta {
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--faint);
-  cursor: default;
-  pointer-events: none;
-}
-
-.seo-nav-links .btn {
-  text-decoration: none;
-}
-
-.seo-hero .lede {
-  max-width: 40rem;
-}
-
-.seo-section {
-  padding-top: 3.5rem;
-  padding-bottom: 3.5rem;
-  max-width: 52rem;
-}
-
-.seo-section h2 {
-  font-size: clamp(1.45rem, 2.4vw, 1.85rem);
+.producthunt-card h2 {
+  margin-top: 0.4rem;
+  font-size: clamp(1.25rem, 2.5vw, 1.65rem);
   line-height: 1.2;
 }
 
-.seo-section h3 {
-  margin-top: 2.25rem;
-  font-size: 1.15rem;
-  line-height: 1.35;
-}
-
-.seo-commands {
-  display: grid;
-  gap: 0.75rem;
-  margin: 1.25rem 0 1rem;
-}
-
-.seo-commands .product-command {
-  margin: 0;
-}
-
-.seo-doc-list {
-  margin: 1rem 0 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 0.65rem;
-}
-
-.seo-doc-list li {
-  padding: 0.85rem 1rem;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  box-shadow: var(--shadow-xs);
+.producthunt-card p {
+  max-width: 42rem;
+  margin-top: 0.55rem;
   color: var(--muted);
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.seo-doc-list a {
-  color: var(--primary);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.seo-doc-list a:hover {
-  text-decoration: underline;
-}
-
-.seo-metric-row {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.85rem;
-  margin: 1.35rem 0 1rem;
-}
-
-.seo-metric {
-  padding: 1rem 1.1rem;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  box-shadow: var(--shadow-xs);
-}
-
-.seo-metric-value {
-  font-family: var(--sans-display);
-  font-size: clamp(1.5rem, 3vw, 1.85rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--primary);
-  line-height: 1.1;
-}
-
-.seo-metric-label {
-  margin-top: 0.45rem;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.seo-metric-sub {
-  margin-top: 0.15rem;
-  font-size: 0.75rem;
-  color: var(--faint);
-}
-
-.seo-details {
-  margin: 0.5rem 0 1.5rem;
-  padding: 0.85rem 1rem;
-  background: var(--bg2);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-}
-
-.seo-details summary {
-  cursor: pointer;
-  font-family: var(--sans-display);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--muted);
-}
-
-.seo-details[open] summary {
-  margin-bottom: 0.75rem;
-  color: var(--text);
-}
-
-.seo-details ul {
-  margin: 0;
-  padding-left: 1.15rem;
-  color: var(--muted);
-  font-size: 0.92rem;
-  line-height: 1.55;
-}
-
-.seo-table-wrap {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
-  margin: 0.85rem 0 1.25rem;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface);
-  box-shadow: var(--shadow-xs);
-  -webkit-overflow-scrolling: touch;
-}
-
-.seo-table-wrap table {
-  width: 100%;
-  min-width: 36rem;
-  border-collapse: collapse;
-  font-size: 0.88rem;
-}
-
-.seo-table-wrap caption {
-  padding: 0.65rem 0.9rem;
-  text-align: left;
-  font-family: var(--sans-display);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--faint);
-  border-bottom: 1px solid var(--line);
-  background: var(--surface-raised);
-}
-
-.seo-table-wrap th,
-.seo-table-wrap td {
-  padding: 0.65rem 0.85rem;
-  text-align: left;
-  vertical-align: top;
-  border-top: 1px solid var(--line);
-  color: var(--body-ink);
-}
-
-.seo-table-wrap thead th {
-  background: var(--surface-raised);
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.seo-table-wrap tbody th {
-  font-weight: 600;
-  color: var(--text);
-  white-space: nowrap;
-}
-
-@media (max-width: 720px) {
-  .seo-metric-row {
-    grid-template-columns: 1fr;
-  }
-
-  .seo-nav-links .product-rail,
-  .seo-nav-links .product-tool-strip,
-  .seo-nav-links .version-meta,
-  .seo-nav-links .product-nav-divider {
-    display: none;
-  }
-
-  .seo-section {
-    padding-top: 2.5rem;
-    padding-bottom: 2.5rem;
-  }
+  line-height: 1.65;
 }
 
 .producthunt-badge {
-  position: relative;
-  display: flex;
-  width: min(250px, 100%);
-  height: 54px;
-  margin-top: 1.25rem;
-  overflow: hidden;
+  display: inline-flex;
+  flex: 0 0 auto;
+  padding: 6px;
   background: #ffffff;
-  border: 1px solid #ff6154;
-  border-radius: 6px;
-  color: #ff6154;
-  text-decoration: none;
-  transition: opacity 150ms ease, transform 150ms ease;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  box-shadow: var(--shadow-xs);
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
 }
 
 .producthunt-badge:hover {
-  opacity: 0.92;
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
 
 .producthunt-badge img {
-  position: absolute;
-  inset: 0;
   display: block;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  color: transparent;
-  object-fit: cover;
-  transition: opacity 120ms ease;
+  width: 250px;
+  max-width: 100%;
+  height: auto;
 }
 
-.producthunt-badge[data-image-loaded="true"] img {
-  opacity: 1;
-}
+@media (max-width: 640px) {
+  .producthunt-card {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
 
-.producthunt-badge-fallback {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0 0.8rem;
-}
-
-.producthunt-badge-fallback > span:last-child {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-
-.producthunt-badge-fallback small {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.producthunt-badge-fallback strong {
-  margin-top: 0.2rem;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.producthunt-badge-mark {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  flex: 0 0 auto;
-  place-items: center;
-  border-radius: 50%;
-  background: #ff6154;
-  color: #ffffff;
-  font-size: 22px;
-  font-weight: 700;
+  .producthunt-badge {
+    width: min(100%, 262px);
+  }
 }
 
 .colophon-orn {
@@ -2429,157 +1820,5 @@ a.sheet-cell:hover .go {
   * {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
-  }
-}
-
-/* ============================================================
-   Dark-theme component overrides (unlayered so they win over the
-   unlayered base rules). Only the values that hardcode light
-   colors need patching; everything else re-themes via the tokens.
-   ============================================================ */
-html[data-theme="dark"] .product-header {
-  background: rgba(10, 16, 32, 0.82);
-}
-html[data-theme="dark"] .dtable tbody tr:nth-child(even) td {
-  background: var(--surface-raised);
-}
-
-/* The hero survey figure now re-themes its own SVG palette (see
-   SurveyChart useChartPalette), so the panel simply follows the surface
-   tokens in both themes — no forced light override needed. */
-
-/* The Product Hunt badge keeps its own white chrome; give the card a hair
-   more separation from the dark band. */
-html[data-theme="dark"] .producthunt-badge {
-  background: #ffffff;
-}
-
-/* smooth the flip between themes */
-html {
-  transition: background-color 200ms ease;
-}
-body {
-  transition: background-color 200ms ease, color 200ms ease;
-}
-
-/* ============================================================
-   Micro-interactions. Every rule here is neutralized by the
-   global prefers-reduced-motion block below, and the JS-driven
-   scroll reveal bails out entirely under reduced motion.
-   ============================================================ */
-
-/* Buttons: subtle lift on hover, press on click, glow on primary. */
-.btn-primary {
-  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.22);
-}
-.btn-primary:hover {
-  background: var(--primary-dim);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 18px -6px rgba(37, 99, 235, 0.55);
-}
-.btn-ghost:hover {
-  transform: translateY(-1px);
-}
-.btn:active {
-  transform: translateY(0) scale(0.985);
-}
-/* trailing arrow on the hero CTA nudges forward on hover */
-.product-hero .btn-primary svg {
-  transition: transform 160ms ease;
-}
-.product-hero .btn-primary:hover svg {
-  transform: translateX(3px);
-}
-
-/* Nav links: an underline that grows from the center on hover + active. */
-.product-navlink::after {
-  content: "";
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  bottom: -2px;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--primary);
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 200ms ease;
-}
-.product-navlink:hover::after,
-.product-navlink[data-active="true"]::after {
-  transform: scaleX(1);
-}
-.product-navlink[data-active="true"] {
-  border-bottom-color: transparent;
-}
-
-/* Icon buttons: lift + press. */
-.icon-btn:hover {
-  transform: translateY(-1px);
-}
-.icon-btn:active {
-  transform: scale(0.92);
-}
-
-/* Theme toggle: the sun/moon glyph pops in whenever it swaps. */
-.theme-toggle svg {
-  animation: icon-pop 300ms cubic-bezier(0.2, 0.9, 0.3, 1);
-}
-@keyframes icon-pop {
-  from {
-    transform: rotate(-35deg) scale(0.65);
-    opacity: 0;
-  }
-  to {
-    transform: none;
-    opacity: 1;
-  }
-}
-
-/* Eyebrow status dot: a slow sonar ping. */
-.status-dot {
-  position: relative;
-}
-.status-dot::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  animation: dot-ping 2.6s ease-out infinite;
-}
-@keyframes dot-ping {
-  0% {
-    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 8px rgba(37, 99, 235, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
-  }
-}
-
-/* Text links: trailing chevron/arrow nudges on hover. */
-.text-link svg {
-  transition: transform 160ms ease;
-}
-.text-link:hover svg {
-  transform: translateX(3px);
-}
-
-/* Scroll reveal: sections rise + fade as they enter the viewport.
-   The class is only added by JS (ProductHome) when motion is allowed, so
-   no-JS and reduced-motion visitors always see fully-rendered content. */
-.reveal-item {
-  transform: translateY(18px);
-  transition: transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-.reveal-item.is-visible {
-  transform: none;
-}
-
-@media print {
-  .reveal-item {
-    transform: none;
   }
 }
