@@ -121,11 +121,15 @@ const EVIDENCE_COLORS = {
   "perf-only": "var(--warning)",
   "agent-harness": "var(--g2)",
 };
+const EVIDENCE_LABELS = {
+  "fixture-truth": "native",
+};
 function EvidenceTag({ kind, children }) {
   const color = EVIDENCE_COLORS[kind] || "var(--muted)";
+  const label = children || EVIDENCE_LABELS[kind] || kind;
   return (
-    <span className="chip" style={{ borderColor: color, color }} title={children || kind}>
-      {kind}
+    <span className="chip" style={{ borderColor: color, color }} title={label}>
+      {label}
     </span>
   );
 }
@@ -191,7 +195,7 @@ const NAV_ITEMS = [
 ];
 
 // Secondary in-page navigation for the long benchmark report. The primary
-// site nav (Overview / Documentation / Benchmarks / Data) is provided by the
+// site nav (Docs / Evidence on the product rail; GitHub / Data / Install on the project rail) is provided by the
 // shared <ProductHeader>, which stays consistent across every view — this
 // strip only jumps between sections of the benchmark page and sits beneath it.
 function ConsoleBar({ active }) {
@@ -201,7 +205,7 @@ function ConsoleBar({ active }) {
       className="sticky z-30"
       style={{
         top: 64,
-        background: "rgba(255,255,255,0.88)",
+        background: "var(--glass-bg)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         borderBottom: "1px solid var(--line)",
@@ -523,7 +527,7 @@ function ExecSummary({ data }) {
         <p style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
           <span className="mono" style={{ color: "var(--warning)" }}>HONEST LIMITS — </span>
           at report time 9 of 37 languages had parser gaps. The saturation run has since fixed all 9 on
-          fixture-truth; they carry a <span style={{ color: "var(--warning)" }}>“pending real-repo proof”</span> badge
+          native evidence; they carry a <span style={{ color: "var(--warning)" }}>“pending real-repo proof”</span> badge
           until a production-repo run lands.
         </p>
         <a href="#languages" className="link inline-flex shrink-0 items-center gap-1" style={{ fontSize: 13 }}>
@@ -682,7 +686,7 @@ function LangChip({ lang, level, pending, promoted }) {
       className="mono inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5"
       data-testid="maturity-lang"
       title={
-        pending ? "fixture-truth F1 1.000 on the Linux saturation run — L4 pending a real-repo call-graph proof"
+        pending ? "native F1 1.000 on the Linux saturation run — L4 pending a real-repo call-graph proof"
         : promoted ? "newly promoted: call graph cross-checked against the language's own LSP server on a real public repository (promotion run below)"
         : undefined
       }
@@ -791,7 +795,7 @@ function MaturityTable({ data }) {
           aria-label="Filter languages"
         />
         <span className="mono" style={{ fontSize: 11.5, color: "var(--faint)" }}>
-          report columns: fixture-truth, LLM-scored · fresh column: Linux deterministic re-run
+          report columns: native, LLM-scored · fresh column: Linux deterministic re-run
         </span>
       </div>
       <div className="tablewrap" style={{ maxHeight: 520, overflowY: "auto" }}>
@@ -1625,7 +1629,7 @@ function EvidenceSection({ data }) {
                 ["scoring model", r.method.scoringModel],
                 ["sampling", r.method.sampling],
                 ["coverage", `${r.method.cells} cells · ${r.method.modelCalls} model calls`],
-                ["fixture truth", "15 callers + 3 decoys, by construction"],
+                ["native", "15 callers + 3 decoys, by construction"],
                 ["fresh-run host", f.platform],
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between gap-4">
@@ -1837,23 +1841,8 @@ function BenchmarkExperience({ data }) {
   );
 }
 
-function App() {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
+function App({ data, error }) {
   const route = useSiteRoute();
-
-  useEffect(() => {
-    fetch("data/site-data.json", { cache: "no-store" })
-      .then((r) => {
-        if (!r.ok) throw new Error(`Unable to load site data: ${r.status}`);
-        return r.json();
-      })
-      .then(setData)
-      .catch((e) => {
-        console.error(e);
-        setError(e);
-      });
-  }, []);
 
   if (error) {
     return (
@@ -1866,27 +1855,23 @@ function App() {
     );
   }
 
-  if (!data) {
-    return (
-      <main className="shell py-24" aria-busy="true">
-        <div className="panel p-6">
-          <div className="kicker">loading</div>
-          <div className="mt-4 flex flex-col gap-3">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="h-3 rounded" style={{ background: "var(--surface-raised)", width: `${80 - i * 18}%` }} />
-            ))}
-          </div>
-          <p className="mono mt-5" style={{ fontSize: 12, color: "var(--faint)" }}>
-            fetching data/site-data.json…
-          </p>
-        </div>
-      </main>
-    );
-  }
-
   if (route.view === "docs") return <Documentation data={data} page={route.page} />;
   if (route.view === "benchmarks") return <BenchmarkExperience data={data} />;
   return <ProductHome data={data} />;
 }
 
-createRoot(document.getElementById("root")).render(<App />);
+/* Fetch site data before mounting so the designed SEO first-paint in
+   index.html stays visible until ProductHome (or docs/benchmarks) can replace it. */
+const rootEl = document.getElementById("root");
+fetch("data/site-data.json", { cache: "no-store" })
+  .then((r) => {
+    if (!r.ok) throw new Error(`Unable to load site data: ${r.status}`);
+    return r.json();
+  })
+  .then((data) => {
+    createRoot(rootEl).render(<App data={data} />);
+  })
+  .catch((error) => {
+    console.error(error);
+    createRoot(rootEl).render(<App error={error} />);
+  });

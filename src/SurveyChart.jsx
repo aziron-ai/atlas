@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 /* ============================================================
    SurveyChart — the hero figure of the Cartograph landing.
@@ -8,7 +8,9 @@ import React from "react";
    nested contours. Deterministic layout; no randomness.
    ============================================================ */
 
-const C = {
+/* Two survey palettes. The figure re-themes with the site so it reads as a
+   dark survey sheet in dark mode instead of a bright white card. */
+const LIGHT = {
   contour: "rgba(82,98,119,0.42)",
   contourSoft: "rgba(82,98,119,0.22)",
   ink: "#0F172A",
@@ -20,6 +22,35 @@ const C = {
   settlement: "#334155",
   ground: "#F9FAFB",
 };
+
+const DARK = {
+  contour: "rgba(148,163,184,0.42)",
+  contourSoft: "rgba(148,163,184,0.2)",
+  ink: "#E8EFF8",
+  muted: "#AEBCD0",
+  faint: "#93A3BB",
+  signal: "#6BA0FF",
+  route: "#9FADC2",
+  impact: "#F98080",
+  settlement: "#C6CFDD",
+  ground: "#0C1424",
+};
+
+/* Track the site theme (set on <html data-theme>) and react to the toggle. */
+function useChartPalette() {
+  const [dark, setDark] = useState(
+    () => typeof document !== "undefined" && document.documentElement.dataset.theme === "dark"
+  );
+  useEffect(() => {
+    const el = document.documentElement;
+    const update = () => setDark(el.dataset.theme === "dark");
+    update();
+    const obs = new MutationObserver(update);
+    obs.observe(el, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => obs.disconnect();
+  }, []);
+  return dark ? DARK : LIGHT;
+}
 
 const MONO = 'ui-monospace, "SF Mono", Menlo, Consolas, monospace';
 const DISP = 'Inter, system-ui, -apple-system, "Segoe UI", sans-serif';
@@ -78,10 +109,13 @@ const TERRITORIES = [
 ];
 
 const SCATTER = [
-  [120, 140], [190, 118], [250, 176], [110, 300], [200, 390], [130, 452],
-  [560, 130], [640, 100], [660, 170], [330, 250], [430, 230], [500, 320],
-  [400, 380], [320, 350], [610, 250], [660, 350], [560, 470], [300, 480],
+  [120, 140], [250, 176], [110, 300], [200, 390],
+  [640, 100], [660, 170], [500, 320], [660, 350],
+  [560, 470], [300, 480],
 ];
+
+/* the surveyed symbol lives in the auth territory — that name marks the focal fill */
+const FOCUS_TERRITORY = "INTERNAL / AUTH";
 
 const CALLERS = [
   { p: [172, 132], bend: -34, label: "handlers/session.go:42", lx: 60, ly: 118, anchor: "start" },
@@ -98,47 +132,76 @@ const IMPACTS = [
   { p: [470, 486], bend: 20 },
 ];
 
-const halo = {
+const haloFor = (c) => ({
   paintOrder: "stroke",
-  stroke: C.ground,
+  stroke: c.ground,
   strokeWidth: 3.5,
   strokeLinejoin: "round",
-};
+});
 
-function Legend() {
+const SwSurveyed = ({ c }) => (
+  <svg width="34" height="16" viewBox="0 0 34 16" aria-hidden>
+    <polygon points="17,2 11,13 23,13" fill="none" stroke={c.signal} strokeWidth="1.6" />
+    <circle cx="17" cy="9.5" r="1.5" fill={c.signal} />
+  </svg>
+);
+const SwRoute = ({ c }) => (
+  <svg width="34" height="16" viewBox="0 0 34 16" aria-hidden>
+    <path d="M2,12 Q17,2 32,10" fill="none" stroke={c.route} strokeWidth="1.5" />
+  </svg>
+);
+const SwImpact = ({ c }) => (
+  <svg width="34" height="16" viewBox="0 0 34 16" aria-hidden>
+    <path d="M2,11 Q17,3 30,8" fill="none" stroke={c.impact} strokeWidth="1.4" strokeDasharray="5 4" />
+  </svg>
+);
+const SwContour = ({ c }) => (
+  <svg width="34" height="16" viewBox="0 0 34 16" aria-hidden>
+    <ellipse cx="17" cy="8" rx="14" ry="6" fill="none" stroke={c.contour} strokeWidth="1.1" />
+  </svg>
+);
+
+function Legend({ compact = false }) {
+  const C = useChartPalette();
+  if (compact) {
+    /* Slim inline key: counts carry the evidence, labels colored to match
+       their glyph. The query string already lives in the chart header, so
+       no bearing note here. */
+    const keys = [
+      { sw: <SwSurveyed c={C} />, color: C.signal, label: "Surveyed symbol" },
+      { sw: <SwRoute c={C} />, color: C.route, label: `${CALLERS.length} caller routes` },
+      { sw: <SwImpact c={C} />, color: C.impact, label: `${IMPACTS.length} impact paths` },
+      { sw: <SwContour c={C} />, color: C.muted, label: "Module contours" },
+    ];
+    return (
+      <figcaption className="chart-legend chart-legend-compact">
+        {keys.map((k) => (
+          <span className="lg" key={k.label}>
+            {k.sw}
+            <span style={{ color: k.color, fontWeight: 600 }}>{k.label}</span>
+          </span>
+        ))}
+      </figcaption>
+    );
+  }
+
   return (
     <figcaption className="chart-legend">
       <div className="lg">
-        <svg width="34" height="16" viewBox="0 0 34 16" aria-hidden>
-          <polygon points="17,2 11,13 23,13" fill="none" stroke={C.signal} strokeWidth="1.6" />
-          <circle cx="17" cy="9.5" r="1.5" fill={C.signal} />
-        </svg>
-        <span>Surveyed symbol — the query&rsquo;s primary result</span>
+        <SwSurveyed c={C} />
+        <span>Surveyed symbol</span>
       </div>
       <div className="lg">
-        <svg width="34" height="16" viewBox="0 0 34 16" aria-hidden>
-          <circle cx="17" cy="8" r="3.4" fill={C.settlement} stroke={C.ground} strokeWidth="1" />
-        </svg>
-        <span>File (settlement) — larger when cited with file:line</span>
+        <SwRoute c={C} />
+        <span>Caller routes</span>
       </div>
       <div className="lg">
-        <svg width="34" height="16" viewBox="0 0 34 16" aria-hidden>
-          <path d="M2,12 Q17,2 32,10" fill="none" stroke={C.route} strokeWidth="1.5" />
-        </svg>
-        <span>Caller route — 6 cited; 3 labeled with grid references</span>
+        <SwImpact c={C} />
+        <span>Impact paths</span>
       </div>
       <div className="lg">
-        <svg width="34" height="16" viewBox="0 0 34 16" aria-hidden>
-          <path d="M2,11 Q17,3 30,8" fill="none" stroke={C.impact} strokeWidth="1.4" strokeDasharray="5 4" markerEnd="url(#imp-arrow)" />
-        </svg>
-        <span>Impact path — 3 likely change-propagation routes</span>
-      </div>
-      <div className="lg">
-        <svg width="34" height="16" viewBox="0 0 34 16" aria-hidden>
-          <ellipse cx="17" cy="8" rx="14" ry="6" fill="none" stroke={C.contour} strokeWidth="1.1" />
-          <ellipse cx="17" cy="8" rx="9" ry="3.6" fill="none" stroke={C.contour} strokeWidth="0.7" />
-        </svg>
-        <span>Contour — module boundary (auth, handlers, tests…)</span>
+        <SwContour c={C} />
+        <span>Module contours</span>
       </div>
       <p className="legend-note">
         Positions are schematic; every file:line reference is exact and returned by the query.
@@ -147,15 +210,21 @@ function Legend() {
   );
 }
 
-export default function SurveyChart() {
+export default function SurveyChart({ compact = false }) {
+  const C = useChartPalette();
+  const halo = haloFor(C);
   const cols = 6;
   const rows = 4;
   const letters = ["A", "B", "C", "D", "E", "F"];
   return (
-    <figure className="chart-panel" style={{ margin: 0 }} aria-label="Map figure: one Atlas query drawn as a survey chart">
+    <figure
+      className={`chart-panel${compact ? " chart-panel-compact" : ""}`}
+      style={{ margin: 0 }}
+      aria-label="Map figure: one Atlas query drawn as a survey chart"
+    >
       <div className="chart-head">
         <span className="title">Sheet A·1 — one query, charted</span>
-        <span className="coord mono">atlas context --query "review risk"</span>
+        <span className="coord mono">atlas context --query &quot;review risk&quot;</span>
       </div>
       <svg
         viewBox={`0 0 ${W} ${H}`}
@@ -203,27 +272,42 @@ export default function SurveyChart() {
           return <line key={`gh${i}`} x1={M} y1={gy} x2={W - M} y2={gy} stroke={C.contourSoft} strokeWidth="0.6" />;
         })}
 
-        {/* territories: module boundaries as nested contours */}
-        {TERRITORIES.map((t) => (
-          <g key={t.name}>
-            {[1, 0.72, 0.45].map((f, j) => (
-              <path
-                key={f}
-                d={blobPath(f === 1 ? t.pts : shrink(t.pts, f))}
-                fill={j === 0 ? "rgba(148,163,184,0.08)" : "none"}
-                stroke={C.contour}
-                strokeWidth={j === 0 ? 1.1 : 0.7}
-              />
-            ))}
-            <text x={t.lx} y={t.ly} fill={C.faint} fontSize="9.5" letterSpacing="0.22em" fontFamily={DISP}>
-              {t.name}
-            </text>
-          </g>
-        ))}
+        {/* territories: module boundaries as nested contours; the focal
+            (auth) territory carries a stronger blue tint so the eye lands
+            on the surveyed symbol first. */}
+        <g className="fade-anim" style={{ animationDelay: "0.05s" }}>
+          {TERRITORIES.map((t) => {
+            const focus = t.name === FOCUS_TERRITORY;
+            return (
+              <g key={t.name}>
+                {[1, 0.72, 0.45].map((f, j) => (
+                  <path
+                    key={f}
+                    d={blobPath(f === 1 ? t.pts : shrink(t.pts, f))}
+                    fill={j === 0 ? (focus ? "rgba(37,99,235,0.07)" : "rgba(148,163,184,0.06)") : "none"}
+                    stroke={focus ? "rgba(37,99,235,0.32)" : C.contour}
+                    strokeWidth={j === 0 ? (focus ? 1.3 : 1.1) : 0.7}
+                  />
+                ))}
+                <text
+                  x={t.lx}
+                  y={t.ly}
+                  fill={focus ? C.signal : C.faint}
+                  fontSize="9.5"
+                  letterSpacing="0.22em"
+                  fontFamily={DISP}
+                  opacity={focus ? 0.9 : 0.75}
+                >
+                  {t.name}
+                </text>
+              </g>
+            );
+          })}
+        </g>
 
-        {/* background settlements: other indexed files */}
+        {/* background settlements: other indexed files (kept faint so routes read first) */}
         {SCATTER.map((p) => (
-          <circle key={`${p[0]}-${p[1]}`} cx={p[0]} cy={p[1]} r="1.6" fill={C.faint} opacity="0.5" />
+          <circle key={`${p[0]}-${p[1]}`} cx={p[0]} cy={p[1]} r="1.5" fill={C.faint} opacity="0.28" />
         ))}
 
         {/* six caller routes (3 carry their published grid references) */}
@@ -237,24 +321,19 @@ export default function SurveyChart() {
               strokeWidth={c.label ? 1.5 : 1.1}
               opacity={c.label ? 0.9 : 0.55}
               pathLength="1"
-              style={{ animationDelay: `${0.25 + idx * 0.12}s` }}
+              style={{ animationDelay: `${0.2 + idx * 0.1}s` }}
             />
             <circle cx={c.p[0]} cy={c.p[1]} r={c.label ? 4 : 2.6} fill={C.settlement} stroke={C.ground} strokeWidth="1.2" />
             {c.label ? (
-              <g>
-                <text x={c.lx} y={c.ly} fill={C.ink} fontSize="10.5" fontFamily={MONO} textAnchor={c.anchor} fontWeight="600" style={halo}>
-                  {c.label}
-                </text>
-                <text x={c.lx} y={c.ly + 13} fill={C.faint} fontSize="7.5" fontFamily={DISP} letterSpacing="0.2em" textAnchor={c.anchor} style={halo}>
-                  CITED CALLER
-                </text>
-              </g>
+              <text x={c.lx} y={c.ly} fill={C.ink} fontSize="10.5" fontFamily={MONO} textAnchor={c.anchor} fontWeight="600" style={halo}>
+                {c.label}
+              </text>
             ) : null}
           </g>
         ))}
 
         {/* three impact paths: dashed coral, arrowed, leading outward */}
-        <g className="fade-anim">
+        <g className="fade-anim" style={{ animationDelay: "1.1s" }}>
           {IMPACTS.map((m) => (
             <g key={`impact-${m.p[0]}-${m.p[1]}`}>
               <path
@@ -269,14 +348,17 @@ export default function SurveyChart() {
               <circle cx={m.p[0]} cy={m.p[1]} r="2.6" fill={C.impact} opacity="0.8" />
             </g>
           ))}
-          <text x={596} y={480} fill={C.impact} fontSize="8.5" fontFamily={DISP} letterSpacing="0.18em" textAnchor="middle" style={halo}>
+          <text x={596} y={480} fill={C.impact} fontSize="8.5" fontFamily={DISP} letterSpacing="0.18em" textAnchor="middle" opacity="0.7" style={halo}>
             3 IMPACT PATHS
           </text>
         </g>
 
-        {/* station symbol: triangulation mark */}
-        <g>
-          <circle cx={S[0]} cy={S[1]} r="15" fill="none" stroke={C.signal} opacity="0.35" />
+        {/* station symbol: triangulation mark — locks in last as the answer */}
+        <g
+          className="station-lock"
+          style={{ transformBox: "view-box", transformOrigin: `${S[0]}px ${S[1]}px` }}
+        >
+          <circle className="station-ping" cx={S[0]} cy={S[1]} r="15" fill="none" stroke={C.signal} opacity="0.35" />
           <circle cx={S[0]} cy={S[1]} r="24" fill="none" stroke={C.signal} opacity="0.14" />
           <polygon
             points={`${S[0]},${S[1] - 9} ${S[0] - 8},${S[1] + 6} ${S[0] + 8},${S[1] + 6}`}
@@ -286,35 +368,38 @@ export default function SurveyChart() {
           />
           <circle cx={S[0]} cy={S[1] + 0.5} r="2" fill={C.signal} />
         </g>
-        <text x={S[0] + 30} y={S[1] - 4} fill={C.signal} fontSize="13" fontWeight="700" fontFamily={DISP} letterSpacing="0.03em" style={halo}>
-          AuthorizeRequest
-        </text>
-        <text x={S[0] + 30} y={S[1] + 12} fill={C.muted} fontSize="10.5" fontFamily={MONO} style={halo}>
-          internal/auth.go:84
-        </text>
-        <text x={S[0] + 30} y={S[1] + 26} fill={C.faint} fontSize="7.5" fontFamily={DISP} letterSpacing="0.18em" style={halo}>
-          6 CITED CALLERS · 3 IMPACT PATHS
-        </text>
+        <g className="fade-anim" style={{ animationDelay: "1.05s" }}>
+          <text x={S[0] + 30} y={S[1] - 4} fill={C.signal} fontSize="13" fontWeight="700" fontFamily={DISP} letterSpacing="0.03em" style={halo}>
+            AuthorizeRequest
+          </text>
+          <text x={S[0] + 30} y={S[1] + 12} fill={C.muted} fontSize="10.5" fontFamily={MONO} style={halo}>
+            internal/auth.go:84
+          </text>
+          <text x={S[0] + 30} y={S[1] + 26} fill={C.faint} fontSize="7.5" fontFamily={DISP} letterSpacing="0.18em" style={halo}>
+            6 CITED CALLERS · 3 IMPACT PATHS
+          </text>
+        </g>
 
         {/* cartouche: the query that produced this figure */}
-        <g>
-          <rect x={M + 14} y={H - M - 58} width="268" height="44" fill="#FFFFFF" stroke={C.contour} />
+        <g className="fade-anim" style={{ animationDelay: "1.25s" }}>
+          <rect x={M + 14} y={H - M - 58} width="268" height="44" fill={C.ground} stroke={C.contour} />
           <rect x={M + 17} y={H - M - 55} width="262" height="38" fill="none" stroke={C.contourSoft} />
           <text x={M + 28} y={H - M - 41} fill={C.faint} fontSize="8" fontFamily={DISP} letterSpacing="0.24em">
             SURVEY OF ONE QUERY
           </text>
           <text x={M + 28} y={H - M - 25} fill={C.ink} fontSize="10" fontFamily={MONO}>
-            atlas context --query "review risk"
+            atlas context --query &quot;review risk&quot;
           </text>
         </g>
       </svg>
-      <Legend />
+      <Legend compact={compact} />
     </figure>
   );
 }
 
 /* Latency scale bar (M-02): 7.4 ms vs 128 ms on an honest linear scale */
 export function LatencyScaleBar() {
+  const C = useChartPalette();
   const SW = 700;
   const SH = 96;
   const SL = 16;
