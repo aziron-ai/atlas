@@ -8,7 +8,7 @@
       "total": 37,
       "graphifyPerfect": 21,
       "graphifyMeanF1": 0.568,
-      "evidence": "native: exact set F1, ground truth by construction, no LLM"
+      "evidence": "fixture-truth: exact set F1, ground truth by construction, no LLM"
     },
     "latency": {
       "atlasMedianMs": 23,

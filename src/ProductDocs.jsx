@@ -6,8 +6,6 @@ import {
   Copy,
   Download,
   ExternalLink,
-  Moon,
-  Sun,
 } from "lucide-react";
 import SurveyChart, { LatencyScaleBar } from "./SurveyChart";
 
@@ -15,11 +13,11 @@ const RELEASE = "0.1.46";
 const GITHUB = "https://github.com/aziron-ai/atlas";
 const WIKI = `${GITHUB}/wiki`;
 
-/* Product rail — in-app destinations. Project actions (GitHub / Data / Install) sit on the right. */
-const PRODUCT_RAIL = [
-  ["Overview", "#overview", "overview"],
-  ["Docs", "#docs/getting-started", "docs"],
-  ["Benchmark", "#benchmarks", "benchmarks"],
+const PRODUCT_NAV = [
+  ["Overview", "#overview"],
+  ["Documentation", "#docs/getting-started"],
+  ["Benchmarks", "#benchmarks"],
+  ["Data", "data/site-data.json"],
 ];
 
 export const BENCHMARK_ANCHORS = new Set([
@@ -56,45 +54,6 @@ export function useSiteRoute() {
   return route;
 }
 
-function getInitialTheme() {
-  if (typeof document === "undefined") return "light";
-  const set = document.documentElement.dataset.theme;
-  if (set) return set;
-  try {
-    const stored = localStorage.getItem("atlas-theme");
-    if (stored) return stored;
-  } catch {
-    /* localStorage may be unavailable */
-  }
-  return "dark"; // dark is the default when there's no saved preference
-}
-
-function ThemeToggle() {
-  const [theme, setTheme] = useState(getInitialTheme);
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    try {
-      localStorage.setItem("atlas-theme", theme);
-    } catch {
-      /* ignore persistence failure */
-    }
-  }, [theme]);
-
-  const isDark = theme === "dark";
-  return (
-    <button
-      className="icon-btn theme-toggle focusring"
-      type="button"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-      aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
-      aria-pressed={isDark}
-      title={isDark ? "Light mode" : "Dark mode"}
-    >
-      {isDark ? <Sun className="h-4 w-4" aria-hidden /> : <Moon className="h-4 w-4" aria-hidden />}
-    </button>
-  );
-}
-
 function Brand() {
   return (
     <span className="flex min-w-0 items-center gap-2.5">
@@ -110,55 +69,44 @@ export function ProductHeader({ version = RELEASE, active = "overview" }) {
     setOpen(false);
   }, [active]);
 
-  const closeMobile = () => setOpen(false);
-
   return (
     <header className="product-header sticky top-0 z-50" data-testid="product-nav">
-      <nav className="shell product-nav-shell" aria-label="Primary navigation">
-        <div className="product-nav-left">
-          <a className="focusring text-inherit no-underline" href="#overview" aria-label="Atlas home" onClick={closeMobile}>
-            <Brand />
-          </a>
-          <div className="product-rail hidden md:flex" aria-label="Product">
-            <div className="product-rail-links">
-              {PRODUCT_RAIL.map(([label, href, key]) => (
-                <a
-                  key={key}
-                  className="product-navlink focusring"
-                  data-active={active === key}
-                  href={href}
-                  aria-current={active === key ? "page" : undefined}
-                >
-                  {label}
-                </a>
-              ))}
+      <nav className="shell flex h-16 items-center justify-between gap-3" aria-label="Primary navigation">
+        <a className="focusring text-inherit no-underline" href="#overview" aria-label="Atlas home">
+          <Brand />
+        </a>
+
+        <div className="hidden items-center gap-1 md:flex">
+          {PRODUCT_NAV.map(([label, href]) => {
+            const key = label.toLowerCase();
+            const selected =
+              (active === "docs" && key === "documentation") ||
+              (active === "benchmarks" && key === "benchmarks") ||
+              active === key;
+            return (
               <a
+                key={label}
                 className="product-navlink focusring"
-                href="data/site-data.json"
-                download=""
-                aria-label="Download benchmark data (JSON)"
+                data-active={selected}
+                href={href}
+                download={key === "data" ? "" : undefined}
               >
-                Data
+                {label}
               </a>
-            </div>
-          </div>
+            );
+          })}
         </div>
 
-        <div className="product-nav-right">
-          <span className="version-meta hidden sm:inline" title={`Atlas edition v${version}`}>v{version}</span>
-          <div className="product-tool-strip hidden sm:flex" role="group" aria-label="Project tools">
-            <a className="tool-btn focusring" href={GITHUB} target="_blank" rel="noreferrer" aria-label="Atlas on GitHub" title="GitHub">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
-              </svg>
-              <span>GitHub</span>
-            </a>
-          </div>
-          <span className="product-nav-divider hidden sm:block" aria-hidden="true" />
+        <div className="flex items-center gap-2">
+          <span className="chip hidden sm:inline-flex">v{version}</span>
+          <a className="icon-btn focusring hidden sm:inline-flex" href={GITHUB} target="_blank" rel="noreferrer" aria-label="Atlas on GitHub" title="GitHub">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
+            </svg>
+          </a>
           <a className="btn btn-primary focusring hidden sm:inline-flex" href="#docs/installation">
             <Download className="h-4 w-4" aria-hidden /> Install
           </a>
-          <ThemeToggle />
           <button
             className="icon-btn focusring md:hidden"
             type="button"
@@ -172,13 +120,11 @@ export function ProductHeader({ version = RELEASE, active = "overview" }) {
       </nav>
       {open && (
         <nav className="mobile-product-nav shell pb-4 md:hidden" aria-label="Mobile navigation">
-          {PRODUCT_RAIL.map(([label, href, key]) => (
-            <a key={key} className="focusring" href={href} onClick={closeMobile}>{label}</a>
+          {PRODUCT_NAV.map(([label, href]) => (
+            <a key={label} className="focusring" href={href}>{label}</a>
           ))}
-          <a className="focusring" href="data/site-data.json" download="" onClick={closeMobile}>Data</a>
-          <div className="mobile-rail-label">Project</div>
-          <a className="focusring" href="#docs/installation" onClick={closeMobile}>Install Atlas</a>
-          <a className="focusring" href={GITHUB} target="_blank" rel="noreferrer" onClick={closeMobile}>GitHub</a>
+          <a className="focusring" href="#docs/installation">Install Atlas</a>
+          <a className="focusring" href={GITHUB} target="_blank" rel="noreferrer">GitHub</a>
         </nav>
       )}
     </header>
@@ -313,42 +259,6 @@ const workflowItems = [
 
 export function ProductHome({ data }) {
   const h = data.report.headline;
-
-  /* Scroll reveal: rise + fade each overview section as it enters the
-     viewport. Self-scoped via a class we add/remove, and skipped entirely
-     under reduced motion so content is never left hidden. */
-  useEffect(() => {
-    const reduce =
-      typeof window !== "undefined" &&
-      window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) return undefined;
-
-    const main = document.getElementById("main");
-    if (!main || !("IntersectionObserver" in window)) return undefined;
-
-    const items = Array.from(main.children).filter((el) => el.tagName === "SECTION");
-    items.forEach((el) => el.classList.add("reveal-item"));
-
-    const io = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.08, rootMargin: "0px 0px -6% 0px" }
-    );
-    items.forEach((el) => io.observe(el));
-
-    return () => {
-      io.disconnect();
-      items.forEach((el) => el.classList.remove("reveal-item", "is-visible"));
-    };
-  }, []);
-
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
@@ -356,35 +266,39 @@ export function ProductHome({ data }) {
       <main id="main">
         {/* =================== A·1 hero =================== */}
         <section className="product-hero" data-testid="product-hero">
-          <div className="shell py-10 lg:py-14">
-            <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-10">
-              <div className="max-w-xl">
-                <div className="eyebrow"><span className="status-dot" /> Local code intelligence</div>
-                <h1 className="mt-4">Your codebase is a territory. <span className="accent">Atlas is the map.</span></h1>
-                <p className="lede mt-4 text-lg leading-relaxed">
-                  Give assistants the few coordinates that matter — symbols, callers, impact — without dumping the repo into the prompt.
+          <div className="shell py-14 lg:py-20">
+            <GridRef cell="A·1" name="Overview" />
+            <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
+              <div className="max-w-2xl">
+                <div className="eyebrow"><span className="status-dot" /> Local code intelligence for AI-assisted engineering</div>
+                <h1 className="mt-5">Your codebase is a territory. <span className="accent">Atlas is the map.</span></h1>
+                <p className="lede mt-5 text-lg leading-relaxed">
+                  Give developers and coding assistants precise repository context without sending
+                  the entire codebase into the prompt. Atlas surveys your repository into a local
+                  graph, then answers each query with the few coordinates that matter — symbol,
+                  callers, impact — every one cited to file and line.
                 </p>
-                <div className="mt-7 flex flex-wrap gap-3">
-                  <a className="btn btn-primary focusring" href="#docs/installation">
-                    Install Atlas <ArrowRight className="h-4 w-4" aria-hidden />
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <a className="btn btn-primary focusring" href="#docs/getting-started">
+                    Get started <ArrowRight className="h-4 w-4" aria-hidden />
                   </a>
                   <a className="btn btn-ghost focusring" href="#benchmarks">
-                    See the evidence
+                    View benchmark evidence
                   </a>
                 </div>
-                <div className="hero-facts mt-6">
-                  <span>~{data.report.latencyAtScale.meanMs} ms queries</span>
-                  <span>{h.fewerTokens}× fewer tokens</span>
-                  <span>Local SQLite index</span>
+                <div className="hero-facts mt-7">
+                  <span>One local binary</span>
+                  <span>SQLite storage</span>
+                  <span>CLI, MCP, HTTP</span>
                 </div>
               </div>
-              <SurveyChart compact />
+              <SurveyChart />
             </div>
           </div>
         </section>
 
         {/* =================== B·1 survey data =================== */}
-        <section className="product-band product-band-blue hairline" aria-labelledby="outcomes-title">
+        <section className="product-band hairline" aria-labelledby="outcomes-title">
           <div className="shell py-16">
             <GridRef cell="B·1" name="Survey data" />
             <div className="product-section-head">
@@ -426,7 +340,7 @@ export function ProductHome({ data }) {
                     <td className="ref">M-03</td>
                     <td className="measure-name">Answer accuracy (F1)</td>
                     <td className="value">{String(h.atlasF1All)}</td>
-                    <td className="method">Mean across 37 native language cells with real-model scoring.</td>
+                    <td className="method">Mean across 37 fixture-truth language cells with real-model scoring.</td>
                   </tr>
                 </tbody>
               </table>
@@ -556,6 +470,35 @@ export function ProductHome({ data }) {
           </div>
         </section>
 
+        {/* =================== H·1 community recognition =================== */}
+        <section className="producthunt-band hairline" aria-labelledby="producthunt-title">
+          <div className="shell py-12">
+            <div className="producthunt-card">
+              <div>
+                <div className="kicker">Community recognition</div>
+                <h2 id="producthunt-title">Atlas is live on Product Hunt</h2>
+                <p>Explore the launch, share feedback, and help more developers discover local-first code intelligence.</p>
+              </div>
+              <a
+                className="producthunt-badge focusring"
+                data-testid="producthunt-badge"
+                href="https://www.producthunt.com/products/atlas-44?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-atlas-47"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View Atlas on Product Hunt"
+              >
+                <img
+                  alt="Atlas - Local code intelligence for developers and AI assistants | Product Hunt"
+                  width="250"
+                  height="54"
+                  loading="lazy"
+                  decoding="async"
+                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1203538&theme=light&t=1784726889410"
+                />
+              </a>
+            </div>
+          </div>
+        </section>
       </main>
       <ProductFooter version={data.version} />
     </>
@@ -1370,7 +1313,7 @@ function DocsPage({ slug }) {
           <ProseSection title="Published Headline Results (July 2026)">
             <p>These are the current published numbers, each with its evidence conditions:</p>
             <div className="docs-table-wrap"><table><thead><tr><th>Result</th><th>Conditions</th></tr></thead><tbody>
-              <tr><td>F1 0.757 at 21.2 context tokens, mean across all 37 languages</td><td>Native ground truth, real-LLM scored (222 cells, 666 model calls)</td></tr>
+              <tr><td>F1 0.757 at 21.2 context tokens, mean across all 37 languages</td><td>Fixture-truth ground truth, real-LLM scored (222 cells, 666 model calls)</td></tr>
               <tr><td>F1 1.000 at 27.1 tokens on the 28 fully-supported languages</td><td>Full-file-dump accuracy at 6.1× fewer tokens; same fixture suite</td></tr>
               <tr><td>Graph-tool comparison: 0.539 F1 at 97 tokens</td><td>Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens</td></tr>
               <tr><td>Query latency ~7.4 ms vs 128 ms for the graph tool</td><td>Real repositories, 36 languages; flat from 15 to 39,161 symbols</td></tr>
@@ -1788,39 +1731,12 @@ export function ProductFooter({ version = RELEASE }) {
           <Brand />
           <p className="mt-3 max-w-sm text-sm" style={{ color: "var(--muted)" }}>Local code intelligence for developers and AI coding assistants.</p>
           <span className="chip mt-4">v{version}</span>
-          <a
-            className="producthunt-badge focusring"
-            data-testid="producthunt-badge"
-            href="https://www.producthunt.com/products/atlas-44?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-atlas-47"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="View Atlas on Product Hunt"
-          >
-            <span className="producthunt-badge-fallback" aria-hidden="true">
-              <span className="producthunt-badge-mark">P</span>
-              <span>
-                <small>Find us on</small>
-                <strong>Product Hunt</strong>
-              </span>
-            </span>
-            <img
-              alt="Atlas - Local code intelligence for developers and AI assistants | Product Hunt"
-              width="250"
-              height="54"
-              loading="lazy"
-              decoding="async"
-              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1203538&theme=light&t=1784726889410"
-              onLoad={(event) => {
-                event.currentTarget.parentElement.dataset.imageLoaded = "true";
-              }}
-            />
-          </a>
         </div>
         <div>
           <div className="kicker mb-3">Product</div>
           <div className="footer-links">
             <a href="#docs/getting-started">Documentation</a>
-            <a href="#benchmarks">Benchmark</a>
+            <a href="#benchmarks">Benchmarks</a>
             <a href="data/site-data.json" download>Download data</a>
           </div>
         </div>

@@ -1,6 +1,6 @@
 {
   "label": "after",
-  "truth": "native: target called by exactly c01..c15, decoys n01..n03 (by construction)",
+  "truth": "fixture-truth: target called by exactly c01..c15, decoys n01..n03 (by construction)",
   "scoring": "deterministic set comparison on simple names; no LLM",
   "perfect_languages": 37,
   "total_languages": 37,

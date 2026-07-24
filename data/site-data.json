@@ -13,7 +13,7 @@
       "evidenceClasses": [
         {
           "id": "fixture-truth",
-          "desc": "native benchmark, ground truth by construction, 37 languages"
+          "desc": "constructed repos, ground truth by construction, 37 languages"
         },
         {
           "id": "LSP-truth",
@@ -407,7 +407,7 @@
       "note": "Two independent models — one small, one large — score Atlas's high-detail context identically and rank the tools the same way: the result is a property of the context, not of any single model."
     },
     "limits": [
-      "9 of 37 languages had parser gaps at report time (bash, blade, byond, ejs, objc, pascal, powershell, razor, ruby) — template/edge dialects pending native call-edge extraction. The Linux saturation run has since fixed all 9 with native evidence; real-repo proof is pending.",
+      "9 of 37 languages had parser gaps at report time (bash, blade, byond, ejs, objc, pascal, powershell, razor, ruby) — template/edge dialects pending native call-edge extraction. The Linux saturation run has since fixed all 9 on fixture-truth; real-repo proof is pending.",
       "On 3 gap languages the graph tool still answered — by dumping full source at ~161 tokens. Where Atlas parses a language it wins on cost and accuracy.",
       "Scoring correction disclosed: an earlier scorer under-credited the graph tool on Scala (rejected `c01()` for parentheses). The corrected scorer raised the competitor's score from 0.000 to 1.000 — the report carries the corrected number."
     ],
@@ -801,7 +801,7 @@
           "razor",
           "ruby"
         ],
-        "evidence": "native F1 1.000 each on the Linux saturation run (CALLERS_F1_AFTER.json); real-repo call-graph validation not yet run"
+        "evidence": "fixture-truth F1 1.000 each on the Linux saturation run (CALLERS_F1_AFTER.json); real-repo call-graph validation not yet run"
       },
       "promoted": {
         "langs": [
@@ -819,7 +819,7 @@
   "fresh": {
     "label": "Linux corroboration run",
     "platform": "Linux 6.18.5 x86_64",
-    "what": "deterministic re-run of the native, LSP-truth and cross-repo benches on independent hardware — corroborates the report, does not replace it",
+    "what": "deterministic re-run of the fixture-truth, LSP-truth and cross-repo benches on independent hardware — corroborates the report, does not replace it",
     "saturation": {
       "perfect": 37,
       "total": 37,
@@ -835,7 +835,7 @@
         "razor",
         "ruby"
       ],
-      "truth": "native: target called by exactly c01..c15, decoys n01..n03 (by construction)"
+      "truth": "fixture-truth: target called by exactly c01..c15, decoys n01..n03 (by construction)"
     },
     "latency": {
       "atlasMedianMs": 23,
@@ -2224,7 +2224,7 @@
       "name": "CALLERS_F1_AFTER.json",
       "path": "data/raw/CALLERS_F1_AFTER.json",
       "tier": "fresh",
-      "note": "37/37 native callers F1 (Linux)"
+      "note": "37/37 fixture-truth callers F1 (Linux)"
     },
     {
       "name": "DIMENSIONS_BENCH_PUBLIC.json",

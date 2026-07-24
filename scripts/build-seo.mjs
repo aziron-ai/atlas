@@ -157,7 +157,7 @@ const jsonLd = [
     "@type": "Dataset",
     name: "Atlas Benchmark & Field Comparison — July 2026",
     description:
-      "Per-language code-intelligence benchmark: answer accuracy (F1), context tokens, query latency and index speed for Atlas vs a graph tool, an LSP-truth real-repository flagship, and a 40-language maturity ladder. Native ground truth by construction; real-LLM scored (222 cells, 666 model calls).",
+      "Per-language code-intelligence benchmark: answer accuracy (F1), context tokens, query latency and index speed for Atlas vs a graph tool, an LSP-truth real-repository flagship, and a 40-language maturity ladder. Fixture-truth ground truth by construction; real-LLM scored (222 cells, 666 model calls).",
     url: BASE,
     isAccessibleForFree: true,
     creator: { "@type": "Organization", name: "Aziron" },
@@ -194,255 +194,117 @@ const pendingSet = new Set(r.maturity.pending.langs);
 const maturityRows = r.maturity.levels
   .map((lv) => {
     const langs = lv.langs.map((l) => (pendingSet.has(l) && lv.id === "L2" ? null : esc(langLabel(l)))).filter(Boolean);
-    const pendingCount = lv.id === "L4" ? r.maturity.pending.langs.length : 0;
-    let langsCell;
-    if (lv.id === "L4") {
-      const preview = langs.slice(0, 8).join(", ");
-      const more = Math.max(0, langs.length - 8);
-      const pendingNote = pendingCount
-        ? `; ${pendingCount} more pending real-repo proof`
-        : "";
-      langsCell = `${preview}${more ? `, and ${more} more` : ""}${pendingNote}. See <a href="docs/languages/">languages guide</a>.`;
-    } else {
-      langsCell = langs.join(", ");
-    }
-    return `<tr><th scope="row">${lv.id} — ${esc(lv.name)}</th><td>${esc(lv.desc)}</td><td>${langsCell}</td></tr>`;
+    const extra = lv.id === "L4" ? r.maturity.pending.langs.map((l) => `${esc(langLabel(l))} (pending real-repo proof)`) : [];
+    return `<tr><td>${lv.id} — ${esc(lv.name)}</td><td>${esc(lv.desc)}</td><td>${[...langs, ...extra].join(", ")}</td></tr>`;
   })
   .join("\n          ");
 
 const scorecardRows = r.scorecard.rows
-  .map((row) => `<tr><th scope="row">${esc(row.metric)}</th><td>${esc(row.atlas)}</td><td>${esc(row.graphify)}</td><td>${esc(row.advantage)}</td><td>${esc(row.evidence)}</td></tr>`)
+  .map((row) => `<tr><td>${esc(row.metric)}</td><td>${esc(row.atlas)}</td><td>${esc(row.graphify)}</td><td>${esc(row.advantage)}</td><td>${esc(row.evidence)}</td></tr>`)
   .join("\n          ");
 
 // agent-harness bench digest — present only when the section has shipped
 const ab = site.agentBench;
 const MODE_LABELS = { atlas: "Atlas", graphify: "Graph tool", baseline: "No tool (raw exploration)" };
 const agentBenchBlock = !ab ? "" : `
-        <h3>What a real agent actually spends — ${esc(ab.label)}</h3>
+        <h2>What a real agent actually spends — ${esc(ab.label)}</h2>
         <p>Claude Code and OpenAI Codex, run headless in ${esc(ab.repo)} (@${esc(ab.commit7)}) and restricted to one
            code-intelligence CLI per run; token numbers are each harness's own usage accounting over
            ${ab.nQuestions} caller questions with ${esc(ab.truth)}. ${esc(ab.caveat)}</p>
-        <div class="seo-table-wrap">
-          <table>
-            <caption>Agent-harness token benchmark by context source</caption>
-            <thead><tr><th scope="col">Agent</th><th scope="col">Context source</th><th scope="col">Mean total tokens</th><th scope="col">Mean tool calls</th><th scope="col">Mean F1</th></tr></thead>
-            <tbody>
-            ${ab.agents.map((a) =>
-              ab.cells.filter((c) => c.agent === a.id)
-                .map((c) => `<tr><td>${esc(a.id)} (${esc(a.model || "default")})</td><td>${esc(MODE_LABELS[c.mode] || c.mode)}</td><td>${c.totalTokens?.toLocaleString("en-US") ?? "—"}</td><td>${c.turns ?? "—"}</td><td>${c.f1?.toFixed(3) ?? "—"}</td></tr>`)
-                .join("\n            ")
-            ).join("\n            ")}
-            </tbody>
-          </table>
-        </div>
+        <table>
+          <thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Mean tool calls</th><th>Mean F1</th></tr></thead>
+          <tbody>
+          ${ab.agents.map((a) =>
+            ab.cells.filter((c) => c.agent === a.id)
+              .map((c) => `<tr><td>${esc(a.id)} (${esc(a.model || "default")})</td><td>${esc(MODE_LABELS[c.mode] || c.mode)}</td><td>${c.totalTokens?.toLocaleString("en-US") ?? "—"}</td><td>${c.turns ?? "—"}</td><td>${c.f1?.toFixed(3) ?? "—"}</td></tr>`)
+              .join("\n          ")
+          ).join("\n          ")}
+          </tbody>
+        </table>
         <p>Reproducible from any machine: the suite ships in
            <a href="https://github.com/aziron-ai/atlas/tree/main/agent-bench">agent-bench/</a> (pinned commit, frozen
            gopls question set, isolation flags baked in); per-run records in
            <a href="data/raw/AGENT_TOKEN_BENCH_PUBLIC.json">AGENT_TOKEN_BENCH_PUBLIC.json</a>.</p>`;
 
 const knobRows = r.detailKnob.levels
-  .map((lv) => `<tr><th scope="row">--detail ${lv.id}${lv.id === r.detailKnob.defaultLevel ? " (default)" : ""}</th><td>${esc(lv.what)}</td><td>${lv.tokens}</td><td>${lv.f1.toFixed(2)}</td></tr>`)
+  .map((lv) => `<tr><td>--detail ${lv.id}${lv.id === r.detailKnob.defaultLevel ? " (default)" : ""}</td><td>${esc(lv.what)}</td><td>${lv.tokens}</td><td>${lv.f1.toFixed(2)}</td></tr>`)
   .join("\n          ");
 
 const body = `
-      <a class="skip-link" href="#main">Skip to content</a>
-      <header class="product-header seo-header">
-        <nav class="shell flex h-16 items-center justify-between gap-3" aria-label="Primary navigation">
-          <a class="focusring text-inherit no-underline" href="${BASE}" aria-label="Atlas home">
-            <span class="flex min-w-0 items-center gap-2.5">
-              <img class="brand-mark" src="assets/atlas-mark.svg" alt="" width="31" height="26">
-              <span class="brand-word">ATLAS</span>
-            </span>
-          </a>
-          <div class="seo-nav-links">
-            <div class="product-rail" aria-label="Product">
-              <div class="product-rail-links">
-                <a class="product-navlink focusring" href="#overview" data-active="true" aria-current="page">Overview</a>
-                <a class="product-navlink focusring" href="docs/">Docs</a>
-                <a class="product-navlink focusring" href="#benchmarks">Benchmark</a>
-                <a class="product-navlink focusring" href="data/site-data.json" download aria-label="Download benchmark data (JSON)">Data</a>
-              </div>
-            </div>
-            <span class="version-meta" title="Atlas edition v${pkg.version}">v${pkg.version}</span>
-            <div class="product-tool-strip" role="group" aria-label="Project tools">
-              <a class="tool-btn focusring" href="https://github.com/aziron-ai/atlas" target="_blank" rel="noreferrer" aria-label="Atlas on GitHub" title="GitHub">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
-                </svg>
-                <span>GitHub</span>
-              </a>
-            </div>
-            <span class="product-nav-divider" aria-hidden="true"></span>
-            <a class="btn btn-primary focusring" href="docs/installation/">Install</a>
-          </div>
-        </nav>
-      </header>
-      <main id="main" class="seo-digest">
-        <section class="product-hero seo-hero" aria-labelledby="seo-hero-title">
-          <div class="shell py-10 lg:py-14">
-            <div class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Local code intelligence</div>
-            <h1 id="seo-hero-title" class="mt-4">Your codebase is a territory. <span class="accent">Atlas is the map.</span></h1>
-            <p class="lede mt-4 text-lg leading-relaxed">
-              Give assistants the few coordinates that matter — symbols, callers, impact — without dumping the repo into the prompt.
-            </p>
-            <div class="mt-7 flex flex-wrap gap-3">
-              <a class="btn btn-primary focusring" href="docs/installation/">Install Atlas</a>
-              <a class="btn btn-ghost focusring" href="docs/getting-started/">Read the docs</a>
-            </div>
-            <div class="hero-facts mt-6">
-              <span>~${r.latencyAtScale.meanMs} ms queries</span>
-              <span>${h.fewerTokens}× fewer tokens</span>
-              <span>Local SQLite index</span>
-            </div>
-          </div>
-        </section>
+      <div class="shell" style="padding:48px 0 64px;max-width:820px">
+        <h1>Atlas</h1>
+        <p>${esc(DESC)}</p>
+        <p><a href="https://github.com/aziron-ai/atlas">GitHub</a> ·
+           <a href="https://github.com/aziron-ai/atlas/releases/latest">Download v${pkg.version}</a> ·
+           <a href="data/site-data.json">Benchmark data (JSON)</a></p>
 
-        <section class="hairline" aria-labelledby="seo-install-title">
-          <div class="shell seo-section">
-            <h2 id="seo-install-title">Install</h2>
-            <p class="lede">Homebrew, npm, native Linux packages, and release archives all expose the same <code>atlas</code> command. Full steps in the <a href="docs/installation/">installation guide</a> (includes GitHub Packages).</p>
-            <div class="seo-commands">
-              <div class="product-command">
-                <div class="flex items-center" style="min-height:42px;padding:0 12px">
-                  <span class="cmd-label">Homebrew</span>
-                </div>
-                <pre><code>brew install --cask aziron-ai/atlas/atlas</code></pre>
-              </div>
-              <div class="product-command">
-                <div class="flex items-center" style="min-height:42px;padding:0 12px">
-                  <span class="cmd-label">npm</span>
-                </div>
-                <pre><code>npm install -g @aziron/atlas</code></pre>
-              </div>
-            </div>
-            <p>Then run <code>atlas index .</code>, check <code>atlas status</code>, and preview assistants with <code>atlas bootstrap --dry-run</code>.
-               Linux packages and archives: <a href="https://github.com/aziron-ai/atlas/releases/latest">Download v${pkg.version}</a>.</p>
-          </div>
-        </section>
+        <h2>Get started</h2>
+        <p>Install with <code>brew install --cask aziron-ai/atlas/atlas</code> or from the public
+           npm registry with <code>npm install -g @aziron/atlas</code>. The
+           <a href="docs/installation/">installation guide</a> also covers the authenticated
+           GitHub Packages coordinate.
+           Then run <code>atlas index .</code>,
+           inspect readiness with <code>atlas status</code>, and preview assistant setup with
+           <code>atlas bootstrap --dry-run</code>.</p>
 
-        <section class="product-band hairline" aria-labelledby="seo-docs-title">
-          <div class="shell seo-section">
-            <h2 id="seo-docs-title">Product documentation</h2>
-            <ul class="seo-doc-list">
-              <li><a href="docs/getting-started/">Getting started</a> — first index, query, and assistant connection.</li>
-              <li><a href="docs/installation/">Installation</a> — Homebrew, npm, archives, and Linux packages.</li>
-              <li><a href="docs/indexing/">Indexing and reindexing</a> — freshness, watch mode, and recovery.</li>
-              <li><a href="docs/cli/">CLI reference</a> — search, symbols, relationships, impact, and routes.</li>
-              <li><a href="docs/assistants/">AI assistant setup</a> and <a href="docs/mcp/">MCP tools</a>.</li>
-              <li><a href="docs/troubleshooting/">Troubleshooting</a>, <a href="docs/privacy/">privacy</a>, <a href="docs/configuration/">configuration</a>, and <a href="docs/upgrade/">upgrades</a>.</li>
-              <li><a href="docs/">Browse all documentation →</a></li>
-            </ul>
-          </div>
-        </section>
+        <h2>Product documentation</h2>
+        <ul>
+          <li><a href="docs/getting-started/">Getting started</a> — first index, query, and assistant connection.</li>
+          <li><a href="docs/installation/">Installation</a> — Homebrew, npm, archives, and Linux packages.</li>
+          <li><a href="docs/indexing/">Indexing and reindexing</a> — freshness, watch mode, and recovery.</li>
+          <li><a href="docs/cli/">CLI reference</a> — search, symbols, relationships, impact, and routes.</li>
+          <li><a href="docs/assistants/">AI assistant setup</a> and <a href="docs/mcp/">MCP tools</a>.</li>
+          <li><a href="docs/troubleshooting/">Troubleshooting</a>, <a href="docs/privacy/">privacy</a>, <a href="docs/configuration/">configuration</a>, and <a href="docs/upgrade/">upgrades</a>.</li>
+          <li><a href="docs/">Browse all documentation →</a></li>
+        </ul>
 
-        <section class="hairline" aria-labelledby="seo-evidence-title" id="benchmarks">
-          <div class="shell seo-section">
-            <h2 id="seo-evidence-title">Headline results — ${esc(r.label)}</h2>
-            <p class="lede">Three published measurements; full methodology and raw artifacts below.</p>
-            <div class="seo-metric-row" role="list">
-              <div class="seo-metric" role="listitem">
-                <div class="seo-metric-value">${h.atlasF1All}</div>
-                <div class="seo-metric-label">Atlas F1 · 37 langs</div>
-                <div class="seo-metric-sub">@ ${h.atlasTokAll} tokens</div>
-              </div>
-              <div class="seo-metric" role="listitem">
-                <div class="seo-metric-value">${h.fewerTokens}×</div>
-                <div class="seo-metric-label">Fewer query tokens</div>
-                <div class="seo-metric-sub">vs graph tool</div>
-              </div>
-              <div class="seo-metric" role="listitem">
-                <div class="seo-metric-value">${r.latencyAtScale.meanMs}&nbsp;ms</div>
-                <div class="seo-metric-label">Mean query latency</div>
-                <div class="seo-metric-sub">flat across 36 repos</div>
-              </div>
-            </div>
-            <details class="seo-details">
-              <summary>Full headline notes</summary>
-              <ul>
-                <li>Atlas F1 ${h.atlasF1All} at ${h.atlasTokAll} context tokens, mean across all 37 languages (native, real-LLM scored, ${r.method.cells} cells / ${r.method.modelCalls} model calls).</li>
-                <li>F1 ${h.atlasF1Supported.toFixed(3)} at ${h.atlasTokSupported} tokens on the ${h.supportedLangs} fully-supported languages — full-file-dump accuracy at 6.1× fewer tokens.</li>
-                <li>Graph-tool comparison: ${h.graphifyF1} F1 at ${Math.round(h.graphifyTok)} tokens — Atlas delivers ${h.accPerToken}× the accuracy per token and ${h.fewerTokens}× fewer query tokens.</li>
-                <li>Real repository (${esc(r.goFlagship.repo)}, gopls call-hierarchy ground truth): Atlas F1 0.975 vs graph tool 0.084 vs raw file 0.017.</li>
-                <li>Query latency ~${r.latencyAtScale.meanMs} ms, flat from 15 to ${r.latencyAtScale.largestSymbols.toLocaleString("en-US")} symbols across 36 real repositories.</li>
-                <li>Corroborated by an independent Linux re-run: ${f.saturation.perfect}/${f.saturation.total} languages fixture-perfect, ${f.latency.ratio}× faster queries than the graph tool, gopls-truth F1 ${f.lspTruth.meanF1.toFixed(3)}.</li>
-              </ul>
-            </details>
+        <h2>Headline results — ${esc(r.label)}</h2>
+        <ul>
+          <li>Atlas F1 ${h.atlasF1All} at ${h.atlasTokAll} context tokens, mean across all 37 languages (fixture-truth, real-LLM scored, ${r.method.cells} cells / ${r.method.modelCalls} model calls).</li>
+          <li>F1 ${h.atlasF1Supported.toFixed(3)} at ${h.atlasTokSupported} tokens on the ${h.supportedLangs} fully-supported languages — full-file-dump accuracy at 6.1× fewer tokens.</li>
+          <li>Graph-tool comparison: ${h.graphifyF1} F1 at ${Math.round(h.graphifyTok)} tokens — Atlas delivers ${h.accPerToken}× the accuracy per token and ${h.fewerTokens}× fewer query tokens.</li>
+          <li>Real repository (${esc(r.goFlagship.repo)}, gopls call-hierarchy ground truth): Atlas F1 0.975 vs graph tool 0.084 vs raw file 0.017.</li>
+          <li>Query latency ~${r.latencyAtScale.meanMs} ms, flat from 15 to ${r.latencyAtScale.largestSymbols.toLocaleString("en-US")} symbols across 36 real repositories.</li>
+          <li>Corroborated by an independent Linux re-run: ${f.saturation.perfect}/${f.saturation.total} languages fixture-perfect, ${f.latency.ratio}× faster queries than the graph tool, gopls-truth F1 ${f.lspTruth.meanF1.toFixed(3)}.</li>
+        </ul>
 
-            <h3>Atlas vs Graphify — scorecard</h3>
-            <div class="seo-table-wrap">
-              <table>
-                <caption>Atlas vs Graphify published scorecard</caption>
-                <thead><tr><th scope="col">Metric</th><th scope="col">Atlas</th><th scope="col">Graphify</th><th scope="col">Advantage</th><th scope="col">Evidence</th></tr></thead>
-                <tbody>
-                ${scorecardRows}
-                </tbody>
-              </table>
-            </div>
+        <h2>Atlas vs Graphify — scorecard</h2>
+        <table>
+          <thead><tr><th>Metric</th><th>Atlas</th><th>Graphify</th><th>Advantage</th><th>Evidence</th></tr></thead>
+          <tbody>
+          ${scorecardRows}
+          </tbody>
+        </table>
 ${agentBenchBlock}
-            <h3>The --detail knob</h3>
-            <p>${esc(r.detailKnob.floorNote)}</p>
-            <div class="seo-table-wrap">
-              <table>
-                <caption>Detail levels: tokens and F1</caption>
-                <thead><tr><th scope="col">Level</th><th scope="col">What the agent sees</th><th scope="col">Tokens</th><th scope="col">F1</th></tr></thead>
-                <tbody>
-                ${knobRows}
-                </tbody>
-              </table>
-            </div>
+        <h2>The --detail knob</h2>
+        <p>${esc(r.detailKnob.floorNote)}</p>
+        <table>
+          <thead><tr><th>Level</th><th>What the agent sees</th><th>Tokens</th><th>F1</th></tr></thead>
+          <tbody>
+          ${knobRows}
+          </tbody>
+        </table>
 
-            <h3>Language maturity ladder — ${r.maturity.totalCodeLanguages} code languages</h3>
-            <p>${esc(r.maturity.note)} Atlas also indexes ~${r.maturity.contentFormats} content formats (JSON, YAML, HTML, PDF, …) for search.</p>
-            <div class="seo-table-wrap">
-              <table>
-                <caption>Language maturity ladder by validation depth</caption>
-                <thead><tr><th scope="col">Level</th><th scope="col">Meaning</th><th scope="col">Languages</th></tr></thead>
-                <tbody>
-                ${maturityRows}
-                </tbody>
-              </table>
-            </div>
-            <p>Every number above is reproducible from the committed artifacts under <a href="data/">data/</a>
-               (<a href="data/site-data.json">site-data.json</a>). Interactive charts load when JavaScript is available.</p>
-          </div>
-        </section>
+        <h2>Language maturity ladder — ${r.maturity.totalCodeLanguages} code languages</h2>
+        <p>${esc(r.maturity.note)} Atlas also indexes ~${r.maturity.contentFormats} content formats (JSON, YAML, HTML, PDF, …) for search.</p>
+        <table>
+          <thead><tr><th>Level</th><th>Meaning</th><th>Languages</th></tr></thead>
+          <tbody>
+          ${maturityRows}
+          </tbody>
+        </table>
 
-      </main>
-      <footer class="product-footer hairline">
-        <div class="shell grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr]">
-          <div>
-            <span class="flex min-w-0 items-center gap-2.5">
-              <img class="brand-mark" src="assets/atlas-mark.svg" alt="" width="31" height="26">
-              <span class="brand-word">ATLAS</span>
-            </span>
-            <p class="mt-3 max-w-sm text-sm" style="color:var(--muted)">Local code intelligence for developers and AI coding assistants.</p>
-            <span class="chip mt-4">v${pkg.version}</span>
-            <a class="producthunt-badge focusring" href="https://www.producthunt.com/products/atlas-44?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-atlas-47" target="_blank" rel="noopener noreferrer" aria-label="View Atlas on Product Hunt">
-              <span class="producthunt-badge-fallback" aria-hidden="true">
-                <span class="producthunt-badge-mark">P</span>
-                <span><small>Find us on</small><strong>Product Hunt</strong></span>
-              </span>
-              <img alt="Atlas - Local code intelligence for developers and AI assistants | Product Hunt" width="250" height="54" loading="lazy" decoding="async" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1203538&amp;theme=light&amp;t=1784726889410">
-            </a>
-          </div>
-          <div>
-            <div class="kicker mb-3">Product</div>
-            <div class="footer-links">
-              <a href="docs/getting-started/">Documentation</a>
-              <a href="#benchmarks">Benchmark</a>
-              <a href="data/site-data.json" download>Download data</a>
-            </div>
-          </div>
-          <div>
-            <div class="kicker mb-3">Project</div>
-            <div class="footer-links">
-              <a href="https://github.com/aziron-ai/atlas">GitHub repository</a>
-              <a href="https://github.com/aziron-ai/atlas/releases/latest">Download v${pkg.version}</a>
-              <a href="https://github.com/aziron-ai/atlas/pkgs/npm/atlas">npm package</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+        <h2>Install</h2>
+        <p>Homebrew: <code>brew install --cask aziron-ai/atlas/atlas</code> ·
+           npm: <code>npm install -g @aziron/atlas</code> ·
+           Linux: <a href="https://github.com/aziron-ai/atlas/releases/latest">tar.gz / .deb / .rpm / .apk from releases</a>.
+           Then <code>atlas index .</code> and <code>atlas mcp --transport stdio</code> for agents.</p>
+        <p>Every number above is reproducible from the committed artifacts under <a href="data/">data/</a>.
+           This static digest is replaced by the interactive page when JavaScript is available.</p>
+
+        <h2>Community</h2>
+        <p><a href="https://www.producthunt.com/products/atlas-44?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-atlas-47" target="_blank" rel="noopener noreferrer"><img alt="Atlas - Local code intelligence for developers and AI assistants | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1203538&amp;theme=light&amp;t=1784726889410"></a></p>
+      </div>
 `;
 
 /* ------------------------------ inject ---------------------------------- */
@@ -508,7 +370,7 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intellig
 
 ## Benchmark data
 - [site-data.json](${BASE}data/site-data.json): the full payload the page renders — headline table, efficiency frontier, detail knob, maturity ladder, scorecard, per-language results
-- [CALLERS_F1_AFTER.json](${BASE}data/raw/CALLERS_F1_AFTER.json): 37/37 native callers F1 (Linux corroboration run)
+- [CALLERS_F1_AFTER.json](${BASE}data/raw/CALLERS_F1_AFTER.json): 37/37 fixture-truth callers F1 (Linux corroboration run)
 - [DIMENSIONS_BENCH_PUBLIC.json](${BASE}data/raw/DIMENSIONS_BENCH_PUBLIC.json): per-language F1 / tokens / latency / index speed
 - [LSP_F1_SUMMARY.json](${BASE}data/raw/LSP_F1_SUMMARY.json): gopls LSP-truth aggregate
 - [AGENT_TOKEN_BENCH_PUBLIC.json](${BASE}data/raw/AGENT_TOKEN_BENCH_PUBLIC.json): end-to-end token usage of real agent harnesses (Claude Code, OpenAI Codex) with Atlas vs graph tool vs no tool — reproducible via agent-bench/ in the GitHub repo

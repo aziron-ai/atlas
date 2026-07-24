@@ -53,7 +53,7 @@ const out = {
     accuracy: {
       atlasPerfect: after.perfect_languages, total: after.total_languages,
       graphifyPerfect: gfyPerfect, graphifyMeanF1: round(gfyMeanF1, 3),
-      evidence: "native: exact set F1, ground truth by construction, no LLM",
+      evidence: "fixture-truth: exact set F1, ground truth by construction, no LLM",
     },
     latency: {
       atlasMedianMs: round(atlasLat), graphifyMedianMs: round(gfyLat),
