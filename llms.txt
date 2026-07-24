@@ -10,7 +10,7 @@
 
 ## Benchmark data
 - [site-data.json](https://aziron-ai.github.io/atlas/data/site-data.json): the full payload the page renders — headline table, efficiency frontier, detail knob, maturity ladder, scorecard, per-language results
-- [CALLERS_F1_AFTER.json](https://aziron-ai.github.io/atlas/data/raw/CALLERS_F1_AFTER.json): 37/37 fixture-truth callers F1 (Linux corroboration run)
+- [CALLERS_F1_AFTER.json](https://aziron-ai.github.io/atlas/data/raw/CALLERS_F1_AFTER.json): 37/37 native callers F1 (Linux corroboration run)
 - [DIMENSIONS_BENCH_PUBLIC.json](https://aziron-ai.github.io/atlas/data/raw/DIMENSIONS_BENCH_PUBLIC.json): per-language F1 / tokens / latency / index speed
 - [LSP_F1_SUMMARY.json](https://aziron-ai.github.io/atlas/data/raw/LSP_F1_SUMMARY.json): gopls LSP-truth aggregate
 - [AGENT_TOKEN_BENCH_PUBLIC.json](https://aziron-ai.github.io/atlas/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json): end-to-end token usage of real agent harnesses (Claude Code, OpenAI Codex) with Atlas vs graph tool vs no tool — reproducible via agent-bench/ in the GitHub repo

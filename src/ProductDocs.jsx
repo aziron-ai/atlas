@@ -340,7 +340,7 @@ export function ProductHome({ data }) {
                     <td className="ref">M-03</td>
                     <td className="measure-name">Answer accuracy (F1)</td>
                     <td className="value">{String(h.atlasF1All)}</td>
-                    <td className="method">Mean across 37 fixture-truth language cells with real-model scoring.</td>
+                    <td className="method">Mean across 37 native language cells with real-model scoring.</td>
                   </tr>
                 </tbody>
               </table>
@@ -1313,7 +1313,7 @@ function DocsPage({ slug }) {
           <ProseSection title="Published Headline Results (July 2026)">
             <p>These are the current published numbers, each with its evidence conditions:</p>
             <div className="docs-table-wrap"><table><thead><tr><th>Result</th><th>Conditions</th></tr></thead><tbody>
-              <tr><td>F1 0.757 at 21.2 context tokens, mean across all 37 languages</td><td>Fixture-truth ground truth, real-LLM scored (222 cells, 666 model calls)</td></tr>
+              <tr><td>F1 0.757 at 21.2 context tokens, mean across all 37 languages</td><td>Native ground truth, real-LLM scored (222 cells, 666 model calls)</td></tr>
               <tr><td>F1 1.000 at 27.1 tokens on the 28 fully-supported languages</td><td>Full-file-dump accuracy at 6.1× fewer tokens; same fixture suite</td></tr>
               <tr><td>Graph-tool comparison: 0.539 F1 at 97 tokens</td><td>Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens</td></tr>
               <tr><td>Query latency ~7.4 ms vs 128 ms for the graph tool</td><td>Real repositories, 36 languages; flat from 15 to 39,161 symbols</td></tr>

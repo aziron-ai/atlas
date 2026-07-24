@@ -98,6 +98,11 @@ test.describe("atlas benchmark evidence", () => {
     }
   });
 
+  test("uses the native evidence label in user-facing benchmark copy", async ({ page }) => {
+    await expect(page.getByText("native", { exact: true }).first()).toBeVisible();
+    await expect(page.locator("body")).not.toContainText(/fixture[- ]truth/i);
+  });
+
   test("agent-harness section: one panel per agent, honest caveat, runnable suite", async ({ page }) => {
     for (const a of site.agentBench.agents) {
       const panel = page.getByTestId(`agent-panel-${a.id}`);

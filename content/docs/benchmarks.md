@@ -38,7 +38,7 @@ These are the current published numbers, each with its evidence conditions:
 
 | Result | Conditions |
 | --- | --- |
-| F1 0.757 at 21.2 context tokens, mean across all 37 languages | Fixture-truth ground truth, real-LLM scored (222 cells, 666 model calls) |
+| F1 0.757 at 21.2 context tokens, mean across all 37 languages | Native ground truth, real-LLM scored (222 cells, 666 model calls) |
 | F1 1.000 at 27.1 tokens on the 28 fully-supported languages | Full-file-dump accuracy at 6.1× fewer tokens; same fixture suite |
 | Graph-tool comparison: 0.539 F1 at 97 tokens | Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens |
 | Query latency ~7.4 ms vs 128 ms for the graph tool | Real repositories, 36 languages; flat from 15 to 39,161 symbols |

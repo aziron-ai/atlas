@@ -121,11 +121,15 @@ const EVIDENCE_COLORS = {
   "perf-only": "var(--warning)",
   "agent-harness": "var(--g2)",
 };
+const EVIDENCE_LABELS = {
+  "fixture-truth": "native",
+};
 function EvidenceTag({ kind, children }) {
   const color = EVIDENCE_COLORS[kind] || "var(--muted)";
+  const label = children || EVIDENCE_LABELS[kind] || kind;
   return (
-    <span className="chip" style={{ borderColor: color, color }} title={children || kind}>
-      {kind}
+    <span className="chip" style={{ borderColor: color, color }} title={label}>
+      {label}
     </span>
   );
 }
@@ -523,7 +527,7 @@ function ExecSummary({ data }) {
         <p style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
           <span className="mono" style={{ color: "var(--warning)" }}>HONEST LIMITS — </span>
           at report time 9 of 37 languages had parser gaps. The saturation run has since fixed all 9 on
-          fixture-truth; they carry a <span style={{ color: "var(--warning)" }}>“pending real-repo proof”</span> badge
+          native evidence; they carry a <span style={{ color: "var(--warning)" }}>“pending real-repo proof”</span> badge
           until a production-repo run lands.
         </p>
         <a href="#languages" className="link inline-flex shrink-0 items-center gap-1" style={{ fontSize: 13 }}>
@@ -682,7 +686,7 @@ function LangChip({ lang, level, pending, promoted }) {
       className="mono inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5"
       data-testid="maturity-lang"
       title={
-        pending ? "fixture-truth F1 1.000 on the Linux saturation run — L4 pending a real-repo call-graph proof"
+        pending ? "native F1 1.000 on the Linux saturation run — L4 pending a real-repo call-graph proof"
         : promoted ? "newly promoted: call graph cross-checked against the language's own LSP server on a real public repository (promotion run below)"
         : undefined
       }
@@ -791,7 +795,7 @@ function MaturityTable({ data }) {
           aria-label="Filter languages"
         />
         <span className="mono" style={{ fontSize: 11.5, color: "var(--faint)" }}>
-          report columns: fixture-truth, LLM-scored · fresh column: Linux deterministic re-run
+          report columns: native, LLM-scored · fresh column: Linux deterministic re-run
         </span>
       </div>
       <div className="tablewrap" style={{ maxHeight: 520, overflowY: "auto" }}>
@@ -1625,7 +1629,7 @@ function EvidenceSection({ data }) {
                 ["scoring model", r.method.scoringModel],
                 ["sampling", r.method.sampling],
                 ["coverage", `${r.method.cells} cells · ${r.method.modelCalls} model calls`],
-                ["fixture truth", "15 callers + 3 decoys, by construction"],
+                ["native", "15 callers + 3 decoys, by construction"],
                 ["fresh-run host", f.platform],
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between gap-4">

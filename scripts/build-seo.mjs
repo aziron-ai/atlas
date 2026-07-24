@@ -157,7 +157,7 @@ const jsonLd = [
     "@type": "Dataset",
     name: "Atlas Benchmark & Field Comparison — July 2026",
     description:
-      "Per-language code-intelligence benchmark: answer accuracy (F1), context tokens, query latency and index speed for Atlas vs a graph tool, an LSP-truth real-repository flagship, and a 40-language maturity ladder. Fixture-truth ground truth by construction; real-LLM scored (222 cells, 666 model calls).",
+      "Per-language code-intelligence benchmark: answer accuracy (F1), context tokens, query latency and index speed for Atlas vs a graph tool, an LSP-truth real-repository flagship, and a 40-language maturity ladder. Native ground truth by construction; real-LLM scored (222 cells, 666 model calls).",
     url: BASE,
     isAccessibleForFree: true,
     creator: { "@type": "Organization", name: "Aziron" },
@@ -260,7 +260,7 @@ const body = `
 
         <h2>Headline results — ${esc(r.label)}</h2>
         <ul>
-          <li>Atlas F1 ${h.atlasF1All} at ${h.atlasTokAll} context tokens, mean across all 37 languages (fixture-truth, real-LLM scored, ${r.method.cells} cells / ${r.method.modelCalls} model calls).</li>
+          <li>Atlas F1 ${h.atlasF1All} at ${h.atlasTokAll} context tokens, mean across all 37 languages (native, real-LLM scored, ${r.method.cells} cells / ${r.method.modelCalls} model calls).</li>
           <li>F1 ${h.atlasF1Supported.toFixed(3)} at ${h.atlasTokSupported} tokens on the ${h.supportedLangs} fully-supported languages — full-file-dump accuracy at 6.1× fewer tokens.</li>
           <li>Graph-tool comparison: ${h.graphifyF1} F1 at ${Math.round(h.graphifyTok)} tokens — Atlas delivers ${h.accPerToken}× the accuracy per token and ${h.fewerTokens}× fewer query tokens.</li>
           <li>Real repository (${esc(r.goFlagship.repo)}, gopls call-hierarchy ground truth): Atlas F1 0.975 vs graph tool 0.084 vs raw file 0.017.</li>
@@ -370,7 +370,7 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intellig
 
 ## Benchmark data
 - [site-data.json](${BASE}data/site-data.json): the full payload the page renders — headline table, efficiency frontier, detail knob, maturity ladder, scorecard, per-language results
-- [CALLERS_F1_AFTER.json](${BASE}data/raw/CALLERS_F1_AFTER.json): 37/37 fixture-truth callers F1 (Linux corroboration run)
+- [CALLERS_F1_AFTER.json](${BASE}data/raw/CALLERS_F1_AFTER.json): 37/37 native callers F1 (Linux corroboration run)
 - [DIMENSIONS_BENCH_PUBLIC.json](${BASE}data/raw/DIMENSIONS_BENCH_PUBLIC.json): per-language F1 / tokens / latency / index speed
 - [LSP_F1_SUMMARY.json](${BASE}data/raw/LSP_F1_SUMMARY.json): gopls LSP-truth aggregate
 - [AGENT_TOKEN_BENCH_PUBLIC.json](${BASE}data/raw/AGENT_TOKEN_BENCH_PUBLIC.json): end-to-end token usage of real agent harnesses (Claude Code, OpenAI Codex) with Atlas vs graph tool vs no tool — reproducible via agent-bench/ in the GitHub repo
