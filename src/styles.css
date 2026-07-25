@@ -2647,3 +2647,8 @@ a.sheet-cell:hover .go {
 }
 .ac-drop b { color: var(--acgrn); }
 .ac-blk[data-kind="info"] { border-left-color: var(--acgrn); }
+.chart-panel { margin: 0; }
+/* hero chart: top-aligned column, but optically level with the H1 (not the eyebrow) */
+@media (min-width: 1024px) {
+  .product-hero .chart-panel { margin-top: 56px; }
+}

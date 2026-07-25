@@ -152,7 +152,7 @@ export default function SurveyChart() {
   const rows = 4;
   const letters = ["A", "B", "C", "D", "E", "F"];
   return (
-    <figure className="chart-panel" style={{ margin: 0 }} aria-label="Map figure: one Atlas query drawn as a survey chart">
+    <figure className="chart-panel" aria-label="Map figure: one Atlas query drawn as a survey chart">
       <div className="chart-head">
         <span className="title">Sheet A·1 — one query, charted</span>
         <span className="coord mono">atlas context --query "review risk"</span>

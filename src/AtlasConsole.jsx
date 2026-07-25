@@ -401,6 +401,14 @@ export default function AtlasConsole({ onClose, compact = false }) {
   const CMDS = [...ARG_CMDS, "help"];
   const sugs = useMemo(() => {
     if (!eng) return [];
+    // completing the binary name itself: "a" → "atl" → "atlas"
+    if (/^\s*a(t(l(a(s)?)?)?)?$/i.test(input) && input.trim() !== "" && !/^\s*atlas$/i.test(input)) {
+      return [{ v: "atlas", t: "bin" }];
+    }
+    // bare "atlas" (or "atlas ") → offer every command
+    if (/^\s*atlas\s*$/i.test(input)) {
+      return CMDS.map((c) => ({ v: c, t: "cmd" }));
+    }
     const raw = input.replace(/^atlas\s*/i, "");
     if (raw !== "" && input.trim() === "") return [];
     const parts = raw.split(/\s+/);
@@ -429,7 +437,8 @@ export default function AtlasConsole({ onClose, compact = false }) {
     const parts = raw.split(/\s+/);
     const trailing = /\s$/.test(raw);
     let next;
-    if (chosen.t === "cmd") next = `atlas ${chosen.v} `;
+    if (chosen.t === "bin") next = "atlas ";
+    else if (chosen.t === "cmd") next = `atlas ${chosen.v} `;
     else if (trailing) next = `atlas ${raw}${chosen.v}`;
     else next = `atlas ${[...parts.slice(0, -1), chosen.v].join(" ")}`;
     setInput(next);
@@ -550,7 +559,7 @@ export default function AtlasConsole({ onClose, compact = false }) {
                     className={`ac-sug${i === sugIdx ? " on" : ""}`}
                     onMouseEnter={() => setSugIdx(i)}
                     onClick={() => acceptSug(sg)}>
-                    <span className="ac-sug-t">{sg.t === "cmd" ? "❯" : "ƒ"}</span> {sg.v}
+                    <span className="ac-sug-t">{sg.t === "sym" ? "ƒ" : "❯"}</span> {sg.v}
                   </button>
                 ))}
                 <span className="ac-sug-hint">tab to complete</span>

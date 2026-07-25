@@ -248,9 +248,13 @@ export default function GraphExplorer({
     reducedMotion: false,
   });
 
-  // repaint when the highlight set changes (console-driven)
+  // repaint + refocus when the highlight set changes (console-driven)
   useEffect(() => {
     stateRef.current.needsPaint = true;
+    const c = canvasRef.current && canvasRef.current._atlasControls;
+    if (!c) return;
+    if (highlightIds && highlightIds.length) c.fitToIds(highlightIds);
+    else c.fit();
   }, [highlightIds]);
 
   // ---- fetch graph data (shared, cached — one fetch/parse per page) -------
@@ -709,6 +713,37 @@ export default function GraphExplorer({
     rafRef.current = requestAnimationFrame(frame);
 
     // expose control hooks for the toolbar buttons
+    function fitToIds(ids) {
+      const layout = st.layout;
+      if (!ids || !ids.length || !layout.length || !st.width || !st.height) return;
+      const idxOf = new Map();
+      st.nodes.forEach((n, i) => idxOf.set(n.id, i));
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity, found = 0;
+      for (const id of ids) {
+        const i = idxOf.get(id);
+        const p = i != null ? layout[i] : null;
+        if (!p) continue;
+        found += 1;
+        if (p.x < minX) minX = p.x;
+        if (p.y < minY) minY = p.y;
+        if (p.x > maxX) maxX = p.x;
+        if (p.y > maxY) maxY = p.y;
+      }
+      if (!found) return;
+      const pad = 70;
+      const w = Math.max(maxX - minX, 40);
+      const h = Math.max(maxY - minY, 40);
+      const scale = Math.min(
+        Math.min((st.width - pad * 2) / w, (st.height - pad * 2) / h),
+        2.2
+      );
+      const view = viewRef.current;
+      view.scale = Math.max(scale, 0.15);
+      view.tx = st.width / 2 - ((minX + maxX) / 2) * view.scale;
+      view.ty = st.height / 2 - ((minY + maxY) / 2) * view.scale;
+      st.needsPaint = true;
+    }
+
     canvas._atlasControls = {
       zoom(factor) {
         const v = viewRef.current;
@@ -725,7 +760,13 @@ export default function GraphExplorer({
         viewRef.current.fitted = false;
         fitView();
       },
+      fitToIds,
     };
+
+    // map opened (or re-mounted) with an active highlight → frame it immediately
+    if (hlRef.current && hlRef.current.size) {
+      requestAnimationFrame(() => fitToIds([...hlRef.current]));
+    }
 
     return () => {
       cancelAnimationFrame(rafRef.current);
