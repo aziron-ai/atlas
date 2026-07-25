@@ -3,9 +3,11 @@ import { createRoot } from "react-dom/client";
 import { ArrowRight, Check, Copy, Download, ExternalLink } from "lucide-react";
 import GraphExplorer from "./GraphExplorer";
 import {
+  CountUp,
   Documentation,
   ProductHeader,
   ProductHome,
+  useReveal,
   useSiteRoute,
 } from "./ProductDocs";
 
@@ -376,10 +378,10 @@ function Hero({ data }) {
             </p>
 
             <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-4">
-              <StatBig value={h.atlasF1All.toFixed(3)} label="Atlas F1 · all 37 langs" sub={`@ ${h.atlasTokAll} tokens`} accent="var(--primary)" />
-              <StatBig value={h.atlasF1Supported.toFixed(3)} label={`F1 · ${h.supportedLangs} supported`} sub={`@ ${h.atlasTokSupported} tokens`} />
-              <StatBig value={`${h.accPerToken}×`} label="Accuracy per token" sub="vs. graph tool" />
-              <StatBig value={`${h.fewerTokens}×`} label="Fewer query tokens" sub="for a better answer" />
+              <StatBig value={<CountUp value={h.atlasF1All} decimals={3} />} label="Atlas F1 · all 37 langs" sub={`@ ${h.atlasTokAll} tokens`} accent="var(--primary)" />
+              <StatBig value={<CountUp value={h.atlasF1Supported} decimals={3} />} label={`F1 · ${h.supportedLangs} supported`} sub={`@ ${h.atlasTokSupported} tokens`} />
+              <StatBig value={<CountUp value={h.accPerToken} decimals={1} suffix="×" />} label="Accuracy per token" sub="vs. graph tool" />
+              <StatBig value={<CountUp value={h.fewerTokens} suffix="×" />} label="Fewer query tokens" sub="for a better answer" />
             </div>
 
             <div className="mt-7 flex flex-wrap items-center gap-2" data-testid="fresh-chips">
@@ -1808,6 +1810,7 @@ function useScrollSpy(ids) {
 
 function BenchmarkExperience({ data }) {
   const active = useScrollSpy(["hero", "summary", "knob", "languages", "versus", "field", "real", "agents", "graph", "evidence", "install"]);
+  useReveal([data.version]);
 
   return (
     <>

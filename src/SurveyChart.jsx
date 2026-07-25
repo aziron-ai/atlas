@@ -276,7 +276,7 @@ export default function SurveyChart() {
 
         {/* station symbol: triangulation mark */}
         <g>
-          <circle cx={S[0]} cy={S[1]} r="15" fill="none" stroke={C.signal} opacity="0.35" />
+          <circle className="station-pulse" cx={S[0]} cy={S[1]} r="15" fill="none" stroke={C.signal} opacity="0.35" />
           <circle cx={S[0]} cy={S[1]} r="24" fill="none" stroke={C.signal} opacity="0.14" />
           <polygon
             points={`${S[0]},${S[1] - 9} ${S[0] - 8},${S[1] + 6} ${S[0] + 8},${S[1] + 6}`}

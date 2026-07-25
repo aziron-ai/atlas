@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
   Check,
@@ -17,8 +17,85 @@ const PRODUCT_NAV = [
   ["Overview", "#overview"],
   ["Documentation", "#docs/getting-started"],
   ["Benchmarks", "#benchmarks"],
-  ["Data", "data/site-data.json"],
+  ["Benchmark data", "#benchmarks"],
 ];
+
+/* ===== motion: turn on the gated CSS before first paint (no flash) ===== */
+if (typeof document !== "undefined") {
+  document.documentElement.classList.add("atlas-anim");
+}
+
+const prefersReduced = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Count a display figure up to its EXACT source value when scrolled into view.
+   The final rendered value always equals `value` — motion never alters a number. */
+export function CountUp({ value, decimals = 0, prefix = "", suffix = "", duration = 900 }) {
+  const ref = useRef(null);
+  const [display, setDisplay] = useState(prefersReduced() ? value : 0);
+  const done = useRef(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || done.current) return undefined;
+    if (prefersReduced() || typeof IntersectionObserver === "undefined") {
+      setDisplay(value);
+      return undefined;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting || done.current) return;
+          done.current = true;
+          io.disconnect();
+          const t0 = performance.now();
+          const tick = (t) => {
+            const p = Math.min(1, (t - t0) / duration);
+            const eased = 1 - Math.pow(1 - p, 3);
+            setDisplay(p >= 1 ? value : value * eased);
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        });
+      },
+      { threshold: 0.4 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [value, duration]);
+  const shown = display > value ? value : display;
+  return (
+    <span ref={ref} className="tabular-nums">
+      {prefix}
+      {shown.toFixed(decimals)}
+      {suffix}
+    </span>
+  );
+}
+
+/* One reusable scroll-reveal for every [data-reveal] element. Resting state is
+   visible (CSS hides only under no-preference), so no-JS/reduced-motion is safe. */
+export function useReveal(deps = []) {
+  useEffect(() => {
+    if (prefersReduced() || typeof IntersectionObserver === "undefined") return undefined;
+    const els = Array.from(document.querySelectorAll("[data-reveal]:not(.is-in)"));
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-in");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+}
 
 export const BENCHMARK_ANCHORS = new Set([
   "benchmarks",
@@ -65,12 +142,22 @@ function Brand() {
 
 export function ProductHeader({ version = RELEASE, active = "overview" }) {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     setOpen(false);
   }, [active]);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="product-header sticky top-0 z-50" data-testid="product-nav">
+    <header
+      className={`product-header sticky top-0 z-50${scrolled ? " is-scrolled" : ""}`}
+      data-testid="product-nav"
+    >
       <nav className="shell flex h-16 items-center justify-between gap-3" aria-label="Primary navigation">
         <a className="focusring text-inherit no-underline" href="#overview" aria-label="Atlas home">
           <Brand />
@@ -154,7 +241,7 @@ function CopyCommand({ command }) {
   };
 
   return (
-    <button className="icon-btn focusring" type="button" onClick={copy} aria-label={`Copy ${command}`} title="Copy command">
+    <button className={`icon-btn focusring${copied ? " copied-pop" : ""}`} type="button" onClick={copy} aria-label={`Copy ${command}`} title="Copy command">
       {copied ? <Check className="h-4 w-4" aria-hidden /> : <Copy className="h-4 w-4" aria-hidden />}
     </button>
   );
@@ -259,6 +346,7 @@ const workflowItems = [
 
 export function ProductHome({ data }) {
   const h = data.report.headline;
+  useReveal([data.version]);
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
@@ -269,14 +357,16 @@ export function ProductHome({ data }) {
           <div className="shell py-14 lg:py-20">
             <GridRef cell="A·1" name="Overview" />
             <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
-              <div className="max-w-2xl">
-                <div className="eyebrow"><span className="status-dot" /> Local code intelligence for AI-assisted engineering</div>
-                <h1 className="mt-5">Your codebase is a territory. <span className="accent">Atlas is the map.</span></h1>
+              <div className="max-w-2xl hero-copy">
+                <div className="eyebrow"><span className="status-dot" /> Local code intelligence for developers &amp; AI agents</div>
+                <h1 className="mt-5">
+                  Your codebase is a territory. <span className="accent">Atlas is the map.</span>
+                  <span className="h1-tail">Cited, file-line answers for your codebase — and your AI coding agent — at a fraction of the tokens.</span>
+                </h1>
                 <p className="lede mt-5 text-lg leading-relaxed">
-                  Give developers and coding assistants precise repository context without sending
-                  the entire codebase into the prompt. Atlas surveys your repository into a local
-                  graph, then answers each query with the few coordinates that matter — symbol,
-                  callers, impact — every one cited to file and line.
+                  Atlas surveys your repository into a local graph, then hands over only the
+                  coordinates a query needs — symbol, callers, change impact — instead of the whole
+                  codebase in the prompt.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
                   <a className="btn btn-primary focusring" href="#docs/getting-started">
@@ -303,7 +393,7 @@ export function ProductHome({ data }) {
             <GridRef cell="B·1" name="Survey data" />
             <div className="product-section-head">
               <div>
-                <h2 id="outcomes-title">Measurements from the field</h2>
+                <h2 id="outcomes-title">Benchmarks &mdash; smaller context, faster queries, grounded answers</h2>
                 <p className="lede mt-3">
                   Smaller context, faster retrieval, source-grounded answers — recorded as a
                   surveyor would record them: value, instrument, and conditions.
@@ -327,19 +417,19 @@ export function ProductHome({ data }) {
                   <tr>
                     <td className="ref">M-01</td>
                     <td className="measure-name">Query context tokens</td>
-                    <td className="value">{h.fewerTokens}× <small>fewer</small></td>
+                    <td className="value"><CountUp value={h.fewerTokens} suffix="×" /> <small>fewer</small></td>
                     <td className="method">Real-repository comparison against the graph baseline in the published benchmark.</td>
                   </tr>
                   <tr>
                     <td className="ref">M-02</td>
                     <td className="measure-name">Query latency</td>
-                    <td className="value">17× <small>faster</small></td>
+                    <td className="value"><CountUp value={17} suffix="×" /> <small>faster</small></td>
                     <td className="method">Reported benchmark mean: Atlas 7.4&nbsp;ms versus 128&nbsp;ms for the graph baseline. Plotted on the scale bar below.</td>
                   </tr>
                   <tr>
                     <td className="ref">M-03</td>
                     <td className="measure-name">Answer accuracy (F1)</td>
-                    <td className="value">{String(h.atlasF1All)}</td>
+                    <td className="value"><CountUp value={h.atlasF1All} decimals={3} /></td>
                     <td className="method">Mean across 37 native language cells with real-model scoring.</td>
                   </tr>
                 </tbody>
@@ -369,8 +459,8 @@ export function ProductHome({ data }) {
               </div>
             </div>
             <div className="cap-grid mt-9">
-              {capabilityItems.map(({ glyph, title, copy }) => (
-                <article className="cap" key={title}>
+              {capabilityItems.map(({ glyph, title, copy }, i) => (
+                <article className="cap" key={title} data-reveal style={{ "--i": i }}>
                   <CapGlyph kind={glyph} />
                   <h3>{title}</h3>
                   <p>{copy}</p>
@@ -386,13 +476,13 @@ export function ProductHome({ data }) {
             <GridRef cell="D·1" name="Plotted route" />
             <div className="product-section-head">
               <div>
-                <h2 id="workflow-title">From checkout to cited context, in three legs</h2>
+                <h2 id="workflow-title">Index, query, connect your assistant &mdash; in three commands</h2>
               </div>
               <a className="text-link focusring" href="#docs/getting-started">Open the getting started guide <ChevronRight className="h-4 w-4" aria-hidden /></a>
             </div>
             <div className="legs mt-9">
-              {workflowItems.map((item) => (
-                <article className="leg" key={item.n}>
+              {workflowItems.map((item, i) => (
+                <article className="leg" key={item.n} data-reveal style={{ "--i": i }}>
                   <div className="leg-mark"><span className="pt">{item.n}</span><span className="rule" aria-hidden /></div>
                   <h3>{item.title}</h3>
                   <p>{item.copy}</p>
@@ -429,14 +519,14 @@ export function ProductHome({ data }) {
             <GridRef cell="F·1" name="Index to adjoining sheets" />
             <div className="product-section-head">
               <div>
-                <h2 id="docs-title">Operate Atlas with confidence</h2>
+                <h2 id="docs-title">Guides &amp; documentation &mdash; install, index, configure, connect</h2>
                 <p className="lede mt-3">The documentation set, indexed like the sheets that border this one.</p>
               </div>
               <a className="text-link focusring" href={WIKI}>GitHub Wiki mirror <ExternalLink className="h-4 w-4" aria-hidden /></a>
             </div>
             <div className="sheets-grid mt-8">
               {DOC_PAGES.slice(0, 8).map((page, i) => (
-                <a key={page.slug} href={`#docs/${page.slug}`} className="sheet-cell focusring">
+                <a key={page.slug} href={`#docs/${page.slug}`} className="sheet-cell focusring" data-reveal style={{ "--i": i % 4 }}>
                   <span className="no">SHEET {String(i + 1).padStart(2, "0")}</span>
                   <h3>{page.label}</h3>
                   <p>{page.summary}</p>

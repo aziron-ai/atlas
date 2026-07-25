@@ -29,14 +29,14 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const site = JSON.parse(fs.readFileSync(path.join(repoRoot, "data", "site-data.json"), "utf8"));
 const pkg = JSON.parse(fs.readFileSync(path.join(repoRoot, "package.json"), "utf8"));
 
-const ORIGIN = "https://aziron-ai.github.io";
-const BASE = `${ORIGIN}/atlas/`;
+const ORIGIN = "https://atlas.aziro.com";
+const BASE = `${ORIGIN}/`;
 const r = site.report;
 const h = r.headline;
 const f = site.fresh;
 const today = site.generatedAt.slice(0, 10);
 
-const TITLE = "Atlas | Local code intelligence for developers and AI assistants";
+const TITLE = "Local code intelligence for developers & AI agents | Atlas";
 const DESC =
   "Atlas indexes repositories locally and returns focused, source-grounded context about symbols, callers, references, routes, and change impact through CLI, MCP, and HTTP.";
 
@@ -231,8 +231,8 @@ const knobRows = r.detailKnob.levels
   .join("\n          ");
 
 const body = `
-      <div class="shell" style="padding:48px 0 64px;max-width:820px">
-        <h1>Atlas</h1>
+      <div class="shell seo-static" style="padding:48px 0 64px;max-width:820px">
+        <h1>Atlas — local code intelligence for developers and AI agents</h1>
         <p>${esc(DESC)}</p>
         <p><a href="https://github.com/aziron-ai/atlas">GitHub</a> ·
            <a href="https://github.com/aziron-ai/atlas/releases/latest">Download v${pkg.version}</a> ·

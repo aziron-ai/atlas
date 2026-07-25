@@ -23,9 +23,9 @@
     --faint: #526277;
     --primary: #2563eb;
     --primary-dim: #1d4ed8;
-    --secondary: #0284c7;
+    --secondary: #0369a1;
     --success: #16a34a;
-    --warning: #d97706;
+    --warning: #b45309;
     --danger: #dc2626;
     --not-comparable: #64748b;
     --grid: #dce4ee;
@@ -538,6 +538,18 @@ section[id] {
 
 .product-hero h1 .accent {
   color: var(--primary);
+}
+
+/* keyword-bearing subhead inside the H1 — SEO + 5-second clarity, metaphor stays dominant */
+.product-hero h1 .h1-tail {
+  display: block;
+  margin-top: 14px;
+  max-width: 30ch;
+  font-size: clamp(0.95rem, 1.4vw, 1.12rem);
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--body-ink);
 }
 
 .eyebrow {
@@ -1813,6 +1825,76 @@ a.sheet-cell:hover .go {
     animation: none;
   }
 }
+
+/* ================= motion system — resting state is ALWAYS the visible
+   state; hidden/animated states apply only under no-preference, so no-JS and
+   reduced-motion users never see blank sections. ================= */
+@media (prefers-reduced-motion: no-preference) {
+  /* scroll reveal (JS adds .is-in via IntersectionObserver) */
+  .atlas-anim [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: calc(var(--i, 0) * 70ms);
+    will-change: opacity, transform;
+  }
+  .atlas-anim [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  /* orchestrated hero entrance on load */
+  .atlas-anim .product-hero .hero-copy > * {
+    opacity: 0;
+    animation: atlas-hero-up 0.44s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .atlas-anim .product-hero .hero-copy > *:nth-child(1) { animation-delay: 0.10s; }
+  .atlas-anim .product-hero .hero-copy > *:nth-child(2) { animation-delay: 0.19s; }
+  .atlas-anim .product-hero .hero-copy > *:nth-child(3) { animation-delay: 0.28s; }
+  .atlas-anim .product-hero .hero-copy > *:nth-child(4) { animation-delay: 0.37s; }
+  .atlas-anim .product-hero .hero-copy > *:nth-child(5) { animation-delay: 0.46s; }
+  .atlas-anim .product-hero .chart-panel {
+    opacity: 0;
+    animation: atlas-fade-in 0.7s ease 0.5s forwards;
+  }
+  /* slow, single "live answer" pulse on the surveyed station only */
+  .atlas-anim .station-pulse {
+    transform-origin: center;
+    animation: atlas-station 3s ease-in-out infinite;
+  }
+}
+@keyframes atlas-hero-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes atlas-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes atlas-station { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.72; } }
+@keyframes atlas-pop { 0% { transform: scale(0.6); } 60% { transform: scale(1.18); } 100% { transform: scale(1); } }
+
+/* hover micro-interactions (durations neutralized under reduced-motion below) */
+.cap, a.sheet-cell, .leg, .adj-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.cap:hover, a.sheet-cell:hover, .leg:hover, .adj-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--line-strong);
+}
+.btn { transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease; }
+.btn:active { transform: translateY(1px); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 22px -8px rgba(37, 99, 235, 0.5); }
+.text-link svg, .btn svg { transition: transform 0.15s ease; }
+.text-link:hover svg { transform: translateX(3px); }
+.btn-primary:hover svg { transform: translateX(2px); }
+
+/* sticky header reacts once the page scrolls */
+.product-header { transition: box-shadow 0.2s ease, border-color 0.2s ease; }
+.product-header.is-scrolled { box-shadow: var(--shadow-sm); border-bottom-color: var(--line-strong); }
+
+/* copy confirmation pop */
+.copied-pop svg { animation: atlas-pop 0.22s ease; }
+
+/* count-up figures keep a stable width */
+.value, .num, .stat-big-value { font-variant-numeric: tabular-nums; }
 
 /* count-up + bar transitions honor reduced motion via JS guards,
    but keep CSS transitions out of reach when reduced. */
