@@ -2654,3 +2654,7 @@ a.sheet-cell:hover .go {
 @media (min-width: 1024px) {
   .product-hero .chart-panel { margin-top: 56px; }
 }
+/* benchmarks hero owns the first screen — clean page break before 01 · summary
+   (64px header + 44px section subnav) */
+section#hero.measure-grid { display: flex; align-items: center; min-height: calc(100vh - 108px); }
+section#hero.measure-grid > .shell { width: 100%; }
