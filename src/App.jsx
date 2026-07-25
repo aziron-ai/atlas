@@ -1800,7 +1800,7 @@ function EvidenceSection({ data }) {
               ))}
             </ul>
             <div className="mt-4">
-              <TermBlock lines={["curl -LO https://aziron-ai.github.io/atlas/data/site-data.json"]} />
+              <TermBlock lines={["curl -LO https://atlas.aziro.com/data/site-data.json"]} />
             </div>
             <a className="link mt-3 inline-flex items-center gap-1" style={{ fontSize: 12.5 }} href="https://github.com/aziron-ai/atlas/tree/main/data" target="_blank" rel="noreferrer">
               Browse all raw artifacts on GitHub <ExternalLink className="h-3 w-3" aria-hidden />

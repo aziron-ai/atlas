@@ -421,7 +421,7 @@ function TypedHeadline() {
   const lead = LEAD.slice(0, Math.min(n, LEAD.length));
   const acc = n > LEAD.length ? ACCENT.slice(0, n - LEAD.length) : "";
   return (
-    <h1 className="mt-5" aria-label={`${LEAD}${ACCENT}`}>
+    <h1 className="mt-5" aria-label={`${LEAD}${ACCENT} Local code intelligence for developers and AI agents.`}>
       <span aria-hidden="true">
         {lead}
         <span className="accent">{acc}</span>
@@ -1756,7 +1756,7 @@ function DocsPage({ slug }) {
           <ProseSection title="Published Compatibility Evidence">
             <p>Language support changes across releases. The public benchmark site includes a dated, evidence-graded compatibility view with an interactive per-language matrix:</p>
             <Bullets>
-              <li><a className="text-link" href="https://aziron-ai.github.io/atlas/#languages" target="_blank" rel="noreferrer">Language benchmark matrix</a></li>
+              <li><a className="text-link" href="https://atlas.aziro.com/#languages" target="_blank" rel="noreferrer">Language benchmark matrix</a></li>
               <li><a className="text-link" href="https://github.com/aziron-ai/atlas/tree/main/data/raw" target="_blank" rel="noreferrer">Raw language artifacts</a></li>
             </Bullets>
             <p>For how those numbers were measured, what they do and do not prove, and how to reproduce them, read <a className="text-link" href="#docs/benchmarks">Benchmarks and Methodology</a>.</p>
@@ -1767,7 +1767,7 @@ function DocsPage({ slug }) {
       return (
         <>
           <p className="docs-lead">Atlas publishes benchmark results for accuracy, token use, latency, language compatibility, and agent workflows. Use this page to interpret those numbers correctly — every result is a dated measurement under stated conditions, not a general guarantee.</p>
-          <p><a className="text-link" href="https://aziron-ai.github.io/atlas/#benchmarks" target="_blank" rel="noreferrer">Open the Atlas benchmark explorer</a></p>
+          <p><a className="text-link" href="https://atlas.aziro.com/#benchmarks" target="_blank" rel="noreferrer">Open the Atlas benchmark explorer</a></p>
           <ProseSection title="How to Read a Result">
             <p>Work through this checklist before comparing tools or quoting a number — a result you cannot place in it is not evidence:</p>
             <ol className="docs-list numbered">
@@ -1819,7 +1819,7 @@ function DocsPage({ slug }) {
             </Bullets>
             <p>The agent suite ships with the pinned commit, frozen gopls question set, and isolation flags baked in:</p>
             <Command>{`python3 agent-bench/agent_token_bench.py \\\n  --setup \\\n  --agents auto \\\n  --qa-set agent-bench/QA_SET_logrus.json \\\n  --workdir agentbench-work`}</Command>
-            <p>Read <a className="text-link" href="https://github.com/aziron-ai/atlas/blob/main/agent-bench/README.md" target="_blank" rel="noreferrer">agent-bench/README.md</a> for prerequisites, expected external cost, pinned inputs, and interpretation. Per-run records are in <a className="text-link" href="https://aziron-ai.github.io/atlas/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json" target="_blank" rel="noreferrer">AGENT_TOKEN_BENCH_PUBLIC.json</a>.</p>
+            <p>Read <a className="text-link" href="https://github.com/aziron-ai/atlas/blob/main/agent-bench/README.md" target="_blank" rel="noreferrer">agent-bench/README.md</a> for prerequisites, expected external cost, pinned inputs, and interpretation. Per-run records are in <a className="text-link" href="https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json" target="_blank" rel="noreferrer">AGENT_TOKEN_BENCH_PUBLIC.json</a>.</p>
           </ProseSection>
           <ProseSection title="Important Limitations">
             <Bullets>

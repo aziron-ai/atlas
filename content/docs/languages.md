@@ -87,7 +87,7 @@ Language support changes across releases. The public benchmark site includes a
 dated, evidence-graded compatibility view with an interactive per-language
 matrix:
 
-- [Language benchmark matrix](https://aziron-ai.github.io/atlas/#languages)
+- [Language benchmark matrix](https://atlas.aziro.com/#languages)
 - [Raw language artifacts](https://github.com/aziron-ai/atlas/tree/main/data/raw)
 
 For how those numbers were measured, what they do and do not prove, and how to

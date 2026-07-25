@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
   <title>Benchmarks and Methodology — Atlas documentation</title>
   <meta name="description" content="How to read and reproduce the published Atlas benchmark evidence.">
   <meta name="robots" content="index,follow,max-image-preview:large">
@@ -63,7 +65,7 @@
     <article>
 <h1>Benchmarks and Methodology</h1>
 <p>Atlas publishes benchmark results for accuracy, token use, latency, language compatibility, and agent workflows. Use this page to interpret those numbers correctly — every result is a dated measurement under stated conditions, not a general guarantee.</p>
-<p><a href="https://aziron-ai.github.io/atlas/#benchmarks">Open the Atlas benchmark explorer</a></p>
+<p><a href="https://atlas.aziro.com/#benchmarks">Open the Atlas benchmark explorer</a></p>
 <h2>How to Read a Result</h2>
 <p>Work through this checklist before comparing tools or quoting a number — a result you cannot place in it is not evidence:</p>
 <p>1. <strong>Identify the setup.</strong> Atlas and baseline tool versions, repository URL    and pinned commit, language and query set. 2. <strong>Identify the conditions.</strong> Hardware and operating system, cold-cache or    warm-cache state, repeat count and aggregation method. 3. <strong>Identify the scoring.</strong> The accuracy oracle or reviewer, and the token    measurement method (provider-reported usage versus a documented estimate). 4. <strong>Identify the failure handling.</strong> How failed and timed-out cases were    counted. A mean that silently drops failures is not comparable to one that    scores them.</p>
@@ -87,7 +89,7 @@
   --agents auto \
   --qa-set agent-bench/QA_SET_logrus.json \
   --workdir agentbench-work</code></pre>
-<p>Read <a href="https://github.com/aziron-ai/atlas/blob/main/agent-bench/README.md">agent-bench/README.md</a> for prerequisites, expected external cost, pinned inputs, and interpretation. Per-run records are in <a href="https://aziron-ai.github.io/atlas/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json">AGENT_TOKEN_BENCH_PUBLIC.json</a>.</p>
+<p>Read <a href="https://github.com/aziron-ai/atlas/blob/main/agent-bench/README.md">agent-bench/README.md</a> for prerequisites, expected external cost, pinned inputs, and interpretation. Per-run records are in <a href="https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json">AGENT_TOKEN_BENCH_PUBLIC.json</a>.</p>
 <h2>Important Limitations</h2>
 <ul><li>Fixture results do not prove production-repository accuracy.</li><li>One repository does not establish performance across a language.</li><li>Different assistants may consume the same MCP result differently.</li><li>Estimated tokens are not equivalent to provider-reported token usage.</li><li>Warm-cache query latency is not cold-start installation or indexing time.</li><li>Language support and result quality can differ by syntax and framework.</li></ul>
 <p>Per-language support levels behind these results are summarized in <a href="../languages/">Supported Languages and Formats</a>.</p>
