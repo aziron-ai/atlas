@@ -657,10 +657,11 @@ section[id] {
 /* typing caret shown only WHILE the headline types itself in */
 .product-hero h1 .type-caret {
   display: inline-block;
-  width: 0.5ch;
-  height: 0.86em;
-  margin-left: 0.06em;
-  vertical-align: -0.06em;
+  width: 3px;
+  height: 0.82em;
+  margin: 0 0.16em;
+  border-radius: 1px;
+  vertical-align: -0.04em;
   background: var(--term-green);
   animation: atlas-caret 1s steps(1) infinite;
 }
@@ -809,10 +810,10 @@ section[id] {
 .cmdk {
   width: min(560px, 100%);
   overflow: hidden;
-  background: #0c1320;
-  border: 1px solid #26324a;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
   border-radius: 14px;
-  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7);
+  box-shadow: var(--shadow-md), 0 30px 80px -28px rgba(0, 0, 0, 0.5);
   animation: atlas-scale-in 0.16s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 .cmdk-input {
@@ -820,7 +821,7 @@ section[id] {
   align-items: center;
   gap: 10px;
   padding: 13px 15px;
-  border-bottom: 1px solid #1c273d;
+  border-bottom: 1px solid var(--line);
 }
 .cmdk-input .cmdk-prompt { font-family: var(--mono); font-size: 13px; color: var(--term-green); font-weight: 700; }
 .cmdk-input input {
@@ -831,14 +832,14 @@ section[id] {
   outline: none;
   font-family: var(--mono);
   font-size: 14px;
-  color: #e6eefb;
+  color: var(--text);
 }
-.cmdk-input input::placeholder { color: #5f7086; }
+.cmdk-input input::placeholder { color: var(--faint); }
 .cmdk-input .cmdk-esc {
   font-family: var(--mono);
   font-size: 10px;
-  color: #5f7086;
-  border: 1px solid #26324a;
+  color: var(--faint);
+  border: 1px solid var(--line-strong);
   border-radius: 5px;
   padding: 2px 6px;
 }
@@ -851,7 +852,7 @@ section[id] {
   border-radius: 8px;
   cursor: pointer;
 }
-.cmdk-item.on { background: rgba(111, 157, 255, 0.14); }
+.cmdk-item.on { background: color-mix(in srgb, var(--primary) 14%, transparent); }
 .cmdk-ic { font-family: var(--mono); font-size: 12px; color: var(--term-green); width: 14px; text-align: center; }
 .cmdk-label {
   flex: 1;
@@ -861,10 +862,10 @@ section[id] {
   white-space: nowrap;
   font-family: var(--mono);
   font-size: 13px;
-  color: #e6eefb;
+  color: var(--text);
 }
-.cmdk-hint { font-size: 11.5px; color: #6b7a8f; white-space: nowrap; }
-.cmdk-empty { padding: 16px; text-align: center; font-family: var(--mono); font-size: 12.5px; color: #6b7a8f; }
+.cmdk-hint { font-size: 11.5px; color: var(--faint); white-space: nowrap; }
+.cmdk-empty { padding: 16px; text-align: center; font-family: var(--mono); font-size: 12.5px; color: var(--faint); }
 @media (prefers-reduced-motion: reduce) {
   .cmdk-overlay, .cmdk { animation: none; }
 }
