@@ -2,10 +2,15 @@ import React, { useEffect, useMemo, useRef, useState, useCallback } from "react"
 import { createRoot } from "react-dom/client";
 import { ArrowRight, Check, Copy, Download, ExternalLink } from "lucide-react";
 import GraphExplorer from "./GraphExplorer";
+import AtlasConsole, { buildEngine } from "./AtlasConsole";
+import { getGraphData } from "./graphData";
 import {
+  CommandPalette,
+  CountUp,
   Documentation,
   ProductHeader,
   ProductHome,
+  useReveal,
   useSiteRoute,
 } from "./ProductDocs";
 
@@ -205,7 +210,7 @@ function ConsoleBar({ active }) {
       className="sticky z-30"
       style={{
         top: 64,
-        background: "rgba(255,255,255,0.88)",
+        background: "var(--header-bg)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         borderBottom: "1px solid var(--line)",
@@ -376,10 +381,10 @@ function Hero({ data }) {
             </p>
 
             <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-4">
-              <StatBig value={h.atlasF1All.toFixed(3)} label="Atlas F1 · all 37 langs" sub={`@ ${h.atlasTokAll} tokens`} accent="var(--primary)" />
-              <StatBig value={h.atlasF1Supported.toFixed(3)} label={`F1 · ${h.supportedLangs} supported`} sub={`@ ${h.atlasTokSupported} tokens`} />
-              <StatBig value={`${h.accPerToken}×`} label="Accuracy per token" sub="vs. graph tool" />
-              <StatBig value={`${h.fewerTokens}×`} label="Fewer query tokens" sub="for a better answer" />
+              <StatBig value={<CountUp value={h.atlasF1All} decimals={3} />} label="Atlas F1 · all 37 langs" sub={`@ ${h.atlasTokAll} tokens`} accent="var(--primary)" />
+              <StatBig value={<CountUp value={h.atlasF1Supported} decimals={3} />} label={`F1 · ${h.supportedLangs} supported`} sub={`@ ${h.atlasTokSupported} tokens`} />
+              <StatBig value={<CountUp value={h.accPerToken} decimals={1} suffix="×" />} label="Accuracy per token" sub="vs. graph tool" />
+              <StatBig value={<CountUp value={h.fewerTokens} suffix="×" />} label="Fewer query tokens" sub="for a better answer" />
             </div>
 
             <div className="mt-7 flex flex-wrap items-center gap-2" data-testid="fresh-chips">
@@ -418,6 +423,22 @@ function Hero({ data }) {
               quadrant; xhigh proves more tokens buy nothing; the raw file is perfect but 7.4× the price.
             </p>
           </div>
+        </div>
+
+        {/* jump strip — where to dig in (fills the fold on tall screens with content) */}
+        <div className="hero-jump" data-reveal>
+          {[
+            ["01", "#summary", "Executive summary", "+40% answer accuracy vs the graph tool"],
+            ["03", "#languages", "Languages", `${r.perLanguage.length} languages · native ground truth`],
+            ["04", "#versus", "Head-to-head", `${h.fewerTokens}× fewer query tokens`],
+            ["08", "#graph", "Live graph", "query facebook/react right here ❯"],
+          ].map(([no, href, t, sub]) => (
+            <a className="hj focusring" key={no} href={href}>
+              <span className="hj-no">{no}</span>
+              <span className="hj-t">{t}</span>
+              <span className="hj-s">{sub}</span>
+            </a>
+          ))}
         </div>
       </div>
     </section>
@@ -1508,15 +1529,179 @@ function AgentBench({ data }) {
 
 /* ========================= graph explorer =============================== */
 
+const GXP_CHIPS = [
+  ["callers useState", "callers useState"],
+  ["impact error", "impact error"],
+  ["search hydrate", "search hydrate"],
+  ["symbol beginWork", "symbol beginWork"],
+];
+
+function GraphWithPrompt() {
+  const [data, setData] = useState(null);
+  const [hl, setHl] = useState(null);
+  const [input, setInput] = useState("");
+  const [last, setLast] = useState(null); // {kind, text}
+  const [sugIdx, setSugIdx] = useState(0);
+  const [sugHidden, setSugHidden] = useState(false);
+  const inputRef = useRef(null);
+  useEffect(() => {
+    let alive = true;
+    getGraphData().then((d) => { if (alive) setData(d); }).catch(() => {});
+    return () => { alive = false; };
+  }, []);
+  const eng = useMemo(() => (data ? buildEngine(data) : null), [data]);
+
+  const summarize = (r) => {
+    if (r.kind === "error") return { kind: "error", text: r.msg + (r.suggest && r.suggest.length ? ` — did you mean ${r.suggest[0]}?` : "") };
+    if (r.kind === "callers" || r.kind === "callees") return { kind: r.kind, text: `${r.kind} ${r.name} · ${r.total} lit on the graph` };
+    if (r.kind === "impact") return { kind: "impact", text: `impact ${r.name} · ${r.affected} affected · ${r.hops} hops` };
+    if (r.kind === "search") return { kind: "search", text: `search ${r.term} · ${r.total} hits${r.total > 40 ? " · top 40 lit" : ""}` };
+    if (r.kind === "symbol") return { kind: "symbol", text: `${r.node.name} · ${r.node.kind} · callers ${r.callers} · callees ${r.callees} · ${r.node.cite}` };
+    return { kind: "help", text: "commands: callers · callees · impact · search · symbol — e.g. impact error" };
+  };
+
+  const run = (raw) => {
+    if (!eng) return;
+    const line = raw.trim();
+    if (!line) return;
+    const r = eng.run(line);
+    setLast(summarize(r));
+    setHl(r.highlight && r.highlight.length ? [...new Set(r.highlight)] : null);
+  };
+
+  // ---- same completion rules as the Try-now console ----
+  const GP_ARG = ["callers", "callees", "impact", "symbol", "search"];
+  const GP_CMDS = [...GP_ARG, "help"];
+  const sugs = useMemo(() => {
+    if (!eng) return [];
+    if (/^\s*a(t(l(a(s)?)?)?)?$/i.test(input) && input.trim() !== "" && !/^\s*atlas$/i.test(input)) return [{ v: "atlas", t: "bin" }];
+    if (/^\s*atlas\s*$/i.test(input)) return GP_CMDS.map((c) => ({ v: c, t: "cmd" }));
+    const raw = input.replace(/^(atlas\s+)+/i, "");
+    const parts = raw.split(/\s+/);
+    const trailing = /\s$/.test(raw);
+    if (parts.length <= 1 && !trailing) {
+      const t = (parts[0] || "").toLowerCase();
+      if (!t) return [];
+      return GP_CMDS.filter((c) => c.startsWith(t) && c !== t).map((c) => ({ v: c, t: "cmd" }));
+    }
+    const cmd = (parts[0] || "").toLowerCase();
+    if (!GP_ARG.includes(cmd)) return [];
+    const arg = trailing ? "" : (parts[parts.length - 1] || "");
+    const al = arg.toLowerCase();
+    const out = [];
+    for (const n of eng.names) {
+      if (n.toLowerCase().startsWith(al) && n !== arg) { out.push({ v: n, t: "sym" }); if (out.length >= 6) break; }
+    }
+    return out;
+  }, [input, eng]);
+  useEffect(() => { setSugIdx(0); setSugHidden(false); }, [input]);
+
+  const acceptSug = (pick) => {
+    const chosen = pick || sugs[sugIdx];
+    if (!chosen) return;
+    const hadAtlas = /^\s*atlas\b/i.test(input);
+    const raw = input.replace(/^(atlas\s+)+/i, "");
+    const parts = raw.split(/\s+/);
+    const trailing = /\s$/.test(raw);
+    const pre = hadAtlas || chosen.t === "bin" ? "atlas " : "";
+    let next;
+    if (chosen.t === "bin") next = "atlas ";
+    else if (chosen.t === "cmd") next = `${pre}${chosen.v} `;
+    else if (trailing) next = `${pre}${raw}${chosen.v}`;
+    else next = `${pre}${[...parts.slice(0, -1), chosen.v].join(" ")}`;
+    setInput(next);
+    requestAnimationFrame(() => {
+      const el = inputRef.current;
+      if (el) { el.focus({ preventScroll: true }); el.setSelectionRange(next.length, next.length); }
+    });
+  };
+
+  const ghost = useMemo(() => {
+    const cur = sugHidden ? null : sugs[sugIdx];
+    if (!cur) return "";
+    const raw = input.replace(/^(atlas\s+)+/i, "");
+    if (/\s$/.test(raw)) return "";
+    const parts = raw.split(/\s+/);
+    const tok = parts[parts.length - 1] || "";
+    if (!tok) return "";
+    return cur.v.toLowerCase().startsWith(tok.toLowerCase()) ? cur.v.slice(tok.length) : "";
+  }, [sugs, sugIdx, input, sugHidden]);
+
+  const onKey = (e) => {
+    if (e.key === "Tab" || (e.key === "ArrowRight" && ghost && e.target.selectionStart === input.length)) {
+      if (sugs.length && !sugHidden) { e.preventDefault(); acceptSug(); return; }
+    }
+    if (e.key === "Enter") {
+      const rawIn = input.replace(/^(atlas\s+)+/i, "");
+      const lastTok = /\s$/.test(rawIn) ? "" : (rawIn.trim().split(/\s+/).pop() || "").toLowerCase();
+      const exact = lastTok && eng && eng.nameSet.has(lastTok);
+      if (sugs.length && !sugHidden && !exact) { e.preventDefault(); acceptSug(); return; }
+      run(input);
+    } else if (e.key === "Escape" && sugs.length && !sugHidden) { setSugHidden(true); }
+    else if (e.key === "ArrowUp" && sugs.length > 1) { e.preventDefault(); setSugIdx((i) => (i - 1 + sugs.length) % sugs.length); }
+    else if (e.key === "ArrowDown" && sugs.length > 1) { e.preventDefault(); setSugIdx((i) => (i + 1) % sugs.length); }
+  };
+
+  const footer = (
+    <div className="gxp">
+      <div className="gxp-row">
+        {sugs.length > 0 && !sugHidden && (
+          <div className="gxp-sugs" role="listbox" aria-label="Completions">
+            {sugs.map((sg, i) => (
+              <button key={sg.v + sg.t} type="button" role="option" aria-selected={i === sugIdx}
+                className={`gxp-sug${i === sugIdx ? " on" : ""}`}
+                onMouseEnter={() => setSugIdx(i)} onClick={() => acceptSug(sg)}>
+                <span className="gxp-sug-t">{sg.t === "sym" ? "ƒ" : "❯"}</span> {sg.v}
+              </button>
+            ))}
+            <span className="gxp-sug-hint">tab to complete</span>
+          </div>
+        )}
+        <span className="gxp-ps1">atlas ❯</span>
+        <span className="gxp-inwrap">
+          <span className="gxp-ghost" aria-hidden="true"><i>{input}</i>{ghost}</span>
+          <input
+            ref={inputRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={onKey}
+            placeholder="callers useState · impact error — tab completes"
+            aria-label="Graph query"
+            autoComplete="off"
+            spellCheck={false}
+          />
+        </span>
+        {GXP_CHIPS.map(([label, cmd]) => (
+          <button key={cmd} type="button" className="gxp-chip" onClick={() => { setInput(cmd); run(cmd); }}>{label}</button>
+        ))}
+      </div>
+      {last && <div className={`gxp-out gxp-${last.kind}`}>{last.kind === "error" ? "✗" : "❯"} {last.text}</div>}
+    </div>
+  );
+
+  return (
+    <GraphExplorer
+      className="atlas-graph-full"
+      dataOverride={data}
+      highlightIds={hl}
+      onInspect={(n) => { setInput(`symbol ${n.name}`); run(`symbol ${n.name}`); }}
+      footer={footer}
+    />
+  );
+}
+
 function GraphSection() {
   return (
     <section id="graph" data-testid="graph" className="shell py-16" aria-labelledby="graph-title">
-      <SectionHeader id="graph-title" kicker="08 · The map Atlas builds" title="The deterministic symbol & call graph">
-        This is the “smallest useful slice” made visible: real <span className="mono">atlas export --all</span> output
-        of the Atlas repo, downsampled to a connected core. Hover a node, drag, pan, zoom; click a hub to focus it.
+      <SectionHeader id="graph-title" kicker="08 · The map Atlas builds" title="Query the graph — live, in your browser">
+        A real Atlas terminal running client-side over a pre-indexed slice of
+        <span className="mono"> facebook/react</span> (280 symbols · 675 call edges). Type a command, click a suggestion,
+        or click a node — every answer is genuinely computed and cited to file:line.
       </SectionHeader>
-      <div className="panel p-4 sm:p-5">
-        <GraphExplorer className="atlas-graph-full" />
+      <div className="gx-frame">
+        <LazyMount height={620}>
+          <GraphWithPrompt />
+        </LazyMount>
       </div>
     </section>
   );
@@ -1615,7 +1800,7 @@ function EvidenceSection({ data }) {
               ))}
             </ul>
             <div className="mt-4">
-              <TermBlock lines={["curl -LO https://aziron-ai.github.io/atlas/data/site-data.json"]} />
+              <TermBlock lines={["curl -LO https://atlas.aziro.com/data/site-data.json"]} />
             </div>
             <a className="link mt-3 inline-flex items-center gap-1" style={{ fontSize: 12.5 }} href="https://github.com/aziron-ai/atlas/tree/main/data" target="_blank" rel="noreferrer">
               Browse all raw artifacts on GitHub <ExternalLink className="h-3 w-3" aria-hidden />
@@ -1808,6 +1993,7 @@ function useScrollSpy(ids) {
 
 function BenchmarkExperience({ data }) {
   const active = useScrollSpy(["hero", "summary", "knob", "languages", "versus", "field", "real", "agents", "graph", "evidence", "install"]);
+  useReveal([data.version]);
 
   return (
     <>
@@ -1888,9 +2074,71 @@ function App() {
     );
   }
 
-  if (route.view === "docs") return <Documentation data={data} page={route.page} />;
-  if (route.view === "benchmarks") return <BenchmarkExperience data={data} />;
-  return <ProductHome data={data} />;
+  let view;
+  if (route.view === "docs") view = <Documentation data={data} page={route.page} />;
+  else if (route.view === "benchmarks") view = <BenchmarkExperience data={data} />;
+  else view = <ProductHome data={data} />;
+  return (
+    <>
+      {view}
+      <CommandPalette />
+      <ConsoleOverlay />
+    </>
+  );
+}
+
+/* Full-screen "Try now" Atlas Console overlay — opened by the hero button or ⌘K.
+   Stays mounted after the first open (hidden, not unmounted) so reopening is
+   instant and the terminal session survives. Click the backdrop to close. */
+function ConsoleOverlay() {
+  const [opened, setOpened] = useState(false);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const onOpen = () => { setOpened(true); setVisible(true); };
+    window.addEventListener("atlas:console", onOpen);
+    return () => window.removeEventListener("atlas:console", onOpen);
+  }, []);
+  // lock the page behind the overlay (wheel at the terminal's scroll boundary
+  // must never scroll the page)
+  useEffect(() => {
+    if (!visible) return undefined;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [visible]);
+  if (!opened) return null;
+  return (
+    <div
+      className="ac-overlay"
+      style={visible ? undefined : { display: "none" }}
+      onMouseDown={(e) => { if (e.target === e.currentTarget) setVisible(false); }}
+    >
+      <AtlasConsole onClose={() => setVisible(false)} />
+    </div>
+  );
+}
+
+/* Mount heavy children only when the user nears them — the benchmarks page pays
+   zero console cost (fetch/layout/engine) until §08 approaches the viewport. */
+function LazyMount({ children, height = 620 }) {
+  const ref = useRef(null);
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") { setOn(true); return undefined; }
+    const el = ref.current;
+    if (!el) return undefined;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { setOn(true); io.disconnect(); } }),
+      { rootMargin: "500px 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div ref={ref} style={{ display: "flex", flex: 1, minWidth: 0, ...(on ? null : { minHeight: height }) }}>
+      {on ? children : null}
+    </div>
+  );
 }
 
 createRoot(document.getElementById("root")).render(<App />);

@@ -1,29 +1,36 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { getGraphData } from "./graphData";
 
 // Atlas — The Benchmark Instrument
 // Interactive deterministic force-directed code graph on a vanilla <canvas>.
 // No external libraries / CDN. Self-fetches data/graph.json on mount.
 
 // Community accent hues, matching the Cartograph tokens g0..g5.
+// Bright, luminous community hues for the dark "network console" screen.
 const COMMUNITY_COLORS = [
-  "#2563EB", // g0 Aziron blue
-  "#0284C7", // g1 sky
-  "#7C3AED", // g2 violet
-  "#16A34A", // g3 green
-  "#DC2626", // g4 red
-  "#0891B2", // g5 cyan
+  "#5b8cff", // c0 blue
+  "#38bdf8", // c1 sky
+  "#a78bfa", // c2 violet
+  "#3ecb6e", // c3 green
+  "#f2726e", // c4 coral
+  "#22d3ee", // c5 cyan
 ];
 
+// The graph is a deliberately dark console screen in BOTH site themes, so the
+// canvas + chrome always read against this fixed dark palette.
 const PALETTE = {
-  bg: "#F9FAFB",
-  surface: "#FFFFFF",
-  line: "#D8E0EA",
-  lineStrong: "#B8C4D2",
-  text: "#0F172A",
-  muted: "#475569",
-  faint: "#526277",
-  primary: "#2563EB",
+  bg: "#05080f",
+  surface: "#101a2c",
+  line: "#20304c",
+  lineStrong: "#33466a",
+  text: "#e9f0fb",
+  muted: "#93a4c0",
+  faint: "#6c7f9d",
+  primary: "#6f9dff",
+  green: "#3ecb6e",
 };
+
+const layoutCache = new WeakMap();
 
 // ----- deterministic PRNG -------------------------------------------------
 // FNV-1a 32-bit hash of a string seed → mulberry32 PRNG. Stable across reloads.
@@ -188,7 +195,14 @@ function computeLayout(nodes, edges) {
 }
 
 // ----- component ----------------------------------------------------------
-export default function GraphExplorer({ className = "" }) {
+export default function GraphExplorer({
+  className = "",
+  bare = false,
+  highlightIds = null,
+  onInspect = null,
+  dataOverride = null,
+  footer = null,
+}) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [hoverId, setHoverId] = useState(null);
@@ -197,6 +211,12 @@ export default function GraphExplorer({ className = "" }) {
   const canvasRef = useRef(null);
   const wrapRef = useRef(null);
   const rafRef = useRef(0);
+
+  // live props read by the persistent canvas loop / handlers
+  const hlRef = useRef(null);
+  hlRef.current = highlightIds && highlightIds.length ? new Set(highlightIds) : null;
+  const inspectRef = useRef(null);
+  inspectRef.current = onInspect;
 
   // Mutable view + interaction state kept in a ref so the render loop reads it
   // without re-subscribing effects on every pointer move.
@@ -229,14 +249,20 @@ export default function GraphExplorer({ className = "" }) {
     reducedMotion: false,
   });
 
-  // ---- fetch graph data --------------------------------------------------
+  // repaint + refocus when the highlight set changes (console-driven)
+  useEffect(() => {
+    stateRef.current.needsPaint = true;
+    const c = canvasRef.current && canvasRef.current._atlasControls;
+    if (!c) return;
+    if (highlightIds && highlightIds.length) c.fitToIds(highlightIds);
+    else c.fit();
+  }, [highlightIds]);
+
+  // ---- fetch graph data (shared, cached — one fetch/parse per page) -------
   useEffect(() => {
     let alive = true;
-    fetch("data/graph.json")
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
+    if (dataOverride) { setData(dataOverride); return () => { alive = false; }; }
+    getGraphData()
       .then((json) => {
         if (!alive) return;
         if (!json || !Array.isArray(json.nodes) || !Array.isArray(json.edges)) {
@@ -257,7 +283,16 @@ export default function GraphExplorer({ className = "" }) {
     if (!data) return null;
     const nodes = data.nodes;
     const edges = data.edges;
-    const layout = computeLayout(nodes, edges);
+    // The 320-iteration O(n²) force sim is the single most expensive step on the
+    // page (~100-300ms). All consumers share the same data object (graphData.js),
+    // so cache the settled layout per data identity and hand each instance a
+    // cheap clone (drags stay instance-local).
+    let base = layoutCache.get(data);
+    if (!base) {
+      base = computeLayout(nodes, edges);
+      layoutCache.set(data, base);
+    }
+    const layout = base.map((pt) => ({ ...pt }));
 
     const adjacency = new Map();
     for (let i = 0; i < nodes.length; i += 1) adjacency.set(i, new Set());
@@ -292,7 +327,7 @@ export default function GraphExplorer({ className = "" }) {
     const total = fmt.format(m.nodes_total ?? data.nodes.length);
     const shownEdges = fmt.format(m.shown_edges ?? data.edges.length);
     const communities = m.communities ?? communityCounts.length;
-    return `${shownNodes} of ${total} symbols · ${shownEdges} edges · ${communities} communities · ${m.source || "atlas export --all"}`;
+    return `${shownNodes} of ${total} symbols · ${shownEdges} edges · ${communities} communities`;
   }, [data, communityCounts]);
 
   const ariaSummary = useMemo(() => {
@@ -420,15 +455,23 @@ export default function GraphExplorer({ className = "" }) {
         H * 0.42,
         Math.max(W, H) * 0.6
       );
-      glow.addColorStop(0, "rgba(37,99,235,0.08)");
-      glow.addColorStop(1, "rgba(37,99,235,0)");
+      glow.addColorStop(0, "rgba(64,120,255,0.1)");
+      glow.addColorStop(0.55, "rgba(40,90,200,0.04)");
+      glow.addColorStop(1, "rgba(70,130,255,0)");
       ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, W, H);
+      // vignette — focus the cluster, hide ragged canvas edges against the bezel
+      const vg = ctx.createRadialGradient(W * 0.5, H * 0.5, Math.min(W, H) * 0.32, W * 0.5, H * 0.5, Math.max(W, H) * 0.72);
+      vg.addColorStop(0, "rgba(0,0,0,0)");
+      vg.addColorStop(1, "rgba(0,0,0,0.28)");
+      ctx.fillStyle = vg;
       ctx.fillRect(0, 0, W, H);
 
       const hoverIdx = st.hoverId;
       const focusIdx = st.focusId;
       const activeIdx = hoverIdx != null ? hoverIdx : focusIdx;
       const neighbors = activeIdx != null ? st.adjacency.get(activeIdx) : null;
+      const HL = hlRef.current; // console highlight set (node ids), or null
 
       // ---- edges --------------------------------------------------------
       ctx.lineWidth = 1;
@@ -436,14 +479,25 @@ export default function GraphExplorer({ className = "" }) {
         const a = layout[e.s];
         const b = layout[e.t];
         if (!a || !b) continue;
+        if (HL) {
+          const lit = HL.has(nodes[e.s].id) && HL.has(nodes[e.t].id);
+          ctx.strokeStyle = lit ? "rgba(111,157,255,0.6)" : "rgba(130,160,210,0.045)";
+          const sa0 = worldToScreen(a.x, a.y);
+          const sb0 = worldToScreen(b.x, b.y);
+          ctx.beginPath();
+          ctx.moveTo(sa0.sx, sa0.sy);
+          ctx.lineTo(sb0.sx, sb0.sy);
+          ctx.stroke();
+          continue;
+        }
         const incident =
           activeIdx != null && (e.s === activeIdx || e.t === activeIdx);
         if (activeIdx != null && !incident) {
-          ctx.strokeStyle = "rgba(100,116,139,0.08)";
+          ctx.strokeStyle = "rgba(130,160,210,0.06)";
         } else if (incident) {
-          ctx.strokeStyle = "rgba(37,99,235,0.5)";
+          ctx.strokeStyle = "rgba(111,157,255,0.6)";
         } else {
-          ctx.strokeStyle = "rgba(100,116,139,0.18)";
+          ctx.strokeStyle = "rgba(130,160,210,0.15)";
         }
         const sa = worldToScreen(a.x, a.y);
         const sb = worldToScreen(b.x, b.y);
@@ -462,7 +516,11 @@ export default function GraphExplorer({ className = "" }) {
         const color = COMMUNITY_COLORS[node.c % COMMUNITY_COLORS.length];
 
         let alpha = 1;
-        if (activeIdx != null) {
+        let lit = true;
+        if (HL) {
+          lit = HL.has(node.id);
+          alpha = lit ? 1 : 0.13;
+        } else if (activeIdx != null) {
           const isActive = i === activeIdx;
           const isNeighbor = neighbors && neighbors.has(i);
           alpha = isActive ? 1 : isNeighbor ? 0.95 : 0.12;
@@ -471,26 +529,35 @@ export default function GraphExplorer({ className = "" }) {
         ctx.globalAlpha = alpha;
         ctx.beginPath();
         ctx.arc(scr.sx, scr.sy, r, 0, Math.PI * 2);
+        // luminous glow — stronger for hubs / highlighted — "network monitor" look
+        ctx.shadowColor = color;
+        ctx.shadowBlur = lit ? Math.min(16, 3 + r * 1.4) : 0;
         ctx.fillStyle = color;
         ctx.fill();
+        ctx.shadowBlur = 0;
 
         // thin ring on the active node + neighbors for legibility
         if (activeIdx != null && (i === activeIdx || (neighbors && neighbors.has(i)))) {
           ctx.globalAlpha = 1;
           ctx.lineWidth = i === activeIdx ? 2 : 1;
-          ctx.strokeStyle = i === activeIdx ? PALETTE.text : "rgba(51,65,85,0.42)";
+          ctx.strokeStyle = i === activeIdx ? "#ffffff" : "rgba(180,205,240,0.45)";
           ctx.stroke();
         }
         ctx.globalAlpha = 1;
       }
 
-      // ---- hub labels (only the largest, to avoid clutter) --------------
+      // ---- hub labels — degree-first, colliding labels skipped ----------
       ctx.globalAlpha = 1;
       ctx.font = "600 11px ui-monospace, 'SF Mono', Menlo, monospace";
       ctx.textBaseline = "middle";
+      const labelIdx = [];
       for (let i = 0; i < layout.length; i += 1) {
+        if (layout[i].degNorm >= 0.55 || i === activeIdx) labelIdx.push(i);
+      }
+      labelIdx.sort((a, b) => layout[b].degNorm - layout[a].degNorm);
+      const drawn = [];
+      for (const i of labelIdx) {
         const p = layout[i];
-        if (p.degNorm < 0.55 && i !== activeIdx) continue;
         const node = nodes[i];
         const scr = worldToScreen(p.x, p.y);
         const r = Math.max(radiusFor(p) * v.scale, 1.4);
@@ -500,9 +567,19 @@ export default function GraphExplorer({ className = "" }) {
           labelAlpha = visible ? 1 : 0.0;
         }
         if (labelAlpha <= 0) continue;
+        const w = ctx.measureText(node.name).width;
+        const rect = { x: scr.sx + r + 5, y: scr.sy - 7, w, h: 14 };
+        const hit = drawn.some((d) =>
+          rect.x < d.x + d.w && rect.x + rect.w > d.x && rect.y < d.y + d.h && rect.y + rect.h > d.y
+        );
+        if (hit && i !== activeIdx) continue;
+        drawn.push(rect);
         ctx.globalAlpha = labelAlpha;
-        ctx.fillStyle = PALETTE.text;
-        ctx.fillText(node.name, scr.sx + r + 4, scr.sy);
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "rgba(0,0,0,0.9)";
+        ctx.shadowBlur = 5;
+        ctx.fillText(node.name, rect.x, scr.sy);
+        ctx.shadowBlur = 0;
       }
       ctx.globalAlpha = 1;
       ctx.restore();
@@ -596,8 +673,13 @@ export default function GraphExplorer({ className = "" }) {
 
     function onPointerUp(evt) {
       canvas.releasePointerCapture?.(evt.pointerId);
+      const clickedIdx = st.dragId;
+      const moved = st.dragMoved;
       st.dragId = null;
       st.panning = false;
+      if (clickedIdx != null && !moved && inspectRef.current) {
+        inspectRef.current(st.nodes[clickedIdx]);
+      }
     }
 
     function onPointerLeave() {
@@ -632,6 +714,37 @@ export default function GraphExplorer({ className = "" }) {
     rafRef.current = requestAnimationFrame(frame);
 
     // expose control hooks for the toolbar buttons
+    function fitToIds(ids) {
+      const layout = st.layout;
+      if (!ids || !ids.length || !layout.length || !st.width || !st.height) return;
+      const idxOf = new Map();
+      st.nodes.forEach((n, i) => idxOf.set(n.id, i));
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity, found = 0;
+      for (const id of ids) {
+        const i = idxOf.get(id);
+        const p = i != null ? layout[i] : null;
+        if (!p) continue;
+        found += 1;
+        if (p.x < minX) minX = p.x;
+        if (p.y < minY) minY = p.y;
+        if (p.x > maxX) maxX = p.x;
+        if (p.y > maxY) maxY = p.y;
+      }
+      if (!found) return;
+      const pad = 70;
+      const w = Math.max(maxX - minX, 40);
+      const h = Math.max(maxY - minY, 40);
+      const scale = Math.min(
+        Math.min((st.width - pad * 2) / w, (st.height - pad * 2) / h),
+        2.2
+      );
+      const view = viewRef.current;
+      view.scale = Math.max(scale, 0.15);
+      view.tx = st.width / 2 - ((minX + maxX) / 2) * view.scale;
+      view.ty = st.height / 2 - ((minY + maxY) / 2) * view.scale;
+      st.needsPaint = true;
+    }
+
     canvas._atlasControls = {
       zoom(factor) {
         const v = viewRef.current;
@@ -648,7 +761,13 @@ export default function GraphExplorer({ className = "" }) {
         viewRef.current.fitted = false;
         fitView();
       },
+      fitToIds,
     };
+
+    // map opened (or re-mounted) with an active highlight → frame it immediately
+    if (hlRef.current && hlRef.current.size) {
+      requestAnimationFrame(() => fitToIds([...hlRef.current]));
+    }
 
     return () => {
       cancelAnimationFrame(rafRef.current);
@@ -739,260 +858,118 @@ export default function GraphExplorer({ className = "" }) {
   }
 
   // ---- main render -------------------------------------------------------
-  return (
-    <div
-      className={className}
-      data-testid="graph-canvas"
-      style={{
-        position: "relative",
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        gap: 16,
-        width: "100%",
-      }}
-    >
-      {/* Accessible text summary, visually hidden but exposed to AT. */}
-      <p
-        style={{
-          position: "absolute",
-          width: 1,
-          height: 1,
-          padding: 0,
-          margin: -1,
-          overflow: "hidden",
-          clip: "rect(0 0 0 0)",
-          whiteSpace: "nowrap",
-          border: 0,
-        }}
-      >
-        {ariaSummary}
-      </p>
+  const maxCount = communityCounts.length ? communityCounts[0].count : 1;
 
-      {/* Canvas stage */}
-      <div
-        ref={wrapRef}
-        role="img"
-        aria-label={ariaSummary}
-        style={{
-          position: "relative",
-          flex: "1 1 420px",
-          minWidth: 280,
-          minHeight: 360,
-          height: "100%",
-          background: PALETTE.bg,
-          border: `1px solid ${PALETTE.line}`,
-          borderRadius: 12,
-          overflow: "hidden",
-        }}
-      >
-        <canvas
-          ref={canvasRef}
-          style={{
-            display: "block",
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            cursor: hoverNode ? "pointer" : "grab",
-            touchAction: "none",
-          }}
-        />
-
-        {/* Tooltip */}
-        {hoverNode && (
-          <div
-            style={{
-              position: "absolute",
-              left: Math.min(tooltipPos.pointerX + 14, (tooltipPos.width || 0) - 240),
-              top: Math.min(tooltipPos.pointerY + 14, (tooltipPos.height || 0) - 110),
-              pointerEvents: "none",
-              maxWidth: 240,
-              background: "rgba(255,255,255,0.98)",
-              border: `1px solid ${PALETTE.lineStrong}`,
-              borderRadius: 8,
-              padding: "8px 10px",
-              fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-              fontSize: 12,
-              lineHeight: 1.45,
-              color: PALETTE.text,
-              boxShadow: "0 10px 24px rgba(15,23,42,0.14)",
-              zIndex: 5,
-            }}
-          >
-            <div style={{ fontWeight: 600, color: PALETTE.primary, wordBreak: "break-all" }}>
-              {hoverNode.name}
-            </div>
-            <div style={{ color: PALETTE.muted, marginTop: 2 }}>
-              {hoverNode.kind} · {languageLabel(hoverNode.lang)} · deg {hoverNode.deg}
-            </div>
-            <div style={{ color: PALETTE.faint, marginTop: 2, wordBreak: "break-all" }}>
-              {hoverNode.path}
-            </div>
-          </div>
-        )}
-
-        {/* Zoom / reset / fit controls (bottom-left) */}
+  const stage = (
+    <div ref={wrapRef} role="img" aria-label={ariaSummary} className="gx-stage">
+      <canvas
+        ref={canvasRef}
+        className="gx-canvas"
+        style={{ cursor: hoverNode ? "pointer" : "grab" }}
+      />
+      {hoverNode && (
         <div
+          className="gx-tip"
           style={{
-            position: "absolute",
-            left: 12,
-            bottom: 12,
-            display: "flex",
-            gap: 6,
-            zIndex: 4,
+            left: Math.min(tooltipPos.pointerX + 14, (tooltipPos.width || 0) - 240),
+            top: Math.min(tooltipPos.pointerY + 14, (tooltipPos.height || 0) - 110),
           }}
         >
-          {[
-            { label: "−", title: "Zoom out", fn: () => canvasRef.current?._atlasControls?.zoom(0.8) },
-            { label: "+", title: "Zoom in", fn: () => canvasRef.current?._atlasControls?.zoom(1.25) },
-            { label: "Fit", title: "Reset & fit", fn: () => canvasRef.current?._atlasControls?.fit() },
-          ].map((b) => (
-            <button
-              key={b.title}
-              type="button"
-              title={b.title}
-              aria-label={b.title}
-              onClick={b.fn}
-              style={{
-                minWidth: 30,
-                height: 30,
-                padding: "0 8px",
-                background: PALETTE.surface,
-                border: `1px solid ${PALETTE.line}`,
-                borderRadius: 6,
-                color: PALETTE.text,
-                fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-                fontSize: 13,
-                cursor: "pointer",
-                lineHeight: 1,
-              }}
-            >
-              {b.label}
-            </button>
-          ))}
+          <div className="n">{hoverNode.name}</div>
+          <div className="m">{hoverNode.kind} · {languageLabel(hoverNode.lang)} · deg {hoverNode.deg}</div>
+          <div className="p">{hoverNode.path}</div>
         </div>
-
-        {/* Caption */}
-        {caption && (
-          <div
-            style={{
-              position: "absolute",
-              right: 12,
-              bottom: 12,
-              maxWidth: "70%",
-              textAlign: "right",
-              fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-              fontSize: 11,
-              letterSpacing: "0.01em",
-              color: PALETTE.faint,
-              zIndex: 4,
-              pointerEvents: "none",
-            }}
-          >
-            {caption}
-          </div>
-        )}
+      )}
+      <div className="gx-controls">
+        {[
+          { label: "−", title: "Zoom out", fn: () => canvasRef.current?._atlasControls?.zoom(0.8) },
+          { label: "+", title: "Zoom in", fn: () => canvasRef.current?._atlasControls?.zoom(1.25) },
+          { label: "fit", title: "Reset & fit", fn: () => canvasRef.current?._atlasControls?.fit() },
+        ].map((b) => (
+          <button key={b.title} type="button" title={b.title} aria-label={b.title} onClick={b.fn} className="gx-ctl">
+            {b.label}
+          </button>
+        ))}
       </div>
+      {!bare && caption && <div className="gx-status">❯ {caption}</div>}
+    </div>
+  );
 
-      {/* Right-rail legend + hubs */}
-      <div
-        data-testid="graph-legend"
-        style={{
-          flex: "0 0 200px",
-          minWidth: 180,
-          display: "flex",
-          flexDirection: "column",
-          gap: 18,
-          fontFamily:
-            "Inter, ui-sans-serif, system-ui, -apple-system, sans-serif",
-        }}
-      >
-        <div>
-          <div
-            style={{
-              fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-              fontSize: 11,
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: PALETTE.faint,
-              marginBottom: 10,
-            }}
-          >
-            Communities
-          </div>
-          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 7 }}>
-            {communityCounts.map((entry) => (
-              <li
-                key={entry.c}
-                style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5, color: PALETTE.text }}
-              >
-                <span
-                  style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: "50%",
-                    background: COMMUNITY_COLORS[entry.c % COMMUNITY_COLORS.length],
-                    flex: "0 0 auto",
-                  }}
-                />
-                <span style={{ color: PALETTE.muted }}>c{entry.c}</span>
-                <span
-                  style={{
-                    marginLeft: "auto",
-                    fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-                    fontVariantNumeric: "tabular-nums",
-                    color: PALETTE.text,
-                  }}
-                >
-                  {fmt.format(entry.count)}
-                </span>
-              </li>
-            ))}
-          </ul>
+  // minimap mode for the console — just the screen, no window chrome / rail
+  if (bare) {
+    return (
+      <div className={className} data-testid="graph-canvas" style={{ position: "relative", width: "100%", height: "100%" }}>
+        <p className="sr-only-abs">{ariaSummary}</p>
+        {stage}
+      </div>
+    );
+  }
+
+  return (
+    <div className={className} data-testid="graph-canvas" style={{ position: "relative", width: "100%" }}>
+      <p className="sr-only-abs">{ariaSummary}</p>
+
+      <div className="gx-window">
+        {/* terminal title bar */}
+        <div className="gx-bar">
+          <span className="gx-dot" style={{ background: "#ff5f56" }} />
+          <span className="gx-dot" style={{ background: "#ffbd2e" }} />
+          <span className="gx-dot" style={{ background: "#27c93f" }} />
+          <span className="gx-title">atlas ❯ export --all</span>
+          <span className="gx-live"><i className="gx-live-dot" /> live graph</span>
         </div>
 
-        <div>
-          <div
-            style={{
-              fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-              fontSize: 11,
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: PALETTE.faint,
-              marginBottom: 10,
-            }}
-          >
-            Top hubs
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {TOP_HUBS.filter((name) =>
-              prepared ? prepared.nodes.some((n) => n.name === name) : true
-            ).map((name) => {
-              const active = focusName === name;
-              return (
-                <button
-                  key={name}
-                  type="button"
-                  onClick={() => setFocusName(active ? null : name)}
-                  aria-pressed={active}
-                  style={{
-                    fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-                    fontSize: 12,
-                    padding: "3px 8px",
-                    borderRadius: 6,
-                    cursor: "pointer",
-                    border: `1px solid ${active ? PALETTE.primary : PALETTE.line}`,
-                    background: active ? "rgba(37,99,235,0.1)" : PALETTE.surface,
-                    color: active ? PALETTE.primary : PALETTE.muted,
-                  }}
-                >
-                  {name}
-                </button>
-              );
-            })}
+        <div className="gx-body">
+          {stage}
+
+          {/* dark side rail */}
+          <div data-testid="graph-legend" className="gx-rail">
+            <div className="gx-sec">
+              <div className="gx-sec-h">Communities</div>
+              <ul className="gx-comms">
+                {communityCounts.map((entry) => {
+                  const c = COMMUNITY_COLORS[entry.c % COMMUNITY_COLORS.length];
+                  return (
+                    <li className="gx-comm" key={entry.c}>
+                      <span className="gx-swatch" style={{ background: c, boxShadow: `0 0 8px ${c}` }} />
+                      <span className="gx-comm-name">c{entry.c}</span>
+                      <span className="gx-comm-bar">
+                        <i style={{ width: `${Math.max(6, (entry.count / maxCount) * 100)}%`, background: c }} />
+                      </span>
+                      <span className="gx-comm-n">{fmt.format(entry.count)}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            <div className="gx-sec">
+              <div className="gx-sec-h">Top hubs</div>
+              <div className="gx-hubs">
+                {(prepared
+                  ? [...prepared.nodes].sort((a, b) => b.deg - a.deg).map((n) => n.name)
+                      .filter((v, i, arr) => arr.indexOf(v) === i).slice(0, 8)
+                  : []
+                ).map((name) => {
+                  const active = focusName === name;
+                  return (
+                    <button
+                      key={name}
+                      type="button"
+                      onClick={() => setFocusName(active ? null : name)}
+                      aria-pressed={active}
+                      className={`gx-hub${active ? " on" : ""}`}
+                    >
+                      {name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
+
+        {footer}
       </div>
     </div>
   );

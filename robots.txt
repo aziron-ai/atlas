@@ -18,4 +18,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://aziron-ai.github.io/atlas/sitemap.xml
+Sitemap: https://atlas.aziro.com/sitemap.xml

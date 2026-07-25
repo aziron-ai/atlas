@@ -5,7 +5,7 @@ compatibility, and agent workflows. Use this page to interpret those numbers
 correctly — every result is a dated measurement under stated conditions, not a
 general guarantee.
 
-[Open the Atlas benchmark explorer](https://aziron-ai.github.io/atlas/#benchmarks)
+[Open the Atlas benchmark explorer](https://atlas.aziro.com/#benchmarks)
 
 ## How to Read a Result
 
@@ -91,7 +91,7 @@ Read
 [agent-bench/README.md](https://github.com/aziron-ai/atlas/blob/main/agent-bench/README.md)
 for prerequisites, expected external cost, pinned inputs, and interpretation.
 Per-run records are in
-[AGENT_TOKEN_BENCH_PUBLIC.json](https://aziron-ai.github.io/atlas/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json).
+[AGENT_TOKEN_BENCH_PUBLIC.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json).
 
 ## Important Limitations
 
