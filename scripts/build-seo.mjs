@@ -231,7 +231,7 @@ const knobRows = r.detailKnob.levels
   .join("\n          ");
 
 const body = `
-      <div class="shell" style="padding:48px 0 64px;max-width:820px">
+      <div class="shell seo-static" style="padding:48px 0 64px;max-width:820px">
         <h1>Atlas</h1>
         <p>${esc(DESC)}</p>
         <p><a href="https://github.com/aziron-ai/atlas">GitHub</a> ·

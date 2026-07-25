@@ -27,11 +27,11 @@ atlas version
 Pin a version for reproducible automation:
 
 ```sh
-npm install -g @aziron/atlas@0.1.43
+npm install -g @aziron/atlas@0.1.46
 ```
 
 For installations sourced from GitHub Packages, use the equivalent
-`@aziron-ai/atlas@0.1.43` coordinate with the existing registry authentication.
+`@aziron-ai/atlas@0.1.46` coordinate with the existing registry authentication.
 
 Archives: download the new tar.gz, .deb, .rpm, or .apk from
 [GitHub Releases](https://github.com/aziron-ai/atlas/releases/latest), replace

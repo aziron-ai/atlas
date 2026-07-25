@@ -6,7 +6,7 @@
 > Benchmark (July 2026, real-LLM scored, 37 languages): Atlas F1 0.757 @ 21.2 tokens vs
 > graph tool 0.539 @ 97 tokens — 6.4× accuracy per token, 36× fewer tokens.
 > Real-repo (gopls ground truth): Atlas F1 0.975 vs graph tool 0.084. 40 code languages on a
-> five-level maturity ladder. Version 0.1.39.
+> five-level maturity ladder. Version 0.1.46.
 
 ## Benchmark data
 - [site-data.json](https://aziron-ai.github.io/atlas/data/site-data.json): the full payload the page renders — headline table, efficiency frontier, detail knob, maturity ladder, scorecard, per-language results

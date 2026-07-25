@@ -74,18 +74,18 @@ atlas version</code></pre>
 <pre><code>npm install -g @aziron/atlas
 atlas version</code></pre>
 <p>Pin an exact version for reproducible environments:</p>
-<pre><code>npm install -g @aziron/atlas@0.1.43</code></pre>
+<pre><code>npm install -g @aziron/atlas@0.1.46</code></pre>
 <h3>GitHub Packages alternative</h3>
 <p>Atlas is also published to GitHub Packages as <code>@aziron-ai/atlas</code>. Use this coordinate when organization CI already authenticates to GitHub Packages. Point the <code>@aziron-ai</code> scope at GitHub and use a token with <code>read:packages</code>:</p>
 <pre><code>npm config set @aziron-ai:registry https://npm.pkg.github.com
 npm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN
 npm install -g @aziron-ai/atlas
 atlas version</code></pre>
-<pre><code>npm install -g @aziron-ai/atlas@0.1.43</code></pre>
+<pre><code>npm install -g @aziron-ai/atlas@0.1.46</code></pre>
 <p>Both npm coordinates install the same wrapper and native Atlas binary for the current platform. If you do not need npm specifically, Homebrew is the simpler path on macOS and Linux.</p>
 <h2>Release Archives</h2>
 <p>Use a release archive when no package manager is available, on air-gapped hosts, or when you need to pin and checksum exact bytes. Choose the current version and platform from <a href="https://github.com/aziron-ai/atlas/releases/latest">GitHub Releases</a>:</p>
-<pre><code>VERSION=0.1.43
+<pre><code>VERSION=0.1.46
 OS=darwin       # darwin or linux
 ARCH=arm64      # arm64 or amd64
 ASSET=&quot;atlas_${VERSION}_${OS}_${ARCH}.tar.gz&quot;
@@ -103,13 +103,13 @@ atlas version</code></pre>
 <h2>Native Linux Packages</h2>
 <p>Use native packages when your fleet is managed through a distribution package manager. Each release includes <code>.deb</code>, <code>.rpm</code>, and <code>.apk</code> packages for amd64 and arm64. Download the matching package from the release page, then install:</p>
 <pre><code># Debian or Ubuntu
-sudo dpkg -i atlas_0.1.43_linux_amd64.deb
+sudo dpkg -i atlas_0.1.46_linux_amd64.deb
 
 # Fedora or RHEL
-sudo rpm -U atlas_0.1.43_linux_amd64.rpm
+sudo rpm -U atlas_0.1.46_linux_amd64.rpm
 
 # Alpine
-sudo apk add --allow-untrusted atlas_0.1.43_linux_amd64.apk</code></pre>
+sudo apk add --allow-untrusted atlas_0.1.46_linux_amd64.apk</code></pre>
 <h2>Post-Install: Assistant Bootstrap</h2>
 <p>Homebrew and npm installations run <code>atlas bootstrap</code> after install. Bootstrap registers Atlas as an MCP server and installs the atlas-first skill and CLAUDE.md directive for every detected assistant (Claude desktop and CLI, Codex, Copilot, Cursor, Gemini). It is idempotent — safe to run repeatedly and from a package post-install hook. Inspect the proposed changes at any time without writing anything:</p>
 <pre><code>atlas bootstrap --dry-run</code></pre>
@@ -147,7 +147,7 @@ atlas doctor --verify atlas</code></pre>
         <a href="../upgrade/">Upgrade and Uninstall</a>
     </nav>
     <footer class="site">
-      Atlas v0.1.43 · <a href="https://aziron-ai.github.io/atlas/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      Atlas v0.1.46 · <a href="https://aziron-ai.github.io/atlas/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
       This page mirrors the interactive documentation for search engines and AI assistants.
     </footer>
   </main>
