@@ -1541,6 +1541,9 @@ function GraphWithPrompt() {
   const [hl, setHl] = useState(null);
   const [input, setInput] = useState("");
   const [last, setLast] = useState(null); // {kind, text}
+  const [sugIdx, setSugIdx] = useState(0);
+  const [sugHidden, setSugHidden] = useState(false);
+  const inputRef = useRef(null);
   useEffect(() => {
     let alive = true;
     getGraphData().then((d) => { if (alive) setData(d); }).catch(() => {});
@@ -1566,19 +1569,108 @@ function GraphWithPrompt() {
     setHl(r.highlight && r.highlight.length ? [...new Set(r.highlight)] : null);
   };
 
+  // ---- same completion rules as the Try-now console ----
+  const GP_ARG = ["callers", "callees", "impact", "symbol", "search"];
+  const GP_CMDS = [...GP_ARG, "help"];
+  const sugs = useMemo(() => {
+    if (!eng) return [];
+    if (/^\s*a(t(l(a(s)?)?)?)?$/i.test(input) && input.trim() !== "" && !/^\s*atlas$/i.test(input)) return [{ v: "atlas", t: "bin" }];
+    if (/^\s*atlas\s*$/i.test(input)) return GP_CMDS.map((c) => ({ v: c, t: "cmd" }));
+    const raw = input.replace(/^(atlas\s+)+/i, "");
+    const parts = raw.split(/\s+/);
+    const trailing = /\s$/.test(raw);
+    if (parts.length <= 1 && !trailing) {
+      const t = (parts[0] || "").toLowerCase();
+      if (!t) return [];
+      return GP_CMDS.filter((c) => c.startsWith(t) && c !== t).map((c) => ({ v: c, t: "cmd" }));
+    }
+    const cmd = (parts[0] || "").toLowerCase();
+    if (!GP_ARG.includes(cmd)) return [];
+    const arg = trailing ? "" : (parts[parts.length - 1] || "");
+    const al = arg.toLowerCase();
+    const out = [];
+    for (const n of eng.names) {
+      if (n.toLowerCase().startsWith(al) && n !== arg) { out.push({ v: n, t: "sym" }); if (out.length >= 6) break; }
+    }
+    return out;
+  }, [input, eng]);
+  useEffect(() => { setSugIdx(0); setSugHidden(false); }, [input]);
+
+  const acceptSug = (pick) => {
+    const chosen = pick || sugs[sugIdx];
+    if (!chosen) return;
+    const hadAtlas = /^\s*atlas\b/i.test(input);
+    const raw = input.replace(/^(atlas\s+)+/i, "");
+    const parts = raw.split(/\s+/);
+    const trailing = /\s$/.test(raw);
+    const pre = hadAtlas || chosen.t === "bin" ? "atlas " : "";
+    let next;
+    if (chosen.t === "bin") next = "atlas ";
+    else if (chosen.t === "cmd") next = `${pre}${chosen.v} `;
+    else if (trailing) next = `${pre}${raw}${chosen.v}`;
+    else next = `${pre}${[...parts.slice(0, -1), chosen.v].join(" ")}`;
+    setInput(next);
+    requestAnimationFrame(() => {
+      const el = inputRef.current;
+      if (el) { el.focus({ preventScroll: true }); el.setSelectionRange(next.length, next.length); }
+    });
+  };
+
+  const ghost = useMemo(() => {
+    const cur = sugHidden ? null : sugs[sugIdx];
+    if (!cur) return "";
+    const raw = input.replace(/^(atlas\s+)+/i, "");
+    if (/\s$/.test(raw)) return "";
+    const parts = raw.split(/\s+/);
+    const tok = parts[parts.length - 1] || "";
+    if (!tok) return "";
+    return cur.v.toLowerCase().startsWith(tok.toLowerCase()) ? cur.v.slice(tok.length) : "";
+  }, [sugs, sugIdx, input, sugHidden]);
+
+  const onKey = (e) => {
+    if (e.key === "Tab" || (e.key === "ArrowRight" && ghost && e.target.selectionStart === input.length)) {
+      if (sugs.length && !sugHidden) { e.preventDefault(); acceptSug(); return; }
+    }
+    if (e.key === "Enter") {
+      const rawIn = input.replace(/^(atlas\s+)+/i, "");
+      const lastTok = /\s$/.test(rawIn) ? "" : (rawIn.trim().split(/\s+/).pop() || "").toLowerCase();
+      const exact = lastTok && eng && eng.nameSet.has(lastTok);
+      if (sugs.length && !sugHidden && !exact) { e.preventDefault(); acceptSug(); return; }
+      run(input);
+    } else if (e.key === "Escape" && sugs.length && !sugHidden) { setSugHidden(true); }
+    else if (e.key === "ArrowUp" && sugs.length > 1) { e.preventDefault(); setSugIdx((i) => (i - 1 + sugs.length) % sugs.length); }
+    else if (e.key === "ArrowDown" && sugs.length > 1) { e.preventDefault(); setSugIdx((i) => (i + 1) % sugs.length); }
+  };
+
   const footer = (
     <div className="gxp">
       <div className="gxp-row">
+        {sugs.length > 0 && !sugHidden && (
+          <div className="gxp-sugs" role="listbox" aria-label="Completions">
+            {sugs.map((sg, i) => (
+              <button key={sg.v + sg.t} type="button" role="option" aria-selected={i === sugIdx}
+                className={`gxp-sug${i === sugIdx ? " on" : ""}`}
+                onMouseEnter={() => setSugIdx(i)} onClick={() => acceptSug(sg)}>
+                <span className="gxp-sug-t">{sg.t === "sym" ? "ƒ" : "❯"}</span> {sg.v}
+              </button>
+            ))}
+            <span className="gxp-sug-hint">tab to complete</span>
+          </div>
+        )}
         <span className="gxp-ps1">atlas ❯</span>
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter") { run(input); } }}
-          placeholder="callers useState · impact error — type a query to light up the graph"
-          aria-label="Graph query"
-          autoComplete="off"
-          spellCheck={false}
-        />
+        <span className="gxp-inwrap">
+          <span className="gxp-ghost" aria-hidden="true"><i>{input}</i>{ghost}</span>
+          <input
+            ref={inputRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={onKey}
+            placeholder="callers useState · impact error — tab completes"
+            aria-label="Graph query"
+            autoComplete="off"
+            spellCheck={false}
+          />
+        </span>
         {GXP_CHIPS.map(([label, cmd]) => (
           <button key={cmd} type="button" className="gxp-chip" onClick={() => { setInput(cmd); run(cmd); }}>{label}</button>
         ))}

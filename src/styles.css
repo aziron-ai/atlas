@@ -2690,3 +2690,28 @@ section#hero.measure-grid > .shell { width: 100%; }
 .hj-no { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: var(--primary); }
 .hj-t { font-size: 13.5px; font-weight: 600; color: var(--text); }
 .hj-s { font-size: 12px; color: var(--muted); }
+/* §08 prompt completion */
+.gxp { position: relative; }
+.gxp-inwrap { position: relative; flex: 1; min-width: 240px; display: flex; }
+.gxp-inwrap input { flex: 1; position: relative; z-index: 1; background: transparent; }
+.gxp-inwrap { background: #0e1524; border: 1px solid #2a3a58; border-radius: 8px; }
+.gxp-inwrap:focus-within { border-color: #3ecb6e; }
+.gxp-inwrap input { border: 0; }
+.gxp-ghost {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; display: flex; align-items: center;
+  padding: 8px 12px; font-family: var(--mono); font-size: 13px; color: #6c7f9d; white-space: pre; overflow: hidden;
+}
+.gxp-ghost i { font-style: normal; visibility: hidden; }
+.gxp-sugs {
+  position: absolute; left: 14px; right: 14px; bottom: calc(100% + 8px); z-index: 8;
+  display: flex; flex-direction: column; padding: 5px;
+  background: #0c1424; border: 1px solid #33466a; border-radius: 10px;
+  box-shadow: 0 -10px 34px rgba(0, 0, 0, 0.55);
+}
+.gxp-sug {
+  display: flex; align-items: center; gap: 9px; text-align: left; padding: 6px 10px;
+  border: 0; border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 13px; color: #e9f0fb; background: none;
+}
+.gxp-sug.on { background: rgba(111, 157, 255, 0.16); }
+.gxp-sug-t { color: #3ecb6e; font-size: 11px; width: 12px; }
+.gxp-sug-hint { align-self: flex-end; padding: 3px 8px 1px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6c7f9d; }
