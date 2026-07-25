@@ -44,6 +44,49 @@
       sans-serif;
     --sans-body: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
       sans-serif;
+    --header-bg: rgba(255, 255, 255, 0.92);
+    --chart-ground: #ffffff;
+    --chart-settlement: #334155;
+    --term-green: #16a34a;
+    color-scheme: light;
+  }
+
+  /* ===================== dark console theme (default) ===================== */
+  :root[data-theme="dark"] {
+    --bg: #080b12;
+    --bg2: #0b111c;
+    --surface: #10192a;
+    --surface-raised: #0c1422;
+    --line: #1e2b42;
+    --line-strong: #31435f;
+    --text: #e9f0fb;
+    --body-ink: #c3d1e4;
+    --muted: #93a4c0;
+    --faint: #7286a3;
+    --primary: #6f9dff;
+    --primary-dim: #5182f5;
+    --secondary: #49c4f0;
+    --success: #3ecb6e;
+    --warning: #f0bf68;
+    --danger: #f2726e;
+    --not-comparable: #7688a3;
+    --grid: #16213a;
+    --g0: #6f9dff;
+    --g1: #49c4f0;
+    --g2: #a78bfa;
+    --g3: #3ecb6e;
+    --g4: #f2726e;
+    --g5: #38bdf8;
+    --contour: rgba(130, 165, 215, 0.2);
+    --contour-2: rgba(130, 165, 215, 0.4);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 6px 16px -6px rgba(0, 0, 0, 0.6), 0 2px 6px -2px rgba(0, 0, 0, 0.5);
+    --header-bg: rgba(9, 13, 21, 0.85);
+    --chart-ground: #0c1422;
+    --chart-settlement: #c3d1e4;
+    --term-green: #3ecb6e;
+    color-scheme: dark;
   }
 
   * {
@@ -254,7 +297,7 @@
     }
   }
   .dtable tbody tr:nth-child(even) td {
-    background: #f8fafc;
+    background: var(--surface-raised);
   }
   .dtable tbody tr:hover td {
     background: rgba(37, 99, 235, 0.05);
@@ -443,7 +486,7 @@ section[id] {
 
 .product-header {
   height: 64px;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--header-bg);
   border-bottom: 1px solid var(--line);
   box-shadow: var(--shadow-xs);
   backdrop-filter: blur(12px);
@@ -601,6 +644,203 @@ section[id] {
 .hero-term .ht-k { color: #59685e; }
 .hero-term .ht-loc { color: #5fd58a; }
 .hero-term .ht-dim { color: #6b7a8f; }
+
+/* ===== console accents ===== */
+.gridref .prompt {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--term-green);
+}
+/* blinking terminal caret after the hero headline */
+.product-hero h1 .accent::after {
+  content: "";
+  display: inline-block;
+  width: 0.52ch;
+  height: 0.92em;
+  margin-left: 0.14em;
+  vertical-align: -0.08em;
+  background: var(--term-green);
+  animation: atlas-caret 1.1s steps(1) infinite;
+}
+@keyframes atlas-caret { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .product-hero h1 .accent::after { animation: none; }
+}
+
+/* interactive hero console — a terminal, so it stays dark in both themes */
+.hero-console {
+  max-width: min(34rem, 100%);
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: #0e1524;
+  box-shadow: var(--shadow-md);
+}
+.hero-console .hc-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 13px;
+  background: #0a0f1a;
+  border-bottom: 1px solid #1e2942;
+}
+.hero-console .hc-dot { width: 9px; height: 9px; border-radius: 50%; }
+.hero-console .hc-title {
+  margin-left: 8px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: #5f7086;
+}
+.hero-console .hc-body {
+  padding: 13px 15px;
+  min-height: 128px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.72;
+}
+.hero-console .ht-line { white-space: pre; color: #c7d2e0; }
+.hero-console .ht-cmt { color: #7f8daa; }
+.hero-console .ht-p { color: var(--term-green); }
+.hero-console .ht-hd { color: #6ea8ff; }
+.hero-console .ht-tot { color: #f4bf5e; }
+.hero-console .ht-k { color: #59685e; }
+.hero-console .ht-loc { color: #5fd58a; }
+.hero-console .ht-dim { color: #6b7a8f; }
+.hero-console .hc-caret {
+  display: inline-block;
+  width: 8px;
+  height: 14px;
+  vertical-align: -2px;
+  background: var(--term-green);
+  animation: atlas-caret 1.1s steps(1) infinite;
+}
+.hero-console .hc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 13px;
+  background: #0b1119;
+  border-top: 1px solid #1e2942;
+}
+.hero-console .hc-chip {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: #a9b6cc;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid #26324a;
+  border-radius: 7px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.hero-console .hc-chip:hover { color: #e6eefb; border-color: var(--term-green); }
+.hero-console .hc-chip.on {
+  color: #04120c;
+  background: var(--term-green);
+  border-color: var(--term-green);
+  font-weight: 600;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-console .hc-caret { animation: none; }
+}
+
+/* ===== command palette (⌘K) — terminal styled, dark in both themes ===== */
+.cmdk-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--surface-raised);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.cmdk-trigger:hover { color: var(--text); border-color: var(--primary); }
+.cmdk-trigger .cmdk-prompt { color: var(--term-green); font-weight: 700; }
+.cmdk-trigger kbd { font-family: var(--mono); font-size: 11px; }
+
+.cmdk-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 14vh 16px 16px;
+  background: rgba(4, 7, 12, 0.62);
+  backdrop-filter: blur(3px);
+  animation: atlas-fade-in 0.12s ease both;
+}
+.cmdk {
+  width: min(560px, 100%);
+  overflow: hidden;
+  background: #0c1320;
+  border: 1px solid #26324a;
+  border-radius: 14px;
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7);
+  animation: atlas-scale-in 0.16s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.cmdk-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 15px;
+  border-bottom: 1px solid #1c273d;
+}
+.cmdk-input .cmdk-prompt { font-family: var(--mono); font-size: 13px; color: var(--term-green); font-weight: 700; }
+.cmdk-input input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  outline: none;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: #e6eefb;
+}
+.cmdk-input input::placeholder { color: #5f7086; }
+.cmdk-input .cmdk-esc {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #5f7086;
+  border: 1px solid #26324a;
+  border-radius: 5px;
+  padding: 2px 6px;
+}
+.cmdk-list { list-style: none; margin: 0; padding: 6px; max-height: 46vh; overflow-y: auto; }
+.cmdk-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 11px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.cmdk-item.on { background: rgba(111, 157, 255, 0.14); }
+.cmdk-ic { font-family: var(--mono); font-size: 12px; color: var(--term-green); width: 14px; text-align: center; }
+.cmdk-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: #e6eefb;
+}
+.cmdk-hint { font-size: 11.5px; color: #6b7a8f; white-space: nowrap; }
+.cmdk-empty { padding: 16px; text-align: center; font-family: var(--mono); font-size: 12.5px; color: #6b7a8f; }
+@media (prefers-reduced-motion: reduce) {
+  .cmdk-overlay, .cmdk { animation: none; }
+}
 
 /* mobile: the schematic survey chart shrinks to ~8px labels — swap it out below sm,
    the hero terminal above now carries the "see it work" job on small screens */
@@ -1142,7 +1382,7 @@ a.sheet-cell:hover .go {
   display: inline-flex;
   flex: 0 0 auto;
   padding: 6px;
-  background: #ffffff;
+  background: var(--surface);
   border: 1px solid var(--line-strong);
   border-radius: 10px;
   box-shadow: var(--shadow-xs);

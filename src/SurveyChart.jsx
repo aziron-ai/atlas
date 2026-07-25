@@ -9,16 +9,16 @@ import React from "react";
    ============================================================ */
 
 const C = {
-  contour: "rgba(82,98,119,0.42)",
-  contourSoft: "rgba(82,98,119,0.22)",
-  ink: "#0F172A",
-  muted: "#475569",
-  faint: "#526277",
-  signal: "#2563EB",
-  route: "#334155",
-  impact: "#DC2626",
-  settlement: "#334155",
-  ground: "#F9FAFB",
+  contour: "var(--contour-2)",
+  contourSoft: "var(--contour)",
+  ink: "var(--text)",
+  muted: "var(--muted)",
+  faint: "var(--faint)",
+  signal: "var(--primary)",
+  route: "var(--chart-settlement)",
+  impact: "var(--danger)",
+  settlement: "var(--chart-settlement)",
+  ground: "var(--chart-ground)",
 };
 
 const MONO = 'ui-monospace, "SF Mono", Menlo, Consolas, monospace';
@@ -298,7 +298,7 @@ export default function SurveyChart() {
 
         {/* cartouche: the query that produced this figure */}
         <g>
-          <rect x={M + 14} y={H - M - 58} width="268" height="44" fill="#FFFFFF" stroke={C.contour} />
+          <rect x={M + 14} y={H - M - 58} width="268" height="44" fill="var(--chart-ground)" stroke={C.contour} />
           <rect x={M + 17} y={H - M - 55} width="262" height="38" fill="none" stroke={C.contourSoft} />
           <text x={M + 28} y={H - M - 41} fill={C.faint} fontSize="8" fontFamily={DISP} letterSpacing="0.24em">
             SURVEY OF ONE QUERY

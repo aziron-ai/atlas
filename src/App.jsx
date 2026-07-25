@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { ArrowRight, Check, Copy, Download, ExternalLink } from "lucide-react";
 import GraphExplorer from "./GraphExplorer";
 import {
+  CommandPalette,
   CountUp,
   Documentation,
   ProductHeader,
@@ -1891,9 +1892,16 @@ function App() {
     );
   }
 
-  if (route.view === "docs") return <Documentation data={data} page={route.page} />;
-  if (route.view === "benchmarks") return <BenchmarkExperience data={data} />;
-  return <ProductHome data={data} />;
+  let view;
+  if (route.view === "docs") view = <Documentation data={data} page={route.page} />;
+  else if (route.view === "benchmarks") view = <BenchmarkExperience data={data} />;
+  else view = <ProductHome data={data} />;
+  return (
+    <>
+      {view}
+      <CommandPalette />
+    </>
+  );
 }
 
 createRoot(document.getElementById("root")).render(<App />);

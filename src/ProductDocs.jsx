@@ -6,6 +6,8 @@ import {
   Copy,
   Download,
   ExternalLink,
+  Moon,
+  Sun,
 } from "lucide-react";
 import SurveyChart, { LatencyScaleBar } from "./SurveyChart";
 
@@ -131,6 +133,166 @@ export function useSiteRoute() {
   return route;
 }
 
+function currentTheme() {
+  return (
+    (typeof document !== "undefined" &&
+      document.documentElement.getAttribute("data-theme")) ||
+    "dark"
+  );
+}
+function applyTheme(next) {
+  document.documentElement.setAttribute("data-theme", next);
+  try {
+    localStorage.setItem("atlas-theme", next);
+  } catch (e) {
+    /* storage may be blocked */
+  }
+  window.dispatchEvent(new CustomEvent("atlas:theme", { detail: next }));
+}
+
+function ThemeToggle() {
+  const [theme, setTheme] = useState(currentTheme);
+  useEffect(() => {
+    const onTheme = (e) => setTheme(e.detail);
+    window.addEventListener("atlas:theme", onTheme);
+    return () => window.removeEventListener("atlas:theme", onTheme);
+  }, []);
+  const toggle = () => {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    applyTheme(next);
+  };
+  return (
+    <button
+      className="icon-btn focusring"
+      type="button"
+      onClick={toggle}
+      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+      title="Toggle theme"
+    >
+      {theme === "dark" ? <Sun className="h-4 w-4" aria-hidden /> : <Moon className="h-4 w-4" aria-hidden />}
+    </button>
+  );
+}
+
+export function CommandPalette() {
+  const [open, setOpen] = useState(false);
+  const [q, setQ] = useState("");
+  const [idx, setIdx] = useState(0);
+  const inputRef = useRef(null);
+
+  const go = (hash) => {
+    window.location.hash = hash;
+  };
+  const runExample = (key) => {
+    if (!window.location.hash.startsWith("#overview") && window.location.hash !== "") {
+      window.location.hash = "#overview";
+    }
+    setTimeout(() => window.dispatchEvent(new CustomEvent("atlas:run", { detail: key })), 80);
+  };
+  const items = useMemo(
+    () => [
+      { ic: "▸", label: "Overview", hint: "home", run: () => go("#overview") },
+      { ic: "▸", label: "Benchmarks", hint: "accuracy · tokens · latency", run: () => go("#benchmarks") },
+      { ic: "▸", label: "Documentation", hint: "getting started", run: () => go("#docs/getting-started") },
+      { ic: "▸", label: "Languages", hint: "supported languages", run: () => go("#languages") },
+      { ic: "$", label: "atlas callers WithField", hint: "run example", run: () => runExample("callers") },
+      { ic: "$", label: "atlas symbol Entry", hint: "run example", run: () => runExample("symbol") },
+      { ic: "$", label: "atlas impact --paths entry.go", hint: "run example", run: () => runExample("impact") },
+      { ic: "⬇", label: "Install Atlas", hint: "brew · npm", run: () => go("#docs/installation") },
+      { ic: "◐", label: "Toggle theme", hint: "dark / light", run: () => applyTheme(currentTheme() === "dark" ? "light" : "dark") },
+      { ic: "↗", label: "GitHub repository", hint: "external", run: () => window.open(GITHUB, "_blank", "noopener") },
+    ],
+    []
+  );
+  const filtered = useMemo(() => {
+    const s = q.trim().toLowerCase();
+    if (!s) return items;
+    return items.filter((i) => `${i.label} ${i.hint}`.toLowerCase().includes(s));
+  }, [q, items]);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setOpen((o) => !o);
+        setQ("");
+        setIdx(0);
+      } else if (e.key === "Escape") {
+        setOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    const onOpen = () => { setOpen(true); setQ(""); setIdx(0); };
+    window.addEventListener("atlas:cmdk", onOpen);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("atlas:cmdk", onOpen);
+    };
+  }, []);
+  useEffect(() => {
+    if (open && inputRef.current) inputRef.current.focus();
+  }, [open]);
+  useEffect(() => {
+    setIdx(0);
+  }, [q]);
+
+  if (!open) return null;
+  const exec = (i) => {
+    setOpen(false);
+    i.run();
+  };
+  const onListKey = (e) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setIdx((n) => Math.min(filtered.length - 1, n + 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setIdx((n) => Math.max(0, n - 1));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (filtered[idx]) exec(filtered[idx]);
+    }
+  };
+  return (
+    <div className="cmdk-overlay" onClick={() => setOpen(false)} role="dialog" aria-modal="true" aria-label="Command palette">
+      <div className="cmdk" onClick={(e) => e.stopPropagation()}>
+        <div className="cmdk-input">
+          <span className="cmdk-prompt">atlas&nbsp;❯</span>
+          <input
+            ref={inputRef}
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            onKeyDown={onListKey}
+            placeholder="jump to a section or run a command…"
+            aria-label="Command"
+            spellCheck={false}
+            autoComplete="off"
+          />
+          <span className="cmdk-esc">esc</span>
+        </div>
+        <ul className="cmdk-list" role="listbox">
+          {filtered.map((i, n) => (
+            <li
+              key={i.label}
+              role="option"
+              aria-selected={n === idx}
+              className={`cmdk-item${n === idx ? " on" : ""}`}
+              onMouseEnter={() => setIdx(n)}
+              onClick={() => exec(i)}
+            >
+              <span className="cmdk-ic">{i.ic}</span>
+              <span className="cmdk-label">{i.label}</span>
+              <span className="cmdk-hint">{i.hint}</span>
+            </li>
+          ))}
+          {filtered.length === 0 && <li className="cmdk-empty">no matches</li>}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 function Brand() {
   return (
     <span className="flex min-w-0 items-center gap-2.5">
@@ -185,7 +347,17 @@ export function ProductHeader({ version = RELEASE, active = "overview" }) {
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="cmdk-trigger focusring hidden md:inline-flex"
+            onClick={() => window.dispatchEvent(new CustomEvent("atlas:cmdk"))}
+            aria-label="Open command palette"
+            title="Command palette"
+          >
+            <span className="cmdk-prompt">❯</span> <kbd>⌘K</kbd>
+          </button>
           <span className="chip hidden sm:inline-flex">v{version}</span>
+          <ThemeToggle />
           <a className="icon-btn focusring hidden sm:inline-flex" href={GITHUB} target="_blank" rel="noreferrer" aria-label="Atlas on GitHub" title="GitHub">
             <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
               <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
@@ -218,10 +390,152 @@ export function ProductHeader({ version = RELEASE, active = "overview" }) {
   );
 }
 
+/* Interactive hero console — click a command to run it; it types out and reveals
+   its cited output. Example output (schematic, like the survey chart) — not a benchmark. */
+const HERO_CMDS = {
+  callers: {
+    label: "who calls WithField?",
+    cmd: "atlas callers WithField",
+    out: [
+      [["callers ", "ht-hd"], ["WithField  ", ""], ["total 47", "ht-tot"]],
+      [["  WithError  ", ""], ["func  ", "ht-k"], ["exported.go:57", "ht-loc"]],
+      [["  TestEntryPanic  ", ""], ["func  ", "ht-k"], ["entry_test.go:175", "ht-loc"]],
+      [["  … and 45 more, every one cited to file:line", "ht-dim"]],
+    ],
+  },
+  symbol: {
+    label: "define Entry",
+    cmd: "atlas symbol Entry",
+    out: [
+      [["symbol ", "ht-hd"], ["Entry  ", ""], ["matches 1", "ht-tot"]],
+      [["  Entry  ", ""], ["type  ", "ht-k"], ["entry.go:52-88", "ht-loc"]],
+      [["  callers(3) · callees(6), all cited", "ht-dim"]],
+    ],
+  },
+  impact: {
+    label: "what breaks if entry.go changes?",
+    cmd: "atlas impact --paths entry.go",
+    out: [
+      [["impact ", "ht-hd"], ["entry.go  ", ""], ["12 symbols · 5 files", "ht-tot"]],
+      [["  hooks.go:41  ", "ht-loc"], ["logger.go:120  ", "ht-loc"], ["writer.go:88", "ht-loc"]],
+      [["  + 3 covering tests", "ht-dim"]],
+    ],
+  },
+};
+
+function HeroConsole() {
+  const ORDER = ["callers", "symbol", "impact"];
+  const [active, setActive] = useState("callers");
+  const [typed, setTyped] = useState("");
+  const [lines, setLines] = useState(0);
+  const runId = useRef(0);
+  const rootRef = useRef(null);
+
+  const run = (key) => {
+    const id = ++runId.current;
+    setActive(key);
+    setTyped("");
+    setLines(0);
+    const { cmd, out } = HERO_CMDS[key];
+    if (prefersReduced()) {
+      setTyped(cmd);
+      setLines(out.length);
+      return;
+    }
+    const reveal = (n) => {
+      if (id !== runId.current) return;
+      setLines(n);
+      if (n < out.length) setTimeout(() => reveal(n + 1), 140);
+    };
+    let i = 0;
+    const type = () => {
+      if (id !== runId.current) return;
+      i += 1;
+      setTyped(cmd.slice(0, i));
+      if (i < cmd.length) setTimeout(type, 34);
+      else setTimeout(() => reveal(0), 180);
+    };
+    setTimeout(type, 140);
+  };
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el || prefersReduced() || typeof IntersectionObserver === "undefined") {
+      run("callers");
+      return undefined;
+    }
+    let fired = false;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && !fired) {
+            fired = true;
+            run("callers");
+            io.disconnect();
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // let the ⌘K palette drive the console
+  useEffect(() => {
+    const onRun = (e) => {
+      if (e.detail && HERO_CMDS[e.detail]) run(e.detail);
+    };
+    window.addEventListener("atlas:run", onRun);
+    return () => window.removeEventListener("atlas:run", onRun);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const out = HERO_CMDS[active].out;
+  return (
+    <div className="hero-console" ref={rootRef}>
+      <div className="hc-bar" aria-hidden>
+        <span className="hc-dot" style={{ background: "#ff5f56" }} />
+        <span className="hc-dot" style={{ background: "#ffbd2e" }} />
+        <span className="hc-dot" style={{ background: "#27c93f" }} />
+        <span className="hc-title">~/your-repo — atlas</span>
+      </div>
+      <div className="hc-body" aria-live="polite">
+        <div className="ht-line"><span className="ht-cmt"># {HERO_CMDS[active].label}</span></div>
+        <div className="ht-line">
+          <span className="ht-p">$</span> {typed}
+          <span className="hc-caret" aria-hidden />
+        </div>
+        {out.slice(0, lines).map((segs, li) => (
+          <div className="ht-line" key={li}>
+            {segs.map(([t, cls], si) => (
+              <span key={si} className={cls}>{t}</span>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="hc-chips" role="group" aria-label="Run an example Atlas command">
+        {ORDER.map((k) => (
+          <button
+            key={k}
+            type="button"
+            className={`hc-chip focusring${active === k ? " on" : ""}`}
+            onClick={() => run(k)}
+          >
+            atlas {k}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function GridRef({ cell, name }) {
   return (
     <div className="gridref">
       <span className="cell">{cell}</span>
+      <span className="prompt" aria-hidden>atlas&nbsp;❯</span>
       <span className="name">{name}</span>
       <span className="rule" aria-hidden />
     </div>
@@ -380,14 +694,7 @@ export function ProductHome({ data }) {
                   <code className="mono"><span className="hi-dollar">$</span> brew install --cask aziron-ai/atlas/atlas</code>
                   <CopyCommand command="brew install --cask aziron-ai/atlas/atlas" />
                 </div>
-                <figure className="hero-term mt-5" aria-label="Example query: who calls a function, answered with file:line citations">
-                  <div className="ht-line"><span className="ht-cmt"># who calls WithField? — cited, in milliseconds</span></div>
-                  <div className="ht-line"><span className="ht-p">$</span> atlas callers WithField</div>
-                  <div className="ht-line"><span className="ht-hd">callers</span> WithField <span className="ht-tot">total 47</span></div>
-                  <div className="ht-line">{"  "}WithError <span className="ht-k">func</span> <span className="ht-loc">exported.go:57</span></div>
-                  <div className="ht-line">{"  "}TestEntryPanic <span className="ht-k">func</span> <span className="ht-loc">entry_test.go:175</span></div>
-                  <div className="ht-line ht-dim">{"  "}… and 45 more, every one cited to file:line</div>
-                </figure>
+                <HeroConsole />
                 <div className="hero-facts mt-7">
                   <span>One local binary</span>
                   <span>SQLite storage</span>

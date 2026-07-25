@@ -13,7 +13,9 @@
     </script>
     <title>Local code intelligence for developers &amp; AI agents | Atlas</title>
     <meta name="description" content="Atlas indexes repositories locally and returns focused, source-grounded context about symbols, callers, references, routes, and change impact through CLI, MCP, and HTTP.">
-    <meta name="color-scheme" content="light">
+    <meta name="color-scheme" content="dark light">
+    <!-- theme init (dark by default) — synchronous, before paint, so no flash -->
+    <script>(function(){try{var t=localStorage.getItem('atlas-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
     <link rel="icon" href="assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
     <link rel="icon" href="assets/atlas-icon-128.png" type="image/png" sizes="128x128">
     <link rel="apple-touch-icon" href="assets/atlas-icon-128.png">
