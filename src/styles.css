@@ -552,6 +552,62 @@ section[id] {
   color: var(--body-ink);
 }
 
+/* hero: one-click install line */
+.hero-install {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: min(30rem, 100%);
+  padding: 8px 8px 8px 13px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-xs);
+}
+.hero-install code {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+  font-size: 13px;
+  color: var(--body-ink);
+}
+.hero-install .hi-dollar {
+  color: var(--primary);
+  margin-right: 7px;
+  user-select: none;
+}
+
+/* hero: a real "see it work" transcript — the one deliberately dark accent on the page */
+.hero-term {
+  margin-left: 0;
+  margin-right: 0;
+  max-width: min(34rem, 100%);
+  overflow-x: auto;
+  padding: 13px 15px;
+  border: 1px solid #1e2942;
+  border-radius: 11px;
+  background: #0e1524;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.72;
+  box-shadow: var(--shadow-sm);
+}
+.hero-term .ht-line { white-space: pre; color: #c7d2e0; }
+.hero-term .ht-cmt { color: #7f8daa; }
+.hero-term .ht-p { color: #3ecb6e; }
+.hero-term .ht-hd { color: #6ea8ff; }
+.hero-term .ht-tot { color: #f4bf5e; }
+.hero-term .ht-k { color: #59685e; }
+.hero-term .ht-loc { color: #5fd58a; }
+.hero-term .ht-dim { color: #6b7a8f; }
+
+/* mobile: the schematic survey chart shrinks to ~8px labels — swap it out below sm,
+   the hero terminal above now carries the "see it work" job on small screens */
+@media (max-width: 639px) {
+  .product-hero .chart-panel { display: none; }
+}
+
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -1855,6 +1911,8 @@ a.sheet-cell:hover .go {
   .atlas-anim .product-hero .hero-copy > *:nth-child(3) { animation-delay: 0.28s; }
   .atlas-anim .product-hero .hero-copy > *:nth-child(4) { animation-delay: 0.37s; }
   .atlas-anim .product-hero .hero-copy > *:nth-child(5) { animation-delay: 0.46s; }
+  .atlas-anim .product-hero .hero-copy > *:nth-child(6) { animation-delay: 0.55s; }
+  .atlas-anim .product-hero .hero-copy > *:nth-child(7) { animation-delay: 0.64s; }
   .atlas-anim .product-hero .chart-panel {
     opacity: 0;
     animation: atlas-fade-in 0.7s ease 0.5s forwards;

@@ -357,7 +357,7 @@ export function ProductHome({ data }) {
           <div className="shell py-14 lg:py-20">
             <GridRef cell="A·1" name="Overview" />
             <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
-              <div className="max-w-2xl hero-copy">
+              <div className="max-w-2xl hero-copy min-w-0">
                 <div className="eyebrow"><span className="status-dot" /> Local code intelligence for developers &amp; AI agents</div>
                 <h1 className="mt-5">
                   Your codebase is a territory. <span className="accent">Atlas is the map.</span>
@@ -376,6 +376,18 @@ export function ProductHome({ data }) {
                     View benchmark evidence
                   </a>
                 </div>
+                <div className="hero-install mt-6">
+                  <code className="mono"><span className="hi-dollar">$</span> brew install --cask aziron-ai/atlas/atlas</code>
+                  <CopyCommand command="brew install --cask aziron-ai/atlas/atlas" />
+                </div>
+                <figure className="hero-term mt-5" aria-label="Example query: who calls a function, answered with file:line citations">
+                  <div className="ht-line"><span className="ht-cmt"># who calls WithField? — cited, in milliseconds</span></div>
+                  <div className="ht-line"><span className="ht-p">$</span> atlas callers WithField</div>
+                  <div className="ht-line"><span className="ht-hd">callers</span> WithField <span className="ht-tot">total 47</span></div>
+                  <div className="ht-line">{"  "}WithError <span className="ht-k">func</span> <span className="ht-loc">exported.go:57</span></div>
+                  <div className="ht-line">{"  "}TestEntryPanic <span className="ht-k">func</span> <span className="ht-loc">entry_test.go:175</span></div>
+                  <div className="ht-line ht-dim">{"  "}… and 45 more, every one cited to file:line</div>
+                </figure>
                 <div className="hero-facts mt-7">
                   <span>One local binary</span>
                   <span>SQLite storage</span>
