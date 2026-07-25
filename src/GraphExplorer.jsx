@@ -192,7 +192,12 @@ function computeLayout(nodes, edges) {
 }
 
 // ----- component ----------------------------------------------------------
-export default function GraphExplorer({ className = "" }) {
+export default function GraphExplorer({
+  className = "",
+  bare = false,
+  highlightIds = null,
+  onInspect = null,
+}) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [hoverId, setHoverId] = useState(null);
@@ -201,6 +206,12 @@ export default function GraphExplorer({ className = "" }) {
   const canvasRef = useRef(null);
   const wrapRef = useRef(null);
   const rafRef = useRef(0);
+
+  // live props read by the persistent canvas loop / handlers
+  const hlRef = useRef(null);
+  hlRef.current = highlightIds && highlightIds.length ? new Set(highlightIds) : null;
+  const inspectRef = useRef(null);
+  inspectRef.current = onInspect;
 
   // Mutable view + interaction state kept in a ref so the render loop reads it
   // without re-subscribing effects on every pointer move.
@@ -232,6 +243,11 @@ export default function GraphExplorer({ className = "" }) {
     needsPaint: true,
     reducedMotion: false,
   });
+
+  // repaint when the highlight set changes (console-driven)
+  useEffect(() => {
+    stateRef.current.needsPaint = true;
+  }, [highlightIds]);
 
   // ---- fetch graph data --------------------------------------------------
   useEffect(() => {
@@ -434,6 +450,7 @@ export default function GraphExplorer({ className = "" }) {
       const focusIdx = st.focusId;
       const activeIdx = hoverIdx != null ? hoverIdx : focusIdx;
       const neighbors = activeIdx != null ? st.adjacency.get(activeIdx) : null;
+      const HL = hlRef.current; // console highlight set (node ids), or null
 
       // ---- edges --------------------------------------------------------
       ctx.lineWidth = 1;
@@ -441,6 +458,17 @@ export default function GraphExplorer({ className = "" }) {
         const a = layout[e.s];
         const b = layout[e.t];
         if (!a || !b) continue;
+        if (HL) {
+          const lit = HL.has(nodes[e.s].id) && HL.has(nodes[e.t].id);
+          ctx.strokeStyle = lit ? "rgba(111,157,255,0.6)" : "rgba(130,160,210,0.045)";
+          const sa0 = worldToScreen(a.x, a.y);
+          const sb0 = worldToScreen(b.x, b.y);
+          ctx.beginPath();
+          ctx.moveTo(sa0.sx, sa0.sy);
+          ctx.lineTo(sb0.sx, sb0.sy);
+          ctx.stroke();
+          continue;
+        }
         const incident =
           activeIdx != null && (e.s === activeIdx || e.t === activeIdx);
         if (activeIdx != null && !incident) {
@@ -467,7 +495,11 @@ export default function GraphExplorer({ className = "" }) {
         const color = COMMUNITY_COLORS[node.c % COMMUNITY_COLORS.length];
 
         let alpha = 1;
-        if (activeIdx != null) {
+        let lit = true;
+        if (HL) {
+          lit = HL.has(node.id);
+          alpha = lit ? 1 : 0.13;
+        } else if (activeIdx != null) {
           const isActive = i === activeIdx;
           const isNeighbor = neighbors && neighbors.has(i);
           alpha = isActive ? 1 : isNeighbor ? 0.95 : 0.12;
@@ -476,9 +508,9 @@ export default function GraphExplorer({ className = "" }) {
         ctx.globalAlpha = alpha;
         ctx.beginPath();
         ctx.arc(scr.sx, scr.sy, r, 0, Math.PI * 2);
-        // luminous glow — stronger for hubs — gives the "network monitor" look
+        // luminous glow — stronger for hubs / highlighted — "network monitor" look
         ctx.shadowColor = color;
-        ctx.shadowBlur = Math.min(16, 3 + r * 1.4);
+        ctx.shadowBlur = lit ? Math.min(16, 3 + r * 1.4) : 0;
         ctx.fillStyle = color;
         ctx.fill();
         ctx.shadowBlur = 0;
@@ -608,8 +640,13 @@ export default function GraphExplorer({ className = "" }) {
 
     function onPointerUp(evt) {
       canvas.releasePointerCapture?.(evt.pointerId);
+      const clickedIdx = st.dragId;
+      const moved = st.dragMoved;
       st.dragId = null;
       st.panning = false;
+      if (clickedIdx != null && !moved && inspectRef.current) {
+        inspectRef.current(st.nodes[clickedIdx]);
+      }
     }
 
     function onPointerLeave() {
@@ -753,6 +790,51 @@ export default function GraphExplorer({ className = "" }) {
   // ---- main render -------------------------------------------------------
   const maxCount = communityCounts.length ? communityCounts[0].count : 1;
 
+  const stage = (
+    <div ref={wrapRef} role="img" aria-label={ariaSummary} className="gx-stage">
+      <canvas
+        ref={canvasRef}
+        className="gx-canvas"
+        style={{ cursor: hoverNode ? "pointer" : "grab" }}
+      />
+      {hoverNode && (
+        <div
+          className="gx-tip"
+          style={{
+            left: Math.min(tooltipPos.pointerX + 14, (tooltipPos.width || 0) - 240),
+            top: Math.min(tooltipPos.pointerY + 14, (tooltipPos.height || 0) - 110),
+          }}
+        >
+          <div className="n">{hoverNode.name}</div>
+          <div className="m">{hoverNode.kind} · {languageLabel(hoverNode.lang)} · deg {hoverNode.deg}</div>
+          <div className="p">{hoverNode.path}</div>
+        </div>
+      )}
+      <div className="gx-controls">
+        {[
+          { label: "−", title: "Zoom out", fn: () => canvasRef.current?._atlasControls?.zoom(0.8) },
+          { label: "+", title: "Zoom in", fn: () => canvasRef.current?._atlasControls?.zoom(1.25) },
+          { label: "fit", title: "Reset & fit", fn: () => canvasRef.current?._atlasControls?.fit() },
+        ].map((b) => (
+          <button key={b.title} type="button" title={b.title} aria-label={b.title} onClick={b.fn} className="gx-ctl">
+            {b.label}
+          </button>
+        ))}
+      </div>
+      {!bare && caption && <div className="gx-status">❯ {caption}</div>}
+    </div>
+  );
+
+  // minimap mode for the console — just the screen, no window chrome / rail
+  if (bare) {
+    return (
+      <div className={className} data-testid="graph-canvas" style={{ position: "relative", width: "100%", height: "100%" }}>
+        <p className="sr-only-abs">{ariaSummary}</p>
+        {stage}
+      </div>
+    );
+  }
+
   return (
     <div className={className} data-testid="graph-canvas" style={{ position: "relative", width: "100%" }}>
       <p className="sr-only-abs">{ariaSummary}</p>
@@ -768,42 +850,7 @@ export default function GraphExplorer({ className = "" }) {
         </div>
 
         <div className="gx-body">
-          {/* canvas stage — the dark radar screen */}
-          <div ref={wrapRef} role="img" aria-label={ariaSummary} className="gx-stage">
-            <canvas
-              ref={canvasRef}
-              className="gx-canvas"
-              style={{ cursor: hoverNode ? "pointer" : "grab" }}
-            />
-
-            {hoverNode && (
-              <div
-                className="gx-tip"
-                style={{
-                  left: Math.min(tooltipPos.pointerX + 14, (tooltipPos.width || 0) - 240),
-                  top: Math.min(tooltipPos.pointerY + 14, (tooltipPos.height || 0) - 110),
-                }}
-              >
-                <div className="n">{hoverNode.name}</div>
-                <div className="m">{hoverNode.kind} · {languageLabel(hoverNode.lang)} · deg {hoverNode.deg}</div>
-                <div className="p">{hoverNode.path}</div>
-              </div>
-            )}
-
-            <div className="gx-controls">
-              {[
-                { label: "−", title: "Zoom out", fn: () => canvasRef.current?._atlasControls?.zoom(0.8) },
-                { label: "+", title: "Zoom in", fn: () => canvasRef.current?._atlasControls?.zoom(1.25) },
-                { label: "fit", title: "Reset & fit", fn: () => canvasRef.current?._atlasControls?.fit() },
-              ].map((b) => (
-                <button key={b.title} type="button" title={b.title} aria-label={b.title} onClick={b.fn} className="gx-ctl">
-                  {b.label}
-                </button>
-              ))}
-            </div>
-
-            {caption && <div className="gx-status">❯ {caption}</div>}
-          </div>
+          {stage}
 
           {/* dark side rail */}
           <div data-testid="graph-legend" className="gx-rail">

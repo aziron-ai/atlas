@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState, useCallback } from "react"
 import { createRoot } from "react-dom/client";
 import { ArrowRight, Check, Copy, Download, ExternalLink } from "lucide-react";
 import GraphExplorer from "./GraphExplorer";
+import AtlasConsole from "./AtlasConsole";
 import {
   CommandPalette,
   CountUp,
@@ -1900,7 +1901,24 @@ function App() {
     <>
       {view}
       <CommandPalette />
+      <ConsoleOverlay />
     </>
+  );
+}
+
+/* Full-screen "Try now" Atlas Console overlay — opened by the hero button or ⌘K. */
+function ConsoleOverlay() {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener("atlas:console", onOpen);
+    return () => window.removeEventListener("atlas:console", onOpen);
+  }, []);
+  if (!open) return null;
+  return (
+    <div className="ac-overlay">
+      <AtlasConsole onClose={() => setOpen(false)} />
+    </div>
   );
 }
 

@@ -748,6 +748,13 @@ export function ProductHome({ data }) {
                   <a className="btn btn-primary focusring" href="#docs/getting-started">
                     Get started <ArrowRight className="h-4 w-4" aria-hidden />
                   </a>
+                  <button
+                    type="button"
+                    className="btn btn-try focusring"
+                    onClick={() => window.dispatchEvent(new CustomEvent("atlas:console"))}
+                  >
+                    <span className="tny">❯</span> Try it now
+                  </button>
                   <a className="btn btn-ghost focusring" href="#benchmarks">
                     View benchmark evidence
                   </a>
