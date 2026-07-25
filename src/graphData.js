@@ -6,9 +6,15 @@
 // query engine) also compute exactly once.
 let promise = null;
 
+// DATA_V bumps whenever the shipped sample index changes (v2 = facebook/react).
+// Combined with cache:"no-cache" (revalidate with the server — an ETag 304 on
+// real hosting, a fresh 200 on dev servers), a browser can never keep serving a
+// stale graph after the data is swapped.
+const DATA_V = "2";
+
 export function getGraphData() {
   if (!promise) {
-    promise = fetch("data/graph.json").then((r) => {
+    promise = fetch(`data/graph.json?v=${DATA_V}`, { cache: "no-cache" }).then((r) => {
       if (!r.ok) throw new Error(`graph.json: HTTP ${r.status}`);
       return r.json();
     });
