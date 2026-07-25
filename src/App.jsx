@@ -1920,6 +1920,14 @@ function ConsoleOverlay() {
     window.addEventListener("atlas:console", onOpen);
     return () => window.removeEventListener("atlas:console", onOpen);
   }, []);
+  // lock the page behind the overlay (wheel at the terminal's scroll boundary
+  // must never scroll the page)
+  useEffect(() => {
+    if (!visible) return undefined;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [visible]);
   if (!opened) return null;
   return (
     <div
