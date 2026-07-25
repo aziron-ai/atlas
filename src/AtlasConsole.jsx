@@ -116,7 +116,7 @@ function buildEngine(data) {
     if (c === "search") {
       if (!arg) return { kind: "error", msg: "usage: atlas search <term>" };
       const hits = search(arg);
-      return { kind: "search", term: arg, total: hits.length, rows: hits.slice(0, 8).map((n) => ({ name: n.name, kind: n.kind, cite: cite(n) })), highlight: hits.slice(0, 40).map((n) => n.id) };
+      return { kind: "search", term: arg, total: hits.length, rows: hits.slice(0, 40).map((n) => ({ name: n.name, kind: n.kind, cite: cite(n) })), highlight: hits.slice(0, 40).map((n) => n.id) };
     }
     if (c === "callers" || c === "callees") {
       if (!arg) return { kind: "error", msg: `usage: atlas ${c} <symbol>` };
@@ -124,7 +124,7 @@ function buildEngine(data) {
       if (r.id == null) return { kind: "error", msg: `no symbol "${arg}"`, suggest: r.suggest };
       const list = callers(r.id, c);
       return { kind: c, name: byId.get(r.id).name, total: list.length,
-        rows: list.slice(0, 6).map((n) => ({ name: n.name, kind: n.kind, cite: cite(n) })),
+        rows: list.map((n) => ({ name: n.name, kind: n.kind, cite: cite(n) })),
         highlight: [r.id, ...list.map((n) => n.id)] };
     }
     if (c === "impact") {
@@ -154,26 +154,47 @@ function buildEngine(data) {
     return { kind: "error", msg: `unknown command "${cmd}" — try: callers · callees · impact · search · symbol · help` };
   }
 
-  return { run, meta: data.meta };
+  const names = [];
+  {
+    const seen = new Set();
+    for (const n of [...nodes].sort((a, b) => b.deg - a.deg)) {
+      const k = n.name.toLowerCase();
+      if (!seen.has(k)) { seen.add(k); names.push(n.name); }
+    }
+  }
+
+  return { run, names, meta: data.meta };
 }
 
 /* ---- rendering ---- */
-function Rows({ rows, run, more }) {
+function Rows({ rows, run, total, initial = 6 }) {
+  const [expanded, setExpanded] = useState(false);
+  const shown = expanded ? rows : rows.slice(0, initial);
+  const hiddenHere = rows.length - shown.length;
+  const beyond = (total ?? rows.length) - rows.length; // e.g. search capped at 40
   return (
     <>
-      {rows.map((r, i) => (
+      {shown.map((r, i) => (
         <div className="ac-row" key={i}>
           <button className="ac-sym" type="button" onClick={() => run(`atlas symbol ${r.name}`)}>{r.name}</button>
           <span className="ac-k">{r.kind}</span>
           <span className="ac-rp" dir="rtl"><bdi>{r.cite}</bdi></span>
         </div>
       ))}
-      {more > 0 && <div className="ac-dim">  … and {more} more, each cited to file:line</div>}
+      {hiddenHere > 0 && (
+        <button className="ac-more" type="button" onClick={() => setExpanded(true)}>
+          ▾ show {hiddenHere} more
+        </button>
+      )}
+      {expanded && rows.length > initial && (
+        <button className="ac-more" type="button" onClick={() => setExpanded(false)}>▴ collapse</button>
+      )}
+      {expanded && beyond > 0 && <div className="ac-faint">showing first {rows.length} of {total}</div>}
     </>
   );
 }
 
-function Result({ r, run }) {
+function Result({ r, run, showMap }) {
   if (r.kind === "help") {
     const cmds = [["callers <symbol>", "who calls it"], ["callees <symbol>", "what it calls"], ["impact <symbol>", "blast radius (reverse reachability)"], ["symbol <symbol>", "definition + degree"], ["search <term>", "lexical search"]];
     return (
@@ -207,7 +228,7 @@ function Result({ r, run }) {
         {r.total === 0 && (
           <div className="ac-dim">{r.kind === "callers" ? "no callers in this slice — nothing depends on it here" : "no callees — a leaf in this slice"}</div>
         )}
-        <Rows rows={r.rows} run={run} more={r.total - r.rows.length} />
+        <Rows rows={r.rows} run={run} total={r.total} />
       </>
     );
   }
@@ -216,8 +237,8 @@ function Result({ r, run }) {
       <>
         <div><span className="ac-hd">search</span> {r.term} <span className="ac-tot">{r.total} hits</span></div>
         {r.total === 0 && <div className="ac-dim">no hits — try a shorter term</div>}
-        <Rows rows={r.rows} run={run} more={r.total - r.rows.length} />
-        {r.total > 40 && <div className="ac-faint">top 40 highlighted on the map</div>}
+        <Rows rows={r.rows} run={run} total={r.total} />
+        {r.total > 40 && <button className="ac-maplink" type="button" onClick={showMap}>◇ top 40 on the map →</button>}
       </>
     );
   }
@@ -236,7 +257,7 @@ function Result({ r, run }) {
         </div>
         {r.affected === 0
           ? <div className="ac-dim">no dependents reach this symbol in this slice</div>
-          : <div className="ac-faint">highlighted on the map →</div>}
+          : <button className="ac-maplink" type="button" onClick={showMap}>◇ show on the map →</button>}
       </>
     );
   }
@@ -280,6 +301,8 @@ export default function AtlasConsole({ onClose, compact = false }) {
   const inputRef = useRef(null);
   const hist = useRef([]);
   const histAt = useRef(-1);
+  const [sugIdx, setSugIdx] = useState(0);
+  const [sugHidden, setSugHidden] = useState(false);
   const bid = useRef(0);
   const autoRan = useRef(false);
 
@@ -329,6 +352,61 @@ export default function AtlasConsole({ onClose, compact = false }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose, compact]);
 
+  // ---- autocomplete over commands + real symbol names (degree-ranked) ----
+  const ARG_CMDS = ["callers", "callees", "impact", "symbol", "search"];
+  const CMDS = [...ARG_CMDS, "help"];
+  const sugs = useMemo(() => {
+    if (!eng) return [];
+    const raw = input.replace(/^atlas\s*/i, "");
+    if (raw !== "" && input.trim() === "") return [];
+    const parts = raw.split(/\s+/);
+    const trailing = /\s$/.test(raw);
+    if (parts.length <= 1 && !trailing) {
+      const t = (parts[0] || "").toLowerCase();
+      if (!t) return [];
+      return CMDS.filter((c) => c.startsWith(t) && c !== t).map((c) => ({ v: c, t: "cmd" }));
+    }
+    const cmd = (parts[0] || "").toLowerCase();
+    if (!ARG_CMDS.includes(cmd)) return [];
+    const arg = trailing ? "" : (parts[parts.length - 1] || "");
+    const al = arg.toLowerCase();
+    const out = [];
+    for (const n of eng.names) {
+      if (n.toLowerCase().startsWith(al) && n !== arg) { out.push({ v: n, t: "sym" }); if (out.length >= 6) break; }
+    }
+    return out;
+  }, [input, eng]);
+  useEffect(() => { setSugIdx(0); setSugHidden(false); }, [input]);
+
+  const acceptSug = (pick) => {
+    const chosen = pick || sugs[sugIdx];
+    if (!chosen) return;
+    const raw = input.replace(/^atlas\s*/i, "");
+    const parts = raw.split(/\s+/);
+    const trailing = /\s$/.test(raw);
+    let next;
+    if (chosen.t === "cmd") next = `atlas ${chosen.v} `;
+    else if (trailing) next = `atlas ${raw}${chosen.v}`;
+    else next = `atlas ${[...parts.slice(0, -1), chosen.v].join(" ")}`;
+    setInput(next);
+    requestAnimationFrame(() => {
+      const el = inputRef.current;
+      if (el) { el.focus({ preventScroll: true }); el.setSelectionRange(next.length, next.length); }
+    });
+  };
+
+  // ghost = inline completion of the current token by the selected suggestion
+  const ghost = useMemo(() => {
+    const cur = sugHidden ? null : sugs[sugIdx];
+    if (!cur) return "";
+    const raw = input.replace(/^atlas\s*/i, "");
+    if (/\s$/.test(raw)) return "";
+    const parts = raw.split(/\s+/);
+    const tok = parts[parts.length - 1] || "";
+    if (!tok) return "";
+    return cur.v.toLowerCase().startsWith(tok.toLowerCase()) ? cur.v.slice(tok.length) : "";
+  }, [sugs, sugIdx, input, sugHidden]);
+
   const onTrapKey = (e) => {
     if (e.key !== "Tab" || compact) return;
     const root = e.currentTarget;
@@ -341,9 +419,21 @@ export default function AtlasConsole({ onClose, compact = false }) {
   };
 
   const onInputKey = (e) => {
+    if (e.key === "Tab" || (e.key === "ArrowRight" && ghost && e.target.selectionStart === input.length)) {
+      if (sugs.length) { e.preventDefault(); acceptSug(); return; }
+    }
     if (e.key === "Enter") { if (!eng) return; run(input); setInput(""); }
-    else if (e.key === "ArrowUp") { e.preventDefault(); if (hist.current.length) { histAt.current = Math.max(0, histAt.current - 1); setInput(hist.current[histAt.current] || ""); } }
-    else if (e.key === "ArrowDown") { e.preventDefault(); histAt.current = Math.min(hist.current.length, histAt.current + 1); setInput(hist.current[histAt.current] || ""); }
+    else if (e.key === "Escape" && sugs.length && !sugHidden) { e.stopPropagation(); setSugHidden(true); }
+    else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (sugs.length > 1) setSugIdx((i) => (i - 1 + sugs.length) % sugs.length);
+      else if (hist.current.length) { histAt.current = Math.max(0, histAt.current - 1); setInput(hist.current[histAt.current] || ""); }
+    }
+    else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (sugs.length > 1) setSugIdx((i) => (i + 1) % sugs.length);
+      else { histAt.current = Math.min(hist.current.length, histAt.current + 1); setInput(hist.current[histAt.current] || ""); }
+    }
   };
 
   return (
@@ -373,12 +463,15 @@ export default function AtlasConsole({ onClose, compact = false }) {
       <div className={`ac-main${mapOn ? " with-map" : ""}`}>
         <section className="ac-term" aria-label="Atlas terminal">
           <div className="ac-scroll" ref={scrollRef}>
-            {blocks.length === 0 && !loadError && <div className="ac-dim">booting query engine over facebook/react…</div>}
+            {eng && (
+              <div className="ac-ready">✓ atlas ready — <b>{eng.meta.repo}</b> · {eng.meta.shown_nodes} symbols · {eng.meta.shown_edges} call edges · engine: client-side (wasm planned)</div>
+            )}
+            {blocks.length === 0 && !eng && !loadError && <div className="ac-dim">booting query engine over facebook/react…</div>}
             {loadError && <div className="ac-err">couldn’t load the index — reload the page to retry.</div>}
             {blocks.map((b) => (
-              <div className="ac-blk" key={b.id}>
-                <div className="ac-echo"><span className="ac-ps1">$</span> {b.echo}</div>
-                <Result r={b.r} run={run} />
+              <div className="ac-blk" key={b.id} data-kind={b.r.kind}>
+                <div className="ac-echo"><span className="ac-ps1">❯</span> <span className="ac-etxt">{b.echo}</span></div>
+                <Result r={b.r} run={run} showMap={() => setMapOn(true)} />
               </div>
             ))}
           </div>
@@ -389,9 +482,25 @@ export default function AtlasConsole({ onClose, compact = false }) {
             ))}
           </div>
           <div className="ac-prompt" onClick={() => inputRef.current && inputRef.current.focus()}>
+            {sugs.length > 0 && !sugHidden && (
+              <div className="ac-sugs" role="listbox" aria-label="Completions">
+                {sugs.map((sg, i) => (
+                  <button key={sg.v + sg.t} type="button" role="option" aria-selected={i === sugIdx}
+                    className={`ac-sug${i === sugIdx ? " on" : ""}`}
+                    onMouseEnter={() => setSugIdx(i)}
+                    onClick={() => acceptSug(sg)}>
+                    <span className="ac-sug-t">{sg.t === "cmd" ? "❯" : "ƒ"}</span> {sg.v}
+                  </button>
+                ))}
+                <span className="ac-sug-hint">tab to complete</span>
+              </div>
+            )}
             <span className="ac-p">~/react — atlas ❯</span>
-            <input ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={onInputKey}
-              placeholder="atlas callers <symbol>" aria-label="Atlas command" autoComplete="off" spellCheck={false} />
+            <span className="ac-inwrap">
+              <span className="ac-ghost" aria-hidden="true"><i>{input}</i>{ghost}</span>
+              <input ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={onInputKey}
+                placeholder="atlas callers <symbol>   ·   tab completes" aria-label="Atlas command" autoComplete="off" spellCheck={false} />
+            </span>
           </div>
         </section>
 

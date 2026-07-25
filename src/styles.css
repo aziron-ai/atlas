@@ -2577,3 +2577,62 @@ a.sheet-cell:hover .go {
 .ac-embed { display: flex; height: 620px; max-height: 78vh; margin-top: 8px; }
 .ac-embed .ac-app { border-radius: 14px; }
 @media (max-width: 820px) { .ac-embed { height: 80vh; max-height: none; } }
+
+/* ===== console v2: Warp-style result blocks, autocomplete, selection ===== */
+.ac-app ::selection { background: rgba(111, 157, 255, 0.45); color: #ffffff; }
+.ac-ready { font-size: 12px; color: var(--acgrn); margin: 0 0 14px; }
+.ac-ready b { color: var(--actx); }
+/* each command+result is a distinct block with a kind-colored spine */
+.ac-blk {
+  position: relative;
+  margin: 0 0 10px;
+  padding: 9px 12px 10px 14px;
+  border-left: 2px solid var(--acls);
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+.ac-blk:hover { background: rgba(255, 255, 255, 0.022); }
+.ac-blk[data-kind="callers"], .ac-blk[data-kind="callees"] { border-left-color: var(--acpri); }
+.ac-blk[data-kind="impact"] { border-left-color: var(--accoral); }
+.ac-blk[data-kind="search"] { border-left-color: #22d3ee; }
+.ac-blk[data-kind="symbol"] { border-left-color: #a78bfa; }
+.ac-blk[data-kind="error"] { border-left-color: var(--accoral); border-left-style: dashed; }
+.ac-blk[data-kind="help"] { border-left-color: var(--acgrn); }
+.ac-echo .ac-etxt { color: #d6e2f5; font-weight: 600; }
+.ac-more {
+  display: inline-block; margin-top: 3px; padding: 2px 9px;
+  font: inherit; font-size: 12px; color: var(--acmut);
+  background: rgba(255, 255, 255, 0.04); border: 1px solid var(--acline); border-radius: 6px; cursor: pointer;
+}
+.ac-more:hover { color: var(--actx); border-color: var(--acpri); }
+.ac-maplink {
+  display: inline-block; margin-top: 5px; padding: 0;
+  font: inherit; font-size: 12px; color: var(--acgrn);
+  background: none; border: 0; border-bottom: 1px dotted transparent; cursor: pointer;
+}
+.ac-maplink:hover { border-bottom-color: var(--acgrn); }
+/* ghost inline completion */
+.ac-inwrap { position: relative; flex: 1; min-width: 60px; display: flex; }
+.ac-inwrap input { flex: 1; position: relative; z-index: 1; background: transparent; }
+.ac-ghost {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  font: inherit; font-size: 14px; color: var(--acfaint); white-space: pre; overflow: hidden;
+  display: flex; align-items: center;
+}
+.ac-ghost i { font-style: normal; visibility: hidden; }
+/* completion menu floats above the prompt */
+.ac-prompt { position: relative; }
+.ac-sugs {
+  position: absolute; left: 12px; right: 12px; bottom: calc(100% + 6px); z-index: 6;
+  display: flex; flex-direction: column; padding: 5px;
+  background: #0c1424; border: 1px solid var(--acls); border-radius: 10px;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.5);
+}
+.ac-sug {
+  display: flex; align-items: center; gap: 9px; text-align: left;
+  padding: 6px 10px; border: 0; border-radius: 6px; cursor: pointer;
+  font: inherit; font-size: 13px; color: var(--actx); background: none;
+}
+.ac-sug.on { background: rgba(111, 157, 255, 0.16); }
+.ac-sug-t { color: var(--acgrn); font-size: 11px; width: 12px; }
+.ac-sug-hint { align-self: flex-end; padding: 3px 8px 1px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--acfaint); }
