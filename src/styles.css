@@ -48,6 +48,9 @@
     --chart-ground: #ffffff;
     --chart-settlement: #334155;
     --term-green: #16a34a;
+    --btn-bg: #2563eb;
+    --btn-bg-hover: #1d4ed8;
+    --btn-border: #1d4ed8;
     color-scheme: light;
   }
 
@@ -86,6 +89,9 @@
     --chart-ground: #0c1422;
     --chart-settlement: #c3d1e4;
     --term-green: #3ecb6e;
+    --btn-bg: #3862d6;
+    --btn-bg-hover: #4571ea;
+    --btn-border: #4f78e8;
     color-scheme: dark;
   }
 
@@ -335,12 +341,12 @@
     border-radius: 8px;
   }
   .btn-primary {
-    background: var(--primary);
+    background: var(--btn-bg);
     color: #ffffff;
-    border: 1px solid var(--primary-dim);
+    border: 1px solid var(--btn-border);
   }
   .btn-primary:hover {
-    background: #1d4ed8;
+    background: var(--btn-bg-hover);
   }
   .btn-ghost {
     background: transparent;
@@ -665,14 +671,22 @@ section[id] {
   background: var(--term-green);
   animation: atlas-caret 1s steps(1) infinite;
 }
+/* collapse the subhead while the title types (no reserved gap), then reveal it */
 .product-hero h1 .h1-tail {
+  max-height: 0;
+  margin-top: 0;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  overflow: hidden;
+  transition: max-height 0.5s ease, margin-top 0.5s ease, opacity 0.5s ease;
 }
-.product-hero h1 .h1-tail.in { opacity: 1; }
+.product-hero h1 .h1-tail.in {
+  max-height: 8em;
+  margin-top: 14px;
+  opacity: 1;
+}
 @media (prefers-reduced-motion: reduce) {
   .product-hero h1 .type-caret { display: none; }
-  .product-hero h1 .h1-tail { opacity: 1; }
+  .product-hero h1 .h1-tail { max-height: none; margin-top: 14px; opacity: 1; }
 }
 
 /* interactive hero console — a terminal, so it stays dark in both themes */
@@ -778,7 +792,16 @@ section[id] {
 .cmdk-trigger .cmdk-prompt { color: var(--term-green); font-weight: 700; }
 .cmdk-trigger kbd { font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; }
 
-/* header control cluster — unified terminal-strip feel with a green hover accent */
+/* header control cluster — a unified terminal toolbar: sharper corners,
+   matching surface, green hover accent */
+.cmdk-trigger,
+.product-header .icon-btn,
+.product-header .chip {
+  border-radius: 6px;
+}
+.product-header .icon-btn {
+  background: var(--surface-raised);
+}
 .product-header .icon-btn:hover {
   border-color: var(--term-green);
   color: var(--text);
@@ -786,13 +809,16 @@ section[id] {
 .product-header .chip {
   height: 34px;
   padding: 0 10px;
-  border-radius: 8px;
 }
 .product-header .chip::before {
   content: "▸";
   color: var(--term-green);
   margin-right: 1px;
   font-size: 10px;
+}
+/* the Install CTA sits in the same toolbar — match its corners */
+.product-header .btn-primary {
+  border-radius: 6px;
 }
 
 .cmdk-overlay {
