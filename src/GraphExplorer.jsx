@@ -5,24 +5,28 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 // No external libraries / CDN. Self-fetches data/graph.json on mount.
 
 // Community accent hues, matching the Cartograph tokens g0..g5.
+// Bright, luminous community hues for the dark "network console" screen.
 const COMMUNITY_COLORS = [
-  "#2563EB", // g0 Aziron blue
-  "#0284C7", // g1 sky
-  "#7C3AED", // g2 violet
-  "#16A34A", // g3 green
-  "#DC2626", // g4 red
-  "#0891B2", // g5 cyan
+  "#5b8cff", // c0 blue
+  "#38bdf8", // c1 sky
+  "#a78bfa", // c2 violet
+  "#3ecb6e", // c3 green
+  "#f2726e", // c4 coral
+  "#22d3ee", // c5 cyan
 ];
 
+// The graph is a deliberately dark console screen in BOTH site themes, so the
+// canvas + chrome always read against this fixed dark palette.
 const PALETTE = {
-  bg: "#F9FAFB",
-  surface: "#FFFFFF",
-  line: "#D8E0EA",
-  lineStrong: "#B8C4D2",
-  text: "#0F172A",
-  muted: "#475569",
-  faint: "#526277",
-  primary: "#2563EB",
+  bg: "#080d18",
+  surface: "#101a2c",
+  line: "#20304c",
+  lineStrong: "#33466a",
+  text: "#e9f0fb",
+  muted: "#93a4c0",
+  faint: "#6c7f9d",
+  primary: "#6f9dff",
+  green: "#3ecb6e",
 };
 
 // ----- deterministic PRNG -------------------------------------------------
@@ -420,8 +424,9 @@ export default function GraphExplorer({ className = "" }) {
         H * 0.42,
         Math.max(W, H) * 0.6
       );
-      glow.addColorStop(0, "rgba(37,99,235,0.08)");
-      glow.addColorStop(1, "rgba(37,99,235,0)");
+      glow.addColorStop(0, "rgba(70,130,255,0.14)");
+      glow.addColorStop(0.55, "rgba(40,90,200,0.05)");
+      glow.addColorStop(1, "rgba(70,130,255,0)");
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, W, H);
 
@@ -439,11 +444,11 @@ export default function GraphExplorer({ className = "" }) {
         const incident =
           activeIdx != null && (e.s === activeIdx || e.t === activeIdx);
         if (activeIdx != null && !incident) {
-          ctx.strokeStyle = "rgba(100,116,139,0.08)";
+          ctx.strokeStyle = "rgba(130,160,210,0.06)";
         } else if (incident) {
-          ctx.strokeStyle = "rgba(37,99,235,0.5)";
+          ctx.strokeStyle = "rgba(111,157,255,0.6)";
         } else {
-          ctx.strokeStyle = "rgba(100,116,139,0.18)";
+          ctx.strokeStyle = "rgba(130,160,210,0.15)";
         }
         const sa = worldToScreen(a.x, a.y);
         const sb = worldToScreen(b.x, b.y);
@@ -471,14 +476,18 @@ export default function GraphExplorer({ className = "" }) {
         ctx.globalAlpha = alpha;
         ctx.beginPath();
         ctx.arc(scr.sx, scr.sy, r, 0, Math.PI * 2);
+        // luminous glow — stronger for hubs — gives the "network monitor" look
+        ctx.shadowColor = color;
+        ctx.shadowBlur = Math.min(16, 3 + r * 1.4);
         ctx.fillStyle = color;
         ctx.fill();
+        ctx.shadowBlur = 0;
 
         // thin ring on the active node + neighbors for legibility
         if (activeIdx != null && (i === activeIdx || (neighbors && neighbors.has(i)))) {
           ctx.globalAlpha = 1;
           ctx.lineWidth = i === activeIdx ? 2 : 1;
-          ctx.strokeStyle = i === activeIdx ? PALETTE.text : "rgba(51,65,85,0.42)";
+          ctx.strokeStyle = i === activeIdx ? "#ffffff" : "rgba(180,205,240,0.45)";
           ctx.stroke();
         }
         ctx.globalAlpha = 1;
@@ -501,8 +510,11 @@ export default function GraphExplorer({ className = "" }) {
         }
         if (labelAlpha <= 0) continue;
         ctx.globalAlpha = labelAlpha;
-        ctx.fillStyle = PALETTE.text;
-        ctx.fillText(node.name, scr.sx + r + 4, scr.sy);
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "rgba(0,0,0,0.9)";
+        ctx.shadowBlur = 5;
+        ctx.fillText(node.name, scr.sx + r + 5, scr.sy);
+        ctx.shadowBlur = 0;
       }
       ctx.globalAlpha = 1;
       ctx.restore();
@@ -739,258 +751,100 @@ export default function GraphExplorer({ className = "" }) {
   }
 
   // ---- main render -------------------------------------------------------
+  const maxCount = communityCounts.length ? communityCounts[0].count : 1;
+
   return (
-    <div
-      className={className}
-      data-testid="graph-canvas"
-      style={{
-        position: "relative",
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        gap: 16,
-        width: "100%",
-      }}
-    >
-      {/* Accessible text summary, visually hidden but exposed to AT. */}
-      <p
-        style={{
-          position: "absolute",
-          width: 1,
-          height: 1,
-          padding: 0,
-          margin: -1,
-          overflow: "hidden",
-          clip: "rect(0 0 0 0)",
-          whiteSpace: "nowrap",
-          border: 0,
-        }}
-      >
-        {ariaSummary}
-      </p>
+    <div className={className} data-testid="graph-canvas" style={{ position: "relative", width: "100%" }}>
+      <p className="sr-only-abs">{ariaSummary}</p>
 
-      {/* Canvas stage */}
-      <div
-        ref={wrapRef}
-        role="img"
-        aria-label={ariaSummary}
-        style={{
-          position: "relative",
-          flex: "1 1 420px",
-          minWidth: 280,
-          minHeight: 360,
-          height: "100%",
-          background: PALETTE.bg,
-          border: `1px solid ${PALETTE.line}`,
-          borderRadius: 12,
-          overflow: "hidden",
-        }}
-      >
-        <canvas
-          ref={canvasRef}
-          style={{
-            display: "block",
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            cursor: hoverNode ? "pointer" : "grab",
-            touchAction: "none",
-          }}
-        />
-
-        {/* Tooltip */}
-        {hoverNode && (
-          <div
-            style={{
-              position: "absolute",
-              left: Math.min(tooltipPos.pointerX + 14, (tooltipPos.width || 0) - 240),
-              top: Math.min(tooltipPos.pointerY + 14, (tooltipPos.height || 0) - 110),
-              pointerEvents: "none",
-              maxWidth: 240,
-              background: "rgba(255,255,255,0.98)",
-              border: `1px solid ${PALETTE.lineStrong}`,
-              borderRadius: 8,
-              padding: "8px 10px",
-              fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-              fontSize: 12,
-              lineHeight: 1.45,
-              color: PALETTE.text,
-              boxShadow: "0 10px 24px rgba(15,23,42,0.14)",
-              zIndex: 5,
-            }}
-          >
-            <div style={{ fontWeight: 600, color: PALETTE.primary, wordBreak: "break-all" }}>
-              {hoverNode.name}
-            </div>
-            <div style={{ color: PALETTE.muted, marginTop: 2 }}>
-              {hoverNode.kind} · {languageLabel(hoverNode.lang)} · deg {hoverNode.deg}
-            </div>
-            <div style={{ color: PALETTE.faint, marginTop: 2, wordBreak: "break-all" }}>
-              {hoverNode.path}
-            </div>
-          </div>
-        )}
-
-        {/* Zoom / reset / fit controls (bottom-left) */}
-        <div
-          style={{
-            position: "absolute",
-            left: 12,
-            bottom: 12,
-            display: "flex",
-            gap: 6,
-            zIndex: 4,
-          }}
-        >
-          {[
-            { label: "−", title: "Zoom out", fn: () => canvasRef.current?._atlasControls?.zoom(0.8) },
-            { label: "+", title: "Zoom in", fn: () => canvasRef.current?._atlasControls?.zoom(1.25) },
-            { label: "Fit", title: "Reset & fit", fn: () => canvasRef.current?._atlasControls?.fit() },
-          ].map((b) => (
-            <button
-              key={b.title}
-              type="button"
-              title={b.title}
-              aria-label={b.title}
-              onClick={b.fn}
-              style={{
-                minWidth: 30,
-                height: 30,
-                padding: "0 8px",
-                background: PALETTE.surface,
-                border: `1px solid ${PALETTE.line}`,
-                borderRadius: 6,
-                color: PALETTE.text,
-                fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-                fontSize: 13,
-                cursor: "pointer",
-                lineHeight: 1,
-              }}
-            >
-              {b.label}
-            </button>
-          ))}
+      <div className="gx-window">
+        {/* terminal title bar */}
+        <div className="gx-bar">
+          <span className="gx-dot" style={{ background: "#ff5f56" }} />
+          <span className="gx-dot" style={{ background: "#ffbd2e" }} />
+          <span className="gx-dot" style={{ background: "#27c93f" }} />
+          <span className="gx-title">atlas ❯ export --all</span>
+          <span className="gx-live"><i className="gx-live-dot" /> live graph</span>
         </div>
 
-        {/* Caption */}
-        {caption && (
-          <div
-            style={{
-              position: "absolute",
-              right: 12,
-              bottom: 12,
-              maxWidth: "70%",
-              textAlign: "right",
-              fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-              fontSize: 11,
-              letterSpacing: "0.01em",
-              color: PALETTE.faint,
-              zIndex: 4,
-              pointerEvents: "none",
-            }}
-          >
-            {caption}
-          </div>
-        )}
-      </div>
+        <div className="gx-body">
+          {/* canvas stage — the dark radar screen */}
+          <div ref={wrapRef} role="img" aria-label={ariaSummary} className="gx-stage">
+            <canvas
+              ref={canvasRef}
+              className="gx-canvas"
+              style={{ cursor: hoverNode ? "pointer" : "grab" }}
+            />
 
-      {/* Right-rail legend + hubs */}
-      <div
-        data-testid="graph-legend"
-        style={{
-          flex: "0 0 200px",
-          minWidth: 180,
-          display: "flex",
-          flexDirection: "column",
-          gap: 18,
-          fontFamily:
-            "Inter, ui-sans-serif, system-ui, -apple-system, sans-serif",
-        }}
-      >
-        <div>
-          <div
-            style={{
-              fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-              fontSize: 11,
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: PALETTE.faint,
-              marginBottom: 10,
-            }}
-          >
-            Communities
-          </div>
-          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 7 }}>
-            {communityCounts.map((entry) => (
-              <li
-                key={entry.c}
-                style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5, color: PALETTE.text }}
+            {hoverNode && (
+              <div
+                className="gx-tip"
+                style={{
+                  left: Math.min(tooltipPos.pointerX + 14, (tooltipPos.width || 0) - 240),
+                  top: Math.min(tooltipPos.pointerY + 14, (tooltipPos.height || 0) - 110),
+                }}
               >
-                <span
-                  style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: "50%",
-                    background: COMMUNITY_COLORS[entry.c % COMMUNITY_COLORS.length],
-                    flex: "0 0 auto",
-                  }}
-                />
-                <span style={{ color: PALETTE.muted }}>c{entry.c}</span>
-                <span
-                  style={{
-                    marginLeft: "auto",
-                    fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-                    fontVariantNumeric: "tabular-nums",
-                    color: PALETTE.text,
-                  }}
-                >
-                  {fmt.format(entry.count)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
+                <div className="n">{hoverNode.name}</div>
+                <div className="m">{hoverNode.kind} · {languageLabel(hoverNode.lang)} · deg {hoverNode.deg}</div>
+                <div className="p">{hoverNode.path}</div>
+              </div>
+            )}
 
-        <div>
-          <div
-            style={{
-              fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-              fontSize: 11,
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: PALETTE.faint,
-              marginBottom: 10,
-            }}
-          >
-            Top hubs
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {TOP_HUBS.filter((name) =>
-              prepared ? prepared.nodes.some((n) => n.name === name) : true
-            ).map((name) => {
-              const active = focusName === name;
-              return (
-                <button
-                  key={name}
-                  type="button"
-                  onClick={() => setFocusName(active ? null : name)}
-                  aria-pressed={active}
-                  style={{
-                    fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace",
-                    fontSize: 12,
-                    padding: "3px 8px",
-                    borderRadius: 6,
-                    cursor: "pointer",
-                    border: `1px solid ${active ? PALETTE.primary : PALETTE.line}`,
-                    background: active ? "rgba(37,99,235,0.1)" : PALETTE.surface,
-                    color: active ? PALETTE.primary : PALETTE.muted,
-                  }}
-                >
-                  {name}
+            <div className="gx-controls">
+              {[
+                { label: "−", title: "Zoom out", fn: () => canvasRef.current?._atlasControls?.zoom(0.8) },
+                { label: "+", title: "Zoom in", fn: () => canvasRef.current?._atlasControls?.zoom(1.25) },
+                { label: "fit", title: "Reset & fit", fn: () => canvasRef.current?._atlasControls?.fit() },
+              ].map((b) => (
+                <button key={b.title} type="button" title={b.title} aria-label={b.title} onClick={b.fn} className="gx-ctl">
+                  {b.label}
                 </button>
-              );
-            })}
+              ))}
+            </div>
+
+            {caption && <div className="gx-status">❯ {caption}</div>}
+          </div>
+
+          {/* dark side rail */}
+          <div data-testid="graph-legend" className="gx-rail">
+            <div className="gx-sec">
+              <div className="gx-sec-h">Communities</div>
+              <ul className="gx-comms">
+                {communityCounts.map((entry) => {
+                  const c = COMMUNITY_COLORS[entry.c % COMMUNITY_COLORS.length];
+                  return (
+                    <li className="gx-comm" key={entry.c}>
+                      <span className="gx-swatch" style={{ background: c, boxShadow: `0 0 8px ${c}` }} />
+                      <span className="gx-comm-name">c{entry.c}</span>
+                      <span className="gx-comm-bar">
+                        <i style={{ width: `${Math.max(6, (entry.count / maxCount) * 100)}%`, background: c }} />
+                      </span>
+                      <span className="gx-comm-n">{fmt.format(entry.count)}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            <div className="gx-sec">
+              <div className="gx-sec-h">Top hubs</div>
+              <div className="gx-hubs">
+                {TOP_HUBS.filter((name) => (prepared ? prepared.nodes.some((n) => n.name === name) : true)).map((name) => {
+                  const active = focusName === name;
+                  return (
+                    <button
+                      key={name}
+                      type="button"
+                      onClick={() => setFocusName(active ? null : name)}
+                      aria-pressed={active}
+                      className={`gx-hub${active ? " on" : ""}`}
+                    >
+                      {name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </div>

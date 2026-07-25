@@ -1002,6 +1002,97 @@ section[id] {
 @keyframes lsb-pop { 0% { transform: scale(0); } 70% { transform: scale(1.35); } 100% { transform: scale(1); } }
 @keyframes lsb-halo { 0% { transform: scale(1); opacity: 0.7; } 70%, 100% { transform: scale(2.6); opacity: 0; } }
 
+/* ===== Atlas network console — the graph explorer, redesigned as a dark
+   radar-style terminal screen (fixed dark palette in both site themes) ===== */
+.sr-only-abs {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.gx-window {
+  overflow: hidden;
+  border: 1px solid #22304a;
+  border-radius: 14px;
+  background: #0a1120;
+  box-shadow: 0 26px 64px -32px rgba(0, 0, 0, 0.75);
+}
+.gx-bar {
+  display: flex; align-items: center; gap: 7px;
+  padding: 10px 14px;
+  background: #0b1322;
+  border-bottom: 1px solid #1c2740;
+}
+.gx-dot { width: 10px; height: 10px; border-radius: 50%; }
+.gx-title { margin-left: 8px; font-family: var(--mono); font-size: 12px; color: #7f93b3; }
+.gx-live {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: #6c7f9d;
+}
+.gx-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #3ecb6e; box-shadow: 0 0 9px #3ecb6e; animation: atlas-caret 1.7s steps(1) infinite; }
+.gx-body { display: flex; flex-wrap: wrap; }
+.gx-stage {
+  position: relative;
+  flex: 1 1 460px;
+  min-width: 280px;
+  min-height: 440px;
+  background:
+    radial-gradient(120% 100% at 50% 38%, rgba(60, 110, 220, 0.1), transparent 60%),
+    #080d18;
+}
+.gx-canvas { display: block; position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+.gx-controls { position: absolute; left: 12px; bottom: 12px; z-index: 4; display: flex; gap: 6px; }
+.gx-ctl {
+  min-width: 30px; height: 30px; padding: 0 9px; line-height: 1;
+  font-family: var(--mono); font-size: 13px; color: #c3d1e4;
+  background: rgba(255, 255, 255, 0.05); border: 1px solid #2a3a58; border-radius: 7px; cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.gx-ctl:hover { border-color: #3ecb6e; color: #fff; }
+.gx-status {
+  position: absolute; right: 12px; bottom: 12px; max-width: 78%; z-index: 4; pointer-events: none;
+  text-align: right; font-family: var(--mono); font-size: 11px; color: #6c7f9d;
+}
+.gx-tip {
+  position: absolute; z-index: 5; max-width: 240px; pointer-events: none;
+  padding: 8px 10px; border-radius: 8px;
+  background: rgba(10, 16, 28, 0.96); border: 1px solid #2a3a58;
+  font-family: var(--mono); font-size: 12px; line-height: 1.45; color: #e9f0fb;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+}
+.gx-tip .n { font-weight: 600; color: #6f9dff; word-break: break-all; }
+.gx-tip .m { color: #93a4c0; margin-top: 2px; }
+.gx-tip .p { color: #6c7f9d; margin-top: 2px; word-break: break-all; }
+.gx-rail {
+  flex: 0 0 224px; min-width: 200px;
+  display: flex; flex-direction: column; gap: 22px;
+  padding: 18px 16px;
+  background: #0b1322;
+  border-left: 1px solid #1c2740;
+}
+.gx-sec-h {
+  margin-bottom: 12px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #6c7f9d;
+}
+.gx-sec-h::before { content: "❯ "; color: #3ecb6e; }
+.gx-comms { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.gx-comm { display: grid; grid-template-columns: 11px 24px 1fr auto; align-items: center; gap: 9px; }
+.gx-swatch { width: 10px; height: 10px; border-radius: 3px; }
+.gx-comm-name { font-family: var(--mono); font-size: 12px; color: #93a4c0; }
+.gx-comm-bar { height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.06); overflow: hidden; }
+.gx-comm-bar i { display: block; height: 100%; border-radius: 3px; opacity: 0.85; }
+.gx-comm-n { font-family: var(--mono); font-size: 12px; color: #e9f0fb; font-variant-numeric: tabular-nums; }
+.gx-hubs { display: flex; flex-wrap: wrap; gap: 6px; }
+.gx-hub {
+  padding: 4px 9px; border-radius: 6px; cursor: pointer;
+  font-family: var(--mono); font-size: 12px; color: #93a4c0;
+  background: rgba(255, 255, 255, 0.04); border: 1px solid #2a3a58;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.gx-hub:hover { color: #e9f0fb; border-color: #3a4d70; }
+.gx-hub.on { color: #04120c; background: #3ecb6e; border-color: #3ecb6e; font-weight: 600; }
+@media (max-width: 720px) {
+  .gx-rail { flex-basis: 100%; border-left: 0; border-top: 1px solid #1c2740; }
+}
+
 /* mobile: the schematic survey chart shrinks to ~8px labels — swap it out below sm,
    the hero terminal above now carries the "see it work" job on small screens */
 @media (max-width: 639px) {
