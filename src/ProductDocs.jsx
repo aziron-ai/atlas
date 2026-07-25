@@ -390,6 +390,47 @@ export function ProductHeader({ version = RELEASE, active = "overview" }) {
   );
 }
 
+/* Hero headline that types itself in on load, then fades in the value subhead.
+   Full text lives in aria-label for assistive tech and SEO. */
+function TypedHeadline() {
+  const LEAD = "Your codebase is a territory. ";
+  const ACCENT = "Atlas is the map.";
+  const TAIL =
+    "Cited, file-line answers for your codebase — and your AI coding agent — at a fraction of the tokens.";
+  const total = LEAD.length + ACCENT.length;
+  const reduce = prefersReduced();
+  const [n, setN] = useState(reduce ? total : 0);
+  const [done, setDone] = useState(reduce);
+  useEffect(() => {
+    if (reduce) return undefined;
+    let i = 0;
+    let t;
+    const step = () => {
+      i += 1;
+      setN(i);
+      if (i < total) t = setTimeout(step, 32);
+      else setDone(true);
+    };
+    t = setTimeout(step, 320);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const lead = LEAD.slice(0, Math.min(n, LEAD.length));
+  const acc = n > LEAD.length ? ACCENT.slice(0, n - LEAD.length) : "";
+  return (
+    <h1 className="mt-5" aria-label={`${LEAD}${ACCENT} ${TAIL}`}>
+      <span aria-hidden="true">
+        {lead}
+        <span className="accent">{acc}</span>
+        {!done && <span className="type-caret" />}
+      </span>
+      <span className={`h1-tail${done ? " in" : ""}`} aria-hidden="true">
+        {TAIL}
+      </span>
+    </h1>
+  );
+}
+
 /* Interactive hero console — click a command to run it; it types out and reveals
    its cited output. Example output (schematic, like the survey chart) — not a benchmark. */
 const HERO_CMDS = {
@@ -673,10 +714,7 @@ export function ProductHome({ data }) {
             <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
               <div className="max-w-2xl hero-copy min-w-0">
                 <div className="eyebrow"><span className="status-dot" /> Local code intelligence for developers &amp; AI agents</div>
-                <h1 className="mt-5">
-                  Your codebase is a territory. <span className="accent">Atlas is the map.</span>
-                  <span className="h1-tail">Cited, file-line answers for your codebase — and your AI coding agent — at a fraction of the tokens.</span>
-                </h1>
+                <TypedHeadline />
                 <p className="lede mt-5 text-lg leading-relaxed">
                   Atlas surveys your repository into a local graph, then hands over only the
                   coordinates a query needs — symbol, callers, change impact — instead of the whole

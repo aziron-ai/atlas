@@ -208,7 +208,7 @@ function ConsoleBar({ active }) {
       className="sticky z-30"
       style={{
         top: 64,
-        background: "rgba(255,255,255,0.88)",
+        background: "var(--header-bg)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         borderBottom: "1px solid var(--line)",
