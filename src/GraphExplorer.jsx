@@ -200,6 +200,7 @@ export default function GraphExplorer({
   bare = false,
   highlightIds = null,
   onInspect = null,
+  dataOverride = null,
 }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -255,6 +256,7 @@ export default function GraphExplorer({
   // ---- fetch graph data (shared, cached — one fetch/parse per page) -------
   useEffect(() => {
     let alive = true;
+    if (dataOverride) { setData(dataOverride); return () => { alive = false; }; }
     getGraphData()
       .then((json) => {
         if (!alive) return;

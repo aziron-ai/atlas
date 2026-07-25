@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import GraphExplorer from "./GraphExplorer";
 import { getGraphData } from "./graphData";
+import { convertExport } from "./exportConvert";
 
 /* Atlas Console — a real Atlas terminal running in the browser over a pre-indexed
    sample of facebook/react (data/graph.json). Terminal-forward: the terminal is
@@ -195,8 +196,11 @@ function Rows({ rows, run, total, initial = 6 }) {
 }
 
 function Result({ r, run, showMap }) {
+  if (r.kind === "info") {
+    return <div className="ac-ready">✓ {r.msg}</div>;
+  }
   if (r.kind === "help") {
-    const cmds = [["callers <symbol>", "who calls it"], ["callees <symbol>", "what it calls"], ["impact <symbol>", "blast radius (reverse reachability)"], ["symbol <symbol>", "definition + degree"], ["search <term>", "lexical search"]];
+    const cmds = [["callers <symbol>", "who calls it"], ["callees <symbol>", "what it calls"], ["impact <symbol>", "blast radius (reverse reachability)"], ["symbol <symbol>", "definition + degree"], ["search <term>", "lexical search"], ["load", "open your own atlas export (or drag a JSON here)"]];
     return (
       <>
         <div className="ac-dim">Atlas over a pre-indexed sample of <b>facebook/react</b> — 280 symbols · 675 call edges.</div>
@@ -290,7 +294,9 @@ const TRY = [
 ];
 
 export default function AtlasConsole({ onClose, compact = false }) {
-  const [data, setData] = useState(null);
+  const [fetched, setFetched] = useState(null);
+  const [custom, setCustom] = useState(null);
+  const data = custom || fetched;
   const [blocks, setBlocks] = useState([]);
   const [hl, setHl] = useState(null);
   const [input, setInput] = useState("");
@@ -305,11 +311,13 @@ export default function AtlasConsole({ onClose, compact = false }) {
   const [sugHidden, setSugHidden] = useState(false);
   const bid = useRef(0);
   const autoRan = useRef(false);
+  const fileRef = useRef(null);
+  const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
     let alive = true;
     getGraphData()
-      .then((d) => { if (alive) setData(d); })
+      .then((d) => { if (alive) setFetched(d); })
       .catch(() => { if (alive) setLoadError(true); });
     return () => { alive = false; };
   }, []);
@@ -320,10 +328,35 @@ export default function AtlasConsole({ onClose, compact = false }) {
     if (el) el.scrollTop = el.scrollHeight;
   }, [blocks]);
 
+  const pushInfo = (msg, isErr) => {
+    setBlocks((bs) => [...bs, { id: ++bid.current, echo: null, r: { kind: isErr ? "error" : "info", msg } }]);
+  };
+
+  const loadExportFile = (file) => {
+    if (!file) return;
+    file.text().then((txt) => {
+      let parsed;
+      try { parsed = JSON.parse(txt); } catch (e) { pushInfo(`${file.name}: not valid JSON`, true); return; }
+      try {
+        const label = file.name.replace(/\.json$/i, "");
+        const conv = convertExport(parsed, label);
+        setCustom(conv);
+        setHl(null);
+        pushInfo(`loaded ${label} — ${conv.meta.shown_nodes} symbols · ${conv.meta.shown_edges} call edges (from ${conv.meta.nodes_total} exported)`);
+      } catch (e) {
+        pushInfo(`${file.name}: ${e.message}`, true);
+      }
+    });
+  };
+
   const run = (raw) => {
     if (!eng) return;
     const line = raw.trim();
     if (!line) return;
+    if (/^(atlas\s+)?load$/i.test(line)) {
+      if (fileRef.current) fileRef.current.click();
+      return;
+    }
     hist.current.push(line);
     histAt.current = hist.current.length;
     const short = line.replace(/^atlas\s+/i, "");
@@ -332,6 +365,17 @@ export default function AtlasConsole({ onClose, compact = false }) {
     setBlocks((bs) => [...bs, { id: ++bid.current, echo: `atlas ${line.replace(/^atlas\s+/i, "")}`, r }]);
     setHl(r.highlight && r.highlight.length ? [...new Set(r.highlight)] : null);
   };
+
+  const customRan = useRef(null);
+  useEffect(() => {
+    if (custom && eng && customRan.current !== custom) {
+      customRan.current = custom;
+      const top = eng.names[0];
+      if (top) { const t = setTimeout(() => run(`atlas callers ${top}`), 250); return () => clearTimeout(t); }
+    }
+    return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [custom, eng]);
 
   useEffect(() => {
     if (eng && !autoRan.current) {
@@ -437,13 +481,22 @@ export default function AtlasConsole({ onClose, compact = false }) {
   };
 
   return (
-    <div className={`ac-app${mapOn ? " has-map" : ""}`} role="dialog" aria-modal="true" aria-label="Atlas Console" onKeyDown={onTrapKey}>
+    <div
+      className={`ac-app${mapOn ? " has-map" : ""}${dragging ? " dragging" : ""}`}
+      role="dialog" aria-modal="true" aria-label="Atlas Console" onKeyDown={onTrapKey}
+      onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+      onDragLeave={(e) => { if (e.target === e.currentTarget) setDragging(false); }}
+      onDrop={(e) => { e.preventDefault(); setDragging(false); loadExportFile(e.dataTransfer.files && e.dataTransfer.files[0]); }}
+    >
+      {dragging && <div className="ac-drop">drop an <b>atlas export</b> (JSON) to query your own repo</div>}
+      <input ref={fileRef} type="file" accept=".json,application/json" style={{ display: "none" }}
+        onChange={(e) => { loadExportFile(e.target.files && e.target.files[0]); e.target.value = ""; }} />
       <header className="ac-bar">
         <span className="ac-dot" style={{ background: "#ff5f56" }} />
         <span className="ac-dot" style={{ background: "#ffbd2e" }} />
         <span className="ac-dot" style={{ background: "#27c93f" }} />
         <span className="ac-title"><span className="ac-live" /> Atlas Console <span className="ac-sub">— running in your browser</span></span>
-        <span className="ac-pill">facebook/react · <b>pre-indexed</b> · client-side</span>
+        <span className="ac-pill">{(eng && eng.meta.repo) || "facebook/react"} · <b>pre-indexed</b> · client-side</span>
         <button
           type="button"
           className={`ac-toggle${mapOn ? " on" : ""}`}
@@ -470,14 +523,22 @@ export default function AtlasConsole({ onClose, compact = false }) {
             {loadError && <div className="ac-err">couldn’t load the index — reload the page to retry.</div>}
             {blocks.map((b) => (
               <div className="ac-blk" key={b.id} data-kind={b.r.kind}>
-                <div className="ac-echo"><span className="ac-ps1">❯</span> <span className="ac-etxt">{b.echo}</span></div>
+                {b.echo != null && <div className="ac-echo"><span className="ac-ps1">❯</span> <span className="ac-etxt">{b.echo}</span></div>}
                 <Result r={b.r} run={run} showMap={() => setMapOn(true)} />
               </div>
             ))}
           </div>
           <div className="ac-chips">
             <span className="ac-lab">try</span>
-            {TRY.map(([label, cmd]) => (
+            {(custom && eng
+              ? [
+                  [`callers ${eng.names[0]}`, `atlas callers ${eng.names[0]}`],
+                  [`impact ${eng.names[1] || eng.names[0]}`, `atlas impact ${eng.names[1] || eng.names[0]}`],
+                  [`symbol ${eng.names[2] || eng.names[0]}`, `atlas symbol ${eng.names[2] || eng.names[0]}`],
+                  ["help", "atlas help"],
+                ]
+              : TRY
+            ).map(([label, cmd]) => (
               <button key={cmd} type="button" className={`ac-chip${active === label ? " on" : ""}`} onClick={() => run(cmd)}>{label}</button>
             ))}
           </div>
@@ -511,7 +572,7 @@ export default function AtlasConsole({ onClose, compact = false }) {
               <span className="ac-map-n">{hl ? `${hl.length} lit` : "280 symbols"}</span>
             </div>
             <div className="ac-map-body">
-              <GraphExplorer bare highlightIds={hl} onInspect={(n) => run(`atlas symbol ${n.name}`)} className="ac-gx" />
+              <GraphExplorer bare dataOverride={data} highlightIds={hl} onInspect={(n) => run(`atlas symbol ${n.name}`)} className="ac-gx" />
             </div>
           </aside>
         )}

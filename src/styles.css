@@ -2484,6 +2484,7 @@ a.sheet-cell:hover .go {
 .ac-overlay .ac-app { flex: 0 1 940px; transition: flex-basis 0.28s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .ac-overlay .ac-app.has-map { flex-basis: 1300px; }
 .ac-app {
+  position: relative;
   --acbg:#080d18; --acbg2:#0b1322; --acsurf:#101a2c; --acline:#20304c; --acls:#33466a;
   --actx:#e9f0fb; --acmut:#93a4c0; --acfaint:#6c7f9d; --acpri:#6f9dff; --acgrn:#3ecb6e; --accoral:#f2726e; --acamber:#f4bf5e;
   flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden;
@@ -2636,3 +2637,12 @@ a.sheet-cell:hover .go {
 .ac-sug.on { background: rgba(111, 157, 255, 0.16); }
 .ac-sug-t { color: var(--acgrn); font-size: 11px; width: 12px; }
 .ac-sug-hint { align-self: flex-end; padding: 3px 8px 1px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--acfaint); }
+/* drag-your-export loader */
+.ac-app.dragging { outline: 2px dashed var(--acgrn); outline-offset: -6px; }
+.ac-drop {
+  position: absolute; inset: 0; z-index: 20; display: grid; place-items: center;
+  background: rgba(5, 10, 18, 0.82); backdrop-filter: blur(2px);
+  font-size: 15px; color: var(--actx); pointer-events: none; border-radius: 16px;
+}
+.ac-drop b { color: var(--acgrn); }
+.ac-blk[data-kind="info"] { border-left-color: var(--acgrn); }
