@@ -18,7 +18,7 @@ const COMMUNITY_COLORS = [
 // The graph is a deliberately dark console screen in BOTH site themes, so the
 // canvas + chrome always read against this fixed dark palette.
 const PALETTE = {
-  bg: "#080d18",
+  bg: "#05080f",
   surface: "#101a2c",
   line: "#20304c",
   lineStrong: "#33466a",
@@ -312,7 +312,7 @@ export default function GraphExplorer({
     const total = fmt.format(m.nodes_total ?? data.nodes.length);
     const shownEdges = fmt.format(m.shown_edges ?? data.edges.length);
     const communities = m.communities ?? communityCounts.length;
-    return `${shownNodes} of ${total} symbols · ${shownEdges} edges · ${communities} communities · ${m.source || "atlas export --all"}`;
+    return `${shownNodes} of ${total} symbols · ${shownEdges} edges · ${communities} communities`;
   }, [data, communityCounts]);
 
   const ariaSummary = useMemo(() => {
@@ -440,10 +440,16 @@ export default function GraphExplorer({
         H * 0.42,
         Math.max(W, H) * 0.6
       );
-      glow.addColorStop(0, "rgba(70,130,255,0.14)");
-      glow.addColorStop(0.55, "rgba(40,90,200,0.05)");
+      glow.addColorStop(0, "rgba(64,120,255,0.1)");
+      glow.addColorStop(0.55, "rgba(40,90,200,0.04)");
       glow.addColorStop(1, "rgba(70,130,255,0)");
       ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, W, H);
+      // vignette — focus the cluster, hide ragged canvas edges against the bezel
+      const vg = ctx.createRadialGradient(W * 0.5, H * 0.5, Math.min(W, H) * 0.32, W * 0.5, H * 0.5, Math.max(W, H) * 0.72);
+      vg.addColorStop(0, "rgba(0,0,0,0)");
+      vg.addColorStop(1, "rgba(0,0,0,0.28)");
+      ctx.fillStyle = vg;
       ctx.fillRect(0, 0, W, H);
 
       const hoverIdx = st.hoverId;

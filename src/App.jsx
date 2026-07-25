@@ -1517,9 +1517,10 @@ function GraphSection() {
     <section id="graph" data-testid="graph" className="shell py-16" aria-labelledby="graph-title">
       <SectionHeader id="graph-title" kicker="08 · The map Atlas builds" title="The deterministic symbol & call graph">
         This is the “smallest useful slice” made visible: real <span className="mono">atlas export --all</span> output
-        of the Atlas repo, downsampled to a connected core. Hover a node, drag, pan, zoom; click a hub to focus it.
+        of <span className="mono">facebook/react</span>, downsampled to a connected core. Hover a node, drag, pan, zoom;
+        click a hub to focus it — or <button type="button" className="text-link" onClick={() => window.dispatchEvent(new CustomEvent("atlas:console"))}>query it live ❯</button>.
       </SectionHeader>
-      <div className="panel p-4 sm:p-5">
+      <div className="gx-frame">
         <GraphExplorer className="atlas-graph-full" />
       </div>
     </section>

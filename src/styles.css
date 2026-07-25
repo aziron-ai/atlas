@@ -1008,18 +1008,36 @@ section[id] {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
+/* no mat — the console window IS the exhibit (Fable) */
+.gx-frame { margin-top: 8px; }
 .gx-window {
   overflow: hidden;
-  border: 1px solid #22304a;
   border-radius: 14px;
-  background: #0a1120;
-  box-shadow: 0 26px 64px -32px rgba(0, 0, 0, 0.75);
+  background: #0b1322;
+}
+/* dark: separate by edge-light + depth, not surface contrast */
+:root[data-theme="dark"] .gx-window,
+:root:not([data-theme="light"]) .gx-window {
+  border: 1px solid #31435f;
+  box-shadow:
+    0 0 0 1px rgba(111, 157, 255, 0.06),
+    inset 0 1px 0 rgba(148, 178, 235, 0.08),
+    0 32px 80px -36px rgba(56, 98, 214, 0.35),
+    0 18px 44px -24px rgba(0, 0, 0, 0.8);
+}
+/* light: separate by contrast + real drop shadow, no white mat */
+:root[data-theme="light"] .gx-window {
+  border: 1px solid #16233c;
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.06),
+    0 24px 60px -24px rgba(15, 23, 42, 0.38),
+    0 8px 20px -10px rgba(15, 23, 42, 0.25);
 }
 .gx-bar {
   display: flex; align-items: center; gap: 7px;
   padding: 10px 14px;
-  background: #0b1322;
-  border-bottom: 1px solid #1c2740;
+  background: #101a2e;
+  border-bottom: 1px solid #22304a;
 }
 .gx-dot { width: 10px; height: 10px; border-radius: 50%; }
 .gx-title { margin-left: 8px; font-family: var(--mono); font-size: 12px; color: #7f93b3; }
@@ -1027,16 +1045,15 @@ section[id] {
   margin-left: auto; display: inline-flex; align-items: center; gap: 7px;
   font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: #6c7f9d;
 }
-.gx-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #3ecb6e; box-shadow: 0 0 9px #3ecb6e; animation: atlas-caret 1.7s steps(1) infinite; }
+.gx-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #3ecb6e; box-shadow: 0 0 9px #3ecb6e; animation: ac-pulse 2.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .gx-live-dot { animation: none; } }
 .gx-body { display: flex; flex-wrap: wrap; }
 .gx-stage {
   position: relative;
   flex: 1 1 460px;
   min-width: 280px;
   min-height: 440px;
-  background:
-    radial-gradient(120% 100% at 50% 38%, rgba(60, 110, 220, 0.1), transparent 60%),
-    #080d18;
+  background: #05080f;
 }
 .gx-canvas { display: block; position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
 .gx-controls { position: absolute; left: 12px; bottom: 12px; z-index: 4; display: flex; gap: 6px; }
@@ -1065,8 +1082,8 @@ section[id] {
   flex: 0 0 224px; min-width: 200px;
   display: flex; flex-direction: column; gap: 22px;
   padding: 18px 16px;
-  background: #0b1322;
-  border-left: 1px solid #1c2740;
+  background: #0d1626;
+  border-left: 1px solid #22304a;
 }
 .gx-sec-h {
   margin-bottom: 12px;
