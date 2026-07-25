@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { getGraphData } from "./graphData";
 
 // Atlas — The Benchmark Instrument
 // Interactive deterministic force-directed code graph on a vanilla <canvas>.
@@ -28,6 +29,8 @@ const PALETTE = {
   primary: "#6f9dff",
   green: "#3ecb6e",
 };
+
+const layoutCache = new WeakMap();
 
 // ----- deterministic PRNG -------------------------------------------------
 // FNV-1a 32-bit hash of a string seed → mulberry32 PRNG. Stable across reloads.
@@ -249,14 +252,10 @@ export default function GraphExplorer({
     stateRef.current.needsPaint = true;
   }, [highlightIds]);
 
-  // ---- fetch graph data --------------------------------------------------
+  // ---- fetch graph data (shared, cached — one fetch/parse per page) -------
   useEffect(() => {
     let alive = true;
-    fetch("data/graph.json")
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
+    getGraphData()
       .then((json) => {
         if (!alive) return;
         if (!json || !Array.isArray(json.nodes) || !Array.isArray(json.edges)) {
@@ -277,7 +276,16 @@ export default function GraphExplorer({
     if (!data) return null;
     const nodes = data.nodes;
     const edges = data.edges;
-    const layout = computeLayout(nodes, edges);
+    // The 320-iteration O(n²) force sim is the single most expensive step on the
+    // page (~100-300ms). All consumers share the same data object (graphData.js),
+    // so cache the settled layout per data identity and hand each instance a
+    // cheap clone (drags stay instance-local).
+    let base = layoutCache.get(data);
+    if (!base) {
+      base = computeLayout(nodes, edges);
+      layoutCache.set(data, base);
+    }
+    const layout = base.map((pt) => ({ ...pt }));
 
     const adjacency = new Map();
     for (let i = 0; i < nodes.length; i += 1) adjacency.set(i, new Set());
@@ -531,13 +539,18 @@ export default function GraphExplorer({
         ctx.globalAlpha = 1;
       }
 
-      // ---- hub labels (only the largest, to avoid clutter) --------------
+      // ---- hub labels — degree-first, colliding labels skipped ----------
       ctx.globalAlpha = 1;
       ctx.font = "600 11px ui-monospace, 'SF Mono', Menlo, monospace";
       ctx.textBaseline = "middle";
+      const labelIdx = [];
       for (let i = 0; i < layout.length; i += 1) {
+        if (layout[i].degNorm >= 0.55 || i === activeIdx) labelIdx.push(i);
+      }
+      labelIdx.sort((a, b) => layout[b].degNorm - layout[a].degNorm);
+      const drawn = [];
+      for (const i of labelIdx) {
         const p = layout[i];
-        if (p.degNorm < 0.55 && i !== activeIdx) continue;
         const node = nodes[i];
         const scr = worldToScreen(p.x, p.y);
         const r = Math.max(radiusFor(p) * v.scale, 1.4);
@@ -547,11 +560,18 @@ export default function GraphExplorer({
           labelAlpha = visible ? 1 : 0.0;
         }
         if (labelAlpha <= 0) continue;
+        const w = ctx.measureText(node.name).width;
+        const rect = { x: scr.sx + r + 5, y: scr.sy - 7, w, h: 14 };
+        const hit = drawn.some((d) =>
+          rect.x < d.x + d.w && rect.x + rect.w > d.x && rect.y < d.y + d.h && rect.y + rect.h > d.y
+        );
+        if (hit && i !== activeIdx) continue;
+        drawn.push(rect);
         ctx.globalAlpha = labelAlpha;
         ctx.fillStyle = "#ffffff";
         ctx.shadowColor = "rgba(0,0,0,0.9)";
         ctx.shadowBlur = 5;
-        ctx.fillText(node.name, scr.sx + r + 5, scr.sy);
+        ctx.fillText(node.name, rect.x, scr.sy);
         ctx.shadowBlur = 0;
       }
       ctx.globalAlpha = 1;

@@ -1521,7 +1521,9 @@ function GraphSection() {
         or click a node — every answer is genuinely computed and cited to file:line.
       </SectionHeader>
       <div className="ac-embed">
-        <AtlasConsole compact />
+        <LazyMount height={620}>
+          <AtlasConsole compact />
+        </LazyMount>
       </div>
     </section>
   );
@@ -1907,18 +1909,48 @@ function App() {
   );
 }
 
-/* Full-screen "Try now" Atlas Console overlay — opened by the hero button or ⌘K. */
+/* Full-screen "Try now" Atlas Console overlay — opened by the hero button or ⌘K.
+   Stays mounted after the first open (hidden, not unmounted) so reopening is
+   instant and the terminal session survives. Click the backdrop to close. */
 function ConsoleOverlay() {
-  const [open, setOpen] = useState(false);
+  const [opened, setOpened] = useState(false);
+  const [visible, setVisible] = useState(false);
   useEffect(() => {
-    const onOpen = () => setOpen(true);
+    const onOpen = () => { setOpened(true); setVisible(true); };
     window.addEventListener("atlas:console", onOpen);
     return () => window.removeEventListener("atlas:console", onOpen);
   }, []);
-  if (!open) return null;
+  if (!opened) return null;
   return (
-    <div className="ac-overlay">
-      <AtlasConsole onClose={() => setOpen(false)} />
+    <div
+      className="ac-overlay"
+      style={visible ? undefined : { display: "none" }}
+      onMouseDown={(e) => { if (e.target === e.currentTarget) setVisible(false); }}
+    >
+      <AtlasConsole onClose={() => setVisible(false)} />
+    </div>
+  );
+}
+
+/* Mount heavy children only when the user nears them — the benchmarks page pays
+   zero console cost (fetch/layout/engine) until §08 approaches the viewport. */
+function LazyMount({ children, height = 620 }) {
+  const ref = useRef(null);
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") { setOn(true); return undefined; }
+    const el = ref.current;
+    if (!el) return undefined;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { setOn(true); io.disconnect(); } }),
+      { rootMargin: "500px 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div ref={ref} style={{ display: "flex", flex: 1, minWidth: 0, ...(on ? null : { minHeight: height }) }}>
+      {on ? children : null}
     </div>
   );
 }

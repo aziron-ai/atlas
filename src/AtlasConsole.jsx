@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import GraphExplorer from "./GraphExplorer";
+import { getGraphData } from "./graphData";
 
 /* Atlas Console — a real Atlas terminal running in the browser over a pre-indexed
    sample of facebook/react (data/graph.json). Terminal-forward: the terminal is
@@ -53,8 +54,12 @@ function buildEngine(data) {
   const cite = (n) => (n.line ? `${n.path}:${n.line}` : n.path);
 
   function resolve(term) {
-    const t = (term || "").toLowerCase();
-    if (nameToIds.has(t)) return { id: nameToIds.get(t)[0] };
+    const t = (term || "").replace(/^["'`]+|["'`]+$/g, "").toLowerCase();
+    if (nameToIds.has(t)) {
+      const ids = nameToIds.get(t);
+      const others = [...new Set(ids.slice(1).map((x) => pkgOf(byId.get(x).path)))];
+      return { id: ids[0], defs: ids.length, others };
+    }
     // did-you-mean: closest names
     const cands = [];
     for (const n of nodes) {
@@ -144,7 +149,7 @@ function buildEngine(data) {
       const cl = (callersOf.get(r.id) || []).length;
       const ce = (calleesOf.get(r.id) || []).length;
       const imp = impact(r.id).affected.length;
-      return { kind: "symbol", node: { name: n.name, kind: n.kind, lang: n.lang, cite: cite(n) }, callers: cl, callees: ce, impact: imp, highlight: [r.id, ...(callersOf.get(r.id) || []), ...(calleesOf.get(r.id) || [])] };
+      return { kind: "symbol", node: { name: n.name, kind: n.kind, lang: n.lang, cite: cite(n) }, defs: r.defs || 1, others: r.others || [], callers: cl, callees: ce, impact: imp, highlight: [r.id, ...(callersOf.get(r.id) || []), ...(calleesOf.get(r.id) || [])] };
     }
     return { kind: "error", msg: `unknown command "${cmd}" — try: callers · callees · impact · search · symbol · help` };
   }
@@ -185,11 +190,13 @@ function Result({ r, run }) {
     return (
       <>
         <div className="ac-err">{r.msg}</div>
-        {r.suggest && r.suggest.length > 0 && (
+        {r.suggest && r.suggest.length > 0 ? (
           <div className="ac-dim">did you mean {r.suggest.map((s, i) => (
             <span key={s}>{i ? " · " : ""}<button className="ac-sym" type="button" onClick={() => run(`atlas symbol ${s}`)}>{s}</button></span>
           ))}?</div>
-        )}
+        ) : r.suggest ? (
+          <div className="ac-dim">try <span className="ac-cmd">atlas search &lt;term&gt;</span> to find symbols by substring</div>
+        ) : null}
       </>
     );
   }
@@ -197,6 +204,9 @@ function Result({ r, run }) {
     return (
       <>
         <div><span className="ac-hd">{r.kind}</span> {r.name} <span className="ac-tot">total {r.total}</span></div>
+        {r.total === 0 && (
+          <div className="ac-dim">{r.kind === "callers" ? "no callers in this slice — nothing depends on it here" : "no callees — a leaf in this slice"}</div>
+        )}
         <Rows rows={r.rows} run={run} more={r.total - r.rows.length} />
       </>
     );
@@ -205,7 +215,9 @@ function Result({ r, run }) {
     return (
       <>
         <div><span className="ac-hd">search</span> {r.term} <span className="ac-tot">{r.total} hits</span></div>
+        {r.total === 0 && <div className="ac-dim">no hits — try a shorter term</div>}
         <Rows rows={r.rows} run={run} more={r.total - r.rows.length} />
+        {r.total > 40 && <div className="ac-faint">top 40 highlighted on the map</div>}
       </>
     );
   }
@@ -222,7 +234,9 @@ function Result({ r, run }) {
             </div>
           ))}
         </div>
-        <div className="ac-faint">highlighted on the map →</div>
+        {r.affected === 0
+          ? <div className="ac-dim">no dependents reach this symbol in this slice</div>
+          : <div className="ac-faint">highlighted on the map →</div>}
       </>
     );
   }
@@ -237,6 +251,9 @@ function Result({ r, run }) {
           <button className="ac-cmd" type="button" onClick={() => run(`atlas callees ${n.name}`)}>callees({r.callees})</button>
           <button className="ac-cmd" type="button" onClick={() => run(`atlas impact ${n.name}`)}>impact({r.impact})</button>
         </div>
+        {r.defs > 1 && (
+          <div className="ac-faint">{r.defs} definitions share this name — showing the highest-degree{r.others.length ? ` · also in ${r.others.slice(0, 3).join(", ")}` : ""}</div>
+        )}
       </div>
     );
   }
@@ -257,7 +274,8 @@ export default function AtlasConsole({ onClose, compact = false }) {
   const [hl, setHl] = useState(null);
   const [input, setInput] = useState("");
   const [active, setActive] = useState("callers useState");
-  const [mapOn, setMapOn] = useState(true);
+  const [mapOn, setMapOn] = useState(false);
+  const [loadError, setLoadError] = useState(false);
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
   const hist = useRef([]);
@@ -267,7 +285,9 @@ export default function AtlasConsole({ onClose, compact = false }) {
 
   useEffect(() => {
     let alive = true;
-    fetch("data/graph.json").then((r) => r.json()).then((d) => { if (alive) setData(d); }).catch(() => {});
+    getGraphData()
+      .then((d) => { if (alive) setData(d); })
+      .catch(() => { if (alive) setLoadError(true); });
     return () => { alive = false; };
   }, []);
   const eng = useMemo(() => (data ? buildEngine(data) : null), [data]);
@@ -286,8 +306,8 @@ export default function AtlasConsole({ onClose, compact = false }) {
     const short = line.replace(/^atlas\s+/i, "");
     setActive(short);
     const r = eng.run(line);
-    setBlocks((bs) => [...bs, { id: ++bid.current, echo: line.startsWith("atlas") ? line : `atlas ${line}`, r }]);
-    setHl(r.highlight && r.highlight.length ? r.highlight : null);
+    setBlocks((bs) => [...bs, { id: ++bid.current, echo: `atlas ${line.replace(/^atlas\s+/i, "")}`, r }]);
+    setHl(r.highlight && r.highlight.length ? [...new Set(r.highlight)] : null);
   };
 
   useEffect(() => {
@@ -303,18 +323,31 @@ export default function AtlasConsole({ onClose, compact = false }) {
   useEffect(() => {
     const onKey = (e) => { if (e.key === "Escape" && onClose) onClose(); };
     window.addEventListener("keydown", onKey);
-    setTimeout(() => inputRef.current && inputRef.current.focus(), 60);
+    if (!compact) {
+      setTimeout(() => inputRef.current && inputRef.current.focus({ preventScroll: true }), 60);
+    }
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [onClose, compact]);
+
+  const onTrapKey = (e) => {
+    if (e.key !== "Tab" || compact) return;
+    const root = e.currentTarget;
+    const focusables = root.querySelectorAll("button, input, [tabindex]:not([tabindex='-1'])");
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  };
 
   const onInputKey = (e) => {
-    if (e.key === "Enter") { run(input); setInput(""); }
+    if (e.key === "Enter") { if (!eng) return; run(input); setInput(""); }
     else if (e.key === "ArrowUp") { e.preventDefault(); if (hist.current.length) { histAt.current = Math.max(0, histAt.current - 1); setInput(hist.current[histAt.current] || ""); } }
     else if (e.key === "ArrowDown") { e.preventDefault(); histAt.current = Math.min(hist.current.length, histAt.current + 1); setInput(hist.current[histAt.current] || ""); }
   };
 
   return (
-    <div className="ac-app" role="dialog" aria-modal="true" aria-label="Atlas Console">
+    <div className={`ac-app${mapOn ? " has-map" : ""}`} role="dialog" aria-modal="true" aria-label="Atlas Console" onKeyDown={onTrapKey}>
       <header className="ac-bar">
         <span className="ac-dot" style={{ background: "#ff5f56" }} />
         <span className="ac-dot" style={{ background: "#ffbd2e" }} />
@@ -337,10 +370,11 @@ export default function AtlasConsole({ onClose, compact = false }) {
         )}
       </header>
 
-      <div className={`ac-main${mapOn ? "" : " no-map"}`}>
+      <div className={`ac-main${mapOn ? " with-map" : ""}`}>
         <section className="ac-term" aria-label="Atlas terminal">
           <div className="ac-scroll" ref={scrollRef}>
-            {blocks.length === 0 && <div className="ac-dim">booting query engine over facebook/react…</div>}
+            {blocks.length === 0 && !loadError && <div className="ac-dim">booting query engine over facebook/react…</div>}
+            {loadError && <div className="ac-err">couldn’t load the index — reload the page to retry.</div>}
             {blocks.map((b) => (
               <div className="ac-blk" key={b.id}>
                 <div className="ac-echo"><span className="ac-ps1">$</span> {b.echo}</div>
