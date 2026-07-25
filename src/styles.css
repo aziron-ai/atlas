@@ -2485,7 +2485,7 @@ a.sheet-cell:hover .go {
 /* the popup is a TERMINAL window by default; toggling the map widens the window
    outward to attach a sidebar — the terminal column never gets squeezed */
 .ac-overlay .ac-app { flex: 0 1 940px; transition: flex-basis 0.28s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.ac-overlay .ac-app.has-map { flex-basis: 1300px; }
+.ac-overlay .ac-app.has-map { flex-basis: 1520px; }
 .ac-app {
   position: relative;
   --acbg:#080d18; --acbg2:#0b1322; --acsurf:#101a2c; --acline:#20304c; --acls:#33466a;
@@ -2510,7 +2510,7 @@ a.sheet-cell:hover .go {
 /* the grid row MUST be minmax(0,1fr) and children min-height:0, or the terminal
    sizes to its content and never scrolls (the "doesn't feel like a terminal" bug) */
 .ac-main { flex: 1; display: grid; grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr); min-height: 0; }
-.ac-main.with-map { grid-template-columns: minmax(0, 1fr) 340px; }
+.ac-main.with-map { grid-template-columns: minmax(0, 1fr) minmax(340px, 34%); }
 .ac-term { display: flex; flex-direction: column; min-width: 0; min-height: 0; background: var(--acbg); }
 .ac-main.with-map .ac-term { border-right: 1px solid var(--acline); }
 .ac-scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 18px 22px 10px; font-size: 14px; line-height: 1.7; min-height: 0; }
@@ -2658,3 +2658,35 @@ a.sheet-cell:hover .go {
    (64px header + 44px section subnav) */
 section#hero.measure-grid { display: flex; align-items: center; min-height: calc(100vh - 108px); }
 section#hero.measure-grid > .shell { width: 100%; }
+/* §08 graph prompt bar — the graph is the star; commands light it up */
+.gxp { border-top: 1px solid #22304a; background: #0b1322; padding: 10px 14px; }
+.gxp-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.gxp-ps1 { font-family: var(--mono); font-size: 12.5px; color: #3ecb6e; white-space: nowrap; }
+.gxp-row input {
+  flex: 1; min-width: 240px; background: #0e1524; border: 1px solid #2a3a58; border-radius: 8px;
+  padding: 8px 12px; font-family: var(--mono); font-size: 13px; color: #e9f0fb; outline: none; caret-color: #3ecb6e;
+}
+.gxp-row input:focus { border-color: #3ecb6e; }
+.gxp-row input::placeholder { color: #6c7f9d; }
+.gxp-chip {
+  font-family: var(--mono); font-size: 11.5px; color: #93a4c0; background: rgba(255,255,255,0.04);
+  border: 1px solid #2a3a58; border-radius: 7px; padding: 5px 10px; cursor: pointer; white-space: nowrap;
+}
+.gxp-chip:hover { color: #e9f0fb; border-color: #3ecb6e; }
+.gxp-out { margin-top: 8px; font-family: var(--mono); font-size: 12.5px; color: #93a4c0; }
+.gxp-out.gxp-error { color: #f2726e; }
+.gxp-out.gxp-impact { color: #f4bf5e; }
+.gxp-out.gxp-callers, .gxp-out.gxp-callees, .gxp-out.gxp-symbol { color: #9db9e8; }
+@media (max-width: 720px) { .gxp-chip { display: none; } }
+/* benchmarks hero jump strip */
+.hero-jump { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 40px; }
+@media (max-width: 900px) { .hero-jump { grid-template-columns: repeat(2, 1fr); } }
+.hj {
+  display: flex; flex-direction: column; gap: 3px; padding: 13px 15px; text-decoration: none;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 11px; box-shadow: var(--shadow-xs);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.hj:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--line-strong); }
+.hj-no { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: var(--primary); }
+.hj-t { font-size: 13.5px; font-weight: 600; color: var(--text); }
+.hj-s { font-size: 12px; color: var(--muted); }

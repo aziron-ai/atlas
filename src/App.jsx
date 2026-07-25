@@ -2,7 +2,8 @@ import React, { useEffect, useMemo, useRef, useState, useCallback } from "react"
 import { createRoot } from "react-dom/client";
 import { ArrowRight, Check, Copy, Download, ExternalLink } from "lucide-react";
 import GraphExplorer from "./GraphExplorer";
-import AtlasConsole from "./AtlasConsole";
+import AtlasConsole, { buildEngine } from "./AtlasConsole";
+import { getGraphData } from "./graphData";
 import {
   CommandPalette,
   CountUp,
@@ -422,6 +423,22 @@ function Hero({ data }) {
               quadrant; xhigh proves more tokens buy nothing; the raw file is perfect but 7.4× the price.
             </p>
           </div>
+        </div>
+
+        {/* jump strip — where to dig in (fills the fold on tall screens with content) */}
+        <div className="hero-jump" data-reveal>
+          {[
+            ["01", "#summary", "Executive summary", "+40% answer accuracy vs the graph tool"],
+            ["03", "#languages", "Languages", `${r.perLanguage.length} languages · native ground truth`],
+            ["04", "#versus", "Head-to-head", `${h.fewerTokens}× fewer query tokens`],
+            ["08", "#graph", "Live graph", "query facebook/react right here ❯"],
+          ].map(([no, href, t, sub]) => (
+            <a className="hj focusring" key={no} href={href}>
+              <span className="hj-no">{no}</span>
+              <span className="hj-t">{t}</span>
+              <span className="hj-s">{sub}</span>
+            </a>
+          ))}
         </div>
       </div>
     </section>
@@ -1512,6 +1529,75 @@ function AgentBench({ data }) {
 
 /* ========================= graph explorer =============================== */
 
+const GXP_CHIPS = [
+  ["callers useState", "callers useState"],
+  ["impact error", "impact error"],
+  ["search hydrate", "search hydrate"],
+  ["symbol beginWork", "symbol beginWork"],
+];
+
+function GraphWithPrompt() {
+  const [data, setData] = useState(null);
+  const [hl, setHl] = useState(null);
+  const [input, setInput] = useState("");
+  const [last, setLast] = useState(null); // {kind, text}
+  useEffect(() => {
+    let alive = true;
+    getGraphData().then((d) => { if (alive) setData(d); }).catch(() => {});
+    return () => { alive = false; };
+  }, []);
+  const eng = useMemo(() => (data ? buildEngine(data) : null), [data]);
+
+  const summarize = (r) => {
+    if (r.kind === "error") return { kind: "error", text: r.msg + (r.suggest && r.suggest.length ? ` — did you mean ${r.suggest[0]}?` : "") };
+    if (r.kind === "callers" || r.kind === "callees") return { kind: r.kind, text: `${r.kind} ${r.name} · ${r.total} lit on the graph` };
+    if (r.kind === "impact") return { kind: "impact", text: `impact ${r.name} · ${r.affected} affected · ${r.hops} hops` };
+    if (r.kind === "search") return { kind: "search", text: `search ${r.term} · ${r.total} hits${r.total > 40 ? " · top 40 lit" : ""}` };
+    if (r.kind === "symbol") return { kind: "symbol", text: `${r.node.name} · ${r.node.kind} · callers ${r.callers} · callees ${r.callees} · ${r.node.cite}` };
+    return { kind: "help", text: "commands: callers · callees · impact · search · symbol — e.g. impact error" };
+  };
+
+  const run = (raw) => {
+    if (!eng) return;
+    const line = raw.trim();
+    if (!line) return;
+    const r = eng.run(line);
+    setLast(summarize(r));
+    setHl(r.highlight && r.highlight.length ? [...new Set(r.highlight)] : null);
+  };
+
+  const footer = (
+    <div className="gxp">
+      <div className="gxp-row">
+        <span className="gxp-ps1">atlas ❯</span>
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter") { run(input); } }}
+          placeholder="callers useState · impact error — type a query to light up the graph"
+          aria-label="Graph query"
+          autoComplete="off"
+          spellCheck={false}
+        />
+        {GXP_CHIPS.map(([label, cmd]) => (
+          <button key={cmd} type="button" className="gxp-chip" onClick={() => { setInput(cmd); run(cmd); }}>{label}</button>
+        ))}
+      </div>
+      {last && <div className={`gxp-out gxp-${last.kind}`}>{last.kind === "error" ? "✗" : "❯"} {last.text}</div>}
+    </div>
+  );
+
+  return (
+    <GraphExplorer
+      className="atlas-graph-full"
+      dataOverride={data}
+      highlightIds={hl}
+      onInspect={(n) => { setInput(`symbol ${n.name}`); run(`symbol ${n.name}`); }}
+      footer={footer}
+    />
+  );
+}
+
 function GraphSection() {
   return (
     <section id="graph" data-testid="graph" className="shell py-16" aria-labelledby="graph-title">
@@ -1520,9 +1606,9 @@ function GraphSection() {
         <span className="mono"> facebook/react</span> (280 symbols · 675 call edges). Type a command, click a suggestion,
         or click a node — every answer is genuinely computed and cited to file:line.
       </SectionHeader>
-      <div className="ac-embed">
+      <div className="gx-frame">
         <LazyMount height={620}>
-          <AtlasConsole compact />
+          <GraphWithPrompt />
         </LazyMount>
       </div>
     </section>

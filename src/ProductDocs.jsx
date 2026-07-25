@@ -19,7 +19,6 @@ const PRODUCT_NAV = [
   ["Overview", "#overview"],
   ["Documentation", "#docs/getting-started"],
   ["Benchmarks", "#benchmarks"],
-  ["Benchmark data", "#benchmarks"],
 ];
 
 /* ===== motion: turn on the gated CSS before first paint (no flash) ===== */

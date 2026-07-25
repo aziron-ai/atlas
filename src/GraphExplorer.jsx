@@ -201,6 +201,7 @@ export default function GraphExplorer({
   highlightIds = null,
   onInspect = null,
   dataOverride = null,
+  footer = null,
 }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -945,7 +946,11 @@ export default function GraphExplorer({
             <div className="gx-sec">
               <div className="gx-sec-h">Top hubs</div>
               <div className="gx-hubs">
-                {TOP_HUBS.filter((name) => (prepared ? prepared.nodes.some((n) => n.name === name) : true)).map((name) => {
+                {(prepared
+                  ? [...prepared.nodes].sort((a, b) => b.deg - a.deg).map((n) => n.name)
+                      .filter((v, i, arr) => arr.indexOf(v) === i).slice(0, 8)
+                  : []
+                ).map((name) => {
                   const active = focusName === name;
                   return (
                     <button
@@ -963,6 +968,8 @@ export default function GraphExplorer({
             </div>
           </div>
         </div>
+
+        {footer}
       </div>
     </div>
   );

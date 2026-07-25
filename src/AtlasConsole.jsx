@@ -37,7 +37,7 @@ function lev(a, b) {
   return d[n];
 }
 
-function buildEngine(data) {
+export function buildEngine(data) {
   const nodes = data.nodes;
   const byId = new Map(nodes.map((n) => [n.id, n]));
   const callersOf = new Map();
