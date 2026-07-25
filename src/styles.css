@@ -689,6 +689,43 @@ section[id] {
   .product-hero h1 .h1-tail { max-height: none; margin-top: 14px; opacity: 1; }
 }
 
+/* hero token-economy graphic — replaces the old text subhead: shows "a fraction
+   of the tokens" as two bars (whole file vs Atlas), animated on load */
+.token-viz { margin-top: 20px; max-width: 30rem; }
+.tv-cap {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 9px;
+}
+.tv-row {
+  display: grid;
+  grid-template-columns: 66px 1fr auto;
+  align-items: center;
+  gap: 11px;
+  margin-top: 7px;
+}
+.tv-lab { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+.tv-lab.tv-on { color: var(--primary); font-weight: 600; }
+.tv-bar {
+  position: relative;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+}
+.tv-fill { position: absolute; inset: 0 auto 0 0; display: block; width: var(--w); border-radius: 6px; }
+.tv-raw { --w: 100%; background: var(--line-strong); }
+.tv-atlas { --w: 8%; background: linear-gradient(90deg, var(--primary), var(--term-green)); }
+.tv-note { font-family: var(--mono); font-size: 11px; color: var(--term-green); white-space: nowrap; }
+@media (prefers-reduced-motion: no-preference) {
+  .atlas-anim .tv-fill { width: 0; animation: tv-grow 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.85s forwards; }
+}
+@keyframes tv-grow { to { width: var(--w); } }
+
 /* interactive hero console — a terminal, so it stays dark in both themes */
 .hero-console {
   margin-top: 20px;
@@ -792,34 +829,55 @@ section[id] {
 .cmdk-trigger .cmdk-prompt { color: var(--term-green); font-weight: 700; }
 .cmdk-trigger kbd { font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; }
 
-/* header control cluster — a unified terminal toolbar: sharper corners,
-   matching surface, green hover accent */
-.cmdk-trigger,
-.product-header .icon-btn,
-.product-header .chip {
-  border-radius: 6px;
-}
-.product-header .icon-btn {
+/* header segmented terminal toolbar: ⌘K · version · theme · github as one strip */
+.hdr-seg {
+  display: none;
+  align-items: stretch;
+  height: 38px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
   background: var(--surface-raised);
+  overflow: hidden;
 }
-.product-header .icon-btn:hover {
-  border-color: var(--term-green);
+@media (min-width: 768px) {
+  .hdr-seg { display: inline-flex; }
+}
+.hdr-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.hdr-cell:hover {
   color: var(--text);
+  background: color-mix(in srgb, var(--term-green) 12%, transparent);
 }
-.product-header .chip {
-  height: 34px;
-  padding: 0 10px;
+.hdr-cell .cmdk-prompt { color: var(--term-green); font-weight: 700; }
+.hdr-cell kbd { font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; }
+.hdr-ver {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--faint);
 }
-.product-header .chip::before {
-  content: "▸";
-  color: var(--term-green);
-  margin-right: 1px;
-  font-size: 10px;
-}
-/* the Install CTA sits in the same toolbar — match its corners */
+.hdr-sep { width: 1px; align-self: stretch; background: var(--line-strong); }
+/* Install CTA matched to the toolbar height + radius */
 .product-header .btn-primary {
-  border-radius: 6px;
+  height: 38px;
+  min-height: 38px;
+  padding: 0 18px;
+  border-radius: 9px;
 }
+.product-header .icon-btn { background: var(--surface-raised); }
 
 .cmdk-overlay {
   position: fixed;
@@ -895,6 +953,54 @@ section[id] {
 @media (prefers-reduced-motion: reduce) {
   .cmdk-overlay, .cmdk { animation: none; }
 }
+
+/* ===== latency scale bar — scroll-triggered reveal (resting = visible) ===== */
+@media (prefers-reduced-motion: no-preference) {
+  .lsb .lsb-block {
+    opacity: 0;
+    transform: scaleX(0.15);
+    transform-box: fill-box;
+    transform-origin: left center;
+  }
+  .lsb.in .lsb-block {
+    animation: lsb-block 0.4s ease forwards;
+    animation-delay: calc(var(--bi) * 42ms);
+  }
+  .lsb .lsb-mark { opacity: 0; }
+  .lsb.in .lsb-mark {
+    animation: lsb-fade 0.3s ease forwards;
+    animation-delay: calc(0.62s + var(--md) * 0.34s);
+  }
+  .lsb .lsb-stem {
+    transform: scaleY(0);
+    transform-box: fill-box;
+    transform-origin: bottom;
+  }
+  .lsb.in .lsb-stem {
+    animation: lsb-stem 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation-delay: calc(0.62s + var(--md) * 0.34s);
+  }
+  .lsb .lsb-dot {
+    transform: scale(0);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .lsb.in .lsb-dot {
+    animation: lsb-pop 0.42s cubic-bezier(0.2, 0.9, 0.2, 1.4) forwards;
+    animation-delay: calc(0.86s + var(--md) * 0.34s);
+  }
+  .lsb .lsb-halo {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .lsb.in .lsb-halo { animation: lsb-halo 2.2s ease-out 1.6s infinite; }
+}
+@keyframes lsb-block { to { opacity: 1; transform: scaleX(1); } }
+@keyframes lsb-fade { to { opacity: 1; } }
+@keyframes lsb-stem { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes lsb-pop { 0% { transform: scale(0); } 70% { transform: scale(1.35); } 100% { transform: scale(1); } }
+@keyframes lsb-halo { 0% { transform: scale(1); opacity: 0.7; } 70%, 100% { transform: scale(2.6); opacity: 0; } }
 
 /* mobile: the schematic survey chart shrinks to ~8px labels — swap it out below sm,
    the hero terminal above now carries the "see it work" job on small screens */
@@ -2207,6 +2313,7 @@ a.sheet-cell:hover .go {
   .atlas-anim .product-hero .hero-copy > *:nth-child(5) { animation-delay: 0.46s; }
   .atlas-anim .product-hero .hero-copy > *:nth-child(6) { animation-delay: 0.55s; }
   .atlas-anim .product-hero .hero-copy > *:nth-child(7) { animation-delay: 0.64s; }
+  .atlas-anim .product-hero .hero-copy > *:nth-child(8) { animation-delay: 0.73s; }
   .atlas-anim .product-hero .chart-panel {
     opacity: 0;
     animation: atlas-fade-in 0.7s ease 0.5s forwards;

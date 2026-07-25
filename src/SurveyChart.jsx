@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 /* ============================================================
    SurveyChart — the hero figure of the Cartograph landing.
@@ -324,8 +324,43 @@ export function LatencyScaleBar() {
   const sx = (ms) => SL + (ms / maxMs) * (SR - SL);
   const blocks = Array.from({ length: 13 }, (_, i) => i);
   const ticks = [0, 25, 50, 75, 100, 125];
+  const markers = [
+    { ms: 7.4, label: "ATLAS · 7.4 ms", color: C.signal, anchor: "start", dx: -6, atlas: true },
+    { ms: 128, label: "GRAPH BASELINE · 128 ms", color: C.muted, anchor: "end", dx: 6 },
+  ];
+
+  const ref = useRef(null);
+  const reduce =
+    typeof window !== "undefined" &&
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const [inView, setInView] = useState(!!reduce);
+  useEffect(() => {
+    if (reduce || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return undefined;
+    }
+    const el = ref.current;
+    if (!el) return undefined;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            setInView(true);
+            io.disconnect();
+          }
+        });
+      },
+      { threshold: 0.45 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [reduce]);
+
   return (
     <svg
+      ref={ref}
+      className={`lsb${inView ? " in" : ""}`}
       viewBox={`0 0 ${SW} ${SH}`}
       role="img"
       aria-label="Latency scale bar from 0 to 130 milliseconds. Atlas is marked at 7.4 milliseconds; the graph baseline at 128 milliseconds."
@@ -333,6 +368,8 @@ export function LatencyScaleBar() {
       {blocks.map((i) => (
         <rect
           key={i}
+          className="lsb-block"
+          style={{ "--bi": i }}
           x={sx(i * 10)}
           y={axisY - 4}
           width={sx(10) - sx(0)}
@@ -353,14 +390,14 @@ export function LatencyScaleBar() {
       <text x={SR} y={axisY + 24} textAnchor="end" fill={C.faint} fontSize="10" fontFamily={MONO}>
         ms
       </text>
-      {[
-        { ms: 7.4, label: "ATLAS · 7.4 ms", color: C.signal, anchor: "start", dx: -6 },
-        { ms: 128, label: "GRAPH BASELINE · 128 ms", color: C.muted, anchor: "end", dx: 6 },
-      ].map((f) => (
-        <g key={f.label}>
-          <line x1={sx(f.ms)} y1={axisY - 4} x2={sx(f.ms)} y2={axisY - 26} stroke={f.color} strokeWidth="1.5" />
-          <circle cx={sx(f.ms)} cy={axisY - 29} r="3" fill={f.color} />
-          <text x={sx(f.ms) + f.dx} y={axisY - 38} textAnchor={f.anchor} fill={f.color} fontSize="11" fontWeight="700" fontFamily={MONO}>
+      {markers.map((f, mi) => (
+        <g key={f.label} className={`lsb-mark${f.atlas ? " atlas" : ""}`} style={{ "--md": mi }}>
+          {f.atlas && (
+            <circle className="lsb-halo" cx={sx(f.ms)} cy={axisY - 29} r="3" fill="none" stroke={f.color} strokeWidth="1.4" />
+          )}
+          <line className="lsb-stem" x1={sx(f.ms)} y1={axisY - 4} x2={sx(f.ms)} y2={axisY - 26} stroke={f.color} strokeWidth="1.5" />
+          <circle className="lsb-dot" cx={sx(f.ms)} cy={axisY - 29} r="3" fill={f.color} />
+          <text className="lsb-label" x={sx(f.ms) + f.dx} y={axisY - 38} textAnchor={f.anchor} fill={f.color} fontSize="11" fontWeight="700" fontFamily={MONO}>
             {f.label}
           </text>
         </g>

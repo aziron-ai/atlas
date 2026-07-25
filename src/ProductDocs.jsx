@@ -164,7 +164,7 @@ function ThemeToggle() {
   };
   return (
     <button
-      className="icon-btn focusring"
+      className="hdr-cell focusring"
       type="button"
       onClick={toggle}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
@@ -346,23 +346,29 @@ export function ProductHeader({ version = RELEASE, active = "overview" }) {
           })}
         </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            className="cmdk-trigger focusring hidden md:inline-flex"
-            onClick={() => window.dispatchEvent(new CustomEvent("atlas:cmdk"))}
-            aria-label="Open command palette"
-            title="Command palette"
-          >
-            <span className="cmdk-prompt">❯</span> <kbd>⌘K</kbd>
-          </button>
-          <span className="chip hidden sm:inline-flex">v{version}</span>
-          <ThemeToggle />
-          <a className="icon-btn focusring hidden sm:inline-flex" href={GITHUB} target="_blank" rel="noreferrer" aria-label="Atlas on GitHub" title="GitHub">
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
-            </svg>
-          </a>
+        <div className="flex items-center gap-3">
+          <div className="hdr-seg">
+            <button
+              type="button"
+              className="hdr-cell focusring"
+              onClick={() => window.dispatchEvent(new CustomEvent("atlas:cmdk"))}
+              aria-label="Open command palette"
+              title="Command palette"
+            >
+              <span className="cmdk-prompt">❯</span>
+              <kbd>⌘K</kbd>
+            </button>
+            <span className="hdr-sep" aria-hidden="true" />
+            <span className="hdr-ver">v{version}</span>
+            <span className="hdr-sep" aria-hidden="true" />
+            <ThemeToggle />
+            <span className="hdr-sep" aria-hidden="true" />
+            <a className="hdr-cell focusring" href={GITHUB} target="_blank" rel="noreferrer" aria-label="Atlas on GitHub" title="GitHub">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
+              </svg>
+            </a>
+          </div>
           <a className="btn btn-primary focusring hidden sm:inline-flex" href="#docs/installation">
             <Download className="h-4 w-4" aria-hidden /> Install
           </a>
@@ -395,8 +401,6 @@ export function ProductHeader({ version = RELEASE, active = "overview" }) {
 function TypedHeadline() {
   const LEAD = "Your codebase is a territory. ";
   const ACCENT = "Atlas is the map.";
-  const TAIL =
-    "Cited, file-line answers for your codebase — and your AI coding agent — at a fraction of the tokens.";
   const total = LEAD.length + ACCENT.length;
   const reduce = prefersReduced();
   const [n, setN] = useState(reduce ? total : 0);
@@ -418,16 +422,35 @@ function TypedHeadline() {
   const lead = LEAD.slice(0, Math.min(n, LEAD.length));
   const acc = n > LEAD.length ? ACCENT.slice(0, n - LEAD.length) : "";
   return (
-    <h1 className="mt-5" aria-label={`${LEAD}${ACCENT} ${TAIL}`}>
+    <h1 className="mt-5" aria-label={`${LEAD}${ACCENT}`}>
       <span aria-hidden="true">
         {lead}
         <span className="accent">{acc}</span>
         {!done && <span className="type-caret" />}
       </span>
-      <span className={`h1-tail${done ? " in" : ""}`} aria-hidden="true">
-        {TAIL}
-      </span>
     </h1>
+  );
+}
+
+/* Compact token-economy graphic that replaces the old text subhead: a whole-file
+   dump vs Atlas's cited context — "a fraction of the tokens", shown, not told. */
+function HeroTokenViz() {
+  return (
+    <div
+      className="token-viz"
+      aria-label="Per answer, reading the whole file costs many tokens; Atlas sends only cited context — a fraction of the tokens."
+    >
+      <div className="tv-cap">tokens an agent reads per answer</div>
+      <div className="tv-row">
+        <span className="tv-lab">whole file</span>
+        <span className="tv-bar"><i className="tv-fill tv-raw" /></span>
+      </div>
+      <div className="tv-row">
+        <span className="tv-lab tv-on">Atlas</span>
+        <span className="tv-bar"><i className="tv-fill tv-atlas" /></span>
+        <span className="tv-note">a fraction of the tokens</span>
+      </div>
+    </div>
   );
 }
 
@@ -715,6 +738,7 @@ export function ProductHome({ data }) {
               <div className="max-w-2xl hero-copy min-w-0">
                 <div className="eyebrow"><span className="status-dot" /> Local code intelligence for developers &amp; AI agents</div>
                 <TypedHeadline />
+                <HeroTokenViz />
                 <p className="lede mt-5 text-lg leading-relaxed">
                   Atlas surveys your repository into a local graph, then hands over only the
                   coordinates a query needs — symbol, callers, change impact — instead of the whole
