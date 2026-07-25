@@ -732,7 +732,7 @@ export function ProductHome({ data }) {
       <main id="main">
         {/* =================== A·1 hero =================== */}
         <section className="product-hero" data-testid="product-hero">
-          <div className="shell py-14 lg:py-20">
+          <div className="shell pt-5 pb-14 lg:pb-20">
             <GridRef cell="A·1" name="Overview" />
             <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
               <div className="max-w-2xl hero-copy min-w-0">
