@@ -1,54 +1,145 @@
-# Atlas
+<p align="center">
+  <a href="https://aziron-ai.github.io/atlas/">
+    <img src="assets/og.png" alt="Atlas — the most accurate code answer, for the fewest tokens" width="820">
+  </a>
+</p>
 
-**Local code intelligence for developers and AI coding assistants.**
+<h1 align="center">Atlas</h1>
 
-Atlas indexes a repository and returns focused, source-grounded context about
-symbols, callers, references, routes, and change impact. Results include file
-and line references so developers and coding agents can inspect the evidence
-without loading an entire codebase into a model context window.
+<p align="center">
+  <strong>Stop pasting your codebase into the context window.</strong><br>
+  Atlas gives you and your AI coding agent precise, <code>file:line</code>-cited answers about
+  your code — who calls what, what breaks if this changes, which routes depend on a
+  handler — for a fraction of the tokens it takes to read the files.
+</p>
 
-[Documentation](https://aziron-ai.github.io/atlas/#docs/getting-started) |
-[Install](https://aziron-ai.github.io/atlas/#docs/installation) |
-[Releases](https://github.com/aziron-ai/atlas/releases) |
-[Benchmarks](https://aziron-ai.github.io/atlas/#benchmarks) |
-[Troubleshooting](https://aziron-ai.github.io/atlas/#docs/troubleshooting)
+<p align="center">
+  <a href="https://github.com/aziron-ai/atlas/releases"><img src="https://img.shields.io/github/v/release/aziron-ai/atlas?label=release&color=2ea043" alt="Latest release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="License"></a>
+  <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey" alt="Platforms">
+  <img src="https://img.shields.io/badge/languages-40-8957e5" alt="Languages">
+  <a href="https://aziron-ai.github.io/atlas/#benchmarks"><img src="https://img.shields.io/badge/benchmarks-open%20%26%20reproducible-2ea043" alt="Benchmarks"></a>
+</p>
+
+<p align="center">
+  <a href="https://aziron-ai.github.io/atlas/#docs/getting-started">Documentation</a> ·
+  <a href="https://aziron-ai.github.io/atlas/#docs/installation">Install</a> ·
+  <a href="https://github.com/aziron-ai/atlas/releases">Releases</a> ·
+  <a href="https://aziron-ai.github.io/atlas/#benchmarks">Benchmarks</a> ·
+  <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>
+</p>
+
+<p align="center">
+  <img src="assets/demo.gif" width="760"
+       alt="Atlas indexing sirupsen/logrus and answering 'who calls WithField' with file:line citations in milliseconds">
+</p>
+
+<p align="center">
+  ⭐ <strong>If Atlas saves your agent tokens (or your patience), a star helps others find it.</strong>
+</p>
+
+---
+
+## Why Atlas
+
+Coding agents answer code questions the expensive way: grep, then read whole
+files into the context window, then guess. It burns tokens, dilutes the model's
+attention, and still misses callers in files it never opened.
+
+Atlas indexes your repo once and answers structural questions directly —
+definitions, callers, references, routes, and change impact — returning a small,
+**cited** slice of code instead of the whole file. Every answer points to
+`file:line`, so you (or the agent) can verify the evidence.
+
+It runs **locally**, is **deterministic** (no LLM in the loop, so the tool itself
+spends zero tokens), and plugs into Claude, Codex, Cursor, Gemini, and Copilot
+over MCP.
+
+## The numbers
+
+Measured on a public benchmark — 222 cells, 666 real LLM-scored model calls,
+across 37 languages. Full methodology and raw artifacts are
+[published and reproducible](https://aziron-ai.github.io/atlas/#benchmarks).
+
+| Approach | Answer accuracy (F1) | Context tokens / query |
+| --- | --- | --- |
+| Read the whole file *(accuracy ceiling)* | 1.00 | 157 |
+| Graph tool | 0.54 | 97 |
+| **Atlas** | **0.76** — and **1.00 on 28 languages** | **21** |
+
+<p align="center">
+  <strong>+40%</strong> answer accuracy &nbsp;·&nbsp;
+  <strong>36×</strong> fewer query tokens &nbsp;·&nbsp;
+  <strong>17×</strong> faster queries &nbsp;·&nbsp;
+  <strong>2.3×</strong> faster cold index
+</p>
+
+On its 28 supported languages Atlas matches the *raw-file accuracy ceiling*
+(F1 1.00) while using **~6× fewer tokens** — and answers `who calls X` in a
+**~7 ms median** even on symbols with tens of thousands of callers.
+
+### Why not just read the files?
+
+Ask **"who calls `WithField`?"** on [sirupsen/logrus](https://github.com/sirupsen/logrus),
+scored against `gopls` call-hierarchy as ground truth:
+
+| Approach | Tokens into the model | Accuracy (F1) |
+| --- | ---: | ---: |
+| Dump the raw files | 2,227 | 0.02 |
+| Graph tool | 98 | 0.08 |
+| **Atlas** | **169** | **0.98** |
+
+A production function has callers spread across many files; raw dumps drown the model
+in noise and still miss callers. Atlas returns the complete, precise caller set as
+structured, cited context — **~13× fewer tokens and far more accurate.**
+
+And it compounds across a real agent loop. On the same repo, 19 questions, Claude:
+
+| Mode | Total tokens | Turns | Answer F1 | Wall time |
+| --- | ---: | ---: | ---: | ---: |
+| Grep-and-read baseline | 144,385 | 4.9 | 0.57 | 19.9 s |
+| **With Atlas** | **61,561** | **2.0** | **0.88** | **8.3 s** |
 
 ## Quickstart
 
-Install Atlas with Homebrew:
+Install with Homebrew:
 
 ```sh
 brew install --cask aziron-ai/atlas/atlas
 ```
 
-Or install the npm wrapper:
+…or the npm wrapper:
 
 ```sh
 npm install -g @aziron/atlas
 ```
 
-Index a repository and connect Atlas to supported coding assistants:
+Index a repository and wire Atlas into your coding assistants:
 
 ```sh
 cd /path/to/repository
-atlas version
 atlas index .
-atlas bootstrap --dry-run
-atlas bootstrap
+atlas bootstrap --dry-run   # preview assistant config changes
+atlas bootstrap             # register MCP integrations
 atlas status
 ```
 
-Atlas can then answer questions such as:
+That's it. Atlas can now answer questions like:
 
-- Where is the checkout flow implemented?
-- Who calls `CreateOrder`?
-- What may be affected if `services/cart.go` changes?
-- Which routes or repositories depend on this handler?
+```sh
+atlas search "checkout flow" --format plain   # where is it implemented?
+atlas symbol CreateOrder                       # definition + callers + callees
+atlas callers CreateOrder --limit 25           # who calls it?
+atlas impact --paths services/cart.go          # what breaks if this changes?
+```
+
+The same answers are available to your coding assistant through Atlas's MCP
+tools — with `file:line` citations on every result.
 
 See [Getting Started](https://aziron-ai.github.io/atlas/#docs/getting-started)
 for a guided first index and first query.
 
-## What Atlas Provides
+## What Atlas provides
 
 | Task | Capability |
 | --- | --- |
@@ -59,39 +150,21 @@ for a guided first index and first query.
 | Support coding agents | MCP tools with source and line citations |
 | Operate a local index | CLI status, dashboard, and HTTP API |
 
-Atlas runs locally by default and stores its default index in the repository
-workspace. A server is not required for local indexing, CLI queries, or stdio
-MCP usage.
+Atlas runs locally by default and stores its index in the repository workspace.
+No server is required for local indexing, CLI queries, or stdio MCP usage.
 
 ## Interfaces
 
-Atlas is available through:
-
 - the `atlas` command-line interface
-- MCP integrations for Claude, Codex, Cursor, Gemini, and GitHub Copilot
+- MCP integrations for **Claude, Codex, Cursor, Gemini, and GitHub Copilot**
 - a local dashboard and HTTP API
 - release archives and native Linux packages
 
-Integration behavior varies by client. Follow
+Integration behavior varies by client — follow
 [AI Assistant Setup](https://aziron-ai.github.io/atlas/#docs/assistants)
 for supported configurations.
 
-## Installation Notes
-
-Homebrew and npm installations run Atlas bootstrap to register supported local
-assistant integrations. Review the planned changes first with:
-
-```sh
-atlas bootstrap --dry-run
-```
-
-For npm automation that must not update assistant configuration:
-
-```sh
-ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron/atlas
-```
-
-Atlas release channels currently provide:
+## Install matrix
 
 | Channel | Platforms |
 | --- | --- |
@@ -100,9 +173,16 @@ Atlas release channels currently provide:
 | Release archives | macOS/Linux amd64 and arm64; Windows amd64 |
 | Linux packages | `.deb`, `.rpm`, and `.apk` for amd64 and arm64 |
 
-Checksums and per-archive SBOMs are attached to each GitHub release. See
-[Installation](https://aziron-ai.github.io/atlas/#docs/installation) for direct
-downloads and verification.
+Homebrew and npm installs run `atlas bootstrap` to register supported local
+assistant integrations. Preview first with `atlas bootstrap --dry-run`, or skip
+it in automation:
+
+```sh
+ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron/atlas
+```
+
+Checksums and per-archive SBOMs are attached to every
+[GitHub release](https://github.com/aziron-ai/atlas/releases).
 
 ## Documentation
 
@@ -118,38 +198,39 @@ downloads and verification.
 - [Supported Languages](https://aziron-ai.github.io/atlas/#docs/languages)
 - [Benchmarks and Methodology](https://aziron-ai.github.io/atlas/#docs/benchmarks)
 - [Troubleshooting](https://aziron-ai.github.io/atlas/#docs/troubleshooting)
-- [Upgrade and Uninstall](https://aziron-ai.github.io/atlas/#docs/upgrade)
 
 The complete guide is also mirrored in the
 [GitHub Wiki](https://github.com/aziron-ai/atlas/wiki).
 
-## Benchmarks and Data
+## Benchmarks and data
 
-The
-[Atlas benchmark explorer](https://aziron-ai.github.io/atlas/#benchmarks)
-presents dated
-accuracy, token-use, and latency measurements with limitations and evidence
-levels. Public benchmark data remains downloadable:
+The [benchmark explorer](https://aziron-ai.github.io/atlas/#benchmarks) presents
+dated accuracy, token-use, and latency measurements with limitations and
+evidence levels. The underlying data is downloadable:
 
 - [Processed site data](data/site-data.json)
 - [Raw benchmark artifacts](data/raw/)
 - [Agent benchmark reproduction guide](agent-bench/README.md)
 
-Benchmark results describe the published test conditions and are not a
-guarantee for every repository, language, machine, or coding assistant.
+Results describe the published test conditions and are not a guarantee for every
+repository, language, machine, or coding assistant.
 
-## Data Handling
+## Data handling
 
 Indexing and querying run locally by default. An MCP client or coding assistant
 may send the snippets it receives to its configured model provider, subject to
 that client's data policy. Network listeners and optional connected features
-require additional configuration.
-
-Review
+require additional configuration. Review
 [Privacy and Data Handling](https://aziron-ai.github.io/atlas/#docs/privacy)
 before enabling network access or organization-connected features.
 
-## Repository Scope
+## Star History
+
+<a href="https://www.star-history.com/#aziron-ai/atlas&Date">
+  <img src="https://api.star-history.com/svg?repos=aziron-ai/atlas&type=Date" alt="Atlas star history" width="640">
+</a>
+
+## Repository scope
 
 This public repository distributes Atlas release binaries, consumer
 documentation, the benchmark site, and downloadable benchmark artifacts. The
