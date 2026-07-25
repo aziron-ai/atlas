@@ -2534,3 +2534,13 @@ a.sheet-cell:hover .go {
   .ac-map { border-top: 1px solid var(--acline); }
 }
 @media (prefers-reduced-motion: reduce) { .ac-live { animation: none; } .ac-blk { animation: none; } }
+/* console map toggle */
+.ac-main.no-map { grid-template-columns: 1fr; }
+.ac-toggle {
+  margin-left: 10px; padding: 5px 11px;
+  font-family: var(--mono); font-size: 11px; color: var(--acmut);
+  background: var(--acsurf); border: 1px solid var(--acls); border-radius: 7px; cursor: pointer;
+}
+.ac-toggle .d { color: var(--acgrn); }
+.ac-toggle:hover, .ac-toggle.on { color: var(--actx); border-color: var(--acpri); }
+@media (max-width: 820px) { .ac-toggle { display: none; } }

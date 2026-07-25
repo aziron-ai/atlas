@@ -257,6 +257,7 @@ export default function AtlasConsole({ onClose }) {
   const [hl, setHl] = useState(null);
   const [input, setInput] = useState("");
   const [active, setActive] = useState("callers useState");
+  const [mapOn, setMapOn] = useState(true);
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
   const hist = useRef([]);
@@ -320,10 +321,19 @@ export default function AtlasConsole({ onClose }) {
         <span className="ac-dot" style={{ background: "#27c93f" }} />
         <span className="ac-title"><span className="ac-live" /> Atlas Console <span className="ac-sub">— running in your browser</span></span>
         <span className="ac-pill">facebook/react · <b>pre-indexed</b> · client-side</span>
+        <button
+          type="button"
+          className={`ac-toggle${mapOn ? " on" : ""}`}
+          onClick={() => setMapOn((v) => !v)}
+          aria-pressed={mapOn}
+          title={mapOn ? "Hide the map" : "Show the map"}
+        >
+          <span className="d">◇</span> map {mapOn ? "on" : "off"}
+        </button>
         {onClose && <button className="ac-x" type="button" onClick={onClose} aria-label="Close console">✕</button>}
       </header>
 
-      <div className="ac-main">
+      <div className={`ac-main${mapOn ? "" : " no-map"}`}>
         <section className="ac-term" aria-label="Atlas terminal">
           <div className="ac-scroll" ref={scrollRef}>
             {blocks.length === 0 && <div className="ac-dim">booting query engine over facebook/react…</div>}
@@ -347,12 +357,17 @@ export default function AtlasConsole({ onClose }) {
           </div>
         </section>
 
-        <aside className="ac-map" aria-label="Code graph minimap">
-          <div className="ac-map-h"><span>◇ map</span><span className="ac-map-n">{hl ? `${hl.length} lit` : "280 symbols"}</span></div>
-          <div className="ac-map-body">
-            <GraphExplorer bare highlightIds={hl} onInspect={(n) => run(`atlas symbol ${n.name}`)} className="ac-gx" />
-          </div>
-        </aside>
+        {mapOn && (
+          <aside className="ac-map" aria-label="Code graph minimap">
+            <div className="ac-map-h">
+              <span>◇ map</span>
+              <span className="ac-map-n">{hl ? `${hl.length} lit` : "280 symbols"}</span>
+            </div>
+            <div className="ac-map-body">
+              <GraphExplorer bare highlightIds={hl} onInspect={(n) => run(`atlas symbol ${n.name}`)} className="ac-gx" />
+            </div>
+          </aside>
+        )}
       </div>
     </div>
   );
