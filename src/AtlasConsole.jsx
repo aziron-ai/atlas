@@ -106,7 +106,7 @@ function buildEngine(data) {
   }
 
   function run(raw) {
-    let line = raw.trim().replace(/^atlas\s+/i, "");
+    let line = raw.trim().replace(/^(atlas\s+)+/i, "");
     const [cmd, ...rest] = line.split(/\s+/);
     const arg = rest.join(" ");
     const c = (cmd || "").toLowerCase();
@@ -164,7 +164,7 @@ function buildEngine(data) {
     }
   }
 
-  return { run, names, meta: data.meta };
+  return { run, names, nameSet: new Set(names.map((n) => n.toLowerCase())), meta: data.meta };
 }
 
 /* ---- rendering ---- */
@@ -362,7 +362,7 @@ export default function AtlasConsole({ onClose, compact = false }) {
     const short = line.replace(/^atlas\s+/i, "");
     setActive(short);
     const r = eng.run(line);
-    setBlocks((bs) => [...bs, { id: ++bid.current, echo: `atlas ${line.replace(/^atlas\s+/i, "")}`, r }]);
+    setBlocks((bs) => [...bs, { id: ++bid.current, echo: `atlas ${line.replace(/^(atlas\s+)+/i, "")}`, r }]);
     setHl(r.highlight && r.highlight.length ? [...new Set(r.highlight)] : null);
   };
 
@@ -475,7 +475,15 @@ export default function AtlasConsole({ onClose, compact = false }) {
     if (e.key === "Tab" || (e.key === "ArrowRight" && ghost && e.target.selectionStart === input.length)) {
       if (sugs.length) { e.preventDefault(); acceptSug(); return; }
     }
-    if (e.key === "Enter") { if (!eng) return; run(input); setInput(""); }
+    if (e.key === "Enter") {
+      // accept the open menu selection — unless the token is already an exact
+      // symbol name (e.g. "error" while "erroredTask" is still suggested)
+      const rawIn = input.replace(/^(atlas\s+)+/i, "");
+      const lastTok = /\s$/.test(rawIn) ? "" : (rawIn.trim().split(/\s+/).pop() || "").toLowerCase();
+      const exact = lastTok && eng && eng.nameSet.has(lastTok);
+      if (sugs.length && !sugHidden && !exact) { e.preventDefault(); acceptSug(); return; }
+      if (!eng) return; run(input); setInput("");
+    }
     else if (e.key === "Escape" && sugs.length && !sugHidden) { e.stopPropagation(); setSugHidden(true); }
     else if (e.key === "ArrowUp") {
       e.preventDefault();
