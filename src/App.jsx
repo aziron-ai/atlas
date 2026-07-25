@@ -1515,13 +1515,13 @@ function AgentBench({ data }) {
 function GraphSection() {
   return (
     <section id="graph" data-testid="graph" className="shell py-16" aria-labelledby="graph-title">
-      <SectionHeader id="graph-title" kicker="08 · The map Atlas builds" title="The deterministic symbol & call graph">
-        This is the “smallest useful slice” made visible: real <span className="mono">atlas export --all</span> output
-        of <span className="mono">facebook/react</span>, downsampled to a connected core. Hover a node, drag, pan, zoom;
-        click a hub to focus it — or <button type="button" className="text-link" onClick={() => window.dispatchEvent(new CustomEvent("atlas:console"))}>query it live ❯</button>.
+      <SectionHeader id="graph-title" kicker="08 · The map Atlas builds" title="Query the graph — live, in your browser">
+        A real Atlas terminal running client-side over a pre-indexed slice of
+        <span className="mono"> facebook/react</span> (280 symbols · 675 call edges). Type a command, click a suggestion,
+        or click a node — every answer is genuinely computed and cited to file:line.
       </SectionHeader>
-      <div className="gx-frame">
-        <GraphExplorer className="atlas-graph-full" />
+      <div className="ac-embed">
+        <AtlasConsole compact />
       </div>
     </section>
   );

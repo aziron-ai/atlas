@@ -251,7 +251,7 @@ const TRY = [
   ["help", "atlas help"],
 ];
 
-export default function AtlasConsole({ onClose }) {
+export default function AtlasConsole({ onClose, compact = false }) {
   const [data, setData] = useState(null);
   const [blocks, setBlocks] = useState([]);
   const [hl, setHl] = useState(null);
@@ -330,7 +330,11 @@ export default function AtlasConsole({ onClose }) {
         >
           <span className="d">◇</span> map {mapOn ? "on" : "off"}
         </button>
-        {onClose && <button className="ac-x" type="button" onClick={onClose} aria-label="Close console">✕</button>}
+        {compact ? (
+          <button className="ac-x" type="button" onClick={() => window.dispatchEvent(new CustomEvent("atlas:console"))} aria-label="Expand to full screen" title="Expand to full screen">⤢</button>
+        ) : (
+          onClose && <button className="ac-x" type="button" onClick={onClose} aria-label="Close console">✕</button>
+        )}
       </header>
 
       <div className={`ac-main${mapOn ? "" : " no-map"}`}>

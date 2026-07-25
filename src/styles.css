@@ -2561,3 +2561,7 @@ a.sheet-cell:hover .go {
 .ac-toggle .d { color: var(--acgrn); }
 .ac-toggle:hover, .ac-toggle.on { color: var(--actx); border-color: var(--acpri); }
 @media (max-width: 820px) { .ac-toggle { display: none; } }
+/* §08 embedded console — bounded-height window (not the full-screen overlay) */
+.ac-embed { display: flex; height: 620px; max-height: 78vh; margin-top: 8px; }
+.ac-embed .ac-app { border-radius: 14px; }
+@media (max-width: 820px) { .ac-embed { height: auto; max-height: none; } }
