@@ -325,7 +325,7 @@ export function ProductHeader({ version = RELEASE, active = "overview" }) {
           <Brand />
         </a>
 
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-1 lg:flex">
           {PRODUCT_NAV.map(([label, href]) => {
             const key = label.toLowerCase();
             const selected =
@@ -373,7 +373,7 @@ export function ProductHeader({ version = RELEASE, active = "overview" }) {
             <Download className="h-4 w-4" aria-hidden /> Install
           </a>
           <button
-            className="icon-btn focusring md:hidden"
+            className="icon-btn focusring lg:hidden"
             type="button"
             aria-label="Toggle navigation"
             aria-expanded={open}
@@ -384,7 +384,7 @@ export function ProductHeader({ version = RELEASE, active = "overview" }) {
         </div>
       </nav>
       {open && (
-        <nav className="mobile-product-nav shell pb-4 md:hidden" aria-label="Mobile navigation">
+        <nav className="mobile-product-nav shell pb-4 lg:hidden" aria-label="Mobile navigation">
           {PRODUCT_NAV.map(([label, href]) => (
             <a key={label} className="focusring" href={href}>{label}</a>
           ))}

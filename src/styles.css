@@ -839,7 +839,7 @@ section[id] {
   background: var(--surface-raised);
   overflow: hidden;
 }
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .hdr-seg { display: inline-flex; }
 }
 .hdr-cell {
@@ -1089,7 +1089,7 @@ section[id] {
 }
 .gx-hub:hover { color: #e9f0fb; border-color: #3a4d70; }
 .gx-hub.on { color: #04120c; background: #3ecb6e; border-color: #3ecb6e; font-weight: 600; }
-@media (max-width: 720px) {
+@media (max-width: 860px) {
   .gx-rail { flex-basis: 100%; border-left: 0; border-top: 1px solid #1c2740; }
 }
 
