@@ -769,8 +769,10 @@ section[id] {
 .hero-console .ht-dim { color: #6b7a8f; }
 .hero-console .hc-caret {
   display: inline-block;
-  width: 8px;
+  width: 3px;
   height: 14px;
+  margin-left: 5px;
+  border-radius: 1px;
   vertical-align: -2px;
   background: var(--term-green);
   animation: atlas-caret 1.1s steps(1) infinite;
