@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://aziron-ai.github.io/atlas/">
+  <a href="https://atlas.aziro.com/">
     <img src="assets/og.png" alt="Atlas — the most accurate code answer, for the fewest tokens" width="820">
   </a>
 </p>
@@ -18,14 +18,14 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="License"></a>
   <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey" alt="Platforms">
   <img src="https://img.shields.io/badge/languages-40-8957e5" alt="Languages">
-  <a href="https://aziron-ai.github.io/atlas/#benchmarks"><img src="https://img.shields.io/badge/benchmarks-open%20%26%20reproducible-2ea043" alt="Benchmarks"></a>
+  <a href="https://atlas.aziro.com/#benchmarks"><img src="https://img.shields.io/badge/benchmarks-open%20%26%20reproducible-2ea043" alt="Benchmarks"></a>
 </p>
 
 <p align="center">
-  <a href="https://aziron-ai.github.io/atlas/#docs/getting-started">Documentation</a> ·
-  <a href="https://aziron-ai.github.io/atlas/#docs/installation">Install</a> ·
+  <a href="https://atlas.aziro.com/#docs/getting-started">Documentation</a> ·
+  <a href="https://atlas.aziro.com/#docs/installation">Install</a> ·
   <a href="https://github.com/aziron-ai/atlas/releases">Releases</a> ·
-  <a href="https://aziron-ai.github.io/atlas/#benchmarks">Benchmarks</a> ·
+  <a href="https://atlas.aziro.com/#benchmarks">Benchmarks</a> ·
   <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>
 </p>
 
@@ -59,7 +59,7 @@ over MCP.
 
 Measured on a public benchmark — 222 cells, 666 real LLM-scored model calls,
 across 37 languages. Full methodology and raw artifacts are
-[published and reproducible](https://aziron-ai.github.io/atlas/#benchmarks).
+[published and reproducible](https://atlas.aziro.com/#benchmarks).
 
 | Approach | Answer accuracy (F1) | Context tokens / query |
 | --- | --- | --- |
@@ -136,7 +136,7 @@ atlas impact --paths services/cart.go          # what breaks if this changes?
 The same answers are available to your coding assistant through Atlas's MCP
 tools — with `file:line` citations on every result.
 
-See [Getting Started](https://aziron-ai.github.io/atlas/#docs/getting-started)
+See [Getting Started](https://atlas.aziro.com/#docs/getting-started)
 for a guided first index and first query.
 
 ## What Atlas provides
@@ -161,7 +161,7 @@ No server is required for local indexing, CLI queries, or stdio MCP usage.
 - release archives and native Linux packages
 
 Integration behavior varies by client — follow
-[AI Assistant Setup](https://aziron-ai.github.io/atlas/#docs/assistants)
+[AI Assistant Setup](https://atlas.aziro.com/#docs/assistants)
 for supported configurations.
 
 ## Install matrix
@@ -186,25 +186,25 @@ Checksums and per-archive SBOMs are attached to every
 
 ## Documentation
 
-- [Getting Started](https://aziron-ai.github.io/atlas/#docs/getting-started)
-- [Installation](https://aziron-ai.github.io/atlas/#docs/installation)
-- [Indexing and Reindexing](https://aziron-ai.github.io/atlas/#docs/indexing)
-- [CLI Reference](https://aziron-ai.github.io/atlas/#docs/cli)
-- [AI Assistant Setup](https://aziron-ai.github.io/atlas/#docs/assistants)
-- [MCP Tools](https://aziron-ai.github.io/atlas/#docs/mcp)
-- [Dashboard and HTTP API](https://aziron-ai.github.io/atlas/#docs/service)
-- [Configuration](https://aziron-ai.github.io/atlas/#docs/configuration)
-- [Privacy and Data Handling](https://aziron-ai.github.io/atlas/#docs/privacy)
-- [Supported Languages](https://aziron-ai.github.io/atlas/#docs/languages)
-- [Benchmarks and Methodology](https://aziron-ai.github.io/atlas/#docs/benchmarks)
-- [Troubleshooting](https://aziron-ai.github.io/atlas/#docs/troubleshooting)
+- [Getting Started](https://atlas.aziro.com/#docs/getting-started)
+- [Installation](https://atlas.aziro.com/#docs/installation)
+- [Indexing and Reindexing](https://atlas.aziro.com/#docs/indexing)
+- [CLI Reference](https://atlas.aziro.com/#docs/cli)
+- [AI Assistant Setup](https://atlas.aziro.com/#docs/assistants)
+- [MCP Tools](https://atlas.aziro.com/#docs/mcp)
+- [Dashboard and HTTP API](https://atlas.aziro.com/#docs/service)
+- [Configuration](https://atlas.aziro.com/#docs/configuration)
+- [Privacy and Data Handling](https://atlas.aziro.com/#docs/privacy)
+- [Supported Languages](https://atlas.aziro.com/#docs/languages)
+- [Benchmarks and Methodology](https://atlas.aziro.com/#docs/benchmarks)
+- [Troubleshooting](https://atlas.aziro.com/#docs/troubleshooting)
 
 The complete guide is also mirrored in the
 [GitHub Wiki](https://github.com/aziron-ai/atlas/wiki).
 
 ## Benchmarks and data
 
-The [benchmark explorer](https://aziron-ai.github.io/atlas/#benchmarks) presents
+The [benchmark explorer](https://atlas.aziro.com/#benchmarks) presents
 dated accuracy, token-use, and latency measurements with limitations and
 evidence levels. The underlying data is downloadable:
 
@@ -221,7 +221,7 @@ Indexing and querying run locally by default. An MCP client or coding assistant
 may send the snippets it receives to its configured model provider, subject to
 that client's data policy. Network listeners and optional connected features
 require additional configuration. Review
-[Privacy and Data Handling](https://aziron-ai.github.io/atlas/#docs/privacy)
+[Privacy and Data Handling](https://atlas.aziro.com/#docs/privacy)
 before enabling network access or organization-connected features.
 
 ## Star History
