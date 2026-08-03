@@ -114,7 +114,7 @@ The pre-0.1.48 spellings still work as inputs: `low` means `eco` and
 
 ### Foreground Full Throttle
 
-`balanced` bounds **background** work, not the command you are waiting on.
+**Since 0.1.50.** `balanced` bounds **background** work, not the command you are waiting on.
 
 - In a warm daemon — `atlas serve`, `atlas mcp`, `atlas watch` — `balanced`
   installs its CPU width (`3C/4`) and its soft heap ceiling (`RAM/4`). This

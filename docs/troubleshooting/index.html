@@ -100,6 +100,7 @@ atlas doctor</code></pre>
 <p>  sidecar once the lock frees. To fix it now, stop the other Atlas processes and   run <code>atlas compact --rebuild-lexical</code>, then confirm with <code>atlas doctor</code>.</p>
 <ul><li><strong>To avoid it:</strong> do not run a manual <code>atlas index</code> while <code>serve</code>/<code>watch</code>/an</li></ul>
 <p>  MCP session holds the same <code>.atlas</code> — stop them first, or let the running   server's watch pick up the change.</p>
+<p><strong>Since 0.1.50, a sidecar that is merely un-compacted is reported separately.</strong> <code>atlas index --format json</code> ends with <code>lexical_settle</code>, and a value of <code>partial</code> means the settle ran every step and then verified it had *not* reached the steady state — the sidecar still holds obsolete document bytes a compaction would reclaim. Search is correct and undegraded; only the <code>lexical_bytes</code> figure is above steady state. Re-run the index on a quiet machine, or run <code>atlas compact --rebuild-lexical</code>, before quoting a size. <code>timeout</code> is the other non-steady state: raise <code>ATLAS_LEXICAL_SETTLE_TIMEOUT</code> (default 30s) and re-run. Only <code>merged</code> asserts a steady-state footprint.</p>
 <p><strong>Why <code>atlas status</code> looked clean but <code>atlas doctor</code> caught it:</strong> <code>atlas status</code> reports <strong>version and contract health only</strong> — schema, index-format, lexical, and MCP contract versions plus per-repo snapshot format. It never opens the sidecar, so a wedged or empty sidecar leaves <code>status</code> green. <code>atlas doctor</code> checks <strong>runtime health</strong>, opens the sidecar, and reports <code>lexical_degraded</code> when it is empty or wedged. That split is by design: if search behaves oddly but <code>status</code> is clean, run <code>atlas doctor</code>.</p>
 <h2>Read the Diagnosis</h2>
 <p>Knowing what each diagnostic actually reports keeps you from applying the wrong fix.</p>
@@ -149,7 +150,7 @@ atlas doctor</code></pre>
         <a href="../upgrade/">Upgrade and Uninstall</a>
     </nav>
     <footer class="site">
-      Atlas v0.1.46 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      Atlas v0.1.50 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
       This page mirrors the interactive documentation for search engines and AI assistants.
     </footer>
   </main>

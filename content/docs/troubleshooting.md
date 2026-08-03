@@ -90,7 +90,7 @@ atlas: index <repo>: lexical sidecar unavailable, indexing without it (lazy back
   MCP session holds the same `.atlas` — stop them first, or let the running
   server's watch pick up the change.
 
-**Since 0.1.48, a sidecar that is merely un-compacted is reported separately.**
+**Since 0.1.50, a sidecar that is merely un-compacted is reported separately.**
 `atlas index --format json` ends with `lexical_settle`, and a value of
 `partial` means the settle ran every step and then verified it had *not*
 reached the steady state — the sidecar still holds obsolete document bytes a
