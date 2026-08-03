@@ -33,6 +33,54 @@ update when files changed, or a no-op when the stored snapshot already
 matches the workspace. For profiling an index run, `--cpuprofile PATH` and
 `--memprofile PATH` write runtime/pprof profiles.
 
+**Since 0.1.48, `atlas index --format json` also reports what the run did
+internally**, so you can verify the fast paths engaged instead of inferring it
+from a stopwatch:
+
+```json
+{
+  "mode": "delta",
+  "persist_mode": "delta",
+  "persist_path": "sql",
+  "delta_base": "dc4dc4ba86e307b8875a4c0b0623b628445d6274",
+  "files_reparsed": 1,
+  "lexical_bytes": 290368,
+  "lexical_settle": "merged"
+}
+```
+
+| Field | Values | What it tells you |
+| --- | --- | --- |
+| `persist_mode` | `full`, `delta`, `noop` | which mode the run resolved to. `noop` means the working tree already matched the stored snapshot |
+| `persist_path` | `sql`, `sql_new_commit`, `whole_graph`, `full_walk`, `full_stream`, `noop` | the decisive one. `sql` and `sql_new_commit` are the O(change) paths — the base graph is never loaded into memory. `whole_graph` is the correctness fallback: a delta by mode, a full index by memory |
+| `delta_base`, `delta_base_snapshot` | commit SHA, snapshot id | which snapshot the run built on, so a ladder of runs is pinnable |
+| `files_reparsed` | integer | defined for every mode: changed plus added on a delta, every indexed file on a full run, `0` on a no-op |
+| `lexical_bytes` | integer | the on-disk size of `.atlas/lexical` after the run settled it. This should match a `du` taken the instant `index` returns; a mismatch is a bug report, not a measurement |
+| `lexical_settle` | see below | how the sidecar reached the size reported in `lexical_bytes` |
+
+### Lexical Settle States
+
+The lexical (BM25) sidecar writes new segments and supersedes old ones
+asynchronously, so a footprint measured the moment an index returns used to
+read far above the steady state. Since 0.1.48 `atlas index` settles the
+sidecar before it returns — a bounded segment merge, then a reclaiming reopen
+— and reports how that went. The settle never changes the document set and
+never fails a run; every failure mode degrades to a disclosed state.
+
+| State | Meaning |
+| --- | --- |
+| `merged` | the merge completed and superseded segments were reclaimed. **Only this state asserts a steady-state footprint** |
+| `reclaimed` | the merge was skipped or declined, but the reclaim ran. Superseded segments are gone; unmerged ones may remain |
+| `partial` | **Since 0.1.50.** Every step ran and reported success, and then the check found the sidecar still holding obsolete document bytes a compaction would reclaim — a contended machine can leave a whole superseded generation inside one segment, which the engine declines to re-merge. The reported footprint is **above** steady state. Re-run on a quiet machine, or run `atlas compact --rebuild-lexical`, before quoting a size |
+| `timeout` | the merge did not finish inside its budget, so the reclaim was deliberately not attempted and the footprint may hold both unmerged and superseded segments. Raise `ATLAS_LEXICAL_SETTLE_TIMEOUT` (default 30s) and re-run |
+| `skipped` | there was nothing to settle: no sidecar, or this run wrote no documents |
+| `failed` | the settle itself errored; the reason is on stderr and the footprint is still reported |
+| `off` | disabled with `ATLAS_LEXICAL_SETTLE=off` |
+
+Set `ATLAS_LEXICAL_SETTLE=reclaim` to skip the merge and only reclaim — the
+cheaper mode for very large sidecars where a single-segment merge is not worth
+its write amplification.
+
 ## Incremental Behavior
 
 Incremental updates are the default because they are much faster than full
@@ -125,22 +173,42 @@ snapshots, symbols, edges, embeddings, and lexical documents.
 
 ## Performance Envelope
 
-Two behaviors worth knowing on large or memory-constrained machines:
+**Since 0.1.48, resource use is a profile decision first.** Atlas detects a
+machine profile — `eco`, `balanced`, `performance`, or `turbo` — and sizes
+indexing to it. The individual knobs below all still work and all still win
+over the tier; they are overrides, not the primary control. Pin a tier with
+`ATLAS_PROFILE` and read back what it installed with `atlas doctor`; the
+tiers, their values, and the auto-detection rules are in
+[Configuration](configuration).
+
+Since 0.1.50, the one rule that matters most while indexing is: **`balanced` bounds background
+work, not the index you are waiting on.** A watch-triggered refresh or an MCP
+lazy index runs inside a warm daemon and takes 3/4 of the cores under a
+`RAM/4` soft heap limit; an explicit `atlas index` you typed runs at full
+width with no ceiling. `eco` is deliberately not scoped that way — on a
+genuinely low-spec box it throttles foreground indexes too, because that is
+the case it exists to protect.
+
+Behaviors worth knowing on large or memory-constrained machines:
 
 - **Streaming index (v0.1.42+).** Full indexes of repos over ~15,000 candidate
   files automatically stream in bounded batches instead of holding the whole
   graph in memory — the Linux kernel (81k files, 1.86M symbols, 6.8M edges)
   indexes at ~1.3 GiB peak RSS. Force it at any size with
   `ATLAS_STREAM_INDEX=1` (or off with `0`); tune with
-  `ATLAS_STREAM_INDEX_THRESHOLD` and `ATLAS_STREAM_INDEX_BATCH`. `ATLAS_GOGC`
-  and `ATLAS_MEMORY_LIMIT` further bound the Go runtime on CI runners.
-- **CPU ceiling (v0.1.43+).** The parse/hash pool defaults to all cores, so a
-  large index can saturate the machine (a Chromium index drove one reporter's
-  CPU past 300%). Cap it with `atlas index --workers N` or the
-  `ATLAS_INDEX_WORKERS` env var — e.g. `--workers 4` trades a little wall-time
-  for headroom. Setting it to 1 pins the run to a single core. (Go repos also
-  run `go/types`, which spawns its own compilers outside this pool; C/C++/other
-  tree-sitter languages are fully bounded by it.)
+  `ATLAS_STREAM_INDEX_THRESHOLD` and `ATLAS_STREAM_INDEX_BATCH`.
+- **CPU ceiling (v0.1.43+; an override since 0.1.48).** With no profile bound
+  in force the parse/hash pool uses all cores, so a large index can saturate
+  the machine (a Chromium index drove one reporter's CPU past 300%). Cap it
+  explicitly with `atlas index --workers N` or `ATLAS_INDEX_WORKERS` — e.g.
+  `--workers 4` trades a little wall-time for headroom, and `1` pins the run
+  to a single core. An explicit value always beats the tier's worker count.
+  (Go repos also run `go/types`, which spawns its own compilers outside this
+  pool; C/C++/other tree-sitter languages are fully bounded by it.)
+- **Memory ceiling (an override since 0.1.48).** `ATLAS_MEMORY_LIMIT` and
+  `ATLAS_GOGC` bound the Go runtime directly and override whatever the tier
+  would have set — the right tool for a container with a hard cgroup limit,
+  where you want a specific number rather than a fraction of host RAM.
 - **Deletions cost more than edits.** Adding or modifying files takes the
   scoped delta path (sub-second, tens of MB). Deleting a Go file currently
   forces the whole-module type-check fallback — correctness requires

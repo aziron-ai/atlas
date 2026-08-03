@@ -1188,6 +1188,27 @@ function DocsPage({ slug }) {
           </ProseSection>
           <ProseSection title="What Index Output Reports">
             <p>Read the index output to confirm what actually happened rather than assuming. With <code>--progress</code> (on by default for human output), Atlas prints start, periodic progress, and completion statistics to stderr. A run reports a delta update when files changed, or a no-op when the stored snapshot already matches the workspace. For profiling an index run, <code>--cpuprofile PATH</code> and <code>--memprofile PATH</code> write runtime/pprof profiles.</p>
+            <p><strong>Since 0.1.48, <code>atlas index --format json</code> also reports what the run did internally</strong>, so you can verify the fast paths engaged instead of inferring it from a stopwatch:</p>
+            <Command label="JSON">{`{\n  "mode": "delta",\n  "persist_mode": "delta",\n  "persist_path": "sql",\n  "delta_base": "dc4dc4ba86e307b8875a4c0b0623b628445d6274",\n  "files_reparsed": 1,\n  "lexical_bytes": 290368,\n  "lexical_settle": "merged"\n}`}</Command>
+            <div className="docs-table-wrap"><table><thead><tr><th>Field</th><th>Values</th><th>What it tells you</th></tr></thead><tbody>
+              <tr><td><code>persist_mode</code></td><td><code>full</code>, <code>delta</code>, <code>noop</code></td><td>which mode the run resolved to. <code>noop</code> means the working tree already matched the stored snapshot</td></tr>
+              <tr><td><code>persist_path</code></td><td><code>sql</code>, <code>sql_new_commit</code>, <code>whole_graph</code>, <code>full_walk</code>, <code>full_stream</code>, <code>noop</code></td><td>the decisive one. <code>sql</code> and <code>sql_new_commit</code> are the O(change) paths — the base graph is never loaded into memory. <code>whole_graph</code> is the correctness fallback: a delta by mode, a full index by memory</td></tr>
+              <tr><td><code>delta_base</code>, <code>delta_base_snapshot</code></td><td>commit SHA, snapshot id</td><td>which snapshot the run built on, so a ladder of runs is pinnable</td></tr>
+              <tr><td><code>files_reparsed</code></td><td>integer</td><td>defined for every mode: changed plus added on a delta, every indexed file on a full run, <code>0</code> on a no-op</td></tr>
+              <tr><td><code>lexical_bytes</code></td><td>integer</td><td>the on-disk size of <code>.atlas/lexical</code> after the run settled it. This should match a <code>du</code> taken the instant <code>index</code> returns; a mismatch is a bug report, not a measurement</td></tr>
+              <tr><td><code>lexical_settle</code></td><td>see below</td><td>how the sidecar reached the size reported in <code>lexical_bytes</code></td></tr>
+            </tbody></table></div>
+            <p><strong>Lexical settle states.</strong> The lexical (BM25) sidecar writes new segments and supersedes old ones asynchronously, so a footprint measured the moment an index returns used to read far above the steady state. Since 0.1.48 <code>atlas index</code> settles the sidecar before it returns — a bounded segment merge, then a reclaiming reopen — and reports how that went. The settle never changes the document set and never fails a run; every failure mode degrades to a disclosed state.</p>
+            <div className="docs-table-wrap"><table><thead><tr><th>State</th><th>Meaning</th></tr></thead><tbody>
+              <tr><td><code>merged</code></td><td>the merge completed and superseded segments were reclaimed. <strong>Only this state asserts a steady-state footprint</strong></td></tr>
+              <tr><td><code>reclaimed</code></td><td>the merge was skipped or declined, but the reclaim ran. Superseded segments are gone; unmerged ones may remain</td></tr>
+              <tr><td><code>partial</code></td><td><strong>Since 0.1.50.</strong> Every step ran and reported success, and then the check found the sidecar still holding obsolete document bytes a compaction would reclaim — a contended machine can leave a whole superseded generation inside one segment, which the engine declines to re-merge. The reported footprint is <strong>above</strong> steady state. Re-run on a quiet machine, or run <code>atlas compact --rebuild-lexical</code>, before quoting a size</td></tr>
+              <tr><td><code>timeout</code></td><td>the merge did not finish inside its budget, so the reclaim was deliberately not attempted and the footprint may hold both unmerged and superseded segments. Raise <code>ATLAS_LEXICAL_SETTLE_TIMEOUT</code> (default 30s) and re-run</td></tr>
+              <tr><td><code>skipped</code></td><td>there was nothing to settle: no sidecar, or this run wrote no documents</td></tr>
+              <tr><td><code>failed</code></td><td>the settle itself errored; the reason is on stderr and the footprint is still reported</td></tr>
+              <tr><td><code>off</code></td><td>disabled with <code>ATLAS_LEXICAL_SETTLE=off</code></td></tr>
+            </tbody></table></div>
+            <p>Set <code>ATLAS_LEXICAL_SETTLE=reclaim</code> to skip the merge and only reclaim — the cheaper mode for very large sidecars where a single-segment merge is not worth its write amplification.</p>
           </ProseSection>
           <ProseSection title="Incremental Behavior">
             <p>Incremental updates are the default because they are much faster than full rebuilds: Atlas computes a delta against the previous snapshot and reindexes only what changed. To diff against a specific commit rather than the stored base, pass <code>--base COMMIT</code>.</p>
@@ -1223,10 +1244,15 @@ function DocsPage({ slug }) {
             <p><code>REPO</code> may be a filesystem path, a git remote URL, or a bare <code>org/name</code>. Linking is idempotent — re-linking updates the registration and reports <code>created=false</code>. Linking does not populate the graph; run <code>atlas index</code> for that. To remove a repo from the registry, <code>atlas repo rm</code> forgets it entirely: snapshots, symbols, edges, embeddings, and lexical documents.</p>
           </ProseSection>
           <ProseSection title="Performance Envelope">
-            <p>Two behaviors matter on large or resource-constrained machines:</p>
+            <p><strong>Since 0.1.48, resource use is a profile decision first.</strong> Atlas detects a machine profile — <code>eco</code>, <code>balanced</code>, <code>performance</code>, or <code>turbo</code> — and sizes indexing to it. The individual knobs below all still work and all still win over the tier; they are overrides, not the primary control. Pin a tier with <code>ATLAS_PROFILE</code> and read back what it installed with <code>atlas doctor</code>; the tiers, their values, and the auto-detection rules are in <a className="text-link" href="#docs/configuration">Configuration</a>.</p>
+            <Callout kind="tip" label="Foreground full throttle">
+              <p><strong>Since 0.1.50.</strong> <code>balanced</code> bounds background work, not the index you are waiting on. A watch-triggered refresh or an MCP lazy index runs inside a warm daemon and takes 3/4 of the cores under a <code>RAM/4</code> soft heap limit; an explicit <code>atlas index</code> you typed runs at full width with no ceiling. <code>eco</code> is deliberately not scoped that way — on a genuinely low-spec box it throttles foreground indexes too, because that is the case it exists to protect.</p>
+            </Callout>
+            <p>Behaviors worth knowing on large or resource-constrained machines:</p>
             <Bullets>
               <li><strong>Streaming index.</strong> Full indexes of repos over ~15,000 candidate files automatically stream in bounded batches instead of holding the whole graph in memory — the Linux kernel (81k files, 1.86M symbols, 6.8M edges) indexes at ~1.3&nbsp;GiB peak RSS. Force it at any size with <code>ATLAS_STREAM_INDEX=1</code> (or off with <code>0</code>); tune with <code>ATLAS_STREAM_INDEX_THRESHOLD</code> and <code>ATLAS_STREAM_INDEX_BATCH</code>.</li>
-              <li><strong>CPU ceiling.</strong> The parse/hash pool defaults to all cores. Cap it with <code>atlas index --workers N</code> or <code>ATLAS_INDEX_WORKERS</code> — e.g. <code>--workers 4</code> trades a little wall-time for headroom; <code>1</code> pins the run to a single core. (Go repos also run <code>go/types</code>, which spawns its own compilers outside this pool; other tree-sitter languages are fully bounded by it.)</li>
+              <li><strong>CPU ceiling (an override since 0.1.48).</strong> With no profile bound in force the parse/hash pool uses all cores. Cap it explicitly with <code>atlas index --workers N</code> or <code>ATLAS_INDEX_WORKERS</code> — e.g. <code>--workers 4</code> trades a little wall-time for headroom; <code>1</code> pins the run to a single core. An explicit value always beats the tier's worker count. (Go repos also run <code>go/types</code>, which spawns its own compilers outside this pool; other tree-sitter languages are fully bounded by it.)</li>
+              <li><strong>Memory ceiling (an override since 0.1.48).</strong> <code>ATLAS_MEMORY_LIMIT</code> and <code>ATLAS_GOGC</code> bound the Go runtime directly and override whatever the tier would have set — the right tool for a container with a hard cgroup limit, where you want a specific number rather than a fraction of host RAM.</li>
               <li><strong>Deletions cost more than edits.</strong> Adding or modifying files takes the fast scoped delta; deleting a Go file forces the whole-module type-check fallback (reverse-dependency edges must be re-derived), so a delete delta can approach cold-build time on Go-heavy repos. Batch deletions when you can.</li>
             </Bullets>
           </ProseSection>
@@ -1283,11 +1309,11 @@ function DocsPage({ slug }) {
           <ProseSection title="Index and Health">
             <p>Build the graph, keep it fresh, and verify that storage and schema are sound.</p>
             <div className="docs-table-wrap"><table><thead><tr><th>Command</th><th>Purpose</th></tr></thead><tbody>
-              <tr><td><code>index</code></td><td>Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; <code>--reindex</code> forces a full rebuild; <code>--workers N</code> (or <code>ATLAS_INDEX_WORKERS</code>; 0 = all cores) caps the parse/hash pool to bound CPU on a large index.</td></tr>
+              <tr><td><code>index</code></td><td>Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; <code>--reindex</code> forces a full rebuild; <code>--workers N</code> (or <code>ATLAS_INDEX_WORKERS</code>; 0 = all cores) caps the parse/hash pool and overrides whatever the machine profile would set. Since 0.1.48, <code>--format json</code> also reports <code>persist_mode</code>, <code>persist_path</code>, <code>files_reparsed</code>, <code>lexical_bytes</code>, and <code>lexical_settle</code>.</td></tr>
               <tr><td><code>watch</code></td><td>Index once, then watch the working tree and apply debounced incremental updates on every file change. Foreground until interrupted.</td></tr>
               <tr><td><code>status</code></td><td>Storage and version health: schema/index-format contracts and per-repo snapshot format state (<code>--schema</code> for contract versions and drift).</td></tr>
               <tr><td><code>stats</code></td><td>Graph and index telemetry statistics for an indexed repo.</td></tr>
-              <tr><td><code>doctor</code></td><td>Report upgrade health and schema/index contract state; <code>--verify</code> also checks whether the <code>atlas</code> on PATH matches the running binary; <code>--deep</code> runs a page-level integrity scan (<code>PRAGMA quick_check</code>) to catch on-disk corruption that reads silently tolerate.</td></tr>
+              <tr><td><code>doctor</code></td><td>Report upgrade health and schema/index contract state; <code>--verify</code> also checks whether the <code>atlas</code> on PATH matches the running binary; <code>--deep</code> runs a page-level integrity scan (<code>PRAGMA quick_check</code>) to catch on-disk corruption that reads silently tolerate. Since 0.1.48 it also reports a <code>machine_profile</code> block — the detected tier, the probe facts behind it, <code>cpu_width_scope</code>, and every bound actually installed.</td></tr>
               <tr><td><code>report</code></td><td>Compose graph stats, top hubs, and top communities; <code>--format plain</code> prints the Markdown report directly.</td></tr>
               <tr><td><code>migrate</code></td><td>Apply storage migrations and report the active contracts.</td></tr>
               <tr><td><code>compact</code></td><td>Reclaim space and truncate the WAL; <code>--full</code> also runs a full VACUUM and rebuilds an oversized lexical sidecar; <code>--rebuild-lexical</code> fixes an empty or wedged sidecar.</td></tr>
@@ -1568,9 +1594,10 @@ function DocsPage({ slug }) {
             <ol className="docs-list numbered">
               <li>Environment variable</li>
               <li>Repository <code>.atlas/settings.json</code></li>
+              <li>Machine profile default <em>(since 0.1.48)</em> — what the tier in force implies for a knob nobody set</li>
               <li>Compiled default</li>
             </ol>
-            <p>A deployment environment variable always wins over a persisted edit. Environment variables suit automation and containers; repository settings suit stable local policy.</p>
+            <p>A deployment environment variable always wins over a persisted edit. Environment variables suit automation and containers; repository settings suit stable local policy. The profile rung sits below both on purpose: a profile never overrides a value you set explicitly.</p>
           </ProseSection>
           <ProseSection title="Inspecting and Persisting Settings">
             <p>Use <code>atlas config</code> to see every knob's effective value and its provenance — not just what is set, but which layer set it:</p>
@@ -1582,8 +1609,9 @@ function DocsPage({ slug }) {
               <tr><td><code>ATLAS_EMBED_URL</code></td><td>Point semantic search at a real embedding model; the default embedder is offline (deterministic token overlap)</td></tr>
               <tr><td><code>ATLAS_NO_WATCH</code></td><td>Disable background file watching in <code>mcp</code> and <code>serve</code> (equivalent to <code>--watch=false</code>)</td></tr>
               <tr><td><code>ATLAS_WATCH_MODE</code></td><td>Select the watcher mode, including polling</td></tr>
-              <tr><td><code>ATLAS_MEMORY_LIMIT</code></td><td>Bound Atlas memory use</td></tr>
-              <tr><td><code>ATLAS_GOGC</code></td><td>Tune Go garbage collection</td></tr>
+              <tr><td><code>ATLAS_PROFILE</code></td><td><strong>Since 0.1.48.</strong> Pin the machine profile tier: <code>eco</code>, <code>balanced</code>, <code>performance</code>, or <code>turbo</code>. Unset means auto-detect</td></tr>
+              <tr><td><code>ATLAS_MEMORY_LIMIT</code></td><td>Soft Go heap limit for the Atlas process. Accepts a byte count or a suffixed size (<code>512MiB</code>, <code>2GiB</code>, <code>2GB</code>). Overrides whatever the profile would set</td></tr>
+              <tr><td><code>ATLAS_GOGC</code></td><td>GC target percent. Overrides both the profile default and the warm-daemon nudge</td></tr>
               <tr><td><code>ATLAS_MCP_CALL_TIMEOUT</code></td><td>Bound an MCP tool call</td></tr>
               <tr><td><code>ATLAS_MCP_ALLOWED_ORIGINS</code></td><td>Allow additional browser origins</td></tr>
               <tr><td><code>ATLAS_API_TOKEN</code></td><td>Require <code>Authorization: Bearer</code> on the HTTP API and HTTP/SSE MCP transports</td></tr>
@@ -1594,10 +1622,57 @@ function DocsPage({ slug }) {
               <tr><td><code>ATLAS_CONTEXT_LIMIT</code>, <code>ATLAS_CONTEXT_MAX_FILES</code>, <code>ATLAS_CONTEXT_MAX_EDGES</code>, <code>ATLAS_CONTEXT_MAX_DEPTH</code></td><td>Default budgets for <code>atlas context</code>; per-request flags override, intent defaults apply otherwise</td></tr>
               <tr><td><code>ATLAS_LEXICAL_MAX_RATIO</code>, <code>ATLAS_MAX_LEXICAL_BYTES</code></td><td>Size bound on the lexical (BM25) sidecar that triggers a rebuild during <code>compact --full</code></td></tr>
               <tr><td><code>ATLAS_MAX_DB_BYTES</code></td><td>Bound the graph database size</td></tr>
-              <tr><td><code>ATLAS_INDEX_WORKERS</code></td><td>Cap the parse/hash worker pool during indexing (0 = all cores); CLI equivalent <code>atlas index --workers N</code>. Lower it to bound CPU on a large index</td></tr>
+              <tr><td><code>ATLAS_INDEX_WORKERS</code></td><td>Cap the parse/hash worker pool during indexing (0 = all cores); CLI equivalent <code>atlas index --workers N</code>. Overrides the profile's worker count</td></tr>
               <tr><td><code>ATLAS_STREAM_INDEX</code>, <code>ATLAS_STREAM_INDEX_THRESHOLD</code>, <code>ATLAS_STREAM_INDEX_BATCH</code></td><td>Force/tune the streaming index that bounds memory on large repos (auto-engages above ~15,000 candidate files)</td></tr>
+              <tr><td><code>ATLAS_LEXICAL_SETTLE</code>, <code>ATLAS_LEXICAL_SETTLE_TIMEOUT</code></td><td><strong>Since 0.1.48.</strong> How <code>atlas index</code> brings the lexical sidecar to its on-disk steady state before returning: <code>auto</code> (default — merge, reclaim, measure), <code>reclaim</code> (skip the merge), <code>off</code> (measure only). The timeout budgets the merge (default 30s)</td></tr>
             </tbody></table></div>
             <p>Run <code>atlas config list</code> for the complete catalog with current names, defaults, descriptions, and accepted values for your installed release.</p>
+          </ProseSection>
+          <ProseSection title="Machine Profiles">
+            <p><strong>Since 0.1.48.</strong> Atlas sizes itself to the machine it is running on. A profile decides how much of the box Atlas takes while it works; it never changes what Atlas produces. Symbol, edge, and route counts are identical on every tier.</p>
+            <p>Leave <code>ATLAS_PROFILE</code> unset to auto-detect, or pin a tier:</p>
+            <Command>{`export ATLAS_PROFILE=balanced   # eco | balanced | performance | turbo\natlas doctor                    # read back the tier and every active bound`}</Command>
+            <p><code>C</code> is the machine's CPU count; <code>RAM</code> is physical memory.</p>
+            <div className="docs-table-wrap"><table><thead><tr><th>Tier</th><th>Intended for</th><th>Index workers</th><th>Soft heap limit</th><th>GOGC</th><th>Sampler</th><th>Watch poll</th><th>WAL checkpoint</th><th>Read pool</th></tr></thead><tbody>
+              <tr><td><code>eco</code></td><td>≤12&nbsp;GiB RAM, or a database on a spinning disk</td><td><code>max(2, C/2)</code></td><td><code>max(512MiB, RAM/8)</code></td><td>50</td><td>30s</td><td>180s</td><td>16384 pages (~64&nbsp;MB)</td><td>4</td></tr>
+              <tr><td><code>balanced</code></td><td>the 12–16&nbsp;GiB middle: a laptop shared with an IDE and a browser</td><td><code>max(2, 3C/4)</code></td><td><code>max(1GiB, RAM/4)</code></td><td>75</td><td>10s</td><td>90s</td><td>4096 pages (~16&nbsp;MB)</td><td>4</td></tr>
+              <tr><td><code>performance</code></td><td>stock Atlas, on any hardware</td><td>all cores</td><td>none</td><td>100 (75 in warm daemons)</td><td>5s</td><td>45s</td><td>1000 pages (~4&nbsp;MB)</td><td>4</td></tr>
+              <tr><td><code>turbo</code></td><td>≥32&nbsp;GiB workstations and CI</td><td>all cores</td><td>none</td><td>100 (75 in warm daemons)</td><td>5s</td><td>45s</td><td>1000 pages (~4&nbsp;MB)</td><td>8</td></tr>
+            </tbody></table></div>
+            <p><code>performance</code> is stock Atlas by construction rather than by gating: it carries no bounds at all, so every read site falls through to its compiled default. <code>turbo</code> moves exactly one knob — the SQLite read-pool connection count, 4 to 8 — because that is the only candidate that survived measurement.</p>
+            <p><strong>Auto-detection.</strong> With <code>ATLAS_PROFILE</code> unset, Atlas picks a tier from what it can actually measure, highest trigger first:</p>
+            <Bullets>
+              <li><strong>≤12 GiB RAM</strong> selects <code>eco</code> (reported reason <code>ram</code>).</li>
+              <li><strong>A rotational database disk</strong> selects <code>eco</code> (reason <code>rotational_disk</code>). Rotation is answered only where the kernel says so — Linux <code>/sys</code>. Everywhere else it is reported <code>unknown</code> rather than guessed, and an unknown disk never blocks a RAM trigger.</li>
+              <li><strong>12–16 GiB RAM</strong> selects <code>balanced</code> (reason <code>ram</code>).</li>
+              <li><strong>Anything else</strong> falls through to <code>performance</code> with an empty reason, so you can tell "performance because the hardware is fine" from "performance because you asked for it".</li>
+            </Bullets>
+            <p>Unmeasured RAM never triggers a tier on its own, and <strong><code>turbo</code> is never auto-selected</strong> — it takes more of the machine than stock, so it has to be asked for. The pre-0.1.48 spellings still work as inputs: <code>low</code> means <code>eco</code> and <code>default</code> means <code>performance</code>. Atlas always reports the canonical name.</p>
+            <Callout kind="tip" label="Foreground full throttle">
+              <p><strong>Since 0.1.50.</strong> <code>balanced</code> bounds <strong>background</strong> work, not the command you are waiting on. In a warm daemon — <code>atlas serve</code>, <code>atlas mcp</code>, <code>atlas watch</code> — it installs its CPU width (<code>3C/4</code>) and its soft heap ceiling (<code>RAM/4</code>), which is where a watch-triggered reindex and an MCP lazy index run. In a one-shot <code>atlas index</code> those two bounds are <strong>not</strong> installed: the command gets the whole machine. Measured on a 10-CPU box, the daemon-sized bounds cost a foreground index up to +15.69% wall time for no benefit a waiting human can use.</p>
+              <p><code>eco</code> is deliberately <strong>not</strong> scoped that way — it throttles one-shot commands too, process-wide, because on genuinely low-spec hardware an explicit index is exactly what makes the machine unusable. <code>performance</code> and <code>turbo</code> carry no runtime bounds at all.</p>
+            </Callout>
+            <p>The two <code>balanced</code> knobs move together or not at all; the rest of the tier — GOGC 75, the 10s/90s cadences, the 4096-page WAL checkpoint — applies process-wide on both paths. Pinning <code>balanced</code> in <code>.atlas/settings.json</code> behaves identically to pinning it in the environment.</p>
+            <p><strong>Explicit knobs always win.</strong> A profile is a default for knobs nobody set. Every control below still works and still outranks the tier, in both directions — Atlas will not apply a bound over your value, and it will not take yours away either:</p>
+            <div className="docs-table-wrap"><table><thead><tr><th>Override</th><th>Beats</th></tr></thead><tbody>
+              <tr><td><code>atlas index --workers N</code>, <code>ATLAS_INDEX_WORKERS</code></td><td>the tier's index worker count</td></tr>
+              <tr><td><code>ATLAS_MEMORY_LIMIT</code>, <code>GOMEMLIMIT</code></td><td>the tier's soft heap limit</td></tr>
+              <tr><td><code>GOMAXPROCS</code></td><td>the tier's CPU width</td></tr>
+              <tr><td><code>ATLAS_GOGC</code>, <code>GOGC</code></td><td>the tier's GC target</td></tr>
+            </tbody></table></div>
+            <p>When a tier does install something, it says so on stderr, names what a one-shot deferred, and tells you how to opt out:</p>
+            <Command label="stderr">{`atlas: balanced profile active (ram): GOGC=75 (cpu width + memory limit apply\nin warm daemons) (set ATLAS_PROFILE=performance to opt out; explicit knobs\nalways win)`}</Command>
+            <p><strong>Reading it back.</strong> <code>atlas doctor</code> reports a <code>machine_profile</code> block. It is informational — a low-spec machine is not a fault, so it never sets doctor's status — and its numbers are <strong>live read-backs</strong> from the running process, not what detection intended. If something overrode a bound, this block shows the override.</p>
+            <div className="docs-table-wrap"><table><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody>
+              <tr><td><code>profile</code></td><td>the tier in force: <code>eco</code>, <code>balanced</code>, <code>performance</code>, <code>turbo</code></td></tr>
+              <tr><td><code>reason</code></td><td><code>ram</code>, <code>rotational_disk</code>, <code>env</code>, <code>flag</code>, or empty when the hardware simply qualified</td></tr>
+              <tr><td><code>cpu_width_scope</code></td><td><strong>where</strong> the tier's CPU width and soft heap limit apply: <code>process</code> under <code>eco</code>, <code>daemon</code> under <code>balanced</code>, empty under <code>performance</code>/<code>turbo</code></td></tr>
+              <tr><td><code>total_ram_bytes</code>, <code>num_cpu</code>, <code>rotational_db</code></td><td>the probe facts behind the verdict; <code>rotational_db</code> may be <code>unknown</code></td></tr>
+              <tr><td><code>gomaxprocs</code>, <code>workers</code>, <code>memory_limit_bytes</code>, <code>gogc</code></td><td>the bounds actually installed</td></tr>
+              <tr><td><code>sampler_interval</code>, <code>watch_poll_interval</code>, <code>wal_autocheckpoint_pages</code>, <code>read_pool</code></td><td>the cadences and pool this tier resolved to</td></tr>
+              <tr><td><code>go_types_note</code></td><td>under <code>eco</code> only: <code>atlas index --go-types=off</code> skips Go type analysis for −78% cold first-index wall and −194&nbsp;MB RSS, at the cost of type-derived edges</td></tr>
+            </tbody></table></div>
+            <p><code>cpu_width_scope</code> is the field that explains an otherwise confusing reading: run <code>atlas doctor</code> as a one-shot under <code>balanced</code> and <code>gomaxprocs</code> correctly shows the stock, full-width value, because a one-shot is not where that bound applies. <code>cpu_width_scope: daemon</code> says so.</p>
           </ProseSection>
           <ProseSection title="Storage Selection">
             <p>Every command reads and writes one database, selected by <code>--db</code>. The DSN takes two forms: <code>sqlite://PATH</code> or <code>postgres://...</code></p>
@@ -1623,10 +1698,12 @@ function DocsPage({ slug }) {
             <Command>{`atlas --read-only --telemetry-db /srv/atlas/telemetry.db \\\n  --db "sqlite:///shared/index/.atlas/atlas.db" search "payment handler"`}</Command>
           </ProseSection>
           <ProseSection title="Resource-Constrained Environments">
-            <p>Start conservative and confirm before raising limits:</p>
+            <p><strong>Since 0.1.48, start with a tier, not with individual knobs.</strong> On a small or shared machine Atlas already selects one for you; pinning it is the one-line version of everything below:</p>
+            <Command>{`export ATLAS_PROFILE=eco\natlas doctor            # confirm the tier and the bounds it installed`}</Command>
+            <p>Reach for individual knobs when you need a specific bound the tier does not give you — a hard memory ceiling for a container, a fixed worker count for a CI runner sharing an executor. They override the tier:</p>
             <Command>{`export ATLAS_MEMORY_LIMIT=2GiB\nexport ATLAS_NO_WATCH=1\natlas index . --workers 4`}</Command>
             <p>On a large repo, <code>--workers N</code> (or <code>ATLAS_INDEX_WORKERS</code>) caps indexing CPU, and the streaming index (auto above ~15,000 files; force with <code>ATLAS_STREAM_INDEX=1</code>) bounds peak memory.</p>
-            <p>For very large repositories, exclude generated files and dependency caches (see <a className="text-link" href="#docs/indexing">Indexing and Reindexing</a>) before increasing limits. Confirm behavior with <code>atlas status</code>, <code>atlas stats</code>, and <code>atlas doctor</code>.</p>
+            <p>For very large repositories, exclude generated files and dependency caches (see <a className="text-link" href="#docs/indexing">Indexing and Reindexing</a>) before tightening limits — a smaller candidate set beats a tighter bound. Confirm behavior with <code>atlas status</code>, <code>atlas stats</code>, and <code>atlas doctor</code>.</p>
           </ProseSection>
         </>
       );
@@ -1891,6 +1968,7 @@ function DocsPage({ slug }) {
               <li><strong>It heals on its own:</strong> in serve/watch mode a lazy backfill rebuilds the sidecar once the lock frees. To fix it now, stop the other Atlas processes and run <code>atlas compact --rebuild-lexical</code>, then confirm with <code>atlas doctor</code>.</li>
               <li><strong>To avoid it:</strong> don't run a manual <code>atlas index</code> while <code>serve</code>/<code>watch</code>/an MCP session holds the same <code>.atlas</code> — stop them first, or let the running server's watch pick up the change.</li>
             </Bullets>
+            <p><strong>Since 0.1.50, a sidecar that is merely un-compacted is reported separately.</strong> <code>atlas index --format json</code> ends with <code>lexical_settle</code>, and a value of <code>partial</code> means the settle ran every step and then verified it had <em>not</em> reached the steady state — the sidecar still holds obsolete document bytes a compaction would reclaim. Search is correct and undegraded; only the <code>lexical_bytes</code> figure is above steady state. Re-run the index on a quiet machine, or run <code>atlas compact --rebuild-lexical</code>, before quoting a size. <code>timeout</code> is the other non-steady state: raise <code>ATLAS_LEXICAL_SETTLE_TIMEOUT</code> (default 30s) and re-run. Only <code>merged</code> asserts a steady-state footprint.</p>
             <Callout kind="tip" label="why status looked clean but doctor caught it">
               <p><code>atlas status</code> reports <strong>version and contract health only</strong> — schema, index-format, lexical, and MCP contract versions plus per-repo snapshot format. It never opens the sidecar, so a wedged or empty sidecar leaves <code>status</code> green. <code>atlas doctor</code> checks <strong>runtime health</strong>, opens the sidecar, and reports <code>lexical_degraded</code> when it is empty or wedged. That split is by design: if search behaves oddly but <code>status</code> is clean, run <code>atlas doctor</code>.</p>
             </Callout>

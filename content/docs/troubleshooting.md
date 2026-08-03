@@ -90,6 +90,17 @@ atlas: index <repo>: lexical sidecar unavailable, indexing without it (lazy back
   MCP session holds the same `.atlas` — stop them first, or let the running
   server's watch pick up the change.
 
+**Since 0.1.50, a sidecar that is merely un-compacted is reported separately.**
+`atlas index --format json` ends with `lexical_settle`, and a value of
+`partial` means the settle ran every step and then verified it had *not*
+reached the steady state — the sidecar still holds obsolete document bytes a
+compaction would reclaim. Search is correct and undegraded; only the
+`lexical_bytes` figure is above steady state. Re-run the index on a quiet
+machine, or run `atlas compact --rebuild-lexical`, before quoting a size.
+`timeout` is the other non-steady state: raise
+`ATLAS_LEXICAL_SETTLE_TIMEOUT` (default 30s) and re-run. Only `merged`
+asserts a steady-state footprint.
+
 **Why `atlas status` looked clean but `atlas doctor` caught it:** `atlas status`
 reports **version and contract health only** — schema, index-format, lexical,
 and MCP contract versions plus per-repo snapshot format. It never opens the

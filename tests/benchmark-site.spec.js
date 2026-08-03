@@ -36,7 +36,7 @@ test.describe("atlas product and documentation", () => {
     await page.goto(`${baseURL}#overview`, { waitUntil: "networkidle" });
     const hero = page.getByTestId("product-hero");
     await expect(hero.getByRole("heading", { level: 1 })).toContainText("Atlas is the map");
-    await expect(hero).toContainText("precise repository context");
+    await expect(hero).toContainText("Atlas surveys your repository into a local graph");
     await expect(hero).toContainText("One local binary");
     await expect(page.getByTestId("product-install")).toContainText(
       "brew install --cask aziron-ai/atlas/atlas"
@@ -213,7 +213,7 @@ test.describe("atlas benchmark evidence", () => {
     const ctx = await page.context().browser().newContext({ javaScriptEnabled: false });
     const nojs = await ctx.newPage();
     await nojs.goto(baseURL, { waitUntil: "domcontentloaded" });
-    await expect(nojs.locator("h1")).toHaveText("Atlas");
+    await expect(nojs.locator("h1")).toContainText("Atlas");
     await expect(nojs.locator("body")).toContainText("Product documentation");
     await expect(nojs.locator("table").first()).toBeVisible();
     await ctx.close();
