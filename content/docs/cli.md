@@ -36,11 +36,11 @@ Build the graph, keep it fresh, and verify that storage and schema are sound.
 
 | Command | Purpose |
 | --- | --- |
-| `index` | Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; `--reindex` forces a full rebuild; `--workers N` (or `ATLAS_INDEX_WORKERS`; 0 = all cores) caps the parse/hash pool to bound CPU on a large index. |
+| `index` | Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; `--reindex` forces a full rebuild; `--workers N` (or `ATLAS_INDEX_WORKERS`; 0 = all cores) caps the parse/hash pool and overrides whatever the machine profile would set. Since 0.1.48, `--format json` also reports `persist_mode`, `persist_path`, `files_reparsed`, `lexical_bytes`, and `lexical_settle`. |
 | `watch` | Index once, then watch the working tree and apply debounced incremental updates on every file change. Foreground until interrupted. |
 | `status` | Storage and version health: schema/index-format contracts and per-repo snapshot format state (`--schema` for contract versions and drift). |
 | `stats` | Graph and index telemetry statistics for an indexed repo. |
-| `doctor` | Report upgrade health and schema/index contract state; `--verify` also checks whether the `atlas` on PATH matches the running binary; `--deep` runs a page-level integrity scan (`PRAGMA quick_check`) to catch on-disk corruption reads silently tolerate. |
+| `doctor` | Report upgrade health and schema/index contract state; `--verify` also checks whether the `atlas` on PATH matches the running binary; `--deep` runs a page-level integrity scan (`PRAGMA quick_check`) to catch on-disk corruption reads silently tolerate. Since 0.1.48 it also reports a `machine_profile` block — the detected tier, the probe facts behind it, `cpu_width_scope`, and every bound actually installed. |
 | `report` | Compose graph stats, top hubs, and top communities; `--format plain` prints the Markdown report directly. |
 | `migrate` | Apply storage migrations and report the active contracts. |
 | `compact` | Reclaim space and truncate the WAL; `--full` also runs a full VACUUM and rebuilds an oversized lexical sidecar; `--rebuild-lexical` fixes an empty or wedged sidecar. |
