@@ -122,12 +122,16 @@ function SectionHeader({ kicker, title, children, actions, id }) {
 
 const EVIDENCE_COLORS = {
   "fixture-truth": "var(--primary)",
+  "LLM-scored": "var(--primary)",
   "LSP-truth": "var(--secondary)",
   "perf-only": "var(--warning)",
   "agent-harness": "var(--g2)",
+  carried: "var(--warning)",
 };
 const EVIDENCE_LABELS = {
   "fixture-truth": "native",
+  "LLM-scored": "LLM-scored",
+  carried: "carried — not re-measured",
 };
 function EvidenceTag({ kind, children }) {
   const color = EVIDENCE_COLORS[kind] || "var(--muted)";
@@ -240,6 +244,11 @@ function ConsoleBar({ active }) {
 
 function FrontierChart({ frontier }) {
   const W = 580, H = 396;
+  // Derived from the plotted points, so the annotation can never disagree
+  // with the chart it is annotating.
+  const _hi = frontier.find((p) => p.id === "atlas-high");
+  const _xhi = frontier.find((p) => p.id === "atlas-xhigh");
+  const xFactor = _hi && _xhi ? Math.round((_xhi.tokens / _hi.tokens) * 10) / 10 : null;
   const L = 52, R = 570, T = 20, B = 350;
   const x = (tok) => L + (tok / 300) * (R - L);
   const y = (f1) => B - f1 * (B - T);
@@ -263,7 +272,7 @@ function FrontierChart({ frontier }) {
       viewBox={`0 0 ${W} ${H}`}
       width="100%"
       role="img"
-      aria-label="Efficiency frontier: answer accuracy (F1) versus context tokens for six context sources. Atlas high sits in the ideal top-left quadrant at F1 0.757 and 21 tokens."
+      aria-label="Efficiency frontier: answer accuracy (F1) versus context tokens for six context sources. Atlas high sits in the ideal top-left quadrant, matching the maximum-detail level's F1 at roughly a tenth of its tokens."
       style={{ display: "block" }}
     >
       {/* ideal quadrant — a soft corner glow, not a box: hard edges read as a
@@ -306,10 +315,10 @@ function FrontierChart({ frontier }) {
         ANSWER ACCURACY (F1) ↑
       </text>
 
-      {/* high → xhigh: same accuracy, 13.6× the tokens */}
+      {/* high → xhigh: identical F1, an order of magnitude more tokens */}
       <line x1={P["atlas-high"].px + 8} x2={P["atlas-xhigh"].px - 8} y1={P["atlas-high"].py} y2={P["atlas-xhigh"].py} stroke="var(--line-strong)" strokeDasharray="3 5" />
       <text x={(P["atlas-high"].px + P["atlas-xhigh"].px) / 2 + 20} y={P["atlas-high"].py + 16} textAnchor="middle" className="mono" fontSize="9.5" fill="var(--faint)">
-        same F1 · 13.6× the tokens
+        same F1 · {xFactor}× the tokens
       </text>
 
       {/* points */}
@@ -370,21 +379,22 @@ function Hero({ data }) {
               className="mt-4 text-balance font-semibold tracking-tight"
               style={{ fontSize: "clamp(30px,4.6vw,50px)", lineHeight: 1.05, letterSpacing: "-0.02em" }}
             >
-              The most accurate code answer,
+              A better answer,
               <br />
-              <span style={{ color: "var(--primary)" }}>for the fewest tokens.</span>
+              <span style={{ color: "var(--primary)" }}>for a fraction of the tokens.</span>
             </h1>
             <p className="mt-5 max-w-xl" style={{ fontSize: 16, lineHeight: 1.65, color: "var(--muted)" }}>
               When a coding agent asks <span className="mono" style={{ color: "var(--text)" }}>“who calls this function?”</span>,
-              Atlas answers at F1 {h.atlasF1All} from just {h.atlasTokAll} context tokens — measured across 37 languages
-              with a real LLM scoring every cell. The graph tool needed {Math.round(h.graphifyTok)} tokens to score {h.graphifyF1}.
+              Atlas answers in {h.tokensPooled}× fewer tokens than the graph tool across a seven-repository
+              matrix — and answers <em>better</em>: caller-F1 {h.atlasF1.toFixed(3)} against {h.graphifyF1.toFixed(3)},
+              scored by a real model over 37 constructed-truth fixtures.
             </p>
 
             <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-4">
-              <StatBig value={<CountUp value={h.atlasF1All} decimals={3} />} label="Atlas F1 · all 37 langs" sub={`@ ${h.atlasTokAll} tokens`} accent="var(--primary)" />
-              <StatBig value={<CountUp value={h.atlasF1Supported} decimals={3} />} label={`F1 · ${h.supportedLangs} supported`} sub={`@ ${h.atlasTokSupported} tokens`} />
-              <StatBig value={<CountUp value={h.accPerToken} decimals={1} suffix="×" />} label="Accuracy per token" sub="vs. graph tool" />
-              <StatBig value={<CountUp value={h.fewerTokens} suffix="×" />} label="Fewer query tokens" sub="for a better answer" />
+              <StatBig value={<CountUp value={h.tokensPooled} decimals={2} suffix="×" />} label="Fewer answer tokens" sub="pooled · 7 repos" accent="var(--primary)" />
+              <StatBig value={<CountUp value={h.atlasF1} decimals={3} />} label="Caller F1" sub={`graph tool ${h.graphifyF1.toFixed(3)}`} />
+              <StatBig value={<CountUp value={h.tokensPerLanguageMean} decimals={2} suffix="×" />} label="Per-language mean" sub={`median ${h.tokensPerLanguageMedian}× · worst ${h.tokensWorstRatio}×`} />
+              <StatBig value={<CountUp value={r.efficiency.xCheaper} decimals={1} suffix="×" />} label="Default vs max detail" sub="identical F1" />
             </div>
 
             <div className="mt-7 flex flex-wrap items-center gap-2" data-testid="fresh-chips">
@@ -392,8 +402,8 @@ function Hero({ data }) {
                 CORROBORATED —
               </span>
               <FreshChip>{f.saturation.perfect}/{f.saturation.total} langs fixture-perfect</FreshChip>
-              <FreshChip>{f.latency.ratio}× faster queries</FreshChip>
               <FreshChip>gopls-truth F1 {f.lspTruth.meanF1.toFixed(3)}</FreshChip>
+              <FreshChip>agent-harness F1 0.995 · both CLIs</FreshChip>
               <span className="mono hidden sm:inline" style={{ fontSize: 11, color: "var(--faint)" }}>
                 Linux re-run, deterministic
               </span>
@@ -420,7 +430,9 @@ function Hero({ data }) {
             <FrontierChart frontier={r.frontier} />
             <p className="mt-2" style={{ fontSize: 12, lineHeight: 1.55, color: "var(--faint)" }}>
               Every context source an agent could be handed, placed by accuracy against cost. Atlas high owns the ideal
-              quadrant; xhigh proves more tokens buy nothing; the raw file is perfect but 7.4× the price.
+              quadrant; xhigh scores an identical F1 for {r.efficiency.xCheaper}× the tokens. The raw file is the
+              positive control — it contains the answer by construction, so its 1.000 checks the judge rather than
+              beating anyone.
             </p>
           </div>
         </div>
@@ -428,9 +440,9 @@ function Hero({ data }) {
         {/* jump strip — where to dig in (fills the fold on tall screens with content) */}
         <div className="hero-jump" data-reveal>
           {[
-            ["01", "#summary", "Executive summary", "+40% answer accuracy vs the graph tool"],
-            ["03", "#languages", "Languages", `${r.perLanguage.length} languages · native ground truth`],
-            ["04", "#versus", "Head-to-head", `${h.fewerTokens}× fewer query tokens`],
+            ["01", "#summary", "Executive summary", `${h.f1Advantage}× the caller F1 of the graph tool`],
+            ["03", "#languages", "Languages", `${r.perLanguage.length} languages · constructed ground truth`],
+            ["04", "#versus", "Head-to-head", `${h.tokensPooled}× fewer answer tokens`],
             ["08", "#graph", "Live graph", "query facebook/react right here ❯"],
           ].map(([no, href, t, sub]) => (
             <a className="hj focusring" key={no} href={href}>
@@ -448,14 +460,14 @@ function Hero({ data }) {
 /* ===================== executive summary ================================ */
 
 function MiniPerTokenBars({ table }) {
-  const rows = table.filter((r) => ["atlas high", "graph tool", "raw file (ceiling)"].includes(r.source));
+  const rows = table.filter((r) => ["atlas high", "graph tool", "raw file (positive control)"].includes(r.source));
   const max = Math.max(...rows.map((r) => r.per100));
   return (
     <div className="mt-4 flex flex-col gap-2.5">
       {rows.map((r) => (
         <div key={r.source} className="grid items-center gap-2" style={{ gridTemplateColumns: "86px 1fr 44px" }}>
           <span className="mono truncate" style={{ fontSize: 11, color: "var(--muted)" }}>
-            {r.source.replace(" (ceiling)", "")}
+            {r.source.replace(" (positive control)", "")}
           </span>
           <div className="h-2.5 rounded-full" style={{ background: "var(--bg2)" }}>
             <div
@@ -481,62 +493,65 @@ function ExecSummary({ data }) {
     <section id="summary" data-testid="summary" className="shell py-16" aria-labelledby="summary-title">
       <SectionHeader id="summary-title" kicker="01 · Executive summary" title="What the numbers say">
         Agents pay for every context token, on every call, across the whole organization — so the real KPI is
-        accuracy per token. Four results, each carrying its evidence class.
+        accuracy per token. Four results, each carrying its evidence class and the definition of its metric.
       </SectionHeader>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <div className="panel min-w-0 p-5">
           <div className="flex items-start justify-between gap-2">
             <div className="kicker">Accuracy per 100 tokens</div>
-            <EvidenceTag kind="fixture-truth" />
+            <EvidenceTag kind="LLM-scored" />
           </div>
-          <div className="num mt-3" style={{ fontSize: 30, fontWeight: 600, color: "var(--primary)" }}>6.4×</div>
+          <div className="num mt-3" style={{ fontSize: 30, fontWeight: 600, color: "var(--primary)" }}>{r.headline.accPerToken}×</div>
           <p className="mt-1" style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
-            Atlas high delivers 3.56 F1 per 100 tokens; the graph tool 0.56. Best answer, lowest cost.
+            Atlas high delivers {r.headlineTable.find((x) => x.source === "atlas high").per100} F1 per 100 context
+            tokens; the graph tool {r.headlineTable.find((x) => x.source === "graph tool").per100}.
           </p>
           <MiniPerTokenBars table={r.headlineTable} />
         </div>
 
         <div className="panel min-w-0 p-5">
           <div className="flex items-start justify-between gap-2">
-            <div className="kicker">Perfect & cheap where supported</div>
-            <EvidenceTag kind="fixture-truth" />
+            <div className="kicker">More detail buys nothing</div>
+            <EvidenceTag kind="LLM-scored" />
           </div>
-          <div className="num mt-3" style={{ fontSize: 30, fontWeight: 600 }}>F1 1.000</div>
+          <div className="num mt-3" style={{ fontSize: 30, fontWeight: 600 }}>{r.efficiency.xCheaper}× <span style={{ fontSize: 15, color: "var(--muted)" }}>cheaper</span></div>
           <p className="mt-1" style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
-            On the {r.headline.supportedLangs} fully-parsed languages Atlas matches a full-file dump —
-            at {r.headline.atlasTokSupported} tokens vs 165, 6.1× fewer. The graph tool tops out at 0.605 there.
+            The shipped default and the maximum-detail level score an <em>identical</em> F1
+            of {r.efficiency.highF1.toFixed(3)} — at {r.efficiency.highTok} tokens against {r.efficiency.xhighTok}.
+            {" "}{r.efficiency.perfectLangs} of {r.efficiency.totalLangs} languages score a perfect 1.000.
           </p>
           <div className="mt-4">
-            <FreshChip>fresh run: {f.saturation.perfect}/{f.saturation.total} languages perfect</FreshChip>
+            <FreshChip>fresh run: {f.saturation.perfect}/{f.saturation.total} languages fixture-perfect</FreshChip>
           </div>
         </div>
 
         <div className="panel min-w-0 p-5">
           <div className="flex items-start justify-between gap-2">
-            <div className="kicker">Holds on production code</div>
+            <div className="kicker">Holds inside a real agent</div>
             <EvidenceTag kind="LSP-truth" />
           </div>
-          <div className="num mt-3" style={{ fontSize: 30, fontWeight: 600 }}>0.975 <span style={{ fontSize: 15, color: "var(--danger)" }}>vs 0.084</span></div>
+          <div className="num mt-3" style={{ fontSize: 30, fontWeight: 600 }}>0.995 <span style={{ fontSize: 15, color: "var(--danger)" }}>vs {r.goFlagship.rows.find((x) => x.agent === "claude" && x.tool === "Graph tool").f1}</span></div>
           <p className="mt-1" style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
-            On {r.goFlagship.repo}, scored against gopls call-hierarchy truth, Atlas holds F1 0.975 while the
-            graph tool and a raw dump collapse — a 12× gap on real fan-in.
+            On {r.goFlagship.repo} against gopls call-hierarchy truth, two real agent harnesses restricted to one
+            tool each answered at F1 0.995 with Atlas. Given the graph tool they spent three to thirteen times the
+            turns and still answered wrong more often than not.
           </p>
           <div className="mt-4">
-            <FreshChip>re-run on a second Go service: {f.lspTruth.meanF1.toFixed(3)}</FreshChip>
+            <FreshChip>second Go service, gopls truth: {f.lspTruth.meanF1.toFixed(3)}</FreshChip>
           </div>
         </div>
 
         <div className="panel min-w-0 p-5">
           <div className="flex items-start justify-between gap-2">
             <div className="kicker">Accuracy you can dial</div>
-            <EvidenceTag kind="fixture-truth" />
+            <EvidenceTag kind="LLM-scored" />
           </div>
           <div className="num mt-3" style={{ fontSize: 30, fontWeight: 600 }}>1 knob</div>
           <p className="mt-1" style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
-            A single <span className="mono">--detail</span> flag moves the budget from a 3-token stub to a 288-token
-            dump. <span style={{ color: "var(--text)" }}>high</span> is the sweet spot — all the accuracy at 1/13th
-            of the tokens.
+            A single <span className="mono">--detail</span> flag moves the budget from
+            a {r.detailKnob.levels[0].tokens}-token stub to a {r.detailKnob.levels[3].tokens}-token
+            dump. <span style={{ color: "var(--text)" }}>high</span> is the default, and it is where the curve flattens.
           </p>
           <a href="#knob" className="link mt-4 inline-flex items-center gap-1" style={{ fontSize: 13 }}>
             See the knob <ArrowRight className="h-3.5 w-3.5" aria-hidden />
@@ -546,13 +561,14 @@ function ExecSummary({ data }) {
 
       <div className="panel mt-4 flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between" style={{ borderColor: "var(--warning)", borderStyle: "dashed" }}>
         <p style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
-          <span className="mono" style={{ color: "var(--warning)" }}>HONEST LIMITS — </span>
-          at report time 9 of 37 languages had parser gaps. The saturation run has since fixed all 9 on
-          native evidence; they carry a <span style={{ color: "var(--warning)" }}>“pending real-repo proof”</span> badge
-          until a production-repo run lands.
+          <span className="mono" style={{ color: "var(--warning)" }}>WHAT WE RETRACTED — </span>
+          this page used to claim <span style={{ textDecoration: "line-through" }}>36× fewer query tokens</span> and
+          {" "}<span style={{ textDecoration: "line-through" }}>17× faster queries</span> from a live-repo run. That run
+          compared against a build whose caller answers were a two-token placeholder: across 224 answers it named
+          zero callers. Every figure on this page is measured against a build that answers.
         </p>
-        <a href="#languages" className="link inline-flex shrink-0 items-center gap-1" style={{ fontSize: 13 }}>
-          Maturity ladder <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+        <a href="#evidence" className="link inline-flex shrink-0 items-center gap-1" style={{ fontSize: 13 }}>
+          Full disclosure list <ArrowRight className="h-3.5 w-3.5" aria-hidden />
         </a>
       </div>
     </section>
@@ -570,7 +586,7 @@ function KnobChart({ levels }) {
   const yTok = (v) => B - (v / 300) * plotH;
   const barW = 52;
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label="The detail knob: F1 climbs from 0 at low to a plateau of 0.76 at high; token cost stays near 21 through high then jumps to 288 at xhigh." style={{ display: "block" }}>
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label="The detail knob: F1 climbs from zero at low to a plateau at high; token cost stays low through high and then jumps by roughly ten times at xhigh for no accuracy gain." style={{ display: "block" }}>
       {[0, 0.25, 0.5, 0.75, 1].map((t) => (
         <g key={t}>
           <line x1={L} x2={R} y1={yF1(t)} y2={yF1(t)} stroke="var(--grid)" />
@@ -638,6 +654,9 @@ function KnobChart({ levels }) {
 
 function DetailKnob({ data }) {
   const k = data.report.detailKnob;
+  const _hi = k.levels.find((l) => l.id === "high");
+  const _xhi = k.levels.find((l) => l.id === "xhigh");
+  const xFactor = _hi && _xhi ? Math.round((_xhi.tokens / _hi.tokens) * 10) / 10 : null;
   return (
     <section id="knob" data-testid="knob" className="shell py-16" aria-labelledby="knob-title">
       <SectionHeader
@@ -648,14 +667,14 @@ function DetailKnob({ data }) {
       >
         <span className="mono" style={{ color: "var(--text)" }}>{k.flag}</span> trades context depth for tokens.
         Accuracy climbs to a plateau at <span className="mono" style={{ color: "var(--primary)" }}>high</span>;
-        beyond it, tokens jump 14× for no gain.
+        beyond it, tokens jump {xFactor}× for an identical F1.
       </SectionHeader>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
         <div className="panel min-w-0 p-4 sm:p-5">
           <KnobChart levels={k.levels} />
           <p className="mt-2" style={{ fontSize: 12, lineHeight: 1.55, color: "var(--faint)" }}>
-            Means across all 37 languages, real-LLM scored. The teal line is F1 (left axis); amber bars are context
+            Means across all 37 fixture languages, scored by a real model. The teal line is F1 (left axis); amber bars are context
             tokens (right axis).
           </p>
         </div>
@@ -1061,7 +1080,7 @@ function WinMap({ perLanguage, fresh }) {
         ))}
       </div>
       <div className="mt-3">
-        <FreshChip>fresh Linux run: Atlas perfect on all {fresh.saturation.total}/{fresh.saturation.total} — the “neither/graph-only” cells are the pending-proof set</FreshChip>
+        <FreshChip>fresh Linux run: {fresh.saturation.perfect}/{fresh.saturation.total} fixture-perfect — the remaining {fresh.saturation.stillFailing.length} ({fresh.saturation.stillFailing.join(", ")}) return no callers</FreshChip>
       </div>
     </div>
   );
@@ -1074,14 +1093,17 @@ function Versus({ data }) {
     <section id="versus" data-testid="versus" className="shell py-16" aria-labelledby="versus-title">
       <SectionHeader id="versus-title" kicker="04 · Head-to-head" title="Atlas vs Graphify — the scorecard">
         Graphify is the only other tool that covers every language from one binary, so it is the honest incumbent
-        to beat. Accuracy and answer size come from fixtures; latency, tokens and build time from real repositories.
+        to beat. Accuracy comes from the fixture sweep; tokens and latency from a seven-repository matrix where both
+        binaries ran on one host in one pass. Every ratio is over queries BOTH tools answered — a query one tool
+        missed is excluded, not scored as a win.
       </SectionHeader>
 
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
         {sc.stats.map((s) => (
           <div key={s.label} className="panel p-5 text-center">
-            <div className="num" style={{ fontSize: "clamp(26px,3vw,34px)", fontWeight: 700, color: "var(--primary)" }}>{s.value}</div>
+            <div className="num" style={{ fontSize: "clamp(22px,2.6vw,30px)", fontWeight: 700, color: "var(--primary)" }}>{s.value}</div>
             <div className="kicker mt-2" style={{ letterSpacing: "0.1em" }}>{s.label}</div>
+            {s.sub && <div className="mono mt-1" style={{ fontSize: 10.5, color: "var(--faint)" }}>{s.sub}</div>}
           </div>
         ))}
       </div>
@@ -1125,7 +1147,7 @@ function Versus({ data }) {
               <span className="mono" style={{ color: "var(--primary)" }}>DETERMINISTIC — </span>{sc.note}
             </p>
             <div className="mt-3">
-              <FreshChip>fresh run medians: {f.latency.atlasMedianMs} ms vs {f.latency.graphifyMedianMs} ms per query ({f.latency.ratio}×)</FreshChip>
+              <FreshChip>fresh Linux run: Atlas median {f.latency.atlasMedianMs} ms per query — no competitor ratio, the graph tool is not installed on that host</FreshChip>
             </div>
           </div>
         </div>
@@ -1246,15 +1268,18 @@ function FieldSection({ data }) {
 
 /* ================== real-repository proof =============================== */
 
-function FlagshipBars({ flagship }) {
-  const max = Math.max(...flagship.rows.map((r) => r.f1));
+function FlagshipBars({ flagship, agent }) {
+  // One agent per chart: the two harnesses use different tokenizers, so their
+  // absolute token totals are not comparable and must never share an axis.
+  const rows = flagship.rows.filter((r) => r.agent === agent);
+  const max = Math.max(...rows.map((r) => r.f1));
   return (
     <div className="mt-5 flex items-end justify-around gap-4">
-      {flagship.rows.map((r) => {
+      {rows.map((r) => {
         const isAtlas = r.tool === "Atlas";
         const h = Math.max((r.f1 / max) * 118, 4);
         return (
-          <div key={r.tool} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-2">
+          <div key={r.agent + r.tool} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-2">
             <span className="num" style={{ fontSize: 15, fontWeight: 700, color: isAtlas ? "var(--primary)" : "var(--muted)" }}>
               {r.f1.toFixed(3)}
             </span>
@@ -1277,24 +1302,23 @@ function FlagshipBars({ flagship }) {
   );
 }
 
-function LatencyScatter({ liveRepos, meanMs }) {
+function LatencyScatter({ liveRepos, medianMs }) {
   const pts = liveRepos.filter((r) => r.perQueryMs != null && r.symbols > 0);
   const W = 560, H = 280;
   const L = 46, R = 546, T = 20, B = 232;
-  const lo = Math.log10(10), hi = Math.log10(50000);
+  const lo = Math.log10(10), hi = Math.log10(2000000);
   const x = (s) => L + ((Math.log10(Math.max(s, 10)) - lo) / (hi - lo)) * (R - L);
-  const yMax = 16;
+  const yMax = Math.max(16, Math.ceil(Math.max(...pts.map((p) => p.perQueryMs)) / 4) * 4);
   const y = (ms) => B - (Math.min(ms, yMax) / yMax) * (B - T);
-  const xt = [[10, "10"], [100, "100"], [1000, "1k"], [10000, "10k"]];
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label={`Query latency versus repository size across ${pts.length} real repositories. Latency stays flat — the report mean is ${meanMs} milliseconds — regardless of repo size.`} style={{ display: "block" }}>
-      {[0, 4, 8, 12, 16].map((t) => (
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label={`Query latency versus repository size across ${pts.length} real repositories. Latency stays broadly flat — the median is ${medianMs} milliseconds — across a wide range of repository sizes.`} style={{ display: "block" }}>
+      {[0, 0.25, 0.5, 0.75, 1].map((fr) => Math.round(yMax * fr)).map((t) => (
         <g key={t}>
           <line x1={L} x2={R} y1={y(t)} y2={y(t)} stroke="var(--grid)" />
           <text x={L - 8} y={y(t) + 3.5} textAnchor="end" className="mono" fontSize="10" fill="var(--faint)">{t}</text>
         </g>
       ))}
-      {xt.map(([v, lb]) => (
+      {[[10, "10"], [1000, "1k"], [100000, "100k"], [1000000, "1M"]].map(([v, lb]) => (
         <text key={v} x={x(v)} y={B + 18} textAnchor="middle" className="mono" fontSize="10" fill="var(--faint)">{lb}</text>
       ))}
       <line x1={L} x2={R} y1={B} y2={B} stroke="var(--line-strong)" />
@@ -1305,9 +1329,9 @@ function LatencyScatter({ liveRepos, meanMs }) {
         QUERY MS
       </text>
 
-      <line x1={L} x2={R} y1={y(meanMs)} y2={y(meanMs)} stroke="var(--primary)" strokeDasharray="5 5" opacity="0.7" />
-      <text x={R} y={y(meanMs) + 17} textAnchor="end" className="mono" fontSize="10" fill="var(--primary)" paintOrder="stroke" stroke="var(--surface)" strokeWidth="4">
-        report mean {meanMs} ms
+      <line x1={L} x2={R} y1={y(medianMs)} y2={y(medianMs)} stroke="var(--primary)" strokeDasharray="5 5" opacity="0.7" />
+      <text x={R} y={y(medianMs) + 17} textAnchor="end" className="mono" fontSize="10" fill="var(--primary)" paintOrder="stroke" stroke="var(--surface)" strokeWidth="4">
+        median {medianMs} ms
       </text>
 
       {pts.map((p) => (
@@ -1324,6 +1348,12 @@ function RealRepo({ data }) {
   const las = data.report.latencyAtScale;
   const f = data.fresh;
   const xr = f.crossRepo;
+  // Derived from the rows actually plotted, so the caption cannot outlive them.
+  const syms = data.liveRepos.map((r) => r.symbols).filter((x) => x > 0);
+  const minSym = Math.min(...syms), maxSym = Math.max(...syms);
+  const sizeRange = Math.round(maxSym / minSym);
+  const msList = data.liveRepos.map((r) => r.perQueryMs).filter((x) => x != null).sort((a, b) => a - b);
+  const medianCliMs = msList.length ? Math.round(msList[Math.floor(msList.length / 2)] * 10) / 10 : null;
   return (
     <section id="real" data-testid="real" className="py-16" style={{ background: "var(--bg2)" }} aria-labelledby="real-title">
       <div className="shell">
@@ -1339,10 +1369,15 @@ function RealRepo({ data }) {
               <EvidenceTag kind="LSP-truth" />
             </div>
             <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>
-              Scored against {flagship.truth} — an authority neither tool can influence. A {flagship.advantage}× gap
-              on production fan-in.
+              Scored against {flagship.truth} — an authority neither tool can influence. Two real agent harnesses,
+              {" "}{flagship.questions} caller questions, one code-intel tool each.
             </p>
-            <FlagshipBars flagship={flagship} />
+            <FlagshipBars flagship={flagship} agent="claude" />
+            <p className="mono mt-2" style={{ fontSize: 10.5, color: "var(--faint)" }}>
+              claude harness shown. The codex harness scores the same F1 with Atlas (0.995) and
+              {" "}{flagship.rows.find((r) => r.agent === "codex" && r.tool === "Graph tool").f1} with the graph
+              tool; its absolute token totals use a different tokenizer and are not plotted on this axis.
+            </p>
             <div className="mt-4">
               <FreshChip>re-run vs gopls on a second production Go service: F1 {f.lspTruth.meanF1.toFixed(3)} over {f.lspTruth.symbols} symbols</FreshChip>
             </div>
@@ -1354,11 +1389,11 @@ function RealRepo({ data }) {
               <EvidenceTag kind="perf-only" />
             </div>
             <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>
-              {num(las.largestSymbols)}-symbol repos answer in about the same time as 100-symbol ones —
-              a {num(las.sizeRange)}× size range, flat latency.
+              A {num(sizeRange)}× spread in repository size, from {num(minSym)} symbols to {num(maxSym)}, and the
+              per-query cost barely moves. Points are each repository's median CLI query, process spawn included.
             </p>
             <div className="mt-3">
-              <LatencyScatter liveRepos={data.liveRepos} meanMs={las.meanMs} />
+              <LatencyScatter liveRepos={data.liveRepos} medianMs={medianCliMs} />
             </div>
           </div>
 
@@ -1402,7 +1437,7 @@ function RealRepo({ data }) {
         </div>
 
         <p className="mt-4" style={{ fontSize: 12.5, color: "var(--faint)" }}>
-          Why latency holds: {las.why}
+          Why latency holds: {las.why} Warm-serve `explain` on the 7-repo matrix lands between {las.warmServeMinMs} and {las.warmServeMaxMs} ms per repo; {las.definition}
         </p>
       </div>
     </section>
@@ -1733,31 +1768,49 @@ function EvidenceSection({ data }) {
               ))}
             </div>
             <div className="hairline mt-4 pt-4">
-              <div className="kicker mb-3">Cross-model agreement</div>
-              <div className="tablewrap">
-                <table className="dtable dtable-compact" style={{ minWidth: 0 }}>
-                  <thead>
-                    <tr>
-                      <th>context source</th>
-                      <th>haiku 4.5</th>
-                      <th>sonnet 5</th>
-                      <th>agreement</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {r.crossModel.rows.map((row) => (
-                      <tr key={row.source}>
-                        <td style={{ fontSize: 12.5 }}>{row.source}</td>
-                        <td className="num">{row.haiku.toFixed(3)}</td>
-                        <td className="num">{row.sonnet.toFixed(3)}</td>
-                        <td className="mono" style={{ fontSize: 11, color: "var(--success)" }}>{row.agreement}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <p className="mt-3" style={{ fontSize: 12, lineHeight: 1.55, color: "var(--faint)" }}>{r.crossModel.note}</p>
+              <div className="kicker mb-3" style={{ color: "var(--warning)" }}>Cross-model agreement — withdrawn</div>
+              <p style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>{r.crossModel.note}</p>
+              <p className="mono mt-2" style={{ fontSize: 11, color: "var(--faint)" }}>
+                scored this refresh: {r.crossModel.ranThisRefresh}
+              </p>
             </div>
+          </div>
+
+          <div className="panel p-5" style={{ borderColor: "var(--danger)", borderStyle: "dashed" }}>
+            <div className="kicker mb-3" style={{ color: "var(--danger)" }}>Retracted — what this page used to say</div>
+            <div className="tablewrap">
+              <table className="dtable dtable-compact" style={{ minWidth: 0 }}>
+                <thead>
+                  <tr><th>retired claim</th><th>replaced by</th><th>why</th></tr>
+                </thead>
+                <tbody>
+                  {r.scorecard.retired.map((row) => (
+                    <tr key={row.claim}>
+                      <td style={{ fontSize: 12.5, textDecoration: "line-through", color: "var(--faint)" }}>{row.claim}</td>
+                      <td style={{ fontSize: 12.5, color: "var(--text)" }}>{row.replacedBy}</td>
+                      <td style={{ fontSize: 12, color: "var(--muted)" }}>{row.why}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-3" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>{r.supersedes}</p>
+          </div>
+
+          <div className="panel p-5" style={{ borderColor: "var(--warning)", borderStyle: "dashed" }}>
+            <div className="kicker mb-3" style={{ color: "var(--warning)" }}>Carried, not re-measured</div>
+            <ul className="flex flex-col gap-2.5" style={{ fontSize: 13, lineHeight: 1.6, color: "var(--muted)" }}>
+              <li className="flex gap-2.5"><span aria-hidden style={{ color: "var(--warning)" }}>—</span>
+                <span><span className="mono" style={{ color: "var(--text)" }}>CALLERS_F1_BEFORE</span> — {f.saturation.pairing}</span></li>
+              <li className="flex gap-2.5"><span aria-hidden style={{ color: "var(--warning)" }}>—</span>
+                <span><span className="mono" style={{ color: "var(--text)" }}>Linux graph-tool latency</span> — {f.latency.unrebuildable}</span></li>
+              <li className="flex gap-2.5"><span aria-hidden style={{ color: "var(--warning)" }}>—</span>
+                <span><span className="mono" style={{ color: "var(--text)" }}>tool-landscape index times</span> — {r.fieldCaveat}</span></li>
+              <li className="flex gap-2.5"><span aria-hidden style={{ color: "var(--warning)" }}>—</span>
+                <span><span className="mono" style={{ color: "var(--text)" }}>maturity ladder rows</span> — 9 of the 20 languages in the promotion matrix carry <span className="mono">carried: true</span> from the July base and make no claim at this commit.</span></li>
+              <li className="flex gap-2.5"><span aria-hidden style={{ color: "var(--warning)" }}>—</span>
+                <span><span className="mono" style={{ color: "var(--text)" }}>live-repo serve column</span> — {data.liveSummary.serveNote}</span></li>
+            </ul>
           </div>
 
           <div className="panel p-5" style={{ borderColor: "var(--warning)", borderStyle: "dashed" }}>

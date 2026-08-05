@@ -260,12 +260,16 @@ const body = `
 
         <h2>Headline results — ${esc(r.label)}</h2>
         <ul>
-          <li>Atlas F1 ${h.atlasF1All} at ${h.atlasTokAll} context tokens, mean across all 37 languages (native, real-LLM scored, ${r.method.cells} cells / ${r.method.modelCalls} model calls).</li>
-          <li>F1 ${h.atlasF1Supported.toFixed(3)} at ${h.atlasTokSupported} tokens on the ${h.supportedLangs} fully-supported languages — full-file-dump accuracy at 6.1× fewer tokens.</li>
-          <li>Graph-tool comparison: ${h.graphifyF1} F1 at ${Math.round(h.graphifyTok)} tokens — Atlas delivers ${h.accPerToken}× the accuracy per token and ${h.fewerTokens}× fewer query tokens.</li>
-          <li>Real repository (${esc(r.goFlagship.repo)}, gopls call-hierarchy ground truth): Atlas F1 0.975 vs graph tool 0.084 vs raw file 0.017.</li>
-          <li>Query latency ~${r.latencyAtScale.meanMs} ms, flat from 15 to ${r.latencyAtScale.largestSymbols.toLocaleString("en-US")} symbols across 36 real repositories.</li>
-          <li>Corroborated by an independent Linux re-run: ${f.saturation.perfect}/${f.saturation.total} languages fixture-perfect, ${f.latency.ratio}× faster queries than the graph tool, gopls-truth F1 ${f.lspTruth.meanF1.toFixed(3)}.</li>
+          <li>${h.tokensPooled}× fewer answer tokens than the graph tool, pooled across a ${h.matrixRepos}-repository matrix (${h.matrixQueries} queries both tools answered). Per-language mean ${h.tokensPerLanguageMean}×, median ${h.tokensPerLanguageMedian}×, worst language ${h.tokensWorstLanguage} at ${h.tokensWorstRatio}×.</li>
+          <li>And a better answer: caller-F1 ${h.atlasF1.toFixed(3)} vs ${h.graphifyF1.toFixed(3)} — ${h.f1Advantage}× — scored by ${esc(r.method.scoringModel)} over ${r.method.cells} cells / ${r.method.modelCalls} model calls on 37 constructed-truth fixtures.</li>
+          <li>The shipped default matches the maximum-detail level exactly (F1 ${r.efficiency.highF1.toFixed(3)} both) at ${r.efficiency.xCheaper}× fewer tokens — ${r.efficiency.highTok} vs ${r.efficiency.xhighTok}. ${r.efficiency.perfectLangs} of ${r.efficiency.totalLangs} languages score a perfect 1.000.</li>
+          <li>Inside a real agent (${esc(r.goFlagship.repo)}, gopls call-hierarchy ground truth, ${r.goFlagship.questions} questions): F1 0.995 with Atlas on both the claude and codex harnesses.</li>
+          <li>Queries run ${r.latencyAtScale.matrixLatencyMean}× faster than the graph tool on the same matrix (mean of the seven per-repository ratios); warm-serve <code>explain</code> lands between ${r.latencyAtScale.warmServeMinMs} and ${r.latencyAtScale.warmServeMaxMs} ms.</li>
+          <li>Corroborated by an independent Linux re-run: ${f.saturation.perfect}/${f.saturation.total} languages fixture-perfect, gopls-truth F1 ${f.lspTruth.meanF1.toFixed(3)}. That leg ran on ${esc(f.platform)}; it has no graph-tool binary, so it publishes no competitor ratio.</li>
+        </ul>
+        <h3>Retracted claims</h3>
+        <ul>
+          ${r.scorecard.retired.map((x) => `<li><s>${esc(x.claim)}</s> → ${esc(x.replacedBy)} (${esc(x.why)})</li>`).join("\n          ")}
         </ul>
 
         <h2>Atlas vs Graphify — scorecard</h2>
@@ -362,11 +366,13 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intellig
 
 > Atlas is a local code-intelligence CLI: one native binary that indexes a
 > repository into a SQLite symbol and relationship graph and answers focused context queries
-> (definition, callers, callees, imports, routes) in ~${r.latencyAtScale.meanMs} ms and ~${h.atlasTokAll} tokens.
-> Benchmark (July 2026, real-LLM scored, 37 languages): Atlas F1 ${h.atlasF1All} @ ${h.atlasTokAll} tokens vs
-> graph tool ${h.graphifyF1} @ ${Math.round(h.graphifyTok)} tokens — ${h.accPerToken}× accuracy per token, ${h.fewerTokens}× fewer tokens.
-> Real-repo (gopls ground truth): Atlas F1 0.975 vs graph tool 0.084. ${r.maturity.totalCodeLanguages} code languages on a
-> five-level maturity ladder. Version ${pkg.version}.
+> (definition, callers, callees, imports, routes) in single-digit milliseconds and tens of tokens.
+> Benchmark (${esc(r.label)}): ${h.tokensPooled}× fewer answer tokens than the graph tool pooled over a
+> ${h.matrixRepos}-repository matrix, at a higher answer quality — caller-F1 ${h.atlasF1.toFixed(3)} vs ${h.graphifyF1.toFixed(3)}.
+> Inside a real agent harness on ${esc(r.goFlagship.repo)} with gopls ground truth: F1 0.995.
+> ${r.maturity.totalCodeLanguages} code languages on a five-level maturity ladder. Version ${pkg.version}.
+> Earlier 20× and 36× token claims are RETRACTED: they were measured against a build whose
+> caller answers were a two-token placeholder.
 
 ## Benchmark data
 - [site-data.json](${BASE}data/site-data.json): the full payload the page renders — headline table, efficiency frontier, detail knob, maturity ladder, scorecard, per-language results
@@ -544,9 +550,9 @@ const llmsFull = `# Atlas — full documentation for LLMs
 > Atlas is a local code-intelligence CLI: one native binary that indexes a
 > repository into a SQLite symbol and relationship graph and answers focused
 > context queries (definition, callers, callees, imports, routes) in
-> ~${r.latencyAtScale.meanMs} ms and ~${h.atlasTokAll} tokens. Benchmark (July 2026, real-LLM
-> scored, 37 languages): Atlas F1 ${h.atlasF1All} @ ${h.atlasTokAll} tokens vs graph tool
-> ${h.graphifyF1} @ ${Math.round(h.graphifyTok)} tokens. Version ${pkg.version}.
+> single-digit milliseconds and tens of tokens. Benchmark (${esc(r.label)}):
+> ${h.tokensPooled}× fewer answer tokens than the graph tool, pooled over ${h.matrixRepos} repositories,
+> at caller-F1 ${h.atlasF1.toFixed(3)} vs ${h.graphifyF1.toFixed(3)}. Version ${pkg.version}.
 >
 > This file inlines the complete consumer documentation. Canonical HTML pages
 > live at ${BASE}docs/<slug>/ ; the interactive site is at ${BASE}.

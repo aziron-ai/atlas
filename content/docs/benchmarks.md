@@ -36,16 +36,32 @@ Keep categories separate — do not combine them into one unsupported headline:
 
 These are the current published numbers, each with its evidence conditions:
 
-| Result | Conditions |
+| Result | Conditions and definition |
 | --- | --- |
-| F1 0.757 at 21.2 context tokens, mean across all 37 languages | Native ground truth, real-LLM scored (222 cells, 666 model calls) |
-| F1 1.000 at 27.1 tokens on the 28 fully-supported languages | Full-file-dump accuracy at 6.1× fewer tokens; same fixture suite |
-| Graph-tool comparison: 0.539 F1 at 97 tokens | Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens |
-| Query latency ~7.4 ms vs 128 ms for the graph tool | Real repositories, 36 languages; flat from 15 to 39,161 symbols |
+| 3.17× fewer answer tokens than the graph tool | Pooled: sum of answer tokens over the 26 queries both tools answered, across a 7-repository matrix run on one host in one pass (Darwin arm64, graphify 0.8.49). Per-language mean 5.06×, median 3.66×, worst language cpp at 1.41× |
+| Caller-F1 0.865 vs 0.541 — 1.60× | A real model is handed one context source and asked which functions call `target`; scored deterministically against a constructed truth of 15 callers and 3 decoys. 37 languages, 222 cells, 666 model calls, temperature 0, majority of 3 |
+| The default detail level equals the maximum one | `--detail high` and `--detail xhigh` both score F1 0.8649 — at 23.9 tokens against 230.1, so high is 9.6× cheaper for an identical answer. 32 of 37 languages score a perfect 1.000 |
+| Queries run 4.12× faster than the graph tool | Mean of the seven per-repository latency ratios on the same matrix; each timing is the median of 5 CLI invocations with process spawn included. Warm-serve `explain` lands between 1.6 and 14.9 ms per repository |
 
-*Measurement layer:* the 7.4 ms figure is warm **in-process engine latency** (the number an MCP/serve session experiences per call). End-to-end **CLI** latency adds ~30 ms of process spawn on both sides — roughly 44 ms vs 450 ms (~9×) — so shell-loop reproductions should expect the CLI numbers, not 7.4 ms.
+**Retracted.** Earlier versions of this page claimed **36× fewer query tokens** and
+**17× faster queries** from a 36-repository live run, and an earlier one claimed 20×.
+Those runs compared against a build whose caller answers were a two-token placeholder:
+across all 224 live answers it named **zero callers**. The ratios measured an empty
+answer, not a cheap one, and are withdrawn rather than adjusted. The
+`2.3× faster cold index`, `14× faster incremental`, `7.9× more call edges` and
+`100.2% AST coverage` rows are withdrawn too — they were not re-measured at this
+commit, and a number nobody re-ran is not evidence.
 
-## Agent-Harness Token Benchmark (2026-07-10)
+**Live repositories, honestly.** On 36 pinned public repositories the current CLI
+answers in **4.25× fewer tokens** (median across languages) or **3.70×** (pooled),
+and runs **4.78×** faster. Those figures cover the 25 repositories whose Atlas answers
+actually named a caller. On the other 11 — astro, blade, byond, delphi, ejs, lua,
+powershell, rust, scala, sql, terraform — the CLI still returns a bare name or a name
+and a location, so its token ratio measures a non-answer and is excluded from the
+headline rather than averaged into it. Several of those excluded ratios are large
+(lua 35.8×, rust 46.1×, terraform 38.5×); that is precisely why they are excluded.
+
+## Agent-Harness Token Benchmark (2026-08-05)
 
 This measures what a real agent actually spends. Claude Code and OpenAI Codex
 ran headless in sirupsen/logrus (@a23d315), restricted to one
@@ -55,16 +71,26 @@ harness's own usage accounting.
 
 | Agent | Context source | Mean total tokens | Mean tool calls | Mean F1 |
 | --- | --- | --- | --- | --- |
-| claude (claude-sonnet-5) | Atlas | 61,561 | 2 | 0.882 |
-| claude (claude-sonnet-5) | No tool (raw exploration) | 144,385 | 4.9 | 0.569 |
-| claude (claude-sonnet-5) | Graph tool | 370,898 | 10.3 | 0.305 |
-| codex (gpt-5.6-sol) | Atlas | 27,981 | 1 | 0.881 |
-| codex (gpt-5.6-sol) | No tool (raw exploration) | 48,106 | 2.1 | 0.876 |
-| codex (gpt-5.6-sol) | Graph tool | 109,662 | 9.6 | 0.410 |
+| claude (claude-sonnet-5) | Atlas | 58,234 | 2.0 | 0.995 |
+| claude (claude-sonnet-5) | No tool (raw exploration) | 134,886 | 4.7 | 0.589 |
+| claude (claude-sonnet-5) | Graph tool | 239,026 | 7.7 | 0.203 |
+| codex (gpt-5.6-sol) | Atlas | 33,471 | 1.0 | 0.995 |
+| codex (gpt-5.6-sol) | No tool (raw exploration) | 74,229 | 3.3 | 0.831 |
+| codex (gpt-5.6-sol) | Graph tool | 131,335 | 12.7 | 0.379 |
+
+All 114 runs completed (19 questions × 2 agents × 3 modes). Against the baseline,
+Atlas saves 2.32× the tokens on claude and 2.22× on codex; against the graph tool,
+4.10× and 3.92×.
 
 Cross-agent absolute totals are **not comparable** — the two harnesses use
 different tokenizers and system-prompt floors (see each agent's calibration).
 Compare modes within an agent only.
+
+**Two changes from the previously published table.** Atlas's F1 is 0.995 on both
+harnesses; the figure published before was 0.88. And this run used **graphify
+0.8.49** where the published run used **0.9.12**, so part of the movement in the
+competitor column is a version change on their side rather than a change on ours.
+Both versions are recorded in the artifacts.
 
 ## Reproduce It Yourself
 

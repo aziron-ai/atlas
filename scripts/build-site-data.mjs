@@ -397,6 +397,12 @@ const liveRepos = live36.languages.map((r) => ({
   coldS: r.cold_wall_seconds ?? null,
   queries: r.n ?? null,
   comparable: r.comparable ?? null,
+  perQueryMs: r.atlas_cli_median_ms ?? null,
+  perQueryServeMs: r.atlas_serve_median_ms ?? null,
+  perQueryTok: r.atlas_cli_median_tokens ?? null,
+  // whether this row's answers named a caller — the flag that decides whether
+  // its ratio is evidence or noise
+  answerBearing: (r.callers_listed_cli ?? 0) > 0,
   // CLI is the lane a human or an agent actually pays for: one-shot process,
   // spawn included. Serve is the warm-daemon lane and is labelled as such.
   tokenRatioCli: r.tokenRatio_cli ?? null,

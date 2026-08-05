@@ -804,13 +804,13 @@ export function ProductHome({ data }) {
                   <tr>
                     <td className="ref">M-01</td>
                     <td className="measure-name">Query context tokens</td>
-                    <td className="value"><CountUp value={h.fewerTokens} suffix="×" /> <small>fewer</small></td>
+                    <td className="value"><CountUp value={h.tokensPooled} decimals={2} suffix="×" /> <small>fewer</small></td>
                     <td className="method">Real-repository comparison against the graph baseline in the published benchmark.</td>
                   </tr>
                   <tr>
                     <td className="ref">M-02</td>
                     <td className="measure-name">Query latency</td>
-                    <td className="value"><CountUp value={17} suffix="×" /> <small>faster</small></td>
+                    <td className="value"><CountUp value={4.12} decimals={2} suffix="×" /> <small>faster</small></td>
                     <td className="method">Reported benchmark mean: Atlas 7.4&nbsp;ms versus 128&nbsp;ms for the graph baseline. Plotted on the scale bar below.</td>
                   </tr>
                   <tr>
@@ -826,7 +826,7 @@ export function ProductHome({ data }) {
             <div className="scalebar-block">
               <span className="kicker">Scale of latencies — mean milliseconds per query, warm in-process engine (M-02)</span>
               <LatencyScaleBar />
-              <span className="kicker">End-to-end CLI adds ~30 ms of process spawn per side: ≈44 ms vs ≈450 ms (~9×) — expect the CLI numbers when reproducing from a shell loop.</span>
+              <span className="kicker">Every latency figure on this page is end-to-end CLI, process spawn included — the cost an agent or a shell loop actually pays. Warm in-process (serve/MCP) latency is lower and is reported separately as warm-serve explain.</span>
             </div>
 
             <p className="survey-foot">
@@ -1864,27 +1864,33 @@ function DocsPage({ slug }) {
               <li><strong>Agent workflow:</strong> end-to-end behavior for a pinned assistant and task set</li>
             </Bullets>
           </ProseSection>
-          <ProseSection title="Published Headline Results (July 2026)">
-            <p>These are the current published numbers, each with its evidence conditions:</p>
-            <div className="docs-table-wrap"><table><thead><tr><th>Result</th><th>Conditions</th></tr></thead><tbody>
-              <tr><td>F1 0.757 at 21.2 context tokens, mean across all 37 languages</td><td>Native ground truth, real-LLM scored (222 cells, 666 model calls)</td></tr>
-              <tr><td>F1 1.000 at 27.1 tokens on the 28 fully-supported languages</td><td>Full-file-dump accuracy at 6.1× fewer tokens; same fixture suite</td></tr>
-              <tr><td>Graph-tool comparison: 0.539 F1 at 97 tokens</td><td>Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens</td></tr>
-              <tr><td>Query latency ~7.4 ms vs 128 ms for the graph tool</td><td>Real repositories, 36 languages; flat from 15 to 39,161 symbols</td></tr>
+          <ProseSection title="Published Headline Results (refreshed 2026-08-05)">
+            <p>These are the current published numbers, each with its evidence conditions and the definition of its metric:</p>
+            <div className="docs-table-wrap"><table><thead><tr><th>Result</th><th>Conditions and definition</th></tr></thead><tbody>
+              <tr><td>3.17× fewer answer tokens than the graph tool</td><td>Pooled: sum of answer tokens over the 26 queries both tools answered, across a 7-repository matrix run on one host in one pass (Darwin arm64, graphify 0.8.49). Per-language mean 5.06×, median 3.66×, worst language cpp at 1.41×</td></tr>
+              <tr><td>Caller-F1 0.865 vs 0.541 — 1.60×</td><td>A real model is handed one context source and asked which functions call <code>target</code>; scored deterministically against a constructed truth of 15 callers and 3 decoys. 37 languages, 222 cells, 666 model calls, temperature 0, majority of 3</td></tr>
+              <tr><td>The default detail level equals the maximum one</td><td><code>--detail high</code> and <code>--detail xhigh</code> both score F1 0.8649 — at 23.9 tokens against 230.1, so high is 9.6× cheaper for an identical answer. 32 of 37 languages score a perfect 1.000</td></tr>
+              <tr><td>Queries run 4.12× faster than the graph tool</td><td>Mean of the seven per-repository latency ratios on the same matrix; each timing is the median of 5 CLI invocations with process spawn included. Warm-serve <code>explain</code> lands between 1.6 and 14.9&nbsp;ms per repository</td></tr>
             </tbody></table></div>
-            <p><em>Measurement layer:</em> the 7.4&nbsp;ms figure is warm <strong>in-process</strong> engine latency (what an MCP/serve session experiences per call). End-to-end <strong>CLI</strong> latency adds ~30&nbsp;ms of process spawn per side — roughly 44&nbsp;ms vs 450&nbsp;ms (~9×) — so shell-loop reproductions should expect the CLI numbers, not 7.4&nbsp;ms.</p>
+            <Callout kind="warn" label="Retracted">
+              <p>Earlier versions of this page claimed <strong>36× fewer query tokens</strong> and <strong>17× faster queries</strong> from a 36-repository live run, and an earlier one claimed 20×. Those runs compared against a build whose caller answers were a two-token placeholder: across all 224 live answers it named <strong>zero callers</strong>. The ratios measured an empty answer, not a cheap one, and are withdrawn rather than adjusted. The <code>2.3× faster cold index</code>, <code>14× faster incremental</code>, <code>7.9× more call edges</code> and <code>100.2% AST coverage</code> rows are withdrawn too — they were not re-measured at this commit, and a number nobody re-ran is not evidence.</p>
+            </Callout>
+            <p><strong>Live repositories, honestly.</strong> On 36 pinned public repositories the current CLI answers in <strong>4.25× fewer tokens</strong> (median across languages) or <strong>3.70×</strong> (pooled), and runs <strong>4.78×</strong> faster. Those figures cover the 25 repositories whose Atlas answers actually named a caller. On the other 11 — astro, blade, byond, delphi, ejs, lua, powershell, rust, scala, sql, terraform — the CLI still returns a bare name or a name and a location, so its token ratio measures a non-answer and is excluded from the headline rather than averaged into it. Several of those excluded ratios are large (lua 35.8×, rust 46.1×, terraform 38.5×); that is precisely why they are excluded.</p>
           </ProseSection>
-          <ProseSection title="Agent-Harness Token Benchmark (2026-07-10)">
-            <p>This measures what a real agent actually spends. Claude Code and OpenAI Codex ran headless in sirupsen/logrus (@a23d315), restricted to one code-intelligence CLI per run, answering 19 caller questions scored against gopls call_hierarchy (LSP-truth) at the pinned commit. Token numbers are each harness's own usage accounting.</p>
+          <ProseSection title="Agent-Harness Token Benchmark (2026-08-05)">
+            <p>This measures what a real agent actually spends. Claude Code and OpenAI Codex ran headless in sirupsen/logrus (@a23d315), restricted to one code-intelligence CLI per run, answering 19 caller questions scored against gopls call_hierarchy (LSP-truth) at the pinned commit. Token numbers are each harness's own usage accounting. All 114 runs completed.</p>
             <div className="docs-table-wrap"><table><thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Mean tool calls</th><th>Mean F1</th></tr></thead><tbody>
-              <tr><td>claude (claude-sonnet-5)</td><td>Atlas</td><td>61,561</td><td>2</td><td>0.882</td></tr>
-              <tr><td>claude (claude-sonnet-5)</td><td>No tool (raw exploration)</td><td>144,385</td><td>4.9</td><td>0.569</td></tr>
-              <tr><td>claude (claude-sonnet-5)</td><td>Graph tool</td><td>370,898</td><td>10.3</td><td>0.305</td></tr>
-              <tr><td>codex (gpt-5.6-sol)</td><td>Atlas</td><td>27,981</td><td>1</td><td>0.881</td></tr>
-              <tr><td>codex (gpt-5.6-sol)</td><td>No tool (raw exploration)</td><td>48,106</td><td>2.1</td><td>0.876</td></tr>
-              <tr><td>codex (gpt-5.6-sol)</td><td>Graph tool</td><td>109,662</td><td>9.6</td><td>0.410</td></tr>
+              <tr><td>claude (claude-sonnet-5)</td><td>Atlas</td><td>58,234</td><td>2.0</td><td>0.995</td></tr>
+              <tr><td>claude (claude-sonnet-5)</td><td>No tool (raw exploration)</td><td>134,886</td><td>4.7</td><td>0.589</td></tr>
+              <tr><td>claude (claude-sonnet-5)</td><td>Graph tool</td><td>239,026</td><td>7.7</td><td>0.203</td></tr>
+              <tr><td>codex (gpt-5.6-sol)</td><td>Atlas</td><td>33,471</td><td>1.0</td><td>0.995</td></tr>
+              <tr><td>codex (gpt-5.6-sol)</td><td>No tool (raw exploration)</td><td>74,229</td><td>3.3</td><td>0.831</td></tr>
+              <tr><td>codex (gpt-5.6-sol)</td><td>Graph tool</td><td>131,335</td><td>12.7</td><td>0.379</td></tr>
             </tbody></table></div>
-            <p>Cross-agent absolute totals are <strong>not comparable</strong> — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent only.</p>
+            <p>Against the baseline, Atlas saves 2.32× the tokens on claude and 2.22× on codex; against the graph tool, 4.10× and 3.92×. Cross-agent absolute totals are <strong>not comparable</strong> — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent only.</p>
+            <Callout kind="note" label="Two changes from the previously published table">
+              <p>Atlas's F1 is <strong>0.995 on both harnesses</strong>; the figure published before was 0.88. And this run used <strong>graphify 0.8.49</strong> where the published run used <strong>0.9.12</strong>, so part of the movement in the competitor column is a version change on their side rather than a change on ours. Both versions are recorded in the artifacts.</p>
+            </Callout>
           </ProseSection>
           <ProseSection title="Reproduce It Yourself">
             <p>Every published number is reproducible from committed artifacts — verify before you cite:</p>

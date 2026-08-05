@@ -147,10 +147,17 @@ const nonBearing = live.languages.filter((x) => x.callers_listed_cli === 0).map(
 let lg = 0, lc = 0, ls = 0, llg = 0, llc = 0, lls = 0, comparable = 0, totalQ = 0;
 let bg = 0, bc = 0, bs = 0, blg = 0, blc = 0, bComparable = 0;
 const perQueryTok = [], perQueryLat = [], perQueryTokServe = [], perQueryLatServe = [];
+const absolutes = {}; // language -> the raw per-query medians, for the scale plot
 for (const f of liveFiles) {
   const d = JSON.parse(fs.readFileSync(path.join(srcDir, "live36", f), "utf8"));
   const isBearing = bearing.has(d.language);
   totalQ += (d.queries || []).length;
+  const answered = (d.queries || []).filter((q) => !q.atlas_missing);
+  absolutes[d.language] = {
+    atlas_cli_median_ms: round(median(answered.map((q) => q.cli_ms)), 2),
+    atlas_serve_median_ms: round(median(answered.map((q) => q.atlas_ms)), 2),
+    atlas_cli_median_tokens: round(median(answered.map((q) => q.cli_tokens)), 1),
+  };
   for (const q of d.queries || []) {
     if (q.graphify_missing || q.atlas_missing) continue;
     comparable++;
@@ -261,7 +268,7 @@ const livePublic = {
       .slice(0, 5)
       .map((x) => ({ language: x.language, from: x.tokenRatio_old, to: x.tokenRatio_cli })),
   },
-  languages: live.languages,
+  languages: live.languages.map((x) => ({ ...x, ...(absolutes[x.language] || {}) })),
 };
 
 /* ============ 3. the real-LLM caller-QA sweep =========================== */
