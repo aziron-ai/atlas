@@ -5,7 +5,7 @@
 > context queries (definition, callers, callees, imports, routes) in
 > single-digit milliseconds and tens of tokens. Benchmark (Benchmark &amp; field comparison — refreshed at fc3b875 (2026-08-05)):
 > 3.17× fewer answer tokens than the graph tool, pooled over 7 repositories,
-> at caller-F1 0.865 vs 0.541. Version 0.1.50.
+> at caller-F1 0.865 vs 0.541. Version 0.1.51.
 >
 > This file inlines the complete consumer documentation. Canonical HTML pages
 > live at https://atlas.aziro.com/docs/<slug>/ ; the interactive site is at https://atlas.aziro.com/.

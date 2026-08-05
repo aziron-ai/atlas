@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-05T08:05:55.601Z",
-  "version": "0.1.50",
+  "generatedAt": "2026-08-05T10:52:58.617Z",
+  "version": "0.1.51",
   "report": {
     "label": "Benchmark & field comparison — refreshed at fc3b875 (2026-08-05)",
     "supersedes": "The July 2026 report this page used to cite. Its live-repo multipliers (36× tokens, and the older 20×) were measured against a build whose caller answers were a two-token placeholder — across 224 live answers it named zero callers. Those figures are retracted in full, not adjusted. The numbers here are smaller and they are real.",

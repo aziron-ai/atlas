@@ -7,7 +7,7 @@
 > 7-repository matrix, at a higher answer quality — caller-F1 0.865 vs 0.541.
 > Inside a real agent harness on sirupsen/logrus with gopls ground truth: F1 0.995.
 > 16 of 40 code languages are reference-validated (L5) on a five-level
-> maturity ladder; dart was RETRACTED from L5 this refresh. Version 0.1.50.
+> maturity ladder; dart was RETRACTED from L5 this refresh. Version 0.1.51.
 > Earlier 20× and 36× token claims are RETRACTED: they were measured against a build whose
 > caller answers were a two-token placeholder.
 
