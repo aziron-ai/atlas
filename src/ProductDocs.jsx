@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import SurveyChart, { LatencyScaleBar } from "./SurveyChart";
 
-const RELEASE = "0.1.50";
+const RELEASE = "0.1.51";
 const GITHUB = "https://github.com/aziron-ai/atlas";
 const WIKI = `${GITHUB}/wiki`;
 
