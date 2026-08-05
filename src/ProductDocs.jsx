@@ -66,6 +66,16 @@ export function CountUp({ value, decimals = 0, prefix = "", suffix = "", duratio
     return () => io.disconnect();
   }, [value, duration]);
   const shown = display > value ? value : display;
+  // A missing data field must degrade to a placeholder, never crash the page.
+  if (!Number.isFinite(value) || !Number.isFinite(shown)) {
+    return (
+      <span ref={ref} className="tabular-nums">
+        {prefix}
+        —
+        {suffix}
+      </span>
+    );
+  }
   return (
     <span ref={ref} className="tabular-nums">
       {prefix}
@@ -816,7 +826,7 @@ export function ProductHome({ data }) {
                   <tr>
                     <td className="ref">M-03</td>
                     <td className="measure-name">Answer accuracy (F1)</td>
-                    <td className="value"><CountUp value={h.atlasF1All} decimals={3} /></td>
+                    <td className="value"><CountUp value={h.atlasF1} decimals={3} /></td>
                     <td className="method">Mean across 37 native language cells with real-model scoring.</td>
                   </tr>
                 </tbody>
