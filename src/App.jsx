@@ -726,7 +726,7 @@ function LangChip({ lang, level, pending, promoted }) {
       className="mono inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5"
       data-testid="maturity-lang"
       title={
-        pending ? "native F1 1.000 on the Linux saturation run — L4 pending a real-repo call-graph proof"
+        pending ? "fixture-perfect at this commit — stays L2 until a real-repo call-graph run lands"
         : promoted ? "newly promoted: call graph cross-checked against the language's own LSP server on a real public repository (promotion run below)"
         : undefined
       }
@@ -739,18 +739,20 @@ function LangChip({ lang, level, pending, promoted }) {
       }}
     >
       {langLabel(lang)}
-      {pending && <span style={{ fontSize: 9, letterSpacing: "0.08em", opacity: 0.85 }}>PENDING</span>}
+      {pending && <span style={{ fontSize: 9, letterSpacing: "0.08em", opacity: 0.85 }}>FIXTURE</span>}
       {promoted && <span style={{ fontSize: 9, letterSpacing: "0.08em", color: "var(--primary)" }}>NEW</span>}
     </span>
   );
 }
 
 function MaturityLadder({ maturity }) {
-  const pendingSet = new Set(maturity.pending.langs);
+  // A fixture pass is a floor, not a promotion. These four used to be drawn
+  // one rung up on the strength of a fixture score; they stay at L2 with a
+  // badge that says exactly what the evidence is.
+  const pendingSet = new Set(maturity.fixtureOnly.langs);
   const promotedSet = new Set(maturity.promoted?.langs || []);
   const bands = maturity.levels.map((lv) => {
-    if (lv.id === "L4") return { ...lv, extra: maturity.pending.langs, count: `${lv.langs.length} + ${maturity.pending.langs.length} pending` };
-    if (lv.id === "L2") return { ...lv, langs: lv.langs.filter((l) => !pendingSet.has(l)), count: `${lv.langs.filter((l) => !pendingSet.has(l)).length} remaining`, note: `${maturity.pending.langs.length} more shown at L4 above, pending proof` };
+    if (lv.id === "L2") return { ...lv, count: `${lv.langs.length}`, note: `${maturity.fixtureOnly.langs.length} of these are fixture-perfect; ${maturity.fixtureGaps.langs.length} return no callers on the fixture` };
     return { ...lv, count: String(lv.langs.length) };
   });
   const maxCount = Math.max(...bands.map((b) => b.langs.length + (b.extra || []).length));
@@ -784,7 +786,7 @@ function MaturityLadder({ maturity }) {
             <div className="min-w-0">
               <div className="flex flex-wrap gap-2">
                 {b.langs.map((l) => <LangChip key={l} lang={l} level={b.id} promoted={b.id === "L5" && promotedSet.has(l)} />)}
-                {(b.extra || []).map((l) => <LangChip key={l} lang={l} level="L4" pending />)}
+                {(b.extra || []).map((l) => <LangChip key={l} lang={l} level={b.id} pending />)}
               </div>
               {b.note && (
                 <div className="mono mt-2.5" style={{ fontSize: 11, color: "var(--faint)" }}>{b.note}</div>
@@ -809,13 +811,13 @@ function MaturityTable({ data }) {
     () => Object.fromEntries(r.perLanguage.map((p) => [p.lang, p])),
     [r]
   );
-  const pendingSet = new Set(maturity.pending.langs);
+  const pendingSet = new Set(maturity.fixtureOnly.langs);
   const order = { L5: 0, L4: 1, L2: 2, L1: 3 };
   const rows = useMemo(() => {
     const out = [];
     for (const lv of maturity.levels) {
       for (const lang of lv.langs) {
-        out.push({ lang, level: pendingSet.has(lang) ? "L4*" : lv.id, sortLevel: pendingSet.has(lang) ? 1.5 : order[lv.id], pending: pendingSet.has(lang) });
+        out.push({ lang, level: lv.id, sortLevel: order[lv.id], pending: pendingSet.has(lang) });
       }
     }
     return out
@@ -855,13 +857,13 @@ function MaturityTable({ data }) {
             {rows.map((x) => {
               const rep = reportByLang[x.lang];
               const fr = freshByLang[x.lang];
-              const st = LEVEL_STYLE[x.pending ? "L4" : x.level] || LEVEL_STYLE.L1;
+              const st = LEVEL_STYLE[x.level] || LEVEL_STYLE.L1;
               return (
                 <tr key={x.lang}>
                   <td className="num" style={{ fontWeight: 600 }}>{langLabel(x.lang)}</td>
                   <td>
                     <span className="chip" style={{ borderColor: x.pending ? "var(--warning)" : st.color, color: x.pending ? "var(--warning)" : st.color, borderStyle: x.pending ? "dashed" : "solid" }}>
-                      {x.pending ? "L4 · pending real-repo proof" : x.level}
+                      {x.pending ? `${x.level} · fixture-perfect only` : x.level}
                     </span>
                   </td>
                   <td className="num" style={{ color: rep ? (rep.atlasF1 === 1 ? "var(--primary)" : "var(--danger)") : "var(--faint)" }}>
@@ -873,7 +875,7 @@ function MaturityTable({ data }) {
                     {fr ? fr.f1.toFixed(3) : "—"}
                   </td>
                   <td style={{ fontSize: 12, color: "var(--muted)" }}>
-                    {x.pending ? "fixed in saturation run" : rep ? rep.status : "beyond the 37-language benchmark set"}
+                    {x.pending ? "fixture-perfect · no real-repo proof" : rep ? rep.status : "beyond the 37-language benchmark set"}
                   </td>
                 </tr>
               );
@@ -884,6 +886,15 @@ function MaturityTable({ data }) {
     </div>
   );
 }
+
+const VERDICT_STYLE = {
+  promoted: { label: "PROMOTED → L5", color: "var(--primary)" },
+  recovered: { label: "RECOVERED → L5", color: "var(--primary)" },
+  held: { label: "HELD → L5", color: "var(--secondary)" },
+  retracted: { label: "RETRACTED ← L5", color: "var(--danger)" },
+  "honest-fail": { label: "honest fail · stays L4", color: "var(--warning)" },
+  carried: { label: "carried · no claim", color: "var(--faint)" },
+};
 
 function L5PromotionPanel({ l5run }) {
   const passed = l5run.rows.filter((r) => r.pass);
@@ -908,7 +919,20 @@ function L5PromotionPanel({ l5run }) {
       </p>
       <div className="mt-3 mb-4 flex flex-wrap gap-2">
         <span className="chip" style={{ borderColor: "var(--primary)", color: "var(--primary)" }}>
-          {passed.length} of {l5run.rows.length} candidates promoted
+          {passed.length} of {l5run.rows.length} scored lanes clear the gate
+        </span>
+        {l5run.verdicts.retracted.length > 0 && (
+          <span className="chip" style={{ borderColor: "var(--danger)", color: "var(--danger)" }}>
+            {l5run.verdicts.retracted.join(", ")} RETRACTED from L5
+          </span>
+        )}
+        {l5run.verdicts.honestFail.length > 0 && (
+          <span className="chip" style={{ borderColor: "var(--warning)", color: "var(--warning)" }}>
+            {l5run.verdicts.honestFail.join(", ")} honest fail — published anyway
+          </span>
+        )}
+        <span className="chip" style={{ borderColor: "var(--warning)", color: "var(--warning)" }}>
+          {l5run.carriedRows.length} carried rows — no claim at this commit
         </span>
         {med.xServeLatGraphify != null && (
           <span className="chip">{fmtX(med.xServeLatGraphify)} faster than the graph tool per query (warm Atlas daemon vs its CLI — it has no daemon mode; CLI-vs-CLI {fmtX(med.xLatGraphify)})</span>
@@ -950,8 +974,8 @@ function L5PromotionPanel({ l5run }) {
                 <td className="num">{r.graphifyMs ?? "–"}</td>
                 <td className="num">{fmtX(r.xTokLsp)}</td>
                 <td className="num">{fmtX(r.xTokRawRead)}</td>
-                <td className="mono" style={{ color: r.pass ? "var(--primary)" : "var(--warning)", fontWeight: 700 }}>
-                  {r.pass ? "PASS → L5" : "stays L4"}
+                <td className="mono" style={{ color: VERDICT_STYLE[r.verdict]?.color || "var(--muted)", fontWeight: 700 }}>
+                  {VERDICT_STYLE[r.verdict]?.label || (r.pass ? "PASS → L5" : "stays L4")}
                 </td>
               </tr>
             ))}
@@ -965,6 +989,31 @@ function L5PromotionPanel({ l5run }) {
         target, but they are session tools, not query daemons. Languages that missed the gate stay L4
         with their numbers shown — nothing is promoted on a partial score.
       </p>
+
+      <div className="hairline mt-5 pt-5">
+        <div className="kicker mb-3">Every lane, in one line</div>
+        <ul className="flex flex-col gap-2.5" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--muted)" }}>
+          {l5run.rows.filter((r) => r.copy).map((r) => (
+            <li key={r.lang} className="flex gap-2.5">
+              <span
+                className="mono shrink-0"
+                style={{ color: VERDICT_STYLE[r.verdict]?.color || "var(--muted)", fontWeight: 700, minWidth: 76 }}
+              >
+                {langLabel(r.lang)}
+              </span>
+              <span>{r.copy}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="hairline mt-5 pt-5 flex flex-col gap-2" style={{ fontSize: 12, lineHeight: 1.6, color: "var(--faint)" }}>
+        <p><span className="mono" style={{ color: "var(--primary)" }}>REPRODUCED — </span>{l5run.reproduction}</p>
+        <p><span className="mono" style={{ color: "var(--warning)" }}>BRACKETED — </span>{l5run.honestyBracket}</p>
+        <p><span className="mono" style={{ color: "var(--warning)" }}>CARRIED — </span>{l5run.carriedNote}{" "}
+          <span className="mono">{l5run.carriedRows.map((c) => `${c.lang} (${c.status})`).join(", ")}</span>
+        </p>
+      </div>
     </div>
   );
 }
@@ -1013,11 +1062,16 @@ function MaturitySection({ data }) {
             </span>
           ) : null}
           <span className="chip" style={{ borderColor: "var(--secondary)", color: "var(--secondary)" }}>{l4} real-repo call graph</span>
+          {maturity.promoted?.removedSinceLastPublished?.length ? (
+            <span className="chip" style={{ borderColor: "var(--danger)", color: "var(--danger)" }}>
+              −{maturity.promoted.removedSinceLastPublished.length} retracted: {maturity.promoted.removedSinceLastPublished.join(", ")}
+            </span>
+          ) : null}
           <span className="chip" style={{ borderColor: "var(--warning)", color: "var(--warning)", borderStyle: "dashed" }}>
-            {maturity.pending.langs.length} fixed · pending real-repo proof
+            {maturity.fixtureOnly.langs.length} fixture-perfect only
           </span>
-          <FreshChip title={maturity.pending.evidence}>
-            saturation run: {data.fresh.saturation.before} → {data.fresh.saturation.perfect}/{data.fresh.saturation.total} fixture-perfect
+          <FreshChip title={maturity.requalification.why}>
+            fixture run at this commit: {data.fresh.saturation.perfect}/{data.fresh.saturation.total}
           </FreshChip>
         </div>
 
@@ -1027,9 +1081,29 @@ function MaturitySection({ data }) {
 
         {data.l5run && <L5PromotionPanel l5run={data.l5run} />}
 
+        <div className="panel mt-4 p-5" style={{ borderColor: "var(--danger)", borderStyle: "dashed" }}>
+          <div className="kicker mb-2" style={{ color: "var(--danger)" }}>
+            Requalified — what this page used to claim about {maturity.requalification.wasClaimedFor.length} languages
+          </div>
+          <p style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--muted)" }}>
+            This page asserted “<em>{maturity.requalification.wasClaimed}</em>” for{" "}
+            <span className="mono">{maturity.requalification.wasClaimedFor.join(", ")}</span>.
+            {" "}{maturity.requalification.why} True for{" "}
+            <span className="mono" style={{ color: "var(--primary)" }}>{maturity.requalification.isTrueFor.join(", ")}</span>;
+            {" "}false for{" "}
+            <span className="mono" style={{ color: "var(--danger)" }}>{maturity.requalification.isFalseFor.join(", ")}</span>.
+          </p>
+          <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--muted)" }}>
+            {maturity.requalification.rubyNote}
+          </p>
+          <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--muted)" }}>
+            <span className="mono" style={{ color: "var(--danger)" }}>DART — </span>{maturity.retracted.why}
+            {" "}Published: {maturity.retracted.publishedF1}. Honest: {maturity.retracted.honestF1} (precision {maturity.retracted.honestPrecision}).
+          </p>
+        </div>
         <p className="mt-4" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--faint)" }}>
-          <span className="mono" style={{ color: "var(--warning)" }}>PENDING</span> = {maturity.pending.evidence}.
-          Until that run lands, the report’s ladder (which counts them at L2) remains the citation.
+          <span className="mono" style={{ color: "var(--warning)" }}>FIXTURE</span> ={" "}
+          {maturity.fixtureOnly.evidence}
         </p>
       </div>
     </section>

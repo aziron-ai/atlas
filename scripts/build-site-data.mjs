@@ -1,13 +1,22 @@
 #!/usr/bin/env node
 // Build data/site-data.json — the single payload the redesigned page renders.
 //
-// Two evidence tiers, never blended:
-//   report  the canonical July-2026 Benchmark & Field Comparison numbers
-//           (real-LLM scored, 222 cells / 666 model calls, evidence-graded).
-//           These are the headlines.
-//   fresh   the Linux re-run of the deterministic benches (fixture-truth
-//           callers F1, dimensions, gopls LSP-truth, cross-repo). These are
-//           corroboration chips next to the headlines, never replacements.
+// Evidence tiers, never blended:
+//   report  the headline canon, DERIVED from the committed fc3b875 artifacts
+//           (7-repo tool matrix + 666-call LLM sweep). These are the claims.
+//   fresh   the Linux leg of the same refresh (fixture callers F1, dimensions,
+//           gopls LSP-truth, cross-repo). Corroboration, never a replacement.
+//   carried anything NOT re-measured at this commit. It ships labelled or it
+//           does not ship: a number nobody re-ran is not evidence.
+//
+// House rules for anything published from here:
+//   1. A ratio travels with its estimator. "6x" is not a claim; "6x, pooled
+//      over the queries both tools answered" is.
+//   2. A ratio is computed only over queries BOTH tools answered. A query one
+//      tool missed is excluded, never scored as a win.
+//   3. A token ratio counts only where the answer named a caller. Two
+//      non-answers of different lengths have a quotient, not a meaning.
+//   4. The ladder demotes as readily as it promotes.
 //
 // Everything here is public-site safe: internal repo names, handler symbols
 // and local machine paths are reduced to counts, latencies and generic
@@ -229,11 +238,11 @@ const report = {
   maturity: {
     totalCodeLanguages: 40,
     contentFormats: 24,
-    note: "Levels reflect validation depth, not just support — an L2 language still indexes and searches; it simply has not reached verified call-graph resolution.",
+    note: "Levels reflect validation depth, not just support — an L2 language still indexes and searches; it simply has not reached verified call-graph resolution. A language moves DOWN when its evidence does: dart came off L5 this refresh.",
     levels: [
       {
         id: "L5", name: "Reference-validated", short: "vs LSP / SCIP",
-        desc: "call graph cross-checked against an LSP server or SCIP indexer",
+        desc: "call graph cross-checked against the language's own LSP server or a SCIP indexer, on a real public repository",
         langs: ["c", "cpp", "go", "java", "javascript", "python", "typescript"],
       },
       {
@@ -252,14 +261,30 @@ const report = {
         langs: ["p4"],
       },
     ],
-    // The saturation run fixed all 9 fixture-benchmark gap languages
-    // (fixture-truth F1 1.000). They are shown at L4 with an honest badge —
-    // promotion completes when a real-repo call-graph run lands.
-    pending: {
+    // REQUALIFIED. This block used to assert that all nine of bash, blade,
+    // byond, ejs, objc, pascal, powershell, razor and ruby scored "native F1
+    // 1.000 each on the Linux saturation run". That is false at this commit,
+    // and the branch it came from never merged. Re-measured here: four of the
+    // nine are fixture-perfect and five score 0.000. Both lists are derived
+    // from the run below, not asserted, so this cannot drift again.
+    fixtureOnly: {
+      badge: "fixture-perfect · no real-repo proof",
+      evidence: "F1 1.000 on the constructed-truth fixture at this commit (CALLERS_F1_AFTER.json). A fixture is a floor, not a promotion: these languages stay at L2 until a real-repo call-graph run lands.",
+      langs: [], // filled from the fresh run below
+    },
+    fixtureGaps: {
+      badge: "returns no callers on the fixture",
+      evidence: "F1 0.000 on the constructed-truth fixture at this commit — the caller list comes back empty.",
+      langs: [], // filled from the fresh run below
+    },
+    retracted: {
+      lang: "dart",
+      fromLevel: "L5",
       toLevel: "L4",
-      badge: "L4 · pending real-repo proof",
-      langs: ["bash", "blade", "byond", "ejs", "objc", "pascal", "powershell", "razor", "ruby"],
-      evidence: "native F1 1.000 each on the Linux saturation run (CALLERS_F1_AFTER.json); real-repo call-graph validation not yet run",
+      publishedF1: 0.9249,
+      honestF1: 0.8631,
+      honestPrecision: 0.9723,
+      why: "July's dart PASS at .9249 rode a fan-out the truth filter should have refused. The verifier re-run measures .8631 against the same reference server on the same pinned repository. Dart returns to L4 until `toString`-scale fan-out and `package:` re-export families bind. We publish the retraction rather than the flattering number.",
     },
   },
 };
@@ -297,6 +322,25 @@ const stillFailing = after.rows.filter((r) => r.f1 !== 1).map((r) => r.language)
 const fixedLangs = after.rows
   .filter((r) => r.f1 === 1 && (beforeByLang[r.language] || {}).f1 !== 1)
   .map((r) => r.language);
+
+// Requalify the nine languages the site used to call "native F1 1.000 each".
+// The claim is now split by what the run actually says, and ruby is handled
+// separately: its fixture zero is a designed refusal, not a gap.
+const CLAIMED_SATURATED = ["bash", "blade", "byond", "ejs", "objc", "pascal", "powershell", "razor", "ruby"];
+report.maturity.fixtureOnly.langs = CLAIMED_SATURATED
+  .filter((l) => l !== "ruby" && (afterByLang[l] || {}).f1 === 1);
+report.maturity.fixtureGaps.langs = CLAIMED_SATURATED
+  .filter((l) => l !== "ruby" && (afterByLang[l] || {}).f1 !== 1);
+report.maturity.requalification = {
+  wasClaimed: "native F1 1.000 each on the Linux saturation run",
+  wasClaimedFor: CLAIMED_SATURATED,
+  isTrueFor: report.maturity.fixtureOnly.langs,
+  isFalseFor: CLAIMED_SATURATED.filter((l) => (afterByLang[l] || {}).f1 !== 1),
+  why: "The saturation branch that produced that claim never merged. Re-measured at this commit, the fixture is perfect for " +
+    `${report.maturity.fixtureOnly.langs.length} of the nine and returns an empty caller list for the rest. ` +
+    "The site-wide fixture score is " + after.perfect_languages + "/" + after.total_languages + ", not 37/37.",
+  rubyNote: "Ruby is a special case and is now L5 on LSP-truth (F1 1.000 against solargraph on rack, 9 symbols). Its 0.000 on the fixture is DESIGNED: the fixture's callers are top-level, and the binder refuses to attribute a top-level call to an owner it cannot prove rather than guessing one. Ruby's promotion cites the LSP lane and never the fixture.",
+};
 
 // Both legs carry a `_provenance` block. It is the reason this refresh exists:
 // publish the host that was actually used, not the host we wish had answered.
@@ -518,6 +562,29 @@ try {
 let l5run = null;
 try {
   const m = readData(path.join("raw", "L5_MATRIX_PUBLIC.json"));
+  // Per-language site copy, transcribed from the wave-2 verifier's own
+  // promotion verdict (docs/L5_WAVE2_FINAL.md). One line each, including the
+  // two that did not pass — a ladder that only publishes its promotions is a
+  // marketing page, not a ladder.
+  const COPY = {
+    ruby: "Promoted at F1 1.000 / precision 1.000 (rack vs solargraph, 9 symbols) with zero adjudication excusals — the baseline's failures were all empty answers, fixed by binding implicit-self calls to their enclosing class. Ruby's separate 0.000 on the constructed fixture is a designed refusal, not a gap, and is never cited as evidence for this promotion.",
+    elixir: "Promoted at 1.000/1.000 (plug vs elixir-ls) with truth-side corroboration ON and declared: elixir-ls attributes multi-clause calls to the public head, and every excusal is listed in the artifact and re-derivable from source. The same binary with corroboration off measures .7437 — both numbers are published.",
+    swift: "Promoted at .9415/.9417 (swift-argument-parser vs sourcekit-lsp) — cross-file sends now bind through SwiftPM target membership; a same-name method family whose receiver cannot be proven stays unanswered rather than guessed.",
+    kotlin: "Promoted at .9395/.9022 (ktlint vs kotlin-language-server) — a call reaches its package and its imports and nothing else: renamed-import decoys and cross-package bare calls refuse to bind. Thinnest margin in the set: precision clears the gate by .0022.",
+    rust: "Recovered at .9297/.9652 (fd vs rust-analyzer). July's published .9534 is RETRACTED: it depended on candidate order that the fail-closed binder no longer permits. Today's number is proven through `use`-declaration rungs.",
+    php: "Recovered at .9098/1.000 (monolog vs intelephense) — `use`-alias and namespace rungs bind cross-namespace static calls; every remaining miss is a listed cross-file test caller. July's 1.000 predated the fail-closed binder.",
+    lua: "Canary held at .966/.9883 (Penlight vs lua-language-server) — one of the three no-regression canaries, unchanged all wave.",
+    fortran: "Canary held at 1.000/1.000 (json-fortran vs fortls, 8 symbols).",
+    zig: "Canary held at 1.000/1.000 (zig-clap vs zls) — up from July's .9723.",
+    dart: "RETRACTED. July's published PASS at .9249 was unsound: it rode a fan-out the truth filter should have refused. The honest number is .8631 (precision .9723). Dart stays L4 until `toString`-scale fan-out and `package:` re-export families bind. We publish the retraction rather than the flattering number.",
+    scala: "Honest fail at .5533/.5667 (scopt vs Metals). Normalising Metals's val-attributed callers to their enclosing defs made the truth honest — and exposed that scopt's cross-file OParser builder chains are invisible to Atlas. The blocker is now named and measured rather than hidden by a flattering truth set.",
+  };
+  const VERDICT = {
+    ruby: "promoted", elixir: "promoted", swift: "promoted", kotlin: "promoted",
+    rust: "recovered", php: "recovered",
+    lua: "held", fortran: "held", zig: "held",
+    dart: "retracted", scala: "honest-fail",
+  };
   const rows = (m.results || []).filter((r) => r.status === "ok").map((r) => {
     const perf = r.perf || {}; const ax = perf.atlas || {}; const gf = perf.graphify || {};
     const lspq = perf.lsp || {}; const mult = perf.multipliers || {};
@@ -528,6 +595,13 @@ try {
       reference: r.reference, mode: (r.truth_mode || []).join("+"),
       symbols: r.symbols_scored, f1: r.mean_f1, precision: r.mean_precision, recall: r.mean_recall,
       pass: !!r.l5_pass,
+      // `carried: true` rows are July-base languages outside the 11 wave-2
+      // lanes. They make NO claim at this commit and must never be read as one.
+      carried: !!r.carried,
+      verdict: VERDICT[r.language] || (r.carried ? "carried" : "unscored"),
+      copy: COPY[r.language] || null,
+      runAt: (r.run || {}).at || null,
+      treeSha: (r.run || {}).tree_sha || null,
       atlasCliMs: ax.median_query_ms ?? null, atlasServeMs: ax.serve_warm_query_ms ?? null,
       atlasTok: ax.mean_answer_tokens ?? null,
       graphifyMs: gf.median_query_ms ?? null, graphifyTok: gf.mean_answer_tokens ?? null,
@@ -543,10 +617,26 @@ try {
   });
   const passed = rows.filter((r) => r.pass).map((r) => r.lang).sort();
   const med = (xs) => { const v = xs.filter((x) => x != null).sort((a, b) => a - b); return v.length ? v[Math.floor(v.length / 2)] : null; };
+  const carriedRows = (m.results || []).filter((r) => r.carried).map((r) => ({
+    lang: r.language, status: r.status, reference: r.reference || null,
+  }));
   l5run = {
-    label: "L4 → L5 promotion run — July 2026 · macOS arm64",
+    label: "L4 → L5 promotion matrix — wave 2 verifier re-run, 2026-08-05 · macOS arm64",
+    what: "each candidate language's call graph cross-checked against ITS OWN language server on a real public repository — callHierarchy where the server offers it, references + documentSymbol enclosure otherwise. Deterministic set F1 on simple names. No LLM anywhere in the loop.",
     truth: m.truth_source, truthFilter: m.truth_filter, scoring: m.scoring, gate: m.gate,
+    corroboration: m.corroboration || null,
     rows, passed,
+    verdicts: {
+      promoted: rows.filter((r) => r.verdict === "promoted").map((r) => r.lang),
+      recovered: rows.filter((r) => r.verdict === "recovered").map((r) => r.lang),
+      held: rows.filter((r) => r.verdict === "held").map((r) => r.lang),
+      retracted: rows.filter((r) => r.verdict === "retracted").map((r) => r.lang),
+      honestFail: rows.filter((r) => r.verdict === "honest-fail").map((r) => r.lang),
+    },
+    carriedRows,
+    carriedNote: `${carriedRows.length} of the ${(m.results || []).length} languages in this matrix carry \`carried: true\` from the July base — they are outside the 11 wave-2 lanes and make no claim at this commit. They are listed rather than hidden, and none of them counts toward the reference-validated total.`,
+    reproduction: "All 11 wave-2 lanes reproduced their claimed numbers to four decimal places on an independent verifier re-run, against a declared tolerance of |ΔF1|,|ΔP| ≤ .03 stated before the run. Every row carries its run timestamp and tree SHA.",
+    honestyBracket: "The elixir lane depends on truth-side adjudication, so it was re-run with that adjudication disabled: F1 .7437 / P .8403. Both numbers are published. The adjudication is worth exactly +.2563 F1 on that lane and every step of it is itemised per symbol in the artifact.",
     medians: {
       xLatGraphify: med(rows.map((r) => r.xLatGraphify)),
       xServeLatGraphify: med(rows.map((r) => r.xServeLatGraphify)),
@@ -559,12 +649,36 @@ try {
   if (passed.length) {
     const lv5 = report.maturity.levels.find((l) => l.id === "L5");
     const lv4 = report.maturity.levels.find((l) => l.id === "L4");
-    const moving = passed.filter((l) => lv4.langs.includes(l));
-    lv5.langs = [...lv5.langs, ...moving].sort();
+    const lv2 = report.maturity.levels.find((l) => l.id === "L2");
+    // A language can arrive at L5 from L4 (the usual path) or from L2 (ruby,
+    // whose promotion is on LSP-truth against a real repository).
+    const moving = passed.filter((l) => lv4.langs.includes(l) || lv2.langs.includes(l));
+    lv5.langs = [...new Set([...lv5.langs, ...moving])].sort();
     lv4.langs = lv4.langs.filter((l) => !passed.includes(l));
+    lv2.langs = lv2.langs.filter((l) => !passed.includes(l));
+
+    // THE RETRACTION. dart was promoted to L5 by the July run and is coming
+    // back down. Demotion has to be as automatic as promotion, or the ladder
+    // only ever ratchets upward and stops being evidence.
+    const failedButListed = rows.filter((r) => !r.pass).map((r) => r.lang);
+    const demoted = lv5.langs.filter((l) => failedButListed.includes(l));
+    if (demoted.length) {
+      lv5.langs = lv5.langs.filter((l) => !demoted.includes(l));
+      lv4.langs = [...new Set([...lv4.langs, ...demoted])].sort();
+    }
+
+    // What changed against the state this site last PUBLISHED (L5 of 13,
+    // which included dart). Stated as a delta because a reader who saw the
+    // old page deserves to know which way each language moved.
+    const PREVIOUSLY_PUBLISHED_L5 = ["c", "cpp", "dart", "fortran", "go", "java", "javascript", "lua", "php", "python", "rust", "typescript", "zig"];
     report.maturity.promoted = {
       langs: moving,
-      evidence: "call graph cross-checked against the language's own LSP server on a real public repository — see the promotion run",
+      demoted,
+      total: lv5.langs.length,
+      previousTotal: PREVIOUSLY_PUBLISHED_L5.length,
+      newSinceLastPublished: lv5.langs.filter((l) => !PREVIOUSLY_PUBLISHED_L5.includes(l)),
+      removedSinceLastPublished: PREVIOUSLY_PUBLISHED_L5.filter((l) => !lv5.langs.includes(l)),
+      evidence: "call graph cross-checked against the language's own LSP server on a real public repository — see the promotion matrix",
     };
   }
 } catch {

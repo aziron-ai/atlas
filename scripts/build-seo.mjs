@@ -190,12 +190,15 @@ const head = `
 
 const langLabel = (v) => ({ cpp: "C++", javascript: "JavaScript", typescript: "TypeScript", objc: "Objective-C", csharp: "C#", ejs: "EJS", ets: "ETS", sql: "SQL", php: "PHP", r: "R", c: "C", powershell: "PowerShell", p4: "P4", byond: "BYOND" }[v] || v.charAt(0).toUpperCase() + v.slice(1));
 
-const pendingSet = new Set(r.maturity.pending.langs);
+// A fixture pass is a floor, not a promotion: these languages are annotated
+// in place at their real level rather than drawn one rung higher.
+const fixtureOnlySet = new Set(r.maturity.fixtureOnly.langs);
 const maturityRows = r.maturity.levels
   .map((lv) => {
-    const langs = lv.langs.map((l) => (pendingSet.has(l) && lv.id === "L2" ? null : esc(langLabel(l)))).filter(Boolean);
-    const extra = lv.id === "L4" ? r.maturity.pending.langs.map((l) => `${esc(langLabel(l))} (pending real-repo proof)`) : [];
-    return `<tr><td>${lv.id} — ${esc(lv.name)}</td><td>${esc(lv.desc)}</td><td>${[...langs, ...extra].join(", ")}</td></tr>`;
+    const langs = lv.langs.map((l) =>
+      fixtureOnlySet.has(l) ? `${esc(langLabel(l))} (fixture-perfect only)` : esc(langLabel(l))
+    );
+    return `<tr><td>${lv.id} — ${esc(lv.name)}</td><td>${esc(lv.desc)}</td><td>${langs.join(", ")}</td></tr>`;
   })
   .join("\n          ");
 
@@ -297,6 +300,8 @@ ${agentBenchBlock}
           ${maturityRows}
           </tbody>
         </table>
+        <p>L5 goes from ${r.maturity.promoted.previousTotal} to <strong>${r.maturity.promoted.total}</strong>. Added since the last published ladder: ${r.maturity.promoted.newSinceLastPublished.map((l) => esc(langLabel(l))).join(", ")}. Removed: ${r.maturity.promoted.removedSinceLastPublished.map((l) => esc(langLabel(l))).join(", ") || "none"} — ${esc(r.maturity.retracted.why)}</p>
+        <p><strong>Requalified.</strong> This page previously asserted “${esc(r.maturity.requalification.wasClaimed)}” for ${r.maturity.requalification.wasClaimedFor.map((l) => esc(langLabel(l))).join(", ")}. ${esc(r.maturity.requalification.why)} ${esc(r.maturity.requalification.rubyNote)}</p>
 
         <h2>Install</h2>
         <p>Homebrew: <code>brew install --cask aziron-ai/atlas/atlas</code> ·
@@ -367,10 +372,11 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intellig
 > Atlas is a local code-intelligence CLI: one native binary that indexes a
 > repository into a SQLite symbol and relationship graph and answers focused context queries
 > (definition, callers, callees, imports, routes) in single-digit milliseconds and tens of tokens.
-> Benchmark (${esc(r.label)}): ${h.tokensPooled}× fewer answer tokens than the graph tool pooled over a
+> ${esc(r.label)}: ${h.tokensPooled}× fewer answer tokens than the graph tool pooled over a
 > ${h.matrixRepos}-repository matrix, at a higher answer quality — caller-F1 ${h.atlasF1.toFixed(3)} vs ${h.graphifyF1.toFixed(3)}.
 > Inside a real agent harness on ${esc(r.goFlagship.repo)} with gopls ground truth: F1 0.995.
-> ${r.maturity.totalCodeLanguages} code languages on a five-level maturity ladder. Version ${pkg.version}.
+> ${r.maturity.promoted.total} of ${r.maturity.totalCodeLanguages} code languages are reference-validated (L5) on a five-level
+> maturity ladder; dart was RETRACTED from L5 this refresh. Version ${pkg.version}.
 > Earlier 20× and 36× token claims are RETRACTED: they were measured against a build whose
 > caller answers were a two-token placeholder.
 
