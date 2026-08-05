@@ -755,12 +755,12 @@ function MaturityLadder({ maturity }) {
     if (lv.id === "L2") return { ...lv, count: `${lv.langs.length}`, note: `${maturity.fixtureOnly.langs.length} of these are fixture-perfect; ${maturity.fixtureGaps.langs.length} return no callers on the fixture` };
     return { ...lv, count: String(lv.langs.length) };
   });
-  const maxCount = Math.max(...bands.map((b) => b.langs.length + (b.extra || []).length));
+  const maxCount = Math.max(...bands.map((b) => b.langs.length));
   return (
     <div className="flex flex-col" data-testid="maturity-ladder">
       {bands.map((b, i) => {
         const st = LEVEL_STYLE[b.id];
-        const total = b.langs.length + (b.extra || []).length;
+        const total = b.langs.length;
         return (
           <div key={b.id} className="relative grid gap-4 py-5 md:grid-cols-[210px_minmax(0,1fr)]" style={{ borderTop: i ? "1px solid var(--line)" : "none" }}>
             {/* ladder rail */}
@@ -785,8 +785,15 @@ function MaturityLadder({ maturity }) {
             {/* the languages */}
             <div className="min-w-0">
               <div className="flex flex-wrap gap-2">
-                {b.langs.map((l) => <LangChip key={l} lang={l} level={b.id} promoted={b.id === "L5" && promotedSet.has(l)} />)}
-                {(b.extra || []).map((l) => <LangChip key={l} lang={l} level={b.id} pending />)}
+                {b.langs.map((l) => (
+                  <LangChip
+                    key={l}
+                    lang={l}
+                    level={b.id}
+                    promoted={b.id === "L5" && promotedSet.has(l)}
+                    pending={pendingSet.has(l)}
+                  />
+                ))}
               </div>
               {b.note && (
                 <div className="mono mt-2.5" style={{ fontSize: 11, color: "var(--faint)" }}>{b.note}</div>

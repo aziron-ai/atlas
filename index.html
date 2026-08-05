@@ -82,44 +82,50 @@
           <li><a href="docs/">Browse all documentation →</a></li>
         </ul>
 
-        <h2>Headline results — Benchmark &amp; Field Comparison — July 2026</h2>
+        <h2>Headline results — Benchmark &amp; field comparison — refreshed at fc3b875 (2026-08-05)</h2>
         <ul>
-          <li>Atlas F1 0.757 at 21.2 context tokens, mean across all 37 languages (native, real-LLM scored, 222 cells / 666 model calls).</li>
-          <li>F1 1.000 at 27.1 tokens on the 28 fully-supported languages — full-file-dump accuracy at 6.1× fewer tokens.</li>
-          <li>Graph-tool comparison: 0.539 F1 at 97 tokens — Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens.</li>
-          <li>Real repository (sirupsen/logrus, gopls call-hierarchy ground truth): Atlas F1 0.975 vs graph tool 0.084 vs raw file 0.017.</li>
-          <li>Query latency ~7.4 ms, flat from 15 to 39,161 symbols across 36 real repositories.</li>
-          <li>Corroborated by an independent Linux re-run: 37/37 languages fixture-perfect, 9× faster queries than the graph tool, gopls-truth F1 0.933.</li>
+          <li>3.17× fewer answer tokens than the graph tool, pooled across a 7-repository matrix (26 queries both tools answered). Per-language mean 5.06×, median 3.66×, worst language cpp at 1.41×.</li>
+          <li>And a better answer: caller-F1 0.865 vs 0.541 — 1.6× — scored by claude-haiku-4-5-20251001 over 222 cells / 666 model calls on 37 constructed-truth fixtures.</li>
+          <li>The shipped default matches the maximum-detail level exactly (F1 0.865 both) at 9.6× fewer tokens — 23.9 vs 230.1. 32 of 37 languages score a perfect 1.000.</li>
+          <li>Inside a real agent (sirupsen/logrus, gopls call-hierarchy ground truth, 19 questions): F1 0.995 with Atlas on both the claude and codex harnesses.</li>
+          <li>Queries run 4.12× faster than the graph tool on the same matrix (mean of the seven per-repository ratios); warm-serve <code>explain</code> lands between 1.6 and 14.9 ms.</li>
+          <li>Corroborated by an independent Linux re-run: 32/37 languages fixture-perfect, gopls-truth F1 0.900. That leg ran on Linux 6.12.54-linuxkit aarch64; it has no graph-tool binary, so it publishes no competitor ratio.</li>
+        </ul>
+        <h3>Retracted claims</h3>
+        <ul>
+          <li><s>36× fewer query tokens</s> → 3.17× pooled / 5.06× per-language mean (measured against a build that answered with a 2-token placeholder)</li>
+          <li><s>17× faster queries</s> → 4.12× (matrix) (same stub comparison; the honest figure is a same-host, same-run measurement)</li>
+          <li><s>+40% answer accuracy</s> → 1.6× the F1 (0.865 vs 0.541) (a percentage of an F1 is not a meaningful unit; the ratio and both raw values are published instead)</li>
+          <li><s>2.3× faster cold index / 14× faster incremental / 7.9× more call edges / 100.2% AST coverage</s> → withdrawn, not restated (not re-measured at this commit. A number nobody re-ran is not evidence.)</li>
         </ul>
 
         <h2>Atlas vs Graphify — scorecard</h2>
         <table>
           <thead><tr><th>Metric</th><th>Atlas</th><th>Graphify</th><th>Advantage</th><th>Evidence</th></tr></thead>
           <tbody>
-          <tr><td>Answer accuracy (F1)</td><td>0.757</td><td>0.539</td><td>+40%</td><td>fixtures · 37 langs</td></tr>
-          <tr><td>Query latency</td><td>7.4 ms</td><td>128 ms</td><td>17× faster</td><td>real repos · 36 langs</td></tr>
-          <tr><td>Query tokens (per answer)</td><td>2.6</td><td>92.8</td><td>36× fewer</td><td>real repos · 36 langs</td></tr>
-          <tr><td>Answer context size</td><td>21.2 tok</td><td>96 tok</td><td>4.5× smaller</td><td>fixtures · 37 langs</td></tr>
-          <tr><td>Cold index build</td><td>0.62 s</td><td>1.39 s</td><td>2.3× faster</td><td>real repos · 36 langs</td></tr>
-          <tr><td>Incremental re-index</td><td>0.10 s</td><td>1.39 s</td><td>14× faster</td><td>real repos · Graphify rebuilds fully</td></tr>
-          <tr><td>Call edges extracted</td><td>9,157</td><td>1,161</td><td>7.9× more</td><td>real repo · typelevel/cats</td></tr>
-          <tr><td>Coverage vs native AST</td><td>100.2%</td><td>100%</td><td>parity</td><td>real repo · cats (tree-sitter)</td></tr>
+          <tr><td>Answer accuracy (F1)</td><td>0.865</td><td>0.541</td><td>1.6× the F1</td><td>666 real model calls · 37 fixture languages</td></tr>
+          <tr><td>Answer tokens — pooled</td><td>1207</td><td>3822</td><td>3.17× fewer</td><td>7 repos · 26 queries both tools answered</td></tr>
+          <tr><td>Answer tokens — per-language mean</td><td>—</td><td>—</td><td>5.06× fewer</td><td>unweighted mean of the 7 per-repo ratios</td></tr>
+          <tr><td>Answer tokens — worst language</td><td>—</td><td>—</td><td>1.41× fewer (cpp)</td><td>the floor, published because it is the floor</td></tr>
+          <tr><td>Answer context size</td><td>23.9 tok</td><td>96.5 tok</td><td>4× smaller</td><td>fixtures · 37 langs · mean context handed to the model</td></tr>
+          <tr><td>Query latency</td><td>—</td><td>—</td><td>4.12× faster</td><td>7 repos · median of 5 CLI runs each, spawn included</td></tr>
+          <tr><td>Warm-serve explain</td><td>1.6–14.9 ms</td><td>no daemon mode</td><td>not comparable</td><td>7 repos · warm daemon, per-repo mean of median explains</td></tr>
           </tbody>
         </table>
 
-        <h2>What a real agent actually spends — Agent-harness token benchmark — 2026-07-10</h2>
+        <h2>What a real agent actually spends — Agent-harness token benchmark — 2026-08-05</h2>
         <p>Claude Code and OpenAI Codex, run headless in sirupsen/logrus (@a23d315) and restricted to one
            code-intelligence CLI per run; token numbers are each harness's own usage accounting over
            19 caller questions with gopls call_hierarchy (LSP-truth), frozen at the pinned commit. Cross-agent absolute totals are not comparable — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent.</p>
         <table>
           <thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Mean tool calls</th><th>Mean F1</th></tr></thead>
           <tbody>
-          <tr><td>claude (claude-sonnet-5)</td><td>Atlas</td><td>61,561</td><td>2</td><td>0.882</td></tr>
-          <tr><td>claude (claude-sonnet-5)</td><td>No tool (raw exploration)</td><td>144,385</td><td>4.9</td><td>0.569</td></tr>
-          <tr><td>claude (claude-sonnet-5)</td><td>Graph tool</td><td>370,898</td><td>10.3</td><td>0.305</td></tr>
-          <tr><td>codex (gpt-5.6-sol)</td><td>Atlas</td><td>27,981</td><td>1</td><td>0.881</td></tr>
-          <tr><td>codex (gpt-5.6-sol)</td><td>No tool (raw exploration)</td><td>48,106</td><td>2.1</td><td>0.876</td></tr>
-          <tr><td>codex (gpt-5.6-sol)</td><td>Graph tool</td><td>109,662</td><td>9.6</td><td>0.410</td></tr>
+          <tr><td>claude (claude-sonnet-5)</td><td>Atlas</td><td>58,234</td><td>2</td><td>0.995</td></tr>
+          <tr><td>claude (claude-sonnet-5)</td><td>No tool (raw exploration)</td><td>134,886</td><td>4.7</td><td>0.589</td></tr>
+          <tr><td>claude (claude-sonnet-5)</td><td>Graph tool</td><td>239,026</td><td>7.7</td><td>0.203</td></tr>
+          <tr><td>codex (gpt-5.6-sol)</td><td>Atlas</td><td>33,471</td><td>1</td><td>0.995</td></tr>
+          <tr><td>codex (gpt-5.6-sol)</td><td>No tool (raw exploration)</td><td>74,229</td><td>3.3</td><td>0.831</td></tr>
+          <tr><td>codex (gpt-5.6-sol)</td><td>Graph tool</td><td>131,335</td><td>12.7</td><td>0.379</td></tr>
           </tbody>
         </table>
         <p>Reproducible from any machine: the suite ships in
@@ -131,24 +137,26 @@
         <table>
           <thead><tr><th>Level</th><th>What the agent sees</th><th>Tokens</th><th>F1</th></tr></thead>
           <tbody>
-          <tr><td>--detail low</td><td>name + location stub</td><td>3</td><td>0.00</td></tr>
-          <tr><td>--detail medium</td><td>+ signatures / explained names</td><td>20</td><td>0.67</td></tr>
-          <tr><td>--detail high (default)</td><td>full uncapped caller list</td><td>21</td><td>0.76</td></tr>
-          <tr><td>--detail xhigh</td><td>+ stable IDs, docs, scores</td><td>288</td><td>0.76</td></tr>
+          <tr><td>--detail low</td><td>name + location stub</td><td>3.4</td><td>0.00</td></tr>
+          <tr><td>--detail medium</td><td>+ signatures / explained names</td><td>22.5</td><td>0.77</td></tr>
+          <tr><td>--detail high (default)</td><td>full uncapped caller list</td><td>23.9</td><td>0.86</td></tr>
+          <tr><td>--detail xhigh</td><td>+ stable IDs, docs, scores</td><td>230.1</td><td>0.86</td></tr>
           </tbody>
         </table>
 
         <h2>Language maturity ladder — 40 code languages</h2>
-        <p>Levels reflect validation depth, not just support — an L2 language still indexes and searches; it simply has not reached verified call-graph resolution. Atlas also indexes ~24 content formats (JSON, YAML, HTML, PDF, …) for search.</p>
+        <p>Levels reflect validation depth, not just support — an L2 language still indexes and searches; it simply has not reached verified call-graph resolution. A language moves DOWN when its evidence does: dart came off L5 this refresh. Atlas also indexes ~24 content formats (JSON, YAML, HTML, PDF, …) for search.</p>
         <table>
           <thead><tr><th>Level</th><th>Meaning</th><th>Languages</th></tr></thead>
           <tbody>
-          <tr><td>L5 — Reference-validated</td><td>call graph cross-checked against an LSP server or SCIP indexer</td><td>C, C++, Dart, Fortran, Go, Java, JavaScript, Lua, PHP, Python, Rust, TypeScript, Zig</td></tr>
-          <tr><td>L4 — Real-repo call graph</td><td>who-calls resolved and proven on a real repository</td><td>Apex, Astro, C#, Elixir, ETS, Groovy, Julia, Kotlin, R, Scala, SQL, Svelte, Swift, Verilog, Vue, Bash (pending real-repo proof), Blade (pending real-repo proof), BYOND (pending real-repo proof), EJS (pending real-repo proof), Objective-C (pending real-repo proof), Pascal (pending real-repo proof), PowerShell (pending real-repo proof), Razor (pending real-repo proof), Ruby (pending real-repo proof)</td></tr>
-          <tr><td>L2 — Real-repo tested</td><td>runs on real code; call graph not yet resolved</td><td>Delphi, Terraform</td></tr>
+          <tr><td>L5 — Reference-validated</td><td>call graph cross-checked against the language's own LSP server or a SCIP indexer, on a real public repository</td><td>C, C++, Elixir, Fortran, Go, Java, JavaScript, Kotlin, Lua, PHP, Python, Ruby, Rust, Swift, TypeScript, Zig</td></tr>
+          <tr><td>L4 — Real-repo call graph</td><td>who-calls resolved and proven on a real repository</td><td>Apex, Astro, C#, Dart, ETS, Groovy, Julia, R, Scala, SQL, Svelte, Verilog, Vue</td></tr>
+          <tr><td>L2 — Real-repo tested</td><td>runs on real code; call graph not yet resolved</td><td>Bash (fixture-perfect only), Blade, BYOND (fixture-perfect only), Delphi, EJS, Objective-C (fixture-perfect only), Pascal, PowerShell (fixture-perfect only), Razor, Terraform</td></tr>
           <tr><td>L1 — Indexed</td><td>parsed and symbols extracted</td><td>P4</td></tr>
           </tbody>
         </table>
+        <p>L5 goes from 13 to <strong>16</strong>. Added since the last published ladder: Elixir, Kotlin, Ruby, Swift. Removed: Dart — July's dart PASS at .9249 rode a fan-out the truth filter should have refused. The verifier re-run measures .8631 against the same reference server on the same pinned repository. Dart returns to L4 until `toString`-scale fan-out and `package:` re-export families bind. We publish the retraction rather than the flattering number.</p>
+        <p><strong>Requalified.</strong> This page previously asserted “native F1 1.000 each on the Linux saturation run” for Bash, Blade, BYOND, EJS, Objective-C, Pascal, PowerShell, Razor, Ruby. The saturation branch that produced that claim never merged. Re-measured at this commit, the fixture is perfect for 4 of the nine and returns an empty caller list for the rest. The site-wide fixture score is 32/37, not 37/37. Ruby is a special case and is now L5 on LSP-truth (F1 1.000 against solargraph on rack, 9 symbols). Its 0.000 on the fixture is DESIGNED: the fixture's callers are top-level, and the binder refuses to attribute a top-level call to an owner it cannot prove rather than guessing one. Ruby's promotion cites the LSP lane and never the fixture.</p>
 
         <h2>Install</h2>
         <p>Homebrew: <code>brew install --cask aziron-ai/atlas/atlas</code> ·

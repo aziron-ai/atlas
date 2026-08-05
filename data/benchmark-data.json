@@ -28,8 +28,8 @@
       "name": "MATRIX_TOOL_VERSIONS.json",
       "source": "bench/MATRIX_TOOL_VERSIONS.json",
       "path": "data/raw/MATRIX_TOOL_VERSIONS.json",
-      "bytes": 8357,
-      "sha256": "50b4fb90df205eb7b2d469284795a69d13b4d1da8bdf7e8712b8e092362ae49a"
+      "bytes": 1062,
+      "sha256": "755e0c2f7809bf178394e3181f2d0cd78b59a2a376ac2c0e23c12bc2c109876f"
     },
     {
       "name": "GRAPHIFY_LANGUAGE_DISCOVERY.json",

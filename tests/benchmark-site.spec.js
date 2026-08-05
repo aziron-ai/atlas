@@ -121,8 +121,10 @@ test.describe("atlas benchmark evidence", () => {
 
   test("hero carries report headlines and fresh-run corroboration chips", async ({ page }) => {
     const hero = page.getByTestId("hero");
-    await expect(hero).toContainText(String(site.report.headline.atlasF1All));
-    await expect(hero).toContainText(`${site.report.headline.accPerToken}×`);
+    // the headline pair: pooled token advantage and the caller F1 it beats
+    await expect(hero).toContainText(`${site.report.headline.tokensPooled}×`);
+    await expect(hero).toContainText(site.report.headline.atlasF1.toFixed(3));
+    await expect(hero).toContainText(site.report.headline.graphifyF1.toFixed(3));
     const chips = page.getByTestId("fresh-chips");
     await expect(chips).toContainText(
       `${site.fresh.saturation.perfect}/${site.fresh.saturation.total}`
@@ -137,16 +139,20 @@ test.describe("atlas benchmark evidence", () => {
     await expect(page.getByTestId("maturity-lang")).toHaveCount(
       site.report.maturity.levels.reduce((s, l) => s + l.langs.length, 0)
     );
-    // the 9 promoted languages carry the honest pending badge
-    const pending = page.getByTestId("maturity-lang").filter({ hasText: "PENDING" });
-    await expect(pending).toHaveCount(site.report.maturity.pending.langs.length);
+    // fixture-perfect languages are badged AT THEIR REAL LEVEL — a fixture
+    // pass is a floor, not a promotion, and must not move a language up a rung
+    const fixtureOnly = page.getByTestId("maturity-lang").filter({ hasText: "FIXTURE" });
+    await expect(fixtureOnly).toHaveCount(site.report.maturity.fixtureOnly.langs.length);
+    // dart must NOT appear at L5: the retraction has to survive a rebuild
+    expect(site.report.maturity.levels.find((l) => l.id === "L5").langs).not.toContain("dart");
+    expect(site.report.maturity.levels.find((l) => l.id === "L4").langs).toContain("dart");
 
     await page.getByTestId("maturity-view-table").click();
     await expect(page.getByTestId("maturity-table")).toBeVisible();
     await expect(
       page.getByTestId("maturity-table").locator("tbody tr")
     ).toHaveCount(site.report.maturity.totalCodeLanguages);
-    await expect(page.getByTestId("maturity-table")).toContainText("pending real-repo proof");
+    await expect(page.getByTestId("maturity-table")).toContainText("fixture-perfect only");
   });
 
   test("win map covers all 37 benchmark languages", async ({ page }) => {
@@ -205,7 +211,12 @@ test.describe("atlas benchmark evidence", () => {
     expect(raw).toContain('property="og:image"');
     expect(raw).toContain("Language maturity ladder");
     expect(raw).toContain(`Download v${site.version}`);
-    expect(raw).toContain(String(site.report.headline.atlasF1All));
+    expect(raw).toContain(String(site.report.headline.tokensPooled));
+    // the retraction must reach a no-JS crawler, not just the interactive page
+    expect(raw).toContain("Requalified");
+    expect(raw).toContain("Retracted claims");
+    // every retired claim reaches the crawler with its replacement attached
+    for (const row of site.report.scorecard.retired) expect(raw).toContain(row.replacedBy);
     for (const f of ["robots.txt", "sitemap.xml", "llms.txt"]) {
       expect(fs.existsSync(path.join(__dirname, "..", f)), f).toBe(true);
     }

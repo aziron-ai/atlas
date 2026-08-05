@@ -24,7 +24,7 @@
   <meta name="twitter:title" content="Configuration — Atlas">
   <meta name="twitter:description" content="Configure Atlas limits, storage location, and runtime behavior.">
   <meta name="twitter:image" content="https://atlas.aziro.com/assets/og.png">
-  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Configuration","description":"Configure Atlas limits, storage location, and runtime behavior.","url":"https://atlas.aziro.com/docs/configuration/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-07-19"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"Configuration","item":"https://atlas.aziro.com/docs/configuration/"}]}]</script>
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Configuration","description":"Configure Atlas limits, storage location, and runtime behavior.","url":"https://atlas.aziro.com/docs/configuration/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-08-05"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"Configuration","item":"https://atlas.aziro.com/docs/configuration/"}]}]</script>
   <style>
   :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
   * { box-sizing:border-box; }
@@ -99,7 +99,7 @@ atlas doctor                    # read back the tier and every active bound</cod
 <p>Unmeasured RAM never triggers a tier on its own, and <strong><code>turbo</code> is never auto-selected</strong> — it takes more of the machine than stock, so it has to be asked for.</p>
 <p>The pre-0.1.48 spellings still work as inputs: <code>low</code> means <code>eco</code> and <code>default</code> means <code>performance</code>. Atlas always reports the canonical name.</p>
 <h3>Foreground Full Throttle</h3>
-<p><strong>Since 0.1.50.</strong> <code>balanced</code> bounds <strong>background</strong> work, not the command you are waiting on.</p>
+<p><strong>Since 0.1.51.</strong> <code>balanced</code> bounds <strong>background</strong> work, not the command you are waiting on.</p>
 <ul><li>In a warm daemon — <code>atlas serve</code>, <code>atlas mcp</code>, <code>atlas watch</code> — <code>balanced</code></li></ul>
 <p>  installs its CPU width (<code>3C/4</code>) and its soft heap ceiling (<code>RAM/4</code>). This   is where a watch-triggered reindex and an MCP lazy index run, and it is   what keeps the machine responsive while Atlas works in the background.</p>
 <ul><li>In a one-shot CLI run — an explicit <code>atlas index</code> — those two bounds are</li></ul>

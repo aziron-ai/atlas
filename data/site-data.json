@@ -1,81 +1,97 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-19T07:40:30.897Z",
-  "version": "0.1.51",
+  "generatedAt": "2026-08-05T08:05:55.601Z",
+  "version": "0.1.50",
   "report": {
-    "label": "Benchmark & Field Comparison — July 2026",
+    "label": "Benchmark & field comparison — refreshed at fc3b875 (2026-08-05)",
+    "supersedes": "The July 2026 report this page used to cite. Its live-repo multipliers (36× tokens, and the older 20×) were measured against a build whose caller answers were a two-token placeholder — across 224 live answers it named zero callers. Those figures are retracted in full, not adjusted. The numbers here are smaller and they are real.",
     "method": {
-      "scoringModel": "claude-haiku-4-5",
-      "sampling": "temperature 0 · 3 samples/cell · majority vote · no tools",
+      "scoringModel": "claude-haiku-4-5-20251001",
+      "sampling": "temperature 0 · 3 samples/cell · majority vote (threshold 2) · no tools",
       "cells": 222,
       "modelCalls": 666,
       "fixture": "per language: a function `target`, exactly 15 direct callers c01–c15, 3 decoys n01–n03 — truth by construction",
       "evidenceClasses": [
         {
           "id": "fixture-truth",
-          "desc": "native benchmark, ground truth by construction, 37 languages"
+          "desc": "constructed-truth fixture, 37 languages, scored deterministically"
+        },
+        {
+          "id": "LLM-scored",
+          "desc": "a real model reads one context source and answers; the context is what is being measured, not the model"
         },
         {
           "id": "LSP-truth",
-          "desc": "independent language-server ground truth on a real repository"
+          "desc": "independent language-server ground truth on a real public repository"
         },
         {
           "id": "perf-only",
-          "desc": "token / latency / build-time measurements, no accuracy claim"
+          "desc": "token / latency / build-time measurement, no accuracy claim attached"
         }
-      ]
+      ],
+      "controlNote": "`baseline` is a positive control — the raw fixture file, which contains the truth by construction, so its F1 of 1.000 confirms the judge works. It is a CEILING, not a competitor: Atlas does not beat it and does not claim to. `graphify` is the rival tool on the identical prompt and fixture."
     },
     "headline": {
-      "atlasF1All": 0.757,
-      "atlasTokAll": 21.2,
-      "atlasF1Supported": 1,
-      "atlasTokSupported": 27.1,
-      "supportedLangs": 28,
-      "graphifyF1": 0.539,
+      "tokensPooled": 3.17,
+      "tokensPerLanguageMean": 5.06,
+      "tokensPerLanguageMedian": 3.66,
+      "tokensWorstLanguage": "cpp",
+      "tokensWorstRatio": 1.41,
+      "matrixRepos": 7,
+      "matrixQueries": 26,
+      "atlasF1": 0.865,
+      "graphifyF1": 0.541,
+      "atlasTok": 23.9,
       "graphifyTok": 96.5,
-      "accPerToken": 6.4,
-      "fewerTokens": 36
+      "f1Advantage": 1.6,
+      "tokenAdvantageQa": 4.04,
+      "accPerToken": 6.5,
+      "perfectLangs": 32,
+      "totalLangs": 37,
+      "platform": "Darwin arm64 (macOS)",
+      "graphifyVersion": "0.8.49",
+      "definition": "tokens: sum of answer tokens over every query BOTH tools answered, across the 7-repo matrix. F1: deterministic set F1 of a real model's majority-voted caller list, given one context source, over 37 constructed-truth fixtures."
     },
     "frontier": [
       {
         "id": "atlas-low",
         "label": "Atlas low",
         "f1": 0,
-        "tokens": 3.2,
+        "tokens": 3.4,
         "kind": "atlas"
       },
       {
         "id": "atlas-medium",
         "label": "Atlas medium",
-        "f1": 0.673,
-        "tokens": 20.1,
+        "f1": 0.769,
+        "tokens": 22.5,
         "kind": "atlas"
       },
       {
         "id": "atlas-high",
         "label": "Atlas high",
-        "f1": 0.757,
-        "tokens": 21.2,
+        "f1": 0.865,
+        "tokens": 23.9,
         "kind": "atlas",
         "star": true
       },
       {
         "id": "atlas-xhigh",
         "label": "Atlas xhigh",
-        "f1": 0.757,
-        "tokens": 287.8,
+        "f1": 0.865,
+        "tokens": 230.1,
         "kind": "atlas"
       },
       {
         "id": "graphify",
         "label": "Graph tool",
-        "f1": 0.539,
+        "f1": 0.541,
         "tokens": 96.5,
         "kind": "rival"
       },
       {
         "id": "raw-file",
-        "label": "Raw file",
+        "label": "Raw file (control)",
         "f1": 1,
         "tokens": 156.8,
         "kind": "ceiling"
@@ -87,43 +103,43 @@
         "f1": 0,
         "recall": 0,
         "precision": 0,
-        "tokens": 3.2,
+        "tokens": 3.4,
         "per100": 0
       },
       {
         "source": "atlas medium",
-        "f1": 0.673,
-        "recall": 0.605,
-        "precision": 0.757,
-        "tokens": 20.1,
-        "per100": 3.35
+        "f1": 0.769,
+        "recall": 0.692,
+        "precision": 0.865,
+        "tokens": 22.5,
+        "per100": 3.42
       },
       {
         "source": "atlas high",
-        "f1": 0.757,
-        "recall": 0.757,
-        "precision": 0.757,
-        "tokens": 21.2,
-        "per100": 3.56
+        "f1": 0.865,
+        "recall": 0.865,
+        "precision": 0.865,
+        "tokens": 23.9,
+        "per100": 3.62
       },
       {
         "source": "atlas xhigh",
-        "f1": 0.757,
-        "recall": 0.757,
-        "precision": 0.757,
-        "tokens": 287.8,
-        "per100": 0.26
+        "f1": 0.865,
+        "recall": 0.865,
+        "precision": 0.865,
+        "tokens": 230.1,
+        "per100": 0.38
       },
       {
         "source": "graph tool",
-        "f1": 0.539,
+        "f1": 0.541,
         "recall": 0.541,
-        "precision": 0.537,
+        "precision": 0.541,
         "tokens": 96.5,
         "per100": 0.56
       },
       {
-        "source": "raw file (ceiling)",
+        "source": "raw file (positive control)",
         "f1": 1,
         "recall": 1,
         "precision": 1,
@@ -131,32 +147,24 @@
         "per100": 0.64
       }
     ],
-    "supported28": [
-      {
-        "source": "atlas medium",
-        "f1": 0.889,
-        "tokens": 25.5,
-        "per100": 3.48
+    "efficiency": {
+      "highF1": 0.8649,
+      "xhighF1": 0.8649,
+      "identical": true,
+      "highTok": 23.9,
+      "xhighTok": 230.1,
+      "xCheaper": 9.6,
+      "vsGraphifyF1": 1.6,
+      "vsGraphifyTok": 4,
+      "perfectLangs": 32,
+      "totalLangs": 37,
+      "modelCalls": 666,
+      "controls": {
+        "graphify": 0.541,
+        "rawFile": 1
       },
-      {
-        "source": "atlas high",
-        "f1": 1,
-        "tokens": 27.1,
-        "per100": 3.69
-      },
-      {
-        "source": "graph tool",
-        "f1": 0.605,
-        "tokens": 107.3,
-        "per100": 0.56
-      },
-      {
-        "source": "raw file (ceiling)",
-        "f1": 1,
-        "tokens": 165.2,
-        "per100": 0.61
-      }
-    ],
+      "controlNote": "The raw-file control contains the answer by construction, so its F1 of 1.000 is a check that the judge works — a ceiling, not a competitor. Atlas does not beat it and does not claim to. The graph tool is the rival, on the identical prompt and fixture."
+    },
     "detailKnob": {
       "flag": "--detail low|medium|high|xhigh",
       "defaultLevel": "high",
@@ -164,135 +172,130 @@
       "levels": [
         {
           "id": "low",
-          "tokens": 3,
+          "tokens": 3.4,
           "f1": 0,
           "what": "name + location stub",
-          "note": "not intended for caller retrieval"
+          "note": "not intended for caller retrieval — it scores 0.000 and the docs say so"
         },
         {
           "id": "medium",
-          "tokens": 20,
-          "f1": 0.67,
+          "tokens": 22.5,
+          "f1": 0.769,
           "what": "+ signatures / explained names",
-          "note": "cheapest useful answer"
+          "note": "same precision as high, lower recall"
         },
         {
           "id": "high",
-          "tokens": 21,
-          "f1": 0.76,
+          "tokens": 23.9,
+          "f1": 0.865,
           "what": "full uncapped caller list",
-          "note": "the default — all the accuracy at 1/13th of xhigh's tokens"
+          "note": "the default — the whole result at a tenth of xhigh's tokens"
         },
         {
           "id": "xhigh",
-          "tokens": 288,
-          "f1": 0.76,
+          "tokens": 230.1,
+          "f1": 0.865,
           "what": "+ stable IDs, docs, scores",
-          "note": "14× the tokens for no accuracy gain — dominated by high"
+          "note": "9.6× the tokens for an identical F1 — dominated by high"
         }
       ]
-    },
-    "goFlagship": {
-      "repo": "sirupsen/logrus",
-      "truth": "gopls call-hierarchy (LSP-truth)",
-      "rows": [
-        {
-          "tool": "Atlas",
-          "f1": 0.975,
-          "tokens": 169
-        },
-        {
-          "tool": "Graph tool",
-          "f1": 0.084,
-          "tokens": 98
-        },
-        {
-          "tool": "Raw file",
-          "f1": 0.017,
-          "tokens": 2227
-        }
-      ],
-      "advantage": 12,
-      "why": "A production function has many more than 15 callers spread across files; summarized graph output and raw dumps both lose the LLM in noise. Atlas returns the precise, complete caller set as structured context."
     },
     "scorecard": {
       "stats": [
         {
           "label": "Answer accuracy (F1)",
-          "value": "+40%"
+          "value": "0.865 vs 0.541"
+        },
+        {
+          "label": "Fewer answer tokens",
+          "value": "3.17×",
+          "sub": "pooled, 7-repo matrix"
         },
         {
           "label": "Faster queries",
-          "value": "17×"
+          "value": "4.12×",
+          "sub": "mean of 7 per-repo ratios"
         },
         {
-          "label": "Fewer query tokens",
-          "value": "36×"
-        },
-        {
-          "label": "Faster cold index",
-          "value": "2.3×"
+          "label": "Same F1, a tenth the cost",
+          "value": "9.6×",
+          "sub": "default vs max detail"
         }
       ],
       "rows": [
         {
           "metric": "Answer accuracy (F1)",
-          "atlas": "0.757",
-          "graphify": "0.539",
-          "advantage": "+40%",
-          "evidence": "fixtures · 37 langs"
+          "atlas": "0.865",
+          "graphify": "0.541",
+          "advantage": "1.6× the F1",
+          "evidence": "666 real model calls · 37 fixture languages"
         },
         {
-          "metric": "Query latency",
-          "atlas": "7.4 ms",
-          "graphify": "128 ms",
-          "advantage": "17× faster",
-          "evidence": "real repos · 36 langs"
+          "metric": "Answer tokens — pooled",
+          "atlas": "1207",
+          "graphify": "3822",
+          "advantage": "3.17× fewer",
+          "evidence": "7 repos · 26 queries both tools answered"
         },
         {
-          "metric": "Query tokens (per answer)",
-          "atlas": "2.6",
-          "graphify": "92.8",
-          "advantage": "36× fewer",
-          "evidence": "real repos · 36 langs"
+          "metric": "Answer tokens — per-language mean",
+          "atlas": "—",
+          "graphify": "—",
+          "advantage": "5.06× fewer",
+          "evidence": "unweighted mean of the 7 per-repo ratios"
+        },
+        {
+          "metric": "Answer tokens — worst language",
+          "atlas": "—",
+          "graphify": "—",
+          "advantage": "1.41× fewer (cpp)",
+          "evidence": "the floor, published because it is the floor"
         },
         {
           "metric": "Answer context size",
-          "atlas": "21.2 tok",
-          "graphify": "96 tok",
-          "advantage": "4.5× smaller",
-          "evidence": "fixtures · 37 langs"
+          "atlas": "23.9 tok",
+          "graphify": "96.5 tok",
+          "advantage": "4× smaller",
+          "evidence": "fixtures · 37 langs · mean context handed to the model"
         },
         {
-          "metric": "Cold index build",
-          "atlas": "0.62 s",
-          "graphify": "1.39 s",
-          "advantage": "2.3× faster",
-          "evidence": "real repos · 36 langs"
+          "metric": "Query latency",
+          "atlas": "—",
+          "graphify": "—",
+          "advantage": "4.12× faster",
+          "evidence": "7 repos · median of 5 CLI runs each, spawn included"
         },
         {
-          "metric": "Incremental re-index",
-          "atlas": "0.10 s",
-          "graphify": "1.39 s",
-          "advantage": "14× faster",
-          "evidence": "real repos · Graphify rebuilds fully"
-        },
-        {
-          "metric": "Call edges extracted",
-          "atlas": "9,157",
-          "graphify": "1,161",
-          "advantage": "7.9× more",
-          "evidence": "real repo · typelevel/cats"
-        },
-        {
-          "metric": "Coverage vs native AST",
-          "atlas": "100.2%",
-          "graphify": "100%",
-          "advantage": "parity",
-          "evidence": "real repo · cats (tree-sitter)"
+          "metric": "Warm-serve explain",
+          "atlas": "1.6–14.9 ms",
+          "graphify": "no daemon mode",
+          "advantage": "not comparable",
+          "evidence": "7 repos · warm daemon, per-repo mean of median explains"
         }
       ],
-      "note": "Atlas is deterministic and LLM-free — the tool itself spends no tokens and never hallucinates. Only the agent reading its output spends tokens, and Atlas keeps that context small."
+      "note": "Atlas is deterministic and LLM-free — the tool itself spends no tokens and never hallucinates. Only the agent reading its output spends tokens, and Atlas keeps that context small. Every ratio above is over queries BOTH tools answered; a query one tool missed is excluded rather than scored as a win.",
+      "retired": [
+        {
+          "claim": "36× fewer query tokens",
+          "replacedBy": "3.17× pooled / 5.06× per-language mean",
+          "why": "measured against a build that answered with a 2-token placeholder"
+        },
+        {
+          "claim": "17× faster queries",
+          "replacedBy": "4.12× (matrix)",
+          "why": "same stub comparison; the honest figure is a same-host, same-run measurement"
+        },
+        {
+          "claim": "+40% answer accuracy",
+          "replacedBy": "1.6× the F1 (0.865 vs 0.541)",
+          "why": "a percentage of an F1 is not a meaningful unit; the ratio and both raw values are published instead"
+        },
+        {
+          "claim": "2.3× faster cold index / 14× faster incremental / 7.9× more call edges / 100.2% AST coverage",
+          "replacedBy": "withdrawn, not restated",
+          "why": "not re-measured at this commit. A number nobody re-ran is not evidence."
+        }
+      ]
     },
     "field": [
       {
@@ -374,42 +377,29 @@
         "oneTool": false
       }
     ],
-    "fieldNote": "Matching Atlas's coverage with the accurate alternatives means running 5 separate LSP servers or 4 separate SCIP indexers. They are precise by construction and serve as the accuracy reference — Atlas's aim is to match them as one fast multi-language tool (F1 0.975 vs gopls on Go).",
+    "fieldNote": "Matching Atlas's coverage with the accurate alternatives means running 5 separate LSP servers or 4 separate SCIP indexers. They are precise by construction and serve as the accuracy reference — Atlas's aim is to match them as one fast multi-language tool. Against gopls call-hierarchy truth on a production Go service, Atlas measures F1 0.900 at this commit.",
+    "fieldCaveat": "The index-time column above is carried from the July field survey and was NOT re-measured at this commit. It is a coverage-and-setup argument, not a performance claim, and no ratio on this page is computed from it.",
     "latencyAtScale": {
-      "meanMs": 7.4,
-      "minMs": 0.5,
-      "maxMs": 15,
-      "largestSymbols": 39161,
-      "sizeRange": 2611,
-      "why": "Answering `who calls X` costs proportional to the number of callers returned, not the size of the codebase — indexing absorbs scale up front."
+      "warmServeMinMs": 1.6,
+      "warmServeMaxMs": 14.9,
+      "matrixLatencyMean": 4.12,
+      "matrixLatencyPooled": 4.03,
+      "largestSymbols": 2099,
+      "why": "Answering `who calls X` costs proportional to the number of callers returned, not the size of the codebase — indexing absorbs scale up front.",
+      "definition": "warm-serve explain: per repo, the mean of that repo's four median `explain` responses against a warm daemon. The graph tool has no daemon mode, so this lane has no competitor and no ratio is claimed for it."
     },
     "crossModel": {
-      "rows": [
-        {
-          "source": "Atlas — explain high",
-          "haiku": 0.757,
-          "sonnet": 0.757,
-          "agreement": "identical"
-        },
-        {
-          "source": "Graphify",
-          "haiku": 0.539,
-          "sonnet": 0.541,
-          "agreement": "within 0.002"
-        },
-        {
-          "source": "Raw file (ceiling)",
-          "haiku": 1,
-          "sonnet": 1,
-          "agreement": "identical"
-        }
-      ],
-      "note": "Two independent models — one small, one large — score Atlas's high-detail context identically and rank the tools the same way: the result is a property of the context, not of any single model."
+      "withdrawn": true,
+      "ranThisRefresh": "claude-haiku-4-5-20251001",
+      "note": "The previous page showed the same fixtures scored by a second, larger model to argue the result is a property of the context rather than of one judge. That second lane was not re-run at this commit, so the comparison is withdrawn. The single-model caveat stands in its place: every F1 on this page is one model's majority vote over three samples at temperature 0."
     },
     "limits": [
-      "9 of 37 languages had parser gaps at report time (bash, blade, byond, ejs, objc, pascal, powershell, razor, ruby) — template/edge dialects pending native call-edge extraction. The Linux saturation run has since fixed all 9 with native evidence; real-repo proof is pending.",
-      "On 3 gap languages the graph tool still answered — by dumping full source at ~161 tokens. Where Atlas parses a language it wins on cost and accuracy.",
-      "Scoring correction disclosed: an earlier scorer under-credited the graph tool on Scala (rejected `c01()` for parentheses). The corrected scorer raised the competitor's score from 0.000 to 1.000 — the report carries the corrected number."
+      "5 of 37 fixture languages return no callers at this commit: ruby, pascal, razor, ejs and blade all score F1 0.000 on the constructed-truth fixture. Ruby's zero is by design — the fixture's callers are top-level, and the binder refuses to bind a top-level call rather than guess an owner. Pascal, razor, ejs and blade are genuine gaps. Ruby's L5 promotion rests on the LSP lane against a real repository, never on this fixture.",
+      "The competitor column is graphify 0.8.49. The previously published agent benchmark ran graphify 0.9.12, so part of the movement in that table is a version change on their side, not a change on ours. Both versions are named in the artifacts.",
+      "The Linux leg ran in an arm64 container on the Darwin workstation, not on the x86_64 host the published run used: no candidate Linux host accepted passwordless ssh, and the run rules forbid guessing a password. F1 is architecture-independent and stands; the Linux latency and index-time figures are NOT comparable to the published ones and are labelled accordingly.",
+      "The graph tool is not installed on the Linux leg, so that leg publishes no competitor ratio at all. The like-for-like comparison is the Darwin matrix.",
+      "The live-repo `serve` column was measured against the serve endpoint as it behaves at this commit, which still returns the reduced answer shape rather than the CLI's. Issue #144 is filed to bring serve to CLI parity in 0.1.51. Until it lands, the CLI column is the one to quote.",
+      "Two live repositories, byond and ets, show a WORSE token ratio than the retracted stub rows did. That is the retraction working as intended: the stub's larger number came from answering with nothing."
     ],
     "perLanguage": [
       {
@@ -430,11 +420,11 @@
       },
       {
         "lang": "bash",
-        "atlasF1": 0,
-        "atlasTok": 4,
+        "atlasF1": 1,
+        "atlasTok": 27,
         "graphF1": 1,
         "graphTok": 161,
-        "status": "parser gap"
+        "status": "resolved"
       },
       {
         "lang": "blade",
@@ -442,15 +432,15 @@
         "atlasTok": 1,
         "graphF1": 0,
         "graphTok": 8,
-        "status": "parser gap"
+        "status": "no callers returned"
       },
       {
         "lang": "byond",
-        "atlasF1": 0,
-        "atlasTok": 1,
+        "atlasF1": 1,
+        "atlasTok": 27,
         "graphF1": 0,
         "graphTok": 8,
-        "status": "parser gap"
+        "status": "resolved"
       },
       {
         "lang": "c",
@@ -472,7 +462,7 @@
         "lang": "csharp",
         "atlasF1": 1,
         "atlasTok": 27,
-        "graphF1": 0.968,
+        "graphF1": 1,
         "graphTok": 166,
         "status": "resolved"
       },
@@ -490,7 +480,7 @@
         "atlasTok": 10,
         "graphF1": 0,
         "graphTok": 8,
-        "status": "parser gap"
+        "status": "no callers returned"
       },
       {
         "lang": "elixir",
@@ -536,7 +526,7 @@
         "lang": "java",
         "atlasF1": 1,
         "atlasTok": 27,
-        "graphF1": 0.968,
+        "graphF1": 1,
         "graphTok": 166,
         "status": "resolved"
       },
@@ -574,11 +564,11 @@
       },
       {
         "lang": "objc",
-        "atlasF1": 0,
-        "atlasTok": 1,
+        "atlasF1": 1,
+        "atlasTok": 27,
         "graphF1": 0,
         "graphTok": 8,
-        "status": "parser gap"
+        "status": "resolved"
       },
       {
         "lang": "pascal",
@@ -586,7 +576,7 @@
         "atlasTok": 3,
         "graphF1": 1,
         "graphTok": 161,
-        "status": "parser gap"
+        "status": "no callers returned"
       },
       {
         "lang": "php",
@@ -598,11 +588,11 @@
       },
       {
         "lang": "powershell",
-        "atlasF1": 0,
-        "atlasTok": 3,
+        "atlasF1": 1,
+        "atlasTok": 27,
         "graphF1": 1,
         "graphTok": 162,
-        "status": "parser gap"
+        "status": "resolved"
       },
       {
         "lang": "python",
@@ -626,7 +616,7 @@
         "atlasTok": 1,
         "graphF1": 0,
         "graphTok": 8,
-        "status": "parser gap"
+        "status": "no callers returned"
       },
       {
         "lang": "ruby",
@@ -634,7 +624,7 @@
         "atlasTok": 3,
         "graphF1": 0,
         "graphTok": 41,
-        "status": "parser gap"
+        "status": "no callers returned"
       },
       {
         "lang": "rust",
@@ -712,25 +702,28 @@
     "maturity": {
       "totalCodeLanguages": 40,
       "contentFormats": 24,
-      "note": "Levels reflect validation depth, not just support — an L2 language still indexes and searches; it simply has not reached verified call-graph resolution.",
+      "note": "Levels reflect validation depth, not just support — an L2 language still indexes and searches; it simply has not reached verified call-graph resolution. A language moves DOWN when its evidence does: dart came off L5 this refresh.",
       "levels": [
         {
           "id": "L5",
           "name": "Reference-validated",
           "short": "vs LSP / SCIP",
-          "desc": "call graph cross-checked against an LSP server or SCIP indexer",
+          "desc": "call graph cross-checked against the language's own LSP server or a SCIP indexer, on a real public repository",
           "langs": [
             "c",
             "cpp",
-            "dart",
+            "elixir",
             "fortran",
             "go",
             "java",
             "javascript",
+            "kotlin",
             "lua",
             "php",
             "python",
+            "ruby",
             "rust",
+            "swift",
             "typescript",
             "zig"
           ]
@@ -744,16 +737,14 @@
             "apex",
             "astro",
             "csharp",
-            "elixir",
+            "dart",
             "ets",
             "groovy",
             "julia",
-            "kotlin",
             "r",
             "scala",
             "sql",
             "svelte",
-            "swift",
             "verilog",
             "vue"
           ]
@@ -773,7 +764,6 @@
             "pascal",
             "powershell",
             "razor",
-            "ruby",
             "terraform"
           ]
         },
@@ -787,10 +777,38 @@
           ]
         }
       ],
-      "pending": {
-        "toLevel": "L4",
-        "badge": "L4 · pending real-repo proof",
+      "fixtureOnly": {
+        "badge": "fixture-perfect · no real-repo proof",
+        "evidence": "F1 1.000 on the constructed-truth fixture at this commit (CALLERS_F1_AFTER.json). A fixture is a floor, not a promotion: these languages stay at L2 until a real-repo call-graph run lands.",
         "langs": [
+          "bash",
+          "byond",
+          "objc",
+          "powershell"
+        ]
+      },
+      "fixtureGaps": {
+        "badge": "returns no callers on the fixture",
+        "evidence": "F1 0.000 on the constructed-truth fixture at this commit — the caller list comes back empty.",
+        "langs": [
+          "blade",
+          "ejs",
+          "pascal",
+          "razor"
+        ]
+      },
+      "retracted": {
+        "lang": "dart",
+        "fromLevel": "L5",
+        "toLevel": "L4",
+        "publishedF1": 0.9249,
+        "honestF1": 0.8631,
+        "honestPrecision": 0.9723,
+        "why": "July's dart PASS at .9249 rode a fan-out the truth filter should have refused. The verifier re-run measures .8631 against the same reference server on the same pinned repository. Dart returns to L4 until `toString`-scale fan-out and `package:` re-export families bind. We publish the retraction rather than the flattering number."
+      },
+      "requalification": {
+        "wasClaimed": "native F1 1.000 each on the Linux saturation run",
+        "wasClaimedFor": [
           "bash",
           "blade",
           "byond",
@@ -801,75 +819,168 @@
           "razor",
           "ruby"
         ],
-        "evidence": "native F1 1.000 each on the Linux saturation run (CALLERS_F1_AFTER.json); real-repo call-graph validation not yet run"
+        "isTrueFor": [
+          "bash",
+          "byond",
+          "objc",
+          "powershell"
+        ],
+        "isFalseFor": [
+          "blade",
+          "ejs",
+          "pascal",
+          "razor",
+          "ruby"
+        ],
+        "why": "The saturation branch that produced that claim never merged. Re-measured at this commit, the fixture is perfect for 4 of the nine and returns an empty caller list for the rest. The site-wide fixture score is 32/37, not 37/37.",
+        "rubyNote": "Ruby is a special case and is now L5 on LSP-truth (F1 1.000 against solargraph on rack, 9 symbols). Its 0.000 on the fixture is DESIGNED: the fixture's callers are top-level, and the binder refuses to attribute a top-level call to an owner it cannot prove rather than guessing one. Ruby's promotion cites the LSP lane and never the fixture."
       },
       "promoted": {
         "langs": [
-          "dart",
+          "elixir",
           "fortran",
+          "kotlin",
           "lua",
           "php",
+          "ruby",
           "rust",
+          "swift",
           "zig"
         ],
-        "evidence": "call graph cross-checked against the language's own LSP server on a real public repository — see the promotion run"
+        "demoted": [],
+        "total": 16,
+        "previousTotal": 13,
+        "newSinceLastPublished": [
+          "elixir",
+          "kotlin",
+          "ruby",
+          "swift"
+        ],
+        "removedSinceLastPublished": [
+          "dart"
+        ],
+        "evidence": "call graph cross-checked against the language's own LSP server on a real public repository — see the promotion matrix"
       }
+    },
+    "goFlagship": {
+      "repo": "sirupsen/logrus",
+      "commit7": "a23d315",
+      "truth": "gopls call_hierarchy (LSP-truth), frozen at the pinned commit",
+      "lane": "end-to-end agent harness, one code-intel tool per run",
+      "questions": 19,
+      "rows": [
+        {
+          "agent": "claude",
+          "tool": "Atlas",
+          "f1": 0.995,
+          "tokens": 58234,
+          "turns": 2
+        },
+        {
+          "agent": "claude",
+          "tool": "No tool (raw exploration)",
+          "f1": 0.589,
+          "tokens": 134886,
+          "turns": 4.7
+        },
+        {
+          "agent": "claude",
+          "tool": "Graph tool",
+          "f1": 0.203,
+          "tokens": 239026,
+          "turns": 7.7
+        },
+        {
+          "agent": "codex",
+          "tool": "Atlas",
+          "f1": 0.995,
+          "tokens": 33471,
+          "turns": 1
+        },
+        {
+          "agent": "codex",
+          "tool": "No tool (raw exploration)",
+          "f1": 0.831,
+          "tokens": 74229,
+          "turns": 3.3
+        },
+        {
+          "agent": "codex",
+          "tool": "Graph tool",
+          "f1": 0.379,
+          "tokens": 131335,
+          "turns": 12.7
+        }
+      ],
+      "why": "A production function has many more callers than a fixture does, spread across files. Given only the graph tool, both agents spent three to thirteen times the turns and still answered wrong more often than not; given Atlas, both answered in one or two turns at F1 0.995.",
+      "caveat": "Cross-agent absolute totals are not comparable — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent."
     }
   },
   "fresh": {
     "label": "Linux corroboration run",
-    "platform": "Linux 6.18.5 x86_64",
-    "what": "deterministic re-run of the native, LSP-truth and cross-repo benches on independent hardware — corroborates the report, does not replace it",
+    "platform": "Linux 6.12.54-linuxkit aarch64",
+    "platformNote": "Docker container golang:1.26-bookworm on the Darwin workstation — arm64/aarch64. PUBLISHED reference run was Linux 6.18.5 x86_64. This leg is arm64. F1/accuracy is architecture-independent; latency_ms and index_ms are NOT comparable across these two architectures.",
+    "hostCaveat": "all four candidate Linux hosts (172.30.47.69, 172.30.62.31, 172.30.38.241, 172.30.36.100) refused passwordless ssh (Permission denied (publickey,password)); per the run rules password prompts are never guessed, so all four were skipped",
+    "resources": "4 vCPU / ~4 GiB RAM -> atlas auto-selected the ECO profile (GOMAXPROCS=2, 614.9MiB soft heap, GOGC=50). The published run's profile is unknown; eco depresses latency/index throughput.",
+    "what": "deterministic re-run of the native, LSP-truth and cross-repo benches in an independent Linux environment — corroborates the report, does not replace it",
     "saturation": {
-      "perfect": 37,
+      "perfect": 32,
       "total": 37,
       "before": 28,
       "fixed": [
-        "bash",
-        "blade",
-        "byond",
-        "ejs",
-        "objc",
-        "pascal",
         "powershell",
-        "razor",
-        "ruby"
+        "bash",
+        "objc",
+        "byond"
       ],
-      "truth": "native: target called by exactly c01..c15, decoys n01..n03 (by construction)"
+      "stillFailing": [
+        "ruby",
+        "pascal",
+        "razor",
+        "ejs",
+        "blade"
+      ],
+      "truth": "fixture-truth: target called by exactly c01..c15, decoys n01..n03 (by construction)",
+      "pairing": "AFTER is fresh at fc68e26. BEFORE is CARRIED from c7a3e8d (2026-07-04) — it is a property of a pre-saturation binary, and there is no 'before' state at this commit to measure. Different binaries, different hardware. Do not pair them as a delta.",
+      "afterProvenance": "fresh @ fc68e26",
+      "beforeProvenance": "CARRIED — NOT re-measured at fc3b875"
     },
     "latency": {
-      "atlasMedianMs": 23,
-      "graphifyMedianMs": 207.1,
-      "ratio": 9,
-      "note": "median of 3 CLI invocations incl. process spawn, identical fixtures"
+      "atlasMedianMs": 11.6,
+      "graphifyMedianMs": null,
+      "ratio": null,
+      "comparable": false,
+      "note": "median of 3 CLI invocations incl. process spawn, identical fixtures",
+      "unrebuildable": "The graph tool is not installed on this host, so this leg has no competitor latency and no ratio is published for it. Atlas's own median is kept as an absolute. The like-for-like latency comparison is the 7-repo Darwin matrix, where both binaries ran in one pass on one machine.",
+      "archCaveat": "PUBLISHED reference run was Linux 6.18.5 x86_64. This leg is arm64. F1/accuracy is architecture-independent; latency_ms and index_ms are NOT comparable across these two architectures."
     },
     "index": {
-      "medianMs": 77.4
+      "medianMs": 60.1
     },
     "lspTruth": {
-      "meanF1": 0.9333,
-      "precision": 0.9647,
-      "recall": 0.918,
+      "meanF1": 0.9,
+      "precision": 0.9,
+      "recall": 0.9,
       "symbols": 10,
       "repo": "a production Go service (private)",
       "truth": "gopls call_hierarchy"
     },
     "crossRepo": {
       "note": "a real 2-repo workspace — a Go API server and the React app that calls it — indexed together",
-      "producerRoutes": 355,
-      "consumerRefs": 738,
+      "producerRoutes": 242,
+      "consumerRefs": 94,
       "queries": {
         "route_contracts": {
           "count": 200,
-          "latencyMs": 36.3
+          "latencyMs": 14.8
         },
         "consumers": {
           "count": 3,
-          "latencyMs": 33.8
+          "latencyMs": 14.8
         },
         "dependencies": {
           "count": 3,
-          "latencyMs": 32.4
+          "latencyMs": 15.4
         }
       },
       "consumerRepoCount": 1
@@ -878,845 +989,3643 @@
       {
         "lang": "go",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 23,
-        "graphifyMs": 205.2,
+        "graphifyF1": null,
+        "atlasMs": 10.8,
+        "graphifyMs": null,
         "atlasTok": 214,
-        "graphifyTok": 162,
-        "indexMs": 81.2
+        "graphifyTok": null,
+        "indexMs": 92.7
       },
       {
         "lang": "python",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 22.5,
-        "graphifyMs": 210.3,
+        "graphifyF1": null,
+        "atlasMs": 11.6,
+        "graphifyMs": null,
         "atlasTok": 166,
-        "graphifyTok": 162,
-        "indexMs": 74.9
+        "graphifyTok": null,
+        "indexMs": 50.5
       },
       {
         "lang": "javascript",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 22.2,
-        "graphifyMs": 210.5,
+        "graphifyF1": null,
+        "atlasMs": 12.1,
+        "graphifyMs": null,
         "atlasTok": 233,
-        "graphifyTok": 162,
-        "indexMs": 74
+        "graphifyTok": null,
+        "indexMs": 49.9
       },
       {
         "lang": "typescript",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 22.6,
-        "graphifyMs": 236.5,
+        "graphifyF1": null,
+        "atlasMs": 10.4,
+        "graphifyMs": null,
         "atlasTok": 255,
-        "graphifyTok": 162,
-        "indexMs": 79.6
+        "graphifyTok": null,
+        "indexMs": 50.9
       },
       {
         "lang": "java",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 23.3,
-        "graphifyMs": 211.4,
+        "graphifyF1": null,
+        "atlasMs": 11.9,
+        "graphifyMs": null,
         "atlasTok": 244,
-        "graphifyTok": 166,
-        "indexMs": 76.8
+        "graphifyTok": null,
+        "indexMs": 47.1
       },
       {
         "lang": "c",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 25.3,
-        "graphifyMs": 202.4,
+        "graphifyF1": null,
+        "atlasMs": 12.2,
+        "graphifyMs": null,
         "atlasTok": 214,
-        "graphifyTok": 161,
-        "indexMs": 81.7
+        "graphifyTok": null,
+        "indexMs": 52.1
       },
       {
         "lang": "cpp",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 22.7,
-        "graphifyMs": 200.5,
+        "graphifyF1": null,
+        "atlasMs": 11.4,
+        "graphifyMs": null,
         "atlasTok": 222,
-        "graphifyTok": 162,
-        "indexMs": 74.4
+        "graphifyTok": null,
+        "indexMs": 46
       },
       {
         "lang": "rust",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 23.3,
-        "graphifyMs": 202.7,
+        "graphifyF1": null,
+        "atlasMs": 20.1,
+        "graphifyMs": null,
         "atlasTok": 210,
-        "graphifyTok": 162,
-        "indexMs": 87.2
+        "graphifyTok": null,
+        "indexMs": 56.4
       },
       {
         "lang": "ruby",
-        "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 24.1,
-        "graphifyMs": 213.2,
-        "atlasTok": 148,
-        "graphifyTok": 41,
-        "indexMs": 121.7
+        "f1": 0,
+        "graphifyF1": null,
+        "atlasMs": 9.7,
+        "graphifyMs": null,
+        "atlasTok": 6,
+        "graphifyTok": null,
+        "indexMs": 115
       },
       {
         "lang": "php",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 22.3,
-        "graphifyMs": 221.6,
+        "graphifyF1": null,
+        "atlasMs": 10.5,
+        "graphifyMs": null,
         "atlasTok": 237,
-        "graphifyTok": 162,
-        "indexMs": 98
+        "graphifyTok": null,
+        "indexMs": 67.5
       },
       {
         "lang": "csharp",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 23.1,
-        "graphifyMs": 209.5,
+        "graphifyF1": null,
+        "atlasMs": 11,
+        "graphifyMs": null,
         "atlasTok": 237,
-        "graphifyTok": 166,
-        "indexMs": 117.3
+        "graphifyTok": null,
+        "indexMs": 67.3
       },
       {
         "lang": "kotlin",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 22.1,
-        "graphifyMs": 214.1,
+        "graphifyF1": null,
+        "atlasMs": 11.6,
+        "graphifyMs": null,
         "atlasTok": 210,
-        "graphifyTok": 162,
-        "indexMs": 98.6
+        "graphifyTok": null,
+        "indexMs": 58
       },
       {
         "lang": "swift",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 22.1,
-        "graphifyMs": 201.5,
+        "graphifyF1": null,
+        "atlasMs": 11.1,
+        "graphifyMs": null,
         "atlasTok": 225,
-        "graphifyTok": 163,
-        "indexMs": 216.1
+        "graphifyTok": null,
+        "indexMs": 101.3
       },
       {
         "lang": "scala",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 22.4,
-        "graphifyMs": 205.2,
-        "atlasTok": 252,
-        "graphifyTok": 176,
-        "indexMs": 118.7
+        "graphifyF1": null,
+        "atlasMs": 17.1,
+        "graphifyMs": null,
+        "atlasTok": 244,
+        "graphifyTok": null,
+        "indexMs": 99.5
       },
       {
         "lang": "lua",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 21.9,
-        "graphifyMs": 207.4,
+        "graphifyF1": null,
+        "atlasMs": 13,
+        "graphifyMs": null,
         "atlasTok": 233,
-        "graphifyTok": 162,
-        "indexMs": 75.4
+        "graphifyTok": null,
+        "indexMs": 75.9
       },
       {
         "lang": "powershell",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 23.2,
-        "graphifyMs": 204.5,
+        "graphifyF1": null,
+        "atlasMs": 10.3,
+        "graphifyMs": null,
         "atlasTok": 218,
-        "graphifyTok": 162,
-        "indexMs": 76
+        "graphifyTok": null,
+        "indexMs": 45.7
       },
       {
         "lang": "bash",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 23.6,
-        "graphifyMs": 210.1,
+        "graphifyF1": null,
+        "atlasMs": 10.9,
+        "graphifyMs": null,
         "atlasTok": 192,
-        "graphifyTok": 162,
-        "indexMs": 72.6
+        "graphifyTok": null,
+        "indexMs": 47.2
       },
       {
         "lang": "zig",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 23.1,
-        "graphifyMs": 200.9,
+        "graphifyF1": null,
+        "atlasMs": 11.4,
+        "graphifyMs": null,
         "atlasTok": 233,
-        "graphifyTok": 162,
-        "indexMs": 106.3
+        "graphifyTok": null,
+        "indexMs": 93.4
       },
       {
         "lang": "elixir",
         "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 22.4,
-        "graphifyMs": 201.1,
+        "graphifyF1": null,
+        "atlasMs": 10.8,
+        "graphifyMs": null,
         "atlasTok": 210,
-        "graphifyTok": 41,
-        "indexMs": 77.5
+        "graphifyTok": null,
+        "indexMs": 45.4
       },
       {
         "lang": "objc",
         "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 22.2,
-        "graphifyMs": 205.1,
+        "graphifyF1": null,
+        "atlasMs": 11.1,
+        "graphifyMs": null,
         "atlasTok": 229,
-        "graphifyTok": 8,
-        "indexMs": 73.9
+        "graphifyTok": null,
+        "indexMs": 50.4
       },
       {
         "lang": "julia",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 23,
-        "graphifyMs": 203.8,
+        "graphifyF1": null,
+        "atlasMs": 12.4,
+        "graphifyMs": null,
         "atlasTok": 178,
-        "graphifyTok": 160,
-        "indexMs": 73.3
+        "graphifyTok": null,
+        "indexMs": 50.7
       },
       {
         "lang": "fortran",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 22.8,
-        "graphifyMs": 214.3,
+        "graphifyF1": null,
+        "atlasMs": 11.2,
+        "graphifyMs": null,
         "atlasTok": 189,
-        "graphifyTok": 162,
-        "indexMs": 76.6
+        "graphifyTok": null,
+        "indexMs": 50.7
       },
       {
         "lang": "dart",
         "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 23.9,
-        "graphifyMs": 209.1,
+        "graphifyF1": null,
+        "atlasMs": 11.6,
+        "graphifyMs": null,
         "atlasTok": 173,
-        "graphifyTok": 42,
-        "indexMs": 82.9
+        "graphifyTok": null,
+        "indexMs": 50.3
       },
       {
         "lang": "verilog",
         "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 22.7,
-        "graphifyMs": 209.4,
+        "graphifyF1": null,
+        "atlasMs": 12.9,
+        "graphifyMs": null,
         "atlasTok": 204,
-        "graphifyTok": 41,
-        "indexMs": 81
+        "graphifyTok": null,
+        "indexMs": 68
       },
       {
         "lang": "pascal",
-        "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 23.1,
-        "graphifyMs": 226,
-        "atlasTok": 185,
-        "graphifyTok": 161,
-        "indexMs": 79
+        "f1": 0,
+        "graphifyF1": null,
+        "atlasMs": 11.3,
+        "graphifyMs": null,
+        "atlasTok": 6,
+        "graphifyTok": null,
+        "indexMs": 88.5
       },
       {
         "lang": "byond",
         "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 24.4,
-        "graphifyMs": 205.7,
-        "atlasTok": 155,
-        "graphifyTok": 8,
-        "indexMs": 77.1
+        "graphifyF1": null,
+        "atlasMs": 16.5,
+        "graphifyMs": null,
+        "atlasTok": 162,
+        "graphifyTok": null,
+        "indexMs": 81.1
       },
       {
         "lang": "razor",
-        "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 25.9,
-        "graphifyMs": 215.9,
-        "atlasTok": 233,
-        "graphifyTok": 8,
-        "indexMs": 82.1
+        "f1": 0,
+        "graphifyF1": null,
+        "atlasMs": 11.6,
+        "graphifyMs": null,
+        "atlasTok": 6,
+        "graphifyTok": null,
+        "indexMs": 71.4
       },
       {
         "lang": "vue",
         "f1": 1,
-        "graphifyF1": 1,
-        "atlasMs": 24,
-        "graphifyMs": 210.9,
+        "graphifyF1": null,
+        "atlasMs": 11.1,
+        "graphifyMs": null,
         "atlasTok": 233,
-        "graphifyTok": 162,
-        "indexMs": 77.4
+        "graphifyTok": null,
+        "indexMs": 70.1
       },
       {
         "lang": "svelte",
         "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 23.2,
-        "graphifyMs": 204.6,
+        "graphifyF1": null,
+        "atlasMs": 13.5,
+        "graphifyMs": null,
         "atlasTok": 244,
-        "graphifyTok": 8,
-        "indexMs": 74.8
+        "graphifyTok": null,
+        "indexMs": 104.8
       },
       {
         "lang": "astro",
         "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 23.1,
-        "graphifyMs": 203.2,
+        "graphifyF1": null,
+        "atlasMs": 12.9,
+        "graphifyMs": null,
         "atlasTok": 240,
-        "graphifyTok": 8,
-        "indexMs": 77.5
+        "graphifyTok": null,
+        "indexMs": 68.8
       },
       {
         "lang": "ejs",
-        "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 22.1,
-        "graphifyMs": 207.1,
-        "atlasTok": 237,
-        "graphifyTok": 8,
-        "indexMs": 73.9
+        "f1": 0,
+        "graphifyF1": null,
+        "atlasMs": 11.2,
+        "graphifyMs": null,
+        "atlasTok": 15,
+        "graphifyTok": null,
+        "indexMs": 56.9
       },
       {
         "lang": "ets",
         "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 22.6,
-        "graphifyMs": 212.5,
+        "graphifyF1": null,
+        "atlasMs": 24.7,
+        "graphifyMs": null,
         "atlasTok": 263,
-        "graphifyTok": 8,
-        "indexMs": 72.6
+        "graphifyTok": null,
+        "indexMs": 66.2
       },
       {
         "lang": "r",
         "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 25,
-        "graphifyMs": 197.2,
+        "graphifyF1": null,
+        "atlasMs": 10.1,
+        "graphifyMs": null,
         "atlasTok": 233,
-        "graphifyTok": 8,
-        "indexMs": 75.9
+        "graphifyTok": null,
+        "indexMs": 84
       },
       {
         "lang": "apex",
         "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 23.5,
-        "graphifyMs": 203.9,
+        "graphifyF1": null,
+        "atlasMs": 10.5,
+        "graphifyMs": null,
         "atlasTok": 255,
-        "graphifyTok": 52,
-        "indexMs": 73.9
+        "graphifyTok": null,
+        "indexMs": 57.2
       },
       {
         "lang": "blade",
-        "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 22.6,
-        "graphifyMs": 202.6,
-        "atlasTok": 259,
-        "graphifyTok": 8,
-        "indexMs": 73.2
+        "f1": 0,
+        "graphifyF1": null,
+        "atlasMs": 11.7,
+        "graphifyMs": null,
+        "atlasTok": 6,
+        "graphifyTok": null,
+        "indexMs": 56.5
       },
       {
         "lang": "groovy",
         "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 22.5,
-        "graphifyMs": 204.5,
+        "graphifyF1": null,
+        "atlasMs": 12.9,
+        "graphifyMs": null,
         "atlasTok": 214,
-        "graphifyTok": 8,
-        "indexMs": 78.7
+        "graphifyTok": null,
+        "indexMs": 60.1
       },
       {
         "lang": "sql",
         "f1": 1,
-        "graphifyF1": 0,
-        "atlasMs": 22.9,
-        "graphifyMs": 209.1,
+        "graphifyF1": null,
+        "atlasMs": 19.2,
+        "graphifyMs": null,
         "atlasTok": 476,
-        "graphifyTok": 8,
-        "indexMs": 77.4
+        "graphifyTok": null,
+        "indexMs": 95.3
       }
     ],
     "tools": [
       {
         "tool": "atlas",
-        "version": "atlas dev (none, unknown)"
+        "version": "atlas dev (none, 2026-08-05T06:02:46Z)"
       },
       {
         "tool": "go",
-        "version": "go version go1.25.0 linux/amd64"
-      },
-      {
-        "tool": "python",
-        "version": "Python 3.11.15"
-      },
-      {
-        "tool": "node",
-        "version": "v22.22.2"
+        "version": "go version go1.26.5 linux/arm64"
       },
       {
         "tool": "gopls",
-        "version": "golang.org/x/tools/gopls v0.22.0"
+        "version": "golang.org/x/tools/gopls v0.23.0"
+      },
+      {
+        "tool": "python",
+        "version": "Python 3.11.2"
+      },
+      {
+        "tool": "node",
+        "version": "not_installed"
       },
       {
         "tool": "tsc",
-        "version": "Version 6.0.3"
+        "version": "not_installed"
       },
       {
         "tool": "pyright",
-        "version": "WARNING: there is a new pyright version available (v1.1.408 -> v1.1.411)."
+        "version": "not_installed"
       },
       {
         "tool": "graphify",
-        "version": "graphify 0.9.5"
+        "version": "not_installed"
+      },
+      {
+        "tool": "gcc",
+        "version": "gcc (Debian 12.2.0-14+deb12u1) 12.2.0"
       }
     ]
+  },
+  "matrix": {
+    "label": "7-repo tool matrix",
+    "platform": "Darwin arm64 (macOS)",
+    "what": "one host, one run, both CLIs present: `atlas explain <symbol> --format plain` against the graph tool's equivalent query, on seven public repositories",
+    "comparability": "a query counts only when BOTH tools returned an answer; queries either tool missed are excluded from every ratio below",
+    "definitions": {
+      "token_ratio": "sum(graphify answer tokens) / sum(atlas answer tokens) over that language's comparable queries",
+      "latency_ratio": "sum(graphify ms) / sum(atlas ms) over the same queries; each ms is the median of 5 CLI invocations including process spawn",
+      "pooled": "the same sums taken across all seven languages at once — the honest 'overall' figure, dominated by the languages with the most tokens",
+      "per_language_mean": "the unweighted mean of the seven per-language ratios — every language counts once, so a small language can lift it"
+    },
+    "aggregates": {
+      "languages": 7,
+      "comparable_queries": 26,
+      "tokens_pooled": 3.17,
+      "tokens_per_language_mean": 5.06,
+      "tokens_per_language_median": 3.66,
+      "tokens_worst_language": "cpp",
+      "tokens_worst_ratio": 1.41,
+      "latency_pooled": 4.03,
+      "latency_per_language_mean": 4.12,
+      "latency_per_language_median": 4.32,
+      "warm_serve_explain_ms_range": [
+        1.6,
+        14.9
+      ]
+    },
+    "rows": [
+      {
+        "language": "go",
+        "repo": "sirupsen/logrus",
+        "subdir": null,
+        "comparable_queries": 4,
+        "total_queries": 4,
+        "atlas_tokens_sum": 122,
+        "graphify_tokens_sum": 447,
+        "token_ratio": 3.66,
+        "atlas_ms_sum": 86.86,
+        "graphify_ms_sum": 375.6,
+        "latency_ratio": 4.32,
+        "warm_serve_explain_median_ms": [
+          4.374,
+          4.097,
+          3.725,
+          3.984
+        ],
+        "warm_serve_explain_mean_ms": 4.05,
+        "index": {
+          "files": 57,
+          "symbols": 733,
+          "edges": 3461
+        },
+        "queries": [
+          {
+            "symbol": "log",
+            "atlas_tokens": 12,
+            "graphify_tokens": 105,
+            "atlas_ms": 22.036,
+            "graphify_ms": 90.515
+          },
+          {
+            "symbol": "Log",
+            "atlas_tokens": 33,
+            "graphify_tokens": 105,
+            "atlas_ms": 22.251,
+            "graphify_ms": 100.243
+          },
+          {
+            "symbol": "newEntry",
+            "atlas_tokens": 38,
+            "graphify_tokens": 62,
+            "atlas_ms": 21.206,
+            "graphify_ms": 92.841
+          },
+          {
+            "symbol": "releaseEntry",
+            "atlas_tokens": 39,
+            "graphify_tokens": 175,
+            "atlas_ms": 21.37,
+            "graphify_ms": 91.999
+          }
+        ]
+      },
+      {
+        "language": "python",
+        "repo": "psf/requests",
+        "subdir": "src",
+        "comparable_queries": 4,
+        "total_queries": 4,
+        "atlas_tokens_sum": 63,
+        "graphify_tokens_sum": 856,
+        "token_ratio": 13.59,
+        "atlas_ms_sum": 77.76,
+        "graphify_ms_sum": 362.18,
+        "latency_ratio": 4.66,
+        "warm_serve_explain_median_ms": [
+          1.83,
+          3.996,
+          5.001,
+          3.17
+        ],
+        "warm_serve_explain_mean_ms": 3.5,
+        "index": {
+          "files": 19,
+          "symbols": 517,
+          "edges": 1887
+        },
+        "queries": [
+          {
+            "symbol": "RequestException",
+            "atlas_tokens": 8,
+            "graphify_tokens": 261,
+            "atlas_ms": 19.483,
+            "graphify_ms": 92.675
+          },
+          {
+            "symbol": "resolve_redirects",
+            "atlas_tokens": 14,
+            "graphify_tokens": 277,
+            "atlas_ms": 19.789,
+            "graphify_ms": 91.603
+          },
+          {
+            "symbol": "send",
+            "atlas_tokens": 18,
+            "graphify_tokens": 133,
+            "atlas_ms": 19.727,
+            "graphify_ms": 89.227
+          },
+          {
+            "symbol": "request",
+            "atlas_tokens": 23,
+            "graphify_tokens": 185,
+            "atlas_ms": 18.764,
+            "graphify_ms": 88.679
+          }
+        ]
+      },
+      {
+        "language": "javascript",
+        "repo": "expressjs/express",
+        "subdir": "lib",
+        "comparable_queries": 3,
+        "total_queries": 4,
+        "atlas_tokens_sum": 46,
+        "graphify_tokens_sum": 145,
+        "token_ratio": 3.15,
+        "atlas_ms_sum": 53.34,
+        "graphify_ms_sum": 233.3,
+        "latency_ratio": 4.37,
+        "warm_serve_explain_median_ms": [
+          1.801,
+          1.684,
+          1.492,
+          1.256
+        ],
+        "warm_serve_explain_mean_ms": 1.56,
+        "index": {
+          "files": 7,
+          "symbols": 313,
+          "edges": 511
+        },
+        "queries": [
+          {
+            "symbol": "defineGetter",
+            "atlas_tokens": 34,
+            "graphify_tokens": 47,
+            "atlas_ms": 17.774,
+            "graphify_ms": 78.157
+          },
+          {
+            "symbol": "sendFile",
+            "atlas_tokens": 7,
+            "graphify_tokens": 46,
+            "atlas_ms": 18.036,
+            "graphify_ms": 79.388
+          },
+          {
+            "symbol": "lookup",
+            "atlas_tokens": 5,
+            "graphify_tokens": 52,
+            "atlas_ms": 17.527,
+            "graphify_ms": 75.757
+          }
+        ]
+      },
+      {
+        "language": "typescript",
+        "repo": "pmndrs/zustand",
+        "subdir": "src",
+        "comparable_queries": 3,
+        "total_queries": 4,
+        "atlas_tokens_sum": 27,
+        "graphify_tokens_sum": 180,
+        "token_ratio": 6.67,
+        "atlas_ms_sum": 53.95,
+        "graphify_ms_sum": 235.39,
+        "latency_ratio": 4.36,
+        "warm_serve_explain_median_ms": [
+          2.341,
+          1.559,
+          1.552,
+          1.31
+        ],
+        "warm_serve_explain_mean_ms": 1.69,
+        "index": {
+          "files": 17,
+          "symbols": 227,
+          "edges": 386
+        },
+        "queries": [
+          {
+            "symbol": "devtoolsImpl",
+            "atlas_tokens": 7,
+            "graphify_tokens": 53,
+            "atlas_ms": 18.34,
+            "graphify_ms": 79.727
+          },
+          {
+            "symbol": "persistImpl",
+            "atlas_tokens": 7,
+            "graphify_tokens": 52,
+            "atlas_ms": 17.894,
+            "graphify_ms": 77.895
+          },
+          {
+            "symbol": "shallow",
+            "atlas_tokens": 13,
+            "graphify_tokens": 75,
+            "atlas_ms": 17.719,
+            "graphify_ms": 77.766
+          }
+        ]
+      },
+      {
+        "language": "java",
+        "repo": "google/gson",
+        "subdir": "gson/src/main/java",
+        "comparable_queries": 4,
+        "total_queries": 4,
+        "atlas_tokens_sum": 131,
+        "graphify_tokens_sum": 627,
+        "token_ratio": 4.79,
+        "atlas_ms_sum": 102.72,
+        "graphify_ms_sum": 388.98,
+        "latency_ratio": 3.79,
+        "warm_serve_explain_median_ms": [
+          8.971,
+          13.346,
+          7.088,
+          8.625
+        ],
+        "warm_serve_explain_mean_ms": 9.51,
+        "index": {
+          "files": 86,
+          "symbols": 1568,
+          "edges": 7203
+        },
+        "queries": [
+          {
+            "symbol": "peek",
+            "atlas_tokens": 73,
+            "graphify_tokens": 250,
+            "atlas_ms": 25.294,
+            "graphify_ms": 95.094
+          },
+          {
+            "symbol": "value",
+            "atlas_tokens": 14,
+            "graphify_tokens": 162,
+            "atlas_ms": 29.36,
+            "graphify_ms": 97.089
+          },
+          {
+            "symbol": "nextNull",
+            "atlas_tokens": 18,
+            "graphify_tokens": 91,
+            "atlas_ms": 23.955,
+            "graphify_ms": 100.694
+          },
+          {
+            "symbol": "nextString",
+            "atlas_tokens": 26,
+            "graphify_tokens": 124,
+            "atlas_ms": 24.107,
+            "graphify_ms": 96.098
+          }
+        ]
+      },
+      {
+        "language": "c",
+        "repo": "DaveGamble/cJSON",
+        "subdir": null,
+        "comparable_queries": 4,
+        "total_queries": 4,
+        "atlas_tokens_sum": 563,
+        "graphify_tokens_sum": 1207,
+        "token_ratio": 2.14,
+        "atlas_ms_sum": 94.43,
+        "graphify_ms_sum": 373.12,
+        "latency_ratio": 3.95,
+        "warm_serve_explain_median_ms": [
+          8.01,
+          7.533,
+          7.817,
+          7.439
+        ],
+        "warm_serve_explain_mean_ms": 7.7,
+        "index": {
+          "files": 178,
+          "symbols": 2080,
+          "edges": 7564
+        },
+        "queries": [
+          {
+            "symbol": "cJSON_Delete",
+            "atlas_tokens": 171,
+            "graphify_tokens": 284,
+            "atlas_ms": 24.13,
+            "graphify_ms": 93.13
+          },
+          {
+            "symbol": "UnityPrint",
+            "atlas_tokens": 148,
+            "graphify_tokens": 302,
+            "atlas_ms": 23.46,
+            "graphify_ms": 93.291
+          },
+          {
+            "symbol": "apply_patch",
+            "atlas_tokens": 28,
+            "graphify_tokens": 274,
+            "atlas_ms": 23.527,
+            "graphify_ms": 92.474
+          },
+          {
+            "symbol": "reset",
+            "atlas_tokens": 216,
+            "graphify_tokens": 347,
+            "atlas_ms": 23.313,
+            "graphify_ms": 94.226
+          }
+        ]
+      },
+      {
+        "language": "cpp",
+        "repo": "google/leveldb",
+        "subdir": null,
+        "comparable_queries": 4,
+        "total_queries": 4,
+        "atlas_tokens_sum": 255,
+        "graphify_tokens_sum": 360,
+        "token_ratio": 1.41,
+        "atlas_ms_sum": 123.81,
+        "graphify_ms_sum": 421.77,
+        "latency_ratio": 3.41,
+        "warm_serve_explain_median_ms": [
+          9.99,
+          20.424,
+          13.941,
+          15.042
+        ],
+        "warm_serve_explain_mean_ms": 14.85,
+        "index": {
+          "files": 144,
+          "symbols": 2099,
+          "edges": 14678
+        },
+        "queries": [
+          {
+            "symbol": "Size",
+            "atlas_tokens": 13,
+            "graphify_tokens": 72,
+            "atlas_ms": 26.521,
+            "graphify_ms": 105.917
+          },
+          {
+            "symbol": "size",
+            "atlas_tokens": 228,
+            "graphify_tokens": 72,
+            "atlas_ms": 37.265,
+            "graphify_ms": 105.473
+          },
+          {
+            "symbol": "main",
+            "atlas_tokens": 7,
+            "graphify_tokens": 66,
+            "atlas_ms": 29.813,
+            "graphify_ms": 105.756
+          },
+          {
+            "symbol": "BuildTable",
+            "atlas_tokens": 7,
+            "graphify_tokens": 150,
+            "atlas_ms": 30.213,
+            "graphify_ms": 104.627
+          }
+        ]
+      }
+    ]
+  },
+  "llmQa": {
+    "label": "Real-LLM caller-QA sweep",
+    "what": "a real model is handed ONE context source and asked which functions call `target`; the answer is scored against the fixture's constructed truth. This measures the context, not the model.",
+    "model": [
+      "claude-haiku-4-5-20251001"
+    ],
+    "sampling": "temperature 0 · 3 samples/cell · majority vote (threshold 2) · no tools",
+    "cells": 222,
+    "model_calls": 666,
+    "languages": 37,
+    "prompt": "Using ONLY the context below, list the names of the functions that directly call `target`. Answer with ONLY a comma-separated list of function names, nothing else. If the context does not list caller names, answer with an empty line.\n\nCONTEXT:\n<context>",
+    "definitions": {
+      "f1": "deterministic set F1 of the majority-voted caller-name list against the fixture truth (15 callers, 3 decoys, truth by construction)",
+      "ctx_tokens": "mean size of the context handed to the model, in tokens",
+      "controls": "`baseline` is a positive control — the raw fixture file, which contains the truth by construction, so its F1 of 1.000 confirms the judge works. It is a CEILING, not a competitor: Atlas does not beat it and does not claim to. `graphify` is the rival tool on the identical prompt and fixture."
+    },
+    "sources": {
+      "atlas_callers_xhigh": {
+        "cells": 37,
+        "f1": 0.8649,
+        "precision": 0.8649,
+        "recall": 0.8649,
+        "ctx_tokens": 230.1,
+        "perfect_languages": 32
+      },
+      "atlas_explain_high": {
+        "cells": 37,
+        "f1": 0.8649,
+        "precision": 0.8649,
+        "recall": 0.8649,
+        "ctx_tokens": 23.9,
+        "perfect_languages": 32
+      },
+      "atlas_explain_low": {
+        "cells": 37,
+        "f1": 0,
+        "precision": 0,
+        "recall": 0,
+        "ctx_tokens": 3.4,
+        "perfect_languages": 0
+      },
+      "atlas_explain_medium": {
+        "cells": 37,
+        "f1": 0.7688,
+        "precision": 0.8649,
+        "recall": 0.6919,
+        "ctx_tokens": 22.5,
+        "perfect_languages": 0
+      },
+      "baseline": {
+        "cells": 37,
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "ctx_tokens": 156.8,
+        "perfect_languages": 37
+      },
+      "graphify": {
+        "cells": 37,
+        "f1": 0.5405,
+        "precision": 0.5405,
+        "recall": 0.5405,
+        "ctx_tokens": 96.5,
+        "perfect_languages": 20
+      }
+    },
+    "detail_curve": [
+      {
+        "source": "atlas_explain_low",
+        "f1": 0,
+        "ctx_tokens": 3.4
+      },
+      {
+        "source": "atlas_explain_medium",
+        "f1": 0.7688,
+        "ctx_tokens": 22.5
+      },
+      {
+        "source": "atlas_explain_high",
+        "f1": 0.8649,
+        "ctx_tokens": 23.9
+      },
+      {
+        "source": "atlas_callers_xhigh",
+        "f1": 0.8649,
+        "ctx_tokens": 230.1
+      }
+    ],
+    "per_cell": [
+      {
+        "language": "go",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "go",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "go",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "go",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 251
+      },
+      {
+        "language": "go",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 162
+      },
+      {
+        "language": "go",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 125
+      },
+      {
+        "language": "python",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "python",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "python",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "python",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 203
+      },
+      {
+        "language": "python",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 162
+      },
+      {
+        "language": "python",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 115
+      },
+      {
+        "language": "javascript",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "javascript",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "javascript",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "javascript",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 270
+      },
+      {
+        "language": "javascript",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 162
+      },
+      {
+        "language": "javascript",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 141
+      },
+      {
+        "language": "typescript",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "typescript",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "typescript",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "typescript",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 292
+      },
+      {
+        "language": "typescript",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 162
+      },
+      {
+        "language": "typescript",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 170
+      },
+      {
+        "language": "java",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "java",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "java",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "java",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 282
+      },
+      {
+        "language": "java",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 166
+      },
+      {
+        "language": "java",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 188
+      },
+      {
+        "language": "c",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "c",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "c",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "c",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 251
+      },
+      {
+        "language": "c",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 161
+      },
+      {
+        "language": "c",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 133
+      },
+      {
+        "language": "cpp",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "cpp",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "cpp",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "cpp",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 259
+      },
+      {
+        "language": "cpp",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 162
+      },
+      {
+        "language": "cpp",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 133
+      },
+      {
+        "language": "rust",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "rust",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "rust",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "rust",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 247
+      },
+      {
+        "language": "rust",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 162
+      },
+      {
+        "language": "rust",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 118
+      },
+      {
+        "language": "ruby",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "ruby",
+        "source": "atlas_explain_medium",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "ruby",
+        "source": "atlas_explain_high",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "ruby",
+        "source": "atlas_callers_xhigh",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 5
+      },
+      {
+        "language": "ruby",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 41
+      },
+      {
+        "language": "ruby",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 99
+      },
+      {
+        "language": "php",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "php",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "php",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "php",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 274
+      },
+      {
+        "language": "php",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 162
+      },
+      {
+        "language": "php",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 137
+      },
+      {
+        "language": "csharp",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 4
+      },
+      {
+        "language": "csharp",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 26
+      },
+      {
+        "language": "csharp",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "csharp",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 274
+      },
+      {
+        "language": "csharp",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 166
+      },
+      {
+        "language": "csharp",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 189
+      },
+      {
+        "language": "kotlin",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "kotlin",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "kotlin",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "kotlin",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 247
+      },
+      {
+        "language": "kotlin",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 162
+      },
+      {
+        "language": "kotlin",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 117
+      },
+      {
+        "language": "swift",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "swift",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "swift",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "swift",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 262
+      },
+      {
+        "language": "swift",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 163
+      },
+      {
+        "language": "swift",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 113
+      },
+      {
+        "language": "scala",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "scala",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "scala",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "scala",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 281
+      },
+      {
+        "language": "scala",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 175
+      },
+      {
+        "language": "scala",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 175
+      },
+      {
+        "language": "lua",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "lua",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "lua",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "lua",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 270
+      },
+      {
+        "language": "lua",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 162
+      },
+      {
+        "language": "lua",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 133
+      },
+      {
+        "language": "powershell",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "powershell",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "powershell",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "powershell",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 255
+      },
+      {
+        "language": "powershell",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 162
+      },
+      {
+        "language": "powershell",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 120
+      },
+      {
+        "language": "bash",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 4
+      },
+      {
+        "language": "bash",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 26
+      },
+      {
+        "language": "bash",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "bash",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 229
+      },
+      {
+        "language": "bash",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 161
+      },
+      {
+        "language": "bash",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 90
+      },
+      {
+        "language": "zig",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "zig",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "zig",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "zig",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 270
+      },
+      {
+        "language": "zig",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 162
+      },
+      {
+        "language": "zig",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 138
+      },
+      {
+        "language": "elixir",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "elixir",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "elixir",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 26
+      },
+      {
+        "language": "elixir",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 248
+      },
+      {
+        "language": "elixir",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 41
+      },
+      {
+        "language": "elixir",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 132
+      },
+      {
+        "language": "objc",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "objc",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "objc",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "objc",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 266
+      },
+      {
+        "language": "objc",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 8
+      },
+      {
+        "language": "objc",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 157
+      },
+      {
+        "language": "julia",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "julia",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "julia",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 26
+      },
+      {
+        "language": "julia",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 215
+      },
+      {
+        "language": "julia",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 160
+      },
+      {
+        "language": "julia",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 160
+      },
+      {
+        "language": "fortran",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "fortran",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "fortran",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 26
+      },
+      {
+        "language": "fortran",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 226
+      },
+      {
+        "language": "fortran",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 161
+      },
+      {
+        "language": "fortran",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 283
+      },
+      {
+        "language": "dart",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "dart",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "dart",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "dart",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 210
+      },
+      {
+        "language": "dart",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 42
+      },
+      {
+        "language": "dart",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 126
+      },
+      {
+        "language": "verilog",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "verilog",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "verilog",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "verilog",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 241
+      },
+      {
+        "language": "verilog",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 41
+      },
+      {
+        "language": "verilog",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 234
+      },
+      {
+        "language": "pascal",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "pascal",
+        "source": "atlas_explain_medium",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "pascal",
+        "source": "atlas_explain_high",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "pascal",
+        "source": "atlas_callers_xhigh",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 5
+      },
+      {
+        "language": "pascal",
+        "source": "graphify",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 161
+      },
+      {
+        "language": "pascal",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 171
+      },
+      {
+        "language": "byond",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "byond",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "byond",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "byond",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 199
+      },
+      {
+        "language": "byond",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 8
+      },
+      {
+        "language": "byond",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 119
+      },
+      {
+        "language": "razor",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 1
+      },
+      {
+        "language": "razor",
+        "source": "atlas_explain_medium",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 1
+      },
+      {
+        "language": "razor",
+        "source": "atlas_explain_high",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 1
+      },
+      {
+        "language": "razor",
+        "source": "atlas_callers_xhigh",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 5
+      },
+      {
+        "language": "razor",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 8
+      },
+      {
+        "language": "razor",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 134
+      },
+      {
+        "language": "vue",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 3
+      },
+      {
+        "language": "vue",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 25
+      },
+      {
+        "language": "vue",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 26
+      },
+      {
+        "language": "vue",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 270
+      },
+      {
+        "language": "vue",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 8
+      },
+      {
+        "language": "vue",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 162
+      },
+      {
+        "language": "svelte",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 5
+      },
+      {
+        "language": "svelte",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "svelte",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 28
+      },
+      {
+        "language": "svelte",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 282
+      },
+      {
+        "language": "svelte",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 8
+      },
+      {
+        "language": "svelte",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 155
+      },
+      {
+        "language": "astro",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 5
+      },
+      {
+        "language": "astro",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "astro",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 28
+      },
+      {
+        "language": "astro",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 278
+      },
+      {
+        "language": "astro",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 8
+      },
+      {
+        "language": "astro",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 143
+      },
+      {
+        "language": "ejs",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 4
+      },
+      {
+        "language": "ejs",
+        "source": "atlas_explain_medium",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 10
+      },
+      {
+        "language": "ejs",
+        "source": "atlas_explain_high",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 10
+      },
+      {
+        "language": "ejs",
+        "source": "atlas_callers_xhigh",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 17
+      },
+      {
+        "language": "ejs",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 8
+      },
+      {
+        "language": "ejs",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 142
+      },
+      {
+        "language": "ets",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 5
+      },
+      {
+        "language": "ets",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "ets",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 28
+      },
+      {
+        "language": "ets",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 300
+      },
+      {
+        "language": "ets",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 8
+      },
+      {
+        "language": "ets",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 189
+      },
+      {
+        "language": "r",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 4
+      },
+      {
+        "language": "r",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 26
+      },
+      {
+        "language": "r",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "r",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 270
+      },
+      {
+        "language": "r",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 8
+      },
+      {
+        "language": "r",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 156
+      },
+      {
+        "language": "apex",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 7
+      },
+      {
+        "language": "apex",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 29
+      },
+      {
+        "language": "apex",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 30
+      },
+      {
+        "language": "apex",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 292
+      },
+      {
+        "language": "apex",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 52
+      },
+      {
+        "language": "apex",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 222
+      },
+      {
+        "language": "blade",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 1
+      },
+      {
+        "language": "blade",
+        "source": "atlas_explain_medium",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 1
+      },
+      {
+        "language": "blade",
+        "source": "atlas_explain_high",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 1
+      },
+      {
+        "language": "blade",
+        "source": "atlas_callers_xhigh",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 5
+      },
+      {
+        "language": "blade",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 8
+      },
+      {
+        "language": "blade",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 143
+      },
+      {
+        "language": "groovy",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 5
+      },
+      {
+        "language": "groovy",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "groovy",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 28
+      },
+      {
+        "language": "groovy",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 251
+      },
+      {
+        "language": "groovy",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 8
+      },
+      {
+        "language": "groovy",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 113
+      },
+      {
+        "language": "sql",
+        "source": "atlas_explain_low",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 4
+      },
+      {
+        "language": "sql",
+        "source": "atlas_explain_medium",
+        "precision": 1,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "ctx_tokens": 26
+      },
+      {
+        "language": "sql",
+        "source": "atlas_explain_high",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 27
+      },
+      {
+        "language": "sql",
+        "source": "atlas_callers_xhigh",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 513
+      },
+      {
+        "language": "sql",
+        "source": "graphify",
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "ctx_tokens": 8
+      },
+      {
+        "language": "sql",
+        "source": "baseline",
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "ctx_tokens": 427
+      }
+    ]
+  },
+  "liveSummary": {
+    "label": "36 live public repositories",
+    "platform": "Darwin arm64 (macOS)",
+    "atlasBinary": "atlas v0.1.47-256-gfc68e26-dirty (fc68e26, 2026-08-05T06:32:22Z)",
+    "stubBinary": "v0.1.26-4-gd882e08",
+    "retraction": "the `*_old` columns are the binary this page's previous live-repo multipliers were measured against. That build answered caller queries with a 2-token placeholder: across all 224 live answers it listed ZERO callers. Its ratios measured an empty answer, not a cheaper one, and are published here only so the retraction can be checked.",
+    "comparability": "a query counts only when BOTH tools returned an answer; the stub column keeps its own comparability set because the stub answered where the current CLI sometimes declines",
+    "definitions": {
+      "per_language_ratio": "median(graphify tokens) / median(atlas tokens) over that language's comparable queries — a ratio of medians, robust to one runaway symbol",
+      "median_across_languages": "the median of the 36 per-language ratios; each language counts once regardless of how many queries it contributed",
+      "pooled_sum": "sum(graphify) / sum(atlas) over all comparable queries at once",
+      "per_query_median": "the median of the per-query ratios across all comparable queries",
+      "cli": "`atlas explain` run as a one-shot process, spawn included — what a shell loop or an agent shelling out actually pays",
+      "serve": "the same query against a warm `atlas serve` daemon. NOTE: at this SHA the serve endpoint still returns the reduced answer shape; see the serve-parity note in the methods section"
+    },
+    "answerQuality": {
+      "callers_listed_stub": 0,
+      "callers_listed_cli": 64,
+      "total_answers": 224,
+      "note": "number of live answers that named at least one caller. The stub scored 0 of 224."
+    },
+    "scorecard": {
+      "threshold": 10,
+      "token_at_or_above_threshold_cli": 11,
+      "token_at_or_above_threshold_serve": 17,
+      "token_at_or_above_threshold_stub": 32,
+      "latency_at_or_above_threshold_cli": 2,
+      "latency_at_or_above_threshold_serve": 10,
+      "latency_at_or_above_threshold_stub": 36,
+      "of": 36
+    },
+    "headline": {
+      "basis": "answer-bearing languages only",
+      "definition": "a language counts when its Atlas CLI answers named at least one caller across the run. On the excluded repositories Atlas returns a bare name or a name and a location, so the ratio measures a non-answer and is not published as a win.",
+      "languages": 25,
+      "of": 36,
+      "comparable_queries": 147,
+      "tokens_median_across_languages_cli": 4.25,
+      "tokens_median_across_languages_serve": 8.9,
+      "tokens_pooled_sum_cli": 3.7,
+      "tokens_pooled_sum_serve": 13.3,
+      "latency_median_across_languages_cli": 4.78,
+      "latency_pooled_sum_cli": 5.71,
+      "token_at_or_above_threshold_cli": 6
+    },
+    "excluded": {
+      "languages": [
+        "astro",
+        "blade",
+        "byond",
+        "delphi",
+        "ejs",
+        "lua",
+        "powershell",
+        "rust",
+        "scala",
+        "sql",
+        "terraform"
+      ],
+      "count": 11,
+      "why": "the Atlas CLI named no caller on these repositories at this commit, so their token ratios describe the size difference between two non-answers. Several are large (lua 35.8×, rust 46.1×, terraform 38.5×) and every one of them is excluded from the headline for that reason.",
+      "note": "Some of these are probe artefacts rather than binder gaps — byond's probes are markdown headings, rust's are type names — but the ratio is unusable either way, so the distinction does not rescue the number."
+    },
+    "aggregatesAsMeasured": {
+      "note": "all 36 languages, including the 11 that named no caller. Published for completeness and for comparison with the retracted rows; NOT the headline.",
+      "languages": 36,
+      "comparable_queries": 199,
+      "total_queries": 224,
+      "tokens_median_across_languages_cli": 6.21,
+      "tokens_median_across_languages_serve": 9.34,
+      "tokens_pooled_sum_cli": 4.82,
+      "tokens_pooled_sum_serve": 14.44,
+      "tokens_per_query_median_cli": 5.22,
+      "tokens_per_query_median_serve": 8.38,
+      "latency_median_across_languages_cli": 4.66,
+      "latency_median_across_languages_serve": 6.84,
+      "latency_pooled_sum_cli": 6.2,
+      "latency_pooled_sum_serve": 8.92,
+      "latency_per_query_median_cli": 5.12,
+      "latency_per_query_median_serve": 8.33
+    },
+    "vsStub": {
+      "fell": 33,
+      "rose": [
+        {
+          "language": "byond",
+          "token_ratio_stub": 17,
+          "token_ratio_cli": 38.25,
+          "callers_listed_cli": 0
+        },
+        {
+          "language": "r",
+          "token_ratio_stub": 91.44,
+          "token_ratio_cli": 274.33,
+          "callers_listed_cli": 4
+        }
+      ],
+      "why_fell": "the stub's larger ratio came from a two-token non-answer. The current CLI returns a real answer and therefore spends real tokens, so almost every honest multiplier is SMALLER than the one it replaces.",
+      "why_rose": "byond's ratio grew while still naming zero callers — a bigger multiplier for the same empty answer, which is why it is excluded from the headline. r's 274× is a single-language outlier on a detector-only comparison and is not representative of anything.",
+      "biggest_drops": [
+        {
+          "language": "terraform",
+          "from": 144.25,
+          "to": 38.47
+        },
+        {
+          "language": "kotlin",
+          "from": 119.5,
+          "to": 18.38
+        },
+        {
+          "language": "zig",
+          "from": 129.5,
+          "to": 37
+        },
+        {
+          "language": "csharp",
+          "from": 99.75,
+          "to": 11.08
+        },
+        {
+          "language": "rust",
+          "from": 126.75,
+          "to": 46.09
+        }
+      ]
+    },
+    "serveNote": "The serve lane above was measured against the serve endpoint as it behaves at this commit, which still returns the reduced answer shape rather than the CLI's full one. Issue #144 is filed to bring serve to CLI parity in 0.1.51; until it lands, quote the CLI column.",
+    "artifact": "data/raw/LIVE36_REFRESH_PUBLIC.json"
   },
   "liveRepos": [
     {
       "lang": "apex",
       "repo": "trailheadapps/apex-recipes",
-      "symbols": 5221,
-      "coldS": 1.154,
-      "reindexS": 0.046,
-      "coverageRatio": 1.215,
+      "commit7": "cb5cd9d",
+      "symbols": 3018,
+      "edges": 4492,
+      "files": 503,
+      "coldS": 0.977,
       "queries": 12,
-      "perQueryMs": 8.31,
-      "tokenRatio": 14.54,
-      "latencyRatio": 26.82
+      "comparable": 12,
+      "perQueryMs": 19.8,
+      "perQueryServeMs": 12.86,
+      "perQueryTok": 10,
+      "answerBearing": true,
+      "tokenRatioCli": 2.4,
+      "tokenRatioServe": 3,
+      "latencyRatioCli": 11.25,
+      "latencyRatioServe": 17.31,
+      "tokenRatioStub": 12,
+      "latencyRatioStub": 27.05,
+      "callersListedCli": 3,
+      "callersListedStub": 0
     },
     {
       "lang": "astro",
       "repo": "withastro/blog-tutorial-demo",
-      "symbols": 68,
-      "coldS": 0.09,
-      "reindexS": 0.03,
-      "coverageRatio": 1.0862,
+      "commit7": "0859a3e",
+      "symbols": 67,
+      "edges": 68,
+      "files": 22,
+      "coldS": 0.166,
       "queries": 6,
-      "perQueryMs": 7.9,
-      "tokenRatio": 13.17,
-      "latencyRatio": 13.54
+      "comparable": 6,
+      "perQueryMs": 17.35,
+      "perQueryServeMs": 9.79,
+      "perQueryTok": 7,
+      "answerBearing": false,
+      "tokenRatioCli": 3,
+      "tokenRatioServe": 3.82,
+      "latencyRatioCli": 6.2,
+      "latencyRatioServe": 10.99,
+      "tokenRatioStub": 10.5,
+      "latencyRatioStub": 13.51,
+      "callersListedCli": 0,
+      "callersListedStub": 0
     },
     {
       "lang": "bash",
       "repo": "nvm-sh/nvm",
-      "symbols": 481,
-      "coldS": 0.337,
-      "reindexS": 0.019,
-      "coverageRatio": 1.044,
+      "commit7": "a6ec739",
+      "symbols": 924,
+      "edges": 1274,
+      "files": 66,
+      "coldS": 0.491,
       "queries": 4,
-      "perQueryMs": 7.75,
-      "tokenRatio": 24,
-      "latencyRatio": 14.85
+      "comparable": 4,
+      "perQueryMs": 22.59,
+      "perQueryServeMs": 16.02,
+      "perQueryTok": 33,
+      "answerBearing": true,
+      "tokenRatioCli": 1.06,
+      "tokenRatioServe": 5.83,
+      "latencyRatioCli": 5.12,
+      "latencyRatioServe": 7.22,
+      "tokenRatioStub": 17.5,
+      "latencyRatioStub": 14.83,
+      "callersListedCli": 4,
+      "callersListedStub": 0
     },
     {
       "lang": "blade",
       "repo": "BookStackApp/BookStack",
-      "symbols": 1093,
-      "coldS": 0.138,
-      "reindexS": 0.019,
-      "coverageRatio": 1.0028,
+      "commit7": "f7df78b",
+      "symbols": 1563,
+      "edges": 4578,
+      "files": 304,
+      "coldS": 0.582,
       "queries": 6,
-      "perQueryMs": 7.59,
-      "tokenRatio": 31.5,
-      "latencyRatio": 12.36
+      "comparable": 6,
+      "perQueryMs": 30.92,
+      "perQueryServeMs": 20.18,
+      "perQueryTok": 10,
+      "answerBearing": false,
+      "tokenRatioCli": 5.95,
+      "tokenRatioServe": 7,
+      "latencyRatioCli": 2.92,
+      "latencyRatioServe": 4.48,
+      "tokenRatioStub": 29.75,
+      "latencyRatioStub": 12.22,
+      "callersListedCli": 0,
+      "callersListedStub": 0
     },
     {
       "lang": "byond",
       "repo": "tgstation/tgstation",
-      "symbols": 10933,
-      "coldS": 0.614,
-      "reindexS": 0.017,
-      "coverageRatio": 1.2311,
+      "commit7": "ba6e479",
+      "symbols": 10906,
+      "edges": 31690,
+      "files": 616,
+      "coldS": 1.844,
       "queries": 5,
-      "perQueryMs": 0.49,
-      "tokenRatio": 16.33,
-      "latencyRatio": 157.27
+      "comparable": 5,
+      "perQueryMs": 34.44,
+      "perQueryServeMs": 25.81,
+      "perQueryTok": 4,
+      "answerBearing": false,
+      "tokenRatioCli": 38.25,
+      "tokenRatioServe": 38.25,
+      "latencyRatioCli": 2.23,
+      "latencyRatioServe": 2.98,
+      "tokenRatioStub": 17,
+      "latencyRatioStub": 156.13,
+      "callersListedCli": 0,
+      "callersListedStub": 0
     },
     {
       "lang": "csharp",
       "repo": "DapperLib/Dapper",
-      "symbols": 3152,
-      "coldS": 0.323,
-      "reindexS": 0.037,
-      "coverageRatio": 1.84,
+      "commit7": "72a54c4",
+      "symbols": 3205,
+      "edges": 7505,
+      "files": 210,
+      "coldS": 0.733,
       "queries": 4,
-      "perQueryMs": 7.2,
-      "tokenRatio": 95.5,
-      "latencyRatio": 16.18
+      "comparable": 4,
+      "perQueryMs": 26.35,
+      "perQueryServeMs": 19.35,
+      "perQueryTok": 18,
+      "answerBearing": true,
+      "tokenRatioCli": 11.08,
+      "tokenRatioServe": 18.14,
+      "latencyRatioCli": 4.38,
+      "latencyRatioServe": 5.96,
+      "tokenRatioStub": 99.75,
+      "latencyRatioStub": 16.28,
+      "callersListedCli": 2,
+      "callersListedStub": 0
     },
     {
       "lang": "cuda",
       "repo": "NVIDIA/cuda-samples",
-      "symbols": 15,
-      "coldS": 0.18,
-      "reindexS": 0.04,
-      "coverageRatio": 1.3333,
+      "commit7": "b7c5481",
+      "symbols": 6,
+      "edges": 66,
+      "files": 5,
+      "coldS": 0.244,
       "queries": 4,
-      "perQueryMs": 0.54,
-      "tokenRatio": 19,
-      "latencyRatio": 209.55
+      "comparable": 4,
+      "perQueryMs": 22.67,
+      "perQueryServeMs": 13.9,
+      "perQueryTok": 13,
+      "answerBearing": true,
+      "tokenRatioCli": 2.85,
+      "tokenRatioServe": 4.11,
+      "latencyRatioCli": 5.07,
+      "latencyRatioServe": 8.27,
+      "tokenRatioStub": 18.5,
+      "latencyRatioStub": 210,
+      "callersListedCli": 2,
+      "callersListedStub": 0
     },
     {
       "lang": "dart",
       "repo": "dart-lang/http",
+      "commit7": "5d94ef5",
       "symbols": 238,
-      "coldS": 0.055,
-      "reindexS": 0.005,
-      "coverageRatio": 1.3222,
+      "edges": 544,
+      "files": 27,
+      "coldS": 0.465,
       "queries": 6,
-      "perQueryMs": 7.77,
-      "tokenRatio": 29.17,
-      "latencyRatio": 10.61
+      "comparable": 6,
+      "perQueryMs": 20.01,
+      "perQueryServeMs": 12.21,
+      "perQueryTok": 13,
+      "answerBearing": true,
+      "tokenRatioCli": 4.08,
+      "tokenRatioServe": 10.6,
+      "latencyRatioCli": 4.01,
+      "latencyRatioServe": 6.57,
+      "tokenRatioStub": 26.5,
+      "latencyRatioStub": 10.44,
+      "callersListedCli": 3,
+      "callersListedStub": 0
     },
     {
       "lang": "delphi",
       "repo": "fpc/Lazarus",
-      "symbols": 39161,
-      "coldS": 2.723,
-      "reindexS": 0.073,
-      "coverageRatio": 3.4626,
+      "commit7": "a37c7c3",
+      "symbols": 39879,
+      "edges": 65490,
+      "files": 594,
+      "coldS": 4.426,
       "queries": 9,
-      "perQueryMs": 8.36,
-      "tokenRatio": 20.17,
-      "latencyRatio": 69.27
+      "comparable": 9,
+      "perQueryMs": 15.83,
+      "perQueryServeMs": 7.82,
+      "perQueryTok": 8,
+      "answerBearing": false,
+      "tokenRatioCli": 2.38,
+      "tokenRatioServe": 3.17,
+      "latencyRatioCli": 36.52,
+      "latencyRatioServe": 73.93,
+      "tokenRatioStub": 9.5,
+      "latencyRatioStub": 69.33,
+      "callersListedCli": 0,
+      "callersListedStub": 0
     },
     {
       "lang": "dotnet",
       "repo": "DapperLib/Dapper",
-      "symbols": 3152,
-      "coldS": 0.485,
-      "reindexS": 0.046,
-      "coverageRatio": 17.235,
+      "commit7": "72a54c4",
+      "symbols": 3205,
+      "edges": 7505,
+      "files": 210,
+      "coldS": 0.688,
       "queries": 10,
-      "perQueryMs": 7.98,
-      "tokenRatio": 24.1,
-      "latencyRatio": 21
+      "comparable": 10,
+      "perQueryMs": 22.78,
+      "perQueryServeMs": 14.98,
+      "perQueryTok": 13,
+      "answerBearing": true,
+      "tokenRatioCli": 1.46,
+      "tokenRatioServe": 2,
+      "latencyRatioCli": 7.24,
+      "latencyRatioServe": 11.01,
+      "tokenRatioStub": 9.5,
+      "latencyRatioStub": 20.95,
+      "callersListedCli": 3,
+      "callersListedStub": 0
     },
     {
       "lang": "ejs",
       "repo": "expressjs/express",
+      "commit7": "18e5985",
       "symbols": 280,
-      "coldS": 0.226,
-      "reindexS": 0.062,
-      "coverageRatio": 2.278,
+      "edges": 785,
+      "files": 77,
+      "coldS": 0.221,
       "queries": 7,
-      "perQueryMs": 0.07,
-      "tokenRatio": 16,
-      "latencyRatio": 149.12
+      "comparable": 1,
+      "perQueryMs": 17.03,
+      "perQueryServeMs": 8.89,
+      "perQueryTok": 6,
+      "answerBearing": false,
+      "tokenRatioCli": 8,
+      "tokenRatioServe": 12,
+      "latencyRatioCli": 4.53,
+      "latencyRatioServe": 5.67,
+      "tokenRatioStub": 16,
+      "latencyRatioStub": 149.12,
+      "callersListedCli": 0,
+      "callersListedStub": 0
     },
     {
       "lang": "elixir",
       "repo": "phoenixframework/phoenix",
+      "commit7": "9d3f1f6",
       "symbols": 1661,
-      "coldS": 2.198,
-      "reindexS": 0.029,
-      "coverageRatio": 1.0116,
+      "edges": 4522,
+      "files": 74,
+      "coldS": 0.373,
       "queries": 5,
-      "perQueryMs": 7.92,
-      "tokenRatio": 31.1,
-      "latencyRatio": 16.24
+      "comparable": 5,
+      "perQueryMs": 23.1,
+      "perQueryServeMs": 14.99,
+      "perQueryTok": 8,
+      "answerBearing": true,
+      "tokenRatioCli": 8.88,
+      "tokenRatioServe": 11.83,
+      "latencyRatioCli": 5.54,
+      "latencyRatioServe": 8.55,
+      "tokenRatioStub": 35.5,
+      "latencyRatioStub": 16.18,
+      "callersListedCli": 2,
+      "callersListedStub": 0
     },
     {
       "lang": "ets",
       "repo": "openharmony/applications_app_samples",
+      "commit7": "a826ab0",
       "symbols": 165,
-      "coldS": 0.117,
-      "reindexS": 0.021,
-      "coverageRatio": 1.0523,
+      "edges": 754,
+      "files": 18,
+      "coldS": 0.164,
       "queries": 13,
-      "perQueryMs": 0.21,
-      "tokenRatio": 36.69,
-      "latencyRatio": 145.56
+      "comparable": 5,
+      "perQueryMs": 19.85,
+      "perQueryServeMs": 19.85,
+      "perQueryTok": 11,
+      "answerBearing": true,
+      "tokenRatioCli": 8.9,
+      "tokenRatioServe": 8.9,
+      "latencyRatioCli": 4,
+      "latencyRatioServe": 4,
+      "tokenRatioStub": 29.67,
+      "latencyRatioStub": 151.09,
+      "callersListedCli": 1,
+      "callersListedStub": 0
     },
     {
       "lang": "fortran",
       "repo": "fortran-lang/stdlib",
-      "symbols": 415,
-      "coldS": 0.104,
-      "reindexS": 0.534,
-      "coverageRatio": 1.0604,
+      "commit7": "4c8521d",
+      "symbols": 428,
+      "edges": 4937,
+      "files": 53,
+      "coldS": 0.357,
       "queries": 6,
-      "perQueryMs": 8.56,
-      "tokenRatio": 31.83,
-      "latencyRatio": 15.86
+      "comparable": 6,
+      "perQueryMs": 18.32,
+      "perQueryServeMs": 10.63,
+      "perQueryTok": 8,
+      "answerBearing": true,
+      "tokenRatioCli": 8.12,
+      "tokenRatioServe": 8.12,
+      "latencyRatioCli": 7.41,
+      "latencyRatioServe": 12.77,
+      "tokenRatioStub": 32.5,
+      "latencyRatioStub": 15.87,
+      "callersListedCli": 2,
+      "callersListedStub": 0
     },
     {
       "lang": "groovy",
       "repo": "nextflow-io/nextflow",
-      "symbols": 3989,
-      "coldS": 0.897,
-      "reindexS": 0.023,
-      "coverageRatio": 1.59,
+      "commit7": "83d452a",
+      "symbols": 1063,
+      "edges": 3681,
+      "files": 100,
+      "coldS": 0.481,
       "queries": 5,
-      "perQueryMs": 7.31,
-      "tokenRatio": 39.9,
-      "latencyRatio": 11.79
+      "comparable": 5,
+      "perQueryMs": 23.42,
+      "perQueryServeMs": 12.84,
+      "perQueryTok": 7,
+      "answerBearing": true,
+      "tokenRatioCli": 11,
+      "tokenRatioServe": 19.25,
+      "latencyRatioCli": 3.7,
+      "latencyRatioServe": 6.75,
+      "tokenRatioStub": 38.5,
+      "latencyRatioStub": 12.02,
+      "callersListedCli": 1,
+      "callersListedStub": 0
     },
     {
       "lang": "json",
       "repo": "eslint/create-config",
-      "symbols": 252,
-      "coldS": 0.173,
-      "reindexS": 0.041,
-      "coverageRatio": 1.483,
+      "commit7": "58d77fc",
+      "symbols": 237,
+      "edges": 428,
+      "files": 27,
+      "coldS": 0.328,
       "queries": 12,
-      "perQueryMs": 7.5,
-      "tokenRatio": 18.83,
-      "latencyRatio": 14.82
+      "comparable": 12,
+      "perQueryMs": 17.89,
+      "perQueryServeMs": 10.25,
+      "perQueryTok": 17,
+      "answerBearing": true,
+      "tokenRatioCli": 2.18,
+      "tokenRatioServe": 5.69,
+      "latencyRatioCli": 6.19,
+      "latencyRatioServe": 10.81,
+      "tokenRatioStub": 18.5,
+      "latencyRatioStub": 14.78,
+      "callersListedCli": 8,
+      "callersListedStub": 0
     },
     {
       "lang": "julia",
       "repo": "JuliaIO/JSON.jl",
+      "commit7": "e5ef310",
       "symbols": 312,
-      "coldS": 0.054,
-      "reindexS": 0.005,
-      "coverageRatio": 1.0065,
+      "edges": 1150,
+      "files": 6,
+      "coldS": 0.204,
       "queries": 6,
-      "perQueryMs": 5.98,
-      "tokenRatio": 36.9,
-      "latencyRatio": 10.23
+      "comparable": 5,
+      "perQueryMs": 19.72,
+      "perQueryServeMs": 12.05,
+      "perQueryTok": 17,
+      "answerBearing": true,
+      "tokenRatioCli": 3.19,
+      "tokenRatioServe": 12.75,
+      "latencyRatioCli": 3.69,
+      "latencyRatioServe": 5.99,
+      "tokenRatioStub": 25.5,
+      "latencyRatioStub": 10.33,
+      "callersListedCli": 4,
+      "callersListedStub": 0
     },
     {
       "lang": "kotlin",
       "repo": "square/okhttp",
-      "symbols": 7848,
-      "coldS": 1.636,
-      "reindexS": 0.024,
-      "coverageRatio": 1.01,
+      "commit7": "0cadfa2",
+      "symbols": 2691,
+      "edges": 7683,
+      "files": 138,
+      "coldS": 0.832,
       "queries": 5,
-      "perQueryMs": 7.87,
-      "tokenRatio": 89.3,
-      "latencyRatio": 13.19
+      "comparable": 5,
+      "perQueryMs": 25.97,
+      "perQueryServeMs": 20.91,
+      "perQueryTok": 13,
+      "answerBearing": true,
+      "tokenRatioCli": 18.38,
+      "tokenRatioServe": 47.8,
+      "latencyRatioCli": 3.99,
+      "latencyRatioServe": 4.96,
+      "tokenRatioStub": 119.5,
+      "latencyRatioStub": 14.21,
+      "callersListedCli": 5,
+      "callersListedStub": 0
     },
     {
       "lang": "lua",
       "repo": "folke/lazy.nvim",
-      "symbols": 3441,
-      "coldS": 0.706,
-      "reindexS": 0.024,
-      "coverageRatio": 1.24,
+      "commit7": "306a055",
+      "symbols": 747,
+      "edges": 3174,
+      "files": 90,
+      "coldS": 0.274,
       "queries": 4,
-      "perQueryMs": 7.47,
-      "tokenRatio": 43.38,
-      "latencyRatio": 12.13
+      "comparable": 4,
+      "perQueryMs": 17.27,
+      "perQueryServeMs": 9.68,
+      "perQueryTok": 2,
+      "answerBearing": false,
+      "tokenRatioCli": 35.75,
+      "tokenRatioServe": 35.75,
+      "latencyRatioCli": 5.24,
+      "latencyRatioServe": 9.35,
+      "tokenRatioStub": 35.75,
+      "latencyRatioStub": 12.36,
+      "callersListedCli": 0,
+      "callersListedStub": 0
     },
     {
       "lang": "markdown",
       "repo": "rust-lang/mdBook",
-      "symbols": 161,
-      "coldS": 0.211,
-      "reindexS": 0.041,
-      "coverageRatio": 1.026,
+      "commit7": "cb49cc5",
+      "symbols": 47,
+      "edges": 25,
+      "files": 38,
+      "coldS": 0.174,
       "queries": 6,
-      "perQueryMs": 7.55,
-      "tokenRatio": 14.5,
-      "latencyRatio": 14.73
+      "comparable": 6,
+      "perQueryMs": 15.81,
+      "perQueryServeMs": 7.86,
+      "perQueryTok": 5.5,
+      "answerBearing": true,
+      "tokenRatioCli": 6.73,
+      "tokenRatioServe": 7.4,
+      "latencyRatioCli": 7.05,
+      "latencyRatioServe": 14.18,
+      "tokenRatioStub": 14.8,
+      "latencyRatioStub": 14.78,
+      "callersListedCli": 1,
+      "callersListedStub": 0
     },
     {
       "lang": "objc",
       "repo": "SDWebImage/SDWebImage",
-      "symbols": 979,
-      "coldS": 0.132,
-      "reindexS": 0.026,
-      "coverageRatio": 1.0021,
+      "commit7": "c3ad5e1",
+      "symbols": 1508,
+      "edges": 5614,
+      "files": 147,
+      "coldS": 0.641,
       "queries": 5,
-      "perQueryMs": 6.23,
-      "tokenRatio": 103.38,
-      "latencyRatio": 11.88
+      "comparable": 4,
+      "perQueryMs": 23.01,
+      "perQueryServeMs": 15.69,
+      "perQueryTok": 11,
+      "answerBearing": true,
+      "tokenRatioCli": 17.85,
+      "tokenRatioServe": 22.31,
+      "latencyRatioCli": 3.77,
+      "latencyRatioServe": 5.72,
+      "tokenRatioStub": 89.25,
+      "latencyRatioStub": 12.25,
+      "callersListedCli": 1,
+      "callersListedStub": 0
     },
     {
       "lang": "pascal",
       "repo": "remobjects/pascalscript",
+      "commit7": "2c826cd",
       "symbols": 6505,
-      "coldS": 0.765,
-      "reindexS": 0.047,
-      "coverageRatio": 1.0067,
+      "edges": 21232,
+      "files": 126,
+      "coldS": 1.78,
       "queries": 11,
-      "perQueryMs": 8.12,
-      "tokenRatio": 19.5,
-      "latencyRatio": 36.42
+      "comparable": 11,
+      "perQueryMs": 33.13,
+      "perQueryServeMs": 24.92,
+      "perQueryTok": 10,
+      "answerBearing": true,
+      "tokenRatioCli": 1.9,
+      "tokenRatioServe": 2.38,
+      "latencyRatioCli": 8.91,
+      "latencyRatioServe": 11.85,
+      "tokenRatioStub": 9.5,
+      "latencyRatioStub": 36.71,
+      "callersListedCli": 2,
+      "callersListedStub": 0
     },
     {
       "lang": "php",
       "repo": "slimphp/Slim",
-      "symbols": 1365,
-      "coldS": 0.211,
-      "reindexS": 1.918,
-      "coverageRatio": 1.2564,
+      "commit7": "0da7dd2",
+      "symbols": 1296,
+      "edges": 8676,
+      "files": 140,
+      "coldS": 0.658,
       "queries": 4,
-      "perQueryMs": 5.67,
-      "tokenRatio": 14.83,
-      "latencyRatio": 17.5
+      "comparable": 3,
+      "perQueryMs": 25.7,
+      "perQueryServeMs": 18.92,
+      "perQueryTok": 16.5,
+      "answerBearing": true,
+      "tokenRatioCli": 1.35,
+      "tokenRatioServe": 3.88,
+      "latencyRatioCli": 5.18,
+      "latencyRatioServe": 6.93,
+      "tokenRatioStub": 15.5,
+      "latencyRatioStub": 17.31,
+      "callersListedCli": 2,
+      "callersListedStub": 0
     },
     {
       "lang": "powershell",
       "repo": "PowerShell/PowerShellGet",
-      "symbols": 31,
-      "coldS": 0.085,
-      "reindexS": 0,
-      "coverageRatio": 1.1071,
+      "commit7": "a2dac8e",
+      "symbols": 32,
+      "edges": 730,
+      "files": 2,
+      "coldS": 0.238,
       "queries": 4,
-      "perQueryMs": 7.5,
-      "tokenRatio": 30.88,
-      "latencyRatio": 10.67
-    },
-    {
-      "lang": "r",
-      "repo": "tidyverse/ggplot2",
-      "symbols": 3010,
-      "coldS": 0.705,
-      "reindexS": 0.029,
-      "coverageRatio": 1.7531,
-      "queries": 13,
-      "perQueryMs": 0.2,
-      "tokenRatio": 66.73,
-      "latencyRatio": 198.41
+      "comparable": 4,
+      "perQueryMs": 16.56,
+      "perQueryServeMs": 8.53,
+      "perQueryTok": 9.5,
+      "answerBearing": false,
+      "tokenRatioCli": 6.47,
+      "tokenRatioServe": 6.83,
+      "latencyRatioCli": 4.78,
+      "latencyRatioServe": 9.28,
+      "tokenRatioStub": 30.75,
+      "latencyRatioStub": 10.68,
+      "callersListedCli": 0,
+      "callersListedStub": 0
     },
     {
       "lang": "razor",
       "repo": "dotnet-architecture/eShopOnWeb",
-      "symbols": 1353,
-      "coldS": 0.42,
-      "reindexS": 0.04,
-      "coverageRatio": 5.101,
+      "commit7": "4da8212",
+      "symbols": 1186,
+      "edges": 2215,
+      "files": 354,
+      "coldS": 0.66,
       "queries": 6,
-      "perQueryMs": 7.7,
-      "tokenRatio": 20.5,
-      "latencyRatio": 16.74
+      "comparable": 6,
+      "perQueryMs": 17.43,
+      "perQueryServeMs": 9.42,
+      "perQueryTok": 9,
+      "answerBearing": true,
+      "tokenRatioCli": 3.44,
+      "tokenRatioServe": 4.13,
+      "latencyRatioCli": 7.36,
+      "latencyRatioServe": 13.62,
+      "tokenRatioStub": 15.5,
+      "latencyRatioStub": 16.75,
+      "callersListedCli": 1,
+      "callersListedStub": 0
     },
     {
       "lang": "ruby",
       "repo": "sinatra/sinatra",
-      "symbols": 1476,
-      "coldS": 0.187,
-      "reindexS": 0.025,
-      "coverageRatio": 1.01,
+      "commit7": "5236d34",
+      "symbols": 1490,
+      "edges": 14728,
+      "files": 180,
+      "coldS": 0.649,
       "queries": 4,
-      "perQueryMs": 7.17,
-      "tokenRatio": 38,
-      "latencyRatio": 13.49
+      "comparable": 4,
+      "perQueryMs": 28.75,
+      "perQueryServeMs": 23.76,
+      "perQueryTok": 17.5,
+      "answerBearing": true,
+      "tokenRatioCli": 4.29,
+      "tokenRatioServe": 13.64,
+      "latencyRatioCli": 3.27,
+      "latencyRatioServe": 3.96,
+      "tokenRatioStub": 37.5,
+      "latencyRatioStub": 13.37,
+      "callersListedCli": 3,
+      "callersListedStub": 0
     },
     {
       "lang": "rust",
       "repo": "BurntSushi/ripgrep",
-      "symbols": 5920,
-      "coldS": 0.474,
-      "reindexS": 0.042,
-      "coverageRatio": 1.0017,
+      "commit7": "dfe4a81",
+      "symbols": 4578,
+      "edges": 16770,
+      "files": 161,
+      "coldS": 0.95,
       "queries": 4,
-      "perQueryMs": 10.14,
-      "tokenRatio": 110.63,
-      "latencyRatio": 13.35
+      "comparable": 4,
+      "perQueryMs": 30.77,
+      "perQueryServeMs": 23.18,
+      "perQueryTok": 5.5,
+      "answerBearing": false,
+      "tokenRatioCli": 46.09,
+      "tokenRatioServe": 50.7,
+      "latencyRatioCli": 4.34,
+      "latencyRatioServe": 5.76,
+      "tokenRatioStub": 126.75,
+      "latencyRatioStub": 13,
+      "callersListedCli": 0,
+      "callersListedStub": 0
+    },
+    {
+      "lang": "r",
+      "repo": "tidyverse/ggplot2",
+      "commit7": "6870419",
+      "symbols": 2060,
+      "edges": 15631,
+      "files": 201,
+      "coldS": 0.654,
+      "queries": 13,
+      "comparable": 5,
+      "perQueryMs": 27.25,
+      "perQueryServeMs": 27.25,
+      "perQueryTok": 7,
+      "answerBearing": true,
+      "tokenRatioCli": 274.33,
+      "tokenRatioServe": 274.33,
+      "latencyRatioCli": 3.99,
+      "latencyRatioServe": 3.99,
+      "tokenRatioStub": 91.44,
+      "latencyRatioStub": 192.6,
+      "callersListedCli": 4,
+      "callersListedStub": 0
     },
     {
       "lang": "scala",
       "repo": "typelevel/cats",
-      "symbols": 7859,
-      "coldS": 1.096,
-      "reindexS": 0.034,
-      "coverageRatio": 1.0023,
+      "commit7": "851965a",
+      "symbols": 7014,
+      "edges": 36900,
+      "files": 206,
+      "coldS": 2.625,
       "queries": 5,
-      "perQueryMs": 15.3,
-      "tokenRatio": 67.67,
-      "latencyRatio": 10.45
+      "comparable": 5,
+      "perQueryMs": 45.01,
+      "perQueryServeMs": 45.01,
+      "perQueryTok": 6,
+      "answerBearing": false,
+      "tokenRatioCli": 45.33,
+      "tokenRatioServe": 45.33,
+      "latencyRatioCli": 3.56,
+      "latencyRatioServe": 3.56,
+      "tokenRatioStub": 68,
+      "latencyRatioStub": 10.72,
+      "callersListedCli": 0,
+      "callersListedStub": 0
     },
     {
       "lang": "sql",
       "repo": "hasura/graphql-engine",
+      "commit7": "417c174",
       "symbols": 131,
-      "coldS": 0.046,
-      "reindexS": 0.008,
-      "coverageRatio": 1.1802,
+      "edges": 825,
+      "files": 82,
+      "coldS": 0.315,
       "queries": 4,
-      "perQueryMs": 7.52,
-      "tokenRatio": 30.63,
-      "latencyRatio": 10.22
+      "comparable": 4,
+      "perQueryMs": 17.23,
+      "perQueryServeMs": 10.65,
+      "perQueryTok": 10.5,
+      "answerBearing": false,
+      "tokenRatioCli": 5.29,
+      "tokenRatioServe": 5.84,
+      "latencyRatioCli": 4.44,
+      "latencyRatioServe": 7.19,
+      "tokenRatioStub": 27.75,
+      "latencyRatioStub": 10.3,
+      "callersListedCli": 0,
+      "callersListedStub": 0
     },
     {
       "lang": "svelte",
       "repo": "carbon-design-system/carbon-components-svelte",
-      "symbols": 3087,
-      "coldS": 0.263,
-      "reindexS": 0.022,
-      "coverageRatio": 1.04,
+      "commit7": "454a388",
+      "symbols": 3517,
+      "edges": 4597,
+      "files": 424,
+      "coldS": 0.889,
       "queries": 5,
-      "perQueryMs": 7.3,
-      "tokenRatio": 47.6,
-      "latencyRatio": 11.61
+      "comparable": 5,
+      "perQueryMs": 29.34,
+      "perQueryServeMs": 19.36,
+      "perQueryTok": 12,
+      "answerBearing": true,
+      "tokenRatioCli": 7.33,
+      "tokenRatioServe": 9.78,
+      "latencyRatioCli": 2.89,
+      "latencyRatioServe": 4.38,
+      "tokenRatioStub": 44,
+      "latencyRatioStub": 12.2,
+      "callersListedCli": 2,
+      "callersListedStub": 0
     },
     {
       "lang": "swift",
       "repo": "apple/swift-argument-parser",
-      "symbols": 13533,
-      "coldS": 4.074,
-      "reindexS": 0.024,
-      "coverageRatio": 1.19,
+      "commit7": "8122bc5",
+      "symbols": 4580,
+      "edges": 5480,
+      "files": 238,
+      "coldS": 1.472,
       "queries": 4,
-      "perQueryMs": 7.14,
-      "tokenRatio": 80.43,
-      "latencyRatio": 18.99
+      "comparable": 4,
+      "perQueryMs": 30.37,
+      "perQueryServeMs": 23.43,
+      "perQueryTok": 22,
+      "answerBearing": true,
+      "tokenRatioCli": 4.25,
+      "tokenRatioServe": 15.58,
+      "latencyRatioCli": 4.42,
+      "latencyRatioServe": 5.73,
+      "tokenRatioStub": 46.75,
+      "latencyRatioStub": 19.05,
+      "callersListedCli": 3,
+      "callersListedStub": 0
     },
     {
       "lang": "terraform",
       "repo": "terraform-aws-modules/terraform-aws-vpc",
-      "symbols": 2244,
-      "coldS": 0.166,
-      "reindexS": 0.022,
-      "coverageRatio": 1.0063,
+      "commit7": "3ffbd46",
+      "symbols": 1927,
+      "edges": 1089,
+      "files": 109,
+      "coldS": 0.92,
       "queries": 4,
-      "perQueryMs": 7.92,
-      "tokenRatio": 145.63,
-      "latencyRatio": 15.12
+      "comparable": 4,
+      "perQueryMs": 24.65,
+      "perQueryServeMs": 18.79,
+      "perQueryTok": 7.5,
+      "answerBearing": false,
+      "tokenRatioCli": 38.47,
+      "tokenRatioServe": 38.47,
+      "latencyRatioCli": 4.79,
+      "latencyRatioServe": 6.28,
+      "tokenRatioStub": 144.25,
+      "latencyRatioStub": 15.18,
+      "callersListedCli": 0,
+      "callersListedStub": 0
     },
     {
       "lang": "verilog",
       "repo": "lowRISC/ibex",
+      "commit7": "022f084",
       "symbols": 144,
-      "coldS": 0.188,
-      "reindexS": 0.034,
-      "coverageRatio": 1.5484,
+      "edges": 1051,
+      "files": 31,
+      "coldS": 0.507,
       "queries": 6,
-      "perQueryMs": 7.51,
-      "tokenRatio": 11,
-      "latencyRatio": 14.93
+      "comparable": 6,
+      "perQueryMs": 23.3,
+      "perQueryServeMs": 13.91,
+      "perQueryTok": 5.5,
+      "answerBearing": true,
+      "tokenRatioCli": 3.45,
+      "tokenRatioServe": 3.45,
+      "latencyRatioCli": 4.78,
+      "latencyRatioServe": 8.02,
+      "tokenRatioStub": 9.5,
+      "latencyRatioStub": 14.94,
+      "callersListedCli": 2,
+      "callersListedStub": 0
     },
     {
       "lang": "vue",
       "repo": "gothinkster/vue-realworld-example-app",
+      "commit7": "f7e48c8",
       "symbols": 161,
-      "coldS": 0.15,
-      "reindexS": 0.03,
-      "coverageRatio": 1.3529,
+      "edges": 393,
+      "files": 32,
+      "coldS": 0.203,
       "queries": 5,
-      "perQueryMs": 7.62,
-      "tokenRatio": 11.5,
-      "latencyRatio": 14.04
+      "comparable": 5,
+      "perQueryMs": 17.97,
+      "perQueryServeMs": 9.44,
+      "perQueryTok": 7,
+      "answerBearing": true,
+      "tokenRatioCli": 3.29,
+      "tokenRatioServe": 4.6,
+      "latencyRatioCli": 5.95,
+      "latencyRatioServe": 11.33,
+      "tokenRatioStub": 11.5,
+      "latencyRatioStub": 14.09,
+      "callersListedCli": 2,
+      "callersListedStub": 0
     },
     {
       "lang": "zig",
       "repo": "zigtools/zls",
-      "symbols": 7679,
-      "coldS": 0.932,
-      "reindexS": 0.031,
-      "coverageRatio": 1.0028,
+      "commit7": "8da87d4",
+      "symbols": 1462,
+      "edges": 11626,
+      "files": 45,
+      "coldS": 0.546,
       "queries": 5,
-      "perQueryMs": 7.36,
-      "tokenRatio": 108.5,
-      "latencyRatio": 12.06
+      "comparable": 5,
+      "perQueryMs": 24.12,
+      "perQueryServeMs": 16.72,
+      "perQueryTok": 7,
+      "answerBearing": true,
+      "tokenRatioCli": 37,
+      "tokenRatioServe": 51.8,
+      "latencyRatioCli": 3.66,
+      "latencyRatioServe": 5.29,
+      "tokenRatioStub": 129.5,
+      "latencyRatioStub": 12.24,
+      "callersListedCli": 1,
+      "callersListedStub": 0
     }
   ],
   "agentBench": {
-    "label": "Agent-harness token benchmark — 2026-07-10",
+    "label": "Agent-harness token benchmark — 2026-08-05",
     "repo": "sirupsen/logrus",
     "commit7": "a23d315",
     "nQuestions": 19,
@@ -1730,34 +4639,34 @@
       {
         "id": "claude",
         "model": "claude-sonnet-5",
-        "calibrationTotal": 29078,
+        "calibrationTotal": 30788,
         "vsAtlas": {
           "graphify": {
-            "totalTokens": 6,
-            "billedProxy": 1.9,
-            "turns": 5.2
+            "totalTokens": 4.1,
+            "billedProxy": 1.6,
+            "turns": 3.9
           },
           "baseline": {
             "totalTokens": 2.3,
-            "billedProxy": 1.3,
-            "turns": 2.5
+            "billedProxy": 1,
+            "turns": 2.4
           }
         }
       },
       {
         "id": "codex",
         "model": "gpt-5.6-sol",
-        "calibrationTotal": 12785,
+        "calibrationTotal": 15418,
         "vsAtlas": {
           "graphify": {
             "totalTokens": 3.9,
-            "billedProxy": 3.4,
-            "turns": 9.6
+            "billedProxy": 2.4,
+            "turns": 12.7
           },
           "baseline": {
-            "totalTokens": 1.7,
-            "billedProxy": 2.5,
-            "turns": 2.1
+            "totalTokens": 2.2,
+            "billedProxy": 1.5,
+            "turns": 3.3
           }
         }
       }
@@ -1766,72 +4675,72 @@
       {
         "agent": "claude",
         "mode": "atlas",
-        "totalTokens": 61561,
-        "billedProxy": 11260,
-        "outputTokens": 315,
+        "totalTokens": 58234,
+        "billedProxy": 8727,
+        "outputTokens": 305,
         "turns": 2,
-        "f1": 0.882,
-        "wallS": 8.3,
+        "f1": 0.995,
+        "wallS": 9.2,
         "ok": 19,
         "n": 19
       },
       {
         "agent": "claude",
         "mode": "baseline",
-        "totalTokens": 144385,
-        "billedProxy": 15120,
-        "outputTokens": 1018,
-        "turns": 4.9,
-        "f1": 0.569,
-        "wallS": 19.9,
+        "totalTokens": 134886,
+        "billedProxy": 9153,
+        "outputTokens": 945,
+        "turns": 4.7,
+        "f1": 0.589,
+        "wallS": 18.1,
         "ok": 19,
         "n": 19
       },
       {
         "agent": "claude",
         "mode": "graphify",
-        "totalTokens": 370898,
-        "billedProxy": 21097,
-        "outputTokens": 2632,
-        "turns": 10.3,
-        "f1": 0.305,
-        "wallS": 52.7,
+        "totalTokens": 239026,
+        "billedProxy": 13582,
+        "outputTokens": 1333,
+        "turns": 7.7,
+        "f1": 0.203,
+        "wallS": 32.5,
         "ok": 19,
         "n": 19
       },
       {
         "agent": "codex",
         "mode": "atlas",
-        "totalTokens": 27981,
-        "billedProxy": 4025,
+        "totalTokens": 33471,
+        "billedProxy": 8221,
         "outputTokens": 245,
         "turns": 1,
-        "f1": 0.881,
-        "wallS": 13.3,
+        "f1": 0.995,
+        "wallS": 13.5,
         "ok": 19,
         "n": 19
       },
       {
         "agent": "codex",
         "mode": "baseline",
-        "totalTokens": 48106,
-        "billedProxy": 9975,
-        "outputTokens": 642,
-        "turns": 2.1,
-        "f1": 0.876,
-        "wallS": 22.6,
+        "totalTokens": 74229,
+        "billedProxy": 12654,
+        "outputTokens": 765,
+        "turns": 3.3,
+        "f1": 0.831,
+        "wallS": 35.9,
         "ok": 19,
         "n": 19
       },
       {
         "agent": "codex",
         "mode": "graphify",
-        "totalTokens": 109662,
-        "billedProxy": 13675,
-        "outputTokens": 1005,
-        "turns": 9.6,
-        "f1": 0.41,
-        "wallS": 42.3,
+        "totalTokens": 131335,
+        "billedProxy": 19799,
+        "outputTokens": 954,
+        "turns": 12.7,
+        "f1": 0.379,
+        "wallS": 45.4,
         "ok": 19,
         "n": 19
       }
@@ -1840,10 +4749,13 @@
     "billedProxyNote": "billed-proxy = fresh input + cache writes + output; cache reads bill at ~10% and are excluded.",
     "artifact": "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json",
     "suiteCmd": "python3 agent-bench/agent_token_bench.py --setup --agents auto \\\n    --qa-set agent-bench/QA_SET_logrus.json --workdir agentbench-work",
-    "suiteNeeds": "python3, git, atlas on PATH, graphify (uv tool install graphifyy), and claude and/or codex logged in"
+    "suiteNeeds": "python3, git, atlas on PATH, graphify (uv tool install graphifyy), and claude and/or codex logged in",
+    "graphifyVersionNote": "This run used graphify 0.8.49. The previously published table ran graphify 0.9.12, so part of the change in the competitor column is a version change on their side rather than a change on ours.",
+    "f1Note": "Atlas's F1 here is 0.995 on BOTH harnesses. The figure this page published before was 0.88, from the July run."
   },
   "l5run": {
-    "label": "L4 → L5 promotion run — July 2026 · macOS arm64",
+    "label": "L4 → L5 promotion matrix — wave 2 verifier re-run, 2026-08-05 · macOS arm64",
+    "what": "each candidate language's call graph cross-checked against ITS OWN language server on a real public repository — callHierarchy where the server offers it, references + documentSymbol enclosure otherwise. Deterministic set F1 on simple names. No LLM anywhere in the loop.",
     "truth": "per-language LSP reference server on a real public repository (callHierarchy preferred, references+documentSymbol enclosure fallback)",
     "truthFilter": "both sides restricted to textually-defined callers; macro/codegen-expanded caller names (no textual definition in the repo) excluded and listed per symbol",
     "scoring": "deterministic simple-name set comparison; no LLM",
@@ -1852,6 +4764,7 @@
       "mean_f1": 0.9,
       "mean_precision": 0.9
     },
+    "corroboration": "where the two tools disagree, the source text adjudicates, and every excusal is listed per symbol. extras_reference_blind (all languages): an Atlas-only caller with a proven CALL SITE of the probe inside its own documentSymbol span is a reference-server blind spot, not a false positive. The site must be call-shaped in a spelling the language makes statically unambiguous (see corroboration_shapes) and must survive comment/string blanking — a name merely MENTIONED corroborates nothing. missed_reference_coarse (opt-in, see corroboration_languages): a truth-only caller whose body never mentions the probe in ANY shape — qualified, parenless, piped or captured — cannot be a textual call site, so it leaves the recall denominator (truth_scored) while truth_callers keeps the server's raw count. The two probes differ in strictness by design: crediting Atlas demands a proven call site, excusing Atlas is triggered by absence of evidence and so uses the widest possible net over the RAW text. A probe whose reference callers are ALL refuted measures nothing and is dropped from scoring and listed under unscorable_probes with both tools' answers.",
     "rows": [
       {
         "lang": "rust",
@@ -1860,52 +4773,62 @@
         "reference": "rust-analyzer",
         "mode": "callHierarchy",
         "symbols": 12,
-        "f1": 0.9534,
-        "precision": 0.9417,
-        "recall": 0.9723,
+        "f1": 0.9297,
+        "precision": 0.9652,
+        "recall": 0.9167,
         "pass": true,
-        "atlasCliMs": 17.7,
-        "atlasServeMs": 0.66,
-        "atlasTok": 89.4,
-        "graphifyMs": 99.7,
-        "graphifyTok": 72.2,
-        "graphifyRecall": 0.194,
-        "lspColdMs": 8551.2,
-        "lspWarmMs": 25.3,
-        "lspTok": 1342,
-        "xLatGraphify": 5.6,
-        "xServeLatGraphify": 151.1,
-        "xLatLspCold": 483.1,
-        "xServeLatLspCold": 12956.4,
-        "xTokLsp": 15,
-        "xTokRawRead": 115.9
+        "carried": false,
+        "verdict": "recovered",
+        "copy": "Recovered at .9297/.9652 (fd vs rust-analyzer). July's published .9534 is RETRACTED: it depended on candidate order that the fail-closed binder no longer permits. Today's number is proven through `use`-declaration rungs.",
+        "runAt": "2026-08-05T10:30:28+0530",
+        "treeSha": "6bb732c",
+        "atlasCliMs": 15.7,
+        "atlasServeMs": 1.5,
+        "atlasTok": 81.3,
+        "graphifyMs": null,
+        "graphifyTok": null,
+        "graphifyRecall": null,
+        "lspColdMs": 8558.9,
+        "lspWarmMs": 25.2,
+        "lspTok": 1157.8,
+        "xLatGraphify": null,
+        "xServeLatGraphify": null,
+        "xLatLspCold": 545.2,
+        "xServeLatLspCold": 5705.9,
+        "xTokLsp": 14.2,
+        "xTokRawRead": 127.5
       },
       {
         "lang": "php",
         "repo": "Seldaek/monolog",
-        "sha": "57eb102",
+        "sha": "57eb1028",
         "reference": "intelephense",
         "mode": "references",
         "symbols": 12,
-        "f1": 1,
+        "f1": 0.9098,
         "precision": 1,
-        "recall": 1,
+        "recall": 0.8694,
         "pass": true,
-        "atlasCliMs": 17.7,
-        "atlasServeMs": 0.83,
-        "atlasTok": 142.6,
-        "graphifyMs": 126.2,
-        "graphifyTok": 94.7,
-        "graphifyRecall": 0.406,
-        "lspColdMs": 7504.1,
-        "lspWarmMs": 42.6,
+        "carried": false,
+        "verdict": "recovered",
+        "copy": "Recovered at .9098/1.000 (monolog vs intelephense) — `use`-alias and namespace rungs bind cross-namespace static calls; every remaining miss is a listed cross-file test caller. July's 1.000 predated the fail-closed binder.",
+        "runAt": "2026-08-05T10:30:58+0530",
+        "treeSha": "6bb732c",
+        "atlasCliMs": 19.3,
+        "atlasServeMs": 3.83,
+        "atlasTok": 116.8,
+        "graphifyMs": null,
+        "graphifyTok": null,
+        "graphifyRecall": null,
+        "lspColdMs": 7717.9,
+        "lspWarmMs": 43.6,
         "lspTok": 5574.9,
-        "xLatGraphify": 7.1,
-        "xServeLatGraphify": 152,
-        "xLatLspCold": 424,
-        "xServeLatLspCold": 9041.1,
-        "xTokLsp": 39.1,
-        "xTokRawRead": 18.6
+        "xLatGraphify": null,
+        "xServeLatGraphify": null,
+        "xLatLspCold": 399.9,
+        "xServeLatLspCold": 2015.1,
+        "xTokLsp": 47.7,
+        "xTokRawRead": 22.8
       },
       {
         "lang": "lua",
@@ -1914,52 +4837,30 @@
         "reference": "lua-language-server",
         "mode": "references",
         "symbols": 12,
-        "f1": 0.9629,
-        "precision": 0.9824,
+        "f1": 0.966,
+        "precision": 0.9883,
         "recall": 0.9583,
         "pass": true,
-        "atlasCliMs": 18.4,
-        "atlasServeMs": 0.7,
-        "atlasTok": 259.5,
-        "graphifyMs": 129,
-        "graphifyTok": 172.2,
-        "graphifyRecall": 0.842,
-        "lspColdMs": 6770.9,
-        "lspWarmMs": 63.3,
-        "lspTok": 23787.8,
-        "xLatGraphify": 7,
-        "xServeLatGraphify": 184.3,
-        "xLatLspCold": 368,
-        "xServeLatLspCold": 9672.7,
-        "xTokLsp": 91.7,
-        "xTokRawRead": 29.3
-      },
-      {
-        "lang": "swift",
-        "repo": "apple/swift-argument-parser",
-        "sha": "2f77f2f",
-        "reference": "sourcekit-lsp",
-        "mode": "callHierarchy",
-        "symbols": 12,
-        "f1": 0.7974,
-        "precision": 0.7989,
-        "recall": 0.8611,
-        "pass": false,
-        "atlasCliMs": 17.3,
-        "atlasServeMs": 0.77,
-        "atlasTok": 222.9,
-        "graphifyMs": 148.7,
-        "graphifyTok": 85.2,
-        "graphifyRecall": 0.417,
-        "lspColdMs": 11432.5,
-        "lspWarmMs": 126.1,
-        "lspTok": 5589.6,
-        "xLatGraphify": 8.6,
-        "xServeLatGraphify": 193.1,
-        "xLatLspCold": 660.8,
-        "xServeLatLspCold": 14847.4,
-        "xTokLsp": 25.1,
-        "xTokRawRead": 39
+        "carried": false,
+        "verdict": "held",
+        "copy": "Canary held at .966/.9883 (Penlight vs lua-language-server) — one of the three no-regression canaries, unchanged all wave.",
+        "runAt": "2026-08-05T10:31:22+0530",
+        "treeSha": "8cc1c39",
+        "atlasCliMs": 16.4,
+        "atlasServeMs": 1.63,
+        "atlasTok": 234.9,
+        "graphifyMs": null,
+        "graphifyTok": null,
+        "graphifyRecall": null,
+        "lspColdMs": 6770.5,
+        "lspWarmMs": 58.8,
+        "lspTok": 15991.8,
+        "xLatGraphify": null,
+        "xServeLatGraphify": null,
+        "xLatLspCold": 412.8,
+        "xServeLatLspCold": 4153.7,
+        "xTokLsp": 68.1,
+        "xTokRawRead": 32.3
       },
       {
         "lang": "dart",
@@ -1968,30 +4869,35 @@
         "reference": "dart language-server",
         "mode": "callHierarchy+references",
         "symbols": 12,
-        "f1": 0.9249,
+        "f1": 0.8631,
         "precision": 0.9723,
-        "recall": 0.9135,
-        "pass": true,
-        "atlasCliMs": 16.8,
-        "atlasServeMs": 0.9,
-        "atlasTok": 101.4,
-        "graphifyMs": 92.9,
-        "graphifyTok": 56.5,
-        "graphifyRecall": 0,
-        "lspColdMs": 8061,
-        "lspWarmMs": 48.1,
+        "recall": 0.8237,
+        "pass": false,
+        "carried": false,
+        "verdict": "retracted",
+        "copy": "RETRACTED. July's published PASS at .9249 was unsound: it rode a fan-out the truth filter should have refused. The honest number is .8631 (precision .9723). Dart stays L4 until `toString`-scale fan-out and `package:` re-export families bind. We publish the retraction rather than the flattering number.",
+        "runAt": "2026-08-05T10:31:57+0530",
+        "treeSha": "8cc1c39",
+        "atlasCliMs": 16.3,
+        "atlasServeMs": 1.37,
+        "atlasTok": 86.1,
+        "graphifyMs": null,
+        "graphifyTok": null,
+        "graphifyRecall": null,
+        "lspColdMs": 8088.2,
+        "lspWarmMs": 47.9,
         "lspTok": 6686.8,
-        "xLatGraphify": 5.5,
-        "xServeLatGraphify": 103.2,
-        "xLatLspCold": 479.8,
-        "xServeLatLspCold": 8956.7,
-        "xTokLsp": 65.9,
-        "xTokRawRead": 63.6
+        "xLatGraphify": null,
+        "xServeLatGraphify": null,
+        "xLatLspCold": 496.2,
+        "xServeLatLspCold": 5903.8,
+        "xTokLsp": 77.7,
+        "xTokRawRead": 74.9
       },
       {
         "lang": "fortran",
         "repo": "jacobwilliams/json-fortran",
-        "sha": "d9ed2e4",
+        "sha": "d9ed2e4e",
         "reference": "fortls",
         "mode": "references",
         "symbols": 8,
@@ -1999,21 +4905,154 @@
         "precision": 1,
         "recall": 1,
         "pass": true,
-        "atlasCliMs": 16.9,
-        "atlasServeMs": 0.64,
+        "carried": false,
+        "verdict": "held",
+        "copy": "Canary held at 1.000/1.000 (json-fortran vs fortls, 8 symbols).",
+        "runAt": "2026-08-05T10:32:26+0530",
+        "treeSha": "8cc1c39",
+        "atlasCliMs": 18.9,
+        "atlasServeMs": 2.87,
         "atlasTok": 142.6,
-        "graphifyMs": 103.3,
-        "graphifyTok": 83.7,
-        "graphifyRecall": 0.167,
-        "lspColdMs": 6743.2,
-        "lspWarmMs": 37.4,
+        "graphifyMs": null,
+        "graphifyTok": null,
+        "graphifyRecall": null,
+        "lspColdMs": 6732.8,
+        "lspWarmMs": 38.1,
         "lspTok": 397.9,
-        "xLatGraphify": 6.1,
-        "xServeLatGraphify": 161.4,
-        "xLatLspCold": 399,
-        "xServeLatLspCold": 10536.2,
+        "xLatGraphify": null,
+        "xServeLatGraphify": null,
+        "xLatLspCold": 356.2,
+        "xServeLatLspCold": 2345.9,
         "xTokLsp": 2.8,
         "xTokRawRead": 867.8
+      },
+      {
+        "lang": "zig",
+        "repo": "Hejsil/zig-clap",
+        "sha": "e91d66b",
+        "reference": "zls",
+        "mode": "references",
+        "symbols": 12,
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "pass": true,
+        "carried": false,
+        "verdict": "held",
+        "copy": "Canary held at 1.000/1.000 (zig-clap vs zls) — up from July's .9723.",
+        "runAt": "2026-08-05T10:32:39+0530",
+        "treeSha": "8cc1c39",
+        "atlasCliMs": 15.4,
+        "atlasServeMs": 0.72,
+        "atlasTok": 65.6,
+        "graphifyMs": null,
+        "graphifyTok": null,
+        "graphifyRecall": null,
+        "lspColdMs": 5195.7,
+        "lspWarmMs": 25.3,
+        "lspTok": 396.8,
+        "xLatGraphify": null,
+        "xServeLatGraphify": null,
+        "xLatLspCold": 337.4,
+        "xServeLatLspCold": 7216.2,
+        "xTokLsp": 6,
+        "xTokRawRead": 274.9
+      },
+      {
+        "lang": "ruby",
+        "repo": "rack/rack",
+        "sha": "b48e0303",
+        "reference": "solargraph",
+        "mode": "references",
+        "symbols": 9,
+        "f1": 1,
+        "precision": 1,
+        "recall": 1,
+        "pass": true,
+        "carried": false,
+        "verdict": "promoted",
+        "copy": "Promoted at F1 1.000 / precision 1.000 (rack vs solargraph, 9 symbols) with zero adjudication excusals — the baseline's failures were all empty answers, fixed by binding implicit-self calls to their enclosing class. Ruby's separate 0.000 on the constructed fixture is a designed refusal, not a gap, and is never cited as evidence for this promotion.",
+        "runAt": "2026-08-05T10:33:00+0530",
+        "treeSha": "f468f32",
+        "atlasCliMs": 20.8,
+        "atlasServeMs": 3.76,
+        "atlasTok": 76.9,
+        "graphifyMs": null,
+        "graphifyTok": null,
+        "graphifyRecall": null,
+        "lspColdMs": 13751.1,
+        "lspWarmMs": 130.8,
+        "lspTok": 1252.6,
+        "xLatGraphify": null,
+        "xServeLatGraphify": null,
+        "xLatLspCold": 661.1,
+        "xServeLatLspCold": 3657.2,
+        "xTokLsp": 16.3,
+        "xTokRawRead": 32.3
+      },
+      {
+        "lang": "swift",
+        "repo": "apple/swift-argument-parser",
+        "sha": "2f77f2f",
+        "reference": "sourcekit-lsp",
+        "mode": "callHierarchy",
+        "symbols": 12,
+        "f1": 0.9415,
+        "precision": 0.9417,
+        "recall": 0.9444,
+        "pass": true,
+        "carried": false,
+        "verdict": "promoted",
+        "copy": "Promoted at .9415/.9417 (swift-argument-parser vs sourcekit-lsp) — cross-file sends now bind through SwiftPM target membership; a same-name method family whose receiver cannot be proven stays unanswered rather than guessed.",
+        "runAt": "2026-08-05T10:33:43+0530",
+        "treeSha": "f468f32",
+        "atlasCliMs": 22.5,
+        "atlasServeMs": 4.28,
+        "atlasTok": 180.1,
+        "graphifyMs": null,
+        "graphifyTok": null,
+        "graphifyRecall": null,
+        "lspColdMs": 10052.2,
+        "lspWarmMs": 100.7,
+        "lspTok": 3723,
+        "xLatGraphify": null,
+        "xServeLatGraphify": null,
+        "xLatLspCold": 446.8,
+        "xServeLatLspCold": 2348.6,
+        "xTokLsp": 20.7,
+        "xTokRawRead": 48.2
+      },
+      {
+        "lang": "kotlin",
+        "repo": "pinterest/ktlint.git",
+        "sha": "c26a4ff",
+        "reference": "kotlin-language-server",
+        "mode": "references",
+        "symbols": 11,
+        "f1": 0.9395,
+        "precision": 0.9022,
+        "recall": 1,
+        "pass": true,
+        "carried": false,
+        "verdict": "promoted",
+        "copy": "Promoted at .9395/.9022 (ktlint vs kotlin-language-server) — a call reaches its package and its imports and nothing else: renamed-import decoys and cross-package bare calls refuse to bind. Thinnest margin in the set: precision clears the gate by .0022.",
+        "runAt": "2026-08-05T10:34:18+0530",
+        "treeSha": "3bbfe68",
+        "atlasCliMs": 29.2,
+        "atlasServeMs": 11.22,
+        "atlasTok": 374.6,
+        "graphifyMs": null,
+        "graphifyTok": null,
+        "graphifyRecall": null,
+        "lspColdMs": 58566.5,
+        "lspWarmMs": 200.8,
+        "lspTok": 7262.5,
+        "xLatGraphify": null,
+        "xServeLatGraphify": null,
+        "xLatLspCold": 2005.7,
+        "xServeLatLspCold": 5219.8,
+        "xTokLsp": 19.4,
+        "xTokRawRead": 18.1
       },
       {
         "lang": "elixir",
@@ -2022,52 +5061,30 @@
         "reference": "elixir-ls",
         "mode": "callHierarchy+references",
         "symbols": 12,
-        "f1": 0.595,
-        "precision": 0.8167,
-        "recall": 0.5973,
-        "pass": false,
-        "atlasCliMs": 17,
-        "atlasServeMs": 0.61,
-        "atlasTok": 101.1,
-        "graphifyMs": 97.5,
-        "graphifyTok": 73.3,
-        "graphifyRecall": 0.5,
-        "lspColdMs": 17403.3,
-        "lspWarmMs": 1226.1,
-        "lspTok": 4548.5,
-        "xLatGraphify": 5.7,
-        "xServeLatGraphify": 159.8,
-        "xLatLspCold": 1023.7,
-        "xServeLatLspCold": 28530,
-        "xTokLsp": 45,
-        "xTokRawRead": 54.4
-      },
-      {
-        "lang": "kotlin",
-        "repo": "JakeWharton/picnic",
-        "sha": "1e3a469",
-        "reference": "kotlin-language-server",
-        "mode": "references",
-        "symbols": 1,
-        "f1": 0.984,
+        "f1": 1,
         "precision": 1,
-        "recall": 0.968,
-        "pass": false,
-        "atlasCliMs": 19.6,
-        "atlasServeMs": 1.2,
-        "atlasTok": 967,
-        "graphifyMs": 152.7,
-        "graphifyTok": 65,
-        "graphifyRecall": 0.065,
-        "lspColdMs": 25063.8,
-        "lspWarmMs": 179.6,
-        "lspTok": 18633,
-        "xLatGraphify": 7.8,
-        "xServeLatGraphify": 127.2,
-        "xLatLspCold": 1278.8,
-        "xServeLatLspCold": 20886.5,
-        "xTokLsp": 19.3,
-        "xTokRawRead": 22.6
+        "recall": 1,
+        "pass": true,
+        "carried": false,
+        "verdict": "promoted",
+        "copy": "Promoted at 1.000/1.000 (plug vs elixir-ls) with truth-side corroboration ON and declared: elixir-ls attributes multi-clause calls to the public head, and every excusal is listed in the artifact and re-derivable from source. The same binary with corroboration off measures .7437 — both numbers are published.",
+        "runAt": "2026-08-05T10:36:19+0530",
+        "treeSha": "3bbfe68",
+        "atlasCliMs": 16.7,
+        "atlasServeMs": 2.27,
+        "atlasTok": 109.8,
+        "graphifyMs": null,
+        "graphifyTok": null,
+        "graphifyRecall": null,
+        "lspColdMs": 18854.9,
+        "lspWarmMs": 1385,
+        "lspTok": 3734.9,
+        "xLatGraphify": null,
+        "xServeLatGraphify": null,
+        "xLatLspCold": 1129,
+        "xServeLatLspCold": 8306.1,
+        "xTokLsp": 34,
+        "xTokRawRead": 67.4
       },
       {
         "lang": "scala",
@@ -2076,25 +5093,30 @@
         "reference": "Metals",
         "mode": "callHierarchy+references",
         "symbols": 12,
-        "f1": 0.2399,
-        "precision": 0.2118,
-        "recall": 0.3056,
+        "f1": 0.5533,
+        "precision": 0.5667,
+        "recall": 0.55,
         "pass": false,
-        "atlasCliMs": 16.9,
-        "atlasServeMs": 0.56,
-        "atlasTok": 230.6,
-        "graphifyMs": 94.5,
-        "graphifyTok": 55.7,
-        "graphifyRecall": 0.125,
-        "lspColdMs": 38344.9,
-        "lspWarmMs": 60.7,
-        "lspTok": 5160.2,
-        "xLatGraphify": 5.6,
-        "xServeLatGraphify": 168.7,
-        "xLatLspCold": 2268.9,
-        "xServeLatLspCold": 68473,
-        "xTokLsp": 22.4,
-        "xTokRawRead": 23.6
+        "carried": false,
+        "verdict": "honest-fail",
+        "copy": "Honest fail at .5533/.5667 (scopt vs Metals). Normalising Metals's val-attributed callers to their enclosing defs made the truth honest — and exposed that scopt's cross-file OParser builder chains are invisible to Atlas. The blocker is now named and measured rather than hidden by a flattering truth set.",
+        "runAt": "2026-08-05T10:41:56+0530",
+        "treeSha": "983a78c",
+        "atlasCliMs": 16.6,
+        "atlasServeMs": 2.34,
+        "atlasTok": 85.2,
+        "graphifyMs": null,
+        "graphifyTok": null,
+        "graphifyRecall": null,
+        "lspColdMs": 38134.5,
+        "lspWarmMs": 93.6,
+        "lspTok": 3223.2,
+        "xLatGraphify": null,
+        "xServeLatGraphify": null,
+        "xLatLspCold": 2297.3,
+        "xServeLatLspCold": 16296.8,
+        "xTokLsp": 37.8,
+        "xTokRawRead": 79
       },
       {
         "lang": "r",
@@ -2107,6 +5129,11 @@
         "precision": 0.625,
         "recall": 0.4625,
         "pass": false,
+        "carried": true,
+        "verdict": "carried",
+        "copy": null,
+        "runAt": null,
+        "treeSha": null,
         "atlasCliMs": 16.7,
         "atlasServeMs": 0.7,
         "atlasTok": 134.2,
@@ -2134,6 +5161,11 @@
         "precision": 0,
         "recall": 0,
         "pass": false,
+        "carried": true,
+        "verdict": "carried",
+        "copy": null,
+        "runAt": null,
+        "treeSha": null,
         "atlasCliMs": 17.5,
         "atlasServeMs": 0.81,
         "atlasTok": 7.5,
@@ -2149,100 +5181,167 @@
         "xServeLatLspCold": 28303,
         "xTokLsp": 112.1,
         "xTokRawRead": 194.5
-      },
-      {
-        "lang": "zig",
-        "repo": "Hejsil/zig-clap",
-        "sha": "e91d66b",
-        "reference": "zls",
-        "mode": "references",
-        "symbols": 12,
-        "f1": 0.9723,
-        "precision": 0.9583,
-        "recall": 1,
-        "pass": true,
-        "atlasCliMs": 18.1,
-        "atlasServeMs": 0.63,
-        "atlasTok": 70.9,
-        "graphifyMs": 92.7,
-        "graphifyTok": 64.2,
-        "graphifyRecall": 0.833,
-        "lspColdMs": 5204.1,
-        "lspWarmMs": 25.4,
-        "lspTok": 536.2,
-        "xLatGraphify": 5.1,
-        "xServeLatGraphify": 147.1,
-        "xLatLspCold": 287.5,
-        "xServeLatLspCold": 8260.5,
-        "xTokLsp": 7.6,
-        "xTokRawRead": 254.4
       }
     ],
     "passed": [
-      "dart",
+      "elixir",
       "fortran",
+      "kotlin",
       "lua",
       "php",
+      "ruby",
       "rust",
+      "swift",
       "zig"
     ],
+    "verdicts": {
+      "promoted": [
+        "ruby",
+        "swift",
+        "kotlin",
+        "elixir"
+      ],
+      "recovered": [
+        "rust",
+        "php"
+      ],
+      "held": [
+        "lua",
+        "fortran",
+        "zig"
+      ],
+      "retracted": [
+        "dart"
+      ],
+      "honestFail": [
+        "scala"
+      ]
+    },
+    "carriedRows": [
+      {
+        "lang": "csharp",
+        "status": "no_scorable_symbols",
+        "reference": "csharp-ls"
+      },
+      {
+        "lang": "r",
+        "status": "ok",
+        "reference": "R languageserver"
+      },
+      {
+        "lang": "julia",
+        "status": "harness_error",
+        "reference": null
+      },
+      {
+        "lang": "verilog",
+        "status": "no_scorable_symbols",
+        "reference": "verible-verilog-ls"
+      },
+      {
+        "lang": "vue",
+        "status": "harness_error",
+        "reference": null
+      },
+      {
+        "lang": "astro",
+        "status": "lsp_start_failed",
+        "reference": "astro-language-server"
+      },
+      {
+        "lang": "svelte",
+        "status": "no_probes",
+        "reference": "svelte-language-server"
+      },
+      {
+        "lang": "apex",
+        "status": "ok",
+        "reference": "apex-jorje-lsp (Salesforce)"
+      },
+      {
+        "lang": "groovy",
+        "status": "no_probes",
+        "reference": "groovy-language-server"
+      }
+    ],
+    "carriedNote": "9 of the 20 languages in this matrix carry `carried: true` from the July base — they are outside the 11 wave-2 lanes and make no claim at this commit. They are listed rather than hidden, and none of them counts toward the reference-validated total.",
+    "reproduction": "All 11 wave-2 lanes reproduced their claimed numbers to four decimal places on an independent verifier re-run, against a declared tolerance of |ΔF1|,|ΔP| ≤ .03 stated before the run. Every row carries its run timestamp and tree SHA.",
+    "honestyBracket": "The elixir lane depends on truth-side adjudication, so it was re-run with that adjudication disabled: F1 .7437 / P .8403. Both numbers are published. The adjudication is worth exactly +.2563 F1 on that lane and every step of it is itemised per symbol in the artifact.",
     "medians": {
-      "xLatGraphify": 5.7,
-      "xServeLatGraphify": 152,
-      "xLatLspCold": 655.2,
-      "xServeLatLspCold": 14847.4,
-      "xTokLsp": 25.1,
-      "xTokRawRead": 54.4
+      "xLatGraphify": 5.3,
+      "xServeLatGraphify": 116.9,
+      "xLatLspCold": 545.2,
+      "xServeLatLspCold": 5705.9,
+      "xTokLsp": 20.7,
+      "xTokRawRead": 67.4
     }
   },
   "artifacts": [
     {
-      "name": "benchmark-data.json",
-      "path": "data/benchmark-data.json",
-      "tier": "report",
-      "note": "full derived dataset behind the original page"
+      "name": "MATRIX_REPORT_PUBLIC.json",
+      "path": "data/raw/MATRIX_REPORT_PUBLIC.json",
+      "tier": "fresh",
+      "note": "7-repo tool matrix — both CLIs, one host, one run (Darwin arm64)"
     },
     {
-      "name": "MATRIX_REPORT.json",
-      "path": "data/raw/MATRIX_REPORT.json",
-      "tier": "report",
-      "note": "core 7-language tool matrix"
+      "name": "LIVE36_REFRESH_PUBLIC.json",
+      "path": "data/raw/LIVE36_REFRESH_PUBLIC.json",
+      "tier": "fresh",
+      "note": "36 live public repos — honest ratios beside the retracted stub column"
     },
     {
-      "name": "SATURATION_REPORT.json",
-      "path": "data/raw/SATURATION_REPORT.json",
-      "tier": "report",
-      "note": "language saturation status"
+      "name": "LLM_QA_SWEEP_PUBLIC.json",
+      "path": "data/raw/LLM_QA_SWEEP_PUBLIC.json",
+      "tier": "fresh",
+      "note": "666 real model calls — 37 languages x 6 context sources"
     },
     {
-      "name": "GRAPHIFY_LANGUAGE_DISCOVERY.json",
-      "path": "data/raw/GRAPHIFY_LANGUAGE_DISCOVERY.json",
-      "tier": "report",
-      "note": "graphify per-language support probe"
+      "name": "MATRIX_TOOL_VERSIONS.json",
+      "path": "data/raw/MATRIX_TOOL_VERSIONS.json",
+      "tier": "fresh",
+      "note": "tool pins for the Darwin leg"
     },
     {
       "name": "CALLERS_F1_AFTER.json",
       "path": "data/raw/CALLERS_F1_AFTER.json",
       "tier": "fresh",
-      "note": "37/37 native callers F1 (Linux)"
+      "note": "native callers F1, fresh at this commit (Linux container)"
+    },
+    {
+      "name": "CALLERS_F1_BEFORE.json",
+      "path": "data/raw/CALLERS_F1_BEFORE.json",
+      "tier": "carried",
+      "note": "CARRIED from c7a3e8d — a pre-saturation binary on other hardware; not a delta partner for AFTER"
     },
     {
       "name": "DIMENSIONS_BENCH_PUBLIC.json",
       "path": "data/raw/DIMENSIONS_BENCH_PUBLIC.json",
       "tier": "fresh",
-      "note": "per-language F1 / tokens / latency / index (Linux)"
+      "note": "per-language F1 / tokens / latency / index (Linux container; no competitor column on this host)"
     },
     {
       "name": "LSP_F1_SUMMARY.json",
       "path": "data/raw/LSP_F1_SUMMARY.json",
       "tier": "fresh",
-      "note": "gopls LSP-truth aggregate (Linux)"
+      "note": "gopls LSP-truth aggregate (Linux container)"
     },
     {
       "name": "MATRIX_TOOL_VERSIONS_LINUX.json",
       "path": "data/raw/MATRIX_TOOL_VERSIONS_LINUX.json",
       "tier": "fresh",
-      "note": "tool pins for the Linux run"
+      "note": "tool pins + host block for the Linux leg"
+    },
+    {
+      "name": "GRAPHIFY_LANGUAGE_DISCOVERY.json",
+      "path": "data/raw/GRAPHIFY_LANGUAGE_DISCOVERY.json",
+      "tier": "report",
+      "note": "graph-tool per-language support probe"
+    },
+    {
+      "name": "benchmark-data.json",
+      "path": "data/benchmark-data.json",
+      "tier": "carried",
+      "note": "the July derived dataset — superseded for every headline; kept so the retracted numbers stay auditable"
     },
     {
       "name": "AGENT_TOKEN_BENCH_PUBLIC.json",
