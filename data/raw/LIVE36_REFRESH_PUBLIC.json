@@ -30,7 +30,40 @@
     "latency_at_or_above_threshold_stub": 36,
     "of": 36
   },
-  "aggregates": {
+  "headline": {
+    "basis": "answer-bearing languages only",
+    "definition": "a language counts when its Atlas CLI answers named at least one caller across the run. On the excluded repositories Atlas returns a bare name or a name and a location, so the ratio measures a non-answer and is not published as a win.",
+    "languages": 25,
+    "of": 36,
+    "comparable_queries": 147,
+    "tokens_median_across_languages_cli": 4.25,
+    "tokens_median_across_languages_serve": 8.9,
+    "tokens_pooled_sum_cli": 3.7,
+    "tokens_pooled_sum_serve": 13.3,
+    "latency_median_across_languages_cli": 4.78,
+    "latency_pooled_sum_cli": 5.71,
+    "token_at_or_above_threshold_cli": 6
+  },
+  "excluded_non_answering": {
+    "languages": [
+      "astro",
+      "blade",
+      "byond",
+      "delphi",
+      "ejs",
+      "lua",
+      "powershell",
+      "rust",
+      "scala",
+      "sql",
+      "terraform"
+    ],
+    "count": 11,
+    "why": "the Atlas CLI named no caller on these repositories at this commit, so their token ratios describe the size difference between two non-answers. Several are large (lua 35.8×, rust 46.1×, terraform 38.5×) and every one of them is excluded from the headline for that reason.",
+    "note": "Some of these are probe artefacts rather than binder gaps — byond's probes are markdown headings, rust's are type names — but the ratio is unusable either way, so the distinction does not rescue the number."
+  },
+  "aggregates_as_measured": {
+    "note": "all 36 languages, including the 11 that named no caller. Published for completeness and for comparison with the retracted rows; NOT the headline.",
     "languages": 36,
     "comparable_queries": 199,
     "total_queries": 224,
@@ -47,239 +80,52 @@
     "latency_per_query_median_cli": 5.12,
     "latency_per_query_median_serve": 8.33
   },
-  "regressed_vs_stub": [
-    {
-      "language": "apex",
-      "token_ratio_stub": 12,
-      "token_ratio_cli": 2.4,
-      "callers_listed_cli": 3,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "astro",
-      "token_ratio_stub": 10.5,
-      "token_ratio_cli": 3,
-      "callers_listed_cli": 0,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "bash",
-      "token_ratio_stub": 17.5,
-      "token_ratio_cli": 1.06,
-      "callers_listed_cli": 4,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "blade",
-      "token_ratio_stub": 29.75,
-      "token_ratio_cli": 5.95,
-      "callers_listed_cli": 0,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "csharp",
-      "token_ratio_stub": 99.75,
-      "token_ratio_cli": 11.08,
-      "callers_listed_cli": 2,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "cuda",
-      "token_ratio_stub": 18.5,
-      "token_ratio_cli": 2.85,
-      "callers_listed_cli": 2,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "dart",
-      "token_ratio_stub": 26.5,
-      "token_ratio_cli": 4.08,
-      "callers_listed_cli": 3,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "delphi",
-      "token_ratio_stub": 9.5,
-      "token_ratio_cli": 2.38,
-      "callers_listed_cli": 0,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "dotnet",
-      "token_ratio_stub": 9.5,
-      "token_ratio_cli": 1.46,
-      "callers_listed_cli": 3,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "ejs",
-      "token_ratio_stub": 16,
-      "token_ratio_cli": 8,
-      "callers_listed_cli": 0,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "elixir",
-      "token_ratio_stub": 35.5,
-      "token_ratio_cli": 8.88,
-      "callers_listed_cli": 2,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "ets",
-      "token_ratio_stub": 29.67,
-      "token_ratio_cli": 8.9,
-      "callers_listed_cli": 1,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "fortran",
-      "token_ratio_stub": 32.5,
-      "token_ratio_cli": 8.12,
-      "callers_listed_cli": 2,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "groovy",
-      "token_ratio_stub": 38.5,
-      "token_ratio_cli": 11,
-      "callers_listed_cli": 1,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "json",
-      "token_ratio_stub": 18.5,
-      "token_ratio_cli": 2.18,
-      "callers_listed_cli": 8,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "julia",
-      "token_ratio_stub": 25.5,
-      "token_ratio_cli": 3.19,
-      "callers_listed_cli": 4,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "kotlin",
-      "token_ratio_stub": 119.5,
-      "token_ratio_cli": 18.38,
-      "callers_listed_cli": 5,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "markdown",
-      "token_ratio_stub": 14.8,
-      "token_ratio_cli": 6.73,
-      "callers_listed_cli": 1,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "objc",
-      "token_ratio_stub": 89.25,
-      "token_ratio_cli": 17.85,
-      "callers_listed_cli": 1,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "pascal",
-      "token_ratio_stub": 9.5,
-      "token_ratio_cli": 1.9,
-      "callers_listed_cli": 2,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "php",
-      "token_ratio_stub": 15.5,
-      "token_ratio_cli": 1.35,
-      "callers_listed_cli": 2,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "powershell",
-      "token_ratio_stub": 30.75,
-      "token_ratio_cli": 6.47,
-      "callers_listed_cli": 0,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "razor",
-      "token_ratio_stub": 15.5,
-      "token_ratio_cli": 3.44,
-      "callers_listed_cli": 1,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "ruby",
-      "token_ratio_stub": 37.5,
-      "token_ratio_cli": 4.29,
-      "callers_listed_cli": 3,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "rust",
-      "token_ratio_stub": 126.75,
-      "token_ratio_cli": 46.09,
-      "callers_listed_cli": 0,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "scala",
-      "token_ratio_stub": 68,
-      "token_ratio_cli": 45.33,
-      "callers_listed_cli": 0,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "sql",
-      "token_ratio_stub": 27.75,
-      "token_ratio_cli": 5.29,
-      "callers_listed_cli": 0,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "svelte",
-      "token_ratio_stub": 44,
-      "token_ratio_cli": 7.33,
-      "callers_listed_cli": 2,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "swift",
-      "token_ratio_stub": 46.75,
-      "token_ratio_cli": 4.25,
-      "callers_listed_cli": 3,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "terraform",
-      "token_ratio_stub": 144.25,
-      "token_ratio_cli": 38.47,
-      "callers_listed_cli": 0,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "verilog",
-      "token_ratio_stub": 9.5,
-      "token_ratio_cli": 3.45,
-      "callers_listed_cli": 2,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "vue",
-      "token_ratio_stub": 11.5,
-      "token_ratio_cli": 3.29,
-      "callers_listed_cli": 2,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    },
-    {
-      "language": "zig",
-      "token_ratio_stub": 129.5,
-      "token_ratio_cli": 37,
-      "callers_listed_cli": 1,
-      "why": "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens"
-    }
-  ],
+  "vs_stub": {
+    "fell": 33,
+    "rose": [
+      {
+        "language": "byond",
+        "token_ratio_stub": 17,
+        "token_ratio_cli": 38.25,
+        "callers_listed_cli": 0
+      },
+      {
+        "language": "r",
+        "token_ratio_stub": 91.44,
+        "token_ratio_cli": 274.33,
+        "callers_listed_cli": 4
+      }
+    ],
+    "why_fell": "the stub's larger ratio came from a two-token non-answer. The current CLI returns a real answer and therefore spends real tokens, so almost every honest multiplier is SMALLER than the one it replaces.",
+    "why_rose": "byond's ratio grew while still naming zero callers — a bigger multiplier for the same empty answer, which is why it is excluded from the headline. r's 274× is a single-language outlier on a detector-only comparison and is not representative of anything.",
+    "biggest_drops": [
+      {
+        "language": "terraform",
+        "from": 144.25,
+        "to": 38.47
+      },
+      {
+        "language": "kotlin",
+        "from": 119.5,
+        "to": 18.38
+      },
+      {
+        "language": "zig",
+        "from": 129.5,
+        "to": 37
+      },
+      {
+        "language": "csharp",
+        "from": 99.75,
+        "to": 11.08
+      },
+      {
+        "language": "rust",
+        "from": 126.75,
+        "to": 46.09
+      }
+    ]
+  },
   "languages": [
     {
       "language": "apex",

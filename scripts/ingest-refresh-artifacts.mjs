@@ -131,22 +131,43 @@ const matrixPublic = {
 const live = read("LIVE36_REFRESH_SUMMARY.json");
 const liveFiles = fs.readdirSync(path.join(srcDir, "live36"))
   .filter((f) => /^LIVE_.*_BENCHMARK\.json$/.test(f)).sort();
+
+// THE ONE THAT MATTERS. A token ratio is only evidence about caller retrieval
+// if the answer being measured actually retrieved a caller. On 11 of these 36
+// repositories the current CLI still answers with a bare name or a name and a
+// location — `Loader.load`, `HiArgs c@hiargs:36` — and the graph tool answers
+// with a paragraph, so the quotient is large and means nothing. That is the
+// SAME defect this refresh exists to retract, one order of magnitude smaller.
+// So the headline live figure is computed over the languages whose answers
+// name at least one caller, and the all-36 figure is published beside it,
+// labelled, rather than led with.
+const bearing = new Set(live.languages.filter((x) => x.callers_listed_cli > 0).map((x) => x.language));
+const nonBearing = live.languages.filter((x) => x.callers_listed_cli === 0).map((x) => x.language).sort();
+
 let lg = 0, lc = 0, ls = 0, llg = 0, llc = 0, lls = 0, comparable = 0, totalQ = 0;
+let bg = 0, bc = 0, bs = 0, blg = 0, blc = 0, bComparable = 0;
 const perQueryTok = [], perQueryLat = [], perQueryTokServe = [], perQueryLatServe = [];
 for (const f of liveFiles) {
   const d = JSON.parse(fs.readFileSync(path.join(srcDir, "live36", f), "utf8"));
+  const isBearing = bearing.has(d.language);
   totalQ += (d.queries || []).length;
   for (const q of d.queries || []) {
     if (q.graphify_missing || q.atlas_missing) continue;
     comparable++;
     lg += q.graphify_tokens; lc += q.cli_tokens; ls += q.atlas_tokens;
     llg += q.graphify_ms; llc += q.cli_ms; lls += q.atlas_ms;
+    if (isBearing) {
+      bComparable++;
+      bg += q.graphify_tokens; bc += q.cli_tokens; bs += q.atlas_tokens;
+      blg += q.graphify_ms; blc += q.cli_ms;
+    }
     if (q.cli_tokens) perQueryTok.push(q.graphify_tokens / q.cli_tokens);
     if (q.atlas_tokens) perQueryTokServe.push(q.graphify_tokens / q.atlas_tokens);
     if (q.cli_ms) perQueryLat.push(q.graphify_ms / q.cli_ms);
     if (q.atlas_ms) perQueryLatServe.push(q.graphify_ms / q.atlas_ms);
   }
 }
+const bearingLangs = live.languages.filter((x) => bearing.has(x.language));
 const livePublic = {
   label: "36 live public repositories",
   platform: "Darwin arm64 (macOS)",
@@ -179,7 +200,31 @@ const livePublic = {
     latency_at_or_above_threshold_stub: live.summary.latency10x_old,
     of: live.summary.liveLanguages,
   },
-  aggregates: {
+  // The published live figure. Restricted to repositories whose Atlas answer
+  // actually named a caller — the only rows where a token ratio is evidence
+  // about caller retrieval rather than about two different non-answers.
+  headline: {
+    basis: "answer-bearing languages only",
+    definition: "a language counts when its Atlas CLI answers named at least one caller across the run. On the excluded repositories Atlas returns a bare name or a name and a location, so the ratio measures a non-answer and is not published as a win.",
+    languages: bearingLangs.length,
+    of: live.languages.length,
+    comparable_queries: bComparable,
+    tokens_median_across_languages_cli: round(median(bearingLangs.map((x) => x.tokenRatio_cli))),
+    tokens_median_across_languages_serve: round(median(bearingLangs.map((x) => x.tokenRatio_serve))),
+    tokens_pooled_sum_cli: round(bg / bc),
+    tokens_pooled_sum_serve: round(bg / bs),
+    latency_median_across_languages_cli: round(median(bearingLangs.map((x) => x.latencyRatio_cli))),
+    latency_pooled_sum_cli: round(blg / blc),
+    token_at_or_above_threshold_cli: bearingLangs.filter((x) => x.tokenRatio_cli >= live.targetRatio).length,
+  },
+  excluded_non_answering: {
+    languages: nonBearing,
+    count: nonBearing.length,
+    why: "the Atlas CLI named no caller on these repositories at this commit, so their token ratios describe the size difference between two non-answers. Several are large (lua 35.8×, rust 46.1×, terraform 38.5×) and every one of them is excluded from the headline for that reason.",
+    note: "Some of these are probe artefacts rather than binder gaps — byond's probes are markdown headings, rust's are type names — but the ratio is unusable either way, so the distinction does not rescue the number.",
+  },
+  aggregates_as_measured: {
+    note: "all 36 languages, including the 11 that named no caller. Published for completeness and for comparison with the retracted rows; NOT the headline.",
     languages: live.languages.length,
     comparable_queries: comparable,
     total_queries: totalQ,
@@ -196,15 +241,26 @@ const livePublic = {
     latency_per_query_median_cli: round(median(perQueryLat)),
     latency_per_query_median_serve: round(median(perQueryLatServe)),
   },
-  regressed_vs_stub: live.languages
-    .filter((x) => x.tokenRatio_cli < x.tokenRatio_old)
-    .map((x) => ({
+  // Most languages' multipliers FELL against the stub rows, because the stub's
+  // number came from answering with nothing. That is the retraction working,
+  // not a regression, so it is summarised rather than listed row by row. The
+  // two rows that went the other way are named, because a multiplier that
+  // GREW deserves more scrutiny than one that shrank, not less.
+  vs_stub: {
+    fell: live.languages.filter((x) => x.tokenRatio_cli < x.tokenRatio_old).length,
+    rose: live.languages.filter((x) => x.tokenRatio_cli > x.tokenRatio_old).map((x) => ({
       language: x.language,
       token_ratio_stub: x.tokenRatio_old,
       token_ratio_cli: x.tokenRatio_cli,
       callers_listed_cli: x.callers_listed_cli,
-      why: "the stub's larger ratio came from a 2-token non-answer; the current CLI returns a real answer and therefore spends real tokens",
     })),
+    why_fell: "the stub's larger ratio came from a two-token non-answer. The current CLI returns a real answer and therefore spends real tokens, so almost every honest multiplier is SMALLER than the one it replaces.",
+    why_rose: "byond's ratio grew while still naming zero callers — a bigger multiplier for the same empty answer, which is why it is excluded from the headline. r's 274× is a single-language outlier on a detector-only comparison and is not representative of anything.",
+    biggest_drops: [...live.languages]
+      .sort((a, b) => (b.tokenRatio_old - b.tokenRatio_cli) - (a.tokenRatio_old - a.tokenRatio_cli))
+      .slice(0, 5)
+      .map((x) => ({ language: x.language, from: x.tokenRatio_old, to: x.tokenRatio_cli })),
+  },
   languages: live.languages,
 };
 
@@ -267,6 +323,6 @@ const wrote = [
 console.log(
   `ingested ${wrote.length} Darwin artifacts, leak check CLEAN\n  ` + wrote.join("\n  ") +
   `\n  matrix pooled ${matrixPublic.aggregates.tokens_pooled}× tokens / ${matrixPublic.aggregates.latency_per_language_mean}× latency (mean)` +
-  `\n  live36 ${livePublic.aggregates.tokens_median_across_languages_cli}× median / ${livePublic.aggregates.tokens_pooled_sum_cli}× pooled (CLI), ${livePublic.answer_quality.callers_listed_cli} answers list a caller (stub: ${livePublic.answer_quality.callers_listed_stub})` +
+  `\n  live36 headline ${livePublic.headline.tokens_median_across_languages_cli}× median / ${livePublic.headline.tokens_pooled_sum_cli}× pooled over ${livePublic.headline.languages}/${livePublic.headline.of} answer-bearing langs (${livePublic.excluded_non_answering.count} excluded: named no caller)` +
   `\n  llm-qa explain_high F1 ${qaPublic.sources.atlas_explain_high.f1} @ ${qaPublic.sources.atlas_explain_high.ctx_tokens} tok vs graphify ${qaPublic.sources.graphify.f1} @ ${qaPublic.sources.graphify.ctx_tokens} tok`
 );
