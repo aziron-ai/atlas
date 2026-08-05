@@ -71,7 +71,7 @@ never fails a run; every failure mode degrades to a disclosed state.
 | --- | --- |
 | `merged` | the merge completed and superseded segments were reclaimed. **Only this state asserts a steady-state footprint** |
 | `reclaimed` | the merge was skipped or declined, but the reclaim ran. Superseded segments are gone; unmerged ones may remain |
-| `partial` | **Since 0.1.50.** Every step ran and reported success, and then the check found the sidecar still holding obsolete document bytes a compaction would reclaim — a contended machine can leave a whole superseded generation inside one segment, which the engine declines to re-merge. The reported footprint is **above** steady state. Re-run on a quiet machine, or run `atlas compact --rebuild-lexical`, before quoting a size |
+| `partial` | **Since 0.1.51.** Every step ran and reported success, and then the check found the sidecar still holding obsolete document bytes a compaction would reclaim — a contended machine can leave a whole superseded generation inside one segment, which the engine declines to re-merge. The reported footprint is **above** steady state. Re-run on a quiet machine, or run `atlas compact --rebuild-lexical`, before quoting a size |
 | `timeout` | the merge did not finish inside its budget, so the reclaim was deliberately not attempted and the footprint may hold both unmerged and superseded segments. Raise `ATLAS_LEXICAL_SETTLE_TIMEOUT` (default 30s) and re-run |
 | `skipped` | there was nothing to settle: no sidecar, or this run wrote no documents |
 | `failed` | the settle itself errored; the reason is on stderr and the footprint is still reported |
@@ -181,7 +181,7 @@ over the tier; they are overrides, not the primary control. Pin a tier with
 tiers, their values, and the auto-detection rules are in
 [Configuration](configuration).
 
-Since 0.1.50, the one rule that matters most while indexing is: **`balanced` bounds background
+Since 0.1.51, the one rule that matters most while indexing is: **`balanced` bounds background
 work, not the index you are waiting on.** A watch-triggered refresh or an MCP
 lazy index runs inside a warm daemon and takes 3/4 of the cores under a
 `RAM/4` soft heap limit; an explicit `atlas index` you typed runs at full
