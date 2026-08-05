@@ -1,0 +1,1867 @@
+{
+  "label": "Real-LLM caller-QA sweep",
+  "what": "a real model is handed ONE context source and asked which functions call `target`; the answer is scored against the fixture's constructed truth. This measures the context, not the model.",
+  "model": [
+    "claude-haiku-4-5-20251001"
+  ],
+  "sampling": "temperature 0 · 3 samples/cell · majority vote (threshold 2) · no tools",
+  "cells": 222,
+  "model_calls": 666,
+  "languages": 37,
+  "prompt": "Using ONLY the context below, list the names of the functions that directly call `target`. Answer with ONLY a comma-separated list of function names, nothing else. If the context does not list caller names, answer with an empty line.\n\nCONTEXT:\n<context>",
+  "definitions": {
+    "f1": "deterministic set F1 of the majority-voted caller-name list against the fixture truth (15 callers, 3 decoys, truth by construction)",
+    "ctx_tokens": "mean size of the context handed to the model, in tokens",
+    "controls": "`baseline` is a positive control — the raw fixture file, which contains the truth by construction, so its F1 of 1.000 confirms the judge works. It is a CEILING, not a competitor: Atlas does not beat it and does not claim to. `graphify` is the rival tool on the identical prompt and fixture."
+  },
+  "sources": {
+    "atlas_callers_xhigh": {
+      "cells": 37,
+      "f1": 0.8649,
+      "precision": 0.8649,
+      "recall": 0.8649,
+      "ctx_tokens": 230.1,
+      "perfect_languages": 32
+    },
+    "atlas_explain_high": {
+      "cells": 37,
+      "f1": 0.8649,
+      "precision": 0.8649,
+      "recall": 0.8649,
+      "ctx_tokens": 23.9,
+      "perfect_languages": 32
+    },
+    "atlas_explain_low": {
+      "cells": 37,
+      "f1": 0,
+      "precision": 0,
+      "recall": 0,
+      "ctx_tokens": 3.4,
+      "perfect_languages": 0
+    },
+    "atlas_explain_medium": {
+      "cells": 37,
+      "f1": 0.7688,
+      "precision": 0.8649,
+      "recall": 0.6919,
+      "ctx_tokens": 22.5,
+      "perfect_languages": 0
+    },
+    "baseline": {
+      "cells": 37,
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "ctx_tokens": 156.8,
+      "perfect_languages": 37
+    },
+    "graphify": {
+      "cells": 37,
+      "f1": 0.5405,
+      "precision": 0.5405,
+      "recall": 0.5405,
+      "ctx_tokens": 96.5,
+      "perfect_languages": 20
+    }
+  },
+  "detail_curve": [
+    {
+      "source": "atlas_explain_low",
+      "f1": 0,
+      "ctx_tokens": 3.4
+    },
+    {
+      "source": "atlas_explain_medium",
+      "f1": 0.7688,
+      "ctx_tokens": 22.5
+    },
+    {
+      "source": "atlas_explain_high",
+      "f1": 0.8649,
+      "ctx_tokens": 23.9
+    },
+    {
+      "source": "atlas_callers_xhigh",
+      "f1": 0.8649,
+      "ctx_tokens": 230.1
+    }
+  ],
+  "per_cell": [
+    {
+      "language": "go",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "go",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "go",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "go",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 251
+    },
+    {
+      "language": "go",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 162
+    },
+    {
+      "language": "go",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 125
+    },
+    {
+      "language": "python",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "python",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "python",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "python",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 203
+    },
+    {
+      "language": "python",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 162
+    },
+    {
+      "language": "python",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 115
+    },
+    {
+      "language": "javascript",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "javascript",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "javascript",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "javascript",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 270
+    },
+    {
+      "language": "javascript",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 162
+    },
+    {
+      "language": "javascript",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 141
+    },
+    {
+      "language": "typescript",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "typescript",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "typescript",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "typescript",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 292
+    },
+    {
+      "language": "typescript",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 162
+    },
+    {
+      "language": "typescript",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 170
+    },
+    {
+      "language": "java",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "java",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "java",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "java",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 282
+    },
+    {
+      "language": "java",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 166
+    },
+    {
+      "language": "java",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 188
+    },
+    {
+      "language": "c",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "c",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "c",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "c",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 251
+    },
+    {
+      "language": "c",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 161
+    },
+    {
+      "language": "c",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 133
+    },
+    {
+      "language": "cpp",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "cpp",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "cpp",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "cpp",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 259
+    },
+    {
+      "language": "cpp",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 162
+    },
+    {
+      "language": "cpp",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 133
+    },
+    {
+      "language": "rust",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "rust",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "rust",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "rust",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 247
+    },
+    {
+      "language": "rust",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 162
+    },
+    {
+      "language": "rust",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 118
+    },
+    {
+      "language": "ruby",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "ruby",
+      "source": "atlas_explain_medium",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "ruby",
+      "source": "atlas_explain_high",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "ruby",
+      "source": "atlas_callers_xhigh",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 5
+    },
+    {
+      "language": "ruby",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 41
+    },
+    {
+      "language": "ruby",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 99
+    },
+    {
+      "language": "php",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "php",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "php",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "php",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 274
+    },
+    {
+      "language": "php",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 162
+    },
+    {
+      "language": "php",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 137
+    },
+    {
+      "language": "csharp",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 4
+    },
+    {
+      "language": "csharp",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 26
+    },
+    {
+      "language": "csharp",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "csharp",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 274
+    },
+    {
+      "language": "csharp",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 166
+    },
+    {
+      "language": "csharp",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 189
+    },
+    {
+      "language": "kotlin",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "kotlin",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "kotlin",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "kotlin",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 247
+    },
+    {
+      "language": "kotlin",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 162
+    },
+    {
+      "language": "kotlin",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 117
+    },
+    {
+      "language": "swift",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "swift",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "swift",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "swift",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 262
+    },
+    {
+      "language": "swift",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 163
+    },
+    {
+      "language": "swift",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 113
+    },
+    {
+      "language": "scala",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "scala",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "scala",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "scala",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 281
+    },
+    {
+      "language": "scala",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 175
+    },
+    {
+      "language": "scala",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 175
+    },
+    {
+      "language": "lua",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "lua",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "lua",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "lua",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 270
+    },
+    {
+      "language": "lua",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 162
+    },
+    {
+      "language": "lua",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 133
+    },
+    {
+      "language": "powershell",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "powershell",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "powershell",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "powershell",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 255
+    },
+    {
+      "language": "powershell",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 162
+    },
+    {
+      "language": "powershell",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 120
+    },
+    {
+      "language": "bash",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 4
+    },
+    {
+      "language": "bash",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 26
+    },
+    {
+      "language": "bash",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "bash",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 229
+    },
+    {
+      "language": "bash",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 161
+    },
+    {
+      "language": "bash",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 90
+    },
+    {
+      "language": "zig",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "zig",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "zig",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "zig",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 270
+    },
+    {
+      "language": "zig",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 162
+    },
+    {
+      "language": "zig",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 138
+    },
+    {
+      "language": "elixir",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "elixir",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "elixir",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 26
+    },
+    {
+      "language": "elixir",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 248
+    },
+    {
+      "language": "elixir",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 41
+    },
+    {
+      "language": "elixir",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 132
+    },
+    {
+      "language": "objc",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "objc",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "objc",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "objc",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 266
+    },
+    {
+      "language": "objc",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 8
+    },
+    {
+      "language": "objc",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 157
+    },
+    {
+      "language": "julia",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "julia",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "julia",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 26
+    },
+    {
+      "language": "julia",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 215
+    },
+    {
+      "language": "julia",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 160
+    },
+    {
+      "language": "julia",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 160
+    },
+    {
+      "language": "fortran",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "fortran",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "fortran",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 26
+    },
+    {
+      "language": "fortran",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 226
+    },
+    {
+      "language": "fortran",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 161
+    },
+    {
+      "language": "fortran",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 283
+    },
+    {
+      "language": "dart",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "dart",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "dart",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "dart",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 210
+    },
+    {
+      "language": "dart",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 42
+    },
+    {
+      "language": "dart",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 126
+    },
+    {
+      "language": "verilog",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "verilog",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "verilog",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "verilog",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 241
+    },
+    {
+      "language": "verilog",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 41
+    },
+    {
+      "language": "verilog",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 234
+    },
+    {
+      "language": "pascal",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "pascal",
+      "source": "atlas_explain_medium",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "pascal",
+      "source": "atlas_explain_high",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "pascal",
+      "source": "atlas_callers_xhigh",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 5
+    },
+    {
+      "language": "pascal",
+      "source": "graphify",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 161
+    },
+    {
+      "language": "pascal",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 171
+    },
+    {
+      "language": "byond",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "byond",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "byond",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "byond",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 199
+    },
+    {
+      "language": "byond",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 8
+    },
+    {
+      "language": "byond",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 119
+    },
+    {
+      "language": "razor",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 1
+    },
+    {
+      "language": "razor",
+      "source": "atlas_explain_medium",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 1
+    },
+    {
+      "language": "razor",
+      "source": "atlas_explain_high",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 1
+    },
+    {
+      "language": "razor",
+      "source": "atlas_callers_xhigh",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 5
+    },
+    {
+      "language": "razor",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 8
+    },
+    {
+      "language": "razor",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 134
+    },
+    {
+      "language": "vue",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 3
+    },
+    {
+      "language": "vue",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 25
+    },
+    {
+      "language": "vue",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 26
+    },
+    {
+      "language": "vue",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 270
+    },
+    {
+      "language": "vue",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 8
+    },
+    {
+      "language": "vue",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 162
+    },
+    {
+      "language": "svelte",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 5
+    },
+    {
+      "language": "svelte",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "svelte",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 28
+    },
+    {
+      "language": "svelte",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 282
+    },
+    {
+      "language": "svelte",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 8
+    },
+    {
+      "language": "svelte",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 155
+    },
+    {
+      "language": "astro",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 5
+    },
+    {
+      "language": "astro",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "astro",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 28
+    },
+    {
+      "language": "astro",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 278
+    },
+    {
+      "language": "astro",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 8
+    },
+    {
+      "language": "astro",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 143
+    },
+    {
+      "language": "ejs",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 4
+    },
+    {
+      "language": "ejs",
+      "source": "atlas_explain_medium",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 10
+    },
+    {
+      "language": "ejs",
+      "source": "atlas_explain_high",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 10
+    },
+    {
+      "language": "ejs",
+      "source": "atlas_callers_xhigh",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 17
+    },
+    {
+      "language": "ejs",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 8
+    },
+    {
+      "language": "ejs",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 142
+    },
+    {
+      "language": "ets",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 5
+    },
+    {
+      "language": "ets",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "ets",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 28
+    },
+    {
+      "language": "ets",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 300
+    },
+    {
+      "language": "ets",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 8
+    },
+    {
+      "language": "ets",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 189
+    },
+    {
+      "language": "r",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 4
+    },
+    {
+      "language": "r",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 26
+    },
+    {
+      "language": "r",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "r",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 270
+    },
+    {
+      "language": "r",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 8
+    },
+    {
+      "language": "r",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 156
+    },
+    {
+      "language": "apex",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 7
+    },
+    {
+      "language": "apex",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 29
+    },
+    {
+      "language": "apex",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 30
+    },
+    {
+      "language": "apex",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 292
+    },
+    {
+      "language": "apex",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 52
+    },
+    {
+      "language": "apex",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 222
+    },
+    {
+      "language": "blade",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 1
+    },
+    {
+      "language": "blade",
+      "source": "atlas_explain_medium",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 1
+    },
+    {
+      "language": "blade",
+      "source": "atlas_explain_high",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 1
+    },
+    {
+      "language": "blade",
+      "source": "atlas_callers_xhigh",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 5
+    },
+    {
+      "language": "blade",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 8
+    },
+    {
+      "language": "blade",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 143
+    },
+    {
+      "language": "groovy",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 5
+    },
+    {
+      "language": "groovy",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "groovy",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 28
+    },
+    {
+      "language": "groovy",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 251
+    },
+    {
+      "language": "groovy",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 8
+    },
+    {
+      "language": "groovy",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 113
+    },
+    {
+      "language": "sql",
+      "source": "atlas_explain_low",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 4
+    },
+    {
+      "language": "sql",
+      "source": "atlas_explain_medium",
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.888888888888889,
+      "ctx_tokens": 26
+    },
+    {
+      "language": "sql",
+      "source": "atlas_explain_high",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 27
+    },
+    {
+      "language": "sql",
+      "source": "atlas_callers_xhigh",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 513
+    },
+    {
+      "language": "sql",
+      "source": "graphify",
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "ctx_tokens": 8
+    },
+    {
+      "language": "sql",
+      "source": "baseline",
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "ctx_tokens": 427
+    }
+  ]
+}

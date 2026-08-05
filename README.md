@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://atlas.aziro.com/">
-    <img src="assets/og.png" alt="Atlas — the most accurate code answer, for the fewest tokens" width="820">
+    <img src="assets/og.png" alt="Atlas — a better code answer, for a fraction of the tokens" width="820">
   </a>
 </p>
 
@@ -63,42 +63,50 @@ across 37 languages. Full methodology and raw artifacts are
 
 | Approach | Answer accuracy (F1) | Context tokens / query |
 | --- | --- | --- |
-| Read the whole file *(accuracy ceiling)* | 1.00 | 157 |
+| Read the whole file *(positive control — contains the answer by construction)* | 1.00 | 157 |
 | Graph tool | 0.54 | 97 |
-| **Atlas** | **0.76** — and **1.00 on 28 languages** | **21** |
+| **Atlas** | **0.86** — and **1.00 on 32 of 37 languages** | **24** |
 
 <p align="center">
-  <strong>+40%</strong> answer accuracy &nbsp;·&nbsp;
-  <strong>36×</strong> fewer query tokens &nbsp;·&nbsp;
-  <strong>17×</strong> faster queries &nbsp;·&nbsp;
-  <strong>2.3×</strong> faster cold index
+  <strong>3.17×</strong> fewer answer tokens &nbsp;·&nbsp;
+  <strong>1.60×</strong> the caller F1 &nbsp;·&nbsp;
+  <strong>4.12×</strong> faster queries &nbsp;·&nbsp;
+  <strong>9.6×</strong> cheaper than max detail, same answer
 </p>
 
-On its 28 supported languages Atlas matches the *raw-file accuracy ceiling*
-(F1 1.00) while using **~6× fewer tokens** — and answers `who calls X` in a
-**~7 ms median** even on symbols with tens of thousands of callers.
+The token and latency figures are pooled over a seven-repository matrix where both
+binaries ran on one host in one pass, counting only queries **both** tools answered.
+The raw-file row is a control, not a competitor: it contains the answer by
+construction, so its 1.00 checks that the judge works.
+
+> **Retracted.** Earlier READMEs claimed **36×** fewer query tokens (and before that,
+> 20×) and **17×** faster queries. Those came from a live-repo run against a build
+> whose caller answers were a two-token placeholder — across 224 answers it named
+> zero callers. Withdrawn, not adjusted.
 
 ### Why not just read the files?
 
 Ask **"who calls `WithField`?"** on [sirupsen/logrus](https://github.com/sirupsen/logrus),
 scored against `gopls` call-hierarchy as ground truth:
 
-| Approach | Tokens into the model | Accuracy (F1) |
-| --- | ---: | ---: |
-| Dump the raw files | 2,227 | 0.02 |
-| Graph tool | 98 | 0.08 |
-| **Atlas** | **169** | **0.98** |
-
 A production function has callers spread across many files; raw dumps drown the model
 in noise and still miss callers. Atlas returns the complete, precise caller set as
-structured, cited context — **~13× fewer tokens and far more accurate.**
+structured, cited context. What that is worth shows up inside a real agent loop —
+19 questions, each agent restricted to one tool, `gopls` call-hierarchy as truth,
+all 114 runs completed:
 
-And it compounds across a real agent loop. On the same repo, 19 questions, Claude:
+| Agent | Mode | Total tokens | Turns | Answer F1 | Wall time |
+| --- | --- | ---: | ---: | ---: | ---: |
+| claude | Graph tool | 239,026 | 7.7 | 0.20 | 32.5 s |
+| claude | Grep-and-read baseline | 134,886 | 4.7 | 0.59 | 18.1 s |
+| **claude** | **With Atlas** | **58,234** | **2.0** | **0.995** | **9.2 s** |
+| codex | Graph tool | 131,335 | 12.7 | 0.38 | 45.4 s |
+| codex | Grep-and-read baseline | 74,229 | 3.3 | 0.83 | 35.9 s |
+| **codex** | **With Atlas** | **33,471** | **1.0** | **0.995** | **13.5 s** |
 
-| Mode | Total tokens | Turns | Answer F1 | Wall time |
-| --- | ---: | ---: | ---: | ---: |
-| Grep-and-read baseline | 144,385 | 4.9 | 0.57 | 19.9 s |
-| **With Atlas** | **61,561** | **2.0** | **0.88** | **8.3 s** |
+Cross-agent totals are not comparable — different tokenizers and system-prompt
+floors — so compare modes within an agent. The graph-tool column ran version
+0.8.49; the previously published table ran 0.9.12.
 
 ## Quickstart
 

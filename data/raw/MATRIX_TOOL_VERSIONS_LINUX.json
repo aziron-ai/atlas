@@ -1,13 +1,30 @@
 {
-  "platform": "Linux 6.18.5 x86_64",
+  "platform": "Linux 6.12.54-linuxkit aarch64",
+  "host": {
+    "actual": "Docker container golang:1.26-bookworm on the Darwin workstation",
+    "kernel": "Linux 6.12.54-linuxkit aarch64 (Docker Desktop VM)",
+    "arch": "arm64/aarch64",
+    "arch_caveat": "PUBLISHED reference run was Linux 6.18.5 x86_64. This leg is arm64. F1/accuracy is architecture-independent; latency_ms and index_ms are NOT comparable across these two architectures.",
+    "resources": "4 vCPU / ~4 GiB RAM -> atlas auto-selected the ECO profile (GOMAXPROCS=2, 614.9MiB soft heap, GOGC=50). The published run's profile is unknown; eco depresses latency/index throughput.",
+    "filesystem": "container overlayfs (case-SENSITIVE); sources were unpacked from git archive inside the container, never read over the case-insensitive Darwin bind mount",
+    "why_not_remote": "all four candidate Linux hosts (172.30.47.69, 172.30.62.31, 172.30.38.241, 172.30.36.100) refused passwordless ssh (Permission denied (publickey,password)); per the run rules password prompts are never guessed, so all four were skipped"
+  },
+  "toolchain": {
+    "go": "go1.26.5 linux/arm64",
+    "gopls": "v0.23.0",
+    "python": "3.11.2",
+    "gcc": "Debian 12.2.0",
+    "graphify": "NOT INSTALLED — competitor column not reproducible on this host"
+  },
   "tools": {
-    "atlas": "atlas dev (none, unknown)",
-    "go": "go version go1.25.0 linux/amd64",
-    "python": "Python 3.11.15",
-    "node": "v22.22.2",
-    "gopls": "golang.org/x/tools/gopls v0.22.0",
-    "tsc": "Version 6.0.3",
-    "pyright": "WARNING: there is a new pyright version available (v1.1.408 -> v1.1.411).",
-    "graphify": "graphify 0.9.5"
+    "atlas": "atlas dev (none, 2026-08-05T06:02:46Z)",
+    "go": "go version go1.26.5 linux/arm64",
+    "gopls": "golang.org/x/tools/gopls v0.23.0",
+    "python": "Python 3.11.2",
+    "node": "not_installed",
+    "tsc": "not_installed",
+    "pyright": "not_installed",
+    "graphify": "not_installed",
+    "gcc": "gcc (Debian 12.2.0-14+deb12u1) 12.2.0"
   }
 }

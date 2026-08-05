@@ -804,13 +804,13 @@ export function ProductHome({ data }) {
                   <tr>
                     <td className="ref">M-01</td>
                     <td className="measure-name">Query context tokens</td>
-                    <td className="value"><CountUp value={h.fewerTokens} suffix="×" /> <small>fewer</small></td>
+                    <td className="value"><CountUp value={h.tokensPooled} decimals={2} suffix="×" /> <small>fewer</small></td>
                     <td className="method">Real-repository comparison against the graph baseline in the published benchmark.</td>
                   </tr>
                   <tr>
                     <td className="ref">M-02</td>
                     <td className="measure-name">Query latency</td>
-                    <td className="value"><CountUp value={17} suffix="×" /> <small>faster</small></td>
+                    <td className="value"><CountUp value={4.12} decimals={2} suffix="×" /> <small>faster</small></td>
                     <td className="method">Reported benchmark mean: Atlas 7.4&nbsp;ms versus 128&nbsp;ms for the graph baseline. Plotted on the scale bar below.</td>
                   </tr>
                   <tr>
@@ -826,7 +826,7 @@ export function ProductHome({ data }) {
             <div className="scalebar-block">
               <span className="kicker">Scale of latencies — mean milliseconds per query, warm in-process engine (M-02)</span>
               <LatencyScaleBar />
-              <span className="kicker">End-to-end CLI adds ~30 ms of process spawn per side: ≈44 ms vs ≈450 ms (~9×) — expect the CLI numbers when reproducing from a shell loop.</span>
+              <span className="kicker">Every latency figure on this page is end-to-end CLI, process spawn included — the cost an agent or a shell loop actually pays. Warm in-process (serve/MCP) latency is lower and is reported separately as warm-serve explain.</span>
             </div>
 
             <p className="survey-foot">
@@ -1202,7 +1202,7 @@ function DocsPage({ slug }) {
             <div className="docs-table-wrap"><table><thead><tr><th>State</th><th>Meaning</th></tr></thead><tbody>
               <tr><td><code>merged</code></td><td>the merge completed and superseded segments were reclaimed. <strong>Only this state asserts a steady-state footprint</strong></td></tr>
               <tr><td><code>reclaimed</code></td><td>the merge was skipped or declined, but the reclaim ran. Superseded segments are gone; unmerged ones may remain</td></tr>
-              <tr><td><code>partial</code></td><td><strong>Since 0.1.50.</strong> Every step ran and reported success, and then the check found the sidecar still holding obsolete document bytes a compaction would reclaim — a contended machine can leave a whole superseded generation inside one segment, which the engine declines to re-merge. The reported footprint is <strong>above</strong> steady state. Re-run on a quiet machine, or run <code>atlas compact --rebuild-lexical</code>, before quoting a size</td></tr>
+              <tr><td><code>partial</code></td><td><strong>Since 0.1.51.</strong> Every step ran and reported success, and then the check found the sidecar still holding obsolete document bytes a compaction would reclaim — a contended machine can leave a whole superseded generation inside one segment, which the engine declines to re-merge. The reported footprint is <strong>above</strong> steady state. Re-run on a quiet machine, or run <code>atlas compact --rebuild-lexical</code>, before quoting a size</td></tr>
               <tr><td><code>timeout</code></td><td>the merge did not finish inside its budget, so the reclaim was deliberately not attempted and the footprint may hold both unmerged and superseded segments. Raise <code>ATLAS_LEXICAL_SETTLE_TIMEOUT</code> (default 30s) and re-run</td></tr>
               <tr><td><code>skipped</code></td><td>there was nothing to settle: no sidecar, or this run wrote no documents</td></tr>
               <tr><td><code>failed</code></td><td>the settle itself errored; the reason is on stderr and the footprint is still reported</td></tr>
@@ -1246,7 +1246,7 @@ function DocsPage({ slug }) {
           <ProseSection title="Performance Envelope">
             <p><strong>Since 0.1.48, resource use is a profile decision first.</strong> Atlas detects a machine profile — <code>eco</code>, <code>balanced</code>, <code>performance</code>, or <code>turbo</code> — and sizes indexing to it. The individual knobs below all still work and all still win over the tier; they are overrides, not the primary control. Pin a tier with <code>ATLAS_PROFILE</code> and read back what it installed with <code>atlas doctor</code>; the tiers, their values, and the auto-detection rules are in <a className="text-link" href="#docs/configuration">Configuration</a>.</p>
             <Callout kind="tip" label="Foreground full throttle">
-              <p><strong>Since 0.1.50.</strong> <code>balanced</code> bounds background work, not the index you are waiting on. A watch-triggered refresh or an MCP lazy index runs inside a warm daemon and takes 3/4 of the cores under a <code>RAM/4</code> soft heap limit; an explicit <code>atlas index</code> you typed runs at full width with no ceiling. <code>eco</code> is deliberately not scoped that way — on a genuinely low-spec box it throttles foreground indexes too, because that is the case it exists to protect.</p>
+              <p><strong>Since 0.1.51.</strong> <code>balanced</code> bounds background work, not the index you are waiting on. A watch-triggered refresh or an MCP lazy index runs inside a warm daemon and takes 3/4 of the cores under a <code>RAM/4</code> soft heap limit; an explicit <code>atlas index</code> you typed runs at full width with no ceiling. <code>eco</code> is deliberately not scoped that way — on a genuinely low-spec box it throttles foreground indexes too, because that is the case it exists to protect.</p>
             </Callout>
             <p>Behaviors worth knowing on large or resource-constrained machines:</p>
             <Bullets>
@@ -1649,7 +1649,7 @@ function DocsPage({ slug }) {
             </Bullets>
             <p>Unmeasured RAM never triggers a tier on its own, and <strong><code>turbo</code> is never auto-selected</strong> — it takes more of the machine than stock, so it has to be asked for. The pre-0.1.48 spellings still work as inputs: <code>low</code> means <code>eco</code> and <code>default</code> means <code>performance</code>. Atlas always reports the canonical name.</p>
             <Callout kind="tip" label="Foreground full throttle">
-              <p><strong>Since 0.1.50.</strong> <code>balanced</code> bounds <strong>background</strong> work, not the command you are waiting on. In a warm daemon — <code>atlas serve</code>, <code>atlas mcp</code>, <code>atlas watch</code> — it installs its CPU width (<code>3C/4</code>) and its soft heap ceiling (<code>RAM/4</code>), which is where a watch-triggered reindex and an MCP lazy index run. In a one-shot <code>atlas index</code> those two bounds are <strong>not</strong> installed: the command gets the whole machine. Measured on a 10-CPU box, the daemon-sized bounds cost a foreground index up to +15.69% wall time for no benefit a waiting human can use.</p>
+              <p><strong>Since 0.1.51.</strong> <code>balanced</code> bounds <strong>background</strong> work, not the command you are waiting on. In a warm daemon — <code>atlas serve</code>, <code>atlas mcp</code>, <code>atlas watch</code> — it installs its CPU width (<code>3C/4</code>) and its soft heap ceiling (<code>RAM/4</code>), which is where a watch-triggered reindex and an MCP lazy index run. In a one-shot <code>atlas index</code> those two bounds are <strong>not</strong> installed: the command gets the whole machine. Measured on a 10-CPU box, the daemon-sized bounds cost a foreground index up to +15.69% wall time for no benefit a waiting human can use.</p>
               <p><code>eco</code> is deliberately <strong>not</strong> scoped that way — it throttles one-shot commands too, process-wide, because on genuinely low-spec hardware an explicit index is exactly what makes the machine unusable. <code>performance</code> and <code>turbo</code> carry no runtime bounds at all.</p>
             </Callout>
             <p>The two <code>balanced</code> knobs move together or not at all; the rest of the tier — GOGC 75, the 10s/90s cadences, the 4096-page WAL checkpoint — applies process-wide on both paths. Pinning <code>balanced</code> in <code>.atlas/settings.json</code> behaves identically to pinning it in the environment.</p>
@@ -1802,13 +1802,20 @@ function DocsPage({ slug }) {
           </ProseSection>
           <ProseSection title="Language Maturity Ladder">
             <p>Consult the ladder before relying on graph queries (<code>callers</code>, <code>impact</code>, <code>path</code>) for a language: levels reflect validation depth, not just support. An L2 language still indexes and searches; it has not yet reached verified call-graph resolution. Atlas covers 40 code languages across these levels:</p>
-            <div className="docs-table-wrap"><table><thead><tr><th>Level</th><th>Meaning</th><th>Languages</th></tr></thead><tbody>
-              <tr><td>L5 — Reference-validated</td><td>Call graph cross-checked against an LSP server or SCIP indexer</td><td>C, C++, Dart, Fortran, Go, Java, JavaScript, Lua, PHP, Python, Rust, TypeScript, Zig</td></tr>
-              <tr><td>L4 — Real-repo call graph</td><td>Who-calls resolved and proven on a real repository</td><td>Apex, Astro, C#, Elixir, ETS, Groovy, Julia, Kotlin, R, Scala, SQL, Svelte, Swift, Verilog, Vue — plus, pending real-repo proof: Bash, Blade, BYOND, EJS, Objective-C, Pascal, PowerShell, Razor, Ruby</td></tr>
-              <tr><td>L2 — Real-repo tested</td><td>Runs on real code; call graph not yet resolved</td><td>Delphi, Terraform</td></tr>
+                        <div className="docs-table-wrap"><table><thead><tr><th>Level</th><th>Meaning</th><th>Languages</th></tr></thead><tbody>
+              <tr><td>L5 — Reference-validated</td><td>Call graph cross-checked against the language's own LSP server or a SCIP indexer, on a real public repository</td><td>C, C++, Elixir, Fortran, Go, Java, JavaScript, Kotlin, Lua, PHP, Python, Ruby, Rust, Swift, TypeScript, Zig</td></tr>
+              <tr><td>L4 — Real-repo call graph</td><td>Who-calls resolved and proven on a real repository</td><td>Apex, Astro, C#, Dart, ETS, Groovy, Julia, R, Scala, SQL, Svelte, Verilog, Vue</td></tr>
+              <tr><td>L2 — Real-repo tested</td><td>Runs on real code; call graph not yet resolved</td><td>Bash, Blade, BYOND, Delphi, EJS, Objective-C, Pascal, PowerShell, Razor, Terraform</td></tr>
               <tr><td>L1 — Indexed</td><td>Parsed and symbols extracted</td><td>P4</td></tr>
             </tbody></table></div>
-            <p>The "pending real-repo proof" languages at L4 have resolved call graphs on fixtures but have not yet been proven against a real repository. Treat them as L4 capability with weaker evidence until the proof lands.</p>
+            <p><strong>What changed, and what came off.</strong> L5 goes from 13 to <strong>16</strong>. Newly promoted on LSP-truth against a real public repository: <strong>Ruby</strong> (1.000/1.000 vs solargraph on rack), <strong>Elixir</strong> (1.000/1.000 vs elixir-ls on plug), <strong>Swift</strong> (.9415/.9417 vs sourcekit-lsp), <strong>Kotlin</strong> (.9395/.9022 vs kotlin-language-server — precision clears the gate by .0022). <strong>Rust</strong> (.9297/.9652) and <strong>PHP</strong> (.9098/1.000) are recovered under a fail-closed binder; both of July's higher numbers for them are retracted.</p>
+            <Callout kind="warn" label="Dart comes off L5">
+              <p>July published a dart PASS at .9249. The verifier re-run measures <strong>.8631</strong> (precision .9723) against the same reference server on the same pinned repository: the earlier number rode a fan-out the truth filter should have refused. Dart returns to L4 until <code>toString</code>-scale fan-out and <code>package:</code> re-export families bind. <strong>Scala</strong> is an honest fail at <strong>.5533</strong> and is published as one — normalising Metals's val-attributed callers to their enclosing defs made the truth honest and exposed that scopt's cross-file OParser builder chains are invisible to Atlas.</p>
+            </Callout>
+            <Callout kind="warn" label="Requalified — a claim this page used to make">
+              <p>Earlier versions asserted that Bash, Blade, BYOND, EJS, Objective-C, Pascal, PowerShell, Razor and Ruby each scored “native F1 1.000 on the Linux saturation run”. That is <strong>false at this commit</strong> — the branch it came from never merged. Re-measured on the constructed-truth fixture: <strong>Bash, BYOND, Objective-C and PowerShell</strong> are fixture-perfect and stay at L2 with that as their only evidence; <strong>Blade, EJS, Pascal and Razor</strong> return an empty caller list (F1 0.000). The site-wide fixture score is <strong>32/37</strong>, not 37/37.</p>
+              <p>Ruby also scores 0.000 on that fixture, and that zero is <em>designed</em>: the fixture's callers are top-level, and the binder refuses to attribute a top-level call to an owner it cannot prove rather than guessing one. Ruby's L5 promotion cites the LSP lane against a real repository and never the fixture. A fixture pass is a floor, not a promotion.</p>
+            </Callout>
           </ProseSection>
           <ProseSection title="Content Formats">
             <p>Beyond code, Atlas indexes approximately 24 content formats (JSON, YAML, HTML, PDF, and others) for search. These are content and structural indexes, not call graphs:</p>
@@ -1864,27 +1871,33 @@ function DocsPage({ slug }) {
               <li><strong>Agent workflow:</strong> end-to-end behavior for a pinned assistant and task set</li>
             </Bullets>
           </ProseSection>
-          <ProseSection title="Published Headline Results (July 2026)">
-            <p>These are the current published numbers, each with its evidence conditions:</p>
-            <div className="docs-table-wrap"><table><thead><tr><th>Result</th><th>Conditions</th></tr></thead><tbody>
-              <tr><td>F1 0.757 at 21.2 context tokens, mean across all 37 languages</td><td>Native ground truth, real-LLM scored (222 cells, 666 model calls)</td></tr>
-              <tr><td>F1 1.000 at 27.1 tokens on the 28 fully-supported languages</td><td>Full-file-dump accuracy at 6.1× fewer tokens; same fixture suite</td></tr>
-              <tr><td>Graph-tool comparison: 0.539 F1 at 97 tokens</td><td>Atlas delivers 6.4× the accuracy per token and 36× fewer query tokens</td></tr>
-              <tr><td>Query latency ~7.4 ms vs 128 ms for the graph tool</td><td>Real repositories, 36 languages; flat from 15 to 39,161 symbols</td></tr>
+          <ProseSection title="Published Headline Results (refreshed 2026-08-05)">
+            <p>These are the current published numbers, each with its evidence conditions and the definition of its metric:</p>
+            <div className="docs-table-wrap"><table><thead><tr><th>Result</th><th>Conditions and definition</th></tr></thead><tbody>
+              <tr><td>3.17× fewer answer tokens than the graph tool</td><td>Pooled: sum of answer tokens over the 26 queries both tools answered, across a 7-repository matrix run on one host in one pass (Darwin arm64, graphify 0.8.49). Per-language mean 5.06×, median 3.66×, worst language cpp at 1.41×</td></tr>
+              <tr><td>Caller-F1 0.865 vs 0.541 — 1.60×</td><td>A real model is handed one context source and asked which functions call <code>target</code>; scored deterministically against a constructed truth of 15 callers and 3 decoys. 37 languages, 222 cells, 666 model calls, temperature 0, majority of 3</td></tr>
+              <tr><td>The default detail level equals the maximum one</td><td><code>--detail high</code> and <code>--detail xhigh</code> both score F1 0.8649 — at 23.9 tokens against 230.1, so high is 9.6× cheaper for an identical answer. 32 of 37 languages score a perfect 1.000</td></tr>
+              <tr><td>Queries run 4.12× faster than the graph tool</td><td>Mean of the seven per-repository latency ratios on the same matrix; each timing is the median of 5 CLI invocations with process spawn included. Warm-serve <code>explain</code> lands between 1.6 and 14.9&nbsp;ms per repository</td></tr>
             </tbody></table></div>
-            <p><em>Measurement layer:</em> the 7.4&nbsp;ms figure is warm <strong>in-process</strong> engine latency (what an MCP/serve session experiences per call). End-to-end <strong>CLI</strong> latency adds ~30&nbsp;ms of process spawn per side — roughly 44&nbsp;ms vs 450&nbsp;ms (~9×) — so shell-loop reproductions should expect the CLI numbers, not 7.4&nbsp;ms.</p>
+            <Callout kind="warn" label="Retracted">
+              <p>Earlier versions of this page claimed <strong>36× fewer query tokens</strong> and <strong>17× faster queries</strong> from a 36-repository live run, and an earlier one claimed 20×. Those runs compared against a build whose caller answers were a two-token placeholder: across all 224 live answers it named <strong>zero callers</strong>. The ratios measured an empty answer, not a cheap one, and are withdrawn rather than adjusted. The <code>2.3× faster cold index</code>, <code>14× faster incremental</code>, <code>7.9× more call edges</code> and <code>100.2% AST coverage</code> rows are withdrawn too — they were not re-measured at this commit, and a number nobody re-ran is not evidence.</p>
+            </Callout>
+            <p><strong>Live repositories, honestly.</strong> On 36 pinned public repositories the current CLI answers in <strong>4.25× fewer tokens</strong> (median across languages) or <strong>3.70×</strong> (pooled), and runs <strong>4.78×</strong> faster. Those figures cover the 25 repositories whose Atlas answers actually named a caller. On the other 11 — astro, blade, byond, delphi, ejs, lua, powershell, rust, scala, sql, terraform — the CLI still returns a bare name or a name and a location, so its token ratio measures a non-answer and is excluded from the headline rather than averaged into it. Several of those excluded ratios are large (lua 35.8×, rust 46.1×, terraform 38.5×); that is precisely why they are excluded.</p>
           </ProseSection>
-          <ProseSection title="Agent-Harness Token Benchmark (2026-07-10)">
-            <p>This measures what a real agent actually spends. Claude Code and OpenAI Codex ran headless in sirupsen/logrus (@a23d315), restricted to one code-intelligence CLI per run, answering 19 caller questions scored against gopls call_hierarchy (LSP-truth) at the pinned commit. Token numbers are each harness's own usage accounting.</p>
+          <ProseSection title="Agent-Harness Token Benchmark (2026-08-05)">
+            <p>This measures what a real agent actually spends. Claude Code and OpenAI Codex ran headless in sirupsen/logrus (@a23d315), restricted to one code-intelligence CLI per run, answering 19 caller questions scored against gopls call_hierarchy (LSP-truth) at the pinned commit. Token numbers are each harness's own usage accounting. All 114 runs completed.</p>
             <div className="docs-table-wrap"><table><thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Mean tool calls</th><th>Mean F1</th></tr></thead><tbody>
-              <tr><td>claude (claude-sonnet-5)</td><td>Atlas</td><td>61,561</td><td>2</td><td>0.882</td></tr>
-              <tr><td>claude (claude-sonnet-5)</td><td>No tool (raw exploration)</td><td>144,385</td><td>4.9</td><td>0.569</td></tr>
-              <tr><td>claude (claude-sonnet-5)</td><td>Graph tool</td><td>370,898</td><td>10.3</td><td>0.305</td></tr>
-              <tr><td>codex (gpt-5.6-sol)</td><td>Atlas</td><td>27,981</td><td>1</td><td>0.881</td></tr>
-              <tr><td>codex (gpt-5.6-sol)</td><td>No tool (raw exploration)</td><td>48,106</td><td>2.1</td><td>0.876</td></tr>
-              <tr><td>codex (gpt-5.6-sol)</td><td>Graph tool</td><td>109,662</td><td>9.6</td><td>0.410</td></tr>
+              <tr><td>claude (claude-sonnet-5)</td><td>Atlas</td><td>58,234</td><td>2.0</td><td>0.995</td></tr>
+              <tr><td>claude (claude-sonnet-5)</td><td>No tool (raw exploration)</td><td>134,886</td><td>4.7</td><td>0.589</td></tr>
+              <tr><td>claude (claude-sonnet-5)</td><td>Graph tool</td><td>239,026</td><td>7.7</td><td>0.203</td></tr>
+              <tr><td>codex (gpt-5.6-sol)</td><td>Atlas</td><td>33,471</td><td>1.0</td><td>0.995</td></tr>
+              <tr><td>codex (gpt-5.6-sol)</td><td>No tool (raw exploration)</td><td>74,229</td><td>3.3</td><td>0.831</td></tr>
+              <tr><td>codex (gpt-5.6-sol)</td><td>Graph tool</td><td>131,335</td><td>12.7</td><td>0.379</td></tr>
             </tbody></table></div>
-            <p>Cross-agent absolute totals are <strong>not comparable</strong> — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent only.</p>
+            <p>Against the baseline, Atlas saves 2.32× the tokens on claude and 2.22× on codex; against the graph tool, 4.10× and 3.92×. Cross-agent absolute totals are <strong>not comparable</strong> — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent only.</p>
+            <Callout kind="note" label="Two changes from the previously published table">
+              <p>Atlas's F1 is <strong>0.995 on both harnesses</strong>; the figure published before was 0.88. And this run used <strong>graphify 0.8.49</strong> where the published run used <strong>0.9.12</strong>, so part of the movement in the competitor column is a version change on their side rather than a change on ours. Both versions are recorded in the artifacts.</p>
+            </Callout>
           </ProseSection>
           <ProseSection title="Reproduce It Yourself">
             <p>Every published number is reproducible from committed artifacts — verify before you cite:</p>
@@ -1968,7 +1981,7 @@ function DocsPage({ slug }) {
               <li><strong>It heals on its own:</strong> in serve/watch mode a lazy backfill rebuilds the sidecar once the lock frees. To fix it now, stop the other Atlas processes and run <code>atlas compact --rebuild-lexical</code>, then confirm with <code>atlas doctor</code>.</li>
               <li><strong>To avoid it:</strong> don't run a manual <code>atlas index</code> while <code>serve</code>/<code>watch</code>/an MCP session holds the same <code>.atlas</code> — stop them first, or let the running server's watch pick up the change.</li>
             </Bullets>
-            <p><strong>Since 0.1.50, a sidecar that is merely un-compacted is reported separately.</strong> <code>atlas index --format json</code> ends with <code>lexical_settle</code>, and a value of <code>partial</code> means the settle ran every step and then verified it had <em>not</em> reached the steady state — the sidecar still holds obsolete document bytes a compaction would reclaim. Search is correct and undegraded; only the <code>lexical_bytes</code> figure is above steady state. Re-run the index on a quiet machine, or run <code>atlas compact --rebuild-lexical</code>, before quoting a size. <code>timeout</code> is the other non-steady state: raise <code>ATLAS_LEXICAL_SETTLE_TIMEOUT</code> (default 30s) and re-run. Only <code>merged</code> asserts a steady-state footprint.</p>
+            <p><strong>Since 0.1.51, a sidecar that is merely un-compacted is reported separately.</strong> <code>atlas index --format json</code> ends with <code>lexical_settle</code>, and a value of <code>partial</code> means the settle ran every step and then verified it had <em>not</em> reached the steady state — the sidecar still holds obsolete document bytes a compaction would reclaim. Search is correct and undegraded; only the <code>lexical_bytes</code> figure is above steady state. Re-run the index on a quiet machine, or run <code>atlas compact --rebuild-lexical</code>, before quoting a size. <code>timeout</code> is the other non-steady state: raise <code>ATLAS_LEXICAL_SETTLE_TIMEOUT</code> (default 30s) and re-run. Only <code>merged</code> asserts a steady-state footprint.</p>
             <Callout kind="tip" label="why status looked clean but doctor caught it">
               <p><code>atlas status</code> reports <strong>version and contract health only</strong> — schema, index-format, lexical, and MCP contract versions plus per-repo snapshot format. It never opens the sidecar, so a wedged or empty sidecar leaves <code>status</code> green. <code>atlas doctor</code> checks <strong>runtime health</strong>, opens the sidecar, and reports <code>lexical_degraded</code> when it is empty or wedged. That split is by design: if search behaves oddly but <code>status</code> is clean, run <code>atlas doctor</code>.</p>
             </Callout>
