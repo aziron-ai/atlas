@@ -2,6 +2,31 @@
   "truth_source": "per-language LSP reference server on a real public repository (callHierarchy preferred, references+documentSymbol enclosure fallback)",
   "truth_filter": "both sides restricted to textually-defined callers; macro/codegen-expanded caller names (no textual definition in the repo) excluded and listed per symbol",
   "scoring": "deterministic simple-name set comparison; no LLM",
+  "corroboration": "where the two tools disagree, the source text adjudicates, and every excusal is listed per symbol. extras_reference_blind (all languages): an Atlas-only caller with a proven CALL SITE of the probe inside its own documentSymbol span is a reference-server blind spot, not a false positive. The site must be call-shaped in a spelling the language makes statically unambiguous (see corroboration_shapes) and must survive comment/string blanking — a name merely MENTIONED corroborates nothing. missed_reference_coarse (opt-in, see corroboration_languages): a truth-only caller whose body never mentions the probe in ANY shape — qualified, parenless, piped or captured — cannot be a textual call site, so it leaves the recall denominator (truth_scored) while truth_callers keeps the server's raw count. The two probes differ in strictness by design: crediting Atlas demands a proven call site, excusing Atlas is triggered by absence of evidence and so uses the widest possible net over the RAW text. A probe whose reference callers are ALL refuted measures nothing and is dropped from scoring and listed under unscorable_probes with both tools' answers.",
+  "corroboration_languages": [
+    "elixir",
+    "scala"
+  ],
+  "value_caller_normalization_languages": [
+    "scala"
+  ],
+  "corroboration_shapes": {
+    "_default": [
+      "bare_call"
+    ],
+    "elixir": [
+      "bare_call",
+      "capture",
+      "module_qualified",
+      "pipe"
+    ]
+  },
+  "corroboration_body_globs": {
+    "elixir": [
+      "*.ex",
+      "*.exs"
+    ]
+  },
   "gate": {
     "min_symbols": 8,
     "mean_f1": 0.9,
@@ -11,9 +36,12 @@
     "rust",
     "php",
     "lua",
-    "dart",
     "fortran",
-    "zig"
+    "zig",
+    "ruby",
+    "swift",
+    "kotlin",
+    "elixir"
   ],
   "results": [
     {
@@ -21,23 +49,27 @@
       "repo": "rust",
       "repo_sha": "1bfeea2",
       "repo_url": "https://github.com/sharkdp/fd",
+      "run": {
+        "at": "2026-08-05T10:30:28+0530",
+        "tree_sha": "6bb732c"
+      },
       "reference": "rust-analyzer",
       "atlas_index": {
-        "ms": 277.1,
+        "ms": 553.1,
         "ok": true,
-        "symbols": 1788,
-        "edges": 2848
+        "symbols": 1350,
+        "edges": 2892
       },
       "source_files": 22,
-      "lsp_ready_ms": 8525.9,
+      "lsp_ready_ms": 8533.7,
       "textual_defs": 322,
       "truth_mode": [
         "callHierarchy"
       ],
       "symbols_scored": 12,
-      "mean_f1": 0.9534,
-      "mean_precision": 0.9417,
-      "mean_recall": 0.9723,
+      "mean_f1": 0.9297,
+      "mean_precision": 0.9652,
+      "mean_recall": 0.9167,
       "rows": [
         {
           "symbol": "absolute_path",
@@ -60,7 +92,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 50.4,
+          "lsp_query_ms": 49.1,
           "lsp_payload_tokens": 541
         },
         {
@@ -68,11 +100,13 @@
           "defs": 1,
           "truth_callers": 2,
           "precision": 1,
-          "recall": 1,
-          "f1": 1,
+          "recall": 0.5,
+          "f1": 0.667,
           "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 61.7,
+          "missed": [
+            "spawn_senders"
+          ],
+          "lsp_query_ms": 47.1,
           "lsp_payload_tokens": 765
         },
         {
@@ -84,7 +118,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 24.2,
+          "lsp_query_ms": 24.6,
           "lsp_payload_tokens": 562
         },
         {
@@ -102,7 +136,7 @@
             "dirname_utf8_0",
             "dirname_utf8_1"
           ],
-          "lsp_query_ms": 25.3,
+          "lsp_query_ms": 22.8,
           "lsp_payload_tokens": 897
         },
         {
@@ -114,7 +148,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 25.3,
+          "lsp_query_ms": 22.9,
           "lsp_payload_tokens": 328
         },
         {
@@ -128,7 +162,7 @@
             "spawn_senders"
           ],
           "missed": [],
-          "lsp_query_ms": 45.9,
+          "lsp_query_ms": 45.6,
           "lsp_payload_tokens": 5406
         },
         {
@@ -140,7 +174,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 24.4,
+          "lsp_query_ms": 25.1,
           "lsp_payload_tokens": 376
         },
         {
@@ -152,7 +186,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 23,
+          "lsp_query_ms": 25.2,
           "lsp_payload_tokens": 442
         },
         {
@@ -164,39 +198,38 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 25.2,
+          "lsp_query_ms": 23.5,
           "lsp_payload_tokens": 324
         },
         {
           "symbol": "from_string",
           "defs": 2,
           "truth_callers": 6,
-          "precision": 0.8,
+          "precision": 1,
           "recall": 0.667,
-          "f1": 0.727,
-          "false_pos": [
-            "construct_config"
-          ],
+          "f1": 0.8,
+          "false_pos": [],
           "missed": [
             "augment_args",
             "augment_args_for_update"
           ],
-          "lsp_query_ms": 359.5,
-          "lsp_payload_tokens": 3828
+          "lsp_query_ms": 347.9,
+          "lsp_payload_tokens": 1618
         },
         {
           "symbol": "generate",
           "defs": 2,
           "truth_callers": 6,
-          "precision": 0.75,
-          "recall": 1,
-          "f1": 0.857,
+          "precision": 0.833,
+          "recall": 0.833,
+          "f1": 0.833,
           "false_pos": [
-            "check",
-            "print_completions"
+            "check"
           ],
-          "missed": [],
-          "lsp_query_ms": 49.2,
+          "missed": [
+            "print_entry_format"
+          ],
+          "lsp_query_ms": 50.4,
           "lsp_payload_tokens": 2305
         }
       ],
@@ -209,17 +242,10 @@
       "status": "ok",
       "perf": {
         "atlas": {
-          "median_query_ms": 17.7,
-          "mean_answer_tokens": 89.4,
-          "serve_warm_query_ms": 0.66,
+          "median_query_ms": 15.7,
+          "mean_answer_tokens": 81.3,
+          "serve_warm_query_ms": 1.5,
           "serve_endpoint": "callers"
-        },
-        "graphify": {
-          "build_ms": null,
-          "median_query_ms": 99.7,
-          "mean_answer_tokens": 72.2,
-          "truth_recall": 0.194,
-          "recall_note": "charitable substring match of truth caller names in explain output"
         },
         "raw_read_floor": {
           "median_tokens": 10362,
@@ -227,59 +253,61 @@
         },
         "lsp": {
           "server": "rust-analyzer",
-          "cold_query_ms": 8551.2,
-          "warm_query_ms": 25.3,
-          "ready_ms": 8525.9,
-          "mean_payload_tokens": 1342,
+          "cold_query_ms": 8558.9,
+          "warm_query_ms": 25.2,
+          "ready_ms": 8533.7,
+          "mean_payload_tokens": 1157.8,
           "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
         },
         "multipliers": {
-          "latency_vs_graphify": 5.6,
-          "tokens_vs_graphify": 0.8,
-          "latency_vs_lsp_cold": 483.1,
-          "latency_vs_lsp_warm": 1.4,
-          "tokens_vs_lsp": 15,
-          "serve_latency_vs_lsp_warm": 38.3,
-          "serve_latency_vs_lsp_cold": 12956.4,
-          "serve_latency_vs_graphify_cli": 151.1,
-          "serve_note": "persistent Atlas daemon (the MCP path) vs graphify CLI per-query spawn — graphify has no daemon mode",
-          "tokens_vs_raw_read": 115.9
+          "latency_vs_lsp_cold": 545.2,
+          "latency_vs_lsp_warm": 1.6,
+          "tokens_vs_lsp": 14.2,
+          "serve_latency_vs_lsp_warm": 16.8,
+          "serve_latency_vs_lsp_cold": 5705.9,
+          "tokens_vs_raw_read": 127.5
         }
       }
     },
     {
       "language": "php",
       "repo": "php",
-      "repo_sha": "57eb102",
+      "repo_sha": "57eb1028",
       "repo_url": "https://github.com/Seldaek/monolog",
+      "run": {
+        "at": "2026-08-05T10:30:58+0530",
+        "tree_sha": "6bb732c"
+      },
       "reference": "intelephense",
       "atlas_index": {
-        "ms": 490,
+        "ms": 852.1,
         "ok": true,
-        "symbols": 2635,
-        "edges": 8234
+        "symbols": 2463,
+        "edges": 11719
       },
       "source_files": 119,
-      "lsp_ready_ms": 7461.5,
+      "lsp_ready_ms": 7674.4,
       "textual_defs": 835,
       "truth_mode": [
         "references"
       ],
       "symbols_scored": 12,
-      "mean_f1": 1,
+      "mean_f1": 0.9098,
       "mean_precision": 1,
-      "mean_recall": 1,
+      "mean_recall": 0.8694,
       "rows": [
         {
           "symbol": "activate",
           "defs": 1,
           "truth_callers": 2,
           "precision": 1,
-          "recall": 1,
-          "f1": 1,
+          "recall": 0.5,
+          "f1": 0.667,
           "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 25.5,
+          "missed": [
+            "testoverrideactivationstrategy"
+          ],
+          "lsp_query_ms": 24.8,
           "lsp_payload_tokens": 105
         },
         {
@@ -287,11 +315,14 @@
           "defs": 1,
           "truth_callers": 3,
           "precision": 1,
-          "recall": 1,
-          "f1": 1,
+          "recall": 0.333,
+          "f1": 0.5,
           "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 46.9,
+          "missed": [
+            "testsetterarrayheaderinjection",
+            "testsetterheaderinjection"
+          ],
+          "lsp_query_ms": 51.2,
           "lsp_payload_tokens": 4934
         },
         {
@@ -303,7 +334,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 37.2,
+          "lsp_query_ms": 36.4,
           "lsp_payload_tokens": 2159
         },
         {
@@ -311,11 +342,18 @@
           "defs": 1,
           "truth_callers": 15,
           "precision": 1,
-          "recall": 1,
-          "f1": 1,
+          "recall": 0.6,
+          "f1": 0.75,
           "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 49.5,
+          "missed": [
+            "testconvertrfc5424tomonologlevelinaddrecordandlog",
+            "testlog",
+            "testlogalwayshandledifnoprocessorsarepresent",
+            "testlognothandledifprocessorsarepresent",
+            "testlogpreventscircularlogging",
+            "testlogwithdatetime"
+          ],
+          "lsp_query_ms": 48.7,
           "lsp_payload_tokens": 20208
         },
         {
@@ -327,7 +365,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 72.4,
+          "lsp_query_ms": 71.9,
           "lsp_payload_tokens": 3474
         },
         {
@@ -339,7 +377,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 33.5,
+          "lsp_query_ms": 38.4,
           "lsp_payload_tokens": 3717
         },
         {
@@ -351,7 +389,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 25.5,
+          "lsp_query_ms": 23.9,
           "lsp_payload_tokens": 155
         },
         {
@@ -363,7 +401,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 64.5,
+          "lsp_query_ms": 63.8,
           "lsp_payload_tokens": 8628
         },
         {
@@ -375,7 +413,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 87.6,
+          "lsp_query_ms": 81,
           "lsp_payload_tokens": 14047
         },
         {
@@ -387,7 +425,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 37.2,
+          "lsp_query_ms": 38.3,
           "lsp_payload_tokens": 3557
         },
         {
@@ -399,7 +437,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 61.5,
+          "lsp_query_ms": 63.5,
           "lsp_payload_tokens": 4128
         },
         {
@@ -411,7 +449,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 38.4,
+          "lsp_query_ms": 36.1,
           "lsp_payload_tokens": 1787
         }
       ],
@@ -424,17 +462,10 @@
       "status": "ok",
       "perf": {
         "atlas": {
-          "median_query_ms": 17.7,
-          "mean_answer_tokens": 142.6,
-          "serve_warm_query_ms": 0.83,
+          "median_query_ms": 19.3,
+          "mean_answer_tokens": 116.8,
+          "serve_warm_query_ms": 3.83,
           "serve_endpoint": "callers"
-        },
-        "graphify": {
-          "build_ms": null,
-          "median_query_ms": 126.2,
-          "mean_answer_tokens": 94.7,
-          "truth_recall": 0.406,
-          "recall_note": "charitable substring match of truth caller names in explain output"
         },
         "raw_read_floor": {
           "median_tokens": 2658,
@@ -442,23 +473,19 @@
         },
         "lsp": {
           "server": "intelephense",
-          "cold_query_ms": 7504.1,
-          "warm_query_ms": 42.6,
-          "ready_ms": 7461.5,
+          "cold_query_ms": 7717.9,
+          "warm_query_ms": 43.6,
+          "ready_ms": 7674.4,
           "mean_payload_tokens": 5574.9,
           "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
         },
         "multipliers": {
-          "latency_vs_graphify": 7.1,
-          "tokens_vs_graphify": 0.7,
-          "latency_vs_lsp_cold": 424,
-          "latency_vs_lsp_warm": 2.4,
-          "tokens_vs_lsp": 39.1,
-          "serve_latency_vs_lsp_warm": 51.3,
-          "serve_latency_vs_lsp_cold": 9041.1,
-          "serve_latency_vs_graphify_cli": 152,
-          "serve_note": "persistent Atlas daemon (the MCP path) vs graphify CLI per-query spawn — graphify has no daemon mode",
-          "tokens_vs_raw_read": 18.6
+          "latency_vs_lsp_cold": 399.9,
+          "latency_vs_lsp_warm": 2.3,
+          "tokens_vs_lsp": 47.7,
+          "serve_latency_vs_lsp_warm": 11.4,
+          "serve_latency_vs_lsp_cold": 2015.1,
+          "tokens_vs_raw_read": 22.8
         }
       }
     },
@@ -467,22 +494,26 @@
       "repo": "lua",
       "repo_sha": "c317508",
       "repo_url": "https://github.com/lunarmodules/Penlight",
+      "run": {
+        "at": "2026-08-05T10:31:22+0530",
+        "tree_sha": "8cc1c39"
+      },
       "reference": "lua-language-server",
       "atlas_index": {
-        "ms": 210.4,
+        "ms": 328.1,
         "ok": true,
-        "symbols": 1139,
-        "edges": 3209
+        "symbols": 999,
+        "edges": 3766
       },
       "source_files": 39,
-      "lsp_ready_ms": 6707.6,
+      "lsp_ready_ms": 6711.7,
       "textual_defs": 693,
       "truth_mode": [
         "references"
       ],
       "symbols_scored": 12,
-      "mean_f1": 0.9629,
-      "mean_precision": 0.9824,
+      "mean_f1": 0.966,
+      "mean_precision": 0.9883,
       "mean_recall": 0.9583,
       "rows": [
         {
@@ -497,7 +528,7 @@
           "extras_reference_blind": [
             "clonetree"
           ],
-          "lsp_query_ms": 25.8,
+          "lsp_query_ms": 24.8,
           "lsp_payload_tokens": 356
         },
         {
@@ -509,7 +540,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 65.1,
+          "lsp_query_ms": 53.3,
           "lsp_payload_tokens": 34590
         },
         {
@@ -521,7 +552,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 25,
+          "lsp_query_ms": 26.9,
           "lsp_payload_tokens": 799
         },
         {
@@ -533,7 +564,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 419.3,
+          "lsp_query_ms": 25.2,
           "lsp_payload_tokens": 218
         },
         {
@@ -545,7 +576,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 61.6,
+          "lsp_query_ms": 50,
           "lsp_payload_tokens": 26904
         },
         {
@@ -565,35 +596,47 @@
             "clonetree",
             "common_prefix",
             "copyfile",
-            "dirname"
+            "dirname",
+            "exists",
+            "expanduser",
+            "extension",
+            "filter",
+            "fnmatch",
+            "getatime",
+            "getctime",
+            "getfiles",
+            "getmtime",
+            "getsize",
+            "isabs",
+            "isdir",
+            "isfile",
+            "islink",
+            "makepath",
+            "movefile",
+            "normcase",
+            "normpath",
+            "package_path",
+            "relpath",
+            "splitext",
+            "splitpath"
           ],
-          "lsp_query_ms": 454.3,
+          "lsp_query_ms": 64.4,
           "lsp_payload_tokens": 38188
         },
         {
           "symbol": "asserteq",
           "defs": 1,
           "truth_callers": 2,
-          "precision": 0.929,
+          "precision": 1,
           "recall": 1,
-          "f1": 0.963,
-          "false_pos": [
-            "__mul"
-          ],
+          "f1": 1,
+          "false_pos": [],
           "missed": [],
-          "extras_reference_blind": [
-            "assert_iter_order",
-            "match",
-            "test2",
-            "test_executeex",
-            "test_fn_arg",
-            "test_scan"
-          ],
           "macro_only_excluded": [
             "[2]"
           ],
-          "lsp_query_ms": 237.1,
-          "lsp_payload_tokens": 106789
+          "lsp_query_ms": 191.4,
+          "lsp_payload_tokens": 13238
         },
         {
           "symbol": "basename",
@@ -604,7 +647,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 249.2,
+          "lsp_query_ms": 51.1,
           "lsp_payload_tokens": 14841
         },
         {
@@ -616,7 +659,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 38.4,
+          "lsp_query_ms": 227.8,
           "lsp_payload_tokens": 5423
         },
         {
@@ -633,7 +676,7 @@
           "macro_only_excluded": [
             "it"
           ],
-          "lsp_query_ms": 60.8,
+          "lsp_query_ms": 288,
           "lsp_payload_tokens": 35376
         },
         {
@@ -645,7 +688,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 291.1,
+          "lsp_query_ms": 310.3,
           "lsp_payload_tokens": 21575
         },
         {
@@ -659,7 +702,7 @@
             "asserteq_no_order"
           ],
           "missed": [],
-          "lsp_query_ms": 47.3,
+          "lsp_query_ms": 247.9,
           "lsp_payload_tokens": 394
         }
       ],
@@ -672,17 +715,10 @@
       "status": "ok",
       "perf": {
         "atlas": {
-          "median_query_ms": 18.4,
-          "mean_answer_tokens": 259.5,
-          "serve_warm_query_ms": 0.7,
+          "median_query_ms": 16.4,
+          "mean_answer_tokens": 234.9,
+          "serve_warm_query_ms": 1.63,
           "serve_endpoint": "callers"
-        },
-        "graphify": {
-          "build_ms": null,
-          "median_query_ms": 129,
-          "mean_answer_tokens": 172.2,
-          "truth_recall": 0.842,
-          "recall_note": "charitable substring match of truth caller names in explain output"
         },
         "raw_read_floor": {
           "median_tokens": 7598,
@@ -690,23 +726,1143 @@
         },
         "lsp": {
           "server": "lua-language-server",
-          "cold_query_ms": 6770.9,
-          "warm_query_ms": 63.3,
-          "ready_ms": 6707.6,
-          "mean_payload_tokens": 23787.8,
+          "cold_query_ms": 6770.5,
+          "warm_query_ms": 58.8,
+          "ready_ms": 6711.7,
+          "mean_payload_tokens": 15991.8,
           "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
         },
         "multipliers": {
-          "latency_vs_graphify": 7,
-          "tokens_vs_graphify": 0.7,
-          "latency_vs_lsp_cold": 368,
-          "latency_vs_lsp_warm": 3.4,
-          "tokens_vs_lsp": 91.7,
-          "serve_latency_vs_lsp_warm": 90.4,
-          "serve_latency_vs_lsp_cold": 9672.7,
-          "serve_latency_vs_graphify_cli": 184.3,
-          "serve_note": "persistent Atlas daemon (the MCP path) vs graphify CLI per-query spawn — graphify has no daemon mode",
-          "tokens_vs_raw_read": 29.3
+          "latency_vs_lsp_cold": 412.8,
+          "latency_vs_lsp_warm": 3.6,
+          "tokens_vs_lsp": 68.1,
+          "serve_latency_vs_lsp_warm": 36.1,
+          "serve_latency_vs_lsp_cold": 4153.7,
+          "tokens_vs_raw_read": 32.3
+        }
+      }
+    },
+    {
+      "language": "dart",
+      "repo": "dart",
+      "repo_sha": "7a2dfb5",
+      "repo_url": "https://github.com/dart-lang/args",
+      "run": {
+        "at": "2026-08-05T10:31:57+0530",
+        "tree_sha": "8cc1c39"
+      },
+      "reference": "dart language-server",
+      "atlas_index": {
+        "ms": 716.8,
+        "ok": true,
+        "symbols": 481,
+        "edges": 2456
+      },
+      "source_files": 12,
+      "lsp_ready_ms": 8040.2,
+      "textual_defs": 91,
+      "truth_mode": [
+        "callHierarchy",
+        "references"
+      ],
+      "symbols_scored": 12,
+      "mean_f1": 0.8631,
+      "mean_precision": 0.9723,
+      "mean_recall": 0.8237,
+      "rows": [
+        {
+          "symbol": "addOption",
+          "defs": 2,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 0.5,
+          "f1": 0.667,
+          "false_pos": [],
+          "missed": [
+            "_mandatoryoptioncommand"
+          ],
+          "macro_only_excluded": [
+            "circlecommand",
+            "cliparser",
+            "dart",
+            "equilateraltrianglecommand",
+            "isoscelestrianglecommand",
+            "squarecommand"
+          ],
+          "lsp_query_ms": 50.6,
+          "lsp_payload_tokens": 8942
+        },
+        {
+          "symbol": "defaultFor",
+          "defs": 2,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 47.3,
+          "lsp_payload_tokens": 885
+        },
+        {
+          "symbol": "findByAbbreviation",
+          "defs": 2,
+          "truth_callers": 5,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 48.5,
+          "lsp_payload_tokens": 1301
+        },
+        {
+          "symbol": "findByNameOrAlias",
+          "defs": 2,
+          "truth_callers": 4,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 50.4,
+          "lsp_payload_tokens": 1191
+        },
+        {
+          "symbol": "flag",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "macro_only_excluded": [
+            "[]"
+          ],
+          "lsp_query_ms": 24.3,
+          "lsp_payload_tokens": 598
+        },
+        {
+          "symbol": "option",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 0.5,
+          "f1": 0.667,
+          "false_pos": [],
+          "missed": [
+            "run"
+          ],
+          "macro_only_excluded": [
+            "[]"
+          ],
+          "lsp_query_ms": 24.1,
+          "lsp_payload_tokens": 1063
+        },
+        {
+          "symbol": "padRight",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 0.667,
+          "recall": 1,
+          "f1": 0.8,
+          "false_pos": [
+            "_writeline"
+          ],
+          "missed": [],
+          "lsp_query_ms": 25.2,
+          "lsp_payload_tokens": 1774
+        },
+        {
+          "symbol": "printUsage",
+          "defs": 2,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 48.5,
+          "lsp_payload_tokens": 635
+        },
+        {
+          "symbol": "toString",
+          "defs": 1,
+          "truth_callers": 13,
+          "precision": 1,
+          "recall": 0.385,
+          "f1": 0.556,
+          "false_pos": [],
+          "missed": [
+            "_wrap",
+            "_write",
+            "expect",
+            "group",
+            "main",
+            "parse",
+            "run",
+            "test"
+          ],
+          "macro_only_excluded": [
+            "==",
+            "_",
+            "_adjustheaders",
+            "_check",
+            "_checkconflict",
+            "_checkforinvalidsealedsuperclass",
+            "_checkforoutofrange",
+            "_checkprivateoptionalparameter",
+            "_checksincesdkversion",
+            "_checkuseresult",
+            "_commaseparated",
+            "_compareroot",
+            "_connect",
+            "_convert",
+            "_convertconstantvalue",
+            "_convertinvalid",
+            "_converttohexstring",
+            "_createbrowsermanager",
+            "_createcompiler",
+            "_describe",
+            "_dillcachesuffix",
+            "_dumpserviceinfotofile",
+            "_enumtostring",
+            "_errorbuilder",
+            "_escape",
+            "_execute",
+            "_expect",
+            "_extractnumberfromdatetime",
+            "_filerangeresponse",
+            "_findanalyzerdiagnosticlibrary",
+            "_findentry",
+            "_fixsourcemap",
+            "_flowcontext",
+            "_flush",
+            "_formatto",
+            "_getlibraryname",
+            "_httpprofiledata",
+            "_idforsuite",
+            "_initializetext",
+            "_instancecreation_prefix_type_name",
+            "_isconstructor",
+            "_ismatch",
+            "_iswasm",
+            "_join",
+            "_languageversioncommentfor",
+            "_locationinfo",
+            "_locationtostring",
+            "_logerror",
+            "_logexception",
+            "_makecallbackid",
+            "_makequeryfromparametersdefault",
+            "_message",
+            "_normalize",
+            "_normalizeregname",
+            "_normalizeurl",
+            "_normalizezoneid",
+            "_onclientdatahandler",
+            "_oncomplete",
+            "_ondone",
+            "_onerror",
+            "_openurl",
+            "_parseliteral",
+            "_parselocalrules",
+            "_pause",
+            "_processenabledrule",
+            "_processmap",
+            "_progressline",
+            "_pubspecdependency",
+            "_redirecttoaddtrailingslash",
+            "_redirecttodevtools",
+            "_regexpfromglobpattern",
+            "_reportmissinglibrary",
+            "_reportunnecessaryorremovedordeprecatedignores",
+            "_reportunsupportedsectionkeys",
+            "_requesturi",
+            "_sanitizeuntrustedelement",
+            "_scanblockscalar",
+            "_scanblockscalarbreaks",
+            "_scanflowscalar",
+            "_scanplainscalar",
+            "_scantaghandle",
+            "_serializegroup",
+            "_serializetest",
+            "_serviceextensionhandler",
+            "_spawnexecutable",
+            "_startbrowser",
+            "_startprocess",
+            "_storeexceptioncontext",
+            "_stripdynamic",
+            "_test",
+            "_throw",
+            "_timestring",
+            "_tofilepath",
+            "_tohyphenedname",
+            "_toregexp",
+            "_tostring",
+            "_tostringhelper",
+            "_towindowsfilepath",
+            "_trimvmchain",
+            "_unique",
+            "_usecarry",
+            "_validatearglist",
+            "_validatediagnostics",
+            "_validatenativecallable",
+            "_validateswitchexhaustiveness",
+            "_valuetostring",
+            "_visitstringliteral",
+            "_warnforunknowntags",
+            "_writeheader",
+            "_writeon",
+            "_writesidebar",
+            "add",
+            "adddirectivessignature",
+            "addelement",
+            "addslice",
+            "applyargumentstotemplate",
+            "argumentnamesreftostring",
+            "authorization",
+            "buildpackagebundle",
+            "bytestohex",
+            "calldescriptorreftostring",
+            "chainfor",
+            "checkstackstateforassert",
+            "checkusage",
+            "close",
+            "collapsewhitespace",
+            "commit",
+            "compareto",
+            "compile",
+            "compileinternal",
+            "connect",
+            "connectionexception",
+            "contains",
+            "converttostring",
+            "create",
+            "createfilehandler",
+            "createlistspace",
+            "createmapspace",
+            "current",
+            "dart",
+            "ddsconnectedcallback",
+            "ddsdisconnectedcallback",
+            "decodegeneral",
+            "decodestream",
+            "dependencyvalidator",
+            "describe",
+            "describemismatch",
+            "describetypedmismatch",
+            "dispatchpattern",
+            "duplicateassignmentpatternvariable",
+            "duplicatefielddefinitioninliteral",
+            "duplicatefielddefinitionintype",
+            "duplicatepatternfield",
+            "duplicaterestelementinpattern",
+            "encode",
+            "export",
+            "expressiontotext",
+            "fieldstotext",
+            "finishrequest",
+            "foldframes",
+            "format",
+            "formatexception",
+            "formatfailure",
+            "formathttpdate",
+            "formatlcov",
+            "formatlist",
+            "fortrace",
+            "from",
+            "frombytes",
+            "fromentries",
+            "fromstring",
+            "fromtext",
+            "fromuri",
+            "generateerrormessage",
+            "get _debugfields",
+            "get _debugtype",
+            "get _name",
+            "get _partialresult",
+            "get _timestamp",
+            "get _usagewithoutdescription",
+            "get ascorrection",
+            "get aswitness",
+            "get authority",
+            "get canonicalizedversion",
+            "get current",
+            "get debugstring",
+            "get documentationcomment",
+            "get errors",
+            "get isdartinternalsince",
+            "get lexeme",
+            "get name",
+            "get string",
+            "get stringvalue",
+            "get supportedcompilerstext",
+            "get text",
+            "get tojs",
+            "get uristr",
+            "get vmtrace",
+            "get widgetpresentationtext",
+            "getcommentnoderawtext",
+            "getdartdocplaintext",
+            "getdartdocsummary",
+            "geterrormessage",
+            "getliststatictype",
+            "getmapstatictype",
+            "getsubtypes",
+            "gettext",
+            "handlerequest",
+            "highlight",
+            "hitmaptojson",
+            "import",
+            "incompatiblelint",
+            "incompatiblelintfiles",
+            "incompatiblelintincluded",
+            "indent",
+            "initiallibrarymap",
+            "isnonsubtypableclass",
+            "isuriprefix",
+            "iterabletofullstring",
+            "iterabletoshortstring",
+            "join",
+            "joinall",
+            "kebabcasetocamelcase",
+            "kebabcasetosnakecase",
+            "listen",
+            "listtostring",
+            "load",
+            "log",
+            "loginfo",
+            "loglogentry",
+            "mapstacktrace",
+            "maptostring",
+            "matchasync",
+            "matches",
+            "message",
+            "messagemultiple",
+            "messagetext",
+            "niceduration",
+            "nonexhaustivenesstotext",
+            "normalize",
+            "nosuchmethod",
+            "object",
+            "packageconfigtojson",
+            "packageof",
+            "parallelwaiterror",
+            "parsepackageconfigjson",
+            "parseparametervalue",
+            "pathappend",
+            "pathfromuri",
+            "pathjoinall",
+            "platformsvalidator",
+            "prettyprint",
+            "prettyuri",
+            "pubspecnodeimpl",
+            "readconfigfileuri",
+            "recordgeneratedconstraint",
+            "recordopaqueapiuse",
+            "redirect",
+            "relativizeuri",
+            "resolveabsolute",
+            "runall",
+            "s",
+            "safetostring",
+            "serialize",
+            "set contentlength",
+            "set contenttype",
+            "set current",
+            "set height",
+            "set width",
+            "settostring",
+            "shellsplit",
+            "spacestotext",
+            "spacetotext",
+            "spanforlocation",
+            "spawn",
+            "spawnhybridcode",
+            "spawnhybriduri",
+            "stackindicesreftostring",
+            "startresponse",
+            "startup",
+            "statictypetotext",
+            "stringbuffer",
+            "stringify",
+            "stringreplaceallemptyfuncunchecked",
+            "stringreplaceallfuncunchecked",
+            "stringreplaceallgeneral",
+            "stringreplaceallstringfuncunchecked",
+            "stringreplacealluncheckedstring",
+            "throwwithstacktrace",
+            "tojson",
+            "tomap",
+            "topackageuri",
+            "tosentence",
+            "tosource",
+            "tostringwrapper",
+            "totext",
+            "toyaml",
+            "truncate",
+            "trysetstacktrace",
+            "typereftostring",
+            "typestotext",
+            "typetostring",
+            "validate",
+            "visitadjacentstrings",
+            "visitgenericfunctiontype",
+            "visitstringinterpolation",
+            "visitsymbolliteral",
+            "vmtrace",
+            "withannotations",
+            "wordwrap",
+            "write",
+            "writeall",
+            "writeln",
+            "writenumber",
+            "writeuri"
+          ],
+          "lsp_query_ms": 4585.8,
+          "lsp_payload_tokens": 61018
+        },
+        {
+          "symbol": "usageException",
+          "defs": 2,
+          "truth_callers": 4,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 50.5,
+          "lsp_payload_tokens": 1127
+        },
+        {
+          "symbol": "valueOrDefault",
+          "defs": 1,
+          "truth_callers": 6,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "macro_only_excluded": [
+            "[]"
+          ],
+          "lsp_query_ms": 25.1,
+          "lsp_payload_tokens": 1079
+        },
+        {
+          "symbol": "wasParsed",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 0.5,
+          "f1": 0.667,
+          "false_pos": [],
+          "missed": [
+            "parse"
+          ],
+          "macro_only_excluded": [
+            "_ifparsed",
+            "_parseoption"
+          ],
+          "lsp_query_ms": 25.1,
+          "lsp_payload_tokens": 628
+        }
+      ],
+      "gate": {
+        "min_symbols": 8,
+        "f1": 0.9,
+        "precision": 0.9
+      },
+      "l5_pass": false,
+      "status": "ok",
+      "perf": {
+        "atlas": {
+          "median_query_ms": 16.3,
+          "mean_answer_tokens": 86.1,
+          "serve_warm_query_ms": 1.37,
+          "serve_endpoint": "callers"
+        },
+        "raw_read_floor": {
+          "median_tokens": 6453,
+          "note": "sum of full-file tokens over source files containing the symbol name"
+        },
+        "lsp": {
+          "server": "dart language-server",
+          "cold_query_ms": 8088.2,
+          "warm_query_ms": 47.9,
+          "ready_ms": 8040.2,
+          "mean_payload_tokens": 6686.8,
+          "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
+        },
+        "multipliers": {
+          "latency_vs_lsp_cold": 496.2,
+          "latency_vs_lsp_warm": 2.9,
+          "tokens_vs_lsp": 77.7,
+          "serve_latency_vs_lsp_warm": 35,
+          "serve_latency_vs_lsp_cold": 5903.8,
+          "tokens_vs_raw_read": 74.9
+        }
+      }
+    },
+    {
+      "language": "fortran",
+      "repo": "fortran",
+      "repo_sha": "d9ed2e4e",
+      "repo_url": "https://github.com/jacobwilliams/json-fortran",
+      "run": {
+        "at": "2026-08-05T10:32:26+0530",
+        "tree_sha": "8cc1c39"
+      },
+      "reference": "fortls",
+      "atlas_index": {
+        "ms": 572,
+        "ok": true,
+        "symbols": 735,
+        "edges": 11274
+      },
+      "source_files": 6,
+      "lsp_ready_ms": 6694.8,
+      "textual_defs": 472,
+      "truth_mode": [
+        "references"
+      ],
+      "symbols_scored": 8,
+      "mean_f1": 1,
+      "mean_precision": 1,
+      "mean_recall": 1,
+      "rows": [
+        {
+          "symbol": "annotate_invalid_json",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 35.4,
+          "lsp_payload_tokens": 242
+        },
+        {
+          "symbol": "destroy_json_data",
+          "defs": 1,
+          "truth_callers": 8,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 38.1,
+          "lsp_payload_tokens": 484
+        },
+        {
+          "symbol": "escape_string",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 38.1,
+          "lsp_payload_tokens": 290
+        },
+        {
+          "symbol": "integer_to_string",
+          "defs": 1,
+          "truth_callers": 9,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "extras_reference_blind": [
+            "write_it"
+          ],
+          "lsp_query_ms": 39.4,
+          "lsp_payload_tokens": 1015
+        },
+        {
+          "symbol": "json_add_string_by_path",
+          "defs": 1,
+          "truth_callers": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 37.9,
+          "lsp_payload_tokens": 289
+        },
+        {
+          "symbol": "json_add_string_vec_by_path",
+          "defs": 1,
+          "truth_callers": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 38.1,
+          "lsp_payload_tokens": 289
+        },
+        {
+          "symbol": "json_file_add_string",
+          "defs": 1,
+          "truth_callers": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 33.9,
+          "lsp_payload_tokens": 287
+        },
+        {
+          "symbol": "json_file_add_string_vec",
+          "defs": 1,
+          "truth_callers": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 38,
+          "lsp_payload_tokens": 287
+        }
+      ],
+      "gate": {
+        "min_symbols": 8,
+        "f1": 0.9,
+        "precision": 0.9
+      },
+      "l5_pass": true,
+      "status": "ok",
+      "perf": {
+        "atlas": {
+          "median_query_ms": 18.9,
+          "mean_answer_tokens": 142.6,
+          "serve_warm_query_ms": 2.87,
+          "serve_endpoint": "callers"
+        },
+        "raw_read_floor": {
+          "median_tokens": 123743,
+          "note": "sum of full-file tokens over source files containing the symbol name"
+        },
+        "lsp": {
+          "server": "fortls",
+          "cold_query_ms": 6732.8,
+          "warm_query_ms": 38.1,
+          "ready_ms": 6694.8,
+          "mean_payload_tokens": 397.9,
+          "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
+        },
+        "multipliers": {
+          "latency_vs_lsp_cold": 356.2,
+          "latency_vs_lsp_warm": 2,
+          "tokens_vs_lsp": 2.8,
+          "serve_latency_vs_lsp_warm": 13.3,
+          "serve_latency_vs_lsp_cold": 2345.9,
+          "tokens_vs_raw_read": 867.8
+        }
+      }
+    },
+    {
+      "language": "zig",
+      "repo": "zig",
+      "repo_sha": "e91d66b",
+      "repo_url": "https://github.com/Hejsil/zig-clap",
+      "run": {
+        "at": "2026-08-05T10:32:39+0530",
+        "tree_sha": "8cc1c39"
+      },
+      "reference": "zls",
+      "atlas_index": {
+        "ms": 204.9,
+        "ok": true,
+        "symbols": 164,
+        "edges": 705
+      },
+      "source_files": 7,
+      "lsp_ready_ms": 5170.4,
+      "textual_defs": 54,
+      "truth_mode": [
+        "references"
+      ],
+      "symbols_scored": 12,
+      "mean_f1": 1,
+      "mean_precision": 1,
+      "mean_recall": 1,
+      "rows": [
+        {
+          "symbol": "chaining",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 37.6,
+          "lsp_payload_tokens": 2751
+        },
+        {
+          "symbol": "deinitArgs",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 25.3,
+          "lsp_payload_tokens": 85
+        },
+        {
+          "symbol": "deinitPositionals",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 23.8,
+          "lsp_payload_tokens": 85
+        },
+        {
+          "symbol": "help",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 25.3,
+          "lsp_payload_tokens": 86
+        },
+        {
+          "symbol": "longest",
+          "defs": 1,
+          "truth_callers": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "macro_only_excluded": [
+            "arguments",
+            "positionals"
+          ],
+          "lsp_query_ms": 24.6,
+          "lsp_payload_tokens": 384
+        },
+        {
+          "symbol": "newline",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 25.7,
+          "lsp_payload_tokens": 258
+        },
+        {
+          "symbol": "parseEx",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "macro_only_excluded": [
+            "different assignment separators",
+            "empty",
+            "everything",
+            "multiple positionals",
+            "overflow-safe",
+            "single positional",
+            "str and u64",
+            "terminating positional"
+          ],
+          "lsp_query_ms": 26,
+          "lsp_payload_tokens": 644
+        },
+        {
+          "symbol": "parseParamEx",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 25.3,
+          "lsp_payload_tokens": 85
+        },
+        {
+          "symbol": "parseParamsEx",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 25.2,
+          "lsp_payload_tokens": 85
+        },
+        {
+          "symbol": "parseParamsIntoArrayListEx",
+          "defs": 1,
+          "truth_callers": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 25.4,
+          "lsp_payload_tokens": 126
+        },
+        {
+          "symbol": "parseParamsIntoSliceEx",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 25.3,
+          "lsp_payload_tokens": 84
+        },
+        {
+          "symbol": "positionalParam",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 25.4,
+          "lsp_payload_tokens": 89
+        }
+      ],
+      "gate": {
+        "min_symbols": 8,
+        "f1": 0.9,
+        "precision": 0.9
+      },
+      "l5_pass": true,
+      "status": "ok",
+      "perf": {
+        "atlas": {
+          "median_query_ms": 15.4,
+          "mean_answer_tokens": 65.6,
+          "serve_warm_query_ms": 0.72,
+          "serve_endpoint": "callers"
+        },
+        "raw_read_floor": {
+          "median_tokens": 18035,
+          "note": "sum of full-file tokens over source files containing the symbol name"
+        },
+        "lsp": {
+          "server": "zls",
+          "cold_query_ms": 5195.7,
+          "warm_query_ms": 25.3,
+          "ready_ms": 5170.4,
+          "mean_payload_tokens": 396.8,
+          "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
+        },
+        "multipliers": {
+          "latency_vs_lsp_cold": 337.4,
+          "latency_vs_lsp_warm": 1.6,
+          "tokens_vs_lsp": 6,
+          "serve_latency_vs_lsp_warm": 35.1,
+          "serve_latency_vs_lsp_cold": 7216.2,
+          "tokens_vs_raw_read": 274.9
+        }
+      }
+    },
+    {
+      "language": "ruby",
+      "repo": "ruby",
+      "repo_sha": "b48e0303",
+      "repo_url": "https://github.com/rack/rack",
+      "run": {
+        "at": "2026-08-05T10:33:00+0530",
+        "tree_sha": "f468f32"
+      },
+      "reference": "solargraph",
+      "atlas_index": {
+        "ms": 1623.7,
+        "ok": true,
+        "symbols": 1176,
+        "edges": 13345
+      },
+      "source_files": 50,
+      "lsp_ready_ms": 13620.3,
+      "textual_defs": 488,
+      "truth_mode": [
+        "references"
+      ],
+      "symbols_scored": 9,
+      "mean_f1": 1,
+      "mean_precision": 1,
+      "mean_recall": 1,
+      "rows": [
+        {
+          "symbol": "accepts_html?",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 75.7,
+          "lsp_payload_tokens": 1653
+        },
+        {
+          "symbol": "add_index_root?",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 73.3,
+          "lsp_payload_tokens": 715
+        },
+        {
+          "symbol": "build_multipart",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 242.2,
+          "lsp_payload_tokens": 2298
+        },
+        {
+          "symbol": "check_headers",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 581.2,
+          "lsp_payload_tokens": 134
+        },
+        {
+          "symbol": "clean_path_info",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 146.9,
+          "lsp_payload_tokens": 134
+        },
+        {
+          "symbol": "downcase_key",
+          "defs": 1,
+          "truth_callers": 7,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "macro_only_excluded": [
+            "[]"
+          ],
+          "lsp_query_ms": 130.8,
+          "lsp_payload_tokens": 2639
+        },
+        {
+          "symbol": "each_query_pair",
+          "defs": 1,
+          "truth_callers": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 99.3,
+          "lsp_payload_tokens": 2240
+        },
+        {
+          "symbol": "escape_html",
+          "defs": 1,
+          "truth_callers": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 96,
+          "lsp_payload_tokens": 741
+        },
+        {
+          "symbol": "escape_path",
+          "defs": 1,
+          "truth_callers": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 132.7,
+          "lsp_payload_tokens": 719
+        }
+      ],
+      "gate": {
+        "min_symbols": 8,
+        "f1": 0.9,
+        "precision": 0.9
+      },
+      "l5_pass": true,
+      "status": "ok",
+      "perf": {
+        "atlas": {
+          "median_query_ms": 20.8,
+          "mean_answer_tokens": 76.9,
+          "serve_warm_query_ms": 3.76,
+          "serve_endpoint": "callers"
+        },
+        "raw_read_floor": {
+          "median_tokens": 2484,
+          "note": "sum of full-file tokens over source files containing the symbol name"
+        },
+        "lsp": {
+          "server": "solargraph",
+          "cold_query_ms": 13751.1,
+          "warm_query_ms": 130.8,
+          "ready_ms": 13620.3,
+          "mean_payload_tokens": 1252.6,
+          "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
+        },
+        "multipliers": {
+          "latency_vs_lsp_cold": 661.1,
+          "latency_vs_lsp_warm": 6.3,
+          "tokens_vs_lsp": 16.3,
+          "serve_latency_vs_lsp_warm": 34.8,
+          "serve_latency_vs_lsp_cold": 3657.2,
+          "tokens_vs_raw_read": 32.3
         }
       }
     },
@@ -715,23 +1871,27 @@
       "repo": "swift",
       "repo_sha": "2f77f2f",
       "repo_url": "https://github.com/apple/swift-argument-parser",
+      "run": {
+        "at": "2026-08-05T10:33:43+0530",
+        "tree_sha": "f468f32"
+      },
       "reference": "sourcekit-lsp",
       "atlas_index": {
-        "ms": 1395.2,
+        "ms": 1420.2,
         "ok": true,
-        "symbols": 5258,
-        "edges": 7513
+        "symbols": 4600,
+        "edges": 5089
       },
       "source_files": 55,
-      "lsp_ready_ms": 11306.4,
+      "lsp_ready_ms": 9951.5,
       "textual_defs": 816,
       "truth_mode": [
         "callHierarchy"
       ],
       "symbols_scored": 12,
-      "mean_f1": 0.7974,
-      "mean_precision": 0.7989,
-      "mean_recall": 0.8611,
+      "mean_f1": 0.9415,
+      "mean_precision": 0.9417,
+      "mean_recall": 0.9444,
       "rows": [
         {
           "symbol": "addingIntercappedPrefix",
@@ -746,43 +1906,34 @@
           "missed": [
             "enabledisablenamepair"
           ],
-          "lsp_query_ms": 133.4,
+          "lsp_query_ms": 104.8,
           "lsp_payload_tokens": 2735
         },
         {
           "symbol": "append",
           "defs": 1,
           "truth_callers": 2,
-          "precision": 0.087,
-          "recall": 1,
-          "f1": 0.16,
-          "false_pos": [
-            "addchild",
-            "argumentsegments",
-            "commandstack",
-            "descendingparse",
-            "escapedmacroargument",
-            "escapedtextline"
-          ],
-          "missed": [],
-          "lsp_query_ms": 129.2,
-          "lsp_payload_tokens": 50590
-        },
-        {
-          "symbol": "arguments",
-          "defs": 1,
-          "truth_callers": 4,
           "precision": 1,
           "recall": 1,
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "extras_reference_blind": [
-            "checkforbuiltinflags",
-            "parsepositionalvalues"
+          "lsp_query_ms": 110.9,
+          "lsp_payload_tokens": 549
+        },
+        {
+          "symbol": "arguments",
+          "defs": 1,
+          "truth_callers": 4,
+          "precision": 0.8,
+          "recall": 1,
+          "f1": 0.889,
+          "false_pos": [
+            "elementstring"
           ],
-          "lsp_query_ms": 282.4,
-          "lsp_payload_tokens": 3334
+          "missed": [],
+          "lsp_query_ms": 111.9,
+          "lsp_payload_tokens": 3729
         },
         {
           "symbol": "argumentSet",
@@ -796,23 +1947,33 @@
           "macro_only_excluded": [
             "init"
           ],
-          "lsp_query_ms": 279.9,
+          "lsp_query_ms": 206.7,
           "lsp_payload_tokens": 2715
         },
         {
           "symbol": "AssertEqualStrings",
           "defs": 1,
           "truth_callers": 2,
-          "precision": 0,
-          "recall": 0,
-          "f1": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
           "false_pos": [],
-          "missed": [
-            "asserthelp",
-            "expectequalstrings"
+          "missed": [],
+          "extras_reference_blind": [
+            "assertcustomcompletion",
+            "assertdumphelp",
+            "assertexecutecommand",
+            "assertjsonequalfromstring",
+            "assertsnapshot",
+            "test_usagecustomization_fullmessage",
+            "test_usagecustomization_helpmessage",
+            "test_usagecustomization_usagestring",
+            "testoptiongroupusagedoesnotincludegroupname",
+            "testoverviewbutnoabstractspacing",
+            "testparsing_subcommand_help"
           ],
           "lsp_query_ms": 25.2,
-          "lsp_payload_tokens": 740
+          "lsp_payload_tokens": 27987
         },
         {
           "symbol": "asyncCompletions",
@@ -823,7 +1984,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 138,
+          "lsp_query_ms": 96.7,
           "lsp_payload_tokens": 730
         },
         {
@@ -835,7 +1996,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 21.2,
+          "lsp_query_ms": 24.8,
           "lsp_payload_tokens": 514
         },
         {
@@ -847,7 +2008,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 123.1,
+          "lsp_query_ms": 133.2,
           "lsp_payload_tokens": 743
         },
         {
@@ -862,7 +2023,7 @@
           "macro_only_excluded": [
             "init"
           ],
-          "lsp_query_ms": 48.8,
+          "lsp_query_ms": 180,
           "lsp_payload_tokens": 1033
         },
         {
@@ -886,7 +2047,7 @@
           "f1": 1,
           "false_pos": [],
           "missed": [],
-          "lsp_query_ms": 135.4,
+          "lsp_query_ms": 87.9,
           "lsp_payload_tokens": 684
         },
         {
@@ -907,8 +2068,888 @@
             "getter:wrappedvalue",
             "init"
           ],
-          "lsp_query_ms": 23.7,
+          "lsp_query_ms": 23.9,
           "lsp_payload_tokens": 2452
+        }
+      ],
+      "gate": {
+        "min_symbols": 8,
+        "f1": 0.9,
+        "precision": 0.9
+      },
+      "l5_pass": true,
+      "status": "ok",
+      "perf": {
+        "atlas": {
+          "median_query_ms": 22.5,
+          "mean_answer_tokens": 180.1,
+          "serve_warm_query_ms": 4.28,
+          "serve_endpoint": "callers"
+        },
+        "raw_read_floor": {
+          "median_tokens": 8686,
+          "note": "sum of full-file tokens over source files containing the symbol name"
+        },
+        "lsp": {
+          "server": "sourcekit-lsp",
+          "cold_query_ms": 10052.2,
+          "warm_query_ms": 100.7,
+          "ready_ms": 9951.5,
+          "mean_payload_tokens": 3723,
+          "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
+        },
+        "multipliers": {
+          "latency_vs_lsp_cold": 446.8,
+          "latency_vs_lsp_warm": 4.5,
+          "tokens_vs_lsp": 20.7,
+          "serve_latency_vs_lsp_warm": 23.5,
+          "serve_latency_vs_lsp_cold": 2348.6,
+          "tokens_vs_raw_read": 48.2
+        }
+      }
+    },
+    {
+      "language": "kotlin",
+      "repo": "kotlin-jvm",
+      "repo_sha": "c26a4ff",
+      "repo_url": "https://github.com/pinterest/ktlint.git",
+      "run": {
+        "at": "2026-08-05T10:34:18+0530",
+        "tree_sha": "3bbfe68"
+      },
+      "reference": "kotlin-language-server",
+      "atlas_index": {
+        "ms": 3862.2,
+        "ok": true,
+        "symbols": 6195,
+        "edges": 32689
+      },
+      "source_files": 210,
+      "lsp_ready_ms": 58365.7,
+      "textual_defs": 1079,
+      "truth_mode": [
+        "references"
+      ],
+      "symbols_scored": 11,
+      "mean_f1": 0.9395,
+      "mean_precision": 0.9022,
+      "mean_recall": 1,
+      "rows": [
+        {
+          "symbol": "addMissingWhiteSpaceAfterMe",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 117.9,
+          "lsp_payload_tokens": 2031
+        },
+        {
+          "symbol": "addPropertiesWithDefaultValueIfMissing",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "macro_only_excluded": [
+            "given an editorconfig containing a certain property with a non-default value and add the same property again with default value then the non-default value is not overwritten",
+            "given an editorconfig containing a property for which a property mapper is defined then the property mapper is called",
+            "given an editorconfig containing some properties then mapping of all properties is possible",
+            "given an editorconfig from which a deprecated -error-level- property is retrieved then thrown an exception",
+            "given an editorconfig from which a deprecated -warning-level- property is retrieved then do not throw an exception",
+            "given an editorconfig to which properties are added with the same name but different identities than those properties can not be loaded in the same editorconfig",
+            "given an editorconfig with a defined code style and add a property with default value then the default value can be retrieved for the default code style",
+            "given an empty editorconfig and add a property with default value then the default value can be retrieved for the default code style"
+          ],
+          "lsp_query_ms": 197.4,
+          "lsp_payload_tokens": 9623
+        },
+        {
+          "symbol": "canRunWith",
+          "defs": 2,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 288.7,
+          "lsp_payload_tokens": 2252
+        },
+        {
+          "symbol": "childIndentOf",
+          "defs": 1,
+          "truth_callers": 22,
+          "precision": 0.957,
+          "recall": 1,
+          "f1": 0.978,
+          "false_pos": [
+            "surroundwithbraces"
+          ],
+          "missed": [],
+          "lsp_query_ms": 355.7,
+          "lsp_payload_tokens": 27265
+        },
+        {
+          "symbol": "color",
+          "defs": 2,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "macro_only_excluded": [
+            "given that the output has to be colored"
+          ],
+          "lsp_query_ms": 243.4,
+          "lsp_payload_tokens": 3012
+        },
+        {
+          "symbol": "colored",
+          "defs": 2,
+          "truth_callers": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 236,
+          "lsp_payload_tokens": 1516
+        },
+        {
+          "symbol": "colorFileName",
+          "defs": 2,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 284.8,
+          "lsp_payload_tokens": 199
+        },
+        {
+          "symbol": "createASTNodeFromText",
+          "defs": 1,
+          "truth_callers": 4,
+          "precision": 0.667,
+          "recall": 1,
+          "f1": 0.8,
+          "false_pos": [
+            "createannotatedexpression",
+            "toshortstringtemplatenode"
+          ],
+          "missed": [],
+          "lsp_query_ms": 147,
+          "lsp_payload_tokens": 7858
+        },
+        {
+          "symbol": "createNewRuleInstance",
+          "defs": 1,
+          "truth_callers": 4,
+          "precision": 0.8,
+          "recall": 1,
+          "f1": 0.889,
+          "false_pos": [
+            "isenabled"
+          ],
+          "missed": [],
+          "lsp_query_ms": 200.8,
+          "lsp_payload_tokens": 12554
+        },
+        {
+          "symbol": "createPsiFileFromText",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 0.5,
+          "recall": 1,
+          "f1": 0.667,
+          "false_pos": [
+            "createdummyktfile",
+            "createfileannotation"
+          ],
+          "missed": [],
+          "lsp_query_ms": 125.1,
+          "lsp_payload_tokens": 10201
+        },
+        {
+          "symbol": "createRuleExecutionContext",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 131.5,
+          "lsp_payload_tokens": 3376
+        }
+      ],
+      "gate": {
+        "min_symbols": 8,
+        "f1": 0.9,
+        "precision": 0.9
+      },
+      "l5_pass": true,
+      "status": "ok",
+      "perf": {
+        "atlas": {
+          "median_query_ms": 29.2,
+          "mean_answer_tokens": 374.6,
+          "serve_warm_query_ms": 11.22,
+          "serve_endpoint": "callers"
+        },
+        "raw_read_floor": {
+          "median_tokens": 6763,
+          "note": "sum of full-file tokens over source files containing the symbol name"
+        },
+        "lsp": {
+          "server": "kotlin-language-server",
+          "cold_query_ms": 58566.5,
+          "warm_query_ms": 200.8,
+          "ready_ms": 58365.7,
+          "mean_payload_tokens": 7262.5,
+          "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
+        },
+        "multipliers": {
+          "latency_vs_lsp_cold": 2005.7,
+          "latency_vs_lsp_warm": 6.9,
+          "tokens_vs_lsp": 19.4,
+          "serve_latency_vs_lsp_warm": 17.9,
+          "serve_latency_vs_lsp_cold": 5219.8,
+          "tokens_vs_raw_read": 18.1
+        }
+      }
+    },
+    {
+      "language": "elixir",
+      "repo": "elixir",
+      "repo_sha": "46c8baa",
+      "repo_url": "https://github.com/elixir-plug/plug",
+      "run": {
+        "at": "2026-08-05T10:36:19+0530",
+        "tree_sha": "3bbfe68"
+      },
+      "reference": "elixir-ls",
+      "atlas_index": {
+        "ms": 440.1,
+        "ok": true,
+        "symbols": 1201,
+        "edges": 7372
+      },
+      "source_files": 41,
+      "lsp_ready_ms": 17469.9,
+      "textual_defs": 1263,
+      "truth_mode": [
+        "callHierarchy",
+        "references"
+      ],
+      "unscorable_probes": [
+        {
+          "symbol": "downcase_char",
+          "truth_callers": [
+            "media_type",
+            "mt_wildcard",
+            "params"
+          ],
+          "atlas_answer": [
+            "mt_first",
+            "mt_second",
+            "params_key"
+          ],
+          "reason": "every reference caller refuted: none of them mentions the probe anywhere in its own body"
+        }
+      ],
+      "symbols_scored": 12,
+      "mean_f1": 1,
+      "mean_precision": 1,
+      "mean_recall": 1,
+      "rows": [
+        {
+          "symbol": "adapter_push",
+          "defs": 2,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 29494.4,
+          "lsp_payload_tokens": 15168
+        },
+        {
+          "symbol": "assign",
+          "defs": 1,
+          "truth_callers": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "extras_reference_blind": [
+            "plug_builder_call"
+          ],
+          "lsp_query_ms": 15358.8,
+          "lsp_payload_tokens": 2632
+        },
+        {
+          "symbol": "assign_map",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 714.8,
+          "lsp_payload_tokens": 3505
+        },
+        {
+          "symbol": "blame_clause",
+          "defs": 2,
+          "truth_callers": 2,
+          "truth_scored": 1,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "missed_reference_coarse": [
+            "blame_match"
+          ],
+          "lsp_query_ms": 15918.3,
+          "lsp_payload_tokens": 4655
+        },
+        {
+          "symbol": "check_nesting!",
+          "defs": 2,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 1611.8,
+          "lsp_payload_tokens": 927
+        },
+        {
+          "symbol": "compile",
+          "defs": 2,
+          "truth_callers": 4,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "macro_only_excluded": [
+            "__before_compile__",
+            "head",
+            "options",
+            "patch",
+            "post",
+            "query"
+          ],
+          "lsp_query_ms": 1905.8,
+          "lsp_payload_tokens": 1316
+        },
+        {
+          "symbol": "content_type",
+          "defs": 1,
+          "truth_callers": 2,
+          "truth_scored": 1,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "extras_reference_blind": [
+            "call"
+          ],
+          "missed_reference_coarse": [
+            "convert_parsers"
+          ],
+          "lsp_query_ms": 1158.1,
+          "lsp_payload_tokens": 6533
+        },
+        {
+          "symbol": "decode_done",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "extras_reference_blind": [
+            "decode_pair"
+          ],
+          "lsp_query_ms": 814.7,
+          "lsp_payload_tokens": 3878
+        },
+        {
+          "symbol": "decode_init",
+          "defs": 1,
+          "truth_callers": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "extras_reference_blind": [
+            "decode_pair"
+          ],
+          "lsp_query_ms": 652.9,
+          "lsp_payload_tokens": 186
+        },
+        {
+          "symbol": "delete_path",
+          "defs": 2,
+          "truth_callers": 2,
+          "truth_scored": 1,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "extras_reference_blind": [
+            "handle_info"
+          ],
+          "missed_reference_coarse": [
+            "handle_cast"
+          ],
+          "lsp_query_ms": 618.1,
+          "lsp_payload_tokens": 2702
+        },
+        {
+          "symbol": "escape",
+          "defs": 1,
+          "truth_callers": 3,
+          "truth_scored": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "missed_reference_coarse": [
+            "init_plug"
+          ],
+          "lsp_query_ms": 731.3,
+          "lsp_payload_tokens": 438
+        },
+        {
+          "symbol": "extract_path",
+          "defs": 2,
+          "truth_callers": 2,
+          "truth_scored": 1,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "missed_reference_coarse": [
+            "join_guards"
+          ],
+          "lsp_query_ms": 1880.6,
+          "lsp_payload_tokens": 2879
+        }
+      ],
+      "gate": {
+        "min_symbols": 8,
+        "f1": 0.9,
+        "precision": 0.9
+      },
+      "l5_pass": true,
+      "status": "ok",
+      "perf": {
+        "atlas": {
+          "median_query_ms": 16.7,
+          "mean_answer_tokens": 109.8,
+          "serve_warm_query_ms": 2.27,
+          "serve_endpoint": "callers"
+        },
+        "raw_read_floor": {
+          "median_tokens": 7405,
+          "note": "sum of full-file tokens over source files containing the symbol name"
+        },
+        "lsp": {
+          "server": "elixir-ls",
+          "cold_query_ms": 18854.9,
+          "warm_query_ms": 1385,
+          "ready_ms": 17469.9,
+          "mean_payload_tokens": 3734.9,
+          "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
+        },
+        "multipliers": {
+          "latency_vs_lsp_cold": 1129,
+          "latency_vs_lsp_warm": 82.9,
+          "tokens_vs_lsp": 34,
+          "serve_latency_vs_lsp_warm": 610.1,
+          "serve_latency_vs_lsp_cold": 8306.1,
+          "tokens_vs_raw_read": 67.4
+        }
+      }
+    },
+    {
+      "language": "scala",
+      "repo": "scala",
+      "repo_sha": "8b70fe0",
+      "repo_url": "https://github.com/scopt/scopt",
+      "run": {
+        "at": "2026-08-05T10:41:56+0530",
+        "tree_sha": "983a78c"
+      },
+      "reference": "Metals",
+      "atlas_index": {
+        "ms": 410.6,
+        "ok": true,
+        "symbols": 649,
+        "edges": 4600
+      },
+      "source_files": 14,
+      "lsp_ready_ms": 38040.9,
+      "textual_defs": 197,
+      "truth_mode": [
+        "callHierarchy",
+        "references"
+      ],
+      "symbols_scored": 12,
+      "mean_f1": 0.5533,
+      "mean_precision": 0.5667,
+      "mean_recall": 0.55,
+      "rows": [
+        {
+          "symbol": "abbr",
+          "defs": 2,
+          "truth_callers": 6,
+          "truth_scored": 5,
+          "precision": 1,
+          "recall": 0.6,
+          "f1": 0.75,
+          "false_pos": [],
+          "missed": [
+            "helpparseronecolumn",
+            "helpparsertwocolumns"
+          ],
+          "missed_reference_coarse": [
+            "parser1"
+          ],
+          "truth_value_callers_normalized": [
+            "parser->dropped",
+            "parser->helpparseronecolumn",
+            "parser->helpparsertwocolumns"
+          ],
+          "macro_only_excluded": [
+            "groupparser1"
+          ],
+          "lsp_query_ms": 120.5,
+          "lsp_payload_tokens": 2707
+        },
+        {
+          "symbol": "action",
+          "defs": 2,
+          "truth_callers": 5,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "false_pos": [],
+          "missed": [
+            "helpparseronecolumn",
+            "helpparsertwocolumns",
+            "parser1",
+            "parser2",
+            "requiredwithfallback"
+          ],
+          "truth_value_callers_normalized": [
+            "options->dropped",
+            "p->dropped",
+            "p1->dropped",
+            "p2->dropped",
+            "parser->dropped",
+            "parser->helpparseronecolumn",
+            "parser->helpparsertwocolumns",
+            "suboptionParser1->dropped",
+            "unitParser1->dropped"
+          ],
+          "macro_only_excluded": [
+            "bigdecimalparser1",
+            "boolparser1",
+            "calendarparser1",
+            "charparser1",
+            "checkparser1",
+            "cmdparser1",
+            "cmdposparser1",
+            "doubleparser1",
+            "durationparser1",
+            "fileparser1",
+            "finitedurationparser1",
+            "groupparser1",
+            "inetaddressparser1",
+            "intargparser1",
+            "intparser1",
+            "liftedoptionparser1",
+            "longparser1",
+            "mapparser1",
+            "multipleargsparser1",
+            "nestedcmdparser1",
+            "pairparser1",
+            "parser",
+            "parsermore",
+            "parsernomin",
+            "requireparser1",
+            "seqparser1",
+            "seqtupleparser1",
+            "shortparser1",
+            "sourceparser1",
+            "stringparser1",
+            "unboundedargsparser1",
+            "unitparser1",
+            "uriparser1",
+            "urlparser1",
+            "validparser1"
+          ],
+          "lsp_query_ms": 552.2,
+          "lsp_payload_tokens": 13015
+        },
+        {
+          "symbol": "apply",
+          "defs": 1,
+          "truth_callers": 4,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "macro_only_excluded": [
+            "++"
+          ],
+          "lsp_query_ms": 25.2,
+          "lsp_payload_tokens": 964
+        },
+        {
+          "symbol": "arguments",
+          "defs": 2,
+          "truth_callers": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "truth_value_callers_normalized": [
+            "as->commandexample",
+            "pendingArgs->runparser"
+          ],
+          "lsp_query_ms": 173.5,
+          "lsp_payload_tokens": 5639
+        },
+        {
+          "symbol": "arity",
+          "defs": 1,
+          "truth_callers": 4,
+          "precision": 0.8,
+          "recall": 1,
+          "f1": 0.889,
+          "false_pos": [
+            "map"
+          ],
+          "missed": [],
+          "lsp_query_ms": 98.8,
+          "lsp_payload_tokens": 3713
+        },
+        {
+          "symbol": "checkConfig",
+          "defs": 2,
+          "truth_callers": 3,
+          "truth_scored": 2,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "false_pos": [],
+          "missed": [
+            "helpparseronecolumn",
+            "helpparsertwocolumns"
+          ],
+          "missed_reference_coarse": [
+            "parser1"
+          ],
+          "truth_value_callers_normalized": [
+            "parser->helpparseronecolumn",
+            "parser->helpparsertwocolumns"
+          ],
+          "macro_only_excluded": [
+            "checkparser1",
+            "nestedcmdparser1"
+          ],
+          "lsp_query_ms": 173.1,
+          "lsp_payload_tokens": 1140
+        },
+        {
+          "symbol": "children",
+          "defs": 2,
+          "truth_callers": 3,
+          "truth_scored": 2,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "false_pos": [],
+          "missed": [
+            "helpparseronecolumn",
+            "helpparsertwocolumns"
+          ],
+          "missed_reference_coarse": [
+            "parser1"
+          ],
+          "truth_value_callers_normalized": [
+            "parser->dropped",
+            "parser->helpparseronecolumn",
+            "parser->helpparsertwocolumns"
+          ],
+          "macro_only_excluded": [
+            "cmdparser1",
+            "cmdposparser1",
+            "nestedcmdparser1",
+            "printhiddencmdparser1"
+          ],
+          "lsp_query_ms": 162.6,
+          "lsp_payload_tokens": 2496
+        },
+        {
+          "symbol": "commandExample",
+          "defs": 1,
+          "truth_callers": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 37.8,
+          "lsp_payload_tokens": 576
+        },
+        {
+          "symbol": "commands",
+          "defs": 2,
+          "truth_callers": 4,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "truth_value_callers_normalized": [
+            "cs->commandexample",
+            "pendingCommands->runparser"
+          ],
+          "lsp_query_ms": 50.5,
+          "lsp_payload_tokens": 844
+        },
+        {
+          "symbol": "desc",
+          "defs": 1,
+          "truth_callers": 4,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "false_pos": [],
+          "missed": [],
+          "lsp_query_ms": 46.5,
+          "lsp_payload_tokens": 988
+        },
+        {
+          "symbol": "failure",
+          "defs": 2,
+          "truth_callers": 4,
+          "truth_scored": 3,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "false_pos": [],
+          "missed": [
+            "helpparseronecolumn",
+            "helpparsertwocolumns",
+            "validfail"
+          ],
+          "missed_reference_coarse": [
+            "parser1"
+          ],
+          "truth_value_callers_normalized": [
+            "parser->dropped",
+            "parser->helpparseronecolumn",
+            "parser->helpparsertwocolumns",
+            "parser->validfail"
+          ],
+          "macro_only_excluded": [
+            "checkparser1",
+            "nestedcmdparser1",
+            "validparser1"
+          ],
+          "lsp_query_ms": 88.5,
+          "lsp_payload_tokens": 2052
+        },
+        {
+          "symbol": "foreach",
+          "defs": 2,
+          "truth_callers": 23,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "false_pos": [],
+          "missed": [
+            "boolparserfail",
+            "cmdparser",
+            "doubleparser",
+            "doubleparserfail",
+            "emptyargs",
+            "helpparseronecolumn",
+            "helpparsertwocolumns",
+            "intarg",
+            "intargfail",
+            "intparser",
+            "intparserfail",
+            "longparser",
+            "multipleargs",
+            "pairparser",
+            "pairparserfail",
+            "requiredfail",
+            "requiredwithfallback",
+            "stringparser",
+            "trueparser",
+            "unboundedargs",
+            "unitparser",
+            "unitparserhidden",
+            "validfail"
+          ],
+          "truth_value_callers_normalized": [
+            "parser->boolparserfail",
+            "parser->cmdparser",
+            "parser->doubleparser",
+            "parser->doubleparserfail",
+            "parser->dropped",
+            "parser->emptyargs",
+            "parser->helpparseronecolumn",
+            "parser->helpparsertwocolumns",
+            "parser->intarg",
+            "parser->intargfail",
+            "parser->intparser",
+            "parser->intparserfail",
+            "parser->longparser",
+            "parser->multipleargs",
+            "parser->pairparser",
+            "parser->pairparserfail",
+            "parser->requiredfail",
+            "parser->requiredwithfallback",
+            "parser->stringparser",
+            "parser->trueparser",
+            "parser->unboundedargs",
+            "parser->unitparser",
+            "parser->unitparserhidden",
+            "parser->validfail"
+          ],
+          "lsp_query_ms": 87.4,
+          "lsp_payload_tokens": 4544
         }
       ],
       "gate": {
@@ -920,467 +2961,30 @@
       "status": "ok",
       "perf": {
         "atlas": {
-          "median_query_ms": 17.3,
-          "mean_answer_tokens": 222.9,
-          "serve_warm_query_ms": 0.77,
-          "serve_endpoint": "callers"
-        },
-        "graphify": {
-          "build_ms": null,
-          "median_query_ms": 148.7,
+          "median_query_ms": 16.6,
           "mean_answer_tokens": 85.2,
-          "truth_recall": 0.417,
-          "recall_note": "charitable substring match of truth caller names in explain output"
-        },
-        "raw_read_floor": {
-          "median_tokens": 8686,
-          "note": "sum of full-file tokens over source files containing the symbol name"
-        },
-        "lsp": {
-          "server": "sourcekit-lsp",
-          "cold_query_ms": 11432.5,
-          "warm_query_ms": 126.1,
-          "ready_ms": 11306.4,
-          "mean_payload_tokens": 5589.6,
-          "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
-        },
-        "multipliers": {
-          "latency_vs_graphify": 8.6,
-          "tokens_vs_graphify": 0.4,
-          "latency_vs_lsp_cold": 660.8,
-          "latency_vs_lsp_warm": 7.3,
-          "tokens_vs_lsp": 25.1,
-          "serve_latency_vs_lsp_warm": 163.8,
-          "serve_latency_vs_lsp_cold": 14847.4,
-          "serve_latency_vs_graphify_cli": 193.1,
-          "serve_note": "persistent Atlas daemon (the MCP path) vs graphify CLI per-query spawn — graphify has no daemon mode",
-          "tokens_vs_raw_read": 39
-        }
-      }
-    },
-    {
-      "language": "dart",
-      "repo": "dart",
-      "repo_sha": "7a2dfb5",
-      "repo_url": "https://github.com/dart-lang/args",
-      "reference": "dart language-server",
-      "atlas_index": {
-        "ms": 240.9,
-        "ok": true,
-        "symbols": 569,
-        "edges": 2452
-      },
-      "source_files": 12,
-      "lsp_ready_ms": 8013,
-      "textual_defs": 91,
-      "truth_mode": [
-        "callHierarchy",
-        "references"
-      ],
-      "symbols_scored": 12,
-      "mean_f1": 0.9249,
-      "mean_precision": 0.9723,
-      "mean_recall": 0.9135,
-      "rows": [
-        {
-          "symbol": "addOption",
-          "defs": 2,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "macro_only_excluded": [
-            "circlecommand",
-            "cliparser",
-            "dart",
-            "equilateraltrianglecommand",
-            "isoscelestrianglecommand",
-            "squarecommand"
-          ],
-          "lsp_query_ms": 48.9,
-          "lsp_payload_tokens": 8942
-        },
-        {
-          "symbol": "defaultFor",
-          "defs": 2,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 49.5,
-          "lsp_payload_tokens": 885
-        },
-        {
-          "symbol": "findByAbbreviation",
-          "defs": 2,
-          "truth_callers": 5,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 49.9,
-          "lsp_payload_tokens": 1301
-        },
-        {
-          "symbol": "findByNameOrAlias",
-          "defs": 2,
-          "truth_callers": 4,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 48.2,
-          "lsp_payload_tokens": 1191
-        },
-        {
-          "symbol": "flag",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "macro_only_excluded": [
-            "[]"
-          ],
-          "lsp_query_ms": 25.3,
-          "lsp_payload_tokens": 598
-        },
-        {
-          "symbol": "option",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "macro_only_excluded": [
-            "[]"
-          ],
-          "lsp_query_ms": 25.2,
-          "lsp_payload_tokens": 1063
-        },
-        {
-          "symbol": "padRight",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 0.667,
-          "recall": 1,
-          "f1": 0.8,
-          "false_pos": [
-            "_writeline"
-          ],
-          "missed": [],
-          "lsp_query_ms": 22.7,
-          "lsp_payload_tokens": 1774
-        },
-        {
-          "symbol": "printUsage",
-          "defs": 2,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 50.3,
-          "lsp_payload_tokens": 635
-        },
-        {
-          "symbol": "toString",
-          "defs": 1,
-          "truth_callers": 13,
-          "precision": 1,
-          "recall": 0.462,
-          "f1": 0.632,
-          "false_pos": [],
-          "missed": [
-            "_wrap",
-            "_write",
-            "expect",
-            "group",
-            "parse",
-            "run"
-          ],
-          "macro_only_excluded": [
-            "==",
-            "_",
-            "_adjustheaders",
-            "_check",
-            "_checkconflict",
-            "_checkforinvalidsealedsuperclass"
-          ],
-          "lsp_query_ms": 5003.4,
-          "lsp_payload_tokens": 61018
-        },
-        {
-          "symbol": "usageException",
-          "defs": 2,
-          "truth_callers": 4,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 48,
-          "lsp_payload_tokens": 1127
-        },
-        {
-          "symbol": "valueOrDefault",
-          "defs": 1,
-          "truth_callers": 6,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "macro_only_excluded": [
-            "[]"
-          ],
-          "lsp_query_ms": 24,
-          "lsp_payload_tokens": 1079
-        },
-        {
-          "symbol": "wasParsed",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 0.5,
-          "f1": 0.667,
-          "false_pos": [],
-          "missed": [
-            "parse"
-          ],
-          "macro_only_excluded": [
-            "_ifparsed",
-            "_parseoption"
-          ],
-          "lsp_query_ms": 25.2,
-          "lsp_payload_tokens": 628
-        }
-      ],
-      "gate": {
-        "min_symbols": 8,
-        "f1": 0.9,
-        "precision": 0.9
-      },
-      "l5_pass": true,
-      "status": "ok",
-      "perf": {
-        "atlas": {
-          "median_query_ms": 16.8,
-          "mean_answer_tokens": 101.4,
-          "serve_warm_query_ms": 0.9,
+          "serve_warm_query_ms": 2.34,
           "serve_endpoint": "callers"
         },
-        "graphify": {
-          "build_ms": null,
-          "median_query_ms": 92.9,
-          "mean_answer_tokens": 56.5,
-          "truth_recall": 0,
-          "recall_note": "charitable substring match of truth caller names in explain output"
-        },
         "raw_read_floor": {
-          "median_tokens": 6453,
+          "median_tokens": 6734,
           "note": "sum of full-file tokens over source files containing the symbol name"
         },
         "lsp": {
-          "server": "dart language-server",
-          "cold_query_ms": 8061,
-          "warm_query_ms": 48.1,
-          "ready_ms": 8013,
-          "mean_payload_tokens": 6686.8,
+          "server": "Metals",
+          "cold_query_ms": 38134.5,
+          "warm_query_ms": 93.6,
+          "ready_ms": 38040.9,
+          "mean_payload_tokens": 3223.2,
           "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
         },
         "multipliers": {
-          "latency_vs_graphify": 5.5,
-          "tokens_vs_graphify": 0.6,
-          "latency_vs_lsp_cold": 479.8,
-          "latency_vs_lsp_warm": 2.9,
-          "tokens_vs_lsp": 65.9,
-          "serve_latency_vs_lsp_warm": 53.4,
-          "serve_latency_vs_lsp_cold": 8956.7,
-          "serve_latency_vs_graphify_cli": 103.2,
-          "serve_note": "persistent Atlas daemon (the MCP path) vs graphify CLI per-query spawn — graphify has no daemon mode",
-          "tokens_vs_raw_read": 63.6
-        }
-      }
-    },
-    {
-      "language": "fortran",
-      "repo": "fortran",
-      "repo_sha": "d9ed2e4",
-      "repo_url": "https://github.com/jacobwilliams/json-fortran",
-      "reference": "fortls",
-      "atlas_index": {
-        "ms": 365.4,
-        "ok": true,
-        "symbols": 1132,
-        "edges": 10951
-      },
-      "source_files": 6,
-      "lsp_ready_ms": 6705.8,
-      "textual_defs": 472,
-      "truth_mode": [
-        "references"
-      ],
-      "symbols_scored": 8,
-      "mean_f1": 1,
-      "mean_precision": 1,
-      "mean_recall": 1,
-      "rows": [
-        {
-          "symbol": "annotate_invalid_json",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 34.8,
-          "lsp_payload_tokens": 242
-        },
-        {
-          "symbol": "destroy_json_data",
-          "defs": 1,
-          "truth_callers": 8,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 38,
-          "lsp_payload_tokens": 484
-        },
-        {
-          "symbol": "escape_string",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 37.2,
-          "lsp_payload_tokens": 290
-        },
-        {
-          "symbol": "integer_to_string",
-          "defs": 1,
-          "truth_callers": 9,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "extras_reference_blind": [
-            "write_it"
-          ],
-          "lsp_query_ms": 39.5,
-          "lsp_payload_tokens": 1015
-        },
-        {
-          "symbol": "json_add_string_by_path",
-          "defs": 1,
-          "truth_callers": 3,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 38.1,
-          "lsp_payload_tokens": 289
-        },
-        {
-          "symbol": "json_add_string_vec_by_path",
-          "defs": 1,
-          "truth_callers": 3,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 37.7,
-          "lsp_payload_tokens": 289
-        },
-        {
-          "symbol": "json_file_add_string",
-          "defs": 1,
-          "truth_callers": 3,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 35.7,
-          "lsp_payload_tokens": 287
-        },
-        {
-          "symbol": "json_file_add_string_vec",
-          "defs": 1,
-          "truth_callers": 3,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 33.7,
-          "lsp_payload_tokens": 287
-        }
-      ],
-      "gate": {
-        "min_symbols": 8,
-        "f1": 0.9,
-        "precision": 0.9
-      },
-      "l5_pass": true,
-      "status": "ok",
-      "perf": {
-        "atlas": {
-          "median_query_ms": 16.9,
-          "mean_answer_tokens": 142.6,
-          "serve_warm_query_ms": 0.64,
-          "serve_endpoint": "callers"
-        },
-        "graphify": {
-          "build_ms": null,
-          "median_query_ms": 103.3,
-          "mean_answer_tokens": 83.7,
-          "truth_recall": 0.167,
-          "recall_note": "charitable substring match of truth caller names in explain output"
-        },
-        "raw_read_floor": {
-          "median_tokens": 123743,
-          "note": "sum of full-file tokens over source files containing the symbol name"
-        },
-        "lsp": {
-          "server": "fortls",
-          "cold_query_ms": 6743.2,
-          "warm_query_ms": 37.4,
-          "ready_ms": 6705.8,
-          "mean_payload_tokens": 397.9,
-          "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
-        },
-        "multipliers": {
-          "latency_vs_graphify": 6.1,
-          "tokens_vs_graphify": 0.6,
-          "latency_vs_lsp_cold": 399,
-          "latency_vs_lsp_warm": 2.2,
-          "tokens_vs_lsp": 2.8,
-          "serve_latency_vs_lsp_warm": 58.4,
-          "serve_latency_vs_lsp_cold": 10536.2,
-          "serve_latency_vs_graphify_cli": 161.4,
-          "serve_note": "persistent Atlas daemon (the MCP path) vs graphify CLI per-query spawn — graphify has no daemon mode",
-          "tokens_vs_raw_read": 867.8
+          "latency_vs_lsp_cold": 2297.3,
+          "latency_vs_lsp_warm": 5.6,
+          "tokens_vs_lsp": 37.8,
+          "serve_latency_vs_lsp_warm": 40,
+          "serve_latency_vs_lsp_cold": 16296.8,
+          "tokens_vs_raw_read": 79
         }
       }
     },
@@ -1402,657 +3006,9 @@
       "truth_mode": [
         "none"
       ],
-      "status": "no_scorable_symbols"
-    },
-    {
-      "language": "elixir",
-      "repo": "elixir",
-      "repo_sha": "46c8baa",
-      "repo_url": "https://github.com/elixir-plug/plug",
-      "reference": "elixir-ls",
-      "atlas_index": {
-        "ms": 342.2,
-        "ok": true,
-        "symbols": 1393,
-        "edges": 5371
-      },
-      "source_files": 41,
-      "lsp_ready_ms": 16177.2,
-      "textual_defs": 404,
-      "truth_mode": [
-        "callHierarchy",
-        "references"
-      ],
-      "symbols_scored": 12,
-      "mean_f1": 0.595,
-      "mean_precision": 0.8167,
-      "mean_recall": 0.5973,
-      "rows": [
-        {
-          "symbol": "adapter_push",
-          "defs": 2,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 12533.3,
-          "lsp_payload_tokens": 15168
-        },
-        {
-          "symbol": "assign",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 0.6,
-          "recall": 1,
-          "f1": 0.75,
-          "false_pos": [
-            "boom",
-            "plug_builder_call"
-          ],
-          "missed": [],
-          "extras_reference_blind": [
-            "call"
-          ],
-          "lsp_query_ms": 5793.4,
-          "lsp_payload_tokens": 18701
-        },
-        {
-          "symbol": "assign_map",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 502.4,
-          "lsp_payload_tokens": 3505
-        },
-        {
-          "symbol": "blame_clause",
-          "defs": 2,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 0.5,
-          "f1": 0.667,
-          "false_pos": [],
-          "missed": [
-            "blame_match"
-          ],
-          "lsp_query_ms": 8310.4,
-          "lsp_payload_tokens": 689
-        },
-        {
-          "symbol": "check_nesting!",
-          "defs": 2,
-          "truth_callers": 2,
-          "precision": 0,
-          "recall": 0,
-          "f1": 0,
-          "false_pos": [],
-          "missed": [
-            "assign_split",
-            "split_keys"
-          ],
-          "lsp_query_ms": 932.1,
-          "lsp_payload_tokens": 927
-        },
-        {
-          "symbol": "compile",
-          "defs": 2,
-          "truth_callers": 4,
-          "precision": 0.8,
-          "recall": 1,
-          "f1": 0.889,
-          "false_pos": [
-            "expand_alias"
-          ],
-          "missed": [],
-          "macro_only_excluded": [
-            "__before_compile__",
-            "head",
-            "options",
-            "patch",
-            "post",
-            "query"
-          ],
-          "lsp_query_ms": 1276.9,
-          "lsp_payload_tokens": 3547
-        },
-        {
-          "symbol": "delete_path",
-          "defs": 2,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 0.5,
-          "f1": 0.667,
-          "false_pos": [],
-          "missed": [
-            "handle_cast"
-          ],
-          "lsp_query_ms": 513.7,
-          "lsp_payload_tokens": 418
-        },
-        {
-          "symbol": "downcase_char",
-          "defs": 2,
-          "truth_callers": 3,
-          "precision": 1,
-          "recall": 0,
-          "f1": 0,
-          "false_pos": [],
-          "missed": [
-            "media_type",
-            "mt_wildcard",
-            "params"
-          ],
-          "extras_reference_blind": [
-            "mt_first",
-            "mt_second",
-            "params_key"
-          ],
-          "lsp_query_ms": 1565.4,
-          "lsp_payload_tokens": 4759
-        },
-        {
-          "symbol": "escape",
-          "defs": 1,
-          "truth_callers": 3,
-          "precision": 0.4,
-          "recall": 0.667,
-          "f1": 0.5,
-          "false_pos": [
-            "compile",
-            "extract_merger",
-            "unquote"
-          ],
-          "missed": [
-            "init_plug"
-          ],
-          "lsp_query_ms": 529.9,
-          "lsp_payload_tokens": 438
-        },
-        {
-          "symbol": "extract_path",
-          "defs": 2,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 0.5,
-          "f1": 0.667,
-          "false_pos": [],
-          "missed": [
-            "join_guards"
-          ],
-          "lsp_query_ms": 1175.3,
-          "lsp_payload_tokens": 648
-        },
-        {
-          "symbol": "fail",
-          "defs": 1,
-          "truth_callers": 5,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 1129.1,
-          "lsp_payload_tokens": 685
-        },
-        {
-          "symbol": "file_encoding",
-          "defs": 2,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 0,
-          "f1": 0,
-          "false_pos": [],
-          "missed": [
-            "etag_for_path",
-            "init"
-          ],
-          "extras_reference_blind": [
-            "call"
-          ],
-          "lsp_query_ms": 2211.1,
-          "lsp_payload_tokens": 5097
-        }
-      ],
-      "gate": {
-        "min_symbols": 8,
-        "f1": 0.9,
-        "precision": 0.9
-      },
-      "l5_pass": false,
-      "status": "ok",
-      "perf": {
-        "atlas": {
-          "median_query_ms": 17,
-          "mean_answer_tokens": 101.1,
-          "serve_warm_query_ms": 0.61,
-          "serve_endpoint": "callers"
-        },
-        "graphify": {
-          "build_ok": true,
-          "build_ms": 976.9,
-          "median_query_ms": 97.5,
-          "mean_answer_tokens": 73.3,
-          "truth_recall": 0.5,
-          "recall_note": "charitable substring match of truth caller names in explain output"
-        },
-        "raw_read_floor": {
-          "median_tokens": 5497,
-          "note": "sum of full-file tokens over source files containing the symbol name"
-        },
-        "lsp": {
-          "server": "elixir-ls",
-          "cold_query_ms": 17403.3,
-          "warm_query_ms": 1226.1,
-          "ready_ms": 16177.2,
-          "mean_payload_tokens": 4548.5,
-          "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
-        },
-        "multipliers": {
-          "latency_vs_graphify": 5.7,
-          "tokens_vs_graphify": 0.7,
-          "latency_vs_lsp_cold": 1023.7,
-          "latency_vs_lsp_warm": 72.1,
-          "tokens_vs_lsp": 45,
-          "serve_latency_vs_lsp_warm": 2010,
-          "serve_latency_vs_lsp_cold": 28530,
-          "serve_latency_vs_graphify_cli": 159.8,
-          "serve_note": "persistent Atlas daemon (the MCP path) vs graphify CLI per-query spawn — graphify has no daemon mode",
-          "tokens_vs_raw_read": 54.4
-        }
-      }
-    },
-    {
-      "language": "kotlin",
-      "repo": "kotlin",
-      "repo_sha": "1e3a469",
-      "repo_url": "https://github.com/JakeWharton/picnic",
-      "reference": "kotlin-language-server",
-      "atlas_index": {
-        "ms": 145.1,
-        "ok": true,
-        "symbols": 436,
-        "edges": 707
-      },
-      "source_files": 13,
-      "lsp_ready_ms": 24884.1,
-      "textual_defs": 92,
-      "truth_mode": [
-        "references"
-      ],
-      "symbols_scored": 1,
-      "mean_f1": 0.984,
-      "mean_precision": 1,
-      "mean_recall": 0.968,
-      "rows": [
-        {
-          "symbol": "cell",
-          "defs": 3,
-          "truth_callers": 31,
-          "precision": 1,
-          "recall": 0.968,
-          "f1": 0.984,
-          "false_pos": [],
-          "missed": [
-            "create"
-          ],
-          "lsp_query_ms": 179.6,
-          "lsp_payload_tokens": 18633
-        }
-      ],
-      "gate": {
-        "min_symbols": 8,
-        "f1": 0.9,
-        "precision": 0.9
-      },
-      "l5_pass": false,
-      "status": "ok",
-      "perf": {
-        "atlas": {
-          "median_query_ms": 19.6,
-          "mean_answer_tokens": 967,
-          "serve_warm_query_ms": 1.2,
-          "serve_endpoint": "callers"
-        },
-        "graphify": {
-          "build_ms": null,
-          "median_query_ms": 152.7,
-          "mean_answer_tokens": 65,
-          "truth_recall": 0.065,
-          "recall_note": "charitable substring match of truth caller names in explain output"
-        },
-        "raw_read_floor": {
-          "median_tokens": 21863,
-          "note": "sum of full-file tokens over source files containing the symbol name"
-        },
-        "lsp": {
-          "server": "kotlin-language-server",
-          "cold_query_ms": 25063.8,
-          "warm_query_ms": 179.6,
-          "ready_ms": 24884.1,
-          "mean_payload_tokens": 18633,
-          "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
-        },
-        "multipliers": {
-          "latency_vs_graphify": 7.8,
-          "tokens_vs_graphify": 0.1,
-          "latency_vs_lsp_cold": 1278.8,
-          "latency_vs_lsp_warm": 9.2,
-          "tokens_vs_lsp": 19.3,
-          "serve_latency_vs_lsp_warm": 149.7,
-          "serve_latency_vs_lsp_cold": 20886.5,
-          "serve_latency_vs_graphify_cli": 127.2,
-          "serve_note": "persistent Atlas daemon (the MCP path) vs graphify CLI per-query spawn — graphify has no daemon mode",
-          "tokens_vs_raw_read": 22.6
-        }
-      }
-    },
-    {
-      "language": "scala",
-      "repo": "scala",
-      "repo_sha": "8b70fe0",
-      "repo_url": "https://github.com/scopt/scopt",
-      "reference": "Metals",
-      "atlas_index": {
-        "ms": 215.8,
-        "ok": true,
-        "symbols": 995,
-        "edges": 2290
-      },
-      "source_files": 14,
-      "lsp_ready_ms": 38284.2,
-      "textual_defs": 197,
-      "truth_mode": [
-        "callHierarchy",
-        "references"
-      ],
-      "symbols_scored": 12,
-      "mean_f1": 0.2399,
-      "mean_precision": 0.2118,
-      "mean_recall": 0.3056,
-      "rows": [
-        {
-          "symbol": "abbr",
-          "defs": 2,
-          "truth_callers": 4,
-          "precision": 0.5,
-          "recall": 1,
-          "f1": 0.667,
-          "false_pos": [
-            "failure",
-            "helpparsertwocolumns",
-            "renderingmode",
-            "withverbose"
-          ],
-          "missed": [],
-          "macro_only_excluded": [
-            "groupparser1",
-            "parser"
-          ],
-          "lsp_query_ms": 293.6,
-          "lsp_payload_tokens": 27918
-        },
-        {
-          "symbol": "action",
-          "defs": 2,
-          "truth_callers": 3,
-          "precision": 0.375,
-          "recall": 1,
-          "f1": 0.545,
-          "false_pos": [
-            "failure",
-            "helpparsertwocolumns",
-            "renderingmode",
-            "terminate",
-            "withverbose"
-          ],
-          "missed": [],
-          "macro_only_excluded": [
-            "bigdecimalparser1",
-            "boolparser1",
-            "calendarparser1",
-            "charparser1",
-            "checkparser1",
-            "cmdparser1"
-          ],
-          "lsp_query_ms": 511.2,
-          "lsp_payload_tokens": 18880
-        },
-        {
-          "symbol": "apply",
-          "defs": 1,
-          "truth_callers": 4,
-          "precision": 0,
-          "recall": 0,
-          "f1": 0,
-          "false_pos": [
-            "getfallback",
-            "validatevalue"
-          ],
-          "missed": [
-            "children",
-            "flatmap",
-            "subhead",
-            "wrap"
-          ],
-          "macro_only_excluded": [
-            "++"
-          ],
-          "lsp_query_ms": 25.2,
-          "lsp_payload_tokens": 7822
-        },
-        {
-          "symbol": "arguments",
-          "defs": 2,
-          "truth_callers": 2,
-          "precision": 0,
-          "recall": 0,
-          "f1": 0,
-          "false_pos": [],
-          "missed": [
-            "commandexample",
-            "pushchildren"
-          ],
-          "macro_only_excluded": [
-            "as",
-            "pendingargs"
-          ],
-          "lsp_query_ms": 148.3,
-          "lsp_payload_tokens": 846
-        },
-        {
-          "symbol": "arity",
-          "defs": 1,
-          "truth_callers": 4,
-          "precision": 0,
-          "recall": 0,
-          "f1": 0,
-          "false_pos": [],
-          "missed": [
-            "itemusage",
-            "tokenstoread",
-            "usagecolumn1",
-            "usagetwocolumn"
-          ],
-          "lsp_query_ms": 72.4,
-          "lsp_payload_tokens": 948
-        },
-        {
-          "symbol": "commandExample",
-          "defs": 1,
-          "truth_callers": 3,
-          "precision": 0.667,
-          "recall": 0.667,
-          "f1": 0.667,
-          "false_pos": [
-            "indentdescription"
-          ],
-          "missed": [
-            "itemusage"
-          ],
-          "lsp_query_ms": 36.3,
-          "lsp_payload_tokens": 576
-        },
-        {
-          "symbol": "commands",
-          "defs": 2,
-          "truth_callers": 2,
-          "precision": 0,
-          "recall": 0,
-          "f1": 0,
-          "false_pos": [],
-          "missed": [
-            "commandname",
-            "pushchildren"
-          ],
-          "macro_only_excluded": [
-            "cs",
-            "pendingcommands"
-          ],
-          "lsp_query_ms": 75.5,
-          "lsp_payload_tokens": 844
-        },
-        {
-          "symbol": "desc",
-          "defs": 1,
-          "truth_callers": 4,
-          "precision": 0,
-          "recall": 0,
-          "f1": 0,
-          "false_pos": [],
-          "missed": [
-            "itemusage",
-            "programname",
-            "usagecolumn1",
-            "usagetwocolumn"
-          ],
-          "lsp_query_ms": 48.4,
-          "lsp_payload_tokens": 988
-        },
-        {
-          "symbol": "findCommand",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 0,
-          "recall": 0,
-          "f1": 0,
-          "false_pos": [
-            "terminate"
-          ],
-          "missed": [
-            "cmd",
-            "runparser"
-          ],
-          "lsp_query_ms": 48.9,
-          "lsp_payload_tokens": 461
-        },
-        {
-          "symbol": "fullName",
-          "defs": 1,
-          "truth_callers": 6,
-          "precision": 0,
-          "recall": 0,
-          "f1": 0,
-          "false_pos": [],
-          "missed": [
-            "apply",
-            "itemusage",
-            "shortdescription",
-            "showtryhelp",
-            "tostring",
-            "usagecolumn1"
-          ],
-          "macro_only_excluded": [
-            "argname",
-            "longopttokens"
-          ],
-          "lsp_query_ms": 85.4,
-          "lsp_payload_tokens": 1626
-        },
-        {
-          "symbol": "handleArgument",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 0.5,
-          "recall": 0.5,
-          "f1": 0.5,
-          "false_pos": [
-            "terminate"
-          ],
-          "missed": [
-            "runparser"
-          ],
-          "lsp_query_ms": 25.2,
-          "lsp_payload_tokens": 510
-        },
-        {
-          "symbol": "handleError",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 0.5,
-          "recall": 0.5,
-          "f1": 0.5,
-          "false_pos": [
-            "terminate"
-          ],
-          "missed": [
-            "runparser"
-          ],
-          "lsp_query_ms": 35.8,
-          "lsp_payload_tokens": 503
-        }
-      ],
-      "gate": {
-        "min_symbols": 8,
-        "f1": 0.9,
-        "precision": 0.9
-      },
-      "l5_pass": false,
-      "status": "ok",
-      "perf": {
-        "atlas": {
-          "median_query_ms": 16.9,
-          "mean_answer_tokens": 230.6,
-          "serve_warm_query_ms": 0.56,
-          "serve_endpoint": "callers"
-        },
-        "graphify": {
-          "build_ms": null,
-          "median_query_ms": 94.5,
-          "mean_answer_tokens": 55.7,
-          "truth_recall": 0.125,
-          "recall_note": "charitable substring match of truth caller names in explain output"
-        },
-        "raw_read_floor": {
-          "median_tokens": 5445,
-          "note": "sum of full-file tokens over source files containing the symbol name"
-        },
-        "lsp": {
-          "server": "Metals",
-          "cold_query_ms": 38344.9,
-          "warm_query_ms": 60.7,
-          "ready_ms": 38284.2,
-          "mean_payload_tokens": 5160.2,
-          "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
-        },
-        "multipliers": {
-          "latency_vs_graphify": 5.6,
-          "tokens_vs_graphify": 0.2,
-          "latency_vs_lsp_cold": 2268.9,
-          "latency_vs_lsp_warm": 3.6,
-          "tokens_vs_lsp": 22.4,
-          "serve_latency_vs_lsp_warm": 108.4,
-          "serve_latency_vs_lsp_cold": 68473,
-          "serve_latency_vs_graphify_cli": 168.7,
-          "serve_note": "persistent Atlas daemon (the MCP path) vs graphify CLI per-query spawn — graphify has no daemon mode",
-          "tokens_vs_raw_read": 23.6
-        }
-      }
+      "status": "no_scorable_symbols",
+      "carried": true,
+      "carried_from": "pre-wave2 L5_MATRIX.json (July base; NOT re-measured in wave 2)"
     },
     {
       "language": "r",
@@ -2188,12 +3144,16 @@
           "serve_note": "persistent Atlas daemon (the MCP path) vs graphify CLI per-query spawn — graphify has no daemon mode",
           "tokens_vs_raw_read": 33.5
         }
-      }
+      },
+      "carried": true,
+      "carried_from": "pre-wave2 L5_MATRIX.json (July base; NOT re-measured in wave 2)"
     },
     {
       "language": "julia",
       "status": "harness_error",
-      "error": "[Errno 32] Broken pipe"
+      "error": "[Errno 32] Broken pipe",
+      "carried": true,
+      "carried_from": "pre-wave2 L5_MATRIX.json (July base; NOT re-measured in wave 2)"
     },
     {
       "language": "verilog",
@@ -2213,12 +3173,16 @@
       "truth_mode": [
         "references"
       ],
-      "status": "no_scorable_symbols"
+      "status": "no_scorable_symbols",
+      "carried": true,
+      "carried_from": "pre-wave2 L5_MATRIX.json (July base; NOT re-measured in wave 2)"
     },
     {
       "language": "vue",
       "status": "harness_error",
-      "error": "[Errno 32] Broken pipe"
+      "error": "[Errno 32] Broken pipe",
+      "carried": true,
+      "carried_from": "pre-wave2 L5_MATRIX.json (July base; NOT re-measured in wave 2)"
     },
     {
       "language": "astro",
@@ -2234,7 +3198,9 @@
       },
       "source_files": 23,
       "status": "lsp_start_failed",
-      "error": "initialize: {'code': -32603, 'message': 'Request initialize failed with message: The `typescript.tsdk` init option is required. It should point to a directory containing a `typescript.js` or `tsserver"
+      "error": "initialize: {'code': -32603, 'message': 'Request initialize failed with message: The `typescript.tsdk` init option is required. It should point to a directory containing a `typescript.js` or `tsserver",
+      "carried": true,
+      "carried_from": "pre-wave2 L5_MATRIX.json (July base; NOT re-measured in wave 2)"
     },
     {
       "language": "svelte",
@@ -2249,7 +3215,9 @@
         "edges": 217
       },
       "source_files": 24,
-      "status": "no_probes"
+      "status": "no_probes",
+      "carried": true,
+      "carried_from": "pre-wave2 L5_MATRIX.json (July base; NOT re-measured in wave 2)"
     },
     {
       "language": "apex",
@@ -2354,7 +3322,9 @@
           "serve_note": "persistent Atlas daemon (the MCP path) vs graphify CLI per-query spawn — graphify has no daemon mode",
           "tokens_vs_raw_read": 194.5
         }
-      }
+      },
+      "carried": true,
+      "carried_from": "pre-wave2 L5_MATRIX.json (July base; NOT re-measured in wave 2)"
     },
     {
       "language": "groovy",
@@ -2369,237 +3339,10 @@
         "edges": 1838
       },
       "source_files": 0,
-      "status": "no_probes"
-    },
-    {
-      "language": "zig",
-      "repo": "zig",
-      "repo_sha": "e91d66b",
-      "repo_url": "https://github.com/Hejsil/zig-clap",
-      "reference": "zls",
-      "atlas_index": {
-        "ms": 137.6,
-        "ok": true,
-        "symbols": 181,
-        "edges": 700
-      },
-      "source_files": 7,
-      "lsp_ready_ms": 5178.7,
-      "textual_defs": 54,
-      "truth_mode": [
-        "references"
-      ],
-      "symbols_scored": 12,
-      "mean_f1": 0.9723,
-      "mean_precision": 0.9583,
-      "mean_recall": 1,
-      "rows": [
-        {
-          "symbol": "chaining",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 34.8,
-          "lsp_payload_tokens": 2751
-        },
-        {
-          "symbol": "deinitArgs",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 23,
-          "lsp_payload_tokens": 85
-        },
-        {
-          "symbol": "deinitPositionals",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 25.5,
-          "lsp_payload_tokens": 85
-        },
-        {
-          "symbol": "help",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 25.4,
-          "lsp_payload_tokens": 86
-        },
-        {
-          "symbol": "longest",
-          "defs": 1,
-          "truth_callers": 3,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "macro_only_excluded": [
-            "arguments",
-            "positionals"
-          ],
-          "lsp_query_ms": 25.7,
-          "lsp_payload_tokens": 384
-        },
-        {
-          "symbol": "newline",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 25.9,
-          "lsp_payload_tokens": 258
-        },
-        {
-          "symbol": "parseEx",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 0.5,
-          "recall": 1,
-          "f1": 0.667,
-          "false_pos": [
-            "main",
-            "mathmain"
-          ],
-          "missed": [],
-          "macro_only_excluded": [
-            "different assignment separators",
-            "empty",
-            "everything",
-            "multiple positionals",
-            "overflow-safe",
-            "single positional"
-          ],
-          "lsp_query_ms": 24.5,
-          "lsp_payload_tokens": 2316
-        },
-        {
-          "symbol": "parseParamEx",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 25.3,
-          "lsp_payload_tokens": 85
-        },
-        {
-          "symbol": "parseParamsEx",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 23.3,
-          "lsp_payload_tokens": 85
-        },
-        {
-          "symbol": "parseParamsIntoArrayListEx",
-          "defs": 1,
-          "truth_callers": 3,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 23.7,
-          "lsp_payload_tokens": 126
-        },
-        {
-          "symbol": "parseParamsIntoSliceEx",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 25.5,
-          "lsp_payload_tokens": 84
-        },
-        {
-          "symbol": "positionalParam",
-          "defs": 1,
-          "truth_callers": 2,
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "false_pos": [],
-          "missed": [],
-          "lsp_query_ms": 24,
-          "lsp_payload_tokens": 89
-        }
-      ],
-      "gate": {
-        "min_symbols": 8,
-        "f1": 0.9,
-        "precision": 0.9
-      },
-      "l5_pass": true,
-      "status": "ok",
-      "perf": {
-        "atlas": {
-          "median_query_ms": 18.1,
-          "mean_answer_tokens": 70.9,
-          "serve_warm_query_ms": 0.63,
-          "serve_endpoint": "callers"
-        },
-        "graphify": {
-          "build_ms": null,
-          "median_query_ms": 92.7,
-          "mean_answer_tokens": 64.2,
-          "truth_recall": 0.833,
-          "recall_note": "charitable substring match of truth caller names in explain output"
-        },
-        "raw_read_floor": {
-          "median_tokens": 18035,
-          "note": "sum of full-file tokens over source files containing the symbol name"
-        },
-        "lsp": {
-          "server": "zls",
-          "cold_query_ms": 5204.1,
-          "warm_query_ms": 25.4,
-          "ready_ms": 5178.7,
-          "mean_payload_tokens": 536.2,
-          "note": "cold = spawn+initialize+index-settle+query, the cost of a fresh agent shell; payload = JSON-RPC results the agent must parse"
-        },
-        "multipliers": {
-          "latency_vs_graphify": 5.1,
-          "tokens_vs_graphify": 0.9,
-          "latency_vs_lsp_cold": 287.5,
-          "latency_vs_lsp_warm": 1.4,
-          "tokens_vs_lsp": 7.6,
-          "serve_latency_vs_lsp_warm": 40.3,
-          "serve_latency_vs_lsp_cold": 8260.5,
-          "serve_latency_vs_graphify_cli": 147.1,
-          "serve_note": "persistent Atlas daemon (the MCP path) vs graphify CLI per-query spawn — graphify has no daemon mode",
-          "tokens_vs_raw_read": 254.4
-        }
-      }
+      "status": "no_probes",
+      "carried": true,
+      "carried_from": "pre-wave2 L5_MATRIX.json (July base; NOT re-measured in wave 2)"
     }
-  ]
+  ],
+  "provenance_note": "wave-2 final master. Rows with run.tree_sha were measured by the wave-2 verifier re-run at that tree; rows marked carried:true are July-base rows for languages outside the 11 wave-2 lanes and carry no wave-2 claim."
 }
