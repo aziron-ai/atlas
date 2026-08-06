@@ -262,7 +262,7 @@ function FrontierChart({ frontier }) {
     { id: "atlas-low", dx: 12, dy: -22, anchor: "start" },
     { id: "atlas-medium", dx: 14, dy: 26, anchor: "start" },
     { id: "atlas-high", dx: 24, dy: -18, anchor: "start" },
-    { id: "atlas-xhigh", dx: -13, dy: -22, anchor: "end" },
+    { id: "atlas-xhigh", dx: 14, dy: -2, anchor: "start" },
     { id: "graphify", dx: 12, dy: 4, anchor: "start" },
     { id: "raw-file", dx: 12, dy: 18, anchor: "start" },
   ];
@@ -285,10 +285,12 @@ function FrontierChart({ frontier }) {
         </radialGradient>
       </defs>
       <rect x={L} y={T} width={x(120) - L} height={y(0.55) - T} fill="url(#idealGlow)" />
-      <text x={L + 10} y={T + 16} className="mono" fontSize="10" fontWeight="700" fill="var(--primary)" letterSpacing="0.14em">
+      {/* quadrant caption sits at the BOTTOM of the glow: the top-left corner
+          belongs to the Atlas-high point and its label */}
+      <text x={L + 10} y={y(0.55) - 19} className="mono" fontSize="10" fontWeight="700" fill="var(--primary)" letterSpacing="0.14em">
         IDEAL
       </text>
-      <text x={L + 10} y={T + 30} className="mono" fontSize="9.5" fill="var(--primary-dim)">
+      <text x={L + 10} y={y(0.55) - 5} className="mono" fontSize="9.5" fill="var(--primary-dim)">
         accurate & cheap
       </text>
 
