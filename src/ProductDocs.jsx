@@ -10,8 +10,9 @@ import {
   Sun,
 } from "lucide-react";
 import SurveyChart, { LatencyScaleBar } from "./SurveyChart";
+import packageMetadata from "../package.json";
 
-const RELEASE = "0.1.54";
+const RELEASE = packageMetadata.version;
 const GITHUB = "https://github.com/aziron-ai/atlas";
 const WIKI = `${GITHUB}/wiki`;
 
@@ -1098,7 +1099,7 @@ function DocsPage({ slug }) {
             <p>Use a release archive when no package manager is available, on air-gapped hosts, or when you need to pin and checksum exact bytes. Choose the current version and platform from <a className="text-link" href="https://github.com/aziron-ai/atlas/releases/latest" target="_blank" rel="noreferrer">GitHub Releases</a>:</p>
             <Command>{`VERSION=${RELEASE}\nOS=darwin       # darwin or linux\nARCH=arm64      # arm64 or amd64\nASSET="atlas_\${VERSION}_\${OS}_\${ARCH}.tar.gz"\nBASE="https://github.com/aziron-ai/atlas/releases/download/v\${VERSION}"\n\ncurl -fLO "$BASE/$ASSET"\ncurl -fLO "$BASE/checksums.txt"\ngrep " $ASSET\\$" checksums.txt | shasum -a 256 -c -\ntar -xzf "$ASSET"\nsudo install -m 0755 atlas /usr/local/bin/atlas\natlas version`}</Command>
             <p>On Linux, replace the checksum command with <code>sha256sum -c -</code> when available.</p>
-            <p><strong>Windows.</strong> Each release also includes a Windows amd64 archive. Download it from the same release page, extract the <code>atlas</code> executable, and add its directory to <code>PATH</code>. Alternatively, the npm channel above supports Windows x64.</p>
+            <p><strong>Windows.</strong> Each release also includes a Windows amd64 archive. Download it from the same release page, extract the <code>atlas.exe</code> executable, and add its directory to <code>PATH</code>. Alternatively, the npm channel above supports Windows x64.</p>
           </ProseSection>
           <ProseSection title="Native Linux Packages">
             <p>Use native packages when your fleet is managed through a distribution package manager. Each release includes <code>.deb</code>, <code>.rpm</code>, and <code>.apk</code> packages for amd64 and arm64. Download the matching package from the release page, then install:</p>

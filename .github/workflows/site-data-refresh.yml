@@ -1,8 +1,5 @@
-# Keeps the site's displayed release version in lockstep with GitHub Releases
-# (Aziron#462 finding 3: the site said v0.1.39 while v0.1.42 was latest —
-# docs regeneration was a manual step nobody ran). Releases are published on
-# THIS repository, so the release event can update the two version fields and
-# request a Pages build directly; workflow_dispatch covers manual re-syncs.
+# Pages serves committed assets, so a release sync must rebuild both the app and
+# static documentation, not just update the source version fields.
 name: site-data-refresh
 on:
   release:
@@ -11,45 +8,42 @@ on:
 permissions:
   contents: write
   pages: write
+concurrency:
+  group: site-release-sync
+  cancel-in-progress: false
 jobs:
   refresh-version:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with: { ref: main }
-      - name: Sync version fields to the latest release tag
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked site dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Sync current installation examples to the latest stable release
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -eu
-          TAG="${{ github.event.release.tag_name }}"
-          if [ -z "$TAG" ]; then
-            TAG="$(curl -sf -H "Authorization: Bearer ${{ github.token }}" \
-              "https://api.github.com/repos/${{ github.repository }}/releases/latest" | jq -r .tag_name)"
-          fi
-          VER="${TAG#v}"
-          node -e '
-            const fs = require("fs");
-            for (const f of ["package.json", "data/site-data.json"]) {
-              const d = JSON.parse(fs.readFileSync(f, "utf8"));
-              d.version = process.argv[1];
-              fs.writeFileSync(f, JSON.stringify(d, null, 2) + "\n");
-            }
-            // The install/upgrade docs render a module-level RELEASE constant
-            // (fetched site-data is not in scope there); bump it here too so
-            // version strings never drift from the release again.
-            const jsx = "src/ProductDocs.jsx";
-            const src = fs.readFileSync(jsx, "utf8").replace(
-              /const RELEASE = "[^"]*";/,
-              `const RELEASE = "${process.argv[1]}";`
-            );
-            fs.writeFileSync(jsx, src);
-          ' "$VER"
-          if git diff --quiet; then echo "already in sync ($VER)"; exit 0; fi
+          TAG="$(gh api "repos/${GITHUB_REPOSITORY}/releases/latest" --jq .tag_name)"
+          npm run sync:release -- "$TAG"
+      - name: Rebuild the app and static documentation
+        run: npm run build
+      - name: Commit the complete published site
+        run: |
+          set -eu
+          git add package.json package-lock.json data/site-data.json content/docs/installation.md \
+            assets/app.js assets/styles.css index.html docs llms.txt llms-full.txt robots.txt sitemap.xml
+          if git diff --cached --quiet; then echo "published site already in sync"; exit 0; fi
+          VER="$(node -p 'require("./package.json").version')"
           git config user.name "atlas-site-bot"
           git config user.email "atlas-site-bot@users.noreply.github.com"
-          git commit -am "site-data: version $VER (release sync)"
-          git push origin main
+          git commit -m "site-data: publish complete site for $VER (release sync)"
+          git push origin HEAD:main
       - name: Request a Pages build (pushes by GITHUB_TOKEN skip workflow triggers)
-        run: |
-          curl -sf -X POST -H "Authorization: Bearer ${{ github.token }}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages/builds" || true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"

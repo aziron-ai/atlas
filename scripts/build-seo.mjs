@@ -22,6 +22,7 @@
 "use strict";
 
 import fs from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -320,6 +321,11 @@ ${agentBenchBlock}
 
 const idx = path.join(repoRoot, "index.html");
 let html = fs.readFileSync(idx, "utf8");
+for (const asset of ["assets/app.js", "assets/styles.css"]) {
+  const digest = createHash("sha256").update(fs.readFileSync(path.join(repoRoot, asset))).digest("hex").slice(0, 12);
+  const reference = new RegExp(`(["'])${asset.replace(/\./g, "\\.")}(?:\\?[^"']*)?\\1`, "g");
+  html = html.replace(reference, `"${asset}?v=${digest}"`);
+}
 
 const inject = (text, startMark, endMark, payload, anchorRe) => {
   const block = `${startMark}${payload}    ${endMark}`;

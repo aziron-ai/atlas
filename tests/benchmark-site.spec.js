@@ -3,6 +3,7 @@ const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 
 const baseURL = process.env.ATLAS_BENCHMARK_URL || "http://127.0.0.1:4179/";
+const release = require("../package.json").version;
 const site = JSON.parse(
   fs.readFileSync(path.join(__dirname, "..", "data", "site-data.json"), "utf8")
 );
@@ -67,11 +68,36 @@ test.describe("atlas product and documentation", () => {
     await expect(page.getByTestId("docs-article")).toContainText("aziron-ai/atlas/atlas");
     await expect(page.getByTestId("docs-article")).toContainText("@aziron/atlas");
     await expect(page.getByTestId("docs-article")).toContainText("@aziron-ai/atlas");
-    await expect(page.getByTestId("docs-article")).toContainText(`@${site.version}`);
+    const article = page.getByTestId("docs-article");
+    for (const example of [
+      `@aziron/atlas@${release}`, `@aziron-ai/atlas@${release}`, `VERSION=${release}`,
+      ...["deb", "rpm", "apk"].map(ext => `atlas_${release}_linux_amd64.${ext}`),
+    ]) {
+      await expect(article).toContainText(example);
+    }
+    await expect(page.getByTestId("product-nav")).toContainText(`v${release}`);
 
     await page.goto(`${baseURL}#docs/assistants`, { waitUntil: "networkidle" });
     await expect(page.getByTestId("docs-article")).toContainText("atlas bootstrap --dry-run");
     await expect(page.getByTestId("docs-article")).toContainText("codex,claude,claude-desktop");
+  });
+
+  test("static installation docs also show the released version without JavaScript", async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    try {
+      const page = await context.newPage();
+      const response = await page.goto(new URL("docs/installation/", baseURL).toString());
+      expect(response.status()).toBe(200);
+      for (const example of [
+        `@aziron/atlas@${release}`, `@aziron-ai/atlas@${release}`, `VERSION=${release}`,
+        ...["deb", "rpm", "apk"].map(ext => `atlas_${release}_linux_amd64.${ext}`),
+      ]) {
+        await expect(page.locator("article")).toContainText(example);
+      }
+      await expect(page.locator("footer.site")).toContainText(`Atlas v${release}`);
+    } finally {
+      await context.close();
+    }
   });
 
   test("primary navigation reaches docs, benchmarks, and downloadable data", async ({ page, request }) => {
@@ -82,7 +108,7 @@ test.describe("atlas product and documentation", () => {
 
     const response = await request.get(new URL("data/site-data.json", baseURL).toString());
     expect(response.status()).toBe(200);
-    expect((await response.json()).version).toBe(site.version);
+    expect((await response.json()).version).toBe(release);
   });
 });
 

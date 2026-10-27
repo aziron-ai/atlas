@@ -4,7 +4,8 @@
   "description": "Atlas product documentation, benchmark evidence, and release data.",
   "private": true,
   "scripts": {
-    "build": "tailwindcss -i ./src/styles.css -o ./assets/styles.css --minify && esbuild ./src/App.jsx --bundle --format=iife --jsx=automatic --minify --outfile=./assets/app.js",
+    "build": "tailwindcss -i ./src/styles.css -o ./assets/styles.css --minify && esbuild ./src/App.jsx --bundle --format=iife --jsx=automatic --minify --outfile=./assets/app.js && node scripts/build-seo.mjs",
+    "sync:release": "node scripts/sync-release.mjs",
     "validate:call-edges": "node scripts/call-edge-evidence-harness.mjs",
     "validate:graphify-support": "node scripts/graphify-support-harness.mjs",
     "validate:public-repos": "node scripts/public-repo-validation-harness.mjs",
