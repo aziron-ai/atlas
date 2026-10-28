@@ -85,14 +85,7 @@ atlas version</code></pre>
 atlas migrate
 atlas status --schema
 atlas doctor --verify atlas</code></pre>
-<ul><li><strong><code>atlas bootstrap</code></strong> refreshes the assistant glue: it re-registers Atlas as</li></ul>
-<p>  an MCP server and reinstalls the skill and CLAUDE.md directive for detected   assistants, baking in the absolute binary path. It is idempotent — safe to   run repeatedly.</p>
-<ul><li><strong><code>atlas migrate</code></strong> applies Atlas storage migrations to the database and</li></ul>
-<p>  reports the active contracts. Use <code>--all --root DIR</code> to migrate every   <code>.atlas/atlas.db</code> under a directory.</p>
-<ul><li><strong><code>atlas status --schema</code></strong> reports the schema/index-format/lexical/MCP</li></ul>
-<p>  contract versions and per-repo snapshot format drift, so you can see   whether existing snapshots match what the new binary expects.</p>
-<ul><li><strong><code>atlas doctor --verify atlas</code></strong> reports upgrade health and the</li></ul>
-<p>  schema/index contract state, and additionally checks binary drift — whether   the <code>atlas</code> on PATH (what assistants launch via <code>command:&quot;atlas&quot;</code>) matches   the binary you just upgraded.</p>
+<ul><li><strong><code>atlas bootstrap</code></strong> refreshes the assistant glue: it re-registers Atlas as an MCP server and reinstalls the skill and CLAUDE.md directive for detected assistants, baking in the absolute binary path. It is idempotent — safe to run repeatedly.</li><li><strong><code>atlas migrate</code></strong> applies Atlas storage migrations to the database and reports the active contracts. Use <code>--all --root DIR</code> to migrate every <code>.atlas/atlas.db</code> under a directory.</li><li><strong><code>atlas status --schema</code></strong> reports the schema/index-format/lexical/MCP contract versions and per-repo snapshot format drift, so you can see whether existing snapshots match what the new binary expects.</li><li><strong><code>atlas doctor --verify atlas</code></strong> reports upgrade health and the schema/index contract state, and additionally checks binary drift — whether the <code>atlas</code> on PATH (what assistants launch via <code>command:&quot;atlas&quot;</code>) matches the binary you just upgraded.</li></ul>
 <h2>Reading Doctor Output After an Upgrade</h2>
 <p>Act on what doctor reports rather than rebuilding preemptively. A clean report means the upgrade is complete. If doctor or status flags schema or index contract drift, run <code>atlas migrate</code> and re-check. If doctor reports the lexical sidecar needs rebuilding, use <code>atlas compact --rebuild-lexical</code> (see <a href="../troubleshooting/">Troubleshooting</a>). Run a full rebuild only when status, doctor, or the release notes require it:</p>
 <pre><code>atlas index . --reindex</code></pre>
@@ -134,6 +127,7 @@ sudo rm /usr/local/bin/atlas                  # manual binary</code></pre>
         <a href="../assistants/">AI Assistant Setup</a>
         <a href="../mcp/">MCP Tools</a>
         <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../workbench/">Ask Workbench</a>
         <a href="../configuration/">Configuration</a>
         <a href="../privacy/">Privacy and Data Handling</a>
         <a href="../languages/">Supported Languages and Formats</a>

@@ -58,6 +58,7 @@ const DOCS = [
   { slug: "assistants", title: "AI Assistant Setup", desc: "Connect Claude, Codex, and other MCP-compatible assistants to Atlas." },
   { slug: "mcp", title: "MCP Tools", desc: "Atlas MCP tools that give coding assistants bounded, cited code context." },
   { slug: "service", title: "Dashboard and HTTP API", desc: "Run the local Atlas dashboard and the HTTP / MCP service." },
+  { slug: "workbench", title: "Ask Workbench", desc: "Ask the codebase in plain language: Atlas gathers cited evidence from the index, git and connected sources, and a model you choose writes the answer, kept as a conversation." },
   { slug: "configuration", title: "Configuration", desc: "Configure Atlas limits, storage location, and runtime behavior." },
   { slug: "privacy", title: "Privacy and Data Handling", desc: "How Atlas stores repository intelligence locally and what stays on your machine." },
   { slug: "languages", title: "Supported Languages and Formats", desc: "Languages and formats Atlas indexes, with capability levels." },
@@ -71,7 +72,7 @@ const WIKI_TO_SLUG = {
   "Getting-Started": "getting-started", "Installation": "installation",
   "Indexing-and-Reindexing": "indexing", "CLI-Reference": "cli", "Core-Concepts": "concepts",
   "AI-Assistant-Setup": "assistants", "MCP-Tools": "mcp",
-  "Dashboard-and-HTTP-API": "service", "Configuration": "configuration",
+  "Dashboard-and-HTTP-API": "service", "Ask-Workbench": "workbench", "Configuration": "configuration",
   "Privacy-and-Data-Handling": "privacy", "Supported-Languages": "languages",
   "Benchmarks-and-Methodology": "benchmarks", "Troubleshooting": "troubleshooting",
   "Upgrade-and-Uninstall": "upgrade",
@@ -98,7 +99,7 @@ function mdToHtml(md) {
   const lines = md.replace(/\r\n/g, "\n").split("\n");
   const out = [];
   let i = 0;
-  const flushList = (buf) => { if (buf.length) { out.push(`<ul>${buf.map((li) => `<li>${inline(li)}</li>`).join("")}</ul>`); buf.length = 0; } };
+  const flushList = (buf) => { if (buf.length) { const tag = buf.ordered ? "ol" : "ul"; out.push(`<${tag}>${buf.map((li) => `<li>${inline(li)}</li>`).join("")}</${tag}>`); buf.length = 0; buf.ordered = false; } };
   const listBuf = [];
   while (i < lines.length) {
     const line = lines[i];
@@ -123,13 +124,26 @@ function mdToHtml(md) {
     }
     const hm = line.match(/^(#{1,4})\s+(.*)$/);
     if (hm) { flushList(listBuf); const n = hm[1].length; out.push(`<h${n}>${inline(hm[2])}</h${n}>`); i++; continue; }
-    if (/^\s*[-*]\s+/.test(line)) { listBuf.push(line.replace(/^\s*[-*]\s+/, "")); i++; continue; }
+    const lm = line.match(/^\s*(?:[-*]|\d+[.)])\s+(.*)$/);                // bullet or numbered item
+    if (lm) {
+      const ordered = /^\s*\d/.test(line);
+      if (listBuf.length && listBuf.ordered !== ordered) flushList(listBuf);
+      listBuf.ordered = ordered;
+      listBuf.push(lm[1]);
+      i++;
+      continue;
+    }
+    if (listBuf.length && /^\s+\S/.test(line)) {                          // wrapped item continues
+      listBuf[listBuf.length - 1] += " " + line.trim();
+      i++;
+      continue;
+    }
     if (line.trim() === "") { flushList(listBuf); i++; continue; }
     // paragraph: gather until blank line
     flushList(listBuf);
     const para = [line];
     i++;
-    while (i < lines.length && lines[i].trim() !== "" && !/^(#{1,4}\s|```|\s*[-*]\s|\s*\|)/.test(lines[i])) { para.push(lines[i]); i++; }
+    while (i < lines.length && lines[i].trim() !== "" && !/^(#{1,4}\s|```|\s*[-*]\s|\s*\d+[.)]\s|\s*\|)/.test(lines[i])) { para.push(lines[i]); i++; }
     out.push(`<p>${inline(para.join(" "))}</p>`);
   }
   flushList(listBuf);
@@ -258,6 +272,7 @@ const body = `
           <li><a href="docs/indexing/">Indexing and reindexing</a> — freshness, watch mode, and recovery.</li>
           <li><a href="docs/cli/">CLI reference</a> — search, symbols, relationships, impact, and routes.</li>
           <li><a href="docs/assistants/">AI assistant setup</a> and <a href="docs/mcp/">MCP tools</a>.</li>
+          <li><a href="docs/workbench/">Ask Workbench</a> — a cited conversation about the codebase in the dashboard.</li>
           <li><a href="docs/troubleshooting/">Troubleshooting</a>, <a href="docs/privacy/">privacy</a>, <a href="docs/configuration/">configuration</a>, and <a href="docs/upgrade/">upgrades</a>.</li>
           <li><a href="docs/">Browse all documentation →</a></li>
         </ul>
@@ -395,6 +410,7 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intellig
 
 ## Project
 - [Product documentation](${BASE}#docs/getting-started): install, index, query, configure, connect, troubleshoot, and upgrade
+- [Ask Workbench](${BASE}#docs/workbench): a conversation about the codebase in the dashboard — Atlas gathers cited evidence (index, git, GitHub, Jira, Confluence, Pulse) and what it computed, a model you choose writes the answer; threads are kept by the server
 - [Benchmark & comparison](${BASE}#benchmarks): interactive version of the published evidence
 - [GitHub repository](https://github.com/aziron-ai/atlas): releases (macOS, Linux, Windows), issues
 - [GitHub Wiki](https://github.com/aziron-ai/atlas/wiki): mirror of the consumer product guide

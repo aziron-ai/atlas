@@ -69,7 +69,7 @@
 <p><a href="https://atlas.aziro.com/#benchmarks">Open the Atlas benchmark explorer</a></p>
 <h2>How to Read a Result</h2>
 <p>Work through this checklist before comparing tools or quoting a number — a result you cannot place in it is not evidence:</p>
-<p>1. <strong>Identify the setup.</strong> Atlas and baseline tool versions, repository URL    and pinned commit, language and query set. 2. <strong>Identify the conditions.</strong> Hardware and operating system, cold-cache or    warm-cache state, repeat count and aggregation method. 3. <strong>Identify the scoring.</strong> The accuracy oracle or reviewer, and the token    measurement method (provider-reported usage versus a documented estimate). 4. <strong>Identify the failure handling.</strong> How failed and timed-out cases were    counted. A mean that silently drops failures is not comparable to one that    scores them.</p>
+<ol><li><strong>Identify the setup.</strong> Atlas and baseline tool versions, repository URL and pinned commit, language and query set.</li><li><strong>Identify the conditions.</strong> Hardware and operating system, cold-cache or warm-cache state, repeat count and aggregation method.</li><li><strong>Identify the scoring.</strong> The accuracy oracle or reviewer, and the token measurement method (provider-reported usage versus a documented estimate).</li><li><strong>Identify the failure handling.</strong> How failed and timed-out cases were counted. A mean that silently drops failures is not comparable to one that scores them.</li></ol>
 <h2>Evidence Categories</h2>
 <p>Keep categories separate — do not combine them into one unsupported headline:</p>
 <ul><li><strong>Compatibility:</strong> whether a format indexes successfully</li><li><strong>Correctness:</strong> precision, recall, or F1 against an oracle</li><li><strong>Latency:</strong> elapsed index or query time under stated cache conditions</li><li><strong>Token use:</strong> measured model/tool usage or a documented estimate</li><li><strong>Agent workflow:</strong> end-to-end behavior for a pinned assistant and task set</li></ul>
@@ -115,6 +115,7 @@
         <a href="../assistants/">AI Assistant Setup</a>
         <a href="../mcp/">MCP Tools</a>
         <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../workbench/">Ask Workbench</a>
         <a href="../configuration/">Configuration</a>
         <a href="../privacy/">Privacy and Data Handling</a>
         <a href="../languages/">Supported Languages and Formats</a>

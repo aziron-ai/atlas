@@ -28,7 +28,7 @@ const SECTIONS = [
 
 const DOC_PAGES = [
   "getting-started", "installation", "concepts", "indexing", "cli", "assistants",
-  "mcp", "service", "configuration", "privacy", "languages", "benchmarks",
+  "mcp", "service", "workbench", "configuration", "privacy", "languages", "benchmarks",
   "troubleshooting", "upgrade",
 ];
 

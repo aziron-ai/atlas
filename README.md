@@ -157,6 +157,7 @@ for a guided first index and first query.
 | Trace service dependencies | Routes, consumers, and dependencies |
 | Support coding agents | MCP tools with source and line citations |
 | Operate a local index | CLI status, dashboard, and HTTP API |
+| Ask the codebase in plain language | Ask Workbench: a cited conversation in the dashboard, answered by a model you choose over evidence Atlas gathered |
 
 Atlas runs locally by default and stores its index in the repository workspace.
 No server is required for local indexing, CLI queries, or stdio MCP usage.
@@ -165,7 +166,9 @@ No server is required for local indexing, CLI queries, or stdio MCP usage.
 
 - the `atlas` command-line interface
 - MCP integrations for **Claude, Codex, Cursor, Gemini, and GitHub Copilot**
-- a local dashboard and HTTP API
+- a local dashboard and HTTP API, including the **Ask Workbench** — a conversation about
+  the codebase where Atlas gathers the evidence (index, git, GitHub, Jira, Confluence,
+  Pulse) and Claude or Codex writes the cited answer
 - release archives and native Linux packages
 
 Integration behavior varies by client — follow
@@ -201,6 +204,7 @@ Checksums and per-archive SBOMs are attached to every
 - [AI Assistant Setup](https://atlas.aziro.com/#docs/assistants)
 - [MCP Tools](https://atlas.aziro.com/#docs/mcp)
 - [Dashboard and HTTP API](https://atlas.aziro.com/#docs/service)
+- [Ask Workbench](https://atlas.aziro.com/#docs/workbench)
 - [Configuration](https://atlas.aziro.com/#docs/configuration)
 - [Privacy and Data Handling](https://atlas.aziro.com/#docs/privacy)
 - [Supported Languages](https://atlas.aziro.com/#docs/languages)

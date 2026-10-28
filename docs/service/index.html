@@ -83,12 +83,17 @@ http://127.0.0.1:3099/dashboard</code></pre>
 <pre><code>curl http://127.0.0.1:3099/healthz
 curl http://127.0.0.1:3099/readyz
 curl http://127.0.0.1:3099/openapi.json</code></pre>
-<ul><li><code>healthz</code> confirms the process is running.</li><li><code>readyz</code> confirms Atlas can answer a lightweight engine request.</li><li><code>openapi.json</code> is the version-specific API contract. Generate clients and</li></ul>
-<p>  validate requests against this document rather than copying request shapes   from historical examples.</p>
+<ul><li><code>healthz</code> confirms the process is running.</li><li><code>readyz</code> confirms Atlas can answer a lightweight engine request.</li><li><code>openapi.json</code> is the version-specific API contract. Generate clients and validate requests against this document rather than copying request shapes from historical examples.</li></ul>
 <h2>Common Requests</h2>
 <pre><code>curl http://127.0.0.1:3099/api/v1/status
 curl http://127.0.0.1:3099/api/v1/stats
 curl &quot;http://127.0.0.1:3099/api/v1/search?q=Checkout&quot;</code></pre>
+<p>The dashboard's Ask Workbench is a route too — a question streams back as server-sent events, and the threads it keeps are readable and deletable:</p>
+<pre><code>curl -N -X POST http://127.0.0.1:3099/api/v1/ask/workbench \
+  -H 'content-type: application/json' \
+  -d '{&quot;question&quot;:&quot;what are the auth routes, and who last changed the login one?&quot;}'
+curl http://127.0.0.1:3099/api/v1/ask/workbench/threads</code></pre>
+<p>See <a href="../workbench/">Ask Workbench</a> for the stream, the thread routes, the model providers and the limits.</p>
 <h2>Binding Beyond Loopback</h2>
 <p>Loopback is the safe default. Before binding to another interface, require a bearer token and restrict browser origins:</p>
 <pre><code>export ATLAS_API_TOKEN='replace-with-a-strong-token'
@@ -113,7 +118,7 @@ lsof -nP -iTCP:3099 -sTCP:LISTEN</code></pre>
     </article>
     <nav class="prevnext">
       <span><a href="../mcp/">← MCP Tools</a></span>
-      <span><a href="../configuration/">Configuration →</a></span>
+      <span><a href="../workbench/">Ask Workbench →</a></span>
     </nav>
     <nav class="doclist" aria-label="All documentation">
         <a href="../getting-started/">Getting Started</a>
@@ -124,6 +129,7 @@ lsof -nP -iTCP:3099 -sTCP:LISTEN</code></pre>
         <a href="../assistants/">AI Assistant Setup</a>
         <a href="../mcp/">MCP Tools</a>
         <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../workbench/">Ask Workbench</a>
         <a href="../configuration/">Configuration</a>
         <a href="../privacy/">Privacy and Data Handling</a>
         <a href="../languages/">Supported Languages and Formats</a>

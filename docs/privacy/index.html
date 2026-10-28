@@ -88,6 +88,8 @@
 atlas sync now</code></pre>
 <p><code>sync status</code> shows uplink configuration, kill switches, and per-stream cursors; <code>sync now</code> pushes all pending telemetry once. To leave the fleet and remove the capture hooks:</p>
 <pre><code>atlas disconnect</code></pre>
+<h2>AI Answers and the Workbench</h2>
+<p>The Ask page's AI answer and the <a href="../workbench/">Ask Workbench</a> send data to a model only when a provider is configured (a logged-in <code>claude</code> or <code>codex</code> CLI that Atlas detected, or a stored API key) and only when you ask. What leaves the machine is the question, the labelled evidence the turn gathered — retrieved passages, never whole files, plus records from the sources you connected — the earlier turns of the thread as context, and the grounding instructions. It goes to the provider you chose, through its API or its CLI; the CLI runs in a scratch working directory with its tools disabled and no session saved, so nothing else rides along. With no provider configured nothing is sent, and Atlas's own exact verdict never leaves the machine. <code>atlas llm status</code> prints the current egress line; <code>ATLAS_LLM_DETECT=off</code> stops automatic detection. Threads the Workbench keeps live in the service's database beside the index and are removed with it.</p>
 <h2>Before Enabling Network Access</h2>
 <p>Review this checklist before binding the service beyond loopback:</p>
 <ul><li>the bind address</li><li>API authentication</li><li>allowed browser origins</li><li>reverse-proxy TLS</li><li>the data policy of connected assistants and model providers</li><li>any optional embedding or organization-connected service</li></ul>
@@ -103,8 +105,7 @@ atlas uninstall</code></pre>
 <p>Package removal does not automatically delete repository indexes; delete the <code>.atlas/</code> directory (with Atlas processes stopped) to remove an index, or use <code>atlas uninstall --purge</code> to delete the index databases automatically (the global <code>~/.atlas</code> and every registry-known repo's <code>.atlas</code>, with a blast-radius report and confirmation), or <code>atlas repo rm</code> to forget one repository's snapshots, symbols, edges, embeddings, and lexical documents from a shared database.</p>
 <h2>Shared and Connected Environments</h2>
 <p>When multiple users or repositories share an Atlas service:</p>
-<ul><li>declare repository scope explicitly</li><li>authenticate every network client</li><li>restrict browser origins</li><li>define retention and backup policy</li><li>avoid mounting sensitive repositories into an index intended for a broader</li></ul>
-<p>  audience</p>
+<ul><li>declare repository scope explicitly</li><li>authenticate every network client</li><li>restrict browser origins</li><li>define retention and backup policy</li><li>avoid mounting sensitive repositories into an index intended for a broader audience</li></ul>
 <p>Atlas documentation describes product behavior, but the operator remains responsible for the policies of connected assistants, networks, and storage.</p>
     </article>
     <nav class="prevnext">
@@ -120,6 +121,7 @@ atlas uninstall</code></pre>
         <a href="../assistants/">AI Assistant Setup</a>
         <a href="../mcp/">MCP Tools</a>
         <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../workbench/">Ask Workbench</a>
         <a href="../configuration/">Configuration</a>
         <a href="../privacy/">Privacy and Data Handling</a>
         <a href="../languages/">Supported Languages and Formats</a>

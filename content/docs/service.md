@@ -64,6 +64,19 @@ curl http://127.0.0.1:3099/api/v1/stats
 curl "http://127.0.0.1:3099/api/v1/search?q=Checkout"
 ```
 
+The dashboard's Ask Workbench is a route too — a question streams back as
+server-sent events, and the threads it keeps are readable and deletable:
+
+```sh
+curl -N -X POST http://127.0.0.1:3099/api/v1/ask/workbench \
+  -H 'content-type: application/json' \
+  -d '{"question":"what are the auth routes, and who last changed the login one?"}'
+curl http://127.0.0.1:3099/api/v1/ask/workbench/threads
+```
+
+See [Ask Workbench](workbench) for the stream, the thread routes, the model
+providers and the limits.
+
 ## Binding Beyond Loopback
 
 Loopback is the safe default. Before binding to another interface, require a

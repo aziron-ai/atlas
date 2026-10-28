@@ -112,6 +112,22 @@ pick up the server:
 Atlas preserves unrelated client configuration. Always review a dry run before
 applying changes in managed environments.
 
+## Ask in the Dashboard
+
+The same providers answer in the dashboard's **Ask Workbench**: a conversation
+about the codebase where Atlas gathers the evidence and the model writes the
+cited answer. A `claude` or `codex` CLI that is installed and logged in is
+detected automatically; an API key can be stored with `atlas llm set`. Check
+what is configured with:
+
+```sh
+atlas llm status
+atlas llm detect --apply
+```
+
+See [Ask Workbench](workbench) for how a turn works, the threads the server
+keeps, and what leaves the machine.
+
 ## Verify
 
 Confirm the integration end to end before relying on it:

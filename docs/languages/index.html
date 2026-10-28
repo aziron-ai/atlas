@@ -79,24 +79,14 @@
 <p><strong>Ruby is the exception worth reading.</strong> Ruby also scores 0.000 on that fixture, and that zero is *designed*: the fixture's callers are top-level, and the binder refuses to attribute a top-level call to an owner it cannot prove rather than guessing one. Ruby's L5 promotion cites the LSP lane against a real repository and never the fixture. A fixture pass is a floor, not a promotion.</p>
 <h2>Content Formats</h2>
 <p>Beyond code, Atlas indexes approximately 24 content formats (JSON, YAML, HTML, PDF, and others) for search. These are content and structural indexes, not call graphs:</p>
-<ul><li><strong>Templates and frontend:</strong> HTML, CSS, Vue, Svelte, Astro, EJS, Razor,</li></ul>
-<p>  Blade, Markdown, and MDX</p>
-<ul><li><strong>Structured and project files:</strong> JSON, YAML, TOML, XML, plist, CSV, TSV,</li></ul>
-<p>  Protocol Buffers, Go module files, .NET project files, Makefiles,   Dockerfiles, configuration files, and plain text</p>
-<ul><li><strong>Documents and media:</strong> PDF, DOCX, XLSX, PPTX, and common image formats,</li></ul>
-<p>  indexed for content discovery</p>
+<ul><li><strong>Templates and frontend:</strong> HTML, CSS, Vue, Svelte, Astro, EJS, Razor, Blade, Markdown, and MDX</li><li><strong>Structured and project files:</strong> JSON, YAML, TOML, XML, plist, CSV, TSV, Protocol Buffers, Go module files, .NET project files, Makefiles, Dockerfiles, configuration files, and plain text</li><li><strong>Documents and media:</strong> PDF, DOCX, XLSX, PPTX, and common image formats, indexed for content discovery</li></ul>
 <p>Treat document and media formats as content indexes rather than programming-language call graphs.</p>
 <h2>Check Evidence for Your Own Repositories</h2>
 <p>Fixture compatibility is not a substitute for production-repository accuracy — verify support on the code you actually work with before depending on it.</p>
 <pre><code>atlas index .
 atlas stats
 atlas report --format plain</code></pre>
-<ul><li><code>atlas index .</code> parses symbols, edges, and routes and persists the graph and</li></ul>
-<p>  lexical index.</p>
-<ul><li><code>atlas stats</code> shows graph and index telemetry statistics for the indexed</li></ul>
-<p>  repository, including recent snapshot telemetry rows.</p>
-<ul><li><code>atlas report</code> composes the snapshot's graph stats, top hubs, and top</li></ul>
-<p>  communities; <code>--format plain</code> prints the Markdown report directly.</p>
+<ul><li><code>atlas index .</code> parses symbols, edges, and routes and persists the graph and lexical index.</li><li><code>atlas stats</code> shows graph and index telemetry statistics for the indexed repository, including recent snapshot telemetry rows.</li><li><code>atlas report</code> composes the snapshot's graph stats, top hubs, and top communities; <code>--format plain</code> prints the Markdown report directly.</li></ul>
 <p>Low edge counts or missing symbol kinds in <code>stats</code> and <code>report</code> output are the fastest signal that a language sits lower on the ladder than your workflow needs. Evaluate important languages on representative repositories and pin the Atlas version used for the evaluation.</p>
 <p>See <a href="../indexing/">Indexing and Reindexing</a> for delta versus full reindex behavior and <a href="../cli/">CLI Reference</a> for the full command surface.</p>
 <h2>Published Compatibility Evidence</h2>
@@ -117,6 +107,7 @@ atlas report --format plain</code></pre>
         <a href="../assistants/">AI Assistant Setup</a>
         <a href="../mcp/">MCP Tools</a>
         <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../workbench/">Ask Workbench</a>
         <a href="../configuration/">Configuration</a>
         <a href="../privacy/">Privacy and Data Handling</a>
         <a href="../languages/">Supported Languages and Formats</a>

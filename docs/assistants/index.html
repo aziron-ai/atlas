@@ -108,6 +108,11 @@ atlas install skill \
 <p>Check these paths when auditing what setup wrote or when a client does not pick up the server:</p>
 <table><thead><tr><th>Client</th><th>Typical location</th></tr></thead><tbody><tr><td>Codex</td><td><code>~/.codex/config.toml</code></td></tr><tr><td>Claude CLI</td><td><code>~/.claude.json</code></td></tr><tr><td>Claude Desktop on macOS</td><td><code>~/Library/Application Support/Claude/claude_desktop_config.json</code></td></tr></tbody></table>
 <p>Atlas preserves unrelated client configuration. Always review a dry run before applying changes in managed environments.</p>
+<h2>Ask in the Dashboard</h2>
+<p>The same providers answer in the dashboard's <strong>Ask Workbench</strong>: a conversation about the codebase where Atlas gathers the evidence and the model writes the cited answer. A <code>claude</code> or <code>codex</code> CLI that is installed and logged in is detected automatically; an API key can be stored with <code>atlas llm set</code>. Check what is configured with:</p>
+<pre><code>atlas llm status
+atlas llm detect --apply</code></pre>
+<p>See <a href="../workbench/">Ask Workbench</a> for how a turn works, the threads the server keeps, and what leaves the machine.</p>
 <h2>Verify</h2>
 <p>Confirm the integration end to end before relying on it:</p>
 <pre><code>atlas doctor --verify atlas
@@ -133,6 +138,7 @@ atlas uninstall</code></pre>
         <a href="../assistants/">AI Assistant Setup</a>
         <a href="../mcp/">MCP Tools</a>
         <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../workbench/">Ask Workbench</a>
         <a href="../configuration/">Configuration</a>
         <a href="../privacy/">Privacy and Data Handling</a>
         <a href="../languages/">Supported Languages and Formats</a>

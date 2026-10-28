@@ -1002,6 +1002,7 @@ const DOC_PAGES = [
   { slug: "assistants", label: "AI assistant setup", summary: "Connect Codex, Claude, and MCP clients." },
   { slug: "mcp", label: "MCP tools", summary: "Choose the right bounded code-intelligence tool." },
   { slug: "service", label: "Dashboard and API", summary: "Run the local service, dashboard, and HTTP MCP." },
+  { slug: "workbench", label: "Ask Workbench", summary: "A cited conversation about the codebase, with a model you choose." },
   { slug: "configuration", label: "Configuration", summary: "Database, limits, security, and precedence." },
   { slug: "privacy", label: "Privacy and data", summary: "Understand local storage and network boundaries." },
   { slug: "languages", label: "Languages and formats", summary: "Capability levels across code and content." },
@@ -1013,7 +1014,7 @@ const DOC_PAGES = [
 /* sidebar groups: letter = group ref, order within = position ref */
 const DOC_GROUPS = [
   { name: "First survey", letter: "A", slugs: ["getting-started", "installation", "concepts"] },
-  { name: "Operating the instrument", letter: "B", slugs: ["indexing", "cli", "configuration", "service"] },
+  { name: "Operating the instrument", letter: "B", slugs: ["indexing", "cli", "configuration", "service", "workbench"] },
   { name: "Assistants", letter: "C", slugs: ["assistants", "mcp"] },
   { name: "Trust & evidence", letter: "D", slugs: ["privacy", "languages", "benchmarks"] },
   { name: "Maintenance", letter: "E", slugs: ["troubleshooting", "upgrade"] },
@@ -1166,7 +1167,7 @@ function DocsPage({ slug }) {
             <p>The same graph is exposed three ways, so humans, services, and AI agents each get a native interface without separate infrastructure.</p>
             <Bullets>
               <li><strong>CLI</strong> — the commands in this documentation; scriptable via <code>--format</code>.</li>
-              <li><strong>REST HTTP API</strong> — <code>atlas serve</code> runs the HTTP API on <code>127.0.0.1:3099</code> by default (use <code>--addr 0.0.0.0:3099</code> to expose it) and hosts the dashboard at that URL (pass <code>--open</code> to auto-open it in your browser); <code>--mcp</code> also mounts MCP over HTTP at <code>POST /mcp</code>.</li>
+              <li><strong>REST HTTP API</strong> — <code>atlas serve</code> runs the HTTP API on <code>127.0.0.1:3099</code> by default (use <code>--addr 0.0.0.0:3099</code> to expose it) and hosts the dashboard at that URL (pass <code>--open</code> to auto-open it in your browser); <code>--mcp</code> also mounts MCP over HTTP at <code>POST /mcp</code>. The dashboard includes the <a className="text-link" href="#docs/workbench">Ask Workbench</a>: a conversation about the codebase where Atlas gathers cited evidence and a model you choose writes the answer.</li>
               <li><strong>MCP</strong> — <code>atlas mcp</code> exposes graph, search, and impact as MCP tools to LLM agents over stdio by default, with <code>--http</code>/<code>--sse</code> transports available. Both <code>serve</code> and <code>mcp</code> keep the graph fresh with a background repo watch (<code>--watch</code>, on by default; disable with <code>--watch=false</code> or <code>ATLAS_NO_WATCH=1</code>). <a className="text-link" href="#docs/getting-started">Getting Started</a> covers wiring assistants via <code>atlas bootstrap</code>; <a className="text-link" href="#docs/mcp">MCP Tools</a> covers the tool surface.</li>
             </Bullets>
             <Command>{`atlas serve --mcp`}</Command>
@@ -1455,6 +1456,11 @@ function DocsPage({ slug }) {
             </tbody></table></div>
             <p>Atlas preserves unrelated client configuration. Always review a dry run before applying changes in managed environments.</p>
           </ProseSection>
+          <ProseSection title="Ask in the Dashboard">
+            <p>The same providers answer in the dashboard's <strong>Ask Workbench</strong>: a conversation about the codebase where Atlas gathers the evidence and the model writes the cited answer. A <code>claude</code> or <code>codex</code> CLI that is installed and logged in is detected automatically; an API key can be stored with <code>atlas llm set</code>. Check what is configured with:</p>
+            <Command>{`atlas llm status\natlas llm detect --apply`}</Command>
+            <p>See <a className="text-link" href="#docs/workbench">Ask Workbench</a> for how a turn works, the threads the server keeps, and what leaves the machine.</p>
+          </ProseSection>
           <ProseSection title="Verify">
             <p>Confirm the integration end to end before relying on it:</p>
             <Command>{`atlas doctor --verify atlas\natlas status\natlas bootstrap --dry-run`}</Command>
@@ -1574,6 +1580,9 @@ function DocsPage({ slug }) {
           </ProseSection>
           <ProseSection title="Common Requests">
             <Command>{`curl http://127.0.0.1:3099/api/v1/status\ncurl http://127.0.0.1:3099/api/v1/stats\ncurl "http://127.0.0.1:3099/api/v1/search?q=Checkout"`}</Command>
+            <p>The dashboard's Ask Workbench is a route too — a question streams back as server-sent events, and the threads it keeps are readable and deletable:</p>
+            <Command>{`curl -N -X POST http://127.0.0.1:3099/api/v1/ask/workbench \\\n  -H 'content-type: application/json' \\\n  -d '{"question":"what are the auth routes, and who last changed the login one?"}'\ncurl http://127.0.0.1:3099/api/v1/ask/workbench/threads`}</Command>
+            <p>See <a className="text-link" href="#docs/workbench">Ask Workbench</a> for the stream, the thread routes, the model providers and the limits.</p>
           </ProseSection>
           <ProseSection title="Binding Beyond Loopback">
             <p>Loopback is the safe default. Before binding to another interface, require a bearer token and restrict browser origins:</p>
@@ -1593,6 +1602,83 @@ function DocsPage({ slug }) {
             <p>Start with Atlas's own diagnostics, then check the port:</p>
             <Command>{`atlas status\natlas doctor\nlsof -nP -iTCP:3099 -sTCP:LISTEN`}</Command>
             <p>If <code>healthz</code> passes but <code>readyz</code> fails, indexing or database maintenance may be blocking engine requests. Wait for the current operation or stop competing Atlas processes before retrying. See <a className="text-link" href="#docs/troubleshooting">Troubleshooting</a> for broader diagnosis.</p>
+          </ProseSection>
+        </>
+      );
+    case "workbench":
+      return (
+        <>
+          <p className="docs-lead">The Ask Workbench is a conversation about your codebase, held inside the Atlas dashboard. You ask in plain language; Atlas gathers the evidence — code passages from its index, git history, and the tickets, pull requests and findings of the sources you connected — plus what it computed itself (routes tables, usage counts, definitions, last changes); a model you choose writes the answer, citing that evidence line by line. Every citation opens the record it came from, and every thread is kept by the server so you can come back to it.</p>
+          <p>The Workbench needs a running service (<a className="text-link" href="#docs/service">Dashboard and HTTP API</a>) and an AI provider (<a className="text-link" href="#docs/assistants">AI assistant setup</a>). Without a provider it still answers, with Atlas's own deterministic verdict and facts.</p>
+          <ProseSection title="Open It">
+            <Command>{`atlas serve`}</Command>
+            <p>Open the dashboard (<code>http://127.0.0.1:3099/dashboard</code>) and choose <strong>Ask Workbench</strong>. The composer takes a question; the chips beneath it pick the repository, the sources to consult (Git, GitHub, Jira, Confluence, Pulse — the ones your service has connected), and the model.</p>
+            <p>A first question starts a thread. Every later question in the same composer continues it: the server keeps the turns, and the model reads the earlier ones as context. The rail on the left lists your threads; <code>#/workbench?thread=&lt;id&gt;</code> reopens one without re-asking anything.</p>
+          </ProseSection>
+          <ProseSection title="What Happens in a Turn">
+            <ol className="docs-list">
+              <li><strong>Plan.</strong> Atlas reads the question, resolves its scope (a repository, a file, a symbol, a ticket or a pull request) and plans which sources to ask.</li>
+              <li><strong>Gather.</strong> The sources run in parallel: the index returns the passages and definitions that match, git blames the lines the question points at, GitHub, Jira, Confluence and Pulse return their records. When the question asks who changed something or which of two things is actually used, Atlas pre-fetches the blame and the callers so the model has them from the start.</li>
+              <li><strong>Compute.</strong> Atlas builds its exact verdict and facts — the routes table, the usage summary, the definitions, the last change — and hands them to the model as labelled evidence (<code>S1</code>…<code>S5</code>) beside the passages (<code>A…</code>), commits (<code>G…</code>), tickets (<code>J…</code>), pages (<code>C…</code>) and findings (<code>P…</code>).</li>
+              <li><strong>Answer.</strong> The model writes the answer in whatever shape the question calls for — a sentence, a list, a table, a walk-through — citing the labels inline. A multi-part question is answered part by part.</li>
+              <li><strong>Ask for more.</strong> When the evidence does not cover something Atlas could fetch, the model asks for it (a symbol's whole body, a file, a search, the callers of a function, a git blame, a ticket) and Atlas resolves the request in well under a second. If the model answered first and then asked, it revises the answer once as a patch: only the sections the new evidence changes are rewritten, and they are marked. By default a turn makes at most three model calls and one revision; what the model would still like to fetch is offered as a follow-up suggestion instead.</li>
+            </ol>
+            <p>The whole turn streams, so you watch the sources answer, the model write, and the revision land.</p>
+          </ProseSection>
+          <ProseSection title="Reading an Answer">
+            <Bullets>
+              <li><strong>Citations</strong> are chips (<code>A3</code>, <code>G1</code>, <code>J2</code>). Click one for the evidence: the passage with its path and lines, the commit, the ticket. Ticket keys, pull request numbers and commit hashes in the prose are links to Jira or GitHub when the turn holds that record; file paths and symbols link to the Code Map.</li>
+              <li><strong>How Atlas got here</strong> (below the answer) opens the deterministic trail: the exact facts with their source tags, the plan, the routes table, every evidence item.</li>
+              <li><strong>The trust cue</strong> in the footer counts the statements that cite evidence and flags the ones that do not; <strong>Check</strong> opens the graded view.</li>
+              <li><strong>Copy</strong>, <strong>Link</strong> and <strong>Re-ask</strong> sit in the footer. Copy gives the answer as Markdown with its sources; Link is a permalink to the turn at its snapshot; Re-ask runs the same question again at that snapshot as a new turn.</li>
+              <li><strong>Follow up</strong> chips under the last turn are the model's suggested next questions; the composer continues the thread.</li>
+            </Bullets>
+          </ProseSection>
+          <ProseSection title="The Side Panel">
+            <p>The panel on the right follows the selected turn and names it ("Turn 2 of 3 · 10:24 · 3 rounds · revised once · 48 s"), with ‹ › to move between turns.</p>
+            <Bullets>
+              <li><strong>Evidence</strong> lists everything the turn gathered, by source.</li>
+              <li><strong>Inspector</strong> shows one item in full; pin a chip to keep it there.</li>
+              <li><strong>Run</strong> tells the turn as a timeline — planned, gathered, answered, asked, fetched, revised, checked, done — with the time each step took. The <strong>Conversation</strong> scope shows where the time went across every turn.</li>
+              <li><strong>Tokens</strong> shows what the turn cost: the prompt the model read (input, including the prompt cache), its output, the time, and the budget; per model call inside the turn, and totals across the conversation with one row per question.</li>
+            </Bullets>
+          </ProseSection>
+          <ProseSection title="Threads, Ownership and Sharing">
+            <p>Threads live in the service's database, not in the browser. On a laptop's own Atlas every thread belongs to you. A shared service (one that identifies its callers through a Jira OAuth session or a gateway identity header) keeps each thread private to its owner unless the owner shares it with the tenant; an operator token sees all of them, a read-only token sees shared ones. Rename, share and delete from the thread's header.</p>
+          </ProseSection>
+          <ProseSection title="Use It from the API">
+            <p>The Workbench is an HTTP route like every other dashboard feature, so a script or another tool can ask the same questions:</p>
+            <Command>{`# ask, streaming the turn as server-sent events (thread_id continues a thread)\ncurl -N -X POST http://127.0.0.1:3099/api/v1/ask/workbench \\\n  -H 'content-type: application/json' \\\n  -d '{"question":"what are the auth routes, and who last changed the login one?"}'\n\n# the threads the server keeps\ncurl http://127.0.0.1:3099/api/v1/ask/workbench/threads\ncurl http://127.0.0.1:3099/api/v1/ask/workbench/threads/<id>`}</Command>
+            <p>The stream's frames — <code>thread</code>, <code>plan</code>, <code>agent.*</code>, <code>merge</code>, <code>verify</code>, <code>meta</code>, <code>delta</code>, <code>more</code>, <code>usage</code>, <code>patch</code>, <code>done</code> — are described in <code>openapi.json</code> on the running service. A thread is read with <code>{"GET …/threads/{id}"}</code>, renamed with <code>PATCH</code>, deleted with <code>DELETE</code>; <code>DELETE …/threads</code> removes all of the caller's threads. Reads need the read-only token or better where a token is set; writes need the read-write token.</p>
+          </ProseSection>
+          <ProseSection title="Choosing the Model">
+            <p>The Workbench uses the same providers as the Ask page's AI answers: a <code>claude</code> or <code>codex</code> CLI that is installed and logged in is detected automatically, and an API key can be stored with <code>atlas llm set</code>. <code>atlas llm status</code> shows what is configured and which models the provider offers; the composer's model menu lists those models. On the Claude CLI, a call that only decides what Atlas should fetch runs at low reasoning effort; the answer runs at the CLI's default unless <code>ATLAS_WORKBENCH_ANSWER_EFFORT</code> says otherwise.</p>
+          </ProseSection>
+          <ProseSection title="What Leaves the Machine">
+            <p>Only when a model is configured and a question is asked: the question, the labelled evidence the turn gathered (passages, never whole files; records from the connected sources), the earlier turns of the thread as context, and the instructions. Nothing is sent when no provider is configured, and nothing is sent for the exact verdict. See <a className="text-link" href="#docs/privacy">Privacy and Data Handling</a>.</p>
+          </ProseSection>
+          <ProseSection title="Limits and Settings">
+            <div className="docs-table-wrap"><table><thead><tr><th>Setting</th><th>Default</th><th>What it bounds</th></tr></thead><tbody>
+              <tr><td><code>ATLAS_WORKBENCH_MODEL_ROUNDS</code></td><td><code>3</code></td><td>Model calls one answer may make (an answer, plus rounds of asking Atlas for more)</td></tr>
+              <tr><td><code>ATLAS_WORKBENCH_MODEL_REVISIONS</code></td><td><code>1</code></td><td>Times an answer may be written again after the model asked for more</td></tr>
+              <tr><td><code>ATLAS_WORKBENCH_MAX_EVIDENCE_TOKENS</code></td><td><code>24000</code></td><td>Evidence a prompt may carry; past it the prompt is trimmed and the trimmed items are listed</td></tr>
+              <tr><td><code>ATLAS_WORKBENCH_ANSWER_MAX_TOKENS</code></td><td><code>4000</code></td><td>The longest reply, on the API providers</td></tr>
+              <tr><td><code>ATLAS_WORKBENCH_ASK_EFFORT</code> / <code>ATLAS_WORKBENCH_ANSWER_EFFORT</code></td><td><code>low</code> / the CLI's own</td><td>Reasoning effort of an asking call and of an answering call on the Claude CLI</td></tr>
+              <tr><td><code>ATLAS_WORKBENCH_HISTORY_TURNS</code> / <code>ATLAS_WORKBENCH_HISTORY_RUNES</code></td><td><code>6</code> / <code>4000</code></td><td>How much of the thread the model reads as context</td></tr>
+              <tr><td><code>ATLAS_WORKBENCH_MODEL_TURNS_PER_HOUR</code></td><td><code>30</code></td><td>Model turns per token per hour; past it a turn answers with the exact verdict only</td></tr>
+              <tr><td><code>ATLAS_WORKBENCH_TURNS_PER_HOUR</code></td><td><code>240</code></td><td>Turns per token per hour; past it the route answers <code>429</code> with <code>retry_after</code></td></tr>
+              <tr><td><code>ATLAS_WORKBENCH_MODEL_FORMAT</code></td><td><code>answer</code></td><td><code>chat</code> switches back to the earlier two-part explanation format</td></tr>
+            </tbody></table></div>
+            <p><code>atlas config list</code> prints every setting with its current value; see <a className="text-link" href="#docs/configuration">Configuration</a> for precedence.</p>
+          </ProseSection>
+          <ProseSection title="When It Does Not Answer">
+            <Bullets>
+              <li><strong>"Exact only" and no model chip</strong>: no provider is configured or detected. <code>atlas llm status</code> says why; <code>atlas llm detect --apply</code> registers a logged-in CLI.</li>
+              <li><strong><code>llm_auth_failed</code> although the CLI is logged in</strong>: the service could not probe the CLI in time — typically a VPN or endpoint-security agent slowing every process launch on the host. Ask again without the tunnel, or store an API key so no subprocess is needed.</li>
+              <li><strong>"The model is off for this question"</strong>: the hourly model budget for your token is spent; the exact verdict still answers.</li>
+              <li><strong>A thread answers 404</strong>: it is not yours to see on a shared service, or it was deleted.</li>
+            </Bullets>
+            <p>See <a className="text-link" href="#docs/troubleshooting">Troubleshooting</a> for service-level problems.</p>
           </ProseSection>
         </>
       );
@@ -1635,6 +1721,8 @@ function DocsPage({ slug }) {
               <tr><td><code>ATLAS_MAX_DB_BYTES</code></td><td>Bound the graph database size</td></tr>
               <tr><td><code>ATLAS_INDEX_WORKERS</code></td><td>Cap the parse/hash worker pool during indexing (0 = all cores); CLI equivalent <code>atlas index --workers N</code>. Overrides the profile's worker count</td></tr>
               <tr><td><code>ATLAS_STREAM_INDEX</code>, <code>ATLAS_STREAM_INDEX_THRESHOLD</code>, <code>ATLAS_STREAM_INDEX_BATCH</code></td><td>Force/tune the streaming index that bounds memory on large repos (auto-engages above ~15,000 candidate files)</td></tr>
+              <tr><td><code>ATLAS_LLM_DETECT</code>, <code>ATLAS_LLM_ANTHROPIC_CLI_BIN</code>, <code>ATLAS_LLM_OPENAI_CLI_BIN</code></td><td><strong>Since 0.1.54.</strong> The AI providers behind the Ask page and the Ask Workbench: zero-configuration detection of a logged-in <code>claude</code> or <code>codex</code> CLI (<code>off</code> disables it) and the binaries it runs; <code>atlas llm status</code> / <code>atlas llm set</code> manage them. See <a className="text-link" href="#docs/workbench">Ask Workbench</a></td></tr>
+              <tr><td><code>ATLAS_WORKBENCH_MODEL_ROUNDS</code>, <code>ATLAS_WORKBENCH_MODEL_REVISIONS</code>, <code>ATLAS_WORKBENCH_MAX_EVIDENCE_TOKENS</code>, <code>ATLAS_WORKBENCH_ASK_EFFORT</code>, <code>ATLAS_WORKBENCH_ANSWER_EFFORT</code>, <code>ATLAS_WORKBENCH_HISTORY_TURNS</code>, <code>ATLAS_WORKBENCH_MODEL_TURNS_PER_HOUR</code>, <code>ATLAS_WORKBENCH_TURNS_PER_HOUR</code></td><td><strong>Since 0.1.54.</strong> How many model calls and rewrites one Workbench answer may make, how much evidence and thread history a prompt carries, the reasoning effort per call on the Claude CLI, and the per-token hourly budgets. Defaults and meanings in <a className="text-link" href="#docs/workbench">Ask Workbench</a></td></tr>
               <tr><td><code>ATLAS_LEXICAL_SETTLE</code>, <code>ATLAS_LEXICAL_SETTLE_TIMEOUT</code></td><td><strong>Since 0.1.48.</strong> How <code>atlas index</code> brings the lexical sidecar to its on-disk steady state before returning: <code>auto</code> (default — merge, reclaim, measure), <code>reclaim</code> (skip the merge), <code>off</code> (measure only). The timeout budgets the merge (default 30s)</td></tr>
             </tbody></table></div>
             <p>Run <code>atlas config list</code> for the complete catalog with current names, defaults, descriptions, and accepted values for your installed release.</p>
@@ -1763,6 +1851,10 @@ function DocsPage({ slug }) {
             <Command>{`atlas sync status\natlas sync now`}</Command>
             <p><code>sync status</code> shows uplink configuration, kill switches, and per-stream cursors; <code>sync now</code> pushes all pending telemetry once. To leave the fleet and remove the capture hooks:</p>
             <Command>{`atlas disconnect`}</Command>
+          </ProseSection>
+          <ProseSection title="AI Answers and the Workbench">
+            <p>The Ask page's AI answer and the <a className="text-link" href="#docs/workbench">Ask Workbench</a> send data to a model only when a provider is configured (a logged-in <code>claude</code> or <code>codex</code> CLI that Atlas detected, or a stored API key) and only when you ask. What leaves the machine is the question, the labelled evidence the turn gathered — retrieved passages, never whole files, plus records from the sources you connected — the earlier turns of the thread as context, and the grounding instructions. It goes to the provider you chose, through its API or its CLI; the CLI runs in a scratch working directory with its tools disabled and no session saved, so nothing else rides along.</p>
+            <p>With no provider configured nothing is sent, and Atlas's own exact verdict never leaves the machine. <code>atlas llm status</code> prints the current egress line; <code>ATLAS_LLM_DETECT=off</code> stops automatic detection. Threads the Workbench keeps live in the service's database beside the index and are removed with it.</p>
           </ProseSection>
           <ProseSection title="Before Enabling Network Access">
             <p>Review this checklist before binding the service beyond loopback:</p>
