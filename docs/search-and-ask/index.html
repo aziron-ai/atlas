@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xs573jloed");</script>
+  <title>Search and Ask — Atlas documentation</title>
+  <meta name="description" content="Exact search, symbol answers and the AI answer on the Ask page.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="../../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../../assets/atlas-icon-128.png">
+  <link rel="canonical" href="https://atlas.aziro.com/docs/search-and-ask/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="Search and Ask — Atlas">
+  <meta property="og:description" content="Exact search, symbol answers and the AI answer on the Ask page.">
+  <meta property="og:url" content="https://atlas.aziro.com/docs/search-and-ask/">
+  <meta property="og:image" content="https://atlas.aziro.com/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Search and Ask — Atlas">
+  <meta name="twitter:description" content="Exact search, symbol answers and the AI answer on the Ask page.">
+  <meta name="twitter:image" content="https://atlas.aziro.com/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Search and Ask","description":"Exact search, symbol answers and the AI answer on the Ask page.","url":"https://atlas.aziro.com/docs/search-and-ask/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-08-05"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"Search and Ask","item":"https://atlas.aziro.com/docs/search-and-ask/"}]}]</script>
+  <style>
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .brand-logo { display:block; width:29px; height:24px; object-fit:contain; }
+  .brand-word { font-size:14px; letter-spacing:.22em; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#eef2f7; border:1px solid var(--line); padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:var(--raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; box-shadow:var(--shadow); }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#f8fafc; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://atlas.aziro.com/"><img class="brand-logo" src="../../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://atlas.aziro.com/">Home</a> / <a href="https://atlas.aziro.com/docs/">Docs</a> / Search and Ask</nav>
+      <a class="open-app" href="https://atlas.aziro.com/#docs/search-and-ask">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>Search and Ask</h1>
+<p>Search finds a symbol, a file or a phrase when you know some of its words. Ask answers a question in plain language with the lines of code that answer it, quoted and cited — and, if you turn it on, a short AI-written answer built only from those lines. Use search when you are looking for a thing; use Ask when you are looking for an explanation.</p>
+<h2>Open It</h2>
+<p>Search lives in two places: the header box of the dashboard (<strong>Search symbols, routes…</strong>, shortcut <code>/</code>) and <code>atlas search</code> on the command line. Ask is <strong>Ask Atlas</strong> under EXPLORE, at <code>#/ask</code>.</p>
+<figure><img src="../../assets/docs/search-and-ask/ask-page.png" alt="The Ask Atlas page before a question: the question box, corpus switch, repository picker, Synthesize with AI, the model picker, Recent questions and Suggested" loading="lazy" decoding="async"><figcaption>Ask Atlas, ready for a question. Suggested questions are templates over the repository's real hubs.</figcaption></figure>
+<h2>Search for a Symbol</h2>
+<p>Type at least two characters into the header box. Atlas returns the matching definitions grouped by kind, each with its file and line; <code>Enter</code> opens the selected one in the inspector (<a href="../dashboard/">The dashboard</a> shows the whole flow).</p>
+<figure><img src="../../assets/docs/search-and-ask/omnibox-results.png" alt="Header search for ModelMatches: FUNCTION, TYPE and FIELD groups with file locations" loading="lazy" decoding="async"><figcaption>ModelMatches in the header search: the function first, then related functions, types and fields.</figcaption></figure>
+<p>Search is <strong>code-aware lexical search</strong>. In practice that means:</p>
+<ul><li><strong>It reads code names the way you type them.</strong> Identifiers are split on camelCase, snake_case, kebab-case, dots and slashes, and every piece is indexed beside the whole name. <code>allowedmodels</code> finds the <code>ALLOWED_MODELS</code> keys; <code>user</code> finds <code>GetUserByID</code>.</li><li><strong>It ranks by BM25.</strong> A result where your words are rare and concentrated — in the name, the signature, the doc comment or the path — ranks above one where they are common and scattered.</li><li><strong>It forgives small typos.</strong> Trigram matching compares three-letter fragments, so <code>modlDenied</code> still finds <code>modelDenied</code>.</li><li><strong>It searches paths too.</strong> <code>model_filter.go</code> or <code>providers/routing</code> name a file or folder; a path-shaped query ranks the file whose path is exactly that first.</li></ul>
+<p>Results carry a kind: <code>function</code>, <code>method</code>, <code>method_spec</code> (an interface method), <code>type</code>, <code>field</code>, <code>constant</code>, <code>key</code> (a configuration or YAML key), and, from documentation, <code>section</code> and <code>document</code>. Filter with <code>--kind</code>, <code>--path</code> and <code>--corpus</code> on the command line.</p>
+<h2>Ask a Question</h2>
+<ol><li>Open <strong>Ask Atlas</strong> and pick what may answer: <strong>code</strong>, <strong>docs</strong> (READMEs, markdown sections, synced tickets) or <strong>all</strong>.</li><li>Pick the repository, or <strong>all repos — federated</strong>.</li><li>Type the question — <code>how are allowed models enforced</code> — and press <strong>Ask</strong> or <code>⌘↵</code>.</li></ol>
+<figure class="clip"><video autoplay muted loop playsinline preload="metadata" poster="../../assets/docs/search-and-ask/ask-question.png" aria-label="Typing a question into Ask Atlas and the best passage appearing below it"><source src="../../assets/docs/search-and-ask/ask-question.mp4" type="video/mp4"><img src="../../assets/docs/search-and-ask/ask-question.gif" alt="Typing a question into Ask Atlas and the best passage appearing below it"></video><figcaption>Ask a question; the best passage arrives first, quoted from the file.</figcaption></figure>
+<p>The answer is the indexed text itself:</p>
+<figure><img src="../../assets/docs/search-and-ask/ask-answer.png" alt="The answer to how are allowed models enforced: summary chip, best passage from config/config.go lines 14 to 17, and the gap box" loading="lazy" decoding="async"><figcaption>The best passage: config/config.go lines 14–17, where ALLOWED_MODELS and DISALLOWED_MODELS are declared.</figcaption></figure>
+<ul><li>The summary chip says how many files answer and how many matches there are (<strong>6 files answer · 59 matches</strong>); the retrieval chip names the method (<strong>bm25</strong>).</li><li><strong>BEST PASSAGE</strong> quotes the lines that match, highlighted, with arrows to step through the other matches in the same file. <strong>Open in Inspector</strong>, <strong>Code Map</strong>, <strong>Open file</strong> and <strong>Copy lines + citation</strong> act on it.</li><li><strong>Not in this answer</strong> names any word of your question that matched nothing — here, <code>enforced</code> — so you know what the passages do not cover.</li><li><strong>MORE PASSAGES</strong> lists the other files that matched, with filters by file type, comments or code lines.</li><li><strong>ASK NEXT</strong> offers follow-up questions built from the matched symbols, such as &quot;what calls modelDenied?&quot;. These are templates, not generated text.</li><li><strong>copy link</strong> and <strong>export .md</strong> share the answer; <strong>Recent questions</strong> keeps what you asked in this browser.</li></ul>
+<h2>Read the Exact Verdict</h2>
+<p>For questions about a symbol, the drawer at the foot of the answer — <strong>Symbol cards + full citation table</strong> — holds the exact verdict. It is composed from the index, not written by a model, and labelled as such.</p>
+<figure><img src="../../assets/docs/search-and-ask/ask-verdict.png" alt="The drawer for What calls modelDenied: 5 callers of modelDenied across 1 file, key symbols and grounded evidence" loading="lazy" decoding="async"><figcaption>What calls modelDenied? — 5 callers across 1 file, then the key symbols and 42 citations grouped by module.</figcaption></figure>
+<p>The shape of the question decides the verdict. &quot;What calls X&quot;, &quot;who uses X&quot; and &quot;what breaks if X changes&quot; get a callers verdict; &quot;explain X&quot; or &quot;what is X&quot; an explain verdict; &quot;is there…&quot; or &quot;do we have…&quot; an exists verdict; anything else a digest of the context the index served. Below the verdict come the key symbols (each with <strong>Inspector</strong>, <strong>Map</strong>, <strong>Ask about</strong> and a pin), the evidence grouped by module, and the full citation table.</p>
+<h2>Add an AI Answer</h2>
+<p><strong>Synthesize with AI</strong> adds a short answer written by a model from the passages on the page. It is off by default and remembered per browser; the quoted passages stay the answer either way.</p>
+<ol><li>Turn on <strong>Synthesize with AI</strong>.</li><li>Check the model picker beside it. It shows the default provider and model; when more than one provider is ready it is a menu.</li><li>Ask. The <strong>AI SYNTHESIS</strong> card appears above the passages.</li></ol>
+<figure><img src="../../assets/docs/search-and-ask/ask-controls.png" alt="The Ask controls: corpus switch, repository picker, Synthesize with AI, and the model picker showing Claude claude-sonnet-5 default" loading="lazy" decoding="async"><figcaption>Synthesize with AI and the model picker, beside the corpus and repository.</figcaption></figure>
+<figure><img src="../../assets/docs/search-and-ask/ask-ai-answer.png" alt="The AI SYNTHESIS card above the best passage, with numbered citation chips and a footer naming Claude, the model, tokens and time" loading="lazy" decoding="async"><figcaption>The AI answer, written from eight passages: each [n] opens its passage; the footer names who wrote it and what it cost.</figcaption></figure>
+<ul><li>Every claim must cite a passage. Each <code>[n]</code> chip scrolls to and highlights passage n.</li><li>A sentence the server's check finds no valid citation for is marked <strong>unsupported</strong>; a citation to a passage that was never sent is marked as pointing at nothing.</li><li>The footer states the provider, model, tokens and time — here <code>Claude (anthropic-cli) · claude-sonnet-5 · 2 in / 299 out tokens · 4667 ms</code>.</li><li>If no passage matched, no model is asked.</li></ul>
+<p>The model reads only the question and the retrieved passages with their paths. Which provider answers is set by <code>atlas llm</code>. With nothing configured, Atlas detects the <code>claude</code> and <code>codex</code> CLIs and the <code>ANTHROPIC_API_KEY</code> and <code>OPENAI_API_KEY</code> variables, and registers what is ready. The default is the one you chose with <code>atlas llm default</code>, else the first ready of <code>anthropic-cli</code>, <code>openai-cli</code>, <code>anthropic</code>, <code>openai</code>. Check it with:</p>
+<pre><code>atlas llm status
+{
+  &quot;configured&quot;: true,
+  &quot;ready&quot;: true,
+  &quot;provider&quot;: &quot;anthropic-cli&quot;,
+  &quot;transport&quot;: &quot;cli&quot;,
+  &quot;model&quot;: &quot;claude-sonnet-5&quot;,
+  &quot;model_source&quot;: &quot;default&quot;,
+  &quot;rung&quot;: &quot;cli_login&quot;,
+  &quot;rung_source&quot;: &quot;claude login&quot;,
+  …
+  &quot;egress&quot;: &quot;the claude CLI sends the question and the retrieved passages with their paths to Anthropic under your login — nothing else leaves this machine&quot;,
+  …
+  &quot;default&quot;: &quot;anthropic-cli&quot;,
+  &quot;default_source&quot;: &quot;detected&quot;,
+  &quot;providers&quot;: [ … ],
+  …
+}</code></pre>
+<p>The same providers, with a <strong>Test</strong> button for each, are under <strong>System → App integrations</strong>. Without a ready provider the toggle shows a note pointing there, and the passages answer alone.</p>
+<p>For a conversation that keeps context across turns and pulls in git history, tickets and pull requests, use the <a href="../workbench/">Ask Workbench</a>.</p>
+<h2>Semantic Search Is Off by Default</h2>
+<p><code>atlas semantic-search</code> ranks symbols by embedding similarity instead of words. It needs embeddings, which the index does not build unless you ask (<code>atlas index --enable-vectors</code> with <code>ATLAS_ENABLE_VECTORS=1</code>). Without them it falls back to lexical search and says so:</p>
+<pre><code>atlas semantic-search &quot;reject a model that is not allowed&quot; --limit 3 --format plain
+semantic_search  mode lexical  degraded true  results 3
+  degraded_reason  this snapshot has no embeddings — re-index with `atlas index --enable-vectors` to enable semantic ranking
+  isToolAllowed  function  internal/mcp/filter.go:32  :: func isToolAllowed(toolName, includeList, excludeList string) bool
+  FilterModels  function  providers/routing/model_filter.go:35  :: func FilterModels(models []types.Model, allowedModels, disallowedModels string) []types.Model
+  ALLOWED_MODELS  key  examples/docker-compose/mcp/.env.example:4  :: ALLOWED_MODELS=</code></pre>
+<p>It is off because the lexical index already answers name and phrase lookups exactly and deterministically, with no model and nothing to download; embeddings add indexing time and storage. By default the embedder is an offline token-overlap model; set <code>ATLAS_EMBED_URL</code> to use a real embedding model. See <a href="../indexing/">Indexing and reindexing</a>.</p>
+<h2>From the CLI</h2>
+<p>Each lookup the dashboard makes is a command. Output is from inference-gateway, in <code>--format plain</code>.</p>
+<p><code>atlas search</code> — the omnibox. <code>--kind</code> and <code>--path</code> filter; <code>--corpus docs</code> searches documentation only:</p>
+<pre><code>atlas search &quot;allowed models&quot; --kind function --limit 3 --format plain
+search  mode lexical  total 3
+  matches  833  (page limit 3)
+  truncated true  (retrieval saw fewer than the 833 matches; a larger --limit widens it, up to 20000)
+  FilterModels  function  providers/routing/model_filter.go:35  :: func FilterModels(models []types.Model, allowedModels, disallowedModels string) []types.Model
+  isToolAllowed  function  internal/mcp/filter.go:32  :: func isToolAllowed(toolName, includeList, excludeList string) bool
+  TestChatCompletionsRouting_AllowedModelsFiltersAlias  function  tests/api_routing_test.go:206  :: func TestChatCompletionsRouting_AllowedModelsFiltersAlias(t *testing.T)
+
+atlas search modlDenied --limit 3 --format plain
+search  mode lexical  total 2
+  matches  2  (page limit 3)
+  modelDenied  method  api/routes.go:622  :: func (router *RouterImpl) modelDenied(model string) string
+  FilterModels  function  providers/routing/model_filter.go:35  :: func FilterModels(models []types.Model, allowedModels, disallowedModels string) []types.Model</code></pre>
+<p><code>atlas symbol</code> — a definition with its callers and callees, what the inspector opens with:</p>
+<pre><code>atlas symbol modelDenied --format plain
+symbol modelDenied  matches 1
+  modelDenied  method  api/routes.go:622-635
+    sig  func (router *RouterImpl) modelDenied(model string) string
+    callers(5)  ChatCompletionsHandler, ImagesHandler, MessagesHandler, ResponsesHandler, handleImagesMultipart
+    callees(6)  Error, Error, ModelMatches, ParseModelSet, Error, Error</code></pre>
+<p><code>atlas snippet</code> — the body itself, bounded:</p>
+<pre><code>atlas snippet modelDenied --format plain
+snippet modelDenied  definitions 1  resolved true
+── api/routes.go:622-635
+sig  func (router *RouterImpl) modelDenied(model string) string
+func (router *RouterImpl) modelDenied(model string) string {
+	if allowed := routing.ParseModelSet(router.cfg.AllowedModels); len(allowed) &gt; 0 {
+		if !routing.ModelMatches(allowed, model) {
+			router.logger.Error(&quot;model not in allowed list&quot;, nil, &quot;model&quot;, model, &quot;allowed_models&quot;, router.cfg.AllowedModels)
+			return &quot;Model not allowed. Please check the list of allowed models.&quot;
+		}
+		return &quot;&quot;
+	}
+	…
+}</code></pre>
+<p><code>atlas explain</code> — a deterministic bundle: definitions, callers, callees, and the routes served from the same file:</p>
+<pre><code>atlas explain modelDenied
+{
+  &quot;symbol&quot;: &quot;modelDenied&quot;,
+  &quot;definitions&quot;: [
+    { &quot;kind&quot;: &quot;method&quot;, &quot;path&quot;: &quot;api/routes.go&quot;, &quot;line&quot;: 622, &quot;end_line&quot;: 635,
+      &quot;signature&quot;: &quot;func (router *RouterImpl) modelDenied(model string) string&quot; }
+  ],
+  &quot;callers&quot;: [&quot;ChatCompletionsHandler&quot;, &quot;ImagesHandler&quot;, &quot;MessagesHandler&quot;, &quot;ResponsesHandler&quot;, &quot;handleImagesMultipart&quot;],
+  &quot;callees&quot;: [&quot;Error&quot;, &quot;ModelMatches&quot;, &quot;ParseModelSet&quot;],
+  &quot;served_routes&quot;: [
+    { &quot;method&quot;: &quot;GET&quot;, &quot;path&quot;: &quot;/health&quot;, &quot;handler_file&quot;: &quot;api/routes.go&quot; },
+    { &quot;method&quot;: &quot;POST&quot;, &quot;path&quot;: &quot;/chat/completions&quot;, &quot;handler_file&quot;: &quot;api/routes.go&quot; },
+    …
+  ],
+  …
+}</code></pre>
+<p><code>atlas callers</code> lists the symbols that call a function; <code>atlas refs</code> adds type uses — parameters, fields, return types — which matters before a rename:</p>
+<pre><code>atlas callers modelDenied --format plain
+callers modelDenied  total 5
+  ChatCompletionsHandler  method  api/routes.go:637  :: func (router *RouterImpl) ChatCompletionsHandler(c *gin.Context)
+  ImagesHandler  method  api/routes.go:1194  :: func (router *RouterImpl) ImagesHandler(c *gin.Context)
+  MessagesHandler  method  api/routes.go:842  :: func (router *RouterImpl) MessagesHandler(c *gin.Context)
+  ResponsesHandler  method  api/routes.go:1018  :: func (router *RouterImpl) ResponsesHandler(c *gin.Context)
+  handleImagesMultipart  method  api/routes.go:1388  :: func (router *RouterImpl) handleImagesMultipart(c *gin.Context, target imagesMultipartTarget)
+
+atlas refs CreateChatCompletionRequest --format plain
+refs CreateChatCompletionRequest  total 44
+  Middleware  method  api/middlewares/mcp.go:86  :: func (m *MCPMiddlewareImpl) Middleware() gin.HandlerFunc
+  handleMCPStreamingRequest  method  api/middlewares/mcp.go:242  :: func (m *MCPMiddlewareImpl) handleMCPStreamingRequest(c *gin.Context, request *types.CreateChatCompletionRequest, result *MCPProviderModelResult) error
+  …</code></pre>
+<p>All flags are in the <a href="../cli/">CLI reference</a>.</p>
+<h2>From the API</h2>
+<p>The page names its own sources: <code>GET /api/v1/search</code> for the omnibox and related symbols, <code>GET /api/v1/passages</code> for the quoted passages, <code>POST /api/v1/agent/code-query</code> for the verdict drawer, and <code>POST /api/v1/ask/answer</code> for the AI answer, which streams and takes a <code>provider</code> per question. See <a href="../service/">Dashboard and API</a>.</p>
+<h2>Related</h2>
+<ul><li><a href="../workbench/">Ask Workbench</a> — conversations with history, tickets and pull requests.</li><li><a href="../dashboard/">The dashboard</a> — the omnibox, the command palette and the inspector.</li><li><a href="../code-map/">Code Map and graph</a> — see the callers and callees you found.</li><li><a href="../assistants/">AI assistant setup</a> — the same lookups for assistants over MCP.</li><li><a href="../privacy/">Privacy and data</a> — what leaves the machine, and when.</li></ul>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../code-map/">← Code Map and Graph</a></span>
+      <span><a href="../workbench/">Ask Workbench →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../tour/">What Atlas Does</a>
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
+        <a href="../dashboard/">The Dashboard</a>
+        <a href="../code-map/">Code Map and Graph</a>
+        <a href="../search-and-ask/">Search and Ask</a>
+        <a href="../workbench/">Ask Workbench</a>
+        <a href="../impact/">Impact and Review</a>
+        <a href="../history/">Change Lens and History</a>
+        <a href="../sources/">Connected Sources</a>
+        <a href="../observe/">Observe</a>
+        <a href="../skills/">Skills and Automations</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../teams/">One Atlas for a Team</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>

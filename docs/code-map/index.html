@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xs573jloed");</script>
+  <title>Code Map and Graph — Atlas documentation</title>
+  <meta name="description" content="Walk the call graph: map modes, files, paths, neighbors, hubs.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="../../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../../assets/atlas-icon-128.png">
+  <link rel="canonical" href="https://atlas.aziro.com/docs/code-map/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="Code Map and Graph — Atlas">
+  <meta property="og:description" content="Walk the call graph: map modes, files, paths, neighbors, hubs.">
+  <meta property="og:url" content="https://atlas.aziro.com/docs/code-map/">
+  <meta property="og:image" content="https://atlas.aziro.com/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Code Map and Graph — Atlas">
+  <meta name="twitter:description" content="Walk the call graph: map modes, files, paths, neighbors, hubs.">
+  <meta name="twitter:image" content="https://atlas.aziro.com/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Code Map and Graph","description":"Walk the call graph: map modes, files, paths, neighbors, hubs.","url":"https://atlas.aziro.com/docs/code-map/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-08-05"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"Code Map and Graph","item":"https://atlas.aziro.com/docs/code-map/"}]}]</script>
+  <style>
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .brand-logo { display:block; width:29px; height:24px; object-fit:contain; }
+  .brand-word { font-size:14px; letter-spacing:.22em; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#eef2f7; border:1px solid var(--line); padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:var(--raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; box-shadow:var(--shadow); }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#f8fafc; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://atlas.aziro.com/"><img class="brand-logo" src="../../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://atlas.aziro.com/">Home</a> / <a href="https://atlas.aziro.com/docs/">Docs</a> / Code Map and Graph</nav>
+      <a class="open-app" href="https://atlas.aziro.com/#docs/code-map">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>Code Map and graph</h1>
+<p>The Code Map draws the stored call graph of a repository: which folders hold what, which symbols call which, and how one function reaches another. Everything on it is an edge the index recorded — calls, references, imports — never a guess. Reach for it when you need to see the shape around a symbol before you change it, or to find your way into a folder you have never opened.</p>
+<h2>Open It</h2>
+<p>Choose <strong>Code Map</strong> under EXPLORE, or open <code>#/map</code>. With no symbol chosen the map opens in the <strong>Clusters</strong> lens: the whole repository packed as its real folder tree.</p>
+<figure><img src="../../assets/docs/code-map/map-clusters.png" alt="The Code Map in the Clusters lens for inference-gateway: folders packed as circles with edges between them" loading="lazy" decoding="async"><figcaption>inference-gateway in Clusters: internal, providers, tests, api and the rest, sized by the symbols inside.</figcaption></figure>
+<p>The controls along the top are shared by every lens:</p>
+<figure><img src="../../assets/docs/code-map/map-controls.png" alt="The repository picker, the five lens buttons, the edge-kind chips and the find / seed box" loading="lazy" decoding="async"><figcaption>Repository, lens, edge kinds with their counts, and the find / seed box.</figcaption></figure>
+<ul><li>The <strong>repository</strong> picker.</li><li>The lens buttons: <strong>Flow</strong>, <strong>Clusters</strong>, <strong>Explorer</strong>, <strong>Workbench</strong> (beta) and <strong>Repos</strong>.</li><li>The edge-kind chips with their counts — <strong>calls 2,383</strong>, <strong>references 2,181</strong>, <strong>imports 929</strong> on inference-gateway. Click a chip to hide or show that kind. Imports start off in Flow and Explorer, which read call flow, and on in Clusters and Workbench, which read architecture.</li><li><strong>find / seed a symbol…</strong> — type a name to light up matches on the canvas (<code>Enter</code> cycles through them) or pick a row to re-root the map on it.</li></ul>
+<p>The line under the controls counts what is drawn against what exists — <code>0 of 3,430 symbols · 318 of 5,493 edges — 28 folders collapsed</code> — so a hidden part of the graph is always named. <strong>⧉ link</strong> copies a link that carries the lens, the focus, pins and edge kinds; <strong>ⓘ</strong> explains why the current lens looks the way it does.</p>
+<h2>Pick a Lens</h2>
+<p>The five lenses are five ways of reading the same stored graph. The focus symbol rides the URL, so switching lens keeps your place.</p>
+<table><thead><tr><th>Lens</th><th>What it shows</th><th>Reach for it when</th></tr></thead><tbody><tr><td><strong>Flow</strong></td><td>One symbol at a time: callers enter from the left, callees leave on the right, one to three layers deep.</td><td>You are about to change a function and want to see who feeds it and what it calls.</td></tr><tr><td><strong>Clusters</strong></td><td>The whole repository as its folder tree, packed in circles, with the edges between folders aggregated and counted. Same input, same picture.</td><td>You are new to a repository, or want to see which folders lean on which.</td></tr><tr><td><strong>Explorer</strong></td><td>An answer-first list of one symbol's callers and dependencies, with call-site evidence in each row and a small synced map (25 nodes at most).</td><td>You want the exact list, with line numbers, rather than a picture.</td></tr><tr><td><strong>Workbench</strong> (beta)</td><td>An interactive canvas of modules, collapsed to badges on a large repository, with style, filter and layout panels, box select and PNG export.</td><td>You want to arrange and export a picture of part of the graph.</td></tr><tr><td><strong>Repos</strong></td><td>The dependency graph between repositories, from HTTP calls one repository makes that match a route another serves.</td><td>Several services are indexed and you need to know which calls which.</td></tr></tbody></table>
+<figure><img src="../../assets/docs/code-map/map-flow.png" alt="Flow lens focused on modelDenied: five callers on the left, seven callees on the right" loading="lazy" decoding="async"><figcaption>Flow on modelDenied at depth 2: five first-degree callers, seven first-degree callees, and the next layer on each side.</figcaption></figure>
+<figure><img src="../../assets/docs/code-map/map-explorer.png" alt="Explorer lens on modelDenied: the focus card, callers grouped by file, dependencies grouped by module, and a small synced map" loading="lazy" decoding="async"><figcaption>Explorer on modelDenied: 5 callers, 7 dependencies, 5 call sites — each row expands to its evidence.</figcaption></figure>
+<figure><img src="../../assets/docs/code-map/map-workbench.png" alt="Workbench beta lens: modules collapsed to badges, with style, module and symbol-kind panels on the left" loading="lazy" decoding="async"><figcaption>Workbench (beta): 117 modules collapsed to badges; tick a module to expand it on the canvas.</figcaption></figure>
+<p>Workbench is a beta: the first time you choose it, the map explains that it loads an extra analysis engine once and asks you to confirm with <strong>Enable Workbench</strong>. <strong>Repos</strong> needs at least two repositories where one calls the other over HTTP; with nothing to join it says so:</p>
+<figure><img src="../../assets/docs/code-map/map-repos.png" alt="Repos lens: a repo-pair matrix of zeros and the note that no cross-repo route join is recorded" loading="lazy" decoding="async"><figcaption>Repos on the demo service: inference-gateway calls no route another indexed repository serves, so the matrix is empty.</figcaption></figure>
+<h2>Read the Legend and Filter Edges</h2>
+<p>Each lens has a <strong>Legend</strong> in the lower left of the canvas; click its title to fold it away. In Clusters it names the colour of each top folder, the line style of each edge kind, and how to read size: a folder's size is the number of symbols inside it, a symbol's size is its degree. Open top folders carry <code>↓</code> fan-in and <code>↑</code> fan-out badges.</p>
+<figure><img src="../../assets/docs/code-map/map-legend.png" alt="The Clusters legend: folder colours, edge kinds and the size rules" loading="lazy" decoding="async"><figcaption>The Clusters legend.</figcaption></figure>
+<p>The Clusters toolbar controls how much is drawn:</p>
+<figure><img src="../../assets/docs/code-map/map-modebar.png" alt="The Clusters toolbar: tint, EDGES all / focus-only / off, link, the lens note and the count strip" loading="lazy" decoding="async"><figcaption>tint, the EDGES switch, link and the count strip.</figcaption></figure>
+<ul><li><strong>EDGES all</strong> draws every edge between folders; past the edge budget they bundle into weighted ribbons.</li><li><strong>focus-only</strong> draws edges only for what you hover or select — the calm way to read a busy repository.</li><li><strong>off</strong> draws no edges: folders only.</li><li><strong>tint</strong> colours open folders in their hue.</li></ul>
+<p>To zoom, use the <strong>+</strong> and <strong>−</strong> buttons in the lower right of the canvas or the mouse wheel; drag to pan; <strong>⤢</strong> (or <code>0</code>) fits the drawing to the frame. Click a node to select it.</p>
+<h2>Seed a Symbol and Read Its Neighbourhood</h2>
+<p>Flow and Explorer read one symbol at a time, so they start by asking for one.</p>
+<ol><li>Click <strong>Flow</strong>. With no focus yet, the lens shows a search box and the repository's top hubs by degree.</li><li>Type a name — <code>modelDenied</code> — and click the row for the definition you mean (<code>api/routes.go:622</code>).</li><li>Read the layers: the five handlers that call <code>modelDenied</code> on the left, what it calls on the right (<code>ModelMatches</code>, <code>ParseModelSet</code>, the logger's <code>Error</code>), the second layer beyond each. Edge width grows with the number of call sites.</li></ol>
+<figure class="clip"><video autoplay muted loop playsinline preload="metadata" poster="../../assets/docs/code-map/seed-symbol.png" aria-label="Switching to Flow, searching modelDenied, picking it, and the layered call flow drawing around it"><source src="../../assets/docs/code-map/seed-symbol.mp4" type="video/mp4"><img src="../../assets/docs/code-map/seed-symbol.gif" alt="Switching to Flow, searching modelDenied, picking it, and the layered call flow drawing around it"></video><figcaption>Seed Flow with modelDenied and read its callers and callees.</figcaption></figure>
+<p>The Flow toolbar works on the focus:</p>
+<ul><li><strong>− 2 +</strong> steps the depth between 1 and 3; each step is a fresh query.</li><li><strong>Hubs ▾</strong> lists the repository's hubs to re-seed from.</li><li><strong>×N</strong> merges same-name definitions within a layer into one chip, such as <strong>Error ×4</strong>.</li><li><strong>Path A→B</strong> draws the path between two symbols on the canvas; <strong>Impact</strong> overlays the blast radius of the selected symbol; <strong>Neighbors</strong> fetches and grafts the selected symbol's neighbours that are not drawn yet.</li><li>When a layer holds many symbols that call the same thing, they fold into a <strong>co-callers</strong> bar; click it to expand.</li></ul>
+<p>Anywhere on the map, double-click a symbol to re-root Flow on it. Explorer reads the same focus as a list: the focus card counts callers, dependencies, call sites and modules, and each row expands to the call-site lines.</p>
+<h2>Isolate a Folder</h2>
+<p>A large folder can be read on its own. In Clusters, double-click the folder: the map redraws with only that subtree, a breadcrumb (<code>inference-gateway › providers</code>) shows where you are, and the count strip says <code>isolated to providers</code>. <strong>⤴ leave isolate</strong> returns to the whole repository.</p>
+<figure><img src="../../assets/docs/code-map/map-isolate.png" alt="Clusters isolated to the providers folder: types, registry, routing, transformers, constants, core and client" loading="lazy" decoding="async"><figcaption>providers isolated: 1,172 symbols, with common_types.go holding 873 of them.</figcaption></figure>
+<h2>Find the Path Between Two Symbols</h2>
+<p><strong>Path Finder</strong> (<code>#/path</code>) answers &quot;how does A reach B?&quot; with the shortest forward chain of stored call edges, or says that none exists.</p>
+<ol><li>Pick the repository and a depth budget (6 by default).</li><li>In <strong>From (the caller side)</strong> search and pick the start symbol; in <strong>To (the callee side)</strong> pick the target.</li><li>Read the chain: one card per step with kind, signature and location, and the edge between steps. The map button on a card opens that symbol in the Code Map.</li></ol>
+<figure><img src="../../assets/docs/code-map/path-finder.png" alt="Path Finder: ChatCompletionsHandler reaches ModelMatches in two hops through modelDenied" loading="lazy" decoding="async"><figcaption>ChatCompletionsHandler reaches ModelMatches in 2 hops, through modelDenied.</figcaption></figure>
+<p>Call edges have a direction. If no path is found, <strong>swap</strong> asks the reverse question in one click. <strong>Copy link to this chain</strong> gives a link that reopens the same answer.</p>
+<h2>Resolve a Log Line to Code</h2>
+<p><strong>Resolve</strong> (<code>#/resolve</code>) starts from the other end: paste a log line, a stack frame or an error string, one per line, and Atlas finds the statement that emits it, then walks its blast radius and the recent change window. At index time Atlas records the message each log statement can emit, so a line with different ids, timestamps and values still matches.</p>
+<ol><li>Pick the repository.</li><li>Paste the line — here a JSON log line from the gateway: <code>{&quot;level&quot;:&quot;error&quot;,…,&quot;msg&quot;:&quot;model not in allowed list&quot;,&quot;model&quot;:&quot;gpt-4o&quot;,…}</code>.</li><li>Click <strong>Resolve</strong>. The answer is a chain of three cards.</li></ol>
+<figure><img src="../../assets/docs/code-map/resolve.png" alt="Resolve: the log line matched to modelDenied at routes.go:625, its impact, and the change window" loading="lazy" decoding="async"><figcaption>The line resolves to modelDenied (routes.go:625, 100% match, exact_skeleton); changing it would touch seven handlers.</figcaption></figure>
+<ul><li><strong>Match</strong> — the emitting symbol and line, the match score and the reason the server gives (<code>exact_skeleton</code>), with <strong>Inspect</strong> and <strong>Map</strong>.</li><li><strong>Impact</strong> — the symbols a change to it would reach.</li><li><strong>Change window</strong> — the snapshot timeline and what changed between the last two snapshots. With a single snapshot indexed, it says a diff needs two.</li></ul>
+<p>The commit and snapshot the evidence came from are pinned at the top of the answer.</p>
+<h2>From the CLI</h2>
+<p>Each map question has a command. Output below is from inference-gateway, in <code>--format plain</code>.</p>
+<p><code>atlas neighbors</code> — a symbol's direct callers and callees (what Flow draws at depth 1):</p>
+<pre><code>atlas neighbors modelDenied --format plain
+neighbors modelDenied  callers 5  callees 6
+  callers(5)  ChatCompletionsHandler, ImagesHandler, MessagesHandler, ResponsesHandler, handleImagesMultipart
+  callees(6)  Error, Error, ModelMatches, ParseModelSet, Error, Error</code></pre>
+<p><code>atlas path</code> — the shortest forward call path (Path Finder); <code>--max-depth</code> sets the budget:</p>
+<pre><code>atlas path ChatCompletionsHandler ModelMatches --format plain
+path ChatCompletionsHandler -&gt; ModelMatches  len 2
+  steps  ChatCompletionsHandler -&gt; modelDenied -&gt; ModelMatches
+
+atlas path main ModelMatches --format plain
+path main -&gt; ModelMatches  NOT FOUND</code></pre>
+<p><code>atlas hubs</code> and <code>atlas communities</code> — the load-bearing symbols and the dense clusters (Orientation's lists):</p>
+<pre><code>atlas hubs --limit 5 --format plain
+hubs  total 5
+  main  function  in 0  out 71  total 71  cmd/gateway/main.go
+  ProviderImpl.ListModels  method  in 2  out 53  total 55  providers/core/provider.go
+  RouterImpl.handleImagesMultipart  method  in 2  out 53  total 55  api/routes.go
+  RouterImpl.MessagesHandler  method  in 0  out 52  total 52  api/routes.go
+  RouterImpl.ImagesHandler  method  in 0  out 51  total 51  api/routes.go
+
+atlas communities --limit 3 --format plain
+communities  total 3161  shown 3
+  #0  size 137  ProviderImpl.ListModels, RouterImpl.handleImagesMultipart, RouterImpl.MessagesHandler
+  #1  size 69  main, LoggerZapImpl.Debug, MockLogger.Debug
+  #2  size 65  LoggerZapImpl.Error, MockLogger.Error, MockLoggerMockRecorder.Error</code></pre>
+<p><code>atlas report</code> — summary, hubs and communities in one Markdown report:</p>
+<pre><code>atlas report --format plain
+# Graph report
+
+## Summary
+
+- Files: 89
+- Symbols (nodes): 3526
+- Call edges: 1317
+- Communities (size &gt; 1): 40
+- Isolated nodes: 3121
+- Languages: go:3511 bash:9 typescript:6
+- Edge kinds: calls:4706 references:3158 imports:540
+…</code></pre>
+<p><code>atlas export</code> — a symbol's neighbourhood or the whole graph as <code>json</code>, <code>mermaid</code>, <code>dot</code> or a self-contained <code>html</code> page; <code>--bundle DIR</code> writes the interactive page and the report together:</p>
+<pre><code>atlas export --symbol modelDenied --depth 1 --format mermaid
+flowchart LR
+  n0[&quot;RouterImpl (type)&quot;]
+  n1[&quot;modelDenied (method)&quot;]
+  n2[&quot;ChatCompletionsHandler (method)&quot;]
+  …
+  n9[&quot;ParseModelSet (function)&quot;]
+  n10[&quot;ModelMatches (function)&quot;]
+  n2 --&gt; n1
+  n1 --&gt; n10
+  n1 --&gt; n9
+  …</code></pre>
+<p>Pasting a log line works from the terminal too: <code>atlas logsites resolve &quot;&lt;line&gt;&quot;</code> returns the same match (<code>api/routes.go:625</code>, <code>modelDenied</code>, <code>exact_skeleton</code>). Flags for each command are in the <a href="../cli/">CLI reference</a>; the map reads <code>GET /api/v1/export</code>, Path Finder <code>GET /api/v1/path</code> and Resolve <code>POST /api/v1/resolve</code> (see <a href="../service/">Dashboard and API</a>).</p>
+<h2>Related</h2>
+<ul><li><a href="../dashboard/">The dashboard</a> — the frame, the omnibox and the inspector.</li><li><a href="../search-and-ask/">Search and Ask</a> — find a symbol by name or ask in plain language.</li><li><a href="../impact/">Impact and review</a> — the full blast radius of a change.</li><li><a href="../history/">Change lens and history</a> — what each indexing pass changed.</li><li><a href="../observe/">Observe</a> — log streams and incidents that Resolve links back to code.</li></ul>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../dashboard/">← The Dashboard</a></span>
+      <span><a href="../search-and-ask/">Search and Ask →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../tour/">What Atlas Does</a>
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
+        <a href="../dashboard/">The Dashboard</a>
+        <a href="../code-map/">Code Map and Graph</a>
+        <a href="../search-and-ask/">Search and Ask</a>
+        <a href="../workbench/">Ask Workbench</a>
+        <a href="../impact/">Impact and Review</a>
+        <a href="../history/">Change Lens and History</a>
+        <a href="../sources/">Connected Sources</a>
+        <a href="../observe/">Observe</a>
+        <a href="../skills/">Skills and Automations</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../teams/">One Atlas for a Team</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>

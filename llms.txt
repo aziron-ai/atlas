@@ -21,6 +21,7 @@
 ## Project
 - [Product documentation](https://atlas.aziro.com/#docs/getting-started): install, index, query, configure, connect, troubleshoot, and upgrade
 - [Ask Workbench](https://atlas.aziro.com/#docs/workbench): a conversation about the codebase in the dashboard — Atlas gathers cited evidence (index, git, GitHub, Jira, Confluence, Pulse) and what it computed, a model you choose writes the answer; threads are kept by the server
+- [User guide](https://atlas.aziro.com/#docs/tour): what Atlas does, the dashboard, Code Map, search and Ask, impact and review, change lens, connected sources, Observe, skills and automations, one Atlas for a team — each page with screenshots and short clips recorded from a running Atlas
 - [Benchmark & comparison](https://atlas.aziro.com/#benchmarks): interactive version of the published evidence
 - [GitHub repository](https://github.com/aziron-ai/atlas): releases (macOS, Linux, Windows), issues
 - [GitHub Wiki](https://github.com/aziron-ai/atlas/wiki): mirror of the consumer product guide

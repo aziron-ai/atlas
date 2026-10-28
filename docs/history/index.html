@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xs573jloed");</script>
+  <title>Change Lens and History — Atlas documentation</title>
+  <meta name="description" content="What changed, hot files, staleness, snapshots and structural diffs.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="../../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../../assets/atlas-icon-128.png">
+  <link rel="canonical" href="https://atlas.aziro.com/docs/history/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="Change Lens and History — Atlas">
+  <meta property="og:description" content="What changed, hot files, staleness, snapshots and structural diffs.">
+  <meta property="og:url" content="https://atlas.aziro.com/docs/history/">
+  <meta property="og:image" content="https://atlas.aziro.com/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Change Lens and History — Atlas">
+  <meta name="twitter:description" content="What changed, hot files, staleness, snapshots and structural diffs.">
+  <meta name="twitter:image" content="https://atlas.aziro.com/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Change Lens and History","description":"What changed, hot files, staleness, snapshots and structural diffs.","url":"https://atlas.aziro.com/docs/history/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-08-05"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"Change Lens and History","item":"https://atlas.aziro.com/docs/history/"}]}]</script>
+  <style>
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .brand-logo { display:block; width:29px; height:24px; object-fit:contain; }
+  .brand-word { font-size:14px; letter-spacing:.22em; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#eef2f7; border:1px solid var(--line); padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:var(--raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; box-shadow:var(--shadow); }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#f8fafc; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://atlas.aziro.com/"><img class="brand-logo" src="../../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://atlas.aziro.com/">Home</a> / <a href="https://atlas.aziro.com/docs/">Docs</a> / Change Lens and History</nav>
+      <a class="open-app" href="https://atlas.aziro.com/#docs/history">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>Change lens and history</h1>
+<p>Every indexing pass stores a snapshot: the files, symbols, call edges and routes of a repository at one commit. History is what you read from those snapshots — what a pass added, changed and removed, which symbols carry the most weight, and whether the index still matches the code. With logs connected, the same idea applies to a running service: what it started or stopped saying between two windows. Reach for it after a merge, before a release, or when an answer and the code seem to disagree.</p>
+<h2>Open It</h2>
+<p>The views live in three places in the dashboard's navigation:</p>
+<ul><li><strong>Changes</strong> in EXPLORE (<code>#/changes</code>) — the Change Lens: the snapshot timeline and what each pass changed.</li><li><strong>Hot Symbols</strong> (<code>#/hot</code>) and <strong>Freshness</strong> (<code>#/staleness</code>) in CODEBASE — the graph's hubs and the freshness of what Atlas derives from the latest snapshot.</li><li><strong>What Changed</strong> in OBSERVE (<code>#/diff</code>) — two windows of one log stream compared. OBSERVE appears once Loki or Elasticsearch is configured.</li></ul>
+<figure><img src="../../assets/docs/history/change-lens-one-snapshot.png" alt="The Change Lens: a repository picker, the snapshot timeline with one snapshot 5249675, and the notice One snapshot recorded — a diff needs two" loading="lazy" decoding="async"><figcaption>The Change Lens on the demo service, which holds one snapshot of inference-gateway.</figcaption></figure>
+<p>From a terminal, <code>atlas history</code> prints the same timeline:</p>
+<pre><code>atlas history --format plain</code></pre>
+<pre><code>history inference-gateway  snapshots 1
+  52496750  e842033e-41d6-4e7a-9e27-7415bc5edcbc  files 307  symbols 11092  edges 13900  2026-10-28T05:16:55Z</code></pre>
+<h2>See What an Indexing Pass Changed</h2>
+<ol><li>Open <strong>Changes</strong> and choose the <strong>Repository</strong>.</li><li>The <strong>Snapshot timeline</strong> lists every stored snapshot, newest first: the short commit, its symbol, edge and file counts, and its age.</li><li>Pick a snapshot. The lens compares it with the snapshot indexed just before it and answers &quot;what did this pass change?&quot;: a count verdict first, then <strong>Added symbols</strong>, <strong>Modified symbols</strong>, <strong>Removed symbols</strong>, the changed files, and <strong>Added call edges</strong> and <strong>Removed call edges</strong>.</li></ol>
+<p>Added and modified symbols open the Symbol Inspector; removed ones do not, because they no longer exist in the newer snapshot. Changed files open in Files. The server sends at most 100 rows per list, while the counts are always complete, so a long list says &quot;first 100 of N&quot;. The address keeps the pick (<code>#/changes?repo=&lt;repo&gt;&amp;to=&lt;snapshot&gt;</code>).</p>
+<figure><img src="../../assets/docs/history/change-lens-timeline.png" alt="The snapshot timeline with one entry, 5249675 with 11,092 symbols, 13,900 edges and 307 files, beside the instruction to index again and the command atlas index path" loading="lazy" decoding="async"><figcaption>With one snapshot there is nothing to compare, and the lens says how to get a second one.</figcaption></figure>
+<p>The demo store holds a single snapshot (commit <code>5249675</code>, 11,092 symbols), so the lens shows its empty state. History grows by indexing again once the code has moved — after a pull, a merge or a checkout of another commit:</p>
+<pre><code>git pull
+atlas index .</code></pre>
+<p>Each pass at a new commit stores another snapshot, and the lens then diffs it against the one before. Retention keeps the newest 5 snapshots per repository by default (<code>ATLAS_MAX_SNAPSHOTS_PER_REPO</code>); the current one is never deleted. See <a href="../indexing/">Indexing and reindexing</a>.</p>
+<h2>Compare Two Snapshots from the CLI</h2>
+<p><code>atlas snapshot-diff</code> (alias <code>atlas diff</code>) gives the same structural delta in a terminal: symbols and edges added, removed and modified. <code>--to</code> defaults to the latest snapshot and <code>--from</code> to the one before it; both take a commit sha (a prefix is enough) or a snapshot id.</p>
+<pre><code>atlas snapshot-diff --format plain</code></pre>
+<pre><code>atlas: need two snapshots to diff — index the repo at two commits, or pass --from</code></pre>
+<p>That is the real answer on a store with one snapshot. <code>--from</code> names the base explicitly; pointed at the one stored snapshot it compares the snapshot with itself, which shows the shape of an answer with every count at zero:</p>
+<pre><code>atlas snapshot-diff --from 5249675</code></pre>
+<pre><code>{
+  &quot;from_commit&quot;: &quot;524967508e9d90185c4a1c3540cac0dcda7c580a&quot;,
+  &quot;to_commit&quot;: &quot;524967508e9d90185c4a1c3540cac0dcda7c580a&quot;,
+  &quot;added_count&quot;: 0,
+  &quot;removed_count&quot;: 0,
+  &quot;modified_count&quot;: 0,
+  &quot;added_symbols&quot;: [],
+  &quot;removed_symbols&quot;: [],
+  &quot;modified_symbols&quot;: [],
+  &quot;changed_files&quot;: [],
+  &quot;added_edges&quot;: [],
+  &quot;removed_edges&quot;: []
+}</code></pre>
+<p><code>atlas snapshots list</code> shows what history is costing on disk — one row per stored snapshot with its counts, and the retention policy:</p>
+<pre><code>atlas snapshots list</code></pre>
+<pre><code>{
+  &quot;repositories&quot;: [
+    {
+      &quot;repo_full_name&quot;: &quot;inference-gateway&quot;,
+      &quot;snapshot_count&quot;: 1,
+      &quot;snapshots&quot;: [
+        { &quot;commit_sha&quot;: &quot;524967508e9d90185c4a1c3540cac0dcda7c580a&quot;,
+          &quot;created_at&quot;: &quot;2026-10-28T05:16:55Z&quot;,
+          &quot;file_count&quot;: 307, &quot;symbol_count&quot;: 11092, &quot;edge_count&quot;: 13900,
+          &quot;route_count&quot;: 71, &quot;current&quot;: true }
+      ]
+    }
+  ],
+  &quot;retention&quot;: { &quot;max_snapshots_per_repo&quot;: 5, &quot;max_total_bytes&quot;: 5368709120, &quot;max_age&quot;: &quot;disabled&quot; }
+}</code></pre>
+<p><code>atlas snapshots prune --dry-run</code> prints exactly what a prune would delete without touching anything; <code>--keep N</code> and <code>--keep-since 90d</code> override the policy for one run.</p>
+<h2>Find the Symbols That Carry the Most Weight</h2>
+<p><strong>Hot Symbols</strong> ranks the graph's hubs by total degree — the calls in plus the calls out. A hub is where a change spreads: a symbol many others call, or one that calls many others.</p>
+<figure><img src="../../assets/docs/history/hot-symbols.png" alt="Hot Symbols: the hub leaderboard with main at degree 71, ProviderImpl.ListModels and RouterImpl.handleImagesMultipart at 55, and the detail rail for main" loading="lazy" decoding="async"><figcaption>The hub leaderboard of inference-gateway. main in cmd/gateway/main.go leads with 71 outgoing edges and none incoming.</figcaption></figure>
+<ul><li><strong>DEGREE</strong>, <strong>IN</strong> and <strong>OUT</strong> are counted from stored edges; <strong>RANK</strong> orders the board. Click a column head to sort.</li><li>The filter box narrows by symbol name or repository; the chips filter by the <strong>SOURCE</strong> column (every hub on the demo reads <strong>yes</strong>: backed by the current graph).</li><li>The rail on the right describes the selected hub — its graph signal (&quot;Low inbound degree&quot; for <code>main</code>), kind, degree and rank — with <strong>Inspect symbol</strong> and <strong>View in Code Map</strong>.</li></ul>
+<pre><code>atlas hubs --format plain</code></pre>
+<pre><code>hubs  total 20
+  main  function  in 0  out 71  total 71  cmd/gateway/main.go
+  ProviderImpl.ListModels  method  in 2  out 53  total 55  providers/core/provider.go
+  RouterImpl.handleImagesMultipart  method  in 2  out 53  total 55  api/routes.go
+  RouterImpl.MessagesHandler  method  in 0  out 52  total 52  api/routes.go
+  LoggerZapImpl.Error  method  in 41  out 6  total 47  logger/logger.go
+  …</code></pre>
+<h2>Check How Fresh the Index Is</h2>
+<p><strong>Freshness</strong> lists the operations Atlas derives from the latest snapshot — on the demo, one <strong>Observe repo</strong> card per indexed repository — and checks each against two signals: <strong>Code</strong> (the snapshot it was built from is still the one loaded) and <strong>Time</strong> (when that snapshot was indexed). Hover a signal for its detail. A card whose signals all hold reads <strong>fresh</strong>; the badge at the top counts the stale ones. <strong>Inspect</strong> opens the operation.</p>
+<figure><img src="../../assets/docs/history/freshness.png" alt="The Freshness view: three cards, Observe repo github://github, inference-gateway and prometheus://promlabs, each fresh with 2/2 signals, and the badge 0 stale" loading="lazy" decoding="async"><figcaption>Three operations, each fresh on both signals; 0 stale.</figcaption></figure>
+<p>When the code moves on and the index does not, re-index: <code>atlas index .</code> brings the snapshot, and with it every derived operation, up to date. <a href="../indexing/">Indexing and reindexing</a> covers watching a repository so this happens on every change.</p>
+<h2>See What a Service Started or Stopped Saying</h2>
+<p><strong>What Changed</strong> compares two windows of one log stream from its hourly counts: templates <strong>New in B</strong>, <strong>Gone in B</strong>, and <strong>Rate changed</strong> per minute, biggest move first. Each row names the line of code that emits the template in <strong>CALLER</strong>. Choose the stream, then one shape: <strong>Recent window</strong> (the last 1–24 h against the same length before), <strong>Around an instant</strong> (either side of a deploy) or <strong>Explicit windows</strong>, and press <strong>Compare</strong>.</p>
+<figure><img src="../../assets/docs/history/what-changed.png" alt="What Changed for prod / inference-gateway: Gone in B has route not found, Rate changed shows failed to generate tokens up 187 percent, with callers such as api/routes.go:805" loading="lazy" decoding="async"><figcaption>The last hour of the prod stream against the hour before. failed to generate tokens (api/routes.go:805) is up 187 % per minute; route not found stopped.</figcaption></figure>
+<p>Windows widen to whole UTC hours and are echoed back; a window still running is marked partial and its rates use the minutes elapsed, and a window that starts before the stream was first ingested is flagged as undercounted. The same comparison from a terminal:</p>
+<pre><code>atlas logs diff --stream inference-gateway --scope prod --window 1h --format plain</code></pre>
+<pre><code>stream inference-gateway  scope prod  limit 20  new 0 of 0  gone 1 of 1  changed 6 of 6
+WINDOW  FROM                  TO                    MINUTES                 TEMPLATES  LINES
+a       2026-10-28T04:00:00Z  2026-10-28T05:00:00Z  60                      7          120
+b       2026-10-28T05:00:00Z  2026-10-28T07:00:00Z  75.88 of 120 (partial)  6          177
+
+LIST     COUNT_A  COUNT_B  CHANGE  SEVERITY  CALLER                    SKELETON
+gone     5        0        -100%   warn      api/routes.go:98          route not found
+changed  12       44       +190%   error     api/routes.go:805         failed to generate tokens | err &lt;*&gt;:{&lt;*&gt;:&lt;*&gt;,&lt;*&gt;:&lt;*&gt;
+…</code></pre>
+<p>Connecting a log source and the other Observe views are covered in <a href="../observe/">Observe</a>.</p>
+<h2>From the API</h2>
+<table><thead><tr><th>Route</th><th>Answers</th></tr></thead><tbody><tr><td><code>GET /api/v1/history?repo=&lt;repo&gt;</code></td><td>The snapshot timeline</td></tr><tr><td><code>GET /api/v1/snapshot-diff?repo=&lt;repo&gt;&amp;from=&lt;sha&gt;</code></td><td>The structural delta; <code>422</code> with the &quot;need two snapshots&quot; detail when there is only one</td></tr><tr><td><code>GET /api/v1/logs/diff</code></td><td>The two-window comparison What Changed draws</td></tr></tbody></table>
+<p>An assistant reads the timeline over MCP with the <code>history</code> tool (<a href="../mcp/">MCP tools</a>). Every command and flag is in the <a href="../cli/">CLI reference</a>; the service is described in <a href="../service/">Dashboard and API</a>.</p>
+<h2>Related</h2>
+<ul><li><a href="../indexing/">Indexing and reindexing</a> — how snapshots are made and kept current.</li><li><a href="../impact/">Impact and review</a> — what a change you are about to make will reach.</li><li><a href="../code-map/">Code Map and graph</a> — open a hub and walk its neighbourhood.</li><li><a href="../observe/">Observe</a> — log streams, incidents, alerts, builds and traces.</li></ul>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../impact/">← Impact and Review</a></span>
+      <span><a href="../sources/">Connected Sources →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../tour/">What Atlas Does</a>
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
+        <a href="../dashboard/">The Dashboard</a>
+        <a href="../code-map/">Code Map and Graph</a>
+        <a href="../search-and-ask/">Search and Ask</a>
+        <a href="../workbench/">Ask Workbench</a>
+        <a href="../impact/">Impact and Review</a>
+        <a href="../history/">Change Lens and History</a>
+        <a href="../sources/">Connected Sources</a>
+        <a href="../observe/">Observe</a>
+        <a href="../skills/">Skills and Automations</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../teams/">One Atlas for a Team</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>

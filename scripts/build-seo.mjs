@@ -50,21 +50,31 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 // markdown in content/docs/. Content mirrors the GitHub Wiki guide.
 
 const DOCS = [
+  { slug: "tour", title: "What Atlas Does", desc: "Every surface in one pass: map, search, ask, impact, history, observe, assistants." },
   { slug: "getting-started", title: "Getting Started", desc: "Create a local Atlas index, run the first cited queries, and connect an AI coding assistant." },
   { slug: "installation", title: "Installation", desc: "Install Atlas via Homebrew, npm, release archives, or native Linux packages, then verify it." },
   { slug: "concepts", title: "Core Concepts", desc: "The Atlas mental model: the code knowledge graph, snapshots, workspace resolution, output control, and the CLI, HTTP, and MCP surfaces." },
-  { slug: "indexing", title: "Indexing and Reindexing", desc: "Keep the Atlas index fresh: incremental updates, watch mode, exclusions, and recovery." },
-  { slug: "cli", title: "CLI Reference", desc: "Atlas command-line reference: search, symbols, relationships, impact, routes, and maintenance." },
+  { slug: "dashboard", title: "The Dashboard", desc: "Command Center, omnibox, inspector, pins, repositories and the system view." },
+  { slug: "code-map", title: "Code Map and Graph", desc: "Walk the call graph: map modes, files, paths, neighbors, hubs." },
+  { slug: "search-and-ask", title: "Search and Ask", desc: "Exact search, symbol answers and the AI answer on the Ask page." },
+  { slug: "workbench", title: "Ask Workbench", desc: "Ask the codebase in plain language: Atlas gathers cited evidence from the index, git and connected sources, and a model you choose writes the answer, kept as a conversation." },
+  { slug: "impact", title: "Impact and Review", desc: "Blast radius, routes, cross-repo consumers and review context for a change." },
+  { slug: "history", title: "Change Lens and History", desc: "What changed, hot files, staleness, snapshots and structural diffs." },
+  { slug: "sources", title: "Connected Sources", desc: "GitHub, Jira, Confluence, Jenkins, Prometheus, Tempo, Grafana and OneDrive as virtual repos." },
+  { slug: "observe", title: "Observe", desc: "Logs, incidents, alerts, builds and traces, bounded and cited." },
+  { slug: "skills", title: "Skills and Automations", desc: "Skill Studio, recall, automations and approvals." },
   { slug: "assistants", title: "AI Assistant Setup", desc: "Connect Claude, Codex, and other MCP-compatible assistants to Atlas." },
   { slug: "mcp", title: "MCP Tools", desc: "Atlas MCP tools that give coding assistants bounded, cited code context." },
+  { slug: "cli", title: "CLI Reference", desc: "Atlas command-line reference: search, symbols, relationships, impact, routes, and maintenance." },
+  { slug: "indexing", title: "Indexing and Reindexing", desc: "Keep the Atlas index fresh: incremental updates, watch mode, exclusions, and recovery." },
   { slug: "service", title: "Dashboard and HTTP API", desc: "Run the local Atlas dashboard and the HTTP / MCP service." },
-  { slug: "workbench", title: "Ask Workbench", desc: "Ask the codebase in plain language: Atlas gathers cited evidence from the index, git and connected sources, and a model you choose writes the answer, kept as a conversation." },
   { slug: "configuration", title: "Configuration", desc: "Configure Atlas limits, storage location, and runtime behavior." },
+  { slug: "teams", title: "One Atlas for a Team", desc: "Shared service, tokens, identity, fleet connect and devices." },
+  { slug: "upgrade", title: "Upgrade and Uninstall", desc: "Update Atlas safely, or remove it and its local data." },
+  { slug: "troubleshooting", title: "Troubleshooting", desc: "Diagnose stale, missing, or incomplete Atlas results." },
   { slug: "privacy", title: "Privacy and Data Handling", desc: "How Atlas stores repository intelligence locally and what stays on your machine." },
   { slug: "languages", title: "Supported Languages and Formats", desc: "Languages and formats Atlas indexes, with capability levels." },
   { slug: "benchmarks", title: "Benchmarks and Methodology", desc: "How to read and reproduce the published Atlas benchmark evidence." },
-  { slug: "troubleshooting", title: "Troubleshooting", desc: "Diagnose stale, missing, or incomplete Atlas results." },
-  { slug: "upgrade", title: "Upgrade and Uninstall", desc: "Update Atlas safely, or remove it and its local data." },
 ];
 
 // Wiki page name -> doc slug, for rewriting the guides' internal links.
@@ -73,6 +83,9 @@ const WIKI_TO_SLUG = {
   "Indexing-and-Reindexing": "indexing", "CLI-Reference": "cli", "Core-Concepts": "concepts",
   "AI-Assistant-Setup": "assistants", "MCP-Tools": "mcp",
   "Dashboard-and-HTTP-API": "service", "Ask-Workbench": "workbench", "Configuration": "configuration",
+  "What-Atlas-Does": "tour", "The-Dashboard": "dashboard", "Code-Map-and-Graph": "code-map", "Search-and-Ask": "search-and-ask",
+  "Impact-and-Review": "impact", "Change-Lens-and-History": "history", "Connected-Sources": "sources", "Observe": "observe",
+  "Skills-and-Automations": "skills", "One-Atlas-for-a-Team": "teams",
   "Privacy-and-Data-Handling": "privacy", "Supported-Languages": "languages",
   "Benchmarks-and-Methodology": "benchmarks", "Troubleshooting": "troubleshooting",
   "Upgrade-and-Uninstall": "upgrade",
@@ -122,6 +135,22 @@ function mdToHtml(md) {
       out.push(`<table><thead><tr>${header.map((c) => `<th>${inline(c)}</th>`).join("")}</tr></thead><tbody>${rows.map((rw) => `<tr>${rw.map((c) => `<td>${inline(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`);
       continue;
     }
+    const fm = line.match(/^!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)\s*$/);  // figure: image or clip
+    if (fm) {
+      flushList(listBuf);
+      const [, alt, src, cap] = fm;
+      const url = /^(https?:)?\/\//.test(src) ? src : `../../${src}`;
+      const caption = cap ? `<figcaption>${inline(cap)}</figcaption>` : "";
+      if (/\.mp4$/.test(src)) {
+        const poster = url.replace(/\.mp4$/, ".png");
+        const gif = url.replace(/\.mp4$/, ".gif");
+        out.push(`<figure class="clip"><video autoplay muted loop playsinline preload="metadata" poster="${esc(poster)}" aria-label="${esc(alt)}"><source src="${esc(url)}" type="video/mp4"><img src="${esc(gif)}" alt="${esc(alt)}"></video>${caption}</figure>`);
+      } else {
+        out.push(`<figure><img src="${esc(url)}" alt="${esc(alt)}" loading="lazy" decoding="async">${caption}</figure>`);
+      }
+      i++;
+      continue;
+    }
     const hm = line.match(/^(#{1,4})\s+(.*)$/);
     if (hm) { flushList(listBuf); const n = hm[1].length; out.push(`<h${n}>${inline(hm[2])}</h${n}>`); i++; continue; }
     const lm = line.match(/^\s*(?:[-*]|\d+[.)])\s+(.*)$/);                // bullet or numbered item
@@ -143,7 +172,7 @@ function mdToHtml(md) {
     flushList(listBuf);
     const para = [line];
     i++;
-    while (i < lines.length && lines[i].trim() !== "" && !/^(#{1,4}\s|```|\s*[-*]\s|\s*\d+[.)]\s|\s*\|)/.test(lines[i])) { para.push(lines[i]); i++; }
+    while (i < lines.length && lines[i].trim() !== "" && !/^(#{1,4}\s|```|\s*[-*]\s|\s*\d+[.)]\s|\s*\||!\[)/.test(lines[i])) { para.push(lines[i]); i++; }
     out.push(`<p>${inline(para.join(" "))}</p>`);
   }
   flushList(listBuf);
@@ -272,7 +301,7 @@ const body = `
           <li><a href="docs/indexing/">Indexing and reindexing</a> — freshness, watch mode, and recovery.</li>
           <li><a href="docs/cli/">CLI reference</a> — search, symbols, relationships, impact, and routes.</li>
           <li><a href="docs/assistants/">AI assistant setup</a> and <a href="docs/mcp/">MCP tools</a>.</li>
-          <li><a href="docs/workbench/">Ask Workbench</a> — a cited conversation about the codebase in the dashboard.</li>
+          <li>User guide: <a href="docs/tour/">what Atlas does</a>, <a href="docs/dashboard/">the dashboard</a>, <a href="docs/code-map/">Code Map</a>, <a href="docs/search-and-ask/">search and Ask</a>, <a href="docs/workbench/">Ask Workbench</a>, <a href="docs/impact/">impact and review</a>, <a href="docs/history/">change lens</a>, <a href="docs/sources/">connected sources</a>, <a href="docs/observe/">Observe</a>, <a href="docs/skills/">skills</a>, <a href="docs/teams/">one Atlas for a team</a>.</li>
           <li><a href="docs/troubleshooting/">Troubleshooting</a>, <a href="docs/privacy/">privacy</a>, <a href="docs/configuration/">configuration</a>, and <a href="docs/upgrade/">upgrades</a>.</li>
           <li><a href="docs/">Browse all documentation →</a></li>
         </ul>
@@ -411,6 +440,7 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intellig
 ## Project
 - [Product documentation](${BASE}#docs/getting-started): install, index, query, configure, connect, troubleshoot, and upgrade
 - [Ask Workbench](${BASE}#docs/workbench): a conversation about the codebase in the dashboard — Atlas gathers cited evidence (index, git, GitHub, Jira, Confluence, Pulse) and what it computed, a model you choose writes the answer; threads are kept by the server
+- [User guide](${BASE}#docs/tour): what Atlas does, the dashboard, Code Map, search and Ask, impact and review, change lens, connected sources, Observe, skills and automations, one Atlas for a team — each page with screenshots and short clips recorded from a running Atlas
 - [Benchmark & comparison](${BASE}#benchmarks): interactive version of the published evidence
 - [GitHub repository](https://github.com/aziron-ai/atlas): releases (macOS, Linux, Windows), issues
 - [GitHub Wiki](https://github.com/aziron-ai/atlas/wiki): mirror of the consumer product guide
@@ -425,6 +455,7 @@ const DOC_CSS = `
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
   .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
   a { color:var(--link); } a:hover { text-decoration:underline; }
   header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
   header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }

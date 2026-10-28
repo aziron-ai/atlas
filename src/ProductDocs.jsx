@@ -10,11 +10,10 @@ import {
   Sun,
 } from "lucide-react";
 import SurveyChart, { LatencyScaleBar } from "./SurveyChart";
+import { Command, CopyCommand, ProseSection, Bullets, Callout, sectionId, RELEASE, GITHUB, WIKI } from "./docs/ui.jsx";
+import { DOC_COMPONENTS } from "./docs/pages.js";
 import packageMetadata from "../package.json";
 
-const RELEASE = packageMetadata.version;
-const GITHUB = "https://github.com/aziron-ai/atlas";
-const WIKI = `${GITHUB}/wiki`;
 
 const PRODUCT_NAV = [
   ["Overview", "#overview"],
@@ -616,37 +615,7 @@ function GridRef({ cell, name }) {
   );
 }
 
-function CopyCommand({ command }) {
-  const [copied, setCopied] = useState(false);
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(command);
-    } catch {
-      // Clipboard access can be blocked in a non-secure local preview.
-    }
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1200);
-  };
 
-  return (
-    <button className={`icon-btn focusring${copied ? " copied-pop" : ""}`} type="button" onClick={copy} aria-label={`Copy ${command}`} title="Copy command">
-      {copied ? <Check className="h-4 w-4" aria-hidden /> : <Copy className="h-4 w-4" aria-hidden />}
-    </button>
-  );
-}
-
-function Command({ children, label = "Terminal" }) {
-  const command = Array.isArray(children) ? children.join("") : String(children);
-  return (
-    <div className="product-command">
-      <div className="flex items-center justify-between gap-3">
-        <span className="cmd-label">{label}</span>
-        <CopyCommand command={command} />
-      </div>
-      <pre><code>{command}</code></pre>
-    </div>
-  );
-}
 
 function InstallSwitcher() {
   const options = {
@@ -994,30 +963,40 @@ export function ProductHome({ data }) {
 }
 
 const DOC_PAGES = [
+  { slug: "tour", label: "What Atlas does", summary: "Every surface in one pass: map, search, ask, impact, history, observe, assistants." },
   { slug: "getting-started", label: "Getting started", summary: "Create an index and run the first cited query." },
   { slug: "installation", label: "Installation", summary: "Homebrew, npm, archives, and Linux packages." },
   { slug: "concepts", label: "Core concepts", summary: "The graph, snapshots, scope, output control, and surfaces." },
-  { slug: "indexing", label: "Indexing and reindexing", summary: "Incremental updates, rebuilds, and freshness." },
-  { slug: "cli", label: "CLI reference", summary: "Core commands for search, graphs, and impact." },
+  { slug: "dashboard", label: "The dashboard", summary: "Command Center, omnibox, inspector, pins, repositories and the system view." },
+  { slug: "code-map", label: "Code Map and graph", summary: "Walk the call graph: map modes, files, paths, neighbors, hubs." },
+  { slug: "search-and-ask", label: "Search and Ask", summary: "Exact search, symbol answers and the AI answer on the Ask page." },
+  { slug: "workbench", label: "Ask Workbench", summary: "A cited conversation about the codebase, with a model you choose." },
+  { slug: "impact", label: "Impact and review", summary: "Blast radius, routes, cross-repo consumers and review context for a change." },
+  { slug: "history", label: "Change lens and history", summary: "What changed, hot files, staleness, snapshots and structural diffs." },
+  { slug: "sources", label: "Connected sources", summary: "GitHub, Jira, Confluence, Jenkins, Prometheus, Tempo, Grafana and OneDrive as virtual repos." },
+  { slug: "observe", label: "Observe", summary: "Logs, incidents, alerts, builds and traces, bounded and cited." },
+  { slug: "skills", label: "Skills and automations", summary: "Skill Studio, recall, automations and approvals." },
   { slug: "assistants", label: "AI assistant setup", summary: "Connect Codex, Claude, and MCP clients." },
   { slug: "mcp", label: "MCP tools", summary: "Choose the right bounded code-intelligence tool." },
+  { slug: "cli", label: "CLI reference", summary: "Core commands for search, graphs, and impact." },
+  { slug: "indexing", label: "Indexing and reindexing", summary: "Incremental updates, rebuilds, and freshness." },
   { slug: "service", label: "Dashboard and API", summary: "Run the local service, dashboard, and HTTP MCP." },
-  { slug: "workbench", label: "Ask Workbench", summary: "A cited conversation about the codebase, with a model you choose." },
   { slug: "configuration", label: "Configuration", summary: "Database, limits, security, and precedence." },
+  { slug: "teams", label: "One Atlas for a team", summary: "Shared service, tokens, identity, fleet connect and devices." },
+  { slug: "upgrade", label: "Upgrade and uninstall", summary: "Update safely or remove Atlas and local data." },
+  { slug: "troubleshooting", label: "Troubleshooting", summary: "Diagnose installs, stale indexes, locks, and MCP." },
   { slug: "privacy", label: "Privacy and data", summary: "Understand local storage and network boundaries." },
   { slug: "languages", label: "Languages and formats", summary: "Capability levels across code and content." },
   { slug: "benchmarks", label: "Benchmark methodology", summary: "Interpret and reproduce published evidence." },
-  { slug: "troubleshooting", label: "Troubleshooting", summary: "Diagnose installs, stale indexes, locks, and MCP." },
-  { slug: "upgrade", label: "Upgrade and uninstall", summary: "Update safely or remove Atlas and local data." },
 ];
 
 /* sidebar groups: letter = group ref, order within = position ref */
 const DOC_GROUPS = [
-  { name: "First survey", letter: "A", slugs: ["getting-started", "installation", "concepts"] },
-  { name: "Operating the instrument", letter: "B", slugs: ["indexing", "cli", "configuration", "service", "workbench"] },
-  { name: "Assistants", letter: "C", slugs: ["assistants", "mcp"] },
-  { name: "Trust & evidence", letter: "D", slugs: ["privacy", "languages", "benchmarks"] },
-  { name: "Maintenance", letter: "E", slugs: ["troubleshooting", "upgrade"] },
+  { name: "Start here", letter: "A", slugs: ["tour", "getting-started", "installation", "concepts"] },
+  { name: "Using the dashboard", letter: "B", slugs: ["dashboard", "code-map", "search-and-ask", "workbench", "impact", "history", "sources", "observe", "skills"] },
+  { name: "AI assistants", letter: "C", slugs: ["assistants", "mcp"] },
+  { name: "Operating Atlas", letter: "D", slugs: ["cli", "indexing", "service", "configuration", "teams", "upgrade", "troubleshooting"] },
+  { name: "Trust and evidence", letter: "E", slugs: ["privacy", "languages", "benchmarks"] },
 ];
 
 function sheetRef(slug) {
@@ -1038,33 +1017,13 @@ function StationGlyph() {
   );
 }
 
-function sectionId(title) {
-  return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-}
 
-function ProseSection({ title, children }) {
-  return (
-    <section className="docs-prose-section" data-toc-id={sectionId(title)}>
-      <h2 id={sectionId(title)}>{title}</h2>
-      {children}
-    </section>
-  );
-}
 
-function Bullets({ children }) {
-  return <ul className="docs-list">{children}</ul>;
-}
 
-function Callout({ kind = "tip", label, children }) {
-  return (
-    <div className={`callout ${kind}`}>
-      <span className="co-label">{label}</span>
-      {children}
-    </div>
-  );
-}
 
 function DocsPage({ slug }) {
+  const Page = DOC_COMPONENTS[slug];
+  if (Page) return <Page />;
   switch (slug) {
     case "installation":
       return (
@@ -1187,118 +1146,6 @@ function DocsPage({ slug }) {
           </ProseSection>
         </>
       );
-    case "indexing":
-      return (
-        <>
-          <p className="docs-lead">Atlas answers are only as current as the selected index. This guide covers creating and updating an index, forcing a rebuild, keeping the graph fresh automatically, controlling what gets indexed, and maintaining the database that stores it. For what the graph contains, see <a className="text-link" href="#docs/concepts">Core Concepts</a>.</p>
-          <ProseSection title="Create or Update an Index">
-            <p>Run this once to build the graph, and again whenever you want to refresh it — the same command handles both cases. From a repository root:</p>
-            <Command>{`atlas index .`}</Command>
-            <p>To pin an explicit database instead of the default <code>sqlite://./.atlas/atlas.db</code>:</p>
-            <Command>{`atlas --db "sqlite:///absolute/path/.atlas/atlas.db" index .`}</Command>
-            <p><code>atlas index</code> parses symbols, edges, and routes, then persists the graph and the lexical search index. By default it indexes the working tree; use <code>--ref COMMIT_OR_BRANCH</code> to index a specific commit or branch instead.</p>
-          </ProseSection>
-          <ProseSection title="What Index Output Reports">
-            <p>Read the index output to confirm what actually happened rather than assuming. With <code>--progress</code> (on by default for human output), Atlas prints start, periodic progress, and completion statistics to stderr. A run reports a delta update when files changed, or a no-op when the stored snapshot already matches the workspace. For profiling an index run, <code>--cpuprofile PATH</code> and <code>--memprofile PATH</code> write runtime/pprof profiles.</p>
-            <p><strong>Since 0.1.48, <code>atlas index --format json</code> also reports what the run did internally</strong>, so you can verify the fast paths engaged instead of inferring it from a stopwatch:</p>
-            <Command label="JSON">{`{\n  "mode": "delta",\n  "persist_mode": "delta",\n  "persist_path": "sql",\n  "delta_base": "dc4dc4ba86e307b8875a4c0b0623b628445d6274",\n  "files_reparsed": 1,\n  "lexical_bytes": 290368,\n  "lexical_settle": "merged"\n}`}</Command>
-            <div className="docs-table-wrap"><table><thead><tr><th>Field</th><th>Values</th><th>What it tells you</th></tr></thead><tbody>
-              <tr><td><code>persist_mode</code></td><td><code>full</code>, <code>delta</code>, <code>noop</code></td><td>which mode the run resolved to. <code>noop</code> means the working tree already matched the stored snapshot</td></tr>
-              <tr><td><code>persist_path</code></td><td><code>sql</code>, <code>sql_new_commit</code>, <code>whole_graph</code>, <code>full_walk</code>, <code>full_stream</code>, <code>noop</code></td><td>the decisive one. <code>sql</code> and <code>sql_new_commit</code> are the O(change) paths — the base graph is never loaded into memory. <code>whole_graph</code> is the correctness fallback: a delta by mode, a full index by memory</td></tr>
-              <tr><td><code>delta_base</code>, <code>delta_base_snapshot</code></td><td>commit SHA, snapshot id</td><td>which snapshot the run built on, so a ladder of runs is pinnable</td></tr>
-              <tr><td><code>files_reparsed</code></td><td>integer</td><td>defined for every mode: changed plus added on a delta, every indexed file on a full run, <code>0</code> on a no-op</td></tr>
-              <tr><td><code>lexical_bytes</code></td><td>integer</td><td>the on-disk size of <code>.atlas/lexical</code> after the run settled it. This should match a <code>du</code> taken the instant <code>index</code> returns; a mismatch is a bug report, not a measurement</td></tr>
-              <tr><td><code>lexical_settle</code></td><td>see below</td><td>how the sidecar reached the size reported in <code>lexical_bytes</code></td></tr>
-            </tbody></table></div>
-            <p><strong>Lexical settle states.</strong> The lexical (BM25) sidecar writes new segments and supersedes old ones asynchronously, so a footprint measured the moment an index returns used to read far above the steady state. Since 0.1.48 <code>atlas index</code> settles the sidecar before it returns — a bounded segment merge, then a reclaiming reopen — and reports how that went. The settle never changes the document set and never fails a run; every failure mode degrades to a disclosed state.</p>
-            <div className="docs-table-wrap"><table><thead><tr><th>State</th><th>Meaning</th></tr></thead><tbody>
-              <tr><td><code>merged</code></td><td>the merge completed and superseded segments were reclaimed. <strong>Only this state asserts a steady-state footprint</strong></td></tr>
-              <tr><td><code>reclaimed</code></td><td>the merge was skipped or declined, but the reclaim ran. Superseded segments are gone; unmerged ones may remain</td></tr>
-              <tr><td><code>partial</code></td><td><strong>Since 0.1.51.</strong> Every step ran and reported success, and then the check found the sidecar still holding obsolete document bytes a compaction would reclaim — a contended machine can leave a whole superseded generation inside one segment, which the engine declines to re-merge. The reported footprint is <strong>above</strong> steady state. Re-run on a quiet machine, or run <code>atlas compact --rebuild-lexical</code>, before quoting a size</td></tr>
-              <tr><td><code>timeout</code></td><td>the merge did not finish inside its budget, so the reclaim was deliberately not attempted and the footprint may hold both unmerged and superseded segments. Raise <code>ATLAS_LEXICAL_SETTLE_TIMEOUT</code> (default 30s) and re-run</td></tr>
-              <tr><td><code>skipped</code></td><td>there was nothing to settle: no sidecar, or this run wrote no documents</td></tr>
-              <tr><td><code>failed</code></td><td>the settle itself errored; the reason is on stderr and the footprint is still reported</td></tr>
-              <tr><td><code>off</code></td><td>disabled with <code>ATLAS_LEXICAL_SETTLE=off</code></td></tr>
-            </tbody></table></div>
-            <p>Set <code>ATLAS_LEXICAL_SETTLE=reclaim</code> to skip the merge and only reclaim — the cheaper mode for very large sidecars where a single-segment merge is not worth its write amplification.</p>
-          </ProseSection>
-          <ProseSection title="Incremental Behavior">
-            <p>Incremental updates are the default because they are much faster than full rebuilds: Atlas computes a delta against the previous snapshot and reindexes only what changed. To diff against a specific commit rather than the stored base, pass <code>--base COMMIT</code>.</p>
-          </ProseSection>
-          <ProseSection title="Forced Rebuild">
-            <p>Use <code>--reindex</code> only when the incremental path cannot repair the index:</p>
-            <Command>{`atlas index . --reindex`}</Command>
-            <p>The legitimate reasons for a full rebuild are:</p>
-            <ol className="docs-list numbered">
-              <li>An upgrade reports an incompatible or stale index format, or <code>atlas doctor</code> recommends a rebuild.</li>
-              <li>Parser or language support changed and old files must be reparsed.</li>
-              <li>The workspace identity or indexed root was incorrect, or focused troubleshooting confirms the current index is incomplete.</li>
-            </ol>
-            <p>Do not make forced reindexing the default workflow. It is slower and discards the benefit of incremental updates.</p>
-          </ProseSection>
-          <ProseSection title="Watch Mode">
-            <p>Use watch mode when you want the graph to stay fresh during active editing with no manual <code>atlas index</code> runs. <code>atlas watch</code> indexes the repo once, then watches the working tree and runs an incremental, working-tree-aware update on every file change. A burst of edits is coalesced into one update (<code>--debounce-ms</code>, default 250). It runs in the foreground until interrupted.</p>
-            <Command>{`atlas watch .`}</Command>
-            <p>The MCP and HTTP surfaces maintain freshness the same way — <code>atlas mcp</code> and <code>atlas serve</code> watch the repo by default. Disable watching when another process owns indexing:</p>
-            <Command>{`atlas mcp --supervise --watch=false   # or set ATLAS_NO_WATCH=1`}</Command>
-          </ProseSection>
-          <ProseSection title="Semantic Vectors (Optional)">
-            <p>Enable vectors only if you want embedding-based retrieval; the deterministic lexical and graph core never depends on them. Run the optional embedding pass at index time:</p>
-            <Command>{`atlas index . --enable-vectors\natlas watch . --enable-vectors   # keep embeddings fresh on each update`}</Command>
-            <p>With vectors enabled (<code>ATLAS_ENABLE_VECTORS=1</code> and a repo indexed with <code>--enable-vectors</code>), <code>atlas semantic-search</code> returns nearest symbols by cosine similarity. Otherwise it transparently degrades to lexical search and reports <code>degraded=true</code> / <code>mode_used=lexical</code>. By default the embedder is offline (deterministic token overlap); set <code>ATLAS_EMBED_URL</code> to use a real embedding model. See <a className="text-link" href="#docs/configuration">Configuration</a>.</p>
-          </ProseSection>
-          <ProseSection title="Excluding Files">
-            <p>Exclude generated outputs, dependency caches, and nested repository snapshots so they do not pollute search results. Atlas skips paths git ignores by default (<code>--gitignore</code>, default true); pass <code>--gitignore=false</code> to index everything. Add Atlas-specific patterns to <code>.atlasignore</code>.</p>
-          </ProseSection>
-          <ProseSection title="Registering Without Indexing">
-            <p>Use <code>atlas link</code> when a repo should participate in cross-repo queries and appear in <code>atlas status</code> before (or without) being indexed on this machine:</p>
-            <Command>{`atlas link org/name --branch main`}</Command>
-            <p><code>REPO</code> may be a filesystem path, a git remote URL, or a bare <code>org/name</code>. Linking is idempotent — re-linking updates the registration and reports <code>created=false</code>. Linking does not populate the graph; run <code>atlas index</code> for that. To remove a repo from the registry, <code>atlas repo rm</code> forgets it entirely: snapshots, symbols, edges, embeddings, and lexical documents.</p>
-          </ProseSection>
-          <ProseSection title="Performance Envelope">
-            <p><strong>Since 0.1.48, resource use is a profile decision first.</strong> Atlas detects a machine profile — <code>eco</code>, <code>balanced</code>, <code>performance</code>, or <code>turbo</code> — and sizes indexing to it. The individual knobs below all still work and all still win over the tier; they are overrides, not the primary control. Pin a tier with <code>ATLAS_PROFILE</code> and read back what it installed with <code>atlas doctor</code>; the tiers, their values, and the auto-detection rules are in <a className="text-link" href="#docs/configuration">Configuration</a>.</p>
-            <Callout kind="tip" label="Foreground full throttle">
-              <p><strong>Since 0.1.51.</strong> <code>balanced</code> bounds background work, not the index you are waiting on. A watch-triggered refresh or an MCP lazy index runs inside a warm daemon and takes 3/4 of the cores under a <code>RAM/4</code> soft heap limit; an explicit <code>atlas index</code> you typed runs at full width with no ceiling. <code>eco</code> is deliberately not scoped that way — on a genuinely low-spec box it throttles foreground indexes too, because that is the case it exists to protect.</p>
-            </Callout>
-            <p>Behaviors worth knowing on large or resource-constrained machines:</p>
-            <Bullets>
-              <li><strong>Streaming index.</strong> Full indexes of repos over ~15,000 candidate files automatically stream in bounded batches instead of holding the whole graph in memory — the Linux kernel (81k files, 1.86M symbols, 6.8M edges) indexes at ~1.3&nbsp;GiB peak RSS. Force it at any size with <code>ATLAS_STREAM_INDEX=1</code> (or off with <code>0</code>); tune with <code>ATLAS_STREAM_INDEX_THRESHOLD</code> and <code>ATLAS_STREAM_INDEX_BATCH</code>.</li>
-              <li><strong>CPU ceiling (an override since 0.1.48).</strong> With no profile bound in force the parse/hash pool uses all cores. Cap it explicitly with <code>atlas index --workers N</code> or <code>ATLAS_INDEX_WORKERS</code> — e.g. <code>--workers 4</code> trades a little wall-time for headroom; <code>1</code> pins the run to a single core. An explicit value always beats the tier's worker count. (Go repos also run <code>go/types</code>, which spawns its own compilers outside this pool; other tree-sitter languages are fully bounded by it.)</li>
-              <li><strong>Memory ceiling (an override since 0.1.48).</strong> <code>ATLAS_MEMORY_LIMIT</code> and <code>ATLAS_GOGC</code> bound the Go runtime directly and override whatever the tier would have set — the right tool for a container with a hard cgroup limit, where you want a specific number rather than a fraction of host RAM.</li>
-              <li><strong>Deletions cost more than edits.</strong> Adding or modifying files takes the fast scoped delta; deleting a Go file forces the whole-module type-check fallback (reverse-dependency edges must be re-derived), so a delete delta can approach cold-build time on Go-heavy repos. Batch deletions when you can.</li>
-            </Bullets>
-          </ProseSection>
-          <ProseSection title="Database Maintenance">
-            <p>Run maintenance when the database has grown or after an Atlas upgrade.</p>
-            <Bullets>
-              <li><code>atlas compact</code> reports reclaimable pages and truncates the WAL. Modern Atlas databases use online incremental auto-vacuum; legacy databases are converted with a one-time full VACUUM that takes an exclusive lock — stop <code>atlas serve</code> and watch processes first, or you get a lock error rather than partial work.</li>
-              <li><code>atlas compact --full</code> additionally runs a full VACUUM and rebuilds the lexical (BM25) sidecar when it has outgrown its size bound — the only way dead segments are returned to the OS. Exclusive: quiesce other Atlas processes first.</li>
-              <li><code>atlas compact --rebuild-lexical</code> rebuilds the lexical sidecar regardless of size — the fix for an empty or wedged sidecar, which otherwise silently degrades every search to SQL-only. <code>atlas doctor</code> reports when you need it.</li>
-              <li><code>atlas migrate</code> applies storage migrations and reports the active contracts. Both <code>migrate</code> and <code>compact</code> accept <code>--all --root DIR</code> to process every local <code>.atlas/atlas.db</code> under a directory.</li>
-            </Bullets>
-          </ProseSection>
-          <ProseSection title="Verify Freshness">
-            <p>Confirm which index is answering before trusting results:</p>
-            <Command>{`atlas status\natlas stats\natlas doctor`}</Command>
-            <p>When multiple repositories or databases exist, pin both <code>--db</code> and <code>--repo</code>. If a running Atlas server is configured, CLI queries may use that server — unset <code>ATLAS_SERVER_URL</code> or pin an explicit database while diagnosing.</p>
-          </ProseSection>
-          <ProseSection title="Safe Recovery Order">
-            <p>Follow this order so you never destroy data a cheaper step could have fixed:</p>
-            <ol className="docs-list numbered">
-              <li>Stop active <code>serve</code>, <code>watch</code>, and supervised MCP processes.</li>
-              <li>Run <code>atlas status</code> and <code>atlas doctor</code>.</li>
-              <li>Confirm the repository and database paths.</li>
-              <li>Run <code>atlas migrate</code> when a schema upgrade is required.</li>
-              <li>Rebuild lexical data only when recommended.</li>
-              <li>Run <code>atlas index . --reindex</code> as the final non-destructive repair.</li>
-              <li>Delete <code>.atlas</code> only when a complete data reset is intended.</li>
-            </ol>
-            <Callout kind="warn" label="Before deleting local data">
-              <p>See <a className="text-link" href="#docs/troubleshooting">Troubleshooting</a> before removing data.</p>
-            </Callout>
-          </ProseSection>
-        </>
-      );
     case "cli":
       return (
         <>
@@ -1406,70 +1253,6 @@ function DocsPage({ slug }) {
           </ProseSection>
           <ProseSection title="Authoritative Contract">
             <p>Flags and defaults can change between releases. <code>atlas --help</code> and <code>atlas &lt;command&gt; --help</code> are the authoritative contract for the release installed on your machine; prefer them over this page when they disagree.</p>
-          </ProseSection>
-        </>
-      );
-    case "assistants":
-      return (
-        <>
-          <p className="docs-lead">Atlas registers its MCP server with Claude CLI, Claude Desktop, Codex, Cursor, Gemini, and GitHub Copilot, so any of these assistants can query your local code graph. This page covers automatic setup, repository-pinned setup, git hooks, verification, and removal. For what the tools return once connected, see <a className="text-link" href="#docs/mcp">MCP Tools</a>.</p>
-          <ProseSection title="Automatic Setup with Bootstrap">
-            <p>Use bootstrap when you want every detected assistant provisioned in one pass. In managed environments, always preview first:</p>
-            <Command>{`atlas bootstrap --dry-run`}</Command>
-            <p>Apply the changes:</p>
-            <Command>{`atlas bootstrap`}</Command>
-            <p>Restrict provisioning to selected clients, or exclude some:</p>
-            <Command>{`atlas bootstrap --only codex,claude,claude-desktop\natlas bootstrap --skip cursor`}</Command>
-            <p>Restart each assistant after its MCP configuration changes; most clients read MCP configuration only at startup.</p>
-            <p><strong>What bootstrap writes.</strong> Bootstrap registers Atlas as an MCP server and installs the atlas-first skill plus a CLAUDE.md directive for all detected assistants. It bakes the absolute binary path into each config and registers the supervised gateway with no <code>--db</code>, so the workspace is resolved at query time rather than pinned at install time. The command is idempotent: it is safe to run repeatedly and from a package post-install hook. Re-running <em>merges</em> the existing atlas entry rather than replacing it, so a <code>--db</code> pin, extra args, or an <code>env</code> block you configured (for example via a repository-pinned <code>install skill --db</code>) are preserved. Use <code>--home</code> to override the home directory base when provisioning a different account's configuration.</p>
-          </ProseSection>
-          <ProseSection title="Repository-Pinned Setup">
-            <p>Use a repository-pinned local MCP configuration when one assistant should always query one index:</p>
-            <Command>{`cd /path/to/repository\natlas index .\n\natlas install skill \\\n  --agent codex,claude,claude-desktop \\\n  --repo "$PWD" \\\n  --db "sqlite://$PWD/.atlas/atlas.db" \\\n  --server-url=none`}</Command>
-          </ProseSection>
-          <ProseSection title="Dynamic Workspace Setup">
-            <p>Bootstrap is appropriate when the assistant supplies the active workspace at runtime. Repository-scoped MCP tools still require one of:</p>
-            <Bullets>
-              <li>a workspace root supplied by the client</li>
-              <li>a <code>workspace</code> argument</li>
-              <li>a repository ID</li>
-              <li>a repository pinned when MCP starts</li>
-            </Bullets>
-            <p>If none is available, Atlas returns <code>workspace_required</code> instead of selecting a repository silently.</p>
-          </ProseSection>
-          <ProseSection title="Shared Local Server">
-            <p>Use one local service when multiple thin clients should share a single index and watcher:</p>
-            <Command>{`atlas serve --mcp\n\natlas install skill \\\n  --agent codex,claude,claude-desktop \\\n  --repo "$PWD" \\\n  --server-url http://127.0.0.1:3099`}</Command>
-            <p>Use a token before exposing the service beyond loopback. See <a className="text-link" href="#docs/service">Dashboard and HTTP API</a>.</p>
-          </ProseSection>
-          <ProseSection title="Keep the Graph Fresh with a Git Hook">
-            <p>Install a local git hook when you want the index updated as part of your normal git workflow rather than by a running watcher:</p>
-            <Command>{`atlas install hook`}</Command>
-            <p>The hook keeps the Atlas graph fresh in the repository where it is installed.</p>
-          </ProseSection>
-          <ProseSection title="Client Configuration Locations">
-            <p>Check these paths when auditing what setup wrote or when a client does not pick up the server:</p>
-            <div className="docs-table-wrap"><table><thead><tr><th>Client</th><th>Typical location</th></tr></thead><tbody>
-              <tr><td>Codex</td><td><code>~/.codex/config.toml</code></td></tr>
-              <tr><td>Claude CLI</td><td><code>~/.claude.json</code></td></tr>
-              <tr><td>Claude Desktop on macOS</td><td><code>~/Library/Application Support/Claude/claude_desktop_config.json</code></td></tr>
-            </tbody></table></div>
-            <p>Atlas preserves unrelated client configuration. Always review a dry run before applying changes in managed environments.</p>
-          </ProseSection>
-          <ProseSection title="Ask in the Dashboard">
-            <p>The same providers answer in the dashboard's <strong>Ask Workbench</strong>: a conversation about the codebase where Atlas gathers the evidence and the model writes the cited answer. A <code>claude</code> or <code>codex</code> CLI that is installed and logged in is detected automatically; an API key can be stored with <code>atlas llm set</code>. Check what is configured with:</p>
-            <Command>{`atlas llm status\natlas llm detect --apply`}</Command>
-            <p>See <a className="text-link" href="#docs/workbench">Ask Workbench</a> for how a turn works, the threads the server keeps, and what leaves the machine.</p>
-          </ProseSection>
-          <ProseSection title="Verify">
-            <p>Confirm the integration end to end before relying on it:</p>
-            <Command>{`atlas doctor --verify atlas\natlas status\natlas bootstrap --dry-run`}</Command>
-            <p><code>doctor --verify atlas</code> also checks for binary drift: whether the <code>atlas</code> on <code>PATH</code> — what assistants launch via <code>command:"atlas"</code> — matches the running binary. Then ask the assistant a repository-specific question and confirm that the answer includes source file and line references.</p>
-          </ProseSection>
-          <ProseSection title="Remove the Integration">
-            <p>Preview removal, then apply it:</p>
-            <Command>{`atlas uninstall --dry-run\natlas uninstall`}</Command>
-            <p>Uninstall reverses <code>atlas bootstrap</code> across every assistant it provisions: it removes the atlas MCP server entry from each config, the atlas skill markdown, and the atlas-managed block in the global CLAUDE.md. Nothing else is touched — other MCP servers, unrelated config keys, and your own CLAUDE.md content outside the atlas markers are preserved. Re-running reports <code>absent</code> and writes nothing. By default repository indexes are not deleted; <code>atlas uninstall --purge</code> also removes the <code>.atlas</code> index directories (the global <code>~/.atlas</code> and every registry-known repo’s <code>.atlas</code>), printing the blast radius and total reclaimed space first and requiring confirmation (<code>--yes</code> to skip it, <code>--dry-run</code> to preview). See <a className="text-link" href="#docs/privacy">Privacy and Data Handling</a> for data removal.</p>
           </ProseSection>
         </>
       );
@@ -1602,83 +1385,6 @@ function DocsPage({ slug }) {
             <p>Start with Atlas's own diagnostics, then check the port:</p>
             <Command>{`atlas status\natlas doctor\nlsof -nP -iTCP:3099 -sTCP:LISTEN`}</Command>
             <p>If <code>healthz</code> passes but <code>readyz</code> fails, indexing or database maintenance may be blocking engine requests. Wait for the current operation or stop competing Atlas processes before retrying. See <a className="text-link" href="#docs/troubleshooting">Troubleshooting</a> for broader diagnosis.</p>
-          </ProseSection>
-        </>
-      );
-    case "workbench":
-      return (
-        <>
-          <p className="docs-lead">The Ask Workbench is a conversation about your codebase, held inside the Atlas dashboard. You ask in plain language; Atlas gathers the evidence — code passages from its index, git history, and the tickets, pull requests and findings of the sources you connected — plus what it computed itself (routes tables, usage counts, definitions, last changes); a model you choose writes the answer, citing that evidence line by line. Every citation opens the record it came from, and every thread is kept by the server so you can come back to it.</p>
-          <p>The Workbench needs a running service (<a className="text-link" href="#docs/service">Dashboard and HTTP API</a>) and an AI provider (<a className="text-link" href="#docs/assistants">AI assistant setup</a>). Without a provider it still answers, with Atlas's own deterministic verdict and facts.</p>
-          <ProseSection title="Open It">
-            <Command>{`atlas serve`}</Command>
-            <p>Open the dashboard (<code>http://127.0.0.1:3099/dashboard</code>) and choose <strong>Ask Workbench</strong>. The composer takes a question; the chips beneath it pick the repository, the sources to consult (Git, GitHub, Jira, Confluence, Pulse — the ones your service has connected), and the model.</p>
-            <p>A first question starts a thread. Every later question in the same composer continues it: the server keeps the turns, and the model reads the earlier ones as context. The rail on the left lists your threads; <code>#/workbench?thread=&lt;id&gt;</code> reopens one without re-asking anything.</p>
-          </ProseSection>
-          <ProseSection title="What Happens in a Turn">
-            <ol className="docs-list">
-              <li><strong>Plan.</strong> Atlas reads the question, resolves its scope (a repository, a file, a symbol, a ticket or a pull request) and plans which sources to ask.</li>
-              <li><strong>Gather.</strong> The sources run in parallel: the index returns the passages and definitions that match, git blames the lines the question points at, GitHub, Jira, Confluence and Pulse return their records. When the question asks who changed something or which of two things is actually used, Atlas pre-fetches the blame and the callers so the model has them from the start.</li>
-              <li><strong>Compute.</strong> Atlas builds its exact verdict and facts — the routes table, the usage summary, the definitions, the last change — and hands them to the model as labelled evidence (<code>S1</code>…<code>S5</code>) beside the passages (<code>A…</code>), commits (<code>G…</code>), tickets (<code>J…</code>), pages (<code>C…</code>) and findings (<code>P…</code>).</li>
-              <li><strong>Answer.</strong> The model writes the answer in whatever shape the question calls for — a sentence, a list, a table, a walk-through — citing the labels inline. A multi-part question is answered part by part.</li>
-              <li><strong>Ask for more.</strong> When the evidence does not cover something Atlas could fetch, the model asks for it (a symbol's whole body, a file, a search, the callers of a function, a git blame, a ticket) and Atlas resolves the request in well under a second. If the model answered first and then asked, it revises the answer once as a patch: only the sections the new evidence changes are rewritten, and they are marked. By default a turn makes at most three model calls and one revision; what the model would still like to fetch is offered as a follow-up suggestion instead.</li>
-            </ol>
-            <p>The whole turn streams, so you watch the sources answer, the model write, and the revision land.</p>
-          </ProseSection>
-          <ProseSection title="Reading an Answer">
-            <Bullets>
-              <li><strong>Citations</strong> are chips (<code>A3</code>, <code>G1</code>, <code>J2</code>). Click one for the evidence: the passage with its path and lines, the commit, the ticket. Ticket keys, pull request numbers and commit hashes in the prose are links to Jira or GitHub when the turn holds that record; file paths and symbols link to the Code Map.</li>
-              <li><strong>How Atlas got here</strong> (below the answer) opens the deterministic trail: the exact facts with their source tags, the plan, the routes table, every evidence item.</li>
-              <li><strong>The trust cue</strong> in the footer counts the statements that cite evidence and flags the ones that do not; <strong>Check</strong> opens the graded view.</li>
-              <li><strong>Copy</strong>, <strong>Link</strong> and <strong>Re-ask</strong> sit in the footer. Copy gives the answer as Markdown with its sources; Link is a permalink to the turn at its snapshot; Re-ask runs the same question again at that snapshot as a new turn.</li>
-              <li><strong>Follow up</strong> chips under the last turn are the model's suggested next questions; the composer continues the thread.</li>
-            </Bullets>
-          </ProseSection>
-          <ProseSection title="The Side Panel">
-            <p>The panel on the right follows the selected turn and names it ("Turn 2 of 3 · 10:24 · 3 rounds · revised once · 48 s"), with ‹ › to move between turns.</p>
-            <Bullets>
-              <li><strong>Evidence</strong> lists everything the turn gathered, by source.</li>
-              <li><strong>Inspector</strong> shows one item in full; pin a chip to keep it there.</li>
-              <li><strong>Run</strong> tells the turn as a timeline — planned, gathered, answered, asked, fetched, revised, checked, done — with the time each step took. The <strong>Conversation</strong> scope shows where the time went across every turn.</li>
-              <li><strong>Tokens</strong> shows what the turn cost: the prompt the model read (input, including the prompt cache), its output, the time, and the budget; per model call inside the turn, and totals across the conversation with one row per question.</li>
-            </Bullets>
-          </ProseSection>
-          <ProseSection title="Threads, Ownership and Sharing">
-            <p>Threads live in the service's database, not in the browser. On a laptop's own Atlas every thread belongs to you. A shared service (one that identifies its callers through a Jira OAuth session or a gateway identity header) keeps each thread private to its owner unless the owner shares it with the tenant; an operator token sees all of them, a read-only token sees shared ones. Rename, share and delete from the thread's header.</p>
-          </ProseSection>
-          <ProseSection title="Use It from the API">
-            <p>The Workbench is an HTTP route like every other dashboard feature, so a script or another tool can ask the same questions:</p>
-            <Command>{`# ask, streaming the turn as server-sent events (thread_id continues a thread)\ncurl -N -X POST http://127.0.0.1:3099/api/v1/ask/workbench \\\n  -H 'content-type: application/json' \\\n  -d '{"question":"what are the auth routes, and who last changed the login one?"}'\n\n# the threads the server keeps\ncurl http://127.0.0.1:3099/api/v1/ask/workbench/threads\ncurl http://127.0.0.1:3099/api/v1/ask/workbench/threads/<id>`}</Command>
-            <p>The stream's frames — <code>thread</code>, <code>plan</code>, <code>agent.*</code>, <code>merge</code>, <code>verify</code>, <code>meta</code>, <code>delta</code>, <code>more</code>, <code>usage</code>, <code>patch</code>, <code>done</code> — are described in <code>openapi.json</code> on the running service. A thread is read with <code>{"GET …/threads/{id}"}</code>, renamed with <code>PATCH</code>, deleted with <code>DELETE</code>; <code>DELETE …/threads</code> removes all of the caller's threads. Reads need the read-only token or better where a token is set; writes need the read-write token.</p>
-          </ProseSection>
-          <ProseSection title="Choosing the Model">
-            <p>The Workbench uses the same providers as the Ask page's AI answers: a <code>claude</code> or <code>codex</code> CLI that is installed and logged in is detected automatically, and an API key can be stored with <code>atlas llm set</code>. <code>atlas llm status</code> shows what is configured and which models the provider offers; the composer's model menu lists those models. On the Claude CLI, a call that only decides what Atlas should fetch runs at low reasoning effort; the answer runs at the CLI's default unless <code>ATLAS_WORKBENCH_ANSWER_EFFORT</code> says otherwise.</p>
-          </ProseSection>
-          <ProseSection title="What Leaves the Machine">
-            <p>Only when a model is configured and a question is asked: the question, the labelled evidence the turn gathered (passages, never whole files; records from the connected sources), the earlier turns of the thread as context, and the instructions. Nothing is sent when no provider is configured, and nothing is sent for the exact verdict. See <a className="text-link" href="#docs/privacy">Privacy and Data Handling</a>.</p>
-          </ProseSection>
-          <ProseSection title="Limits and Settings">
-            <div className="docs-table-wrap"><table><thead><tr><th>Setting</th><th>Default</th><th>What it bounds</th></tr></thead><tbody>
-              <tr><td><code>ATLAS_WORKBENCH_MODEL_ROUNDS</code></td><td><code>3</code></td><td>Model calls one answer may make (an answer, plus rounds of asking Atlas for more)</td></tr>
-              <tr><td><code>ATLAS_WORKBENCH_MODEL_REVISIONS</code></td><td><code>1</code></td><td>Times an answer may be written again after the model asked for more</td></tr>
-              <tr><td><code>ATLAS_WORKBENCH_MAX_EVIDENCE_TOKENS</code></td><td><code>24000</code></td><td>Evidence a prompt may carry; past it the prompt is trimmed and the trimmed items are listed</td></tr>
-              <tr><td><code>ATLAS_WORKBENCH_ANSWER_MAX_TOKENS</code></td><td><code>4000</code></td><td>The longest reply, on the API providers</td></tr>
-              <tr><td><code>ATLAS_WORKBENCH_ASK_EFFORT</code> / <code>ATLAS_WORKBENCH_ANSWER_EFFORT</code></td><td><code>low</code> / the CLI's own</td><td>Reasoning effort of an asking call and of an answering call on the Claude CLI</td></tr>
-              <tr><td><code>ATLAS_WORKBENCH_HISTORY_TURNS</code> / <code>ATLAS_WORKBENCH_HISTORY_RUNES</code></td><td><code>6</code> / <code>4000</code></td><td>How much of the thread the model reads as context</td></tr>
-              <tr><td><code>ATLAS_WORKBENCH_MODEL_TURNS_PER_HOUR</code></td><td><code>30</code></td><td>Model turns per token per hour; past it a turn answers with the exact verdict only</td></tr>
-              <tr><td><code>ATLAS_WORKBENCH_TURNS_PER_HOUR</code></td><td><code>240</code></td><td>Turns per token per hour; past it the route answers <code>429</code> with <code>retry_after</code></td></tr>
-              <tr><td><code>ATLAS_WORKBENCH_MODEL_FORMAT</code></td><td><code>answer</code></td><td><code>chat</code> switches back to the earlier two-part explanation format</td></tr>
-            </tbody></table></div>
-            <p><code>atlas config list</code> prints every setting with its current value; see <a className="text-link" href="#docs/configuration">Configuration</a> for precedence.</p>
-          </ProseSection>
-          <ProseSection title="When It Does Not Answer">
-            <Bullets>
-              <li><strong>"Exact only" and no model chip</strong>: no provider is configured or detected. <code>atlas llm status</code> says why; <code>atlas llm detect --apply</code> registers a logged-in CLI.</li>
-              <li><strong><code>llm_auth_failed</code> although the CLI is logged in</strong>: the service could not probe the CLI in time — typically a VPN or endpoint-security agent slowing every process launch on the host. Ask again without the tunnel, or store an API key so no subprocess is needed.</li>
-              <li><strong>"The model is off for this question"</strong>: the hourly model budget for your token is spent; the exact verdict still answers.</li>
-              <li><strong>A thread answers 404</strong>: it is not yours to see on a shared service, or it was deleted.</li>
-            </Bullets>
-            <p>See <a className="text-link" href="#docs/troubleshooting">Troubleshooting</a> for service-level problems.</p>
           </ProseSection>
         </>
       );
@@ -2176,66 +1882,7 @@ function DocsPage({ slug }) {
         </>
       );
     default:
-      return (
-        <>
-          <p className="docs-lead">This guide takes a repository from unindexed to queryable: build the local index, verify it is healthy, run the core queries, and connect an AI assistant. Atlas is local-first — everything below runs on your machine against an embedded database, with no server or account required. For the mental model behind these commands, see <a className="text-link" href="#docs/concepts">Core Concepts</a>.</p>
-          <ProseSection title="1. Check Prerequisites">
-            <p>Confirm the binary is installed and on <code>PATH</code> before anything else, because assistants and scripts resolve <code>atlas</code> from <code>PATH</code> too.</p>
-            <Command>{`command -v atlas\natlas version`}</Command>
-            <p>If either command fails, follow <a className="text-link" href="#docs/installation">Installation</a> first. You also need a local checkout of the repository you want to index; a git repository is required for commit-pinned indexing (<code>--ref</code>) and the per-commit snapshot history.</p>
-          </ProseSection>
-          <ProseSection title="2. Index a Repository">
-            <p>Indexing builds everything Atlas knows about a repository: it parses symbols, call edges, and routes, and persists the <strong>knowledge graph</strong> plus a lexical search index.</p>
-            <Command>{`cd /path/to/repository\natlas index .`}</Command>
-            <p>Progress is printed to stderr while the run reports discovery and completion stats. Results are stored in an embedded SQLite database in the repository: <code>.atlas/atlas.db</code></p>
-            <p>By default the indexer skips paths git ignores (build output, caches, vendored runtimes); pass <code>--gitignore=false</code> to index everything. The first run parses the whole repository; later runs are incremental deltas. Use <code>--reindex</code> to force a full rebuild, and <code>--ref</code> to index a specific commit or branch instead of the working tree. See <a className="text-link" href="#docs/indexing">Indexing and Reindexing</a> for exclusions, watch mode, and the optional embedding pass (<code>--enable-vectors</code>).</p>
-          </ProseSection>
-          <ProseSection title="3. Confirm Readiness">
-            <p>Verify the index before relying on query results, so an empty or drifted database does not silently return nothing.</p>
-            <Command>{`atlas status\natlas stats`}</Command>
-            <p><code>atlas status</code> reports storage and version health: the schema and index-format contracts and the per-repo snapshot format state. <code>atlas stats</code> reports graph and index telemetry for the indexed repository. Look for your repository identity, a current snapshot, and non-zero symbol and edge counts. Zero counts or a missing repository mean the index did not build — see <a className="text-link" href="#docs/troubleshooting">Troubleshooting</a>.</p>
-          </ProseSection>
-          <ProseSection title="4. Run the First Queries">
-            <p>Each query answers a different question; pick the one that matches what you already know.</p>
-            <p>Use <code>search</code> when you know words or phrases but not exact names — it is code-aware lexical search (BM25 + trigram) over the symbol index:</p>
-            <Command>{`atlas search "authentication middleware" --format plain`}</Command>
-            <p>Use <code>symbol</code> when you know a name and want its definition(s) together with its callers and callees:</p>
-            <Command>{`atlas symbol NewServer`}</Command>
-            <p>Use <code>callers</code> before changing a function's behavior or signature, to see exactly which symbols call it directly:</p>
-            <Command>{`atlas callers NewServer --limit 25`}</Command>
-            <p>Use <code>refs</code> when a rename or type change is on the table — it lists call sites plus type-use references (params, fields, returns):</p>
-            <Command>{`atlas refs NewServer`}</Command>
-            <p>Use <code>context</code> when reviewing a change — it builds a bounded review-context bundle (16–32 KiB with the default <code>auto</code> intent) around the changed files:</p>
-            <Command>{`atlas context \\\n  --paths path/to/changed-file.go \\\n  --query "review correctness and regression risk" \\\n  --format json`}</Command>
-            <p>For the blast radius of a change — impacted symbols, files, and covering tests — use <code>impact</code>:</p>
-            <Command>{`atlas impact --paths path/to/changed-file.go`}</Command>
-            <p>Run <code>atlas &lt;command&gt; --help</code> for the full flag list of your installed version, or see the <a className="text-link" href="#docs/cli">CLI Reference</a>.</p>
-          </ProseSection>
-          <ProseSection title="5. Connect an AI Assistant">
-            <p>Bootstrap registers Atlas as an MCP server and installs the atlas-first skill and CLAUDE.md directive for every detected assistant (Claude desktop and CLI, Codex, Copilot, Cursor, Gemini), so assistants query the graph instead of grepping. Preview what would be written first:</p>
-            <Command>{`atlas bootstrap --dry-run`}</Command>
-            <p>Then apply it:</p>
-            <Command>{`atlas bootstrap`}</Command>
-            <p>Bootstrap is idempotent — safe to run repeatedly. Use <code>--only</code> or <code>--skip</code> (comma-separated agent lists) to limit which assistants are provisioned. Restart the assistant after configuration changes, and run <code>atlas doctor --verify atlas</code> to confirm the <code>atlas</code> on <code>PATH</code> — what assistants launch — matches the binary you installed. See <a className="text-link" href="#docs/mcp">MCP Tools</a> for the tool surface assistants receive.</p>
-          </ProseSection>
-          <ProseSection title="6. Keep the Index Fresh">
-            <p>Query results are only as current as the last index run. After meaningful changes, run an incremental update:</p>
-            <Command>{`atlas index .`}</Command>
-            <p>For a foreground process that re-indexes on every file change (edits within 250 ms are coalesced into one update):</p>
-            <Command>{`atlas watch`}</Command>
-            <p>Reserve <code>atlas index . --reindex</code> for format changes or recovery, per <a className="text-link" href="#docs/indexing">Indexing and Reindexing</a>.</p>
-          </ProseSection>
-          <ProseSection title="Where to Go Next">
-            <Bullets>
-              <li><a className="text-link" href="#docs/concepts">Core Concepts</a> — the graph, snapshots, workspaces, and output control that every command shares.</li>
-              <li><a className="text-link" href="#docs/cli">CLI Reference</a> — every command and flag.</li>
-              <li><a className="text-link" href="#docs/mcp">MCP Tools</a> — what assistants can call after bootstrap.</li>
-              <li><a className="text-link" href="#docs/configuration">Configuration</a> — knob precedence and <code>atlas config</code>.</li>
-              <li><a className="text-link" href="#docs/troubleshooting">Troubleshooting</a> — empty results, drift, and recovery.</li>
-            </Bullets>
-          </ProseSection>
-        </>
-      );
+      return null;
   }
 }
 

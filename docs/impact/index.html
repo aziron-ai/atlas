@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xs573jloed");</script>
+  <title>Impact and Review — Atlas documentation</title>
+  <meta name="description" content="Blast radius, routes, cross-repo consumers and review context for a change.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="../../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../../assets/atlas-icon-128.png">
+  <link rel="canonical" href="https://atlas.aziro.com/docs/impact/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="Impact and Review — Atlas">
+  <meta property="og:description" content="Blast radius, routes, cross-repo consumers and review context for a change.">
+  <meta property="og:url" content="https://atlas.aziro.com/docs/impact/">
+  <meta property="og:image" content="https://atlas.aziro.com/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Impact and Review — Atlas">
+  <meta name="twitter:description" content="Blast radius, routes, cross-repo consumers and review context for a change.">
+  <meta name="twitter:image" content="https://atlas.aziro.com/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Impact and Review","description":"Blast radius, routes, cross-repo consumers and review context for a change.","url":"https://atlas.aziro.com/docs/impact/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-08-05"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"Impact and Review","item":"https://atlas.aziro.com/docs/impact/"}]}]</script>
+  <style>
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .brand-logo { display:block; width:29px; height:24px; object-fit:contain; }
+  .brand-word { font-size:14px; letter-spacing:.22em; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#eef2f7; border:1px solid var(--line); padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:var(--raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; box-shadow:var(--shadow); }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#f8fafc; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://atlas.aziro.com/"><img class="brand-logo" src="../../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://atlas.aziro.com/">Home</a> / <a href="https://atlas.aziro.com/docs/">Docs</a> / Impact and Review</nav>
+      <a class="open-app" href="https://atlas.aziro.com/#docs/impact">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>Impact and review</h1>
+<p>Impact answers the question you ask before you change something: what else does this reach? You name the symbols or files you are about to change; Atlas walks the stored call and import edges backwards to every symbol, file and test that could notice, and joins the result with the routes the repository serves and the repositories that call them. Reach for it before a refactor, while reviewing a pull request, or when you need to know which tests to run.</p>
+<h2>Open It</h2>
+<p>In the dashboard, choose <strong>Impact</strong> in the EXPLORE group (<code>#/impact</code>). The view opens on the first repository with nothing picked. Everything you pick is written into the address — <code>#/impact?repo=&lt;repo&gt;&amp;symbols=a,b&amp;depth=3</code> — so a radius can be linked and reopened.</p>
+<figure><img src="../../assets/docs/impact/impact-empty.png" alt="The Impact view before anything is picked: Repository, Add a symbol to the change set, depth and Compute radius" loading="lazy" decoding="async"><figcaption>Impact with nothing picked yet. The radius appears under the picker.</figcaption></figure>
+<p>From a terminal, the same question is one command. Positional arguments are symbols; changed files go in <code>--paths</code>:</p>
+<pre><code>atlas impact StreamChatCompletions
+atlas impact --paths api/context_window.go</code></pre>
+<h2>Find What a Change Reaches</h2>
+<figure class="clip"><video autoplay muted loop playsinline preload="metadata" poster="../../assets/docs/impact/pick-a-symbol.png" aria-label="Typing StreamChatCompletions into the Impact picker, choosing the provider method, and the blast radius appearing"><source src="../../assets/docs/impact/pick-a-symbol.mp4" type="video/mp4"><img src="../../assets/docs/impact/pick-a-symbol.gif" alt="Typing StreamChatCompletions into the Impact picker, choosing the provider method, and the blast radius appearing"></video><figcaption>Picking StreamChatCompletions on inference-gateway. The radius computes as soon as a symbol is picked.</figcaption></figure>
+<ol><li>Choose the <strong>Repository</strong>.</li><li>Type a name into <strong>Add a symbol to the change set…</strong>. The list offers only symbols the index holds, with their kind and <code>path:line</code>; free text is never accepted as a symbol.</li><li>Pick one. The radius computes at once. Add more symbols (up to 12) to widen the change set; <strong>×</strong> on a chip removes it.</li><li><strong>depth</strong> (1 to 6, default 3) bounds how many reverse hops the walk takes. <strong>Compute radius</strong> runs it again.</li></ol>
+<p><strong>One name, every definition.</strong> A name stands for every definition that carries it. In inference-gateway, <code>StreamChatCompletions</code> is an interface method, the provider's method and two test mocks, so the verdict starts from 4 seeds and lists all four under <strong>traversal roots</strong>.</p>
+<h2>Read the Radius</h2>
+<figure><img src="../../assets/docs/impact/impact-radius.png" alt="The Impact verdict: Changing these 4 seeds would touch 10 symbols across 8 files, the traversal roots, the impacted symbols and the impacted files grouped by module" loading="lazy" decoding="async"><figcaption>The radius of StreamChatCompletions: 10 symbols across 8 files at depth 3, with 6 covering tests.</figcaption></figure>
+<ul><li><strong>The verdict</strong> — &quot;Changing these 4 seeds would touch 10 symbols across 8 files&quot;, with the depth reached and the number of covering tests. It is labelled <strong>structural verdict</strong>: counted from stored edges, not written by a model. <strong>Copy link to this radius</strong> copies the address.</li><li><strong>Impacted symbols</strong> are chips; each opens the Symbol Inspector.</li><li><strong>Impacted files</strong> are grouped by module (here <code>tests</code> 4, <code>api</code> 2, <code>internal/mcp</code> 2), each with the reason the server gave — <code>caller</code> for all eight.</li><li><strong>Covering tests in the radius</strong> lists the tests that reach the change, with <code>path:line</code>: the list to run before you merge.</li><li><strong>Affected routes</strong> are the contracts whose handler symbol and file are both in the radius — here <code>POST /chat/completions</code> through <code>ChatCompletionsHandler</code>. Contracts that only share a file are counted, not listed.</li><li><strong>Cross-repo blast</strong> checks whether another indexed repository calls a route served from the impacted files. On this single-repository demo it reads &quot;no call site in another repo hits a route served from these files (10 served routes in the closure, 42 changed paths checked)&quot;.</li></ul>
+<figure><img src="../../assets/docs/impact/impact-tests-routes.png" alt="Further down the radius: impacted files by module, covering tests with path and line, the affected route POST /chat/completions, and the cross-repo line" loading="lazy" decoding="async"><figcaption>Covering tests, the affected route and the cross-repo line for the same radius.</figcaption></figure>
+<p>An empty radius is a finding, not an error: no stored edge reaches the seeds.</p>
+<h2>Read the Routes a Repository Serves</h2>
+<p>Choose <strong>Routes</strong> in the EXPLORE group (<code>#/routes</code>). It lists the HTTP contracts the index proved, each with its method, path pattern, handler, file and the server's <strong>CONF</strong> (confidence) verbatim. The filter box narrows by path, handler or method; <strong>all</strong> / <strong>≥ medium</strong> / <strong>high only</strong> sets a confidence floor. Rows are grouped by the module of the handler's file.</p>
+<figure><img src="../../assets/docs/impact/routes-table.png" alt="The Routes view for inference-gateway: 20 contracts, 7 GET, 11 POST, 1 ALL, 1 ANY, 10 medium and 10 low confidence, with the api group of 9 routes" loading="lazy" decoding="async"><figcaption>inference-gateway serves 20 contracts: 7 GET, 11 POST, 1 ALL and 1 ANY; 10 medium and 10 low confidence.</figcaption></figure>
+<p>Of the 20, eleven are registered by <code>cmd/gateway/main.go</code> (one of them, <code>POST /metrics</code>, is handled by a test mock) and nine by the example MCP servers under <code>examples/</code>. <code>atlas stats</code> reports 71 route rows for the snapshot: 32 are outbound HTTP calls the gateway makes, and the rest are the registrations this view folds into 20 contracts.</p>
+<p>On a row:</p>
+<ul><li>The <strong>handler</strong> name opens the Symbol Inspector.</li><li><strong>chain</strong> opens the Inspector with the handler's callers, references and neighbours loaded.</li><li>The crosshair button opens <strong>Impact</strong> for that handler.</li><li>A click anywhere else opens the <strong>Dependency panel</strong> under the row: <strong>IMPLEMENTS — SAME REPO</strong> (the handler's call chain from the stored graph) and <strong>CONSUMED BY — OTHER REPOS</strong> (call sites in other indexed repositories that match this route).</li></ul>
+<figure><img src="../../assets/docs/impact/routes-dependency.png" alt="The Dependency panel under POST /chat/completions: IMPLEMENTS shows ChatCompletionsHandler at api/routes.go:46, CONSUMED BY shows no recorded call site in another repo" loading="lazy" decoding="async"><figcaption>The Dependency panel of POST /chat/completions. The graph records no outgoing call edge from the handler; no other repository calls the route.</figcaption></figure>
+<h2>Find Who Calls a Route from Another Repository</h2>
+<p>Cross-repo answers join two repositories: the routes one serves and the HTTP calls another makes. Three commands ask it from either side:</p>
+<ul><li><code>atlas consumers</code> — the other repositories that call a route this one serves.</li><li><code>atlas dependencies</code> — the producers and handlers that serve the calls this one makes.</li><li><code>atlas cross-repo-impact --paths &lt;files&gt;</code> — which other repositories call the routes served by the handlers in the changed files.</li></ul>
+<p>The demo service holds one code repository, so every join is empty. This is the real output, and the shape a populated answer fills:</p>
+<pre><code>atlas consumers --format plain</code></pre>
+<pre><code>consumers inference-gateway  impacted 0/0  repos 0/0
+  producer  52496750  indexed 2026-10-28T05:16:55Z</code></pre>
+<pre><code>atlas cross-repo-impact --paths api/routes.go</code></pre>
+<pre><code>{
+  &quot;repo&quot;: &quot;inference-gateway&quot;,
+  &quot;served_routes&quot;: [
+    { &quot;method&quot;: &quot;GET&quot;, &quot;path_pattern&quot;: &quot;/health&quot;,
+      &quot;handler_file&quot;: &quot;api/routes.go&quot;, &quot;handler_symbol&quot;: &quot;HealthcheckHandler&quot;,
+      &quot;confidence&quot;: &quot;medium&quot;, &quot;registered_in&quot;: &quot;cmd/gateway/main.go&quot;, &quot;registered_line&quot;: 310 },
+    …
+  ],
+  &quot;impacted&quot;: [],
+  &quot;consumer_repos&quot;: [],
+  &quot;producer_commit&quot;: &quot;524967508e9d90185c4a1c3540cac0dcda7c580a&quot;,
+  &quot;closure_size&quot;: 13,
+  &quot;effective_changed_paths&quot;: 14,
+  &quot;total_served_routes&quot;: 10
+}</code></pre>
+<p>With a second repository indexed — a front end or another service whose code calls these paths — <code>impacted</code> lists each matched route with the calling file and symbol, and <code>consumer_repos</code> names the callers. The same joins feed the <strong>CONSUMED BY</strong> half of the Dependency panel, the cross-repo line of Impact, and the <strong>Repos</strong> lens of the Code Map, which draws a repo-pair matrix: rows consume, columns produce.</p>
+<figure><img src="../../assets/docs/impact/repos-lens.png" alt="The Code Map Repos lens: a repo-pair matrix of github://github, inference-gateway and prometheus://promlabs, all zero, and the note No cross-repo route join recorded" loading="lazy" decoding="async"><figcaption>The Repos lens on the demo. The other two rows are connected sources, which serve no routes, so every cell is 0.</figcaption></figure>
+<h2>Gather Review Context for a Change</h2>
+<p>Three read-only commands prepare a review. <code>atlas context</code> builds a bounded bundle around changed paths — the changed symbols with excerpts, retrieval hits for an optional question, the impacted files and the edges between them — sized for a model's context window:</p>
+<pre><code>atlas context --format plain --paths providers/core/provider.go &quot;how are streaming chat completions forwarded&quot;</code></pre>
+<pre><code>context  mode symbol_context  files 13  symbols 32  edges 17  hits 4  impacted 0
+  files(13)  providers/core/provider.go, internal/guardrails/guardrails.go, logger/logger.go, …
+  symbols(29)  HTTPError, StatusCode, Message, Error, ProviderImpl, ID, Name, URL, Token, …</code></pre>
+<p><code>atlas receipt</code> compares a git base with <code>HEAD</code> against the local snapshot and prints what the diff touches. It never indexes or writes anything:</p>
+<pre><code>atlas receipt --base HEAD~3</code></pre>
+<pre><code>Atlas pre-submit receipt
+changed paths: 4
+changed symbols:
+  VERSION — callers ambiguous (config/meta.go:5)
+  TracesEndpointURL — callers 2 (otel/otel.go:86)
+  Init — callers ambiguous (otel/otel.go:104)
+  TestTracingTracesEndpointURL — callers 0 (tests/tracing_test.go:312)
+caller note: ambiguous means multiple same-named definitions; count withheld
+served routes touched: 10
+consumer repos: 0
+local snapshot e842033e · commit 52496750 · NOT the server's snapshot</code></pre>
+<p><code>atlas coverage</code> lists the tests that reach a symbol. Without an imported coverage profile it answers from the call graph (<code>mode static</code>); <code>atlas coverage import</code> loads a Go coverprofile or LCOV file for real line coverage:</p>
+<pre><code>atlas coverage --format plain StreamChatCompletions</code></pre>
+<pre><code>coverage StreamChatCompletions  mode static  covered true  dir tests_for_symbol
+  tests(20)  TestRunWithStreamReturnsWhenConsumerAbandons, TestChatCompletionsHandler_StreamingErrorHandling, TestChatCompletionsRouting_StreamingPassthrough, TestAgent_RunWithStream, …</code></pre>
+<h2>From the CLI</h2>
+<pre><code>atlas impact StreamChatCompletions --format plain</code></pre>
+<pre><code>impact  symbols 10  files 8  tests 6  depth 3
+  symbols(10)  ChatCompletionsHandler, Middleware, RunWithStream, TestAgent_RunWithStream, …
+  files(8)  api/middlewares/mcp.go, api/routes.go, internal/mcp/agent.go, internal/mcp/client_concurrency_test.go, …
+  tests(6)  TestRunWithStreamReturnsWhenConsumerAbandons, TestChatCompletionsHandler_StreamingErrorHandling, …</code></pre>
+<pre><code>atlas route-contracts --format plain</code></pre>
+<pre><code>route_contracts inference-gateway  total 20
+  ALL /mcp  confidence low  source route_table
+  ANY /metrics  Handler  confidence low  source route_table
+  GET /  confidence low  source route_table
+  GET /capabilities  func  confidence low  source route_table
+  GET /health  HealthcheckHandler  confidence medium  source route_table
+  …</code></pre>
+<p><code>--max-depth</code> bounds the walk (default 3) and <code>--tests=false</code> leaves out covering tests. The <a href="../cli/">CLI reference</a> lists every flag.</p>
+<h2>From the API and MCP</h2>
+<p>The views read these routes on the running service (<a href="../service/">Dashboard and API</a>):</p>
+<table><thead><tr><th>Route</th><th>Answers</th></tr></thead><tbody><tr><td><code>POST /api/v1/impact</code></td><td>The radius: <code>{&quot;symbols&quot;: […], &quot;repo_id&quot;: &quot;…&quot;, &quot;max_depth&quot;: 3}</code></td></tr><tr><td><code>GET /api/v1/repos/{repo}/route-contracts</code></td><td>The routes a repository serves, paged with <code>next_offset</code></td></tr><tr><td><code>GET /api/v1/repos/{repo}/consumers</code> · <code>/dependencies</code></td><td>Cross-repo callers and producers</td></tr><tr><td><code>GET /api/v1/repos/{repo}/consumer-contracts</code></td><td>Every outbound call the repository makes, matched or not</td></tr><tr><td><code>POST /api/v1/repos/{repo}/cross-repo-impact</code></td><td>Cross-repo blast for <code>{&quot;changed_paths&quot;: […]}</code></td></tr></tbody></table>
+<p>An assistant asks the same questions over MCP through the <code>impact</code> tool (with <code>scope=cross_repo</code> for the cross-repo radius), <code>routes</code> and <code>context</code>. See <a href="../mcp/">MCP tools</a>.</p>
+<h2>Related</h2>
+<ul><li><a href="../code-map/">Code Map and graph</a> — walk the callers and callees a radius is made of.</li><li><a href="../history/">Change lens and history</a> — what an indexing pass changed, and how history grows.</li><li><a href="../workbench/">Ask Workbench</a> — ask about a change in plain language, with citations.</li><li><a href="../mcp/">MCP tools</a> — the same answers for an AI assistant.</li></ul>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../workbench/">← Ask Workbench</a></span>
+      <span><a href="../history/">Change Lens and History →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../tour/">What Atlas Does</a>
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
+        <a href="../dashboard/">The Dashboard</a>
+        <a href="../code-map/">Code Map and Graph</a>
+        <a href="../search-and-ask/">Search and Ask</a>
+        <a href="../workbench/">Ask Workbench</a>
+        <a href="../impact/">Impact and Review</a>
+        <a href="../history/">Change Lens and History</a>
+        <a href="../sources/">Connected Sources</a>
+        <a href="../observe/">Observe</a>
+        <a href="../skills/">Skills and Automations</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../teams/">One Atlas for a Team</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>

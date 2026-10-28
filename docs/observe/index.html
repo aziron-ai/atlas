@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xs573jloed");</script>
+  <title>Observe — Atlas documentation</title>
+  <meta name="description" content="Logs, incidents, alerts, builds and traces, bounded and cited.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="../../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../../assets/atlas-icon-128.png">
+  <link rel="canonical" href="https://atlas.aziro.com/docs/observe/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="Observe — Atlas">
+  <meta property="og:description" content="Logs, incidents, alerts, builds and traces, bounded and cited.">
+  <meta property="og:url" content="https://atlas.aziro.com/docs/observe/">
+  <meta property="og:image" content="https://atlas.aziro.com/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Observe — Atlas">
+  <meta name="twitter:description" content="Logs, incidents, alerts, builds and traces, bounded and cited.">
+  <meta name="twitter:image" content="https://atlas.aziro.com/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Observe","description":"Logs, incidents, alerts, builds and traces, bounded and cited.","url":"https://atlas.aziro.com/docs/observe/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-08-05"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"Observe","item":"https://atlas.aziro.com/docs/observe/"}]}]</script>
+  <style>
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .brand-logo { display:block; width:29px; height:24px; object-fit:contain; }
+  .brand-word { font-size:14px; letter-spacing:.22em; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#eef2f7; border:1px solid var(--line); padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:var(--raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; box-shadow:var(--shadow); }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#f8fafc; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://atlas.aziro.com/"><img class="brand-logo" src="../../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://atlas.aziro.com/">Home</a> / <a href="https://atlas.aziro.com/docs/">Docs</a> / Observe</nav>
+      <a class="open-app" href="https://atlas.aziro.com/#docs/observe">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>Observe</h1>
+<p>Observe connects Atlas to what your running system is doing: the logs it writes, the alerts that fire, the builds that fail and the traces it records. Atlas keeps a bounded summary of each — log templates with counts, alert and query summaries, trace summaries — and ties every line it can back to the file and function that emits it. Reach for it when something is wrong in production and you want to go from the symptom to the code in a few clicks.</p>
+<h2>Open It</h2>
+<p>The <strong>OBSERVE</strong> group sits in the dashboard's left rail: <strong>Log Streams</strong> (<code>#/logs</code>), <strong>What Changed</strong> (<code>#/diff</code>), <strong>Alerts &amp; Metrics</strong> (<code>#/alerts</code>), <strong>Builds</strong> (<code>#/builds</code>), <strong>Incidents</strong> (<code>#/incidents</code>) and <strong>Traces</strong> (<code>#/traces</code>). <strong>Live Activity</strong> (<code>#/events</code>) is at the top of the rail, under <strong>COMMAND</strong>.</p>
+<p>Each view needs one tool configured. Until it is, the view shows the three ways to configure that tool instead of data — nothing on these pages is sample data.</p>
+<table><thead><tr><th>View</th><th>Needs</th><th>Configure it with</th></tr></thead><tbody><tr><td><strong>Log Streams</strong>, <strong>What Changed</strong>, <strong>Incidents</strong></td><td>a Grafana Loki or Elasticsearch log pull</td><td><code>atlas logs pull add</code></td></tr><tr><td><strong>Alerts &amp; Metrics</strong></td><td>a Prometheus source</td><td><code>atlas source add &lt;name&gt; --kind prometheus</code></td></tr><tr><td><strong>Builds</strong></td><td>a Jenkins source</td><td><code>atlas source add &lt;name&gt; --kind jenkins</code></td></tr><tr><td><strong>Traces</strong></td><td>a Tempo source</td><td><code>atlas source add &lt;name&gt; --kind tempo</code></td></tr></tbody></table>
+<p>The same settings live in <strong>Fleet › Connectors</strong> (<code>#/connectors</code>), and each one is also a single HTTP <code>POST</code>. Whichever way you use, the service checks it can reach the tool before it saves anything. The pages below were recorded on a service with one log pull from a local Loki and one Prometheus source:</p>
+<pre><code>atlas logs pull add inference-gateway --source loki --url http://127.0.0.1:3100 \
+  --selector '{app=&quot;inference-gateway&quot;}' --stream inference-gateway --scope prod --since 7h
+
+atlas source add promlabs --kind prometheus --url https://demo.promlabs.com
+atlas source sync promlabs</code></pre>
+<p>A running <code>atlas serve</code> picks a new pull up on its next tick and runs it every <code>--every</code> (default 5m). The source sync turns the Prometheus rules into documents Atlas can cite; the alerts and queries themselves are asked live. See <a href="../sources/">Sources</a> for the other source kinds.</p>
+<p><strong>About the demo logs.</strong> The log lines in these screenshots were generated for this guide in the exact JSON shape inference-gateway's logger writes, and pushed into a local Loki. Every <code>caller</code> in them is a real log call in the repository, so everything Atlas resolves below is real.</p>
+<h2>Read What a Stream Is Saying</h2>
+<p>Open <strong>Log Streams</strong>. Atlas does not store log lines. As each line arrives it is reduced to a template — the sentence with its ids, times and numbers replaced by <code>&lt;*&gt;</code> — and Atlas keeps, per template, a count per UTC hour, a severity hint, the caller and a few exemplars with secrets masked. A stream's whole history stays a few hundred rows however many lines produced it.</p>
+<figure><img src="../../assets/docs/observe/log-streams.png" alt="Log Streams showing the inference-gateway stream in scope prod: 655 lines folded into 18 templates, loudest first, with level, hourly sparkline, caller and template" loading="lazy" decoding="async"><figcaption>655 lines of inference-gateway logs from the last 24 hours, folded into 18 templates.</figcaption></figure>
+<ul><li>The <strong>Streams</strong> rail lists every stream in the selected scope. The dot is the state of the pull that feeds it: <strong>fresh</strong>, <strong>stale</strong> (no successful pull within two cadences), <strong>pending</strong>, or <strong>no pull</strong>.</li><li>The table is loudest first: <strong>count</strong>, <strong>level</strong>, an <strong>hours</strong> sparkline, the <strong>caller</strong> the line names, and the <strong>template</strong>.</li><li>Narrow it with the scope picker, the window (<strong>last 15 min</strong> to <strong>last 7 d</strong>), the level, and <strong>contains…</strong> — a literal substring matched on the server, not a regex.</li></ul>
+<p>In this stream the three error templates that only appear in the last two hours — <code>failed to generate tokens</code>, <code>&lt;*&gt; status code</code> and <code>request timed out</code> — are the incident. The 449 <code>request received</code> lines are normal traffic.</p>
+<p>To see what changed rather than what is loud, open <strong>What Changed</strong>. It compares two windows of one stream from the stored hourly counts: templates that are <strong>New in B</strong>, <strong>Gone in B</strong>, and those whose per-minute rate moved. Pick <strong>Recent window</strong>, <strong>Around an instant</strong> (either side of a deploy) or <strong>Explicit windows</strong>, then <strong>Compare</strong>.</p>
+<figure><img src="../../assets/docs/observe/what-changed.png" alt="What Changed comparing the hour before against the last two hours: three new error templates, none gone, and four templates whose rate changed" loading="lazy" decoding="async"><figcaption>The three groq error templates are new in the last window; route not found doubled.</figcaption></figure>
+<p>Windows widen to whole UTC hours, and the page says so when a window is partial or starts before the stream was first fed.</p>
+<h2>Trace a Log Line to Its Code</h2>
+<p>Click a template row. The inspector on the right shows the skeleton, a masked exemplar, the caller and when it was first and last seen, then runs the <strong>resolve chain</strong>: it maps the exemplar to the file and line that emits it in the repository you pick (Atlas guesses the repository from the stream name).</p>
+<figure><img src="../../assets/docs/observe/log-template-inspector.png" alt="The template inspector for failed to generate tokens, resolved to api/routes.go:805 in ChatCompletionsHandler with a 100% score" loading="lazy" decoding="async"><figcaption>The template resolves to api/routes.go:805, inside ChatCompletionsHandler.</figcaption></figure>
+<p>A hit gives you three next steps: <strong>Symbol Inspector</strong>, <strong>Open in Resolve</strong> and <strong>Code Map</strong>, then <strong>Impact</strong> for the blast radius of the enclosing function. <strong>Run RCA</strong> opens the incident that groups this template, if there is one.</p>
+<figure class="clip"><video autoplay muted loop playsinline preload="metadata" poster="../../assets/docs/observe/log-template-to-source.png" aria-label="Clicking the request timed out template, the resolve chain landing on api/routes.go:801, then Code Map opening on ChatCompletionsHandler"><source src="../../assets/docs/observe/log-template-to-source.mp4" type="video/mp4"><img src="../../assets/docs/observe/log-template-to-source.gif" alt="Clicking the request timed out template, the resolve chain landing on api/routes.go:801, then Code Map opening on ChatCompletionsHandler"></video><figcaption>From a log template to the handler that logs it, on the Code Map.</figcaption></figure>
+<p>When nothing matches, the chain says so and why (for example, the caller names a file the selected repository does not carry) instead of guessing a plausible file.</p>
+<h2>Work an Incident</h2>
+<p>An incident is a group of error and warn templates that share a cause — the call-site file a structured line names, or the head of the error — across every stream of a scope, joined with the Prometheus alerts that are firing. The service recomputes incidents every 2 minutes over the last 24 hours (<code>ATLAS_INCIDENTS_EVERY</code>, <code>ATLAS_INCIDENTS_WINDOW</code>); <strong>Refresh</strong> does it now.</p>
+<figure><img src="../../assets/docs/observe/incidents.png" alt="Incidents in scope prod: six open incidents in the rail, the selected one keyed on api/routes.go with four member templates" loading="lazy" decoding="async"><figcaption>Six open incidents in scope prod. The selected one groups four templates logged from api/routes.go.</figcaption></figure>
+<ol><li>Pick an incident in the rail. They are ordered worst first: severity, then lines per hour. An <strong>alert only</strong> row is a firing alert with no matching log template.</li><li>Read the header: rate, state, the grouping key (<code>caller:api/routes.go</code>), when it was first and last seen, and its <strong>members</strong> — click a member to open its template in Log Streams.</li><li>Scroll to <strong>Evidence</strong>: up to 24 citations, numbered <strong>[n]</strong> — the log templates, the code that emits them, config and code lines that name the same identifiers, matching docs and alert rules.</li><li><strong>Ack</strong> (with an optional note) to say someone is on it, or <strong>Resolve</strong>. A resolved incident reopens if one of its members is seen again.</li></ol>
+<figure class="clip"><video autoplay muted loop playsinline preload="metadata" poster="../../assets/docs/observe/incident-to-source.png" aria-label="Selecting the failed to generate tokens incident and scrolling its evidence to the code card for api/routes.go:805 in ChatCompletionsHandler"><source src="../../assets/docs/observe/incident-to-source.mp4" type="video/mp4"><img src="../../assets/docs/observe/incident-to-source.gif" alt="Selecting the failed to generate tokens incident and scrolling its evidence to the code card for api/routes.go:805 in ChatCompletionsHandler"></video><figcaption>From an incident to the line of code its evidence cites.</figcaption></figure>
+<figure><img src="../../assets/docs/observe/incident-evidence.png" alt="The Evidence list with log template cards and the Actions card proposing a ticket, a pull request and an alert rule" loading="lazy" decoding="async"><figcaption>Evidence on the left; on the right, the actions Atlas derived from it, each awaiting approval.</figcaption></figure>
+<p><strong>Generate RCA</strong> asks the configured model for a verdict-first narrative over the evidence cards; every sentence must cite a card or it is dropped. The <strong>Actions</strong> card lists what to do next — a ticket draft, a pull request naming the cited files, an alert rule — as descriptors waiting in the <a href="../skills/">Action Queue</a>. Approving one records it for whoever carries it out; Atlas executes none of them.</p>
+<h2>Check Alerts and Query Metrics</h2>
+<p>Open <strong>Alerts &amp; Metrics</strong>. Each panel is one bounded question to the Prometheus you configured, asked when the page loads.</p>
+<figure><img src="../../assets/docs/observe/alerts-metrics.png" alt="Alerts and Metrics for the promlabs source: three firing or pending alerts, a PromQL summary of request rate by status, and scrape targets by job" loading="lazy" decoding="async"><figcaption>Alerts from the public PromLabs demo, a bounded query, and scrape targets.</figcaption></figure>
+<ul><li><strong>Firing</strong> — what fires and pends now, with the rule's summary, labels and value.</li><li><strong>Bounded query</strong> — type a PromQL expression, pick a window and press <strong>Run</strong>. The answer is a summary, never a series dump: the step Atlas chose so each series stays under its point budget, then <strong>min</strong>, <strong>max</strong>, <strong>avg</strong> and <strong>last</strong> per series.</li><li><strong>Scrape targets</strong> — up and down counts by job and environment, with the last error of any target that is down.</li></ul>
+<h2>Connect Builds and Traces</h2>
+<p><strong>Builds</strong> reads a Jenkins job board — each job's last result, duration and age — from the controller's Prometheus endpoint (the Prometheus metrics plugin), anonymously first and with the source's credential only when that is refused. Per-build console output is a separate Jenkins log pull, folded into templates like any log. No Jenkins is connected in this demo, so the view shows how to connect one:</p>
+<figure><img src="../../assets/docs/observe/builds-empty.png" alt="The Builds view before Jenkins is configured, showing the Connectors path, the CLI command and the HTTP request that configure it" loading="lazy" decoding="async"><figcaption>Builds with no Jenkins configured.</figcaption></figure>
+<p><strong>Traces</strong> asks a Tempo four kinds of bounded question: which services have traces in a window, a TraceQL search (newest first, at most a limit), one trace summarized on one screen (the services it crossed, the five slowest spans, the error spans), and a TraceQL metrics query under a point budget. There is no public Tempo to point this guide at, so here it is before one is connected:</p>
+<figure><img src="../../assets/docs/observe/traces-empty.png" alt="The Traces view before Tempo is configured, with the command atlas source add tempo --kind tempo --url http://tempo:3200" loading="lazy" decoding="async"><figcaption>Traces with no Tempo configured.</figcaption></figure>
+<pre><code>atlas source add tempo --kind tempo --url http://tempo:3200
+atlas source add jenkins --kind jenkins --url http://jenkins:8080/jenkins --email ops --token-env ATLAS_JENKINS_TOKEN</code></pre>
+<p>The view appears as soon as the source is saved; no reload is needed.</p>
+<h2>Watch Live Activity</h2>
+<p><strong>Live Activity</strong> is every event the service records across its connectors — index reads, recall turns, snapshot history and hub observations. Each row shows the time, the connector, what happened, the repository, how it was served, the tokens it returned and its latency. Filter by connector with the chips, by tier (<strong>automation</strong>, <strong>exact</strong>, <strong>semantic</strong>, <strong>live</strong>), or with <strong>Filter events…</strong>.</p>
+<figure><img src="../../assets/docs/observe/live-activity.png" alt="Live Activity filtered to the atlas connector: index events for github://github, prometheus://promlabs and inference-gateway" loading="lazy" decoding="async"><figcaption>Filtered to the atlas connector: the index run for inference-gateway and the two source syncs.</figcaption></figure>
+<h2>From the CLI</h2>
+<p>Every view has a command, and every command answers a bounded question. Streams the dashboard does not show — lines piped in with <code>atlas logs ingest</code> — are read the same way. A piped line counts in the hour it was ingested; a pull keeps each line's own time.</p>
+<pre><code>$ atlas logs ingest --stream inference-gateway --scope local --source-kind file &lt; gateway-info.log
+{ &quot;source&quot;: &quot;stdin&quot;, &quot;scope&quot;: &quot;local&quot;, &quot;stream&quot;: &quot;inference-gateway&quot;, &quot;batches&quot;: 1,
+  &quot;lines_read&quot;: 477, &quot;lines_ingested&quot;: 477, &quot;lines_skipped&quot;: 0, &quot;templates&quot;: 9, … }
+
+$ atlas logs streams
+STREAM             SCOPE  KIND  LAST_INGEST           LABELS
+inference-gateway  local  file  2026-10-28T06:14:21Z  -
+inference-gateway  prod   loki  2026-10-28T05:49:01Z  app=inference-gateway,detected_level=warn,env=prod,service_name=inference-gateway
+
+$ atlas logs templates --stream inference-gateway --scope prod --since 24h --limit 6
+COUNT  SEVERITY  LAST_SEEN             CALLER                    SKELETON
+449    info      2026-10-28T05:00:00Z  middlewares/logger.go:63  request received
+56     error     2026-10-28T05:00:00Z  api/routes.go:805         failed to generate tokens | err &lt;*&gt;:{&lt;*&gt;:&lt;*&gt;,&lt;*&gt;:&lt;*&gt;
+56     error     2026-10-28T05:00:00Z  core/provider.go:139      &lt;*&gt; status code | err &lt;*&gt;:{&lt;*&gt;:&lt;*&gt;,&lt;*&gt;:&lt;*&gt;
+27     error     2026-10-28T05:00:00Z  api/routes.go:801         request timed out | err context deadline exceeded
+18     info      2026-10-28T05:00:00Z  mcp/init.go:403           server reconnection failed | err failed to initialize client post &lt;*&gt; dial tcp &lt;*&gt; connect connection refused
+18     info      2026-10-28T05:00:00Z  mcp/init.go:397           attempting server reconnection
+
+$ atlas logs diff --stream inference-gateway --scope prod --window 1h
+LIST     COUNT_A  COUNT_B  CHANGE  SEVERITY  CALLER                    SKELETON
+new      0        56       new     error     api/routes.go:805         failed to generate tokens | err &lt;*&gt;:{&lt;*&gt;:&lt;*&gt;,&lt;*&gt;:&lt;*&gt;
+new      0        56       new     error     core/provider.go:139      &lt;*&gt; status code | err &lt;*&gt;:{&lt;*&gt;:&lt;*&gt;,&lt;*&gt;:&lt;*&gt;
+new      0        27       new     error     api/routes.go:801         request timed out | err context deadline exceeded
+changed  1        5        +165%   warn      api/routes.go:98          route not found</code></pre>
+<p><code>atlas logsites resolve</code> is the resolve chain on its own. It accepts raw lines or skeletons; a line the repository does not emit comes back <code>matched: false</code> with a reason.</p>
+<pre><code>$ atlas logsites resolve '{&quot;level&quot;:&quot;error&quot;,&quot;timestamp&quot;:&quot;2026-10-28T04:38:38.000Z&quot;,&quot;caller&quot;:&quot;api/routes.go:801&quot;,&quot;msg&quot;:&quot;request timed out&quot;,&quot;provider&quot;:&quot;groq&quot;,&quot;error&quot;:&quot;context deadline exceeded&quot;}' 'failed to reach upstream server'
+{
+  &quot;commit_sha&quot;: &quot;524967508e9d90185c4a1c3540cac0dcda7c580a&quot;,
+  &quot;results&quot;: [
+    { &quot;matched&quot;: true, &quot;file&quot;: &quot;api/routes.go&quot;, &quot;line&quot;: 801, &quot;symbol&quot;: &quot;ChatCompletionsHandler&quot;,
+      &quot;kind&quot;: &quot;method&quot;, &quot;score&quot;: 1, &quot;reason&quot;: &quot;caller&quot;,
+      &quot;skeleton&quot;: &quot;request timed out | err context deadline exceeded&quot; },
+    { &quot;matched&quot;: true, &quot;file&quot;: &quot;api/routes.go&quot;, &quot;line&quot;: 963, &quot;symbol&quot;: &quot;MessagesHandler&quot;,
+      &quot;kind&quot;: &quot;method&quot;, &quot;score&quot;: 1, &quot;reason&quot;: &quot;exact_skeleton&quot;,
+      &quot;skeleton&quot;: &quot;failed to reach upstream server&quot; }
+  ]
+}</code></pre>
+<pre><code>$ atlas metrics alerts
+metrics alerts  source promlabs  firing 3  pending 0  shown 3 of 3  limit 50  columns state/active_at/name/value/labels :: summary
+  firing  2026-10-28T05:48:01Z  DemoServiceHighErrorRate  0.5285230431169889  {job=&quot;demo&quot;,method=&quot;GET&quot;,path=&quot;/api/foo&quot;,severity=&quot;critical&quot;}  :: The 5xx error rate for path /api/foo with method GET in demo is 0.53%.
+  …
+
+$ atlas metrics query 'sum by (status) (rate(demo_api_request_duration_seconds_count[5m]))' --window 1h
+metrics query  source promlabs  mode range  window 1h  step 1m (60s)  max_points 60  points_per_series 60  series 3 of 3  limit 20
+  {status=&quot;200&quot;}  points 60  min 125.881  max 230.853  avg 171.563  first 191.586  last 200.881@2026-10-28T05:52:51Z
+  {status=&quot;404&quot;}  points 60  min 2.11579  max 5.14737  avg 3.33526  first 3.90527  last 4.10526@2026-10-28T05:52:51Z
+  {status=&quot;500&quot;}  points 60  min 0.954386  max 2.38245  avg 1.52099  first 1.61755  last 1.66667@2026-10-28T05:52:51Z
+
+$ atlas metrics rules
+metrics rules  source promlabs  repo prometheus://promlabs  groups 1  rules 5  alerting 5  recording 0  firing_rules 1  firing_alerts 2  unhealthy 0  shown 5  limit 500
+    alerting  firing  2  DemoServiceHighErrorRate  prometheus/rules/demo-service-alerts/demo-service-high-error-rate.md
+    …</code></pre>
+<pre><code>$ atlas incidents list --scope prod
+incidents  scope prod  state active  severity -  shown 6 of 6  limit 50  columns id/severity/state/rate_per_hour/streams/members/alerts/last_seen :: title
+  inc-f884ea2508ed  error  open  29.81/h  inference-gateway  1  0+0  2026-10-28T05:00:00Z  :: status code | err &lt;*&gt;:{&lt;*&gt;:&lt;*&gt;,&lt;*&gt;:&lt;*&gt;
+  inc-127dae35a3a0  error  open  17.18/h  inference-gateway  4  0+0  2026-10-28T05:00:00Z  :: failed to generate tokens | err &lt;*&gt;:{&lt;*&gt;:&lt;*&gt;,&lt;*&gt;:&lt;*&gt;
+  inc-27eb60fce071  error  open  2.908/h  inference-gateway  3  0+0  2026-10-28T05:00:00Z  :: server reconnection failed | err failed to initialize client post &lt;*&gt; dial tcp &lt;*&gt; connect connection refused
+  inc-1c7810a0f77d  error  open  0/h  -  0  1+0  2026-10-28T05:52:42Z  :: The 5xx error rate for path /api/foo with method POST in demo is 1.16%.
+  …
+
+$ atlas incidents show inc-127dae35a3a0 --evidence
+incident inc-127dae35a3a0  error  open  17.18/h  window 24h  key caller:api/routes.go
+members 4  columns stream/severity/count/caller :: skeleton
+  inference-gateway  error  56  api/routes.go:805  :: failed to generate tokens | err &lt;*&gt;:{&lt;*&gt;:&lt;*&gt;,&lt;*&gt;:&lt;*&gt;
+  inference-gateway  error  27  api/routes.go:801  :: request timed out | err context deadline exceeded
+  inference-gateway  warn  14  api/routes.go:98  :: route not found
+  inference-gateway  error  4  api/routes.go:963  :: failed to reach upstream server | err post &lt;*&gt; dial tcp lookup api.anthropic.com i/o timeout
+evidence  shown 17 of 17  cap 24  terms api.anthropic.com  columns kind/source/where/score :: title | excerpt | note
+  code  caller_resolve  inference-gateway api/routes.go:805  1  :: api/routes.go:805 ChatCompletionsHandler | … router.logger.Error(&quot;failed to generate tokens&quot;, err, &quot;provider&quot;, providerID) | …
+  config  content_scan  inference-gateway providers/constants/constants.go:10  1  :: … AnthropicDefaultBaseURL = &quot;https://api.anthropic.com/v1&quot; …
+  …</code></pre>
+<p>With no Jenkins or Tempo configured, <code>atlas builds</code> and <code>atlas traces</code> say exactly what to add:</p>
+<pre><code>$ atlas traces services
+atlas: no Tempo source is configured — add one: atlas source add &lt;name&gt; --kind tempo --url http://tempo:3200
+
+$ atlas builds jobs
+atlas: builds_source_not_found: no jenkins source is configured — `atlas source add &lt;name&gt; --kind jenkins --url http://jenkins:8080/jenkins --email &lt;jenkins user id&gt; --token-env ATLAS_JENKINS_TOKEN` records one; the board reads only its url</code></pre>
+<p>Assistants reach the same reads through the MCP tools <code>logs</code>, <code>logsite</code>, <code>metrics</code>, <code>builds</code>, <code>traces</code> and <code>incidents</code> (<a href="../mcp/">MCP Tools</a>). The full flag list is in the <a href="../cli/">CLI reference</a>.</p>
+<h2>From the API</h2>
+<p>Each view names its data source on the page. The routes behind them:</p>
+<ul><li><code>GET /api/v1/logs/streams</code>, <code>/logs/templates</code>, <code>/logs/diff</code>, <code>/logs/pulls</code>; <code>POST /api/v1/logs/ingest</code> and <code>/logs/pulls</code></li><li><code>POST /api/v1/resolve</code> — the resolve chain's first step</li><li><code>GET /api/v1/metrics/alerts</code>, <code>/metrics/targets</code>; <code>POST /api/v1/metrics/query</code></li><li><code>GET /api/v1/builds</code> and <code>GET /api/v1/traces?op=services|search|trace|metrics</code></li><li><code>GET /api/v1/incidents</code>, <code>/incidents/{id}?evidence=true</code>, <code>/incidents/{id}/actions</code>; <code>POST /api/v1/incidents/refresh</code>; <code>PATCH /api/v1/incidents/{id}</code> to ack, resolve or reopen</li></ul>
+<p>Writes need the read-write token when the service enforces one. See <a href="../service/">Dashboard and HTTP API</a>.</p>
+<h2>Related</h2>
+<ul><li><a href="../sources/">Sources</a> — Prometheus, Jenkins, Tempo, Grafana and the knowledge sources Atlas indexes.</li><li><a href="../impact/">Impact</a> — the blast radius of the function a log line resolves to.</li><li><a href="../skills/">Skills and automations</a> — the Action Queue where incident actions wait for approval.</li><li><a href="../mcp/">MCP Tools</a> — the Observe tools assistants call.</li><li><a href="../configuration/">Configuration</a> — <code>ATLAS_INCIDENTS_EVERY</code>, <code>ATLAS_INCIDENTS_WINDOW</code> and the log pull token allowlist.</li></ul>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../sources/">← Connected Sources</a></span>
+      <span><a href="../skills/">Skills and Automations →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../tour/">What Atlas Does</a>
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
+        <a href="../dashboard/">The Dashboard</a>
+        <a href="../code-map/">Code Map and Graph</a>
+        <a href="../search-and-ask/">Search and Ask</a>
+        <a href="../workbench/">Ask Workbench</a>
+        <a href="../impact/">Impact and Review</a>
+        <a href="../history/">Change Lens and History</a>
+        <a href="../sources/">Connected Sources</a>
+        <a href="../observe/">Observe</a>
+        <a href="../skills/">Skills and Automations</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../teams/">One Atlas for a Team</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>

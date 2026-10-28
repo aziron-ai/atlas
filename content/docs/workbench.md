@@ -28,6 +28,8 @@ continues it: the server keeps the turns, and the model reads the earlier ones
 as context. The rail on the left lists your threads; `#/workbench?thread=<id>`
 reopens one without re-asking anything.
 
+![Typing a question into the Ask Workbench composer, sending it, and the answer streaming in as a routes table](assets/docs/workbench/ask-a-question.mp4 "Asking on inference-gateway: the Atlas and Git lanes answer first (11 and 3 items), then Claude (claude-sonnet-5) writes. This turn took 7.2 s from plan to done.")
+
 ## What Happens in a Turn
 
 1. **Plan.** Atlas reads the question, resolves its scope (a repository, a
@@ -56,7 +58,11 @@ reopens one without re-asking anything.
 The whole turn streams, so you watch the sources answer, the model write, and
 the revision land.
 
+![The Run tab of the side panel: Planned, Atlas gathered 17 items, Exact verdict, Claude answered, Checked, Done](assets/docs/workbench/side-run.png "The Run tab tells the same turn back: planned at 48 ms, 17 items gathered, the exact verdict at 288 ms, Claude answered in 6.4 s, all 5 statements checked, done at 7.2 s.")
+
 ## Reading an Answer
+
+![A finished Workbench answer: a table of 10 routes with method, path and handler, each handler cited with a chip from A1 to A10](assets/docs/workbench/finished-answer.png "A finished answer. The table lists the 10 routes main.main registers; each handler carries its citation chip (A1–A10) and the count cites the computed routes table (S1).")
 
 - **Citations** are chips (`A3`, `G1`, `J2`). Click one for the evidence: the
   passage with its path and lines, the commit, the ticket. Ticket keys, pull
@@ -73,6 +79,12 @@ the revision land.
 - **Follow up** chips under the last turn are the model's suggested next
   questions; the composer continues the thread.
 
+![The popover of citation A5: POST /chat/completions, handler ChatCompletionsHandler, registered at cmd/gateway/main.go:316, with Open in Code Map, Inspector, Pin and Copy](assets/docs/workbench/citation-popover.png "Clicking A5 opens its evidence: POST /chat/completions, served by ChatCompletionsHandler (api/routes.go) and registered at cmd/gateway/main.go:316, at snapshot 5249675.")
+
+![How Atlas got here, expanded below the answer: What Atlas found, a list of facts tagged real, then the routes table grouped by router](assets/docs/workbench/how-atlas-got-here.png "How Atlas got here, opened: the scope, intent and snapshot, the facts Atlas found (each tagged real and cited), then the routes table grouped by router.")
+
+![The end of a turn: source lanes, the model chip, 7.2 s, How Atlas got here, All 5 statements cite evidence, Copy, Link, Re-ask, and three Follow up suggestions](assets/docs/workbench/follow-up.png "The end of the turn: the source lanes, the model chip and time, How Atlas got here, the trust cue (All 5 statements cite evidence), Copy · Link · Re-ask, and the Follow up suggestions.")
+
 ## The Side Panel
 
 The panel on the right follows the selected turn and names it ("Turn 2 of 3 ·
@@ -88,6 +100,10 @@ The panel on the right follows the selected turn and names it ("Turn 2 of 3 ·
   call inside the turn, and totals across the conversation with one row per
   question.
 
+![The Evidence tab: the CODE lane with A1 to A10 routes, A11 main.main, S1 Routes table and S4 Last change](assets/docs/workbench/side-evidence.png "Evidence, by lane: ten routes (A1–A10), the registrar main.main (A11) and the facts Atlas computed (S1, S4…).")
+
+![The Tokens tab: about 2,394 tokens of evidence, 6,482 model input and 547 output tokens, the model, and the hourly budget](assets/docs/workbench/side-tokens.png "Tokens for the same turn: about 2,394 tokens of evidence, 6,482 input and 547 output tokens as the provider reported them, and 1 of 30 model turns used this hour.")
+
 ## Threads, Ownership and Sharing
 
 Threads live in the service's database, not in the browser. On a laptop's own
@@ -96,6 +112,8 @@ callers through a Jira OAuth session or a gateway identity header) keeps each
 thread private to its owner unless the owner shares it with the tenant; an
 operator token sees all of them, a read-only token sees shared ones. Rename,
 share and delete from the thread's header.
+
+![The thread rail open over the answer: Threads, + New, and one thread from today with its turn count and verdict](assets/docs/workbench/thread-rail.png "☰ Threads opens the rail: each thread with its age, turn count and verdict. ✎ renames, × deletes, + New starts another thread.")
 
 ## Use It from the API
 

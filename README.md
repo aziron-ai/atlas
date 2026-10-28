@@ -195,7 +195,33 @@ ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron/atlas
 Checksums and per-archive SBOMs are attached to every
 [GitHub release](https://github.com/aziron-ai/atlas/releases).
 
+## See it
+
+Atlas running on the public Go project [inference-gateway](https://github.com/inference-gateway/inference-gateway): the header search finds a symbol and opens it in the inspector, and the Ask Workbench answers a question about the routes with every row cited.
+
+![Searching for a symbol in the dashboard and opening it in the inspector](assets/docs/dashboard/omnibox-search.gif)
+
+![Asking the Ask Workbench which HTTP routes the gateway serves](assets/docs/workbench/ask-a-question.gif)
+
+The [user guide](https://atlas.aziro.com/#docs/tour) walks every surface with screenshots and clips.
+
 ## Documentation
+
+User guide:
+
+- [What Atlas does](https://atlas.aziro.com/#docs/tour) — one frame of every area
+- [The dashboard](https://atlas.aziro.com/#docs/dashboard)
+- [Code Map and graph](https://atlas.aziro.com/#docs/code-map)
+- [Search and Ask](https://atlas.aziro.com/#docs/search-and-ask)
+- [Ask Workbench](https://atlas.aziro.com/#docs/workbench)
+- [Impact and review](https://atlas.aziro.com/#docs/impact)
+- [Change lens and history](https://atlas.aziro.com/#docs/history)
+- [Connected sources](https://atlas.aziro.com/#docs/sources)
+- [Observe](https://atlas.aziro.com/#docs/observe)
+- [Skills and automations](https://atlas.aziro.com/#docs/skills)
+- [One Atlas for a team](https://atlas.aziro.com/#docs/teams)
+
+Reference:
 
 - [Getting Started](https://atlas.aziro.com/#docs/getting-started)
 - [Installation](https://atlas.aziro.com/#docs/installation)
@@ -204,7 +230,6 @@ Checksums and per-archive SBOMs are attached to every
 - [AI Assistant Setup](https://atlas.aziro.com/#docs/assistants)
 - [MCP Tools](https://atlas.aziro.com/#docs/mcp)
 - [Dashboard and HTTP API](https://atlas.aziro.com/#docs/service)
-- [Ask Workbench](https://atlas.aziro.com/#docs/workbench)
 - [Configuration](https://atlas.aziro.com/#docs/configuration)
 - [Privacy and Data Handling](https://atlas.aziro.com/#docs/privacy)
 - [Supported Languages](https://atlas.aziro.com/#docs/languages)
