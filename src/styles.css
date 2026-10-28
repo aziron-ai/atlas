@@ -2715,3 +2715,24 @@ section#hero.measure-grid > .shell { width: 100%; }
 .gxp-sug.on { background: rgba(111, 157, 255, 0.16); }
 .gxp-sug-t { color: #3ecb6e; font-size: 11px; width: 12px; }
 .gxp-sug-hint { align-self: flex-end; padding: 3px 8px 1px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6c7f9d; }
+
+/* documentation figures: screenshots and clips */
+.docs-figure {
+  margin: 22px 0 6px;
+  max-width: 100%;
+}
+.docs-figure img,
+.docs-figure video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--contour-2);
+  border-radius: 10px;
+  background: var(--bg2);
+}
+.docs-figure figcaption {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}

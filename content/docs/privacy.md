@@ -86,6 +86,22 @@ remove the capture hooks:
 atlas disconnect
 ```
 
+## AI Answers and the Workbench
+
+The Ask page's AI answer and the [Ask Workbench](workbench) send data to a model
+only when a provider is configured (a logged-in `claude` or `codex` CLI that
+Atlas detected, or a stored API key) and only when you ask. What leaves the
+machine is the question, the labelled evidence the turn gathered — retrieved
+passages, never whole files, plus records from the sources you connected — the
+earlier turns of the thread as context, and the grounding instructions. It goes
+to the provider you chose, through its API or its CLI; the CLI runs in a
+scratch working directory with its tools disabled and no session saved, so
+nothing else rides along.
+With no provider configured nothing is sent, and Atlas's own exact verdict
+never leaves the machine. `atlas llm status` prints the current egress line;
+`ATLAS_LLM_DETECT=off` stops automatic detection. Threads the Workbench keeps
+live in the service's database beside the index and are removed with it.
+
 ## Before Enabling Network Access
 
 Review this checklist before binding the service beyond loopback:

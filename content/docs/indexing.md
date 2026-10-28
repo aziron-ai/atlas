@@ -24,6 +24,22 @@ atlas --db "sqlite:///absolute/path/.atlas/atlas.db" index .
 the lexical search index. By default it indexes the working tree; use
 `--ref COMMIT_OR_BRANCH` to index a specific commit or branch instead.
 
+A first index of inference-gateway, a Go service of 307 files, looks like this
+on stderr (the JSON summary goes to stdout):
+
+```text
+atlas index: starting path=. db=sqlite://…/.atlas/atlas.db
+atlas index: analyzing types (307 files, 11092 symbols) elapsed=2s
+…
+atlas index: analyzing types (307 files, 11092 symbols) elapsed=24s
+atlas index: persisting 11092 symbols elapsed=26s
+atlas index: done repo=inference-gateway mode=full files=307 symbols=11092 edges=13900 routes=71 duration=27014ms
+atlas index: timings build_symbols_edges=25539ms … go_types=25510ms lexical=795ms lexical_settle=132ms log_sites=9ms parse=115ms persist=438ms …
+```
+
+On a Go repository most of a cold index is Go type analysis (`go_types`); the
+parse itself took 115 ms here.
+
 ## What Index Output Reports
 
 Read the index output to confirm what actually happened rather than assuming.
@@ -80,6 +96,29 @@ never fails a run; every failure mode degrades to a disclosed state.
 Set `ATLAS_LEXICAL_SETTLE=reclaim` to skip the merge and only reclaim — the
 cheaper mode for very large sidecars where a single-segment merge is not worth
 its write amplification.
+
+Running the same command again on an unchanged tree is a no-op — this is the
+real second run on inference-gateway, trimmed:
+
+```text
+$ atlas index . --format json
+{
+  "repo_full_name": "inference-gateway",
+  "commit_sha": "524967508e9d90185c4a1c3540cac0dcda7c580a",
+  "indexed_files": 307,
+  "symbols": 11092,
+  "edges": 13900,
+  "routes": 71,
+  "mode": "noop",
+  "duration_ms": 69,
+  "persist_mode": "noop",
+  "persist_path": "noop",
+  "delta_base": "524967508e9d90185c4a1c3540cac0dcda7c580a",
+  "files_reparsed": 0,
+  "lexical_bytes": 6991343,
+  "lexical_settle": "merged"
+}
+```
 
 ## Incremental Behavior
 
@@ -249,6 +288,32 @@ atlas doctor
 When multiple repositories or databases exist, pin both `--db` and `--repo`.
 If a running Atlas server is configured, CLI queries may use that server —
 unset `ATLAS_SERVER_URL` or pin an explicit database while diagnosing.
+
+```text
+$ atlas stats
+stats inference-gateway  local/sqlite  history 1  coverage_facts 0
+  latest 52496750  mode full  files 307  symbols 11092  edges 13900  routes 71  53534ms
+  store_rows files 307  symbols 11092  edges 13900  routes 71
+  graph files 89  symbols 3526  edges 1317  communities 3161  isolated 3121
+  langs  go:3511 bash:9 typescript:6
+```
+
+`store_rows` is what the index stored. `graph` is what the graph report reads —
+the same numbers the dashboard's **Orientation** view (`#/orient`) shows at the
+top, beside the repository's entry points and its most-connected symbols:
+
+![Orientation for inference-gateway: 89 files, 3,526 symbols, 1,317 edges, 3,161 communities, 3,121 isolated, a language bar, entry points and load-bearing symbols](assets/docs/indexing/orientation-index-state.png "Orientation reads the graph report of the selected repository.")
+
+To walk what was indexed file by file, open **Files** (`#/files`). Type in the
+filter to narrow the tree by path or symbol name, then click a file: the
+details panel lists the routes it serves, its imports and the symbols in it,
+with caller and callee counts.
+
+![The Files view: filtering the indexed tree for routes, then selecting api/routes.go to show its 9 routes, 882 relations and imports](assets/docs/indexing/files-after-index.mp4 "Files after an index: api/routes.go serves 9 routes.")
+
+The counter beside the filter says how much of the index the view loaded. On a
+large repository the first load is a sample; expanding a folder fetches that
+folder in full.
 
 ## Safe Recovery Order
 

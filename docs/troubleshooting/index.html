@@ -30,6 +30,7 @@
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
   .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
   a { color:var(--link); } a:hover { text-decoration:underline; }
   header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
   header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
@@ -76,48 +77,20 @@ atlas doctor</code></pre>
 <p>Match your symptom, apply the action, and re-run the failing command. Details for the harder cases follow the table.</p>
 <table><thead><tr><th>Symptom</th><th>Action</th></tr></thead><tbody><tr><td><code>atlas: command not found</code></td><td>Check <code>command -v atlas</code> and <code>$PATH</code>; reinstall via your channel — <code>brew reinstall --cask aziron-ai/atlas/atlas</code> or <code>npm install -g @aziron/atlas</code> (verify <code>npm prefix -g</code> is on PATH)</td></tr><tr><td>Results are stale or from the wrong repository</td><td><code>atlas index .</code> then <code>atlas status</code>; pin scope with <code>atlas --repo /absolute/path status</code>; if still stale, <code>atlas doctor</code> then <code>atlas index . --reindex</code></td></tr><tr><td><code>workspace_required</code> from MCP</td><td>Supply a workspace root, <code>workspace</code>, <code>repo_id</code>, or launch-time <code>--repo</code>. Atlas does not silently select a repository for scoped requests</td></tr><tr><td>SQLite is busy or locked</td><td>Stop <code>atlas serve</code>, <code>atlas watch</code>, and supervised MCP processes; inspect the owner with <code>lsof &quot;$PWD/.atlas/atlas.db&quot;</code>; run maintenance serially after all writers exit</td></tr><tr><td>Retrieval reports <code>sql_fallback</code></td><td>The lexical (BM25) sidecar is empty or wedged while the graph stays readable. Run <code>atlas doctor</code> to confirm, stop other Atlas processes, then <code>atlas compact --rebuild-lexical</code> and re-check with <code>atlas doctor</code></td></tr><tr><td><code>index</code> warns <code>lexical sidecar unavailable, indexing without it</code></td><td>A warning, not a failure — the graph indexed fine. Another Atlas process held the sidecar lock (~2s timeout). It self-heals via lazy backfill; or stop other Atlas processes and run <code>atlas compact --rebuild-lexical</code>. See <strong>The lexical sidecar</strong> below</td></tr><tr><td>Assistant does not list Atlas tools</td><td><code>atlas bootstrap --dry-run</code> to preview, <code>atlas doctor --verify atlas</code> to check binary drift; apply <code>atlas bootstrap</code>, then fully restart the assistant</td></tr><tr><td>Doctor or status reports schema/index drift</td><td><code>atlas migrate</code> applies storage migrations and reports the active contracts; confirm with <code>atlas status --schema</code>, then <code>atlas index . --reindex</code> if snapshot formats have drifted</td></tr><tr><td>Database keeps growing after deletions or reindexes</td><td><code>atlas compact</code> reports reclaimable pages and truncates the WAL; <code>atlas compact --full</code> also runs a full VACUUM and rebuilds an oversized lexical sidecar. Both <code>--full</code> and <code>--rebuild-lexical</code> are exclusive — quiesce other Atlas processes first</td></tr><tr><td>Semantic search falls back to lexical</td><td>Expected when vectors are absent: reindex with <code>atlas index . --enable-vectors</code> and verify configuration with <code>atlas config list</code></td></tr></tbody></table>
 <p>Other known cases, kept brief:</p>
-<ul><li><strong>npm binary download fails:</strong> confirm the version exists on</li></ul>
-<p>  <a href="https://github.com/aziron-ai/atlas/releases">GitHub Releases</a>, check proxy   and GitHub access, and pin a published version.</p>
-<ul><li><strong>macOS blocks a manual binary:</strong> prefer the Homebrew cask; for a trusted,</li></ul>
-<p>  checksum-verified binary run   <code>xattr -dr com.apple.quarantine /usr/local/bin/atlas</code>.</p>
-<ul><li><strong>MCP list is fast but calls are slow:</strong> an index or exclusive maintenance</li></ul>
-<p>  task may be running — check <code>atlas status</code> and <code>atlas doctor</code>; disable   duplicate watchers; adjust <code>ATLAS_MCP_CALL_TIMEOUT</code> only after confirming   the root cause.</p>
-<ul><li><strong>HTTP 401 or 403:</strong> send <code>Authorization: Bearer $ATLAS_API_TOKEN</code>; for</li></ul>
-<p>  browser clients also configure <code>ATLAS_MCP_ALLOWED_ORIGINS</code>.</p>
-<ul><li><strong>Port 3099 in use:</strong> find the owner with</li></ul>
-<p>  <code>lsof -nP -iTCP:3099 -sTCP:LISTEN</code>; stop it or choose another address (see   <code>atlas serve --help</code>).</p>
-<ul><li><strong><code>healthz</code> passes but <code>readyz</code> fails:</strong> Atlas is running but cannot</li></ul>
-<p>  complete a lightweight engine request — look for an active index, database   lock, or maintenance operation.</p>
+<ul><li><strong>npm binary download fails:</strong> confirm the version exists on <a href="https://github.com/aziron-ai/atlas/releases">GitHub Releases</a>, check proxy and GitHub access, and pin a published version.</li><li><strong>macOS blocks a manual binary:</strong> prefer the Homebrew cask; for a trusted, checksum-verified binary run <code>xattr -dr com.apple.quarantine /usr/local/bin/atlas</code>.</li><li><strong>MCP list is fast but calls are slow:</strong> an index or exclusive maintenance task may be running — check <code>atlas status</code> and <code>atlas doctor</code>; disable duplicate watchers; adjust <code>ATLAS_MCP_CALL_TIMEOUT</code> only after confirming the root cause.</li><li><strong>HTTP 401 or 403:</strong> send <code>Authorization: Bearer $ATLAS_API_TOKEN</code>; for browser clients also configure <code>ATLAS_MCP_ALLOWED_ORIGINS</code>.</li><li><strong>Port 3099 in use:</strong> find the owner with <code>lsof -nP -iTCP:3099 -sTCP:LISTEN</code>; stop it or choose another address (see <code>atlas serve --help</code>).</li><li><strong><code>healthz</code> passes but <code>readyz</code> fails:</strong> Atlas is running but cannot complete a lightweight engine request — look for an active index, database lock, or maintenance operation.</li></ul>
 <h2>The Lexical Sidecar (and the SQL Fallback)</h2>
 <p>Atlas keeps two things under <code>.atlas/</code>. The <strong>graph database</strong> (<code>atlas.db</code>, SQLite) holds symbols, callers, references, routes, and change impact. A separate <strong>lexical sidecar</strong> (<code>.atlas/lexical/</code>, a Bleve BM25 index) powers fast text search. Graph queries never need the sidecar — only text and keyword search does.</p>
 <p>During <code>atlas index</code> you may see this line on stderr. It is a <strong>warning, not a failure</strong> — the graph index still built:</p>
 <pre><code>atlas: index &lt;repo&gt;: lexical sidecar unavailable, indexing without it (lazy backfill will heal): &lt;reason&gt;</code></pre>
-<ul><li><strong>Why it happens:</strong> another Atlas process — a running <code>atlas serve</code>,</li></ul>
-<p>  <code>atlas watch</code>, or a supervised/stale MCP session — holds the sidecar's   exclusive lock. Atlas waits about two seconds for it (a bounded lock timeout),   then indexes *without* the sidecar rather than failing the whole run. The   usual trigger is running <code>atlas index</code> by hand while a server is already   watching the same repo.</p>
-<ul><li><strong>What it means:</strong> until the sidecar is populated, text search answers from a</li></ul>
-<p>  SQL scan instead of BM25. Those results are honestly labelled — <code>degraded:   true</code> and <code>retrieval_mode: sql_fallback</code> — and are correct but slower and   lower quality. Symbol, caller, ref, route, and impact queries are unaffected.</p>
-<ul><li><strong>It heals on its own:</strong> in serve/watch mode a lazy backfill rebuilds the</li></ul>
-<p>  sidecar once the lock frees. To fix it now, stop the other Atlas processes and   run <code>atlas compact --rebuild-lexical</code>, then confirm with <code>atlas doctor</code>.</p>
-<ul><li><strong>To avoid it:</strong> do not run a manual <code>atlas index</code> while <code>serve</code>/<code>watch</code>/an</li></ul>
-<p>  MCP session holds the same <code>.atlas</code> — stop them first, or let the running   server's watch pick up the change.</p>
+<ul><li><strong>Why it happens:</strong> another Atlas process — a running <code>atlas serve</code>, <code>atlas watch</code>, or a supervised/stale MCP session — holds the sidecar's exclusive lock. Atlas waits about two seconds for it (a bounded lock timeout), then indexes *without* the sidecar rather than failing the whole run. The usual trigger is running <code>atlas index</code> by hand while a server is already watching the same repo.</li><li><strong>What it means:</strong> until the sidecar is populated, text search answers from a SQL scan instead of BM25. Those results are honestly labelled — <code>degraded: true</code> and <code>retrieval_mode: sql_fallback</code> — and are correct but slower and lower quality. Symbol, caller, ref, route, and impact queries are unaffected.</li><li><strong>It heals on its own:</strong> in serve/watch mode a lazy backfill rebuilds the sidecar once the lock frees. To fix it now, stop the other Atlas processes and run <code>atlas compact --rebuild-lexical</code>, then confirm with <code>atlas doctor</code>.</li><li><strong>To avoid it:</strong> do not run a manual <code>atlas index</code> while <code>serve</code>/<code>watch</code>/an MCP session holds the same <code>.atlas</code> — stop them first, or let the running server's watch pick up the change.</li></ul>
 <p><strong>Since 0.1.51, a sidecar that is merely un-compacted is reported separately.</strong> <code>atlas index --format json</code> ends with <code>lexical_settle</code>, and a value of <code>partial</code> means the settle ran every step and then verified it had *not* reached the steady state — the sidecar still holds obsolete document bytes a compaction would reclaim. Search is correct and undegraded; only the <code>lexical_bytes</code> figure is above steady state. Re-run the index on a quiet machine, or run <code>atlas compact --rebuild-lexical</code>, before quoting a size. <code>timeout</code> is the other non-steady state: raise <code>ATLAS_LEXICAL_SETTLE_TIMEOUT</code> (default 30s) and re-run. Only <code>merged</code> asserts a steady-state footprint.</p>
 <p><strong>Why <code>atlas status</code> looked clean but <code>atlas doctor</code> caught it:</strong> <code>atlas status</code> reports <strong>version and contract health only</strong> — schema, index-format, lexical, and MCP contract versions plus per-repo snapshot format. It never opens the sidecar, so a wedged or empty sidecar leaves <code>status</code> green. <code>atlas doctor</code> checks <strong>runtime health</strong>, opens the sidecar, and reports <code>lexical_degraded</code> when it is empty or wedged. That split is by design: if search behaves oddly but <code>status</code> is clean, run <code>atlas doctor</code>.</p>
 <h2>Read the Diagnosis</h2>
 <p>Knowing what each diagnostic actually reports keeps you from applying the wrong fix.</p>
-<ul><li><strong><code>atlas doctor</code></strong> reports Atlas upgrade health and the schema/index</li></ul>
-<p>  contract state. It also tells you when the lexical sidecar needs   <code>atlas compact --rebuild-lexical</code> — the condition that otherwise degrades   every search to SQL-only silently. It also reports <code>mcp_registrations</code> health — flagging assistant MCP configs that launch a nonexistent binary (broken now) or a version-pinned path that breaks on the next upgrade, with <code>atlas bootstrap</code> as the fix. Add <code>--deep</code> for a page-level integrity scan (<code>PRAGMA quick_check</code>) that catches on-disk corruption. Add <code>--verify atlas</code> to check binary   drift: whether the <code>atlas</code> on PATH (what assistants launch) matches the   running binary. Add <code>--all --root DIR</code> to scan every <code>.atlas/atlas.db</code>   under a directory.</p>
-<ul><li><strong><code>atlas status</code></strong> reports storage/version health: the schema and</li></ul>
-<p>  index-format contracts plus per-repo snapshot format state. Add <code>--schema</code>   to see the schema/index-format/lexical/MCP contract versions and per-repo   snapshot format drift.</p>
-<ul><li><strong><code>atlas migrate</code></strong> is the corresponding fix for schema findings: it applies</li></ul>
-<p>  storage migrations and reports the active contracts. <code>--all --root DIR</code>   migrates every local SQLite database under a directory.</p>
+<ul><li><strong><code>atlas doctor</code></strong> reports Atlas upgrade health and the schema/index contract state. It also tells you when the lexical sidecar needs <code>atlas compact --rebuild-lexical</code> — the condition that otherwise degrades every search to SQL-only silently. It also reports <code>mcp_registrations</code> health — flagging assistant MCP configs that launch a nonexistent binary (broken now) or a version-pinned path that breaks on the next upgrade, with <code>atlas bootstrap</code> as the fix. Add <code>--deep</code> for a page-level integrity scan (<code>PRAGMA quick_check</code>) that catches on-disk corruption. Add <code>--verify atlas</code> to check binary drift: whether the <code>atlas</code> on PATH (what assistants launch) matches the running binary. Add <code>--all --root DIR</code> to scan every <code>.atlas/atlas.db</code> under a directory.</li><li><strong><code>atlas status</code></strong> reports storage/version health: the schema and index-format contracts plus per-repo snapshot format state. Add <code>--schema</code> to see the schema/index-format/lexical/MCP contract versions and per-repo snapshot format drift.</li><li><strong><code>atlas migrate</code></strong> is the corresponding fix for schema findings: it applies storage migrations and reports the active contracts. <code>--all --root DIR</code> migrates every local SQLite database under a directory.</li></ul>
 <h2>Logs and Telemetry</h2>
 <p>When you need runtime evidence rather than a health verdict, look here:</p>
-<ul><li><strong><code>atlas stats</code></strong> shows graph and index telemetry statistics for an indexed</li></ul>
-<p>  repository; <code>--limit</code> controls how many recent snapshot telemetry rows are   returned (default 20).</p>
-<ul><li><strong>Observability database:</strong> telemetry is stored in <code>telemetry.db</code> beside the</li></ul>
-<p>  graph database by default; relocate it with <code>--telemetry-db PATH</code>. With   <code>--read-only</code>, no <code>telemetry.db</code> is created unless you pass   <code>--telemetry-db</code> explicitly.</p>
-<ul><li><strong><code>atlas sync status</code></strong> (connected fleets only) shows uplink configuration,</li></ul>
-<p>  kill switches, and per-stream cursors.</p>
+<ul><li><strong><code>atlas stats</code></strong> shows graph and index telemetry statistics for an indexed repository; <code>--limit</code> controls how many recent snapshot telemetry rows are returned (default 20).</li><li><strong>Observability database:</strong> telemetry is stored in <code>telemetry.db</code> beside the graph database by default; relocate it with <code>--telemetry-db PATH</code>. With <code>--read-only</code>, no <code>telemetry.db</code> is created unless you pass <code>--telemetry-db</code> explicitly.</li><li><strong><code>atlas sync status</code></strong> (connected fleets only) shows uplink configuration, kill switches, and per-stream cursors.</li></ul>
 <h2>Two Atlas Writers at Once</h2>
 <p>A different sidecar line means two Atlas processes raced to WRITE it:</p>
 <pre><code>atlas: lexical segment-version probe failed (…: timeout) — opening anyway</code></pre>
@@ -126,28 +99,39 @@ atlas doctor</code></pre>
 <p>SQLite reads pages lazily, so a store with corrupted interior pages can keep answering reads — <code>doctor</code>, <code>status</code>, and queries all look healthy — until the next write fails with <code>database disk image is malformed (11)</code>. From v0.1.43, <code>atlas doctor --deep</code> runs the page-level integrity scan (<code>PRAGMA quick_check</code>) and escalates to <code>status: &quot;db_corrupt&quot;</code> with the damaged pages named. It is a full-file scan (seconds on GB-scale stores), so it is opt-in — run it when hardware, filesystem, or sync tooling is suspect. Recovery: restore <code>.atlas</code> from a backup, or delete <code>.atlas</code> and run <code>atlas index --reindex</code>.</p>
 <h2>Before Deleting Data</h2>
 <p>&gt; <strong>Warning:</strong> Deleting <code>.atlas/</code> is irreversible and is almost never the &gt; right first move. Complete every step below before removing anything.</p>
-<p>1. Stop every Atlas process. 2. Confirm the exact database and repository paths. 3. Back up the full <code>.atlas/</code> directory. 4. Run <code>atlas doctor</code>. 5. Attempt migration, lexical rebuild, or reindex first.</p>
+<ol><li>Stop every Atlas process.</li><li>Confirm the exact database and repository paths.</li><li>Back up the full <code>.atlas/</code> directory.</li><li>Run <code>atlas doctor</code>.</li><li>Attempt migration, lexical rebuild, or reindex first.</li></ol>
 <p>Delete local Atlas data only when a complete reset is intended. For the removal procedure itself, see <a href="../upgrade/">Upgrade and Uninstall</a>. For index behavior and reindex options, see <a href="../indexing/">Indexing and Reindexing</a>; for assistant wiring, see <a href="../assistants/">AI Assistant Setup</a>; for knob provenance, see <a href="../configuration/">Configuration</a>.</p>
     </article>
     <nav class="prevnext">
-      <span><a href="../benchmarks/">← Benchmarks and Methodology</a></span>
-      <span><a href="../upgrade/">Upgrade and Uninstall →</a></span>
+      <span><a href="../upgrade/">← Upgrade and Uninstall</a></span>
+      <span><a href="../privacy/">Privacy and Data Handling →</a></span>
     </nav>
     <nav class="doclist" aria-label="All documentation">
+        <a href="../tour/">What Atlas Does</a>
         <a href="../getting-started/">Getting Started</a>
         <a href="../installation/">Installation</a>
         <a href="../concepts/">Core Concepts</a>
-        <a href="../indexing/">Indexing and Reindexing</a>
-        <a href="../cli/">CLI Reference</a>
+        <a href="../dashboard/">The Dashboard</a>
+        <a href="../code-map/">Code Map and Graph</a>
+        <a href="../search-and-ask/">Search and Ask</a>
+        <a href="../workbench/">Ask Workbench</a>
+        <a href="../impact/">Impact and Review</a>
+        <a href="../history/">Change Lens and History</a>
+        <a href="../sources/">Connected Sources</a>
+        <a href="../observe/">Observe</a>
+        <a href="../skills/">Skills and Automations</a>
         <a href="../assistants/">AI Assistant Setup</a>
         <a href="../mcp/">MCP Tools</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
         <a href="../service/">Dashboard and HTTP API</a>
         <a href="../configuration/">Configuration</a>
+        <a href="../teams/">One Atlas for a Team</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
         <a href="../privacy/">Privacy and Data Handling</a>
         <a href="../languages/">Supported Languages and Formats</a>
         <a href="../benchmarks/">Benchmarks and Methodology</a>
-        <a href="../troubleshooting/">Troubleshooting</a>
-        <a href="../upgrade/">Upgrade and Uninstall</a>
     </nav>
     <footer class="site">
       Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.

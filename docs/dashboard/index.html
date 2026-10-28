@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xs573jloed");</script>
+  <title>The Dashboard — Atlas documentation</title>
+  <meta name="description" content="Command Center, omnibox, inspector, pins, repositories and the system view.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="../../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../../assets/atlas-icon-128.png">
+  <link rel="canonical" href="https://atlas.aziro.com/docs/dashboard/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="The Dashboard — Atlas">
+  <meta property="og:description" content="Command Center, omnibox, inspector, pins, repositories and the system view.">
+  <meta property="og:url" content="https://atlas.aziro.com/docs/dashboard/">
+  <meta property="og:image" content="https://atlas.aziro.com/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Dashboard — Atlas">
+  <meta name="twitter:description" content="Command Center, omnibox, inspector, pins, repositories and the system view.">
+  <meta name="twitter:image" content="https://atlas.aziro.com/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"The Dashboard","description":"Command Center, omnibox, inspector, pins, repositories and the system view.","url":"https://atlas.aziro.com/docs/dashboard/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-08-05"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"The Dashboard","item":"https://atlas.aziro.com/docs/dashboard/"}]}]</script>
+  <style>
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .brand-logo { display:block; width:29px; height:24px; object-fit:contain; }
+  .brand-word { font-size:14px; letter-spacing:.22em; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#eef2f7; border:1px solid var(--line); padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:var(--raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; box-shadow:var(--shadow); }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#f8fafc; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://atlas.aziro.com/"><img class="brand-logo" src="../../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://atlas.aziro.com/">Home</a> / <a href="https://atlas.aziro.com/docs/">Docs</a> / The Dashboard</nav>
+      <a class="open-app" href="https://atlas.aziro.com/#docs/dashboard">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>The dashboard</h1>
+<p>The dashboard is the browser view of everything one Atlas service holds: the repositories it indexed, the graph inside them, the questions it answered and the tools it is connected to. Every view shares one frame — a navigation rail on the left, a search box in the header and a symbol inspector that opens over any page. Reach for it when you want to look around a codebase instead of asking the command line one question at a time.</p>
+<h2>Open It</h2>
+<p>Start the service and open the dashboard in a browser:</p>
+<pre><code>atlas serve
+# then open http://127.0.0.1:3099/dashboard</code></pre>
+<p>The first page is the <strong>Command Center</strong> (<code>#/overview</code>). Every view has its own hash route — <code>#/map</code>, <code>#/ask</code>, <code>#/orient</code> — so a link to a view, a symbol or a question can be pasted into chat and opens the same page for the next reader. <a href="../service/">Dashboard and API</a> covers the service flags, tokens and the address it binds to.</p>
+<figure><img src="../../assets/docs/dashboard/command-center.png" alt="The Command Center: KPI tiles, the Observe row, Ready to automate, Connector pulse, Skills lifecycle and the Live activity rail" loading="lazy" decoding="async"><figcaption>The Command Center on a service that has indexed inference-gateway and has Prometheus and a log pull configured.</figcaption></figure>
+<h2>Find Your Way Around</h2>
+<p>The rail on the left groups the views by job. A badge beside an item is a live count: events in the stream, open incidents, firing alerts, skills, repositories.</p>
+<figure><img src="../../assets/docs/dashboard/nav-rail-lower.png" alt="The lower half of the navigation rail: the OBSERVE, AUTOMATE, FLEET, CODEBASE and SYSTEM groups with their badges" loading="lazy" decoding="async"><figcaption>The lower half of the rail (COMMAND and EXPLORE are in the screenshot above). OBSERVE appears only once a monitoring tool is configured; Builds and Traces are greyed until Jenkins and Tempo are.</figcaption></figure>
+<table><thead><tr><th>Group</th><th>Views</th><th>Use it to</th></tr></thead><tbody><tr><td><strong>COMMAND</strong></td><td>Command Center, Live Activity</td><td>See what the service holds and what it is doing right now.</td></tr><tr><td><strong>PINNED</strong></td><td>Symbols you starred</td><td>Jump back to the symbols you keep returning to. Hidden until you pin one.</td></tr><tr><td><strong>EXPLORE</strong></td><td>Ask Atlas, Ask Workbench, Code Map, Orientation, Resolve, Files, Routes, Impact, Path Finder, Changes</td><td>Read and question the code: search, ask, map, trace a path, size a change.</td></tr><tr><td><strong>OBSERVE</strong></td><td>Log Streams, What Changed, Alerts &amp; Metrics, Builds, Incidents, Traces</td><td>Read what a running system is doing. Each item is greyed until the tool it needs (Loki or Elasticsearch, Prometheus, Jenkins, Tempo) is configured.</td></tr><tr><td><strong>AUTOMATE</strong></td><td>Skill Studio, Skills, Approvals</td><td>Turn repeated work into reviewed skills and decide pending requests.</td></tr><tr><td><strong>FLEET</strong></td><td>Devices, Connectors</td><td>See connected machines and configure monitoring tools.</td></tr><tr><td><strong>CODEBASE</strong></td><td>Workspace, Hot Symbols, Freshness</td><td>List every indexed repository, its most-connected symbols and how fresh each index is.</td></tr><tr><td><strong>SYSTEM</strong></td><td>System</td><td>Check the service's own health, settings and AI providers.</td></tr></tbody></table>
+<p>The header carries four controls on the right:</p>
+<figure><img src="../../assets/docs/dashboard/header-controls.png" alt="Header controls: the search box with its / shortcut, the Live toggle, the ? button and the theme button" loading="lazy" decoding="async"><figcaption>Search, Live, tour replay and theme.</figcaption></figure>
+<ul><li><strong>Search symbols, routes…</strong> — the omnibox. Press <code>/</code> anywhere to focus it (see below).</li><li><strong>Live</strong> — pauses and resumes the dashboard's live refresh. Pause it when you want the numbers on screen to stop moving.</li><li><strong>?</strong> — replays the five-step product tour: Orientation, Ask Atlas, Code Map, Routes, and search with the command palette. Each step highlights the real control; <strong>Skip</strong> closes it, <strong>Back</strong> and <strong>Next</strong> step through.</li><li>The <strong>theme</strong> button switches between dark and light. The choice is remembered in this browser.</li></ul>
+<figure><img src="../../assets/docs/dashboard/product-tour.png" alt="The first step of the product tour, highlighting Orientation in the rail" loading="lazy" decoding="async"><figcaption>The tour's first step, opened from the ? button.</figcaption></figure>
+<h2>Read the Command Center</h2>
+<p>The Command Center is a summary of the whole service, read from one endpoint (<code>/api/v1/dashboard</code>). Nothing on it is sample data: a tile with nothing to count says so. Click a tile to open the view that owns its number.</p>
+<figure><img src="../../assets/docs/dashboard/kpi-strip.png" alt="The six KPI tiles of the Command Center" loading="lazy" decoding="async"><figcaption>The KPI strip.</figcaption></figure>
+<table><thead><tr><th>Tile</th><th>The number</th><th>Opens</th></tr></thead><tbody><tr><td><strong>Tokens saved (recall)</strong></td><td>Tokens the recall ledger recorded as saved by replaying a stored answer, with the number of replay runs beneath.</td><td>Skills</td></tr><tr><td><strong>Hit rate</strong></td><td>Cache and shadow hits over recorded turns.</td><td>Skills</td></tr><tr><td><strong>Fleet devices</strong></td><td>Machines connected with <code>atlas connect</code>; a device is flagged stale after seven days without a push.</td><td>Devices</td></tr><tr><td><strong>Active skills</strong></td><td>Trusted skills, with the candidate and validating counts beneath.</td><td>Skills</td></tr><tr><td><strong>Events/min</strong></td><td>Recorded events over the last ten minutes.</td><td>Live Activity</td></tr><tr><td><strong>System</strong></td><td>The service's p95 serving latency and its uptime.</td><td>System</td></tr></tbody></table>
+<p>Below the tiles:</p>
+<ul><li><strong>OBSERVE</strong> — one tile per configured monitoring tool, such as <strong>Log pulls</strong>, <strong>Open incidents</strong> and <strong>Firing alerts</strong>. With nothing configured the row reads <strong>Observe is off</strong> and lists each tool, the views it unlocks, and the CLI command and HTTP route that configure it.</li><li><strong>Ready to automate</strong> — repeated procedures mined from real sessions, ranked by projected savings, each with <strong>Create skill</strong>. Empty until agents work through Atlas with episode capture on.</li><li><strong>Connector pulse</strong> — events per connector in the live window.</li><li><strong>Skills lifecycle</strong> — skills per stage: candidate, validating, trusted, quarantined, revoked.</li><li><strong>Code graph index</strong> — links to <strong>Orientation</strong> and <strong>Hot Symbols</strong>.</li><li><strong>Live activity</strong> (right rail) — the seven newest events: what was asked, which connector, how many tokens, how long it took. <strong>All</strong> opens the full stream. Below it, an <strong>Approvals</strong> card appears when requests await a decision, and a <strong>Devices</strong> card lists connected machines.</li></ul>
+<p><strong>Live Activity</strong> (<code>#/events</code>) is the full stream. Filter it by connector with the chips (each shows its count), by tier (<strong>automation</strong>, <strong>exact</strong>, <strong>semantic</strong>, <strong>live</strong>), or by any text in the <strong>Filter events…</strong> box.</p>
+<figure><img src="../../assets/docs/dashboard/live-activity.png" alt="Live Activity filtered to the atlas connector, showing three indexing events" loading="lazy" decoding="async"><figcaption>Live Activity filtered to the atlas connector: each row is an indexing pass with its file, symbol, edge and route counts.</figcaption></figure>
+<h2>Search and Inspect a Symbol</h2>
+<p>The omnibox in the header finds any indexed symbol from any view.</p>
+<ol><li>Press <code>/</code> (or click the box) and type at least two characters.</li><li>Results arrive grouped by kind — <strong>METHOD</strong>, <strong>FUNCTION</strong>, <strong>TYPE</strong>, <strong>FIELD</strong>, <strong>KEY</strong> — each with its file and line.</li><li>Use <code>↑</code> <code>↓</code> to select and <code>Enter</code> to open the symbol in the inspector. <code>Enter</code> with nothing selected sends the text to <strong>Ask Atlas</strong> as a question instead (or, when logs are configured, a query that looks like a log line to <strong>Log Streams</strong>).</li></ol>
+<figure class="clip"><video autoplay muted loop playsinline preload="metadata" poster="../../assets/docs/dashboard/omnibox-search.png" aria-label="Typing modelDenied into the header search, selecting the method and opening the inspector"><source src="../../assets/docs/dashboard/omnibox-search.mp4" type="video/mp4"><img src="../../assets/docs/dashboard/omnibox-search.gif" alt="Typing modelDenied into the header search, selecting the method and opening the inspector"></video><figcaption>Search for modelDenied and open it in the inspector.</figcaption></figure>
+<p>The inspector docks on the right, over whatever view you are on. For <code>modelDenied</code> it shows:</p>
+<ul><li>the name, kind and location (<code>routes.go:622</code>), with a star to pin it, a copy-link button and close;</li><li><strong>Code Map</strong> and <strong>Ask about this</strong>, which open the symbol in those views;</li><li><strong>Explain</strong> — the signature; then <strong>Body excerpt</strong>, <strong>Callers</strong> (5), <strong>References</strong> (5) and <strong>Neighbors</strong>, each loaded on its own and each saying so when it is empty;</li><li><strong>Blast radius</strong> and <strong>History</strong> at the foot, which run the impact and history queries for this symbol.</li></ul>
+<figure><img src="../../assets/docs/dashboard/inspector.png" alt="The symbol inspector open on modelDenied, listing five callers and five references" loading="lazy" decoding="async"><figcaption>The inspector on modelDenied: five callers, all in api/routes.go.</figcaption></figure>
+<p>The inspector's state rides the URL (<code>?sym=modelDenied&amp;symPath=api/routes.go</code>), so a copied link reopens it. Star a symbol and it appears under <strong>PINNED</strong> in the rail; click the pin to reopen the inspector. Pins are kept per store in this browser, up to 20.</p>
+<figure><img src="../../assets/docs/dashboard/pinned-symbol.png" alt="The PINNED group in the rail holding modelDenied" loading="lazy" decoding="async"><figcaption>A pinned symbol in the rail.</figcaption></figure>
+<p>For actions as well as symbols, press <code>⌘K</code> (<code>Ctrl+K</code>) for the command palette. It jumps to any view by name, lists matching symbols, and offers actions built on your text: <strong>Ask Atlas</strong>, <strong>Search Routes</strong>, <strong>Impact</strong> for the top hit, <strong>Path Finder</strong> from the top hit.</p>
+<figure><img src="../../assets/docs/dashboard/command-palette.png" alt="The command palette with modelDenied typed: symbol rows and four actions" loading="lazy" decoding="async"><figcaption>The command palette: symbol rows are live index hits; the actions start a view pre-filled.</figcaption></figure>
+<h2>Get Oriented in a Repository</h2>
+<p><strong>Orientation</strong> (<code>#/orient</code>) is the page to open first on an unfamiliar repository. Pick the repository at the top; <strong>Open Code Map</strong> and <strong>Ask Atlas</strong> carry it into those views.</p>
+<figure><img src="../../assets/docs/dashboard/orientation.png" alt="Orientation for inference-gateway: graph counts, language bars, entry points and load-bearing symbols" loading="lazy" decoding="async"><figcaption>Orientation for inference-gateway.</figcaption></figure>
+<ul><li>The counts strip — <strong>FILES</strong>, <strong>SYMBOLS</strong>, <strong>EDGES</strong>, <strong>COMMUNITIES</strong>, <strong>ISOLATED</strong> — and a bar per language come from the graph report, which reads non-test code symbols and call edges. That is why they are smaller than the repository's stored totals: 89 files and 3,526 symbols here, against 307 files and 11,092 symbols stored.</li><li><strong>Entry points</strong> lists the routes the repository serves — method, path, handler — with the confidence of each match.</li><li><strong>Load-bearing symbols</strong> ranks the hubs by degree; <strong>Inspect</strong> opens one in the inspector, <strong>Map</strong> in the Code Map.</li><li><strong>Modules &amp; communities</strong>, further down, groups symbols that call each other densely.</li></ul>
+<h2>Browse Repositories and Files</h2>
+<p><strong>Workspace</strong> (<code>#/workspace</code>, under CODEBASE) lists every repository the service holds. The tiles total repositories, files, symbols, dependency edges and route contracts; the <strong>Knowledge map</strong> draws one tile per repository, sized by symbols and coloured by how recently it was indexed. The <strong>Per-repository index</strong> table below gives each repository's counts, index mode, age and status, with <strong>Orient me</strong> and <strong>Map</strong> buttons.</p>
+<figure><img src="../../assets/docs/dashboard/workspace.png" alt="Workspace: totals, the knowledge map and the per-repository table header" loading="lazy" decoding="async"><figcaption>Workspace on the demo service: inference-gateway plus two connected sources indexed as virtual repositories.</figcaption></figure>
+<p><strong>Files</strong> (<code>#/files</code>) walks a repository as a tree. Sort the tree by <strong>name</strong>, <strong>syms</strong> or <strong>rel</strong>, or filter it by path and symbol name. Select a file and the <strong>Details</strong> panel shows its relations, the routes it serves, a likely test file, the packages it imports and the files that import it, with <strong>Map this file's folder</strong>, <strong>Ask about this file</strong> and <strong>Compare…</strong>.</p>
+<figure><img src="../../assets/docs/dashboard/files.png" alt="Files: api/routes.go selected, showing 882 relations and the nine routes it serves" loading="lazy" decoding="async"><figcaption>api/routes.go in Files: 882 relations and nine served routes, each with its handler.</figcaption></figure>
+<h2>Check the Service</h2>
+<p><strong>System</strong> (<code>#/system</code>) has two tabs. <strong>Overview</strong> is the service's own footprint, streamed live: uptime, memory, CPU, serving latency, the size of the graph database, the lexical index and the telemetry database, events recorded and an estimate of tokens served. Below the tiles are a live resource timeline, a <strong>Per-tool breakdown</strong> of every tool call served, and the operational settings with where each value comes from (environment, settings file or default). <strong>Run self-diagnostic</strong>, <strong>Clear stale snapshots</strong> and <strong>Compact storage</strong> are the maintenance actions.</p>
+<figure><img src="../../assets/docs/dashboard/system-runtime.png" alt="System overview: runtime tiles for uptime, memory, CPU, latency and storage" loading="lazy" decoding="async"><figcaption>System → Overview.</figcaption></figure>
+<p><strong>App integrations</strong> is where the optional AI answer gets its provider. Atlas detects the Claude and Codex CLIs and API keys on the machine; each provider card shows its model, the credential it uses, what leaves the machine, and a <strong>Test</strong> button. The same tab shows the GitHub and Pulse integrations of the Ask Workbench and the Jira sign-in.</p>
+<figure><img src="../../assets/docs/dashboard/system-ai-providers.png" alt="System → App integrations: the AI providers card with Claude as the default, detected and ready" loading="lazy" decoding="async"><figcaption>App integrations: Claude detected and ready as the default provider.</figcaption></figure>
+<h2>From the CLI</h2>
+<p>The same facts the frame shows are one command away. <code>atlas status</code> is the storage and contract check, one line per repository:</p>
+<pre><code>atlas status --format plain
+status  schema 8  index_format 5  lexical 4  mcp 2  driver sqlite
+  inference-gateway  52496750  format 5  symbols 11092  edges 13900</code></pre>
+<p><code>atlas stats</code> is one repository's index telemetry. <code>store_rows</code> are the stored totals the Workspace view shows; <code>graph</code> is the report's non-test call graph that Orientation shows:</p>
+<pre><code>atlas stats --format plain
+stats inference-gateway  local/sqlite  history 1  coverage_facts 0
+  latest 52496750  mode full  files 307  symbols 11092  edges 13900  routes 71  53534ms
+  store_rows files 307  symbols 11092  edges 13900  routes 71
+  graph files 89  symbols 3526  edges 1317  communities 3161  isolated 3121
+  langs  go:3511 bash:9 typescript:6</code></pre>
+<p><code>atlas repo list</code> is the Workspace table; <code>atlas repo rm</code> forgets a repository and its data:</p>
+<pre><code>atlas repo list --format plain
+NAME               PATH               COMMIT                                    INDEXED               STATUS
+inference-gateway  inference-gateway  524967508e9d90185c4a1c3540cac0dcda7c580a  2026-10-28T05:16:55Z  ready</code></pre>
+<p>Every command and flag is in the <a href="../cli/">CLI reference</a>.</p>
+<h2>From the API</h2>
+<p>The Command Center reads one snapshot, <code>GET /api/v1/dashboard</code>, and keeps it fresh over <code>GET /api/v1/dashboard/stream</code> (server-sent events). The snapshot's top-level blocks are <code>meta</code>, <code>kpis</code>, <code>series</code>, <code>tierBreakdown</code>, <code>clusters</code>, <code>automations</code>, <code>approvals</code>, <code>events</code>, <code>repoObservability</code>, <code>devices</code>, <code>decisions</code>, <code>recall</code>, <code>system</code> and <code>observe</code>; Workspace reads <code>repoObservability</code>. <code>GET /api/v1/status</code> is the same check as <code>atlas status</code>:</p>
+<pre><code>curl -s http://127.0.0.1:3099/api/v1/status
+{&quot;data&quot;:{&quot;tier&quot;:&quot;local&quot;,&quot;storage_driver&quot;:&quot;sqlite&quot;,&quot;vector_backend&quot;:&quot;disabled&quot;,&quot;repos_indexed&quot;:1,
+ &quot;repos&quot;:[{&quot;repo_full_name&quot;:&quot;inference-gateway&quot;,&quot;commit_sha&quot;:&quot;524967508e9d90185c4a1c3540cac0dcda7c580a&quot;,
+  &quot;files&quot;:307,&quot;symbols&quot;:11092,&quot;edges&quot;:13900,&quot;routes&quot;:71,&quot;producer_routes&quot;:39,&quot;consumer_calls&quot;:32,
+  &quot;indexed_at&quot;:&quot;2026-10-28T05:16:55Z&quot;,&quot;state&quot;:&quot;ready&quot;, …}]}}</code></pre>
+<p>Tokens, the full route list and the HTTP MCP endpoint are on <a href="../service/">Dashboard and API</a>.</p>
+<h2>Related</h2>
+<ul><li><a href="../tour/">What Atlas does</a> — one frame of every area.</li><li><a href="../code-map/">Code Map and graph</a> — the five map lenses, Path Finder and Resolve.</li><li><a href="../search-and-ask/">Search and Ask</a> — the omnibox, <code>atlas search</code> and the Ask page.</li><li><a href="../workbench/">Ask Workbench</a> — a cited conversation about the code.</li><li><a href="../observe/">Observe</a> and <a href="../sources/">Connected sources</a> — the OBSERVE group and the Connectors page.</li><li><a href="../service/">Dashboard and API</a> — running the service.</li></ul>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../concepts/">← Core Concepts</a></span>
+      <span><a href="../code-map/">Code Map and Graph →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../tour/">What Atlas Does</a>
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
+        <a href="../dashboard/">The Dashboard</a>
+        <a href="../code-map/">Code Map and Graph</a>
+        <a href="../search-and-ask/">Search and Ask</a>
+        <a href="../workbench/">Ask Workbench</a>
+        <a href="../impact/">Impact and Review</a>
+        <a href="../history/">Change Lens and History</a>
+        <a href="../sources/">Connected Sources</a>
+        <a href="../observe/">Observe</a>
+        <a href="../skills/">Skills and Automations</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../teams/">One Atlas for a Team</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>

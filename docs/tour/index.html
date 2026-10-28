@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xs573jloed");</script>
+  <title>What Atlas Does — Atlas documentation</title>
+  <meta name="description" content="Every surface in one pass: map, search, ask, impact, history, observe, assistants.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="../../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../../assets/atlas-icon-128.png">
+  <link rel="canonical" href="https://atlas.aziro.com/docs/tour/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="What Atlas Does — Atlas">
+  <meta property="og:description" content="Every surface in one pass: map, search, ask, impact, history, observe, assistants.">
+  <meta property="og:url" content="https://atlas.aziro.com/docs/tour/">
+  <meta property="og:image" content="https://atlas.aziro.com/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="What Atlas Does — Atlas">
+  <meta name="twitter:description" content="Every surface in one pass: map, search, ask, impact, history, observe, assistants.">
+  <meta name="twitter:image" content="https://atlas.aziro.com/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"What Atlas Does","description":"Every surface in one pass: map, search, ask, impact, history, observe, assistants.","url":"https://atlas.aziro.com/docs/tour/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-08-05"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"What Atlas Does","item":"https://atlas.aziro.com/docs/tour/"}]}]</script>
+  <style>
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .brand-logo { display:block; width:29px; height:24px; object-fit:contain; }
+  .brand-word { font-size:14px; letter-spacing:.22em; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#eef2f7; border:1px solid var(--line); padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:var(--raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; box-shadow:var(--shadow); }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#f8fafc; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://atlas.aziro.com/"><img class="brand-logo" src="../../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://atlas.aziro.com/">Home</a> / <a href="https://atlas.aziro.com/docs/">Docs</a> / What Atlas Does</nav>
+      <a class="open-app" href="https://atlas.aziro.com/#docs/tour">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>What Atlas does</h1>
+<p>Atlas builds a local index of a repository — its symbols, the calls and references between them, the HTTP routes it serves and the history of each indexing pass — and answers questions about it exactly, with a file and line for every claim. The same index feeds a browser dashboard, a command line, an HTTP API and AI assistants over MCP, so a person and an assistant read the same facts. This page shows each area in one frame and links to its guide. Every screenshot is from Atlas running on the public Go project inference-gateway.</p>
+<h2>Command Center</h2>
+<p>The dashboard opens on the <strong>Command Center</strong>: a summary of everything one Atlas service holds. Tiles count recall savings, connected devices, skills, events per minute and the service's own latency; a row below shows each configured monitoring tool; a live feed on the right lists the newest events. Every number is read from the running service, and every tile opens the view that owns it. The navigation rail on the left reaches every other area.</p>
+<figure><img src="../../assets/docs/tour/command-center.png" alt="The Command Center with KPI tiles, the Observe row and the Live activity feed" loading="lazy" decoding="async"><figcaption>The Command Center.</figcaption></figure>
+<p>Read more: <a href="../dashboard/">The dashboard</a>.</p>
+<h2>Code Map</h2>
+<p>The <strong>Code Map</strong> draws the stored graph five ways. <strong>Clusters</strong> packs the whole repository as its folder tree; <strong>Flow</strong> reads one symbol with its callers on the left and callees on the right; <strong>Explorer</strong> lists the same relations with call-site evidence; <strong>Workbench</strong> (beta) is a canvas you arrange and export; <strong>Repos</strong> draws which services call which. <strong>Path Finder</strong> traces how one function reaches another, and <strong>Resolve</strong> maps a pasted log line back to the code that emits it.</p>
+<figure><img src="../../assets/docs/tour/code-map.png" alt="The Code Map in the Clusters lens for inference-gateway" loading="lazy" decoding="async"><figcaption>The Code Map, Clusters lens.</figcaption></figure>
+<p>Read more: <a href="../code-map/">Code Map and graph</a>.</p>
+<h2>Search and Ask</h2>
+<p>Press <code>/</code> anywhere in the dashboard to search every indexed symbol by name, path or a word from its signature. <strong>Ask Atlas</strong> takes a question in plain language and answers with the lines that answer it — the best passage first, quoted and cited, then the other files that matched. For symbol questions it adds an exact verdict, such as the number of callers. An optional AI answer, written only from those passages, can sit on top.</p>
+<figure><img src="../../assets/docs/tour/search-and-ask.png" alt="Ask Atlas answering how are allowed models enforced with a passage from config/config.go" loading="lazy" decoding="async"><figcaption>Ask Atlas: the best passage for a question, quoted with its lines.</figcaption></figure>
+<p>Read more: <a href="../search-and-ask/">Search and Ask</a>.</p>
+<h2>Ask Workbench</h2>
+<p>The <strong>Ask Workbench</strong> is a conversation about the codebase. Atlas gathers the evidence — passages, definitions, routes, git history, and the tickets and pull requests of connected sources — and a model you choose writes the answer, citing each piece. The evidence panel lists every item the answer rests on, and the server keeps each thread, so you can come back to it or share its link.</p>
+<figure><img src="../../assets/docs/tour/workbench.png" alt="Ask Workbench answering which HTTP routes the gateway serves, with a routes table and citation chips" loading="lazy" decoding="async"><figcaption>A Workbench thread: the routes table, every row cited, and the evidence on the right.</figcaption></figure>
+<p>Read more: <a href="../workbench/">Ask Workbench</a>.</p>
+<h2>Impact and Routes</h2>
+<p>Before you change a symbol, <strong>Impact</strong> shows what the change could reach over stored call and import edges: every affected symbol, file and test, the routes whose handlers fall inside that radius, and the call sites in other indexed repositories. <strong>Routes</strong> lists the HTTP surface the index proved, each route with its handler. The same answers come from <code>atlas impact</code> and <code>atlas context</code> when you review a change.</p>
+<figure><img src="../../assets/docs/tour/impact.png" alt="Impact for modelDenied: seven impacted handlers" loading="lazy" decoding="async"><figcaption>The blast radius of modelDenied: seven symbols, each resolvable in the inspector.</figcaption></figure>
+<p>Read more: <a href="../impact/">Impact and review</a>.</p>
+<h2>Change Lens</h2>
+<p>Every indexing pass is kept as a snapshot. The <strong>Change Lens</strong> shows the timeline of snapshots for a repository and, for any pass, what it changed: symbols added, modified and removed, files touched, call edges gained and lost. With a single snapshot it says a diff needs two and gives the command that makes the second. <strong>Freshness</strong> shows how current each index is.</p>
+<figure><img src="../../assets/docs/tour/change-lens.png" alt="Change Lens for inference-gateway with one snapshot recorded" loading="lazy" decoding="async"><figcaption>The Change Lens on a repository indexed once: one snapshot, and the command that records the next.</figcaption></figure>
+<p>Read more: <a href="../history/">Change lens and history</a>.</p>
+<h2>Observe</h2>
+<p>Connect a log store, Prometheus, Jenkins or Tempo and an <strong>OBSERVE</strong> group appears in the navigation: Log Streams, What Changed, Alerts &amp; Metrics, Builds, Incidents and Traces. Each answers a bounded question — the alerts firing now, the log templates growing since a deploy, the build that failed — and links what it finds back to the code that emits it. Atlas keeps templates and summaries, not raw lines.</p>
+<figure><img src="../../assets/docs/tour/observe.png" alt="Alerts and Metrics reading the public Prometheus demo: firing alerts and a bounded query" loading="lazy" decoding="async"><figcaption>Alerts &amp; Metrics against the public Prometheus demo.</figcaption></figure>
+<p>Read more: <a href="../observe/">Observe</a>.</p>
+<h2>Connected Sources</h2>
+<p>Code is one source among several. <code>atlas source</code> indexes GitHub pull requests and issues, Jira, Confluence, OneDrive, Jenkins, Prometheus, Grafana and Tempo as virtual repositories beside your code, so a search or a Workbench question can cite a ticket as readily as a function. The <strong>Connectors</strong> page configures the monitoring tools: each card says what it unlocks, saving checks that the tool is reachable, and credentials are stored as environment variable names, never values.</p>
+<figure><img src="../../assets/docs/tour/sources.png" alt="The Connectors page with Grafana Loki and Prometheus configured" loading="lazy" decoding="async"><figcaption>Connectors: a Loki log pull and the Prometheus demo configured.</figcaption></figure>
+<p>Read more: <a href="../sources/">Connected sources</a>.</p>
+<h2>Skills and Automations</h2>
+<p>A skill is a reviewed runbook an assistant can follow: steps, the parameters it takes, its preconditions, how to verify it worked and how to roll it back. <strong>Skill Studio</strong> turns repeated sessions into a draft; <strong>Skills</strong> moves each one through candidate, validating and trusted, and only trusted skills are offered to connected assistants. <strong>Approvals</strong> holds the requests that wait for a person.</p>
+<figure><img src="../../assets/docs/tour/skills.png" alt="The Skills view with one validating runbook: its steps, rendered SKILL.md and contract" loading="lazy" decoding="async"><figcaption>A skill under validation: runbook steps, the rendered SKILL.md and its contract.</figcaption></figure>
+<p>Read more: <a href="../skills/">Skills and automations</a>.</p>
+<h2>AI Assistants over MCP</h2>
+<p><code>atlas bootstrap</code> registers Atlas as an MCP server for the assistants it finds on the machine — Claude, Codex, Copilot, Cursor, Gemini — and installs an instruction to ask Atlas before searching files. The assistant then calls the same tools the dashboard uses — search, symbol, impact, routes, logs and more. When assistants reach Atlas through the service, the System page counts every call, with errors, latency and the size of the answer.</p>
+<figure><img src="../../assets/docs/tour/assistants.png" alt="System per-tool breakdown: calls, errors, p50, p95 and estimated tokens for each tool" loading="lazy" decoding="async"><figcaption>System → Per-tool breakdown: every tool call the service answered.</figcaption></figure>
+<p>Read more: <a href="../assistants/">AI assistant setup</a>.</p>
+<h2>The CLI</h2>
+<p>Every answer the dashboard shows is also a command of the single <code>atlas</code> binary, with <code>--format plain</code> for people and JSON for scripts. Index, search, ask for callers, trace a path, size a change, read the graph report, export the graph, run the service:</p>
+<pre><code>atlas callers modelDenied --format plain
+callers modelDenied  total 5
+  ChatCompletionsHandler  method  api/routes.go:637  :: func (router *RouterImpl) ChatCompletionsHandler(c *gin.Context)
+  ImagesHandler  method  api/routes.go:1194  :: func (router *RouterImpl) ImagesHandler(c *gin.Context)
+  MessagesHandler  method  api/routes.go:842  :: func (router *RouterImpl) MessagesHandler(c *gin.Context)
+  …</code></pre>
+<p>Read more: <a href="../cli/">CLI reference</a>.</p>
+<h2>How the Pieces Fit</h2>
+<ol><li><strong>Index.</strong> <code>atlas index</code> parses a repository into symbols, edges and routes and stores them, with a lexical search index, in a local database. Each pass is a snapshot.</li><li><strong>Graph.</strong> Every query — search, callers, path, impact, report — reads that stored graph. Nothing is guessed at query time.</li><li><strong>Surfaces.</strong> The same graph is served four ways: the CLI, the dashboard and HTTP API of <code>atlas serve</code>, and MCP for assistants (<code>atlas mcp</code>, or <code>atlas serve --mcp</code>).</li></ol>
+<p><a href="../concepts/">Core concepts</a> explains snapshots, scope and output control; <a href="../getting-started/">Getting started</a> takes you from install to the first answer.</p>
+    </article>
+    <nav class="prevnext">
+      <span></span>
+      <span><a href="../getting-started/">Getting Started →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../tour/">What Atlas Does</a>
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
+        <a href="../dashboard/">The Dashboard</a>
+        <a href="../code-map/">Code Map and Graph</a>
+        <a href="../search-and-ask/">Search and Ask</a>
+        <a href="../workbench/">Ask Workbench</a>
+        <a href="../impact/">Impact and Review</a>
+        <a href="../history/">Change Lens and History</a>
+        <a href="../sources/">Connected Sources</a>
+        <a href="../observe/">Observe</a>
+        <a href="../skills/">Skills and Automations</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../teams/">One Atlas for a Team</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xs573jloed");</script>
+  <title>Skills and Automations — Atlas documentation</title>
+  <meta name="description" content="Skill Studio, recall, automations and approvals.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="../../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../../assets/atlas-icon-128.png">
+  <link rel="canonical" href="https://atlas.aziro.com/docs/skills/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="Skills and Automations — Atlas">
+  <meta property="og:description" content="Skill Studio, recall, automations and approvals.">
+  <meta property="og:url" content="https://atlas.aziro.com/docs/skills/">
+  <meta property="og:image" content="https://atlas.aziro.com/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Skills and Automations — Atlas">
+  <meta name="twitter:description" content="Skill Studio, recall, automations and approvals.">
+  <meta name="twitter:image" content="https://atlas.aziro.com/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Skills and Automations","description":"Skill Studio, recall, automations and approvals.","url":"https://atlas.aziro.com/docs/skills/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-08-05"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"Skills and Automations","item":"https://atlas.aziro.com/docs/skills/"}]}]</script>
+  <style>
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .brand-logo { display:block; width:29px; height:24px; object-fit:contain; }
+  .brand-word { font-size:14px; letter-spacing:.22em; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#eef2f7; border:1px solid var(--line); padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:var(--raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; box-shadow:var(--shadow); }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#f8fafc; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://atlas.aziro.com/"><img class="brand-logo" src="../../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://atlas.aziro.com/">Home</a> / <a href="https://atlas.aziro.com/docs/">Docs</a> / Skills and Automations</nav>
+      <a class="open-app" href="https://atlas.aziro.com/#docs/skills">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>Skills and automations</h1>
+<p>A skill is a runbook: the steps someone repeats to do a job — triage a timeout, restart a deployment, check a release — written down once, reviewed, and handed to every connected assistant to follow. Atlas can mine skills from the procedures it watches people repeat, or you can write one by hand; either way a skill moves through review before any agent sees it. Reach for this when your team keeps solving the same problem the same way.</p>
+<h2>Open It</h2>
+<p>The <strong>AUTOMATE</strong> group in the dashboard rail holds three views:</p>
+<ul><li><strong>Skill Studio</strong> (<code>#/studio</code>) — review what the miner found, edit a skill and preview the <code>SKILL.md</code> an agent will read.</li><li><strong>Skills</strong> (<code>#/automations</code>) — the registry: every stored version and where it is in its lifecycle.</li><li><strong>Approvals</strong> (<code>#/approvals</code>, titled <strong>Action Queue</strong>) — everything waiting for a human decision: skills submitted for trust, the actions Atlas derived from incidents, and requests from the graph.</li></ul>
+<p>From the terminal the same work is <code>atlas skill</code> (author, test, render, distribute) and <code>atlas recall</code> (mine frequent prompts, move automations through their lifecycle, sync with an org Atlas).</p>
+<figure><img src="../../assets/docs/skills/skill-studio.png" alt="Skill Studio with no mined trajectories, its filters for automatability and side-effect tier, and one registered candidate skill" loading="lazy" decoding="async"><figcaption>Skill Studio on the demo service: episode capture is off, so nothing is mined yet; one skill was registered by hand.</figcaption></figure>
+<h2>Follow a Skill Through Its Lifecycle</h2>
+<p>Every skill version is in one of five states. The <strong>Skill lifecycle</strong> strip on the Skills page counts them; click a stage to filter the registry.</p>
+<table><thead><tr><th>State</th><th>Meaning</th></tr></thead><tbody><tr><td><strong>candidate</strong></td><td>registered, not yet reviewed</td></tr><tr><td><strong>validating</strong></td><td>submitted for trust; waiting in the Action Queue</td></tr><tr><td><strong>trusted</strong></td><td>advertised to connected agents; runbooks are rendered as <code>SKILL.md</code> files</td></tr><tr><td><strong>quarantined</strong></td><td>pulled from agents pending review</td></tr><tr><td><strong>revoked</strong></td><td>permanently withdrawn</td></tr></tbody></table>
+<figure><img src="../../assets/docs/skills/skills-registry.png" alt="The Skills page: lifecycle strip with one candidate, the registry list, and the selected skill's runbook steps, rendered SKILL.md and contract" loading="lazy" decoding="async"><figcaption>A candidate runbook in the registry: its steps with their side-effect tiers, the rendered SKILL.md, and its contract.</figcaption></figure>
+<p>Selecting a skill shows its <strong>Runbook steps</strong>, each tagged with a side-effect tier (<code>read</code>, <code>mutate-local</code>, <code>mutate-shared</code>, <code>destructive</code>, <code>credential</code> or <code>unknown</code>), the <strong>Rendered SKILL.md</strong>, and its <strong>Contract</strong>: params, preconditions, verify, rollback and the files whose change makes it stale. Versions are immutable — a change is a new version that goes through review again.</p>
+<p>The Command Center shows the same counts in its <strong>Skills lifecycle</strong> panel:</p>
+<figure><img src="../../assets/docs/skills/skills-lifecycle-panel.png" alt="The Command Center's Skills lifecycle panel: candidate 0, validating 0, trusted 1, quarantined 0, revoked 0" loading="lazy" decoding="async"><figcaption>Skills lifecycle on the Command Center, read from the recall registry.</figcaption></figure>
+<h2>Let Atlas Find Repeated Work</h2>
+<p>Mining needs episodes: the sessions your assistants run, captured with prompts redacted. A service does not read your agents' transcripts unless you opt in, and says so when it starts:</p>
+<pre><code>episode capture: off — set ATLAS_SERVE_CAPTURE=1 to opt in</code></pre>
+<p>Turn it on for a service that runs on your own machine:</p>
+<pre><code>ATLAS_SERVE_CAPTURE=1 atlas serve</code></pre>
+<ul><li>The service then scans <code>~/.claude/projects</code> and <code>~/.codex/sessions</code> every <code>ATLAS_SERVE_CAPTURE_SEC</code> seconds (default 20) into its observability store — <code>telemetry.db</code> beside the graph, never the graph itself.</li><li><code>ATLAS_SERVE_CAPTURE_PROMPT_MODE</code> decides how prompts are kept: <code>off</code> stores only a hash, <code>norm</code> (the default) stores redacted normalized text, <code>raw</code> stores redacted prompt text. Tool traces are always redacted.</li><li><code>atlas privacy purge-recall --apply --yes</code> deletes what was captured. See <a href="../privacy/">Privacy</a>.</li></ul>
+<p>For a team, <code>atlas connect</code> installs the Claude and Codex capture hooks on each machine instead (see <a href="../teams/">One Atlas for a team</a>). Once episodes arrive, repeated command sequences show up as <strong>Mined trajectories</strong> in Skill Studio — filter them by <strong>Ready to automate</strong>, kind and tier, sort by <strong>hot</strong>, <strong>ROI</strong>, <strong>frequency</strong> or <strong>newest</strong> — and on the Command Center under <strong>Ready to automate</strong>. On the demo service capture is off, so both are empty:</p>
+<figure><img src="../../assets/docs/skills/ready-to-automate.png" alt="The Command Center's Ready to automate panel: No procedural clusters mined yet" loading="lazy" decoding="async"><figcaption>Ready to automate stays empty until episodes are captured.</figcaption></figure>
+<p>Recall also mines the questions people ask. Asking the same thing twice is enough to form a cluster:</p>
+<pre><code>$ atlas recall clusters
+{&quot;clusters&quot;:[{&quot;id&quot;:&quot;39da6790b3d067bc&quot;,&quot;prompt_norm&quot;:&quot;what calls modeldenied&quot;,&quot;frequency&quot;:2,&quot;user_count&quot;:1,
+  &quot;avg_tokens&quot;:8822,&quot;hot_score&quot;:9691.899128981016,&quot;success_ratio&quot;:1,&quot;automatable&quot;:&quot;yes&quot;,&quot;status&quot;:&quot;open&quot;,…},
+ {&quot;id&quot;:&quot;5a9649f09806db7b&quot;,&quot;prompt_norm&quot;:&quot;how are allowed models enforced&quot;,&quot;frequency&quot;:2,&quot;user_count&quot;:1,
+  &quot;avg_tokens&quot;:7806,&quot;hot_score&quot;:8575.767427903642,&quot;success_ratio&quot;:1,&quot;automatable&quot;:&quot;yes&quot;,&quot;status&quot;:&quot;open&quot;,…}],
+ &quot;events&quot;:4}</code></pre>
+<p><code>atlas recall promote &lt;id&gt;</code> distills a cluster into a candidate automation; <code>atlas skill new &lt;slug&gt; --from-cluster &lt;id&gt;</code> prefills a runbook from a mined trajectory; <code>atlas skill suggest</code> ranks clusters by how automatable they are.</p>
+<h2>Write a Skill</h2>
+<p>A skill pack is a folder, <code>~/.atlas/skills/&lt;slug&gt;/</code>, holding <code>skill.yaml</code>. Scaffold one, fill it in, then lint and test it:</p>
+<pre><code>$ atlas skill new upstream-timeout-triage
+scaffolded ~/.atlas/skills/upstream-timeout-triage
+edit skill.yaml, then: atlas skill lint upstream-timeout-triage &amp;&amp; atlas skill test upstream-timeout-triage</code></pre>
+<pre><code>slug: upstream-timeout-triage
+title: Triage upstream provider timeouts in inference-gateway
+version: 1
+kind: runbook
+triggers:
+  - groq is timing out
+  - failed to generate tokens
+  - upstream provider errors on the gateway
+params:
+  - name: namespace
+    default: inference
+  - name: deployment
+    default: inference-gateway
+preconditions:
+  - command -v git
+steps:
+  - run: git log --oneline -5 -- api/routes.go providers/core/provider.go
+    expect: the last changes to the chat handler and the provider client
+    tier: read
+  - run: grep -n &quot;request timed out&quot; api/routes.go
+    expect: the call sites that log the timeout
+    tier: read
+  - run: grep -n &quot;READ_TIMEOUT\|WRITE_TIMEOUT&quot; config/config.go
+    expect: the server timeouts the gateway runs with
+    tier: read
+  - run: kubectl rollout restart deployment/{deployment} -n {namespace}
+    expect: a fresh rollout once the provider recovers
+    tier: mutate-shared
+verify: the error templates for api/routes.go stop growing in Log Streams
+rollback: kubectl rollout undo deployment/{deployment} -n {namespace}
+staleness:
+  ttl_days: 90
+  files:
+    - api/routes.go
+    - providers/core/provider.go</code></pre>
+<p><code>atlas skill test</code> runs the preflight checks and the <code>read</code> steps only, and prints mutating steps without running them. A step tagged <code>read</code> whose command Atlas cannot prove read-only is refused, not run.</p>
+<pre><code>$ atlas skill lint upstream-timeout-triage
+ok
+
+$ atlas skill test upstream-timeout-triage
+preflight 1: command -v git
+/usr/bin/git
+  ✓ ok
+step 1 (read): git log --oneline -5 -- api/routes.go providers/core/provider.go
+0c89a51 feat(telemetry): name outbound spans with method and path (#554)
+3199ad2 refactor: gate image stripping on per-model modalities (#549)
+…
+  ✓ ok
+step 2 (read): grep -n &quot;request timed out&quot; api/routes.go
+486:  router.logger.Error(&quot;request timed out&quot;, err, &quot;provider&quot;, provider.GetName())
+801:  router.logger.Error(&quot;request timed out&quot;, err, &quot;provider&quot;, providerID)
+…
+  ✓ ok
+step 3 (read): grep -n &quot;READ_TIMEOUT\|WRITE_TIMEOUT&quot; config/config.go
+96:  ReadTimeout        time.Duration `env:&quot;READ_TIMEOUT, default=30s&quot; description:&quot;Read timeout&quot;`
+97:  WriteTimeout       time.Duration `env:&quot;WRITE_TIMEOUT, default=30s&quot; description:&quot;Write timeout&quot;`
+  ✓ ok
+step 4 (mutate-shared, NOT executed): kubectl rollout restart deployment/inference-gateway -n inference
+preflight + read steps pass; mutating steps printed only
+
+$ atlas skill register upstream-timeout-triage
+registered upstream-timeout-triage v1 (candidate, kind runbook)</code></pre>
+<p>Open the registered skill in <strong>Skill Studio</strong> to see it the way a reviewer will: identity and triggers, params, preconditions, steps with their tiers, and a live preview of the rendered runbook. A registered version is read-only — <strong>Fork v2 to edit</strong> starts the next version. <strong>+ New blank skill</strong> starts one from scratch in the browser.</p>
+<figure><img src="../../assets/docs/skills/skill-studio-editor.png" alt="Skill Studio showing the registered upstream-timeout-triage runbook: identity, triggers, params, preconditions and the rendered SKILL.md preview" loading="lazy" decoding="async"><figcaption>The registered runbook in Skill Studio, with the rendered SKILL.md on the right.</figcaption></figure>
+<h2>Review and Trust a Skill</h2>
+<ol><li>In <strong>Skills</strong>, select the candidate and click <strong>Submit for trust</strong>. Its state becomes <strong>validating</strong>.</li><li>Open <strong>Approvals</strong>. The skill waits under <strong>Skill candidates for org trust</strong> with its provenance, the first steps and a <strong>HIGH-TIER STEPS</strong> warning for anything beyond <code>read</code>. <strong>Runbook</strong> opens the full rendered text.</li><li>Click <strong>Approve as trusted</strong>, or <strong>Quarantine</strong> to send it back.</li></ol>
+<figure class="clip"><video autoplay muted loop playsinline preload="metadata" poster="../../assets/docs/skills/submit-for-trust.png" aria-label="Submitting the v2 candidate for trust in Skills, then opening Approvals where it waits under Skill candidates for org trust"><source src="../../assets/docs/skills/submit-for-trust.mp4" type="video/mp4"><img src="../../assets/docs/skills/submit-for-trust.gif" alt="Submitting the v2 candidate for trust in Skills, then opening Approvals where it waits under Skill candidates for org trust"></video><figcaption>Submit for trust, then review in the Action Queue.</figcaption></figure>
+<figure><img src="../../assets/docs/skills/skill-trust-review.png" alt="The skill trust review card: validating, mutate-shared, provenance, the first three read steps, the high-tier kubectl step and the Approve as trusted button" loading="lazy" decoding="async"><figcaption>The review card shows the one step that changes something shared before you approve.</figcaption></figure>
+<p><strong>Where trusted skills are written.</strong> Trusting a runbook renders it as <code>SKILL.md</code> files for the agents on the machine that runs the service, under that process's home directory. On a shared service, set <code>ATLAS_SKILLS_HOME</code> to the directory those files should go to.</p>
+<p>The same steps from the terminal, rendering into your own assistants' skill folders:</p>
+<pre><code>$ atlas recall state upstream-timeout-triage trusted
+{
+  &quot;slug&quot;: &quot;upstream-timeout-triage&quot;,
+  &quot;state&quot;: &quot;trusted&quot;
+}
+
+$ atlas skill render upstream-timeout-triage --agent claude
+rendered upstream-timeout-triage v1 → ~/.claude/skills/atlas-upstream-timeout-triage/SKILL.md
+1 skill file(s) written</code></pre>
+<p>The rendered file opens with the procedure's guard rails — run the preflight first, stop on any failed step, report the outcome — then the parameters, preflight and steps.</p>
+<h2>Decide What Waits in the Action Queue</h2>
+<p><strong>Approvals</strong> is the one place where a person says yes or no. Besides skills it holds the actions Atlas derived from active incidents — a ticket draft, a pull request naming the cited files, an alert rule — and requests Atlas raises from missing route, coverage and freshness signals in the graph.</p>
+<figure><img src="../../assets/docs/skills/action-queue.png" alt="The Action Queue: 17 awaiting review, an incident's ticket draft with its rationale, descriptor and blast radius, and the Approve and Reject buttons" loading="lazy" decoding="async"><figcaption>Incident actions in the Action Queue. Each card states what its executor would do; Atlas executes nothing.</figcaption></figure>
+<ul><li>Each card shows its rationale, what the descriptor asks for, and the blast radius if someone runs it.</li><li><strong>Approve</strong> records the decision and the exact descriptor (by digest) for whoever carries it out; <strong>Reject</strong> records the refusal. Decisions are stored on the service and listed under <strong>Recent approval activity</strong>.</li><li>Incident actions are also listed, and can be decided, on the incident itself — see <a href="../observe/">Observe</a>.</li></ul>
+<h2>From the CLI</h2>
+<pre><code>$ atlas skill list
+{&quot;skills&quot;:[{&quot;slug&quot;:&quot;upstream-timeout-triage&quot;,&quot;version&quot;:1,&quot;kind&quot;:&quot;runbook&quot;,&quot;state&quot;:&quot;candidate&quot;,
+  &quot;title&quot;:&quot;Triage upstream provider timeouts in inference-gateway&quot;}]}
+
+$ atlas recall automations
+{&quot;automations&quot;:[{&quot;slug&quot;:&quot;upstream-timeout-triage&quot;,&quot;version&quot;:1,&quot;kind&quot;:&quot;runbook&quot;,&quot;state&quot;:&quot;candidate&quot;,
+  &quot;prompt_norm&quot;:&quot;groq is timing out | failed to generate tokens | upstream provider errors on the gateway&quot;,…}],
+ &quot;runs&quot;:0,&quot;test_runs&quot;:0,&quot;tokens_saved_estimated&quot;:0,&quot;tokens_saved_measured&quot;:0,&quot;tokens_saved_total&quot;:0}</code></pre>
+<table><thead><tr><th>Command</th><th>Does</th></tr></thead><tbody><tr><td><code>atlas skill new &lt;slug&gt; [--from-cluster &lt;id&gt;]</code></td><td>Scaffold a pack, optionally prefilled from a mined trajectory.</td></tr><tr><td><code>atlas skill lint</code> / <code>test</code></td><td>Validate the pack; run preflight and read steps only.</td></tr><tr><td><code>atlas skill register [--trust]</code></td><td>Publish the pack into the local registry as a candidate.</td></tr><tr><td><code>atlas skill render [slug…] --agent &lt;agent&gt;</code></td><td>Write trusted runbooks as <code>SKILL.md</code> files for <code>claude</code>, <code>codex</code>, <code>copilot</code> or <code>all</code>.</td></tr><tr><td><code>atlas skill push</code> / <code>pull</code> / <code>fork</code></td><td>Send a skill to the org Atlas (it arrives as an org candidate), fetch org-trusted skills, or fork a read-only org skill into an editable pack.</td></tr><tr><td><code>atlas skill suggest</code> / <code>graduations</code> / <code>nominate</code></td><td>Rank automatable clusters; list trusted runbooks that earned a script promotion; push one finished session straight to review.</td></tr><tr><td><code>atlas recall clusters</code> / <code>promote</code></td><td>Mine frequent prompts; distill one into a candidate automation.</td></tr><tr><td><code>atlas recall state &lt;slug&gt; &lt;state&gt;</code></td><td>Move an automation through candidate, validating, trusted, revoked.</td></tr><tr><td><code>atlas recall push</code> / <code>pull</code></td><td>Sync trusted automations and anonymized cluster stats with the org Atlas.</td></tr></tbody></table>
+<p>See the <a href="../cli/">CLI reference</a> for every flag.</p>
+<h2>From the API</h2>
+<ul><li><code>GET /api/v1/skills</code> — the registered packs the review queue reads.</li><li><code>POST /api/v1/recall/automations/{slug}/state</code> — <code>{&quot;state&quot;: &quot;validating&quot;, &quot;version&quot;: 2}</code> moves a version through its lifecycle.</li><li><code>GET /api/v1/recall/metrics?by=skill</code> — per-skill savings from the runs ledger (recorded replays and script runs).</li><li><code>POST /api/v1/dashboard/approvals/{id}</code> — decide a card in the Action Queue.</li></ul>
+<p>State changes and decisions need the read-write token when the service enforces one. See <a href="../service/">Dashboard and HTTP API</a>.</p>
+<h2>Related</h2>
+<ul><li><a href="../observe/">Observe</a> — incidents and the actions they propose.</li><li><a href="../teams/">One Atlas for a team</a> — connect machines so skills sync both ways.</li><li><a href="../assistants/">AI assistant setup</a> — where rendered skills are read by Claude, Codex and Copilot.</li><li><a href="../privacy/">Privacy</a> — what episode capture stores and how to purge it.</li></ul>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../observe/">← Observe</a></span>
+      <span><a href="../assistants/">AI Assistant Setup →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../tour/">What Atlas Does</a>
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
+        <a href="../dashboard/">The Dashboard</a>
+        <a href="../code-map/">Code Map and Graph</a>
+        <a href="../search-and-ask/">Search and Ask</a>
+        <a href="../workbench/">Ask Workbench</a>
+        <a href="../impact/">Impact and Review</a>
+        <a href="../history/">Change Lens and History</a>
+        <a href="../sources/">Connected Sources</a>
+        <a href="../observe/">Observe</a>
+        <a href="../skills/">Skills and Automations</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../teams/">One Atlas for a Team</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>

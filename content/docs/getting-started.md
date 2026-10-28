@@ -64,6 +64,26 @@ identity, a current snapshot, and non-zero symbol and edge counts. Zero counts
 or a missing repository mean the index did not build — see
 [Troubleshooting](troubleshooting).
 
+The same index is visible in the dashboard. Run `atlas serve` and open
+`http://127.0.0.1:3099/dashboard`. **Live Activity** records the indexing pass
+with what it found — here inference-gateway, a public Go project:
+
+![A Live Activity row: indexed inference-gateway, 307 files, 11092 symbols, 13900 edges, 71 routes](assets/docs/getting-started/index-event.png "The first index of inference-gateway, as Live Activity records it: 307 files, 11,092 symbols, 13,900 edges and 71 routes in about 54 seconds.")
+
+**Workspace** (under CODEBASE) lists the repository with the same counts, its
+index mode, when it was indexed and its status, with **Orient me** and **Map**
+to start reading:
+
+![The Workspace per-repository table with inference-gateway: 307 files, 11,092 symbols, 13,900 edges, 71 routes, full, indexed](assets/docs/getting-started/workspace-repo.png "The repository in Workspace, ready to explore.")
+
+**Orient me** opens **Orientation**: the entry points the repository serves,
+its most-connected symbols and its modules — the quickest way into code you
+have not read before.
+
+![Orientation for inference-gateway: graph counts, language bars, entry points and load-bearing symbols](assets/docs/getting-started/orientation.png "Orientation for inference-gateway: entry points on the left, load-bearing symbols on the right.")
+
+[The dashboard](dashboard) walks through every view.
+
 ## 4. Run the First Queries
 
 Each query answers a different question; pick the one that matches what you

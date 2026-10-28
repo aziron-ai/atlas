@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xs573jloed");</script>
+  <title>One Atlas for a Team — Atlas documentation</title>
+  <meta name="description" content="Shared service, tokens, identity, fleet connect and devices.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="../../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../../assets/atlas-icon-128.png">
+  <link rel="canonical" href="https://atlas.aziro.com/docs/teams/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="One Atlas for a Team — Atlas">
+  <meta property="og:description" content="Shared service, tokens, identity, fleet connect and devices.">
+  <meta property="og:url" content="https://atlas.aziro.com/docs/teams/">
+  <meta property="og:image" content="https://atlas.aziro.com/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="One Atlas for a Team — Atlas">
+  <meta name="twitter:description" content="Shared service, tokens, identity, fleet connect and devices.">
+  <meta name="twitter:image" content="https://atlas.aziro.com/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"One Atlas for a Team","description":"Shared service, tokens, identity, fleet connect and devices.","url":"https://atlas.aziro.com/docs/teams/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-08-05"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"One Atlas for a Team","item":"https://atlas.aziro.com/docs/teams/"}]}]</script>
+  <style>
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .brand-logo { display:block; width:29px; height:24px; object-fit:contain; }
+  .brand-word { font-size:14px; letter-spacing:.22em; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#eef2f7; border:1px solid var(--line); padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:var(--raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; box-shadow:var(--shadow); }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#f8fafc; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://atlas.aziro.com/"><img class="brand-logo" src="../../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://atlas.aziro.com/">Home</a> / <a href="https://atlas.aziro.com/docs/">Docs</a> / One Atlas for a Team</nav>
+      <a class="open-app" href="https://atlas.aziro.com/#docs/teams">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>One Atlas for a team</h1>
+<p>One Atlas can serve a whole team: one index, one watcher and one dashboard that everyone's browser, CLI and assistants talk to. Tokens decide who may read and who may write, an identity header gives each person their own Workbench threads, and developer machines can connect to share telemetry and skills. Reach for this page when Atlas moves off your laptop and onto a machine other people reach.</p>
+<h2>Open It</h2>
+<p>Run the service on an address other machines can reach. It listens on loopback unless you say otherwise:</p>
+<pre><code>atlas token init
+atlas serve --mcp --addr 0.0.0.0:3099</code></pre>
+<p>Two dashboard views tell you how the shared service is doing. <strong>System</strong> (<code>#/system</code>, under <strong>SYSTEM</strong>) shows the service's own uptime, memory, CPU, serving latency and storage, streamed live, with buttons for a self-diagnostic, clearing stale snapshots and compacting storage; its <strong>Operational settings</strong> editor and <strong>Fleet uplink</strong> card are further down the page. <strong>Devices</strong> (<code>#/devices</code>, under <strong>FLEET</strong>) lists the machines that connected to it.</p>
+<figure><img src="../../assets/docs/teams/system-runtime.png" alt="System › Overview: uptime, memory, CPU, serving latency, graph DB size, lexical index size, telemetry DB size and events recorded" loading="lazy" decoding="async"><figcaption>System › Overview on the demo service.</figcaption></figure>
+<p><a href="../service/">Dashboard and HTTP API</a> lists every <code>atlas serve</code> flag; <a href="../configuration/">Configuration</a> lists the settings behind the editor.</p>
+<h2>Protect It with Tokens</h2>
+<p>A service with no token answers anyone who can reach it, and says so when it starts:</p>
+<pre><code>API auth: off — no --token, ATLAS_API_TOKEN or ~/.atlas/api-token; `atlas token init` turns it on</code></pre>
+<p>Mint a token into <code>~/.atlas/api-token</code>, and optionally a read-only one, then restart the service:</p>
+<pre><code>$ atlas token init
+atlas token: wrote a new read-write token to ~/.atlas/api-token (mode 0600); restart the serve to enforce it
+
+$ atlas token init --ro
+atlas token: wrote a new read-only token to ~/.atlas/api-token-ro (mode 0600); restart the serve to enforce it</code></pre>
+<pre><code>API auth: on — read-write token from ~/.atlas/api-token; read-only token from ~/.atlas/api-token-ro</code></pre>
+<ul><li>The service takes its token from <code>--token</code>, else <code>$ATLAS_API_TOKEN</code>, else <code>$ATLAS_HOME/api-token</code>. Prefer the file or the variable: a flag value shows up in <code>ps</code>.</li><li>The <strong>read-write</strong> token can do everything: index, change state, trust skills, call <code>POST /mcp</code>.</li><li>The <strong>read-only</strong> token is accepted only by routes classified as reads — give it to a dashboard or a reporting client that should look but not change anything.</li><li><code>atlas token</code> prints the token the running service enforces, for <code>curl -H &quot;Authorization: Bearer $(atlas token)&quot;</code>. Reading another rung than your own shell's <code>ATLAS_API_TOKEN</code> needs <code>sudo</code>.</li></ul>
+<p>What each caller gets, against a service with both tokens:</p>
+<pre><code># no token
+{&quot;code&quot;:&quot;unauthorized&quot;,&quot;detail&quot;:&quot;missing or invalid bearer token&quot;,&quot;status&quot;:401,&quot;title&quot;:&quot;Unauthorized&quot;,&quot;type&quot;:&quot;about:blank&quot;}
+
+# read-only token, GET /api/v1/repos
+[200]
+
+# read-only token, POST /api/v1/incidents/refresh
+{&quot;code&quot;:&quot;read_only_token&quot;,&quot;detail&quot;:&quot;the read-only Atlas token cannot call this route&quot;,&quot;error&quot;:&quot;read_only_token&quot;,&quot;status&quot;:403,&quot;title&quot;:&quot;Forbidden&quot;,&quot;type&quot;:&quot;about:blank&quot;}
+
+# read-write token, POST /api/v1/incidents/refresh
+[200]</code></pre>
+<p>The dashboard asks for the token the first time a browser opens it. Paste it into <strong>Paste ATLAS_API_TOKEN</strong> and click <strong>Unlock dashboard</strong>; the browser keeps it and reloads the live view.</p>
+<figure><img src="../../assets/docs/teams/token-prompt.png" alt="The Command Center with the Atlas token required banner, a Paste ATLAS_API_TOKEN field and an Unlock dashboard button" loading="lazy" decoding="async"><figcaption>A token-protected service refuses the dashboard's requests until a token is pasted.</figcaption></figure>
+<h2>Give Each Person Their Own Threads</h2>
+<p>The Ask Workbench keeps conversation threads on the service. With no identity configured every caller is the same local principal, and the service says so:</p>
+<pre><code>workbench threads: local mode — no identity provider, every caller is the local principal (--identity-header / ATLAS_IDENTITY_HEADER or --jira-oauth turn identity mode on)</code></pre>
+<p>Put an authenticating gateway in front of the service and have it set a header naming the user:</p>
+<pre><code>atlas serve --addr 127.0.0.1:3099 --identity-header X-Atlas-User
+# or: ATLAS_IDENTITY_HEADER=X-Atlas-User atlas serve</code></pre>
+<pre><code>workbench threads: identity mode — users from X-Atlas-User beside the read-write token; the read-write token alone is the service principal, the read-only token a reader</code></pre>
+<ul><li>Each thread is owned by the user the header names; a user sees their own threads and the ones shared with the tenant.</li><li>The header is honoured only on a request that also carries the read-write token. The gateway holds that token, so a browser cannot claim to be someone else.</li><li><code>--jira-oauth</code> is the other identity mode: each person signs in with Atlassian OAuth and gets their own Jira workspace. It needs the <code>ATLAS_JIRA_OAUTH_*</code> settings and restricts the shared graph APIs and MCP to the administrator token.</li></ul>
+<p>See <a href="../workbench/">Ask Workbench</a> for how threads work.</p>
+<h2>Connect Developer Machines</h2>
+<p>A developer machine can register with the shared service so its usage telemetry and captured episodes reach the team's Atlas, and skills sync both ways:</p>
+<pre><code>atlas connect https://atlas.example.com --token &quot;$ATLAS_SYNC_TOKEN&quot;</code></pre>
+<ul><li>The machine registers under a stable device identity (OS user and primary MAC address), writes <code>~/.atlas/config.json</code> and installs the Claude and Codex capture hooks (<code>--no-hooks</code> skips them).</li><li><code>--level</code> decides what leaves the machine: <code>off</code>, <code>telemetry</code> (metrics only), <code>interactions</code> (normalized prompts and redacted traces — the default) or <code>full</code> (raw prompts, an org opt-in). Raw transcripts, tool outputs, answers and secrets never leave at any level.</li><li><code>atlas sync status</code> shows the uplink and its cursors, <code>atlas sync now</code> pushes once, and <code>atlas disconnect</code> removes the connection and the hooks.</li><li>Skills and automations travel with <code>atlas skill push</code> / <code>pull</code> and <code>atlas recall push</code> / <code>pull</code>; a pushed skill arrives on the team service as a candidate for review. See <a href="../skills/">Skills and automations</a>.</li></ul>
+<p>Connected machines appear in <strong>Devices</strong> with their OS, Atlas version, last-seen time, events uplinked and tokens saved. The demo service has none yet:</p>
+<figure><img src="../../assets/docs/teams/devices-empty.png" alt="The Devices view: No devices registered yet. On each dev machine run atlas connect this-server-url" loading="lazy" decoding="async"><figcaption>Devices before any machine connects.</figcaption></figure>
+<p>On the service side, the <strong>Fleet uplink</strong> card on <strong>System</strong> shows the most a device may share (<code>ATLAS_SYNC_ACCEPT_LEVEL</code>) and whether this machine itself is connected to a hub:</p>
+<figure><img src="../../assets/docs/teams/fleet-uplink.png" alt="The Fleet uplink card: not connected to a hub; the server accepts up to the interactions level" loading="lazy" decoding="async"><figcaption>Fleet uplink on a service that is not itself connected to a hub.</figcaption></figure>
+<h2>Share Repositories and Stores</h2>
+<ul><li><strong>Register a repository without indexing it here.</strong> <code>atlas link org/name --branch main</code> adds it to the registry so it joins cross-repository queries and shows in <code>atlas status</code>; run <code>atlas index</code> where the code is to fill it in.</li><li><strong>Keep tenants apart.</strong> On a hosted service that holds several organisations' repositories, <code>--tenant</code> scopes every query to one of them; empty means all repositories.</li><li><strong>Find the stores a machine has used.</strong> <code>atlas stores list</code> reads the store registry without opening any graph; <code>forget</code> and <code>prune</code> tidy it.</li><li><strong>Use Postgres for a shared service.</strong> Point <code>--db</code> at a <code>postgres://</code> DSN instead of a SQLite file. The observability data — log streams, incidents, captured episodes — then lives in its own schema in the same database.</li></ul>
+<pre><code>$ atlas stores list
+LABEL       PATH                              REPOS  SYMBOLS  LAST INDEXED
+atlas-demo  …/atlas-demo/atlas.db              1      11092    2026-10-28T05:16:55Z
+
+$ atlas serve --addr 127.0.0.1:3099 --db &quot;postgres://USER:PASSWORD@HOST:5432/atlas&quot;</code></pre>
+<h2>Put It Behind TLS</h2>
+<p><code>atlas serve</code> speaks plain HTTP. When the service is reached from other machines, keep it on loopback or a private interface and terminate TLS at a reverse proxy in front of it. If the proxy also authenticates users, let it hold the read-write token and set the identity header, as above. Browser clients served from another origin must be listed in <code>ATLAS_MCP_ALLOWED_ORIGINS</code>; see <a href="../service/">Dashboard and HTTP API</a>.</p>
+<p><strong>Token handling.</strong> Anyone holding the read-write token can query every repository the service indexes and change its state. Keep it out of shared links, logs, screenshots and source control.</p>
+<h2>From the CLI</h2>
+<pre><code>$ atlas token --help
+Print the bearer token the running `atlas serve` enforces — to stdout, and
+nothing else, so `curl -H &quot;Authorization: Bearer $(atlas token)&quot;` works.
+…
+The serve resolves its own token once, at startup:
+  --token  &gt;  $ATLAS_API_TOKEN  &gt;  $ATLAS_HOME/api-token  &gt;  none (auth off)
+(read-only tier: --token-ro &gt; $ATLAS_API_TOKEN_RO &gt; $ATLAS_HOME/api-token-ro).
+
+Available Commands:
+  init        Mint a random token into $ATLAS_HOME/api-token (0600) for serve and its local clients
+  show        Same as `atlas token`: print the token the running serve enforces
+
+$ atlas connect --help
+Usage:
+  atlas connect [server-url] [flags]
+
+Flags:
+      --level string         data-sharing level: off|telemetry|interactions|full (default interactions)
+      --no-hooks             skip installing the Claude/Codex capture hooks
+      --prompt-mode string   fine-grained prompt redaction override: norm|raw|off (the level's own mode wins when unset)
+      --reset-device         recompute the device identity instead of reusing the persisted one
+      --scope string         org scope for this device's events
+      --token string         bearer token for the central Atlas (or ATLAS_SYNC_TOKEN)
+
+$ atlas sync status
+not connected (no server in ~/.atlas/config.json or ATLAS_SYNC_SERVER)</code></pre>
+<p>The <a href="../cli/">CLI reference</a> lists every command.</p>
+<h2>Related</h2>
+<ul><li><a href="../service/">Dashboard and HTTP API</a> — serve flags, origins and the API.</li><li><a href="../configuration/">Configuration</a> — settings, storage selection and profiles.</li><li><a href="../privacy/">Privacy and data handling</a> — what leaves a machine at each level, and how to purge it.</li><li><a href="../workbench/">Ask Workbench</a> — the threads identity mode gives each user.</li><li><a href="../skills/">Skills and automations</a> — what connected machines share.</li></ul>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../configuration/">← Configuration</a></span>
+      <span><a href="../upgrade/">Upgrade and Uninstall →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../tour/">What Atlas Does</a>
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
+        <a href="../dashboard/">The Dashboard</a>
+        <a href="../code-map/">Code Map and Graph</a>
+        <a href="../search-and-ask/">Search and Ask</a>
+        <a href="../workbench/">Ask Workbench</a>
+        <a href="../impact/">Impact and Review</a>
+        <a href="../history/">Change Lens and History</a>
+        <a href="../sources/">Connected Sources</a>
+        <a href="../observe/">Observe</a>
+        <a href="../skills/">Skills and Automations</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../teams/">One Atlas for a Team</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>

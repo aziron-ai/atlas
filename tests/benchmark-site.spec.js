@@ -27,9 +27,31 @@ const SECTIONS = [
 ];
 
 const DOC_PAGES = [
-  "getting-started", "installation", "concepts", "indexing", "cli", "assistants",
-  "mcp", "service", "configuration", "privacy", "languages", "benchmarks",
-  "troubleshooting", "upgrade",
+  "tour",
+  "getting-started",
+  "installation",
+  "concepts",
+  "dashboard",
+  "code-map",
+  "search-and-ask",
+  "workbench",
+  "impact",
+  "history",
+  "sources",
+  "observe",
+  "skills",
+  "assistants",
+  "mcp",
+  "cli",
+  "indexing",
+  "service",
+  "configuration",
+  "teams",
+  "upgrade",
+  "troubleshooting",
+  "privacy",
+  "languages",
+  "benchmarks",
 ];
 
 test.describe("atlas product and documentation", () => {

@@ -15,6 +15,40 @@ In managed environments, always preview first:
 atlas bootstrap --dry-run
 ```
 
+The preview names every file bootstrap would write and the entry it would put
+there. On a machine with no assistant configured yet it reads (binary path
+shortened):
+
+```text
+would write ~/.claude.json
+  mcpServers.atlas = {command: "/path/to/atlas", args: ["mcp", "--supervise", "--watch=false"]}
+would write ~/.claude/skills/atlas/SKILL.md
+  skill atlas (claude)
+would write ~/.claude/skills/atlas-sre-triage/SKILL.md
+  skill atlas-sre-triage (claude)
+would write ~/Library/Application Support/Claude/claude_desktop_config.json
+  mcpServers.atlas = {command: "/path/to/atlas", args: ["mcp", "--supervise", "--watch=false"]}
+would write ~/.cursor/mcp.json
+  mcpServers.atlas = {command: "/path/to/atlas", args: ["mcp", "--supervise", "--watch=false"]}
+would write ~/.gemini/settings.json
+  mcpServers.atlas = {command: "/path/to/atlas", args: ["mcp", "--supervise", "--watch=false"]}
+would write ~/.codex/config.toml
+  mcp_servers.atlas = {command: "/path/to/atlas", args: ["mcp", "--supervise", "--watch=false"]}
+would write ~/.codex/skills/atlas/SKILL.md
+  skill atlas (codex)
+would write ~/.codex/skills/atlas-sre-triage/SKILL.md
+  skill atlas-sre-triage (codex)
+would write ~/Library/Application Support/Code/User/mcp.json
+  servers.atlas = {command: "/path/to/atlas", args: ["mcp", "--supervise", "--watch=false"]}
+would write ~/.copilot/skills/atlas-sre-triage/SKILL.md
+  skill atlas-sre-triage (copilot)
+```
+
+Besides the `atlas` skill, bootstrap installs `atlas-sre-triage`, the runbook
+Atlas ships for answering production questions from the [Observe](observe)
+tools. When a client already has an atlas entry, the preview shows the merged
+entry, keeping any `--db` or `--repo` you pinned.
+
 Apply the changes:
 
 ```sh
@@ -111,6 +145,29 @@ pick up the server:
 
 Atlas preserves unrelated client configuration. Always review a dry run before
 applying changes in managed environments.
+
+## Ask in the Dashboard
+
+The same providers answer in the dashboard's **Ask Workbench**: a conversation
+about the codebase where Atlas gathers the evidence and the model writes the
+cited answer. A `claude` or `codex` CLI that is installed and logged in is
+detected automatically; an API key can be stored with `atlas llm set`. Check
+what is configured with:
+
+```sh
+atlas llm status
+atlas llm detect --apply
+```
+
+In the dashboard the same configuration is under **System › App integrations
+› AI providers** (`#/system?tab=integrations`): each provider's state
+(**default**, **detected**, **ready**), its model and credential, a **Test**
+button, and **Detect** to look for installed CLIs again.
+
+![System › App integrations › AI providers: two providers detected and ready, Claude as the default via the anthropic-cli provider, model claude-sonnet-5, credential cli_login](assets/docs/assistants/ai-providers.png "AI providers, detected automatically from the logged-in claude and codex CLIs.")
+
+See [Ask Workbench](workbench) for how a turn works, the threads the server
+keeps, and what leaves the machine.
 
 ## Verify
 

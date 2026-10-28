@@ -19,6 +19,7 @@
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
   .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
   a { color:var(--link); } a:hover { text-decoration:underline; }
   header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
   header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
@@ -54,20 +55,31 @@
       <h1>Atlas documentation</h1>
       <p>Local code intelligence for developers and AI coding assistants. Install Atlas, index a repository, and return focused, source-grounded context through the CLI, MCP, and a local HTTP service.</p>
       <ul>
+        <li><a href="tour/">What Atlas Does</a> — Every surface in one pass: map, search, ask, impact, history, observe, assistants.</li>
         <li><a href="getting-started/">Getting Started</a> — Create a local Atlas index, run the first cited queries, and connect an AI coding assistant.</li>
         <li><a href="installation/">Installation</a> — Install Atlas via Homebrew, npm, release archives, or native Linux packages, then verify it.</li>
         <li><a href="concepts/">Core Concepts</a> — The Atlas mental model: the code knowledge graph, snapshots, workspace resolution, output control, and the CLI, HTTP, and MCP surfaces.</li>
-        <li><a href="indexing/">Indexing and Reindexing</a> — Keep the Atlas index fresh: incremental updates, watch mode, exclusions, and recovery.</li>
-        <li><a href="cli/">CLI Reference</a> — Atlas command-line reference: search, symbols, relationships, impact, routes, and maintenance.</li>
+        <li><a href="dashboard/">The Dashboard</a> — Command Center, omnibox, inspector, pins, repositories and the system view.</li>
+        <li><a href="code-map/">Code Map and Graph</a> — Walk the call graph: map modes, files, paths, neighbors, hubs.</li>
+        <li><a href="search-and-ask/">Search and Ask</a> — Exact search, symbol answers and the AI answer on the Ask page.</li>
+        <li><a href="workbench/">Ask Workbench</a> — Ask the codebase in plain language: Atlas gathers cited evidence from the index, git and connected sources, and a model you choose writes the answer, kept as a conversation.</li>
+        <li><a href="impact/">Impact and Review</a> — Blast radius, routes, cross-repo consumers and review context for a change.</li>
+        <li><a href="history/">Change Lens and History</a> — What changed, hot files, staleness, snapshots and structural diffs.</li>
+        <li><a href="sources/">Connected Sources</a> — GitHub, Jira, Confluence, Jenkins, Prometheus, Tempo, Grafana and OneDrive as virtual repos.</li>
+        <li><a href="observe/">Observe</a> — Logs, incidents, alerts, builds and traces, bounded and cited.</li>
+        <li><a href="skills/">Skills and Automations</a> — Skill Studio, recall, automations and approvals.</li>
         <li><a href="assistants/">AI Assistant Setup</a> — Connect Claude, Codex, and other MCP-compatible assistants to Atlas.</li>
         <li><a href="mcp/">MCP Tools</a> — Atlas MCP tools that give coding assistants bounded, cited code context.</li>
+        <li><a href="cli/">CLI Reference</a> — Atlas command-line reference: search, symbols, relationships, impact, routes, and maintenance.</li>
+        <li><a href="indexing/">Indexing and Reindexing</a> — Keep the Atlas index fresh: incremental updates, watch mode, exclusions, and recovery.</li>
         <li><a href="service/">Dashboard and HTTP API</a> — Run the local Atlas dashboard and the HTTP / MCP service.</li>
         <li><a href="configuration/">Configuration</a> — Configure Atlas limits, storage location, and runtime behavior.</li>
+        <li><a href="teams/">One Atlas for a Team</a> — Shared service, tokens, identity, fleet connect and devices.</li>
+        <li><a href="upgrade/">Upgrade and Uninstall</a> — Update Atlas safely, or remove it and its local data.</li>
+        <li><a href="troubleshooting/">Troubleshooting</a> — Diagnose stale, missing, or incomplete Atlas results.</li>
         <li><a href="privacy/">Privacy and Data Handling</a> — How Atlas stores repository intelligence locally and what stays on your machine.</li>
         <li><a href="languages/">Supported Languages and Formats</a> — Languages and formats Atlas indexes, with capability levels.</li>
         <li><a href="benchmarks/">Benchmarks and Methodology</a> — How to read and reproduce the published Atlas benchmark evidence.</li>
-        <li><a href="troubleshooting/">Troubleshooting</a> — Diagnose stale, missing, or incomplete Atlas results.</li>
-        <li><a href="upgrade/">Upgrade and Uninstall</a> — Update Atlas safely, or remove it and its local data.</li>
       </ul>
     </article>
     <footer class="site">Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.</footer>

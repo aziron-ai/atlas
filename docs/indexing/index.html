@@ -30,6 +30,7 @@
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
   .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
   a { color:var(--link); } a:hover { text-decoration:underline; }
   header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
   header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
@@ -72,6 +73,15 @@
 <p>To pin an explicit database instead of the default <code>sqlite://./.atlas/atlas.db</code>:</p>
 <pre><code>atlas --db &quot;sqlite:///absolute/path/.atlas/atlas.db&quot; index .</code></pre>
 <p><code>atlas index</code> parses symbols, edges, and routes, then persists the graph and the lexical search index. By default it indexes the working tree; use <code>--ref COMMIT_OR_BRANCH</code> to index a specific commit or branch instead.</p>
+<p>A first index of inference-gateway, a Go service of 307 files, looks like this on stderr (the JSON summary goes to stdout):</p>
+<pre><code>atlas index: starting path=. db=sqlite://…/.atlas/atlas.db
+atlas index: analyzing types (307 files, 11092 symbols) elapsed=2s
+…
+atlas index: analyzing types (307 files, 11092 symbols) elapsed=24s
+atlas index: persisting 11092 symbols elapsed=26s
+atlas index: done repo=inference-gateway mode=full files=307 symbols=11092 edges=13900 routes=71 duration=27014ms
+atlas index: timings build_symbols_edges=25539ms … go_types=25510ms lexical=795ms lexical_settle=132ms log_sites=9ms parse=115ms persist=438ms …</code></pre>
+<p>On a Go repository most of a cold index is Go type analysis (<code>go_types</code>); the parse itself took 115 ms here.</p>
 <h2>What Index Output Reports</h2>
 <p>Read the index output to confirm what actually happened rather than assuming. With <code>--progress</code> (on by default for human output), Atlas prints start, periodic progress, and completion statistics to stderr. A run reports a delta update when files changed, or a no-op when the stored snapshot already matches the workspace. For profiling an index run, <code>--cpuprofile PATH</code> and <code>--memprofile PATH</code> write runtime/pprof profiles.</p>
 <p><strong>Since 0.1.48, <code>atlas index --format json</code> also reports what the run did internally</strong>, so you can verify the fast paths engaged instead of inferring it from a stopwatch:</p>
@@ -89,13 +99,31 @@
 <p>The lexical (BM25) sidecar writes new segments and supersedes old ones asynchronously, so a footprint measured the moment an index returns used to read far above the steady state. Since 0.1.48 <code>atlas index</code> settles the sidecar before it returns — a bounded segment merge, then a reclaiming reopen — and reports how that went. The settle never changes the document set and never fails a run; every failure mode degrades to a disclosed state.</p>
 <table><thead><tr><th>State</th><th>Meaning</th></tr></thead><tbody><tr><td><code>merged</code></td><td>the merge completed and superseded segments were reclaimed. <strong>Only this state asserts a steady-state footprint</strong></td></tr><tr><td><code>reclaimed</code></td><td>the merge was skipped or declined, but the reclaim ran. Superseded segments are gone; unmerged ones may remain</td></tr><tr><td><code>partial</code></td><td><strong>Since 0.1.51.</strong> Every step ran and reported success, and then the check found the sidecar still holding obsolete document bytes a compaction would reclaim — a contended machine can leave a whole superseded generation inside one segment, which the engine declines to re-merge. The reported footprint is <strong>above</strong> steady state. Re-run on a quiet machine, or run <code>atlas compact --rebuild-lexical</code>, before quoting a size</td></tr><tr><td><code>timeout</code></td><td>the merge did not finish inside its budget, so the reclaim was deliberately not attempted and the footprint may hold both unmerged and superseded segments. Raise <code>ATLAS_LEXICAL_SETTLE_TIMEOUT</code> (default 30s) and re-run</td></tr><tr><td><code>skipped</code></td><td>there was nothing to settle: no sidecar, or this run wrote no documents</td></tr><tr><td><code>failed</code></td><td>the settle itself errored; the reason is on stderr and the footprint is still reported</td></tr><tr><td><code>off</code></td><td>disabled with <code>ATLAS_LEXICAL_SETTLE=off</code></td></tr></tbody></table>
 <p>Set <code>ATLAS_LEXICAL_SETTLE=reclaim</code> to skip the merge and only reclaim — the cheaper mode for very large sidecars where a single-segment merge is not worth its write amplification.</p>
+<p>Running the same command again on an unchanged tree is a no-op — this is the real second run on inference-gateway, trimmed:</p>
+<pre><code>$ atlas index . --format json
+{
+  &quot;repo_full_name&quot;: &quot;inference-gateway&quot;,
+  &quot;commit_sha&quot;: &quot;524967508e9d90185c4a1c3540cac0dcda7c580a&quot;,
+  &quot;indexed_files&quot;: 307,
+  &quot;symbols&quot;: 11092,
+  &quot;edges&quot;: 13900,
+  &quot;routes&quot;: 71,
+  &quot;mode&quot;: &quot;noop&quot;,
+  &quot;duration_ms&quot;: 69,
+  &quot;persist_mode&quot;: &quot;noop&quot;,
+  &quot;persist_path&quot;: &quot;noop&quot;,
+  &quot;delta_base&quot;: &quot;524967508e9d90185c4a1c3540cac0dcda7c580a&quot;,
+  &quot;files_reparsed&quot;: 0,
+  &quot;lexical_bytes&quot;: 6991343,
+  &quot;lexical_settle&quot;: &quot;merged&quot;
+}</code></pre>
 <h2>Incremental Behavior</h2>
 <p>Incremental updates are the default because they are much faster than full rebuilds: Atlas computes a delta against the previous snapshot and reindexes only what changed. To diff against a specific commit rather than the stored base, pass <code>--base COMMIT</code>.</p>
 <h2>Forced Rebuild</h2>
 <p>Use <code>--reindex</code> only when the incremental path cannot repair the index:</p>
 <pre><code>atlas index . --reindex</code></pre>
 <p>The legitimate reasons for a full rebuild are:</p>
-<p>1. An upgrade reports an incompatible or stale index format, or    <code>atlas doctor</code> recommends a rebuild. 2. Parser or language support changed and old files must be reparsed. 3. The workspace identity or indexed root was incorrect, or focused    troubleshooting confirms the current index is incomplete.</p>
+<ol><li>An upgrade reports an incompatible or stale index format, or <code>atlas doctor</code> recommends a rebuild.</li><li>Parser or language support changed and old files must be reparsed.</li><li>The workspace identity or indexed root was incorrect, or focused troubleshooting confirms the current index is incomplete.</li></ol>
 <p>Do not make forced reindexing the default workflow. It is slower and discards the benefit of incremental updates.</p>
 <h2>Watch Mode</h2>
 <p>Use watch mode when you want the graph to stay fresh during active editing with no manual <code>atlas index</code> runs. <code>atlas watch</code> indexes the repo once, then watches the working tree and runs an incremental, working-tree-aware update on every file change. A burst of edits is coalesced into one update (<code>--debounce-ms</code>, default 250). It runs in the foreground until interrupted.</p>
@@ -118,54 +146,62 @@ atlas watch . --enable-vectors   # keep embeddings fresh on each update</code></
 <p><strong>Since 0.1.48, resource use is a profile decision first.</strong> Atlas detects a machine profile — <code>eco</code>, <code>balanced</code>, <code>performance</code>, or <code>turbo</code> — and sizes indexing to it. The individual knobs below all still work and all still win over the tier; they are overrides, not the primary control. Pin a tier with <code>ATLAS_PROFILE</code> and read back what it installed with <code>atlas doctor</code>; the tiers, their values, and the auto-detection rules are in <a href="../configuration/">Configuration</a>.</p>
 <p>Since 0.1.51, the one rule that matters most while indexing is: <strong><code>balanced</code> bounds background work, not the index you are waiting on.</strong> A watch-triggered refresh or an MCP lazy index runs inside a warm daemon and takes 3/4 of the cores under a <code>RAM/4</code> soft heap limit; an explicit <code>atlas index</code> you typed runs at full width with no ceiling. <code>eco</code> is deliberately not scoped that way — on a genuinely low-spec box it throttles foreground indexes too, because that is the case it exists to protect.</p>
 <p>Behaviors worth knowing on large or memory-constrained machines:</p>
-<ul><li><strong>Streaming index (v0.1.42+).</strong> Full indexes of repos over ~15,000 candidate</li></ul>
-<p>  files automatically stream in bounded batches instead of holding the whole   graph in memory — the Linux kernel (81k files, 1.86M symbols, 6.8M edges)   indexes at ~1.3 GiB peak RSS. Force it at any size with   <code>ATLAS_STREAM_INDEX=1</code> (or off with <code>0</code>); tune with   <code>ATLAS_STREAM_INDEX_THRESHOLD</code> and <code>ATLAS_STREAM_INDEX_BATCH</code>.</p>
-<ul><li><strong>CPU ceiling (v0.1.43+; an override since 0.1.48).</strong> With no profile bound</li></ul>
-<p>  in force the parse/hash pool uses all cores, so a large index can saturate   the machine (a Chromium index drove one reporter's CPU past 300%). Cap it   explicitly with <code>atlas index --workers N</code> or <code>ATLAS_INDEX_WORKERS</code> — e.g.   <code>--workers 4</code> trades a little wall-time for headroom, and <code>1</code> pins the run   to a single core. An explicit value always beats the tier's worker count.   (Go repos also run <code>go/types</code>, which spawns its own compilers outside this   pool; C/C++/other tree-sitter languages are fully bounded by it.)</p>
-<ul><li><strong>Memory ceiling (an override since 0.1.48).</strong> <code>ATLAS_MEMORY_LIMIT</code> and</li></ul>
-<p>  <code>ATLAS_GOGC</code> bound the Go runtime directly and override whatever the tier   would have set — the right tool for a container with a hard cgroup limit,   where you want a specific number rather than a fraction of host RAM.</p>
-<ul><li><strong>Deletions cost more than edits.</strong> Adding or modifying files takes the</li></ul>
-<p>  scoped delta path (sub-second, tens of MB). Deleting a Go file currently   forces the whole-module type-check fallback — correctness requires   re-deriving reverse-dependency edges — so a delete delta can approach   cold-build time and RAM on Go-heavy repos. A scoped-deletion analyzer is   planned; until then, batch deletions together when you can.</p>
+<ul><li><strong>Streaming index (v0.1.42+).</strong> Full indexes of repos over ~15,000 candidate files automatically stream in bounded batches instead of holding the whole graph in memory — the Linux kernel (81k files, 1.86M symbols, 6.8M edges) indexes at ~1.3 GiB peak RSS. Force it at any size with <code>ATLAS_STREAM_INDEX=1</code> (or off with <code>0</code>); tune with <code>ATLAS_STREAM_INDEX_THRESHOLD</code> and <code>ATLAS_STREAM_INDEX_BATCH</code>.</li><li><strong>CPU ceiling (v0.1.43+; an override since 0.1.48).</strong> With no profile bound in force the parse/hash pool uses all cores, so a large index can saturate the machine (a Chromium index drove one reporter's CPU past 300%). Cap it explicitly with <code>atlas index --workers N</code> or <code>ATLAS_INDEX_WORKERS</code> — e.g. <code>--workers 4</code> trades a little wall-time for headroom, and <code>1</code> pins the run to a single core. An explicit value always beats the tier's worker count. (Go repos also run <code>go/types</code>, which spawns its own compilers outside this pool; C/C++/other tree-sitter languages are fully bounded by it.)</li><li><strong>Memory ceiling (an override since 0.1.48).</strong> <code>ATLAS_MEMORY_LIMIT</code> and <code>ATLAS_GOGC</code> bound the Go runtime directly and override whatever the tier would have set — the right tool for a container with a hard cgroup limit, where you want a specific number rather than a fraction of host RAM.</li><li><strong>Deletions cost more than edits.</strong> Adding or modifying files takes the scoped delta path (sub-second, tens of MB). Deleting a Go file currently forces the whole-module type-check fallback — correctness requires re-deriving reverse-dependency edges — so a delete delta can approach cold-build time and RAM on Go-heavy repos. A scoped-deletion analyzer is planned; until then, batch deletions together when you can.</li></ul>
 <h2>Database Maintenance</h2>
 <p>Run maintenance when the database has grown or after an Atlas upgrade.</p>
-<ul><li><code>atlas compact</code> reports reclaimable pages and truncates the WAL. Modern</li></ul>
-<p>  Atlas databases use online incremental auto-vacuum; legacy databases are   converted with a one-time full VACUUM that takes an exclusive lock — stop   <code>atlas serve</code> and watch processes first, or you get a lock error rather   than partial work.</p>
-<ul><li><code>atlas compact --full</code> additionally runs a full VACUUM and rebuilds the</li></ul>
-<p>  lexical (BM25) sidecar when it has outgrown its size bound — the only way   dead segments are returned to the OS. Exclusive: quiesce other Atlas   processes first.</p>
-<ul><li><code>atlas compact --rebuild-lexical</code> rebuilds the lexical sidecar regardless of</li></ul>
-<p>  size — the fix for an empty or wedged sidecar, which otherwise silently   degrades every search to SQL-only. <code>atlas doctor</code> reports when you need it.</p>
-<ul><li><code>atlas migrate</code> applies storage migrations and reports the active contracts.</li></ul>
-<p>  Both <code>migrate</code> and <code>compact</code> accept <code>--all --root DIR</code> to process every   local <code>.atlas/atlas.db</code> under a directory.</p>
+<ul><li><code>atlas compact</code> reports reclaimable pages and truncates the WAL. Modern Atlas databases use online incremental auto-vacuum; legacy databases are converted with a one-time full VACUUM that takes an exclusive lock — stop <code>atlas serve</code> and watch processes first, or you get a lock error rather than partial work.</li><li><code>atlas compact --full</code> additionally runs a full VACUUM and rebuilds the lexical (BM25) sidecar when it has outgrown its size bound — the only way dead segments are returned to the OS. Exclusive: quiesce other Atlas processes first.</li><li><code>atlas compact --rebuild-lexical</code> rebuilds the lexical sidecar regardless of size — the fix for an empty or wedged sidecar, which otherwise silently degrades every search to SQL-only. <code>atlas doctor</code> reports when you need it.</li><li><code>atlas migrate</code> applies storage migrations and reports the active contracts. Both <code>migrate</code> and <code>compact</code> accept <code>--all --root DIR</code> to process every local <code>.atlas/atlas.db</code> under a directory.</li></ul>
 <h2>Verify Freshness</h2>
 <p>Confirm which index is answering before trusting results:</p>
 <pre><code>atlas status
 atlas stats
 atlas doctor</code></pre>
 <p>When multiple repositories or databases exist, pin both <code>--db</code> and <code>--repo</code>. If a running Atlas server is configured, CLI queries may use that server — unset <code>ATLAS_SERVER_URL</code> or pin an explicit database while diagnosing.</p>
+<pre><code>$ atlas stats
+stats inference-gateway  local/sqlite  history 1  coverage_facts 0
+  latest 52496750  mode full  files 307  symbols 11092  edges 13900  routes 71  53534ms
+  store_rows files 307  symbols 11092  edges 13900  routes 71
+  graph files 89  symbols 3526  edges 1317  communities 3161  isolated 3121
+  langs  go:3511 bash:9 typescript:6</code></pre>
+<p><code>store_rows</code> is what the index stored. <code>graph</code> is what the graph report reads — the same numbers the dashboard's <strong>Orientation</strong> view (<code>#/orient</code>) shows at the top, beside the repository's entry points and its most-connected symbols:</p>
+<figure><img src="../../assets/docs/indexing/orientation-index-state.png" alt="Orientation for inference-gateway: 89 files, 3,526 symbols, 1,317 edges, 3,161 communities, 3,121 isolated, a language bar, entry points and load-bearing symbols" loading="lazy" decoding="async"><figcaption>Orientation reads the graph report of the selected repository.</figcaption></figure>
+<p>To walk what was indexed file by file, open <strong>Files</strong> (<code>#/files</code>). Type in the filter to narrow the tree by path or symbol name, then click a file: the details panel lists the routes it serves, its imports and the symbols in it, with caller and callee counts.</p>
+<figure class="clip"><video autoplay muted loop playsinline preload="metadata" poster="../../assets/docs/indexing/files-after-index.png" aria-label="The Files view: filtering the indexed tree for routes, then selecting api/routes.go to show its 9 routes, 882 relations and imports"><source src="../../assets/docs/indexing/files-after-index.mp4" type="video/mp4"><img src="../../assets/docs/indexing/files-after-index.gif" alt="The Files view: filtering the indexed tree for routes, then selecting api/routes.go to show its 9 routes, 882 relations and imports"></video><figcaption>Files after an index: api/routes.go serves 9 routes.</figcaption></figure>
+<p>The counter beside the filter says how much of the index the view loaded. On a large repository the first load is a sample; expanding a folder fetches that folder in full.</p>
 <h2>Safe Recovery Order</h2>
 <p>Follow this order so you never destroy data a cheaper step could have fixed:</p>
-<p>1. Stop active <code>serve</code>, <code>watch</code>, and supervised MCP processes. 2. Run <code>atlas status</code> and <code>atlas doctor</code>. 3. Confirm the repository and database paths. 4. Run <code>atlas migrate</code> when a schema upgrade is required. 5. Rebuild lexical data only when recommended. 6. Run <code>atlas index . --reindex</code> as the final non-destructive repair. 7. Delete <code>.atlas</code> only when a complete data reset is intended.</p>
+<ol><li>Stop active <code>serve</code>, <code>watch</code>, and supervised MCP processes.</li><li>Run <code>atlas status</code> and <code>atlas doctor</code>.</li><li>Confirm the repository and database paths.</li><li>Run <code>atlas migrate</code> when a schema upgrade is required.</li><li>Rebuild lexical data only when recommended.</li><li>Run <code>atlas index . --reindex</code> as the final non-destructive repair.</li><li>Delete <code>.atlas</code> only when a complete data reset is intended.</li></ol>
 <p>See <a href="../troubleshooting/">Troubleshooting</a> before removing data.</p>
     </article>
     <nav class="prevnext">
-      <span><a href="../concepts/">← Core Concepts</a></span>
-      <span><a href="../cli/">CLI Reference →</a></span>
+      <span><a href="../cli/">← CLI Reference</a></span>
+      <span><a href="../service/">Dashboard and HTTP API →</a></span>
     </nav>
     <nav class="doclist" aria-label="All documentation">
+        <a href="../tour/">What Atlas Does</a>
         <a href="../getting-started/">Getting Started</a>
         <a href="../installation/">Installation</a>
         <a href="../concepts/">Core Concepts</a>
-        <a href="../indexing/">Indexing and Reindexing</a>
-        <a href="../cli/">CLI Reference</a>
+        <a href="../dashboard/">The Dashboard</a>
+        <a href="../code-map/">Code Map and Graph</a>
+        <a href="../search-and-ask/">Search and Ask</a>
+        <a href="../workbench/">Ask Workbench</a>
+        <a href="../impact/">Impact and Review</a>
+        <a href="../history/">Change Lens and History</a>
+        <a href="../sources/">Connected Sources</a>
+        <a href="../observe/">Observe</a>
+        <a href="../skills/">Skills and Automations</a>
         <a href="../assistants/">AI Assistant Setup</a>
         <a href="../mcp/">MCP Tools</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
         <a href="../service/">Dashboard and HTTP API</a>
         <a href="../configuration/">Configuration</a>
+        <a href="../teams/">One Atlas for a Team</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
         <a href="../privacy/">Privacy and Data Handling</a>
         <a href="../languages/">Supported Languages and Formats</a>
         <a href="../benchmarks/">Benchmarks and Methodology</a>
-        <a href="../troubleshooting/">Troubleshooting</a>
-        <a href="../upgrade/">Upgrade and Uninstall</a>
     </nav>
     <footer class="site">
       Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.

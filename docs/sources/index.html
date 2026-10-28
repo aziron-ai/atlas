@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xs573jloed");</script>
+  <title>Connected Sources — Atlas documentation</title>
+  <meta name="description" content="GitHub, Jira, Confluence, Jenkins, Prometheus, Tempo, Grafana and OneDrive as virtual repos.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="../../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../../assets/atlas-icon-128.png">
+  <link rel="canonical" href="https://atlas.aziro.com/docs/sources/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="Connected Sources — Atlas">
+  <meta property="og:description" content="GitHub, Jira, Confluence, Jenkins, Prometheus, Tempo, Grafana and OneDrive as virtual repos.">
+  <meta property="og:url" content="https://atlas.aziro.com/docs/sources/">
+  <meta property="og:image" content="https://atlas.aziro.com/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Connected Sources — Atlas">
+  <meta name="twitter:description" content="GitHub, Jira, Confluence, Jenkins, Prometheus, Tempo, Grafana and OneDrive as virtual repos.">
+  <meta name="twitter:image" content="https://atlas.aziro.com/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Connected Sources","description":"GitHub, Jira, Confluence, Jenkins, Prometheus, Tempo, Grafana and OneDrive as virtual repos.","url":"https://atlas.aziro.com/docs/sources/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-08-05"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"Connected Sources","item":"https://atlas.aziro.com/docs/sources/"}]}]</script>
+  <style>
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .brand-logo { display:block; width:29px; height:24px; object-fit:contain; }
+  .brand-word { font-size:14px; letter-spacing:.22em; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#eef2f7; border:1px solid var(--line); padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:var(--raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; box-shadow:var(--shadow); }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#f8fafc; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://atlas.aziro.com/"><img class="brand-logo" src="../../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://atlas.aziro.com/">Home</a> / <a href="https://atlas.aziro.com/docs/">Docs</a> / Connected Sources</nav>
+      <a class="open-app" href="https://atlas.aziro.com/#docs/sources">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>Connected sources</h1>
+<p>A connected source brings the records around your code — pull requests and issues, tickets, wiki pages, dashboards and alert rules, builds, traces, drive files — into Atlas as a virtual repository. Each record becomes a real file with real line ranges, indexed like code, so a citation into a pull request validates by path and hash exactly the way a citation into a function does. Reach for it when the answer you need is the why behind the code: the ticket that asked for a change, the pull request that made it, the alert that fires on it.</p>
+<h2>Open It</h2>
+<p>Sources are added and synced from the CLI. Two dashboard pages show them:</p>
+<ul><li><strong>Connectors</strong> in FLEET (<code>#/connectors</code>) — the monitoring kinds (Prometheus, Grafana, Jenkins, Tempo) beside the log pulls, each with its status and a <strong>Configure</strong> form.</li><li><strong>System</strong> → <strong>App integrations</strong> (<code>#/system?tab=integrations</code>) — the GitHub and Pulse lanes of the Ask Workbench, and Jira sign-in.</li></ul>
+<figure><img src="../../assets/docs/sources/connectors-view.png" alt="The Connectors view: cards for Grafana Loki, Elasticsearch, Prometheus, Grafana, Jenkins, Jenkins console pull and Tempo, two of them configured" loading="lazy" decoding="async"><figcaption>Connectors on the demo service: a Loki log pull and the public Prometheus at demo.promlabs.com are configured; the other cards wait for Configure.</figcaption></figure>
+<p>In a terminal, <code>atlas source list</code> shows what is configured and <code>atlas source status</code> what each source has actually synced.</p>
+<h2>Choose a Kind</h2>
+<p>Eight kinds are registered. Each turns its records into Markdown documents under its own virtual repository (<code>github://&lt;name&gt;</code>, <code>prometheus://&lt;name&gt;</code>, …):</p>
+<table><thead><tr><th>Kind</th><th>What becomes a document</th><th>Credential</th><th>Also feeds</th></tr></thead><tbody><tr><td><code>github</code></td><td>Pull requests and issues of each <code>--repo owner/name</code>, as <code>github/&lt;owner&gt;/&lt;repo&gt;/pull/&lt;n&gt;.md</code> and <code>…/issue/&lt;n&gt;.md</code></td><td><code>--token-env GITHUB_TOKEN</code></td><td>The Workbench's GitHub lane</td></tr><tr><td><code>jira</code></td><td>The issues of <code>--project KEY</code> (or a <code>--jql</code> filter)</td><td><code>--email</code> and <code>--token-env</code>; none for a public instance</td><td>The Workbench's Jira lane</td></tr><tr><td><code>confluence</code></td><td>The pages of <code>--space KEY</code> (optionally narrowed with <code>--cql</code>)</td><td><code>--email</code> and <code>--token-env</code>; none for a public instance</td><td>The Workbench's Confluence lane</td></tr><tr><td><code>onedrive</code></td><td>The files of a drive (<code>--drive me</code>), optionally one <code>--folder</code></td><td>A bearer token in <code>--token-env</code>; there is no anonymous tier</td><td>—</td></tr><tr><td><code>grafana</code></td><td>Dashboards and alert rules, as <code>grafana/dashboards/&lt;uid&gt;.md</code> and <code>grafana/alerts/&lt;uid&gt;.md</code></td><td>A Viewer service-account token in <code>--token-env</code></td><td>Dashboard and alert-rule citations in Incidents</td></tr><tr><td><code>prometheus</code></td><td>Its rules</td><td>None, or a bearer for a proxy that demands one</td><td><code>atlas metrics</code>, Alerts &amp; Metrics</td></tr><tr><td><code>jenkins</code></td><td>Jobs and builds</td><td>None where the controller allows it, else <code>--email &lt;user id&gt;</code> and <code>--token-env</code></td><td><code>atlas builds</code>, Builds</td></tr><tr><td><code>tempo</code></td><td>The services it saw</td><td>None, or a bearer for a proxy</td><td><code>atlas traces</code>, Traces</td></tr></tbody></table>
+<h2>Add and Sync a Source</h2>
+<p>The demo service has one public source: the pull requests and issues of <code>inference-gateway/inference-gateway</code> on GitHub. Adding it validates the connection and writes the configuration; it pulls nothing:</p>
+<pre><code>atlas source add github --kind github --repo inference-gateway/inference-gateway --token-env GITHUB_TOKEN --window 90d</code></pre>
+<pre><code>{
+  &quot;name&quot;: &quot;github&quot;,
+  &quot;kind&quot;: &quot;github&quot;,
+  &quot;repos&quot;: [&quot;inference-gateway/inference-gateway&quot;],
+  &quot;token_env&quot;: &quot;GITHUB_TOKEN&quot;,
+  &quot;credential_rung&quot;: &quot;none&quot;,
+  &quot;credential_reason&quot;: &quot;$GITHUB_TOKEN is empty and the gh CLI is not installed&quot;,
+  &quot;window&quot;: &quot;90d&quot;,
+  &quot;validated&quot;: true,
+  &quot;validated_by&quot;: &quot;connector&quot;,
+  &quot;next&quot;: &quot;atlas source sync github&quot;
+}</code></pre>
+<p><strong>Credentials are names.</strong> <code>--token-env</code> names an environment variable; the token is read from it at sync time and never stored, so the sources file cannot leak one. Here the variable is set for the one sync command only.</p>
+<p><code>atlas source sync</code> does the work: it pulls everything changed since the stored cursor, writes each record as a file, and indexes the result as a virtual repository:</p>
+<pre><code>GITHUB_TOKEN=$(gh auth token) atlas source sync github</code></pre>
+<pre><code>{
+  &quot;name&quot;: &quot;github&quot;,
+  &quot;repo_full_name&quot;: &quot;github://github&quot;,
+  &quot;window&quot;: &quot;90d&quot;,
+  &quot;docs_fetched&quot;: 287,
+  &quot;docs_written&quot;: 287,
+  &quot;indexed_files&quot;: 287,
+  &quot;symbols&quot;: 1402,
+  &quot;reconciled&quot;: true,
+  &quot;next_reconcile_at&quot;: &quot;2026-11-04T05:45:02Z&quot;,
+  &quot;duration_ms&quot;: 228002
+}</code></pre>
+<p>287 pull requests and issues updated in the last 90 days became 287 files in <code>github://github</code>. A sync that finds nothing new is a no-op, not a new snapshot, and a sync that fails part-way resumes from its last checkpoint. <code>atlas source status</code> reports what is held:</p>
+<pre><code>atlas source status github</code></pre>
+<pre><code>{
+  &quot;name&quot;: &quot;github&quot;,
+  &quot;kind&quot;: &quot;github&quot;,
+  &quot;token_env&quot;: &quot;GITHUB_TOKEN&quot;,
+  &quot;token_present&quot;: false,
+  &quot;credential_rung&quot;: &quot;none&quot;,
+  &quot;repo_full_name&quot;: &quot;github://github&quot;,
+  &quot;docs&quot;: 287,
+  &quot;window&quot;: &quot;90d&quot;,
+  &quot;oldest_updated&quot;: &quot;2026-07-31T09:51:54Z&quot;,
+  &quot;newest_updated&quot;: &quot;2026-10-27T17:54:30Z&quot;,
+  &quot;last_synced_at&quot;: &quot;2026-10-28T05:41:16Z&quot;,
+  &quot;next_reconcile_at&quot;: &quot;2026-11-04T05:45:02Z&quot;
+}</code></pre>
+<p><code>token_present</code> is <code>false</code> because the variable was set only for the sync.</p>
+<h2>Configure a Monitoring Source from the Dashboard</h2>
+<p>The monitoring kinds can also be added on <strong>Connectors</strong>. <strong>Configure</strong> opens a form: a source name, the base URL and the name of the variable that holds the token. As you type, the card shows the same write two other ways — the CLI command and the HTTP request.</p>
+<figure class="clip"><video autoplay muted loop playsinline preload="metadata" poster="../../assets/docs/sources/configure-a-source.png" aria-label="Opening Configure on the Grafana card, typing a source name, a base URL and GRAFANA_SA_TOKEN, and the CLI and HTTP spellings filling in"><source src="../../assets/docs/sources/configure-a-source.mp4" type="video/mp4"><img src="../../assets/docs/sources/configure-a-source.gif" alt="Opening Configure on the Grafana card, typing a source name, a base URL and GRAFANA_SA_TOKEN, and the CLI and HTTP spellings filling in"></video><figcaption>The Grafana form. The token field takes a variable name, and the CLI and POST spellings update as you type. The clip stops before Save.</figcaption></figure>
+<p><strong>Save &amp; validate</strong> has the service reach the URL and check the configuration before anything is written; the result appears in the card. A configured card shows the source's state and offers <strong>Edit</strong> and <strong>Remove</strong>. Log pulls and the Observe views are covered in <a href="../observe/">Observe</a>.</p>
+<h2>Find Pull Requests and Issues in Answers</h2>
+<p>Once synced, the records answer like code. Search the virtual repository from the CLI:</p>
+<pre><code>atlas search --repo github://github --format plain streaming</code></pre>
+<pre><code>search  mode lexical  total 20
+  matches  118  (page limit 20)
+  #578: fix(proxy): relay upstream status and body on streaming /proxy requests  section  github/inference-gateway/inference-gateway/pull/578.md:24  :: …
+  #695: [BUG] MCP streaming mode leaks tool_call deltas to the client …  section  github/inference-gateway/inference-gateway/issue/695.md:15  :: …
+  #696: fix(mcp): keep agent tool-call chunks off the client stream  section  github/inference-gateway/inference-gateway/pull/696.md:24  :: …
+  …</code></pre>
+<p>On <strong>Ask Atlas</strong>, choose <strong>docs</strong> and the <code>github://github</code> repository: the answer quotes the passage verbatim, cites the document by path and line, and offers <strong>Open in Github ↗</strong> to the original.</p>
+<figure><img src="../../assets/docs/sources/ask-github-pr.png" alt="Ask Atlas over github://github for Retry-After header: the best passage is the title of pull request 752, cited as github/inference-gateway/inference-gateway/pull/752.md, with Open document and Open in Github" loading="lazy" decoding="async"><figcaption>Pull request #752 found by Ask Atlas: 6 documents answer, the best passage cited by path and line.</figcaption></figure>
+<h2>See a Source's State in the Dashboard</h2>
+<p><strong>System</strong> → <strong>App integrations</strong> → <strong>Integrations</strong> shows each GitHub source as the service sees it: the repositories it covers, how many records it holds, its credential, its window, the last sync and the webhook address to paste into the repository's settings.</p>
+<figure><img src="../../assets/docs/sources/github-integration.png" alt="The Integrations card: GitHub with no credential, source github with 287 PRs and issues stored, repo inference-gateway/inference-gateway, credential none, window 90d, last sync, and the webhook URL; Pulse with nothing pushed" loading="lazy" decoding="async"><figcaption>The demo's GitHub source: 287 records, a 90-day window, and no credential in the service's own environment.</figcaption></figure>
+<p>The <strong>Credential</strong> row is the rung the service is on: <strong>env</strong> (the variable the source names is set in the service's environment), <strong>gh_cli</strong> (<code>gh auth token</code>, used only by a service listening on loopback) or <strong>none</strong>. The service reads the variable from its own environment — for a background service, the environment it was started with, not your shell's. The Ask Workbench's GitHub lane — pull requests, checks and reviews read for a question — needs that credential. On the demo the service was started without it, so the lane reads <strong>not connected</strong> under every answer, while the synced records stay searchable. <strong>Connect</strong> leads to this page.</p>
+<figure><img src="../../assets/docs/sources/workbench-source-lanes.png" alt="The source lanes under a Workbench answer: Atlas 11, Git 3, GitHub not connected, Jira not connected, Confluence not connected, Pulse not connected, each with Connect" loading="lazy" decoding="async"><figcaption>The lanes under a Workbench answer on the demo: Atlas and Git answered; GitHub, Jira, Confluence and Pulse are not connected.</figcaption></figure>
+<h2>Keep a Source Current</h2>
+<ul><li><strong>Rolling window.</strong> A Jira or GitHub source pulls only records updated within its window — 180 days unless <code>--window</code> says otherwise — and the same window is the corpus's time-to-live: a record that falls behind it leaves at the next sync. Other kinds are unbounded unless you set one; Prometheus refuses one. <code>atlas source set &lt;name&gt; --window 26w</code> changes it: widening back-fills exactly the newly covered range, narrowing prunes locally without a request.</li><li><strong>Schedule.</strong> A running service resyncs its sources every 15 minutes by default (<code>atlas serve --source-sync-every</code>); <code>--sync-every</code> on a source overrides it, and <code>0</code> opts that source out. The demo's GitHub source is synced by hand:</li></ul>
+<pre><code>atlas source set github --sync-every 0</code></pre>
+<pre><code>{
+  &quot;name&quot;: &quot;github&quot;,
+  &quot;next&quot;: &quot;atlas source sync github&quot;,
+  &quot;sync_every&quot;: &quot;0&quot;,
+  &quot;sync_every_effect&quot;: &quot;the serve no longer syncs this source on a schedule; its webhook and `atlas source sync` still do&quot;
+}</code></pre>
+<ul><li><strong>Deletions.</strong> A sync removes records the source no longer lists by reconciling its membership every 7 days (<code>--reconcile-every</code>), or at once with <code>atlas source sync &lt;name&gt; --reconcile</code>. <code>--full</code> re-pulls everything from the beginning.</li><li><strong>Webhooks.</strong> A webhook makes a change visible in seconds instead of at the next sync. For Jira, <code>atlas source webhook &lt;name&gt; --secret-env NAME</code> prints the setup, <code>--register</code> creates it through Jira's admin API and <code>--verify</code> waits for the first delivery. For GitHub, the Integrations card gives the address (<code>/api/v1/sources/&lt;name&gt;/webhook</code>) for the <code>pull_request</code>, <code>issues</code> and <code>push</code> events, signed with <code>X-Hub-Signature-256</code>.</li></ul>
+<h2>Connect Jira</h2>
+<p>Jira connects two ways, for two jobs:</p>
+<ul><li><strong>As a source</strong> — one project materialized into the corpus with the service's credential, so tickets are searchable, citable and offered to the Workbench's Jira lane. A public instance needs no credential: leave <code>--email</code> and <code>--token-env</code> off.</li><li><strong>As sign-in</strong> — each person connects their own Atlassian account under <strong>System</strong> → <strong>App integrations</strong> → <strong>Jira</strong> and searches Jira live with their own permissions. The service must be started with <code>--jira-oauth</code> and the <code>ATLAS_JIRA_OAUTH_*</code> settings.</li></ul>
+<pre><code>atlas source add jira-ops --kind jira --url https://jira.example.com --project OPS \
+  --email you@example.com --token-env JIRA_API_TOKEN --window 90d
+atlas source sync jira-ops</code></pre>
+<p>The demo service has neither, and its Jira card says so:</p>
+<figure><img src="../../assets/docs/sources/jira-card.png" alt="The Jira card under App integrations: Not connected, Jira sign-in is not configured, Ask your Atlas administrator to enable Jira sign-in for this Command Center" loading="lazy" decoding="async"><figcaption>Jira under App integrations on a service started without --jira-oauth.</figcaption></figure>
+<h2>Remove a Source</h2>
+<pre><code>atlas source remove github          # forget how the corpus was fetched; keep the corpus
+atlas source remove github --purge  # also delete the materialized files</code></pre>
+<p>Without <code>--purge</code> the files and the indexed snapshots stay, so re-adding the source resumes where it left off. On <strong>Connectors</strong>, <strong>Remove</strong> does the same for a monitoring source after a second click to confirm.</p>
+<h2>From the API</h2>
+<table><thead><tr><th>Route</th><th>Does</th></tr></thead><tbody><tr><td><code>GET /api/v1/sources</code></td><td>Every source with its kind, window, credential rung, document count and sync state</td></tr><tr><td><code>POST /api/v1/sources</code></td><td>Add or replace a source; the service validates it before writing</td></tr><tr><td><code>DELETE /api/v1/sources/{name}</code></td><td>Remove a source</td></tr><tr><td><code>POST /api/v1/sources/{name}/webhook</code></td><td>The webhook door a Jira or GitHub delivery posts to</td></tr><tr><td><code>GET /api/v1/sources/pulse/status</code></td><td>The findings Pulse has pushed</td></tr></tbody></table>
+<p>Writes need the read-write token where a token is set. See <a href="../service/">Dashboard and API</a> and, for every flag, the <a href="../cli/">CLI reference</a>.</p>
+<h2>Related</h2>
+<ul><li><a href="../workbench/">Ask Workbench</a> — where the GitHub, Jira, Confluence and Pulse lanes answer.</li><li><a href="../search-and-ask/">Search and Ask</a> — searching code and documents together.</li><li><a href="../observe/">Observe</a> — log pulls, metrics, builds and traces from the monitoring kinds.</li><li><a href="../privacy/">Privacy and data</a> — what a sync stores and where.</li></ul>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../history/">← Change Lens and History</a></span>
+      <span><a href="../observe/">Observe →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../tour/">What Atlas Does</a>
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
+        <a href="../dashboard/">The Dashboard</a>
+        <a href="../code-map/">Code Map and Graph</a>
+        <a href="../search-and-ask/">Search and Ask</a>
+        <a href="../workbench/">Ask Workbench</a>
+        <a href="../impact/">Impact and Review</a>
+        <a href="../history/">Change Lens and History</a>
+        <a href="../sources/">Connected Sources</a>
+        <a href="../observe/">Observe</a>
+        <a href="../skills/">Skills and Automations</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../teams/">One Atlas for a Team</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>
