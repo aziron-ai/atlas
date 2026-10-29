@@ -264,7 +264,7 @@ const agentBenchBlock = !ab ? "" : `
         <h2>What a real agent actually spends — ${esc(ab.label)}</h2>
         <p>${esc(ab.agents.map((a) => `${a.harness} (${a.model})`).join(" and "))}, run headless in ${esc(ab.repo)} (@${esc(ab.commit7)}) and restricted to one
            code-intelligence CLI per run; token numbers are each harness's own usage accounting over
-           ${ab.nQuestions} caller questions with ${esc(ab.truth)}. Atlas binary: ${esc(ab.atlasBuild || "—")}; graph tool: ${esc(ab.graphifyVersion || "—")}. ${esc(ab.caveat)}</p>
+           ${ab.nQuestions} caller questions with ${esc(ab.truth)}. Atlas binary: ${esc(ab.atlasBinary || ab.atlasBuild || "—")}; graph tool: ${esc(ab.graphifyVersion || "—")}. ${esc(ab.caveat)}</p>
         <table>
           <thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Mean turns</th><th>Mean F1</th></tr></thead>
           <tbody>
@@ -275,7 +275,14 @@ const agentBenchBlock = !ab ? "" : `
           ).join("\n          ")}
           </tbody>
         </table>
-        <p>No tool / graph tool over Atlas, total tokens: ${esc(ab.agents.map((a) => `${a.id} ${xf(a.vsAtlas.baseline?.totalTokens)} / ${xf(a.vsAtlas.graphify?.totalTokens)}`).join(", "))}.${ab.supersedes ? ` This replaces the ${esc(ab.supersedes.date)} run (${esc(Object.entries(ab.supersedes.vsAtlasTotalTokens || {}).map(([a, v]) => `${a} ${xf(v.baseline)} / ${xf(v.graphify)}`).join(", "))}). ${esc(ab.supersedes.why)}` : ""}</p>
+        <p>No tool / graph tool over Atlas, total tokens: ${esc(ab.agents.map((a) => `${a.id} ${xf(a.vsAtlas.baseline?.totalTokens)} / ${xf(a.vsAtlas.graphify?.totalTokens)}`).join(", "))}; marginal (total minus the harness floor): ${esc(ab.agents.map((a) => `${a.id} ${xf(a.vsAtlas.baseline?.marginal)} / ${xf(a.vsAtlas.graphify?.marginal)}`).join(", "))}. ${esc(ab.marginalNote || "")}${ab.supersedes ? ` This replaces the ${esc(ab.supersedes.date)} run (${esc(Object.entries(ab.supersedes.vsAtlasTotalTokens || {}).map(([a, v]) => `${a} ${xf(v.baseline)} / ${xf(v.graphify)}`).join(", "))}). ${esc(ab.supersedes.moved || "")}` : ""}</p>${ab.history?.length > 1 ? `
+        <table>
+          <thead><tr><th>Run</th><th>Atlas build</th><th>Agent · harness · model</th><th>Floor</th><th>Atlas F1</th><th>Total tokens × (no tool / graph tool)</th><th>Marginal × (no tool / graph tool)</th></tr></thead>
+          <tbody>
+          ${ab.history.flatMap((h) => h.agents.map((a) =>
+            `<tr><td>${esc(h.date)}${h.current ? " (current)" : ""}</td><td>${esc(h.atlasRelease ? `${h.atlasRelease}${h.atlasCommit ? ` (${h.atlasCommit})` : ""}` : h.atlasVersion || "—")}</td><td>${esc(`${a.id} · ${a.harness} · ${a.model}`)}</td><td>${a.calibrationTotal?.toLocaleString("en-US") ?? "—"}</td><td>${f3(a.atlasF1)}</td><td>${xf(a.vsAtlasTotalTokens?.baseline)} / ${xf(a.vsAtlasTotalTokens?.graphify)}</td><td>${xf(a.vsAtlasMarginal?.baseline)} / ${xf(a.vsAtlasMarginal?.graphify)}</td></tr>`)).join("\n          ")}
+          </tbody>
+        </table>` : ""}
         <p>Reproducible from any machine: the suite ships in
            <a href="https://github.com/aziron-ai/atlas/tree/main/agent-bench">agent-bench/</a> (pinned commit, frozen
            gopls question set, isolation flags baked in); per-run records in
@@ -505,7 +512,7 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intellig
 ${ab ? `- [${baseName(ab.artifact)}](${BASE}${ab.artifact}): end-to-end token usage of real agent harnesses (Claude Code, OpenAI Codex) with Atlas vs graph tool vs no tool, ${ab.date} — reproducible via agent-bench/ in the GitHub repo
 ` : ""}${L ? L.languages.map((l) => `- [${baseName(l.artifact)}](${BASE}${l.artifact}): the same harness on ${l.label} (${l.repo}), ${L.date}`).join("\n") + "\n" : ""}${T ? `- [${baseName(T.artifact)}](${BASE}${T.artifact}): tool-level callers F1 against each language's LSP server, 8 languages, ${T.date}
 ` : ""}${RV ? `- [${baseName(RV.artifact)}](${BASE}${RV.artifact}): natural-language relevance benchmark (216 labelled queries, 3 surfaces, regression gate), ${RV.date} — harness in relevance-bench/
-` : ""}- [AGENT_TOKEN_BENCH_PUBLIC.json](${BASE}data/raw/AGENT_TOKEN_BENCH_PUBLIC.json): the superseded 2026-08-05 agent-harness run, kept for audit
+` : ""}${(ab?.history || []).filter((h) => !h.current).map((h) => `- [${baseName(h.artifact)}](${BASE}${h.artifact}): the superseded ${h.date} agent-harness run (Atlas ${h.atlasRelease || h.atlasVersion}), kept in the run history for audit`).join("\n")}
 
 ## Project
 - [Product documentation](${BASE}#docs/getting-started): install, index, query, configure, connect, troubleshoot, and upgrade

@@ -133,9 +133,10 @@ models; the gap is what to compare.
 
 | Run | Where | Per-run records |
 | --- | --- | --- |
-| logrus, 2026-10-28, released Atlas 0.1.54, Claude Code 2.1.304 (claude-sonnet-5), Codex CLI 0.162.1 (gpt-6.1-sol) | [#agents](https://atlas.aziro.com/#agents) | [`AGENT_TOKEN_BENCH_PUBLIC_20261028.json`](../data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json) |
+| logrus, 2026-10-29, Atlas 0.1.55 (the release code, built from 3790ba95), Claude Code 2.1.304 (claude-sonnet-5), Codex CLI 0.162.1 (gpt-6.1-sol) | [#agents](https://atlas.aziro.com/#agents) | [`AGENT_TOKEN_BENCH_PUBLIC_20261029.json`](../data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261029.json) |
+| logrus, 2026-10-28 (superseded), released Atlas 0.1.54, same agents | [#agents](https://atlas.aziro.com/#agents) (run history) | [`AGENT_TOKEN_BENCH_PUBLIC_20261028.json`](../data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json) |
 | eight languages, 2026-10-28, develop builds that ship in 0.1.55, same agents | [#agent-languages](https://atlas.aziro.com/#agent-languages) | `AGENT_TOKEN_BENCH_<LANG>_20261028.json` in [`data/raw/`](../data/raw/) |
-| logrus, 2026-08-05 (superseded), Claude Code 2.1.178, Codex CLI 0.146.0-alpha.9.2 (gpt-5.6-sol) | — | [`AGENT_TOKEN_BENCH_PUBLIC.json`](../data/raw/AGENT_TOKEN_BENCH_PUBLIC.json) |
+| logrus, 2026-08-05 (superseded), Claude Code 2.1.178, Codex CLI 0.146.0-alpha.9.2 (gpt-5.6-sol) | [#agents](https://atlas.aziro.com/#agents) (run history) | [`AGENT_TOKEN_BENCH_PUBLIC.json`](../data/raw/AGENT_TOKEN_BENCH_PUBLIC.json) |
 
 The question sets for C, C++, Java, JavaScript, Python, Rust and TypeScript are
 also the label source of the natural-language relevance benchmark in

@@ -1040,23 +1040,38 @@ function BenchmarkDocsRuns({ data }) {
   const T = data.lspTruthLanguages;
   const R = data.relevance;
   const order = { atlas: 0, baseline: 1, graphify: 2 };
-  const abVersion = ab?.atlasBuild ? (ab.atlasBuild.match(/^atlas v?(\S+)/) || [])[1] : null;
+  const abVersion = ab ? ab.atlasRelease || (ab.atlasBuild ? (ab.atlasBuild.match(/^atlas v?(\S+)/) || [])[1] : null) : null;
+  const pair = (v) => `${docX(v?.baseline)} / ${docX(v?.graphify)}`;
   const agentLine = (agents) => agents.map((a) => `${a.harness} (${a.model})`).join(" and ");
   return (
     <>
       {ab && (
         <ProseSection title={`Agent-Harness Token Benchmark (${ab.date}${abVersion ? `, Atlas ${abVersion}` : ""})`}>
-          <p>This measures what a real agent actually spends. {agentLine(ab.agents)} ran headless in {ab.repo} (@{ab.commit7}), restricted to one code-intelligence CLI per run, answering {ab.nQuestions} caller questions scored against {ab.truth}. The Atlas binary was {ab.atlasBuild}; the graph tool was {ab.graphifyVersion}. Token numbers are each harness's own usage accounting. All {ab.cells.reduce((s, c) => s + c.n, 0)} runs completed.</p>
+          <p>This measures what a real agent actually spends. {agentLine(ab.agents)} ran headless in {ab.repo} (@{ab.commit7}), restricted to one code-intelligence CLI per run, answering {ab.nQuestions} caller questions scored against {ab.truth}. The Atlas binary was {ab.atlasBinary || ab.atlasBuild}; the graph tool was {ab.graphifyVersion}. Token numbers are each harness's own usage accounting. All {ab.cells.reduce((s, c) => s + c.n, 0)} runs completed.</p>
           <div className="docs-table-wrap"><table><thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Billed-proxy tokens</th><th>Mean turns</th><th>Mean F1</th><th>Mean wall time</th></tr></thead><tbody>
             {ab.agents.flatMap((a) => ab.cells.filter((c) => c.agent === a.id).sort((x, y) => order[x.mode] - order[y.mode]).map((c) => (
               <tr key={`${a.id}-${c.mode}`}><td>{a.id} ({a.model})</td><td>{DOC_MODE_LABELS[c.mode] || c.mode}</td><td>{docNum(c.totalTokens)}</td><td>{docNum(c.billedProxy)}</td><td>{Number(c.turns).toFixed(1)}</td><td>{docF3(c.f1)}</td><td>{Number(c.wallS).toFixed(1)} s</td></tr>
             )))}
           </tbody></table></div>
-          <p>Against the no-tool baseline, the other mode spends {ab.agents.map((a) => `${docX(a.vsAtlas.baseline?.totalTokens)} Atlas's total tokens on ${a.id}`).join(" and ")}; the graph tool spends {ab.agents.map((a) => `${docX(a.vsAtlas.graphify?.totalTokens)} on ${a.id}`).join(" and ")}. Harness floors: {ab.agents.map((a) => `${a.id} ${docNum(a.calibrationTotal)}`).join(", ")} tokens. {ab.ratioNote} Cross-agent absolute totals are <strong>not comparable</strong> — the two harnesses use different tokenizers and system-prompt floors. Compare modes within an agent only. {ab.billedProxyNote}</p>
+          <p>Against the no-tool baseline, the other mode spends {ab.agents.map((a) => `${docX(a.vsAtlas.baseline?.totalTokens)} Atlas's total tokens on ${a.id}`).join(" and ")}; the graph tool spends {ab.agents.map((a) => `${docX(a.vsAtlas.graphify?.totalTokens)} on ${a.id}`).join(" and ")}. Harness floors: {ab.agents.map((a) => `${a.id} ${docNum(a.calibrationTotal)}`).join(", ")} tokens. {ab.ratioNote} Cross-agent absolute totals are <strong>not comparable</strong> — the two harnesses use different tokenizers and system-prompt floors. Compare modes within an agent only. {ab.billedProxyNote} {ab.emptyNote}</p>
+          {ab.agents.some((a) => a.marginalTokens) && (
+            <p><strong>Marginal cost.</strong> {ab.marginalNote} Above the floor, Atlas spends {ab.agents.map((a) => `${docNum(a.marginalTokens?.atlas)} tokens per question on ${a.id}`).join(" and ")}; the no-tool baseline spends {ab.agents.map((a) => `${docX(a.vsAtlas.baseline?.marginal)} that on ${a.id}`).join(" and ")}, the graph tool {ab.agents.map((a) => `${docX(a.vsAtlas.graphify?.marginal)} on ${a.id}`).join(" and ")}.</p>
+          )}
           {ab.supersedes && (
-            <Callout kind="note" label={`Replaces the ${ab.supersedes.date} run`}>
-              <p>That run used {ab.supersedes.atlasBuild} with {Object.entries(ab.supersedes.harnesses || {}).map(([a, h]) => `${h} (${ab.supersedes.models?.[a]})`).join(" and ")}, and measured {Object.entries(ab.supersedes.vsAtlasTotalTokens || {}).map(([a, v]) => `${docX(v.baseline)} / ${docX(v.graphify)} (${a})`).join(" and ")} against the baseline / graph tool. {ab.supersedes.why}</p>
+            <Callout kind="note" label={`Replaces the ${ab.supersedes.date} run — what moved`}>
+              <p>That run used {ab.supersedes.atlasBinary || ab.supersedes.atlasBuild} with {Object.entries(ab.supersedes.harnesses || {}).map(([a, h]) => `${h} (${ab.supersedes.models?.[a]})`).join(" and ")}, and measured {Object.entries(ab.supersedes.vsAtlasTotalTokens || {}).map(([a, v]) => `${docX(v.baseline)} / ${docX(v.graphify)} (${a})`).join(" and ")} against the baseline / graph tool. {ab.supersedes.moved}</p>
             </Callout>
+          )}
+          {ab.history?.length > 1 && (
+            <>
+              <p>Run history: same repository, pinned commit and questions in every run. Ratios are no tool / graph tool over Atlas.</p>
+              <div className="docs-table-wrap"><table><thead><tr><th>Run</th><th>Atlas build</th><th>Agent · harness · model</th><th>Floor</th><th>Atlas F1</th><th>Total tokens ×</th><th>Marginal ×</th></tr></thead><tbody>
+                {ab.history.flatMap((h) => h.agents.map((a) => (
+                  <tr key={`${h.date}-${a.id}`}><td>{h.date}{h.current ? " (current)" : ""}</td><td>{h.atlasRelease ? `${h.atlasRelease}${h.atlasCommit ? ` (${h.atlasCommit})` : ""}` : h.atlasVersion}</td><td>{a.id} · {a.harness} · {a.model}</td><td>{docNum(a.calibrationTotal)}</td><td>{docF3(a.atlasF1)}</td><td>{pair(a.vsAtlasTotalTokens)}</td><td>{pair(a.vsAtlasMarginal)}</td></tr>
+                )))}
+              </tbody></table></div>
+              {ab.history.map((h, i) => ({ h, prev: ab.history[i + 1] })).slice(1).filter(({ h, prev }) => h.moved && prev).map(({ h, prev }) => <p key={h.date}>{prev.date} → {h.date}: {h.moved}</p>)}
+            </>
           )}
           {ab.rescoreNote && <p>{ab.rescoreNote}</p>}
         </ProseSection>

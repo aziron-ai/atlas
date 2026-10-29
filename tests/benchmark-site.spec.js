@@ -171,6 +171,45 @@ test.describe("atlas benchmark evidence", () => {
       const sup = page.getByTestId("agent-supersedes");
       await expect(sup).toContainText(site.agentBench.supersedes.date);
       await expect(sup.locator("a[download]")).toHaveAttribute("href", site.agentBench.supersedes.artifact);
+      // what moved between the two runs is stated, from the data
+      await expect(page.getByTestId("agent-moved")).toHaveText(site.agentBench.supersedes.moved);
+    }
+  });
+
+  test("agent-harness run history: the current run and the two it superseded, with marginal ratios", async ({ page }) => {
+    const ab = site.agentBench;
+    const x = (v) => `${Number(v).toFixed(2)}×`;
+    const nf = new Intl.NumberFormat("en-US");
+    expect(ab.history).toHaveLength(3);
+    expect(ab.history[0].current).toBe(true);
+    expect(ab.history[1].artifact).toBe(ab.supersedes.artifact);
+
+    const rows = page.getByTestId("agent-history-row");
+    await expect(rows).toHaveCount(3);
+    for (const [i, h] of ab.history.entries()) {
+      await expect(rows.nth(i)).toContainText(h.date);
+      await expect(rows.nth(i).locator("a[download]")).toHaveAttribute("href", h.artifact);
+      for (const a of h.agents) {
+        await expect(rows.nth(i)).toContainText(a.harness);
+        await expect(rows.nth(i)).toContainText(nf.format(a.calibrationTotal));
+        await expect(rows.nth(i)).toContainText(a.atlasF1.toFixed(3));
+        await expect(rows.nth(i)).toContainText(`${x(a.vsAtlasTotalTokens.baseline)} / ${x(a.vsAtlasTotalTokens.graphify)}`);
+        await expect(rows.nth(i)).toContainText(`${x(a.vsAtlasMarginal.baseline)} / ${x(a.vsAtlasMarginal.graphify)}`);
+      }
+    }
+
+    // the marginal-cost view sits beside the total ratios, with what the floor is
+    const marginal = page.getByTestId("agent-marginal");
+    await expect(marginal).toBeVisible();
+    await expect(marginal).toContainText("Reply with exactly: OK");
+    await expect(page.getByTestId("agent-marginal-row")).toHaveCount(ab.agents.length);
+    for (const a of ab.agents) {
+      // marginal = mean total − floor, recomputed here from the cells and the floor
+      const atlasCell = ab.cells.find((c) => c.agent === a.id && c.mode === "atlas");
+      expect(Math.abs(a.marginalTokens.atlas - (atlasCell.totalTokens - a.calibrationTotal))).toBeLessThanOrEqual(1);
+      await expect(marginal).toContainText(nf.format(a.marginalTokens.atlas));
+      await expect(marginal).toContainText(`${x(a.vsAtlas.baseline.marginal)} / ${x(a.vsAtlas.graphify.marginal)}`);
+      await expect(page.getByTestId(`agent-marginal-chips-${a.id}`)).toContainText(x(a.vsAtlas.graphify.marginal));
     }
   });
 
