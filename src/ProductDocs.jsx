@@ -1339,11 +1339,12 @@ communities  total 2  shown 2  multi_member 1  singletons 1  isolated 1
           <ProseSection title="Choosing a Tool">
             <p>Start with <code>code_query</code> for most repository questions: it checks index readiness and returns cited context under a bounded response budget. Reach for a narrower tool when you already know the shape of the answer:</p>
             <Bullets>
-              <li><code>symbol</code> when you have a name and want its definition, callers, callees, refs, or coverage. Add package, receiver, or arity filters when the name is overloaded.</li>
+              <li><code>symbol</code> when you have a name and want its definition, callers, callees, refs, or coverage. Add package, receiver, or arity filters when the name is overloaded. Since 0.1.55 an owner-qualified name — <code>Type.method</code>, <code>Widget.prototype.render</code>, a Go <code>pkg.Func</code> — resolves on every view, including the default <code>explain</code> (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/150" target="_blank" rel="noreferrer">#150</a>), and <code>mutations: true</code> on the refs view lists only the references that write a symbol (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/55" target="_blank" rel="noreferrer">#55</a>).</li>
               <li><code>context</code> when reviewing a known set of changed files.</li>
               <li><code>impact</code> before a change, to size its blast radius.</li>
               <li><code>routes</code> for service contracts, consumers, and dependencies.</li>
-              <li><code>status</code> when results look empty or stale — it reports index and readiness state, which distinguishes "no index" from "no matches".</li>
+              <li><code>report</code> for whole-graph analytics. Since 0.1.55 its <code>hubs</code> and <code>communities</code> sections are the whole <code>atlas hubs</code> / <code>atlas communities</code> answers — objects carrying <code>eligible</code>, <code>excluded_isolated</code>, <code>warnings</code> and the community split, rows capped by <code>limit</code> — rather than bare arrays (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/45" target="_blank" rel="noreferrer">#45</a>).</li>
+              <li><code>status</code> when results look empty or stale — it reports index and readiness state, which distinguishes "no index" from "no matches". Since 0.1.55 it also carries a <code>telemetry</code> block, so a read-only server says <code>unavailable_read_only</code> instead of leaving fields out (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/154" target="_blank" rel="noreferrer">#154</a>).</li>
             </Bullets>
           </ProseSection>
           <ProseSection title="Workspace Scoping">
@@ -1355,6 +1356,12 @@ communities  total 2  shown 2  multi_member 1  singletons 1  isolated 1
               <li>a repository pinned at launch time with <code>--repo</code></li>
             </Bullets>
             <p>If none is available, Atlas returns <code>workspace_required</code> instead of silently choosing a repository. In <code>--supervise</code> mode the gateway resolves the workspace per call and routes a <code>workspace</code> argument that names a <em>different</em> indexed repository to that repository’s own <code>.atlas</code> store (read-only), so one warm gateway can answer queries across every repo you have indexed.</p>
+            <p><strong>Since 0.1.55</strong>, more of these signals resolve, and a refusal says which one it judged:</p>
+            <Bullets>
+              <li><strong>Windows roots.</strong> A root a Windows client declares — <code>file:///C:/…</code>, VS Code's <code>file:///c%3A/…</code>, <code>file://localhost/C:/…</code>, a UNC path or a plain <code>C:\</code> path — resolves to its directory and matches without regard to case or separators. This is verified by tests on macOS; a run on Windows is still pending (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/72" target="_blank" rel="noreferrer">#72</a>).</li>
+              <li><strong>Checkouts Atlas did not index.</strong> A <code>workspace</code> that is a linked worktree, another clone or a worktree of a bare clone of an indexed repository is served by that index when its HEAD and working-tree state equal the latest snapshot; the scope reason is <code>workspace_identity</code>. Several equal checkouts are refused as <code>ambiguous_repo</code> with <code>candidates[]</code> and a remedy to pass <code>repo_id</code> (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/42" target="_blank" rel="noreferrer">#42</a>).</li>
+              <li><strong>Refusals name their source.</strong> A scope refusal carries <code>scope_source</code> (<code>workspace</code>, <code>cwd</code>, <code>roots</code> or <code>launch_roots</code>). A miss on client roots alone lists each root it tried in <code>roots_tried[]</code> (<code>path</code>, <code>uri</code>, and what is at that path), and a <code>workspace_not_indexed</code> refusal names the <code>searched_stores</code> and a <code>checkout</code> diagnosis (<code>content_differs</code>, <code>not_a_git_checkout</code>) beside <code>repos[]</code> and <code>remedy</code> (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/72" target="_blank" rel="noreferrer">#72</a>, <a className="text-link" href="https://github.com/aziron-ai/atlas/issues/42" target="_blank" rel="noreferrer">#42</a>).</li>
+            </Bullets>
           </ProseSection>
           <ProseSection title="Result Statuses">
             <p>Check the status field before trusting a result — it tells you whether the answer is backed by an index at all.</p>
@@ -1362,15 +1369,39 @@ communities  total 2  shown 2  multi_member 1  singletons 1  isolated 1
               <tr><td><code>ok</code></td><td>Atlas returned cited context</td></tr>
               <tr><td><code>indexing</code></td><td>An index was started or is still running</td></tr>
               <tr><td><code>no_index</code></td><td>No usable index exists for the workspace</td></tr>
-              <tr><td><code>insufficient</code></td><td>The index could not support a cited answer</td></tr>
+              <tr><td><code>insufficient</code></td><td>The index could not support a cited answer — nothing citeable is indexed, or (since 0.1.55, with <code>require_citations</code>) the retrieved code does not carry what the question names: <code>reason: citations_below_relevance_floor</code></td></tr>
               <tr><td><code>budget_exceeded</code></td><td>Strict output budget was too small</td></tr>
               <tr><td><code>workspace_required</code></td><td>Repository scope was not declared</td></tr>
+              <tr><td><code>workspace_not_indexed</code></td><td>The workspace has no index this server can use; retry <code>code_query</code> with <code>allow_lazy_index=true</code>, or re-call with one of <code>repos[]</code></td></tr>
+              <tr><td><code>ambiguous_repo</code></td><td>Several repositories match; re-call with one of <code>candidates[]</code> as <code>repo_id</code></td></tr>
             </tbody></table></div>
+          </ProseSection>
+          <ProseSection title="Citations and the Relevance Floor">
+            <p>A non-empty citation list is not evidence on its own: keyword search always matches something. <strong>Since 0.1.55</strong>, <code>code_query</code> with <code>require_citations: true</code> also checks that the cited symbol names and paths carry what the question names — an identifier it spells, or enough of its specific terms (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/60" target="_blank" rel="noreferrer">#60</a>). Below that floor it refuses:</p>
+            <div className="docs-table-wrap"><table><thead><tr><th>Field</th><th>When</th><th>Meaning</th></tr></thead><tbody>
+              <tr><td><code>status</code></td><td>refused</td><td><code>insufficient</code>, with no <code>citations</code> and no <code>context</code></td></tr>
+              <tr><td><code>reason</code></td><td>refused</td><td><code>citations_below_relevance_floor</code> — stable; branch on it</td></tr>
+              <tr><td><code>relevance</code></td><td>refused, or <code>ok</code> with pruned citations</td><td>the verdict (<code>below_floor</code> or <code>grounded</code>), what grounded it, the terms it looked for and matched, and how many citations it pruned</td></tr>
+              <tr><td><code>low_confidence_hits</code></td><td>refused, or <code>ok</code> with pruned citations</td><td>up to 5 candidates with the words they matched — never citations, never evidence</td></tr>
+            </tbody></table></div>
+            <p>On a grounded answer, a keyword-only citation that matched only generic words moves to <code>low_confidence_hits</code>; graph evidence is never pruned. An answer the floor did not touch is unchanged. Trimming to <code>max_tokens</code> never removes the last citation: a budget that cannot hold one is refused with <code>budget_exceeded</code>, and the message names the budget that would fit (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/160" target="_blank" rel="noreferrer">#160</a>).</p>
+            <p><strong>Evidence inside large functions.</strong> The index keeps a bounded window of each body. When a cited symbol is longer than that window, <code>code_query</code> and <code>context</code> re-read the lines that match the question from the file — only when the file still has the indexed hash — and serve the signature, up to 4 windows and the closing line, with each skipped run marked <code>// ... elided N lines (La-Lb) ...</code>. <code>metadata.body_elision</code> records what was shown and elided, or why the file was not used (<code>source_changed</code>, <code>source_unavailable</code>, <code>source_too_large</code>, <code>budget_trimmed</code>, <code>focus_cap</code>); the citation keeps the symbol's real line range (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/156" target="_blank" rel="noreferrer">#156</a>).</p>
+          </ProseSection>
+          <ProseSection title="Freshness Fields">
+            <p><strong>Since 0.1.55</strong>, <code>code_query</code>, <code>symbol</code> (every view), <code>search</code> and <code>context</code> answers say how their snapshot relates to the checkout, with the same fields the CLI and HTTP API return (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/59" target="_blank" rel="noreferrer">#59</a>, <a className="text-link" href="https://github.com/aziron-ai/atlas/issues/62" target="_blank" rel="noreferrer">#62</a>):</p>
+            <div className="docs-table-wrap"><table><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody>
+              <tr><td><code>indexed_sha</code></td><td>the snapshot that answered; <code>&lt;sha&gt;+dirty</code> when it was built from uncommitted work</td></tr>
+              <tr><td><code>head_sha</code></td><td>the live HEAD, or <code>unknown</code> when git cannot answer</td></tr>
+              <tr><td><code>dirty</code></td><td>whether the working tree has indexable changes</td></tr>
+              <tr><td><code>stale</code>, <code>stale_reason</code></td><td>whether the answer lags the checkout: <code>head_moved</code>, <code>working_tree_dirty</code>, <code>working_tree_changed</code> or <code>working_tree_reverted</code>. Omitted, never <code>false</code>, when git cannot answer</td></tr>
+              <tr><td><code>refresh</code></td><td><code>none</code> on a clean tree; <code>started</code> when this answer queued a refresh (with <code>refresh_target</code>); <code>completed</code> on answers from the refreshed snapshot in the next 10 minutes (with <code>refresh_snapshot</code> and <code>refreshed_at</code>)</td></tr>
+            </tbody></table></div>
+            <p>A stale answer is still an answer: it tells the assistant the line numbers may have moved. A long-running MCP server queues the refresh itself and says so with <code>refresh: "started"</code>.</p>
           </ProseSection>
           <ProseSection title="Controlling Token Spend">
             <p>Tune detail and format so results fit the assistant's context window instead of trimming after the fact:</p>
             <Bullets>
-              <li>Use <code>detail=low</code> when you only need counts or minimal metadata; <code>medium</code> for names and signatures; <code>high</code> for repository-local evidence; <code>xhigh</code> only when broader cross-repo context is required.</li>
+              <li>Use <code>detail=low</code> when you only need counts or minimal metadata; <code>medium</code> for names and signatures; <code>high</code> for repository-local evidence; <code>xhigh</code> only when broader cross-repo context is required. Since 0.1.55 the tool schema's <code>detail</code> enum lists every accepted spelling (<code>l</code>/<code>0</code>, <code>med</code>/<code>m</code>/<code>1</code>, <code>h</code>/<code>2</code>, <code>x</code>/<code>max</code>/<code>full</code>/<code>3</code>), and each means what it means on the CLI and the HTTP API (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/146" target="_blank" rel="noreferrer">#146</a>).</li>
               <li>Use <code>format=plain</code> for compact line-oriented output when the client does not need structured JSON.</li>
               <li>Set <code>max_tokens</code> to bound a <code>code_query</code> answer; an answer trimmed to fit is marked <code>truncated:true</code>. Strict budget mode refuses an oversized answer and returns <code>budget_exceeded</code> instead.</li>
             </Bullets>
