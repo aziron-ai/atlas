@@ -1,6 +1,6 @@
 {
   "name": "atlas-benchmark-site",
-  "version": "0.1.54",
+  "version": "0.1.55",
   "description": "Atlas product documentation, benchmark evidence, and release data.",
   "private": true,
   "scripts": {
