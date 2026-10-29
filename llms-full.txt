@@ -442,6 +442,26 @@ Pin an exact version for reproducible environments:
 npm install -g @aziron/atlas@0.1.55
 ```
 
+### Installing a Binary You Already Have
+
+Offline, behind a TLS-intercepting proxy, or with a binary you built or
+verified yourself, point `ATLAS_BINARY` at it:
+
+```sh
+ATLAS_BINARY=/absolute/path/to/atlas npm install -g @aziron/atlas
+```
+
+**Since 0.1.55** postinstall honours it. It checks that the path exists, is
+a file, is executable, and that `atlas version` prints an Atlas version line
+within 30 seconds, then copies the binary into the package, replacing any
+earlier copy. It makes no request to the release host and never falls back to
+a download: an invalid path fails the install with a message that names the
+problem. A relative path resolves against the directory you ran `npm` from.
+`ATLAS_SKIP_DOWNLOAD=1` makes postinstall do nothing and takes precedence over
+`ATLAS_BINARY`. `checksums.txt` covers the release archives, not a binary you
+supply, so verify that binary yourself
+([#151](https://github.com/aziron-ai/atlas/issues/151)).
+
 ### GitHub Packages alternative
 
 Atlas is also published to GitHub Packages as `@aziron-ai/atlas`. Use this
@@ -805,7 +825,15 @@ Below the tiles:
 - **Connector pulse** — events per connector in the live window.
 - **Skills lifecycle** — skills per stage: candidate, validating, trusted,
   quarantined, revoked.
-- **Code graph index** — links to **Orientation** and **Hot Symbols**.
+- **Code graph index** — **Indexed symbols**, **Repos indexed**, **Indexed
+  edges** and **Route records**: the stored rows of each indexed repository's
+  latest snapshot, summed over the repositories, the same totals the
+  Workspace view shows. Since 0.1.55 both views share one calculation, each
+  tile reads "—" until the first dashboard frame arrives (an empty index shows
+  a measured 0), hovering a tile names that scope, and **Graph edges** is
+  renamed **Indexed edges** because it counts stored edge rows, not the
+  graph's resolved edges ([#158](https://github.com/aziron-ai/atlas/issues/158)). The card links to **Orientation** and
+  **Hot Symbols**.
 - **Live activity** (right rail) — the seven newest events: what was asked,
   which connector, how many tokens, how long it took. **All** opens the full
   stream. Below it, an **Approvals** card appears when requests await a
@@ -1304,6 +1332,10 @@ Search is **code-aware lexical search**. In practice that means:
 - **It searches paths too.** `model_filter.go` or `providers/routing` name a
   file or folder; a path-shaped query ranks the file whose path is exactly
   that first.
+- **Ties have one order.** Since 0.1.55, results with equal scores come back
+  by path, then name, kind, signature and line, so two fresh indexes of the
+  same commit, at any worker count, return the same page in the same order
+  ([#135](https://github.com/aziron-ai/atlas/issues/135)).
 
 Results carry a kind: `function`, `method`, `method_spec` (an interface
 method), `type`, `field`, `constant`, `key` (a configuration or YAML key), and,
@@ -1532,6 +1564,54 @@ refs CreateChatCompletionRequest  total 44
 ```
 
 All flags are in the [CLI reference](cli).
+
+## How Fresh Is the Answer
+
+**Since 0.1.55**, every answer about a repository says which snapshot it came
+from and whether the code has moved since: `indexed_sha`, `head_sha`, `dirty`,
+`stale` and `stale_reason`, the same on the CLI, over MCP and from the API
+([#59](https://github.com/aziron-ai/atlas/issues/59)). Edit a file after
+indexing and the next lookup says so before anything else:
+
+```text
+$ atlas snippet helper --format plain
+stale: indexed 4fb9d0f74f1c vs head 4fb9d0f74f1c+dirty  (working_tree_dirty)  not refreshed (one-shot command; run `atlas index`)
+snippet helper  definitions 1  resolved true
+```
+
+`resolved: true` still means the symbol was found; `stale: true` means its
+line numbers and body may have moved. A one-shot command does not refresh in
+the background, so run `atlas index .`, or set `ATLAS_ONESHOT_REFRESH=sync`
+to refresh before answering
+([#141](https://github.com/aziron-ai/atlas/issues/141)). Indexing uncommitted
+work stores its own `<sha>+dirty` snapshot beside the commit's — see
+[Change lens and history](history).
+
+## Answers That Refuse Instead of Guessing
+
+Keyword search always matches something, so a list of citations is not proof
+that the code answers the question. When an assistant or a script calls
+`code_query` with `require_citations: true`, **since 0.1.55** the cited names
+and paths must carry what the question names — an identifier it spells, or
+enough of its specific words ([#60](https://github.com/aziron-ai/atlas/issues/60)).
+Otherwise the answer is `status: "insufficient"` with
+`reason: "citations_below_relevance_floor"`, a `relevance` block naming the
+words nothing matched, and the nearest candidates as `low_confidence_hits`,
+never as citations. Asked about "the quantum flux capacitor module" in a
+repository that has none, Atlas now says so instead of citing a `helper`
+whose doc comment mentions "module". The fields are described in
+[MCP tools](mcp).
+
+## Evidence Inside Large Functions
+
+The index keeps the start and end of a long function body, not every line.
+**Since 0.1.55**, when a question is about something inside a long function —
+a route registered on line 1,005 of a 2,000-line setup function — `code_query`
+and `context` re-read the matching lines from the file, as long as the file
+still matches the index, and quote them with every skipped run marked
+`// ... elided N lines (La-Lb) ...`. The answer's `metadata.body_elision`
+lists the line ranges shown, and the citation keeps the function's real range
+([#156](https://github.com/aziron-ai/atlas/issues/156)).
 
 ## From the API
 
@@ -2150,6 +2230,32 @@ atlas snapshots list
 without touching anything; `--keep N` and `--keep-since 90d` override the
 policy for one run.
 
+## Snapshots of Uncommitted Work
+
+**Since 0.1.55**, indexing a working tree with uncommitted edits or untracked
+files stores a snapshot of its own, labelled `<sha>+dirty`, beside the clean
+snapshot of that commit ([#65](https://github.com/aziron-ai/atlas/issues/65)).
+The timeline lists both, and `snapshot-diff` compares them: `--from` and `--to`
+accept `<sha>+dirty` as well as a commit sha or a snapshot id. On a small
+repository after adding one function without committing it:
+
+```text
+$ atlas history --format plain
+history repo  snapshots 2
+  4fb9d0f7+dirty  e0596478-…  files 2  symbols 4  edges 3  2026-10-29T05:18:49Z
+  4fb9d0f7  777a3e52-…  files 2  symbols 3  edges 3  2026-10-29T05:18:35Z
+
+$ atlas snapshot-diff --format plain
+snapshot_diff 4fb9d0f7 -> 4fb9d0f7+dirty  +1 -0 ~0  files 1
+  added(1)  extra
+  files(1)  main.go
+```
+
+In `snapshots list` the dirty row carries `dirty: true` and its `tree_hash`.
+A newer dirty state of the same commit retires the one before it, so edit
+churn never pushes commit history out of the per-repository cap, and
+committing the work stores the new commit's snapshot.
+
 ## Find the Symbols That Carry the Most Weight
 
 **Hot Symbols** ranks the graph's hubs by total degree — the calls in plus the
@@ -2181,6 +2287,11 @@ hubs  total 20
   …
 ```
 
+Since 0.1.55 a hub needs at least one resolved call or inheritance relation:
+the header adds `eligible` and `excluded_isolated`, and on a sparse graph the
+list is shorter than the limit rather than padded with symbols nothing calls
+([#45](https://github.com/aziron-ai/atlas/issues/45)).
+
 ## Check How Fresh the Index Is
 
 **Freshness** lists the operations Atlas derives from the latest snapshot — on
@@ -2196,6 +2307,12 @@ When the code moves on and the index does not, re-index: `atlas index .` brings
 the snapshot, and with it every derived operation, up to date.
 [Indexing and reindexing](indexing) covers watching a repository so this
 happens on every change.
+
+The answers themselves say how fresh they are too. Since 0.1.55 every
+lookup carries `indexed_sha`, `head_sha`, `dirty` and `stale`, and a plain
+answer opens with a `stale:` line when the checkout has moved past the
+snapshot that answered — see [Search and Ask](search-and-ask)
+([#59](https://github.com/aziron-ai/atlas/issues/59)).
 
 ## See What a Service Started or Stopped Saying
 
@@ -3428,12 +3545,24 @@ a narrower tool when you already know the shape of the answer:
 
 - `symbol` when you have a name and want its definition, callers, callees,
   refs, or coverage. Add package, receiver, or arity filters when the name is
-  overloaded.
+  overloaded. Since 0.1.55 an owner-qualified name — `Type.method`,
+  `Widget.prototype.render`, a Go `pkg.Func` — resolves on every view,
+  including the default `explain`
+  ([#150](https://github.com/aziron-ai/atlas/issues/150)), and `mutations: true` on the refs view lists only the
+  references that write a symbol ([#55](https://github.com/aziron-ai/atlas/issues/55)).
 - `context` when reviewing a known set of changed files.
 - `impact` before a change, to size its blast radius.
 - `routes` for service contracts, consumers, and dependencies.
+- `report` for whole-graph analytics. Since 0.1.55 its `hubs` and
+  `communities` sections are the whole `atlas hubs` / `atlas communities`
+  answers — objects carrying `eligible`, `excluded_isolated`, `warnings` and
+  the community split, rows capped by `limit` — rather than bare arrays
+  ([#45](https://github.com/aziron-ai/atlas/issues/45)).
 - `status` when results look empty or stale — it reports index and readiness
-  state, which distinguishes "no index" from "no matches".
+  state, which distinguishes "no index" from "no matches". Since 0.1.55 it
+  also carries a `telemetry` block, so a read-only server says
+  `unavailable_read_only` instead of leaving fields out
+  ([#154](https://github.com/aziron-ai/atlas/issues/154)).
 
 ## Workspace Scoping
 
@@ -3448,6 +3577,29 @@ accepts scope from, in order of availability:
 If none is available, Atlas returns `workspace_required` instead of silently
 choosing a repository.
 
+**Since 0.1.55**, more of these signals resolve, and a refusal says which one
+it judged:
+
+- **Windows roots.** A root a Windows client declares — `file:///C:/…`, VS
+  Code's `file:///c%3A/…`, `file://localhost/C:/…`, a UNC path or a plain
+  `C:\` path — resolves to its directory and matches without regard to case or
+  separators. This is verified by tests on macOS; a run on Windows is still
+  pending ([#72](https://github.com/aziron-ai/atlas/issues/72)).
+- **Checkouts Atlas did not index.** A `workspace` that is a linked worktree,
+  another clone or a worktree of a bare clone of an indexed repository is
+  served by that index when its HEAD and working-tree state equal the latest
+  snapshot; the scope reason is `workspace_identity`. Several equal checkouts
+  are refused as `ambiguous_repo` with `candidates[]` and a remedy to pass
+  `repo_id` ([#42](https://github.com/aziron-ai/atlas/issues/42)).
+- **Refusals name their source.** A scope refusal carries `scope_source`
+  (`workspace`, `cwd`, `roots` or `launch_roots`). A miss on client roots
+  alone lists each root it tried in `roots_tried[]` (`path`, `uri`, and what
+  is at that path), and a `workspace_not_indexed` refusal names the
+  `searched_stores` and a `checkout` diagnosis (`content_differs`,
+  `not_a_git_checkout`) beside `repos[]` and `remedy`
+  ([#72](https://github.com/aziron-ai/atlas/issues/72),
+  [#42](https://github.com/aziron-ai/atlas/issues/42)).
+
 ## Result Statuses
 
 Check the status field before trusting a result — it tells you whether the
@@ -3458,9 +3610,64 @@ answer is backed by an index at all.
 | `ok` | Atlas returned cited context |
 | `indexing` | An index was started or is still running |
 | `no_index` | No usable index exists for the workspace |
-| `insufficient` | The index could not support a cited answer |
+| `insufficient` | The index could not support a cited answer — nothing citeable is indexed, or (since 0.1.55, with `require_citations`) the retrieved code does not carry what the question names: `reason: citations_below_relevance_floor` |
 | `budget_exceeded` | Strict output budget was too small |
 | `workspace_required` | Repository scope was not declared |
+| `workspace_not_indexed` | The workspace has no index this server can use; retry `code_query` with `allow_lazy_index=true`, or re-call with one of `repos[]` |
+| `ambiguous_repo` | Several repositories match; re-call with one of `candidates[]` as `repo_id` |
+
+## Citations and the Relevance Floor
+
+A non-empty citation list is not evidence on its own: keyword search always
+matches something. **Since 0.1.55**, `code_query` with
+`require_citations: true` also checks that the cited symbol names and paths
+carry what the question names — an identifier it spells, or enough of its
+specific terms ([#60](https://github.com/aziron-ai/atlas/issues/60)). Below
+that floor it refuses:
+
+| Field | When | Meaning |
+| --- | --- | --- |
+| `status` | refused | `insufficient`, with no `citations` and no `context` |
+| `reason` | refused | `citations_below_relevance_floor` — stable; branch on it |
+| `relevance` | refused, or `ok` with pruned citations | the verdict (`below_floor` or `grounded`), what grounded it, the terms it looked for and matched, and how many citations it pruned |
+| `low_confidence_hits` | refused, or `ok` with pruned citations | up to 5 candidates with the words they matched — never citations, never evidence |
+
+On a grounded answer, a keyword-only citation that matched only generic words
+moves to `low_confidence_hits`; graph evidence is never pruned. An answer the
+floor did not touch is unchanged. With `require_citations`, trimming to
+`max_tokens` never removes the last citation: a budget that cannot hold one is refused with
+`budget_exceeded`, and the message names the budget that would fit
+([#160](https://github.com/aziron-ai/atlas/issues/160)).
+
+**Evidence inside large functions.** The index keeps a bounded window of each
+body. When a cited symbol is longer than that window, `code_query` and
+`context` re-read the lines that match the question from the file — only when
+the file still has the indexed hash — and serve the signature, up to 4
+windows and the closing line, with each skipped run marked
+`// ... elided N lines (La-Lb) ...`. `metadata.body_elision` records what was
+shown and elided, or why the file was not used (`source_changed`,
+`source_unavailable`, `source_too_large`, `budget_trimmed`, `focus_cap`); the
+citation keeps the symbol's real line range
+([#156](https://github.com/aziron-ai/atlas/issues/156)).
+
+## Freshness Fields
+
+**Since 0.1.55**, `code_query`, `symbol` (every view), `search` and `context`
+answers say how their snapshot relates to the checkout, with the same fields
+the CLI and HTTP API return ([#59](https://github.com/aziron-ai/atlas/issues/59),
+[#62](https://github.com/aziron-ai/atlas/issues/62)):
+
+| Field | Meaning |
+| --- | --- |
+| `indexed_sha` | the snapshot that answered; `<sha>+dirty` when it was built from uncommitted work |
+| `head_sha` | the live HEAD, or `unknown` when git cannot answer |
+| `dirty` | whether the working tree has indexable changes |
+| `stale`, `stale_reason` | whether the answer lags the checkout: `head_moved`, `working_tree_dirty`, `working_tree_changed` or `working_tree_reverted`. Omitted, never `false`, when git cannot answer |
+| `refresh` | `none` on a clean tree; `started` when this answer queued a refresh (with `refresh_target`); `completed` on answers from the refreshed snapshot in the next 10 minutes (with `refresh_snapshot` and `refreshed_at`) |
+
+A stale answer is still an answer: it tells the assistant the line numbers may
+have moved. A long-running MCP server queues the refresh itself and says so
+with `refresh: "started"`.
 
 ## Controlling Token Spend
 
@@ -3469,7 +3676,10 @@ of trimming after the fact:
 
 - Use `detail=low` when you only need counts or minimal metadata; `medium` for
   names and signatures; `high` for repository-local evidence; `xhigh` only
-  when broader cross-repo context is required.
+  when broader cross-repo context is required. Since 0.1.55 the tool schema's
+  `detail` enum lists every accepted spelling (`l`/`0`, `med`/`m`/`1`,
+  `h`/`2`, `x`/`max`/`full`/`3`), and each means what it means on the CLI and
+  the HTTP API ([#146](https://github.com/aziron-ai/atlas/issues/146)).
 - Use `format=plain` for compact line-oriented output when the client does not
   need structured JSON.
 - Set `max_tokens` to bound a `code_query` answer; an answer trimmed to fit is
@@ -3513,7 +3723,7 @@ repo is in scope, and how output is shaped.
 | `--detail` | Output depth: `low`, `medium`, `high`, or `xhigh` — how much graph context to return per item. Default `high` for every format; `xhigh` opts into cross-repo context. Retrieval ops (callers/refs/impact) floor at `high`. |
 | `--format` | Output shape: `plain`, `json`, `compact`, or `ndjson` (`json` by default). |
 | `--json` | Shorthand for `--format json`. |
-| `--read-only` | Open the database immutably: no migration, no WAL/journal files, no `telemetry.db` created beside it — artifact bytes hash identically after any query. A missing database errors instead of being created. |
+| `--read-only` | Open the database read-only: no migration, no writes or checkpoints, no `telemetry.db` created beside it, and no `-wal`/`-shm` beside a quiescent store — artifact bytes hash identically after any query. Since 0.1.55 it follows a live writer: once a running Atlas has a WAL beside the store it reads it, and it refuses a store moved to another schema generation (`store_superseded`) ([#130](https://github.com/aziron-ai/atlas/issues/130)). A missing database errors instead of being created. |
 | `--repo` | Repo workspace: path, `org/name`, or repo_id. Defaults to the current directory; `'*'` means all repos on `search`/`semantic-search`. |
 | `--telemetry-db` | Explicit path for the observability database — required if you want telemetry with `--read-only`. Default: `telemetry.db` beside the graph database. |
 | `--tenant` | Tenant/org scope to isolate repos to (hosted multi-tenant; empty = all repos). |
@@ -3527,6 +3737,30 @@ atlas --detail xhigh explain NewServer
 atlas --repo '*' search "rate limiter"
 ```
 
+### How a Workspace Finds Its Index
+
+A workspace-scoped command answers in two steps: which store, then which
+repository in it. The store is the `--db` you typed, else a running server
+(`ATLAS_SERVER_URL`, or a local `atlas serve` on `127.0.0.1:3099`), else
+`./.atlas/atlas.db`. Inside the store an explicit `--repo` wins, then the
+registered root that contains the path.
+
+**Since 0.1.55**, a git checkout that no registered root contains — a linked
+worktree, another clone, a worktree of a bare clone — is served by an existing
+index when it shares that repository's git common directory or normalized
+`origin` URL, and its HEAD and working-tree state equal the repository's
+latest snapshot ([#42](https://github.com/aziron-ai/atlas/issues/42)).
+`atlas status --repo <path>` then reports `repo_scope.workspace_reuse` and the
+line `workspace <path> served by the index of <root>`.
+
+A checkout with the same identity but different content is refused with
+`verdict: content_differs` rather than served stale line numbers, a copy that
+is not a git checkout is never matched (`not_a_git_checkout`), and several
+equal checkouts are `ambiguous_repo` with `candidates[]`. Every refusal names
+the `searched_stores` and the `checkout` diagnosis. To read an index
+explicitly, pin it with `atlas --db <dsn> --repo <repo_id>`; its line numbers
+then describe the checkout that index was built from.
+
 ## Index and Health
 
 Build the graph, keep it fresh, and verify that storage and schema are sound.
@@ -3535,10 +3769,10 @@ Build the graph, keep it fresh, and verify that storage and schema are sound.
 | --- | --- |
 | `index` | Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; `--reindex` forces a full rebuild; `--workers N` (or `ATLAS_INDEX_WORKERS`; 0 = all cores) caps the parse/hash pool and overrides whatever the machine profile would set. Since 0.1.48, `--format json` also reports `persist_mode`, `persist_path`, `files_reparsed`, `lexical_bytes`, and `lexical_settle`. |
 | `watch` | Index once, then watch the working tree and apply debounced incremental updates on every file change. Foreground until interrupted. |
-| `status` | Storage and version health: schema/index-format contracts and per-repo snapshot format state (`--schema` for contract versions and drift). |
-| `stats` | Graph and index telemetry statistics for an indexed repo. |
+| `status` | Storage and version health: schema/index-format contracts and per-repo snapshot format state (`--schema` for contract versions and drift). Since 0.1.55 `--repo` scopes the whole report to one repo, and the report carries a `telemetry` block. |
+| `stats` | Graph and index telemetry statistics for an indexed repo. Since 0.1.55 it names its count projections, checks seven `invariants` between them, and carries graph-health fields and a `telemetry` block. |
 | `doctor` | Report upgrade health and schema/index contract state; `--verify` also checks whether the `atlas` on PATH matches the running binary; `--deep` runs a page-level integrity scan (`PRAGMA quick_check`) to catch on-disk corruption reads silently tolerate. Since 0.1.48 it also reports a `machine_profile` block — the detected tier, the probe facts behind it, `cpu_width_scope`, and every bound actually installed. |
-| `report` | Compose graph stats, top hubs, and top communities; `--format plain` prints the Markdown report directly. |
+| `report` | Compose graph stats, top hubs, and top communities; `--format plain` prints the Markdown report directly. Since 0.1.55 it lists clusters only and prints graph-health warnings and coverage tables. |
 | `migrate` | Apply storage migrations and report the active contracts. |
 | `compact` | Reclaim space and truncate the WAL; `--full` also runs a full VACUUM and rebuilds an oversized lexical sidecar; `--rebuild-lexical` fixes an empty or wedged sidecar. |
 | `link` | Register a repo into the graph without indexing it, so it joins cross-repo queries and appears in `status`. Idempotent. |
@@ -3551,20 +3785,46 @@ atlas doctor --verbose
 atlas report --format plain
 ```
 
+### Status, Stats and Telemetry
+
+**Since 0.1.55:**
+
+- `atlas status --repo <path|org/name|repo_id>` scopes the whole report —
+  served snapshot, counts, format drift and watch lock — to that repo and adds
+  `repo_scope`. An unknown repo is refused exactly as `stats` refuses it, with
+  exit code 1. Without `--repo`, or with `--repo '*'`, the global view is
+  unchanged ([#155](https://github.com/aziron-ai/atlas/issues/155)).
+- `atlas stats` names its four count projections (`latest`, `store_rows`,
+  `graph.raw_*`, `graph`) and checks seven `invariants` between them: `ok`,
+  `partial` when the graph was not computed at this scale, or `violated` with
+  the failing checks named. `graph.edge_binding` accounts for every edge row
+  on its way into `graph.edges`, including rows bound to several targets
+  (`multi_bound_rows`) ([#14](https://github.com/aziron-ai/atlas/issues/14)).
+- `stats`, `status` and `doctor` carry a `telemetry` block — `available`,
+  `unavailable_read_only`, `unavailable`, `stale` or `missing`, with `reason`
+  and `remedy` — and plain output prints a `telemetry` line whenever it is not
+  `available` ([#154](https://github.com/aziron-ai/atlas/issues/154)).
+
+```text
+  edge_binding  raw 3 = graph-kind 2 + other 1;  graph-kind = bound 1 + unresolved 1;  multi-bound 0;  pairs 1 -> edges 1 (collapsed 0)
+  invariants ok  (7 checked)
+  telemetry unavailable_read_only  sink not_attached  index_run present
+```
+
 ## Search and Retrieval
 
 Find code and pull bounded, deterministic context about it.
 
 | Command | Purpose |
 | --- | --- |
-| `search` | Code-aware lexical search (BM25 + trigram) over the symbol index; `--mode lexical\|semantic\|hybrid`, plus `--kind` and `--path` filters. |
+| `search` | Code-aware lexical search (BM25 + trigram) over the symbol index; `--mode lexical\|semantic\|hybrid`, plus `--kind` and `--path` filters. Since 0.1.55 equal scores are ordered by path, name, kind, signature and line, so every fresh index returns the same page ([#135](https://github.com/aziron-ai/atlas/issues/135)). |
 | `semantic-search` | Embedding-based nearest-symbol search; transparently degrades to lexical (`degraded=true`) when vectors are unavailable. |
 | `context` | Bounded review-context bundle for changed/seed paths; budgets via `--intent` (`auto` is 16-32 KiB), per-request flags, or env vars. |
 | `explain` | Deterministic context bundle for a symbol: defs, callers/callees, imports, served routes, cross-repo consumers. |
 | `symbol` | Show a symbol's definition(s) with its callers and callees. |
 | `snippet` | Show a symbol's bounded implementation body (path:line, signature, source excerpt). |
-| `callers` | List symbols that directly call a symbol; scope overloaded names with `--package`, `--receiver`, or `--arity`. |
-| `refs` | List references to a symbol: call sites plus type-use references (params, fields, returns). |
+| `callers` | List symbols that directly call a symbol; scope overloaded names with `--package`, `--receiver`, or `--arity`. Since 0.1.55 the answer leads with `caller_names`, and `--brief` keeps the whole caller list with less detail per caller. |
+| `refs` | List references to a symbol: call sites plus type-use references (params, fields, returns). Since 0.1.55 `--mutations` (alias `--writes`) lists only the references that write the symbol ([#55](https://github.com/aziron-ai/atlas/issues/55)). |
 | `neighbors` | Depth-1 call neighborhood: a symbol's direct callers and callees. |
 | `path` | Shortest forward call path from one symbol to another (`--max-depth`, default 6). |
 
@@ -3592,10 +3852,10 @@ Measure blast radius, contracts, structure, and change over time.
 | `dependencies` | Producer repos/handlers that serve HTTP calls this repo makes. |
 | `route-contracts` | The producer HTTP routes a repo serves — its public contract. |
 | `coverage` | Real covered/total line ratio when a runtime profile was imported (`coverage import`); otherwise static call-graph reachability. |
-| `hubs` | Rank the graph's hubs ("god nodes") by call-graph degree centrality. |
-| `communities` | Detect deterministic clusters of densely connected symbols. |
-| `history` | Per-commit snapshot timeline for a repo. |
-| `snapshot-diff` | Structural diff between two snapshots: symbols/edges added, removed, modified (alias: `diff`). |
+| `hubs` | Rank the graph's hubs ("god nodes") by call-graph degree centrality. Since 0.1.55 degree-zero symbols are never hubs (see Graph Health below). |
+| `communities` | Detect deterministic clusters of densely connected symbols; since 0.1.55 identical across fresh indexes of one commit, with isolated symbols flagged. |
+| `history` | Per-commit snapshot timeline for a repo; since 0.1.55 a snapshot built from uncommitted work is its own row, labelled `<sha>+dirty`. |
+| `snapshot-diff` | Structural diff between two snapshots: symbols/edges added, removed, modified (alias: `diff`). `--from`/`--to` take a commit sha, a snapshot id, or since 0.1.55 `<sha>+dirty`. |
 | `export` | Export the call graph as `json`, `mermaid`, `dot`, or a self-contained interactive `html` page; `--bundle DIR` writes graph.html plus report.md. |
 
 ```sh
@@ -3607,6 +3867,78 @@ atlas export --symbol NewServer --depth 2 --format html -o graph.html
 
 Cross-repository results depend on linked repositories and indexed service
 contracts — see `atlas link` above.
+
+## Freshness on Every Answer
+
+**Since 0.1.55**, every repo-scoped answer — `search`, `symbol`, `callers`,
+`refs`, `impact`, `context`, `explain`, `snippet` — says how its snapshot
+relates to the checkout, with the same fields on MCP and the HTTP API
+([#59](https://github.com/aziron-ai/atlas/issues/59)):
+
+| Field | Meaning |
+| --- | --- |
+| `indexed_sha` | the snapshot that answered; `<sha>+dirty` when it was built from uncommitted work |
+| `head_sha` | the live HEAD, or `unknown` when git cannot answer |
+| `dirty` | whether the working tree has indexable changes |
+| `stale`, `stale_reason` | whether the answer lags the checkout, and why: `head_moved`, `working_tree_dirty`, `working_tree_changed` or `working_tree_reverted`. Omitted, never `false`, when git cannot answer |
+| `refresh`, `refresh_skipped` | what Atlas did about it: `none`, `started` or `completed`; a one-shot command reports `refresh_skipped: "one_shot"` |
+
+Plain output opens with a notice when an answer is stale:
+
+```text
+stale: indexed 4fb9d0f74f1c vs head 4fb9d0f74f1c+dirty  (working_tree_dirty)  not refreshed (one-shot command; run `atlas index`)
+```
+
+A one-shot command (anything but `serve`, `mcp` and `watch`) never starts
+background index work, because the process would exit before it landed
+([#141](https://github.com/aziron-ai/atlas/issues/141)). Refresh with
+`atlas index`, or set `ATLAS_ONESHOT_REFRESH=sync` to re-index a git-stale
+repo before answering, bounded by `ATLAS_ONESHOT_REFRESH_TIMEOUT` (default
+10s); an overrun reports `refresh_skipped: "budget_exceeded"` and persists
+nothing. The check costs one HEAD read and one `git status` of the indexable
+files per repo, reused for `ATLAS_FRESHNESS_TTL` (default 2s);
+`ATLAS_FRESHNESS_PROBE=0` turns it off.
+
+## Graph Health
+
+**Since 0.1.55**, `hubs`, `communities`, `report` and `stats` describe how
+connected the graph is, so a sparse graph is not mistaken for an
+architecture ([#45](https://github.com/aziron-ai/atlas/issues/45),
+[#149](https://github.com/aziron-ai/atlas/issues/149)):
+
+- `hubs` ranks only symbols with at least one resolved call or inheritance
+  relation and reports `eligible`, `excluded_isolated`, `ranking` and
+  `warnings`; on a sparse graph the list is shorter than `--limit`.
+- `communities` is deterministic: one commit gives the same partition, ids
+  and order on every fresh index and at any `--workers` count. `total` splits
+  into `multi_member` and `singletons`, and isolated one-symbol communities
+  are flagged.
+- `report` lists clusters only, counts isolated symbols in its summary, and
+  prints `WARNING:` lines and relation-coverage tables by language and by
+  symbol kind.
+- `stats` (under `graph`) and `report` carry `isolated_ratio`,
+  `connected_components`, `largest_component`, `multi_member_communities`,
+  `singleton_communities`, relation coverage and `warnings`.
+
+| Warning | Fires when |
+| --- | --- |
+| `isolated_majority` | at least half the symbols have no resolved relation |
+| `fragmented_communities` | the connected symbols split into communities of two or fewer on average (evaluated with a computed partition and at least 20 connected symbols) |
+
+On a three-function repository where one function calls nothing and nothing
+calls it:
+
+```text
+$ atlas hubs --format plain
+hubs  total 2  eligible 2  excluded_isolated 1
+  helper  function  in 1  out 0  total 1  main.go
+  main  function  in 0  out 1  total 1  main.go
+
+$ atlas communities --format plain
+communities  total 2  shown 2  multi_member 1  singletons 1  isolated 1
+  #0  size 2  helper, main
+  #1  size 1  extra  (isolated)
+```
 
 ## Assistants and Surfaces
 
@@ -3713,6 +4045,19 @@ atlas --db "sqlite:///absolute/path/.atlas/atlas.db" index .
 the lexical search index. By default it indexes the working tree; use
 `--ref COMMIT_OR_BRANCH` to index a specific commit or branch instead.
 
+**Since 0.1.55, uncommitted work gets a snapshot of its own.** When the
+working tree has uncommitted edits or untracked files that Atlas indexes, the
+run stores a snapshot labelled `<sha>+dirty`, with a `tree_hash` of the dirty
+paths and their content, beside the clean snapshot of that commit instead of
+overwriting it. The index JSON reports `dirty`, `tree_hash` and `indexed_sha`,
+and `status`, `history`, `snapshots list` and `snapshot-diff` show the label.
+A clean re-index of the same commit still replaces its snapshot in place, and
+committing the work stores the new commit's snapshot. Files Atlas never reads
+(its own `.atlas/`, extensions it does not index, `.atlasignore` matches)
+never make a tree dirty. `ATLAS_INDEX_DIRTY_IDENTITY=0` restores the old
+behaviour of labelling the working tree with the clean commit
+([#65](https://github.com/aziron-ai/atlas/issues/65)).
+
 A first index of inference-gateway, a Go service of 307 files, looks like this
 on stderr (the JSON summary goes to stdout):
 
@@ -3815,6 +4160,87 @@ Incremental updates are the default because they are much faster than full
 rebuilds: Atlas computes a delta against the previous snapshot and reindexes
 only what changed. To diff against a specific commit rather than the stored
 base, pass `--base COMMIT`.
+
+**Since 0.1.55, a new commit costs what it changed.** The lexical sidecar is
+carried forward per snapshot, so a new commit re-streams only the changed
+files' documents, and the shapes that used to rebuild the whole graph — adding
+or deleting JS/TS, Python, C, C++ or Rust files, deleting a Go file, turning
+Go type analysis off, fact-changing header edits — run on the SQL delta path
+(`persist_path: sql_new_commit`) with bounded passes after the commit
+([#128](https://github.com/aziron-ai/atlas/issues/128)). A delta and a fresh
+full index of the same commit hold identical symbols, edges and file rows
+([#118](https://github.com/aziron-ai/atlas/issues/118)).
+
+Because uncommitted work is now its own snapshot, an edit to a dirty tree
+takes that same new-commit path (copy forward, then retire the superseded
+dirty snapshot) instead of rewriting a snapshot in place. Watch mode on a large
+repository therefore pays roughly what a new commit costs for each edit; set
+`ATLAS_INDEX_DIRTY_IDENTITY=0` if that matters more than an honest label
+([#65](https://github.com/aziron-ai/atlas/issues/65)).
+
+## Imports and Cross-File Types
+
+Atlas proves which file a name comes from before it counts a cross-file
+relationship, and fails closed when two files could answer. **Since 0.1.55**
+the proof reaches further:
+
+- **Python.** `from X import A, B` keeps the module row plus one row per
+  binding, marked `import_binding` / `import_module`, and `export` folds the
+  bindings onto one edge per statement. Parenthesized imports are read from
+  the syntax tree, and `from . import foo` stores `.foo`
+  ([#126](https://github.com/aziron-ai/atlas/issues/126)).
+- **Go.** Imports resolve through `go.mod` — nested modules and in-repo
+  `replace` directives included — to the package directory
+  (`resolved_kind: package_dir`); an in-module path with no package is marked
+  `module_not_found`, and the standard library and third-party modules fail
+  closed. A delta refreshes the resolution when a package directory is added
+  or removed or `go.mod` changes
+  ([#126](https://github.com/aziron-ai/atlas/issues/126)). Package-level
+  variables carry their initializer call, their writes and an inferred
+  `declared_type` ([#55](https://github.com/aziron-ai/atlas/issues/55)).
+- **Scala.** Each import selector resolves by Scala's lookup order and gains
+  `resolved_path` only when exactly one file declares the target under a
+  verified package clause ([#137](https://github.com/aziron-ai/atlas/issues/137));
+  type uses, universal `apply` and companions resolve through the same imports
+  ([#21](https://github.com/aziron-ai/atlas/issues/21)).
+- **PHP.** `use` clauses are read per namespace region, one row per clause,
+  so grouped and aliased imports prove their class, and `use function` /
+  `use const` resolve only to functions and constants
+  ([#139](https://github.com/aziron-ai/atlas/issues/139)). Class constants,
+  static properties, container and event rows prove their class too
+  ([#24](https://github.com/aziron-ai/atlas/issues/24)).
+- **Java.** Same-package, single-type and on-demand imports resolve type
+  uses, and method return types, field types and annotation element types
+  are references ([#34](https://github.com/aziron-ai/atlas/issues/34)).
+
+These facts are written when a file is indexed, so an existing store shows
+them after one `atlas index . --reindex`.
+
+## Images
+
+An image is a searchable file-level entry, never a call-graph node. **Since
+0.1.55** its entry holds the text the file itself carries — PNG text chunks
+(including XMP) and EXIF, JPEG EXIF/XMP/IPTC/comments, TIFF text tags, WebP
+EXIF/XMP and GIF comments — plus its format and size, so a title or caption
+embedded in an image is found by search
+([#26](https://github.com/aziron-ai/atlas/issues/26)). Binary data is never
+read as text.
+
+Text drawn in the pixels needs OCR, which is opt-in. Set
+`ATLAS_IMAGE_OCR_CMD` to a command that reads one image on stdin and prints
+its text; it runs without a shell, with the repo-relative path in
+`ATLAS_IMAGE_PATH`, for at most 30 s per image:
+
+```sh
+export ATLAS_IMAGE_OCR_CMD="tesseract - stdout"
+atlas index . --reindex
+```
+
+Every image entry states `ocr_status` (`off`, `ok`, `empty`, `unavailable` or
+`failed`), and its signature says `ocr: <status>` whenever no OCR text was
+indexed, for example `fixture.png png 320x60 ocr: off Title: ATLAS VISION
+TOKEN 7842`. Images already indexed keep their text until they are indexed
+again with `--reindex`.
 
 ## Forced Rebuild
 
@@ -3937,12 +4363,14 @@ Behaviors worth knowing on large or memory-constrained machines:
   `ATLAS_GOGC` bound the Go runtime directly and override whatever the tier
   would have set — the right tool for a container with a hard cgroup limit,
   where you want a specific number rather than a fraction of host RAM.
-- **Deletions cost more than edits.** Adding or modifying files takes the
-  scoped delta path (sub-second, tens of MB). Deleting a Go file currently
-  forces the whole-module type-check fallback — correctness requires
-  re-deriving reverse-dependency edges — so a delete delta can approach
-  cold-build time and RAM on Go-heavy repos. A scoped-deletion analyzer is
-  planned; until then, batch deletions together when you can.
+- **Deletions no longer rebuild the graph (since 0.1.55).** Deleting a Go
+  file used to force the whole-module type-check fallback, and adding or
+  deleting JS/TS or Python files took the whole-graph path. Those shapes now
+  run on the SQL delta path: on TensorFlow a one-line Python edit went from
+  1,528 MB / 36 s to 529 MB / 13 s, and adding a `.cc` file beside JavaScript
+  from 8.5 GB / 184 s to 752 MB / 24 s
+  ([#128](https://github.com/aziron-ai/atlas/issues/128)). Under `eco`, SQLite's
+  caches and memory map are bounded as well (see [Configuration](configuration)).
 
 ## Database Maintenance
 
@@ -3986,6 +4414,14 @@ stats inference-gateway  local/sqlite  history 1  coverage_facts 0
   graph files 89  symbols 3526  edges 1317  communities 3161  isolated 3121
   langs  go:3511 bash:9 typescript:6
 ```
+
+Since 0.1.55 the plain `stats` output also prints a `health` line (isolated
+ratio, connected components, the community split), an `edge_binding` line and
+an `invariants` line, and `atlas status --repo <path>` scopes the status
+report to one repository; the [CLI reference](cli) describes each. Every
+answer also carries its own `indexed_sha`, `head_sha` and `stale` fields, so
+a lookup tells you when the index lags the checkout
+([#59](https://github.com/aziron-ai/atlas/issues/59)).
 
 `store_rows` is what the index stored. `graph` is what the graph report reads —
 the same numbers the dashboard's **Orientation** view (`#/orient`) shows at the
@@ -4197,6 +4633,9 @@ atlas config set ATLAS_MAX_DB_BYTES ""     # clear a persisted override
 
 ## Known Settings
 
+The settings most people change, including environment-only variables such as
+`ATLAS_API_TOKEN` and `ATLAS_SERVER_URL` that `atlas config` does not list:
+
 | Setting | Purpose |
 | --- | --- |
 | `ATLAS_ENABLE_VECTORS` | Enable optional semantic retrieval (pairs with an index built with `--enable-vectors`) |
@@ -4222,8 +4661,10 @@ atlas config set ATLAS_MAX_DB_BYTES ""     # clear a persisted override
 | `ATLAS_WORKBENCH_MODEL_ROUNDS`, `ATLAS_WORKBENCH_MODEL_REVISIONS`, `ATLAS_WORKBENCH_MAX_EVIDENCE_TOKENS`, `ATLAS_WORKBENCH_ASK_EFFORT`, `ATLAS_WORKBENCH_ANSWER_EFFORT`, `ATLAS_WORKBENCH_HISTORY_TURNS`, `ATLAS_WORKBENCH_MODEL_TURNS_PER_HOUR`, `ATLAS_WORKBENCH_TURNS_PER_HOUR` | **Since 0.1.54.** How many model calls and rewrites one Workbench answer may make, how much evidence and thread history a prompt carries, the reasoning effort per call on the Claude CLI, and the per-token hourly budgets. Defaults and meanings in [Ask Workbench](workbench) |
 | `ATLAS_LEXICAL_SETTLE`, `ATLAS_LEXICAL_SETTLE_TIMEOUT` | **Since 0.1.48.** How `atlas index` brings the lexical sidecar to its on-disk steady state before returning: `auto` (default — merge, reclaim, measure), `reclaim` (skip the merge), `off` (measure only). The timeout budgets the merge (default 30s) |
 
-Run `atlas config list` for the complete catalog with current names, defaults,
-descriptions, and accepted values for your installed release.
+The complete catalogue of the 122 settings `atlas config` manages in 0.1.55 is
+at the end of this page, under The Knob Catalogue. `atlas config list` prints
+it for the release you have installed, with each knob's effective value and
+where that value came from.
 
 ## Machine Profiles
 
@@ -4254,6 +4695,26 @@ atlas doctor                    # read back the tier and every active bound
 no bounds at all, so every read site falls through to its compiled default.
 `turbo` moves exactly one knob — the SQLite read-pool connection count, 4 to 8
 — because that is the only candidate that survived measurement.
+
+### SQLite Residency
+
+**Since 0.1.55.** The soft heap limit bounds the Go heap only. SQLite's
+memory-mapped window and its page caches live outside it, so `eco` and
+`balanced` now bound them too
+([#127](https://github.com/aziron-ai/atlas/issues/127)):
+
+| Tier | Read window (`ATLAS_MMAP_SIZE`) | Write window | Write cache (`ATLAS_SQLITE_CACHE_SIZE`) | Per read connection (`ATLAS_SQLITE_READ_CACHE_SIZE`) |
+| --- | --- | --- | --- | --- |
+| `performance`, `turbo` | 512MiB | whole database if at most 512MiB, else none | 64MiB | 16MiB |
+| `balanced` | 256MiB | whole database if at most 256MiB, else none | 64MiB | 16MiB |
+| `eco` | 64MiB | whole database if at most 64MiB, else none | 16MiB | 16MiB |
+
+An explicit `ATLAS_MMAP_SIZE` sets both windows; an explicit cache knob
+replaces the tier's cache. Under `eco` with the 1 GiB limit an 8 GB machine
+gets, a one-line TensorFlow delta now peaks at 393 MB instead of 1,510 MB.
+`atlas doctor` reports the values the handles open with as
+`sqlite_read_mmap_bytes`, `sqlite_write_mmap_bytes`,
+`sqlite_write_cache_bytes` and `sqlite_read_cache_bytes_per_conn`.
 
 ### Auto-Detection
 
@@ -4335,10 +4796,11 @@ intended. If something overrode a bound, this block shows the override.
 | Field | Meaning |
 | --- | --- |
 | `profile` | the tier in force: `eco`, `balanced`, `performance`, `turbo` |
-| `reason` | `ram`, `rotational_disk`, `env`, `flag`, or empty when the hardware simply qualified |
+| `reason` | `ram`, `rotational_disk`, `env`, `settings` (a tier set in `.atlas/settings.json`, since 0.1.55), `flag`, or empty when the hardware simply qualified |
 | `cpu_width_scope` | **where** the tier's CPU width and soft heap limit apply: `process` under `eco`, `daemon` under `balanced`, empty under `performance`/`turbo` |
 | `total_ram_bytes`, `num_cpu`, `rotational_db` | the probe facts behind the verdict; `rotational_db` may be `unknown` |
-| `gomaxprocs`, `workers`, `memory_limit_bytes`, `gogc` | the bounds actually installed |
+| `gomaxprocs`, `workers`, `memory_limit_bytes`, `gogc` | the bounds actually installed. Since 0.1.55 a one-shot `doctor` under `balanced` reports the daemon-only heap limit as `daemon_memory_limit_bytes`, with a note, rather than as its own |
+| `sqlite_read_mmap_bytes`, `sqlite_write_mmap_bytes`, `sqlite_write_cache_bytes`, `sqlite_read_cache_bytes_per_conn` | **Since 0.1.55.** The SQLite windows and caches the handles open with (see SQLite Residency above) |
 | `sampler_interval`, `watch_poll_interval`, `wal_autocheckpoint_pages`, `read_pool` | the cadences and pool this tier resolved to |
 | `go_types_note` | under `eco` only: `atlas index --go-types=off` skips Go type analysis for −78% cold first-index wall and −194 MB RSS, at the cost of type-derived edges |
 
@@ -4386,20 +4848,34 @@ scripting against Atlas.
 - `--detail` selects the depth: `low`, `medium`, `high` (default for every
   format), or `xhigh`, which opts into cross-repo context. Retrieval
   operations (callers/refs/impact) floor at `high`.
+- **Since 0.1.55, one alias table serves every surface:** `l`/`0`,
+  `med`/`m`/`1`, `h`/`2` and `x`/`max`/`full`/`3` mean the same on
+  `--detail`, the HTTP `?detail=` parameter and the MCP `detail` argument, and
+  `ATLAS_DETAIL_DEFAULT` reads through the same table. An unrecognised value
+  falls back to `high` ([#146](https://github.com/aziron-ai/atlas/issues/146)).
 
 ## Read-Only Mode and Telemetry
 
 Use `--read-only` when the database must not change — for example when
-hashing artifacts or querying a shared, immutable index. It opens the
-database immutably: no migration runs, no WAL/journal files are created, and
-no `telemetry.db` is created beside it, so the artifact bytes hash
-identically after any query. A missing database errors instead of being
-created.
+hashing artifacts or querying a shared index. No migration runs, nothing is
+written or checkpointed, and no `telemetry.db` is created beside the store.
+Beside a quiescent store it creates no `-wal` or `-shm` file either, so the
+artifact bytes hash identically after any query. A missing database errors
+instead of being created.
 
-Because read-only mode suppresses the default telemetry database, telemetry
-with `--read-only` requires an explicit `--telemetry-db PATH`. Without
+**Since 0.1.55, a read-only reader follows a live writer.** Once a running
+Atlas has a WAL beside the store, the reader reads that WAL, so it sees
+snapshots the writer has committed; it refuses a store another Atlas moved to
+a different schema generation (`store_superseded`), and it drops its warm
+search, context and report caches when the store changes underneath it
+([#130](https://github.com/aziron-ai/atlas/issues/130)).
+
+Because read-only mode attaches no telemetry sink, telemetry with
+`--read-only` requires an explicit `--telemetry-db PATH`. Without
 `--read-only`, telemetry defaults to `telemetry.db` beside the graph
-database.
+database. Since 0.1.55 `stats` and `status` say so instead of leaving fields
+out: their `telemetry` block reads `unavailable_read_only` with the remedy
+([#154](https://github.com/aziron-ai/atlas/issues/154)).
 
 ```sh
 atlas --read-only --telemetry-db /srv/atlas/telemetry.db \
@@ -4431,6 +4907,228 @@ For very large repositories, exclude generated files and dependency caches
 (see [Indexing and Reindexing](indexing)) before tightening limits — a
 smaller candidate set beats a tighter bound. Confirm behavior with
 `atlas status`, `atlas stats`, and `atlas doctor`.
+
+## The Knob Catalogue
+
+Every setting `atlas config` manages in 0.1.55, 122 in all, grouped by area.
+**Live** says whether a running daemon picks up a change without a restart:
+`yes` means the knob is re-read per call or tick, `no` means restart to apply
+it. A value is written in the syntax its environment variable accepts, in the
+environment, in `.atlas/settings.json` or with `atlas config set`. The
+settings new in 0.1.55 are listed in the [release notes](upgrade).
+
+| Type | Syntax |
+| --- | --- |
+| `bytes` | `5GiB`, `500MB`, or a plain integer |
+| `int` | a plain integer |
+| `float` | a decimal ratio |
+| `duration` | a Go duration (`6h`, `90s`) or bare seconds |
+| `bool` | `1`/`true` is on; empty or absent is off |
+| `enum` | one of the listed values |
+| `string` | free-form (URLs, origin lists) |
+
+### Storage and Retention
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_MAX_DB_BYTES` | bytes | `5GiB` | yes | Retention budget for the graph DB's live footprint; oldest snapshots are pruned past it (0 disables). |
+| `ATLAS_MAX_SNAPSHOTS_PER_REPO` | int | `5` | yes | How many newest snapshots each repo keeps; older ones are pruned after every index (<=0 disables). |
+| `ATLAS_MAX_SNAPSHOT_AGE` | duration | `0 (disabled)` | yes | Prune snapshots older than this Go duration ("720h") after every index. A repo's newest snapshot is never pruned, nor is one with a read in flight. OFF by default so an upgrade never silently drops history; `atlas snapshots prune --keep-since 90d` applies it on demand. |
+| `ATLAS_MAINTENANCE_INTERVAL` | duration | `6h` | yes | How often warm daemons run retention + lexical purge + online compact (0 disables the ticker). |
+| `ATLAS_MMAP_SIZE` | bytes | `512MiB read (256MiB balanced, 64MiB eco); write: whole db if it fits, else 0` | no | SQLite memory-mapped window, set for EVERY handle when given ('0' disables mmap). Unset, the read pool maps the tier's window (512MiB; 256MiB balanced, 64MiB eco) and the WRITE handle maps the database whole when it fits that window and not at all when it is larger — a partial window only pins the persist's scanned pages on top of the page cache (TensorFlow's 2.2 GB store: ~500 MB of a one-line delta's peak). Mapped pages are file-backed but DO count toward RSS. |
+| `ATLAS_SQLITE_CACHE_SIZE` | bytes | `64MiB (16MiB eco)` | no | Page cache of the SQLite WRITE handle (the index persist's working set). Outside the Go heap, so outside ATLAS_MEMORY_LIMIT. Explicit value beats the tier. |
+| `ATLAS_SQLITE_READ_CACHE_SIZE` | bytes | `16MiB` | no | Page cache of EACH SQLite read-pool connection (multiply by ATLAS_READ_POOL). The tiers never move it — it is the measured warm-serve latency setting — so only an explicit value changes it. |
+| `ATLAS_SQLITE_WAL_AUTOCHECKPOINT` | int | `1000 (4096 balanced, 16384 eco)` | no | WAL pages that accumulate on the WRITE handle before SQLite checkpoints (0 disables autocheckpointing). Larger means fewer, bigger, seek-friendlier checkpoints. The read pool always keeps SQLite's stock value. |
+| `ATLAS_READ_POOL` | int | `4 (8 under turbo)` | no | SQLite READ-pool connection count, clamped to [1,32]. Read connections run concurrently with the single writer under WAL, so this is the concurrency ceiling for serve/MCP query traffic; the WRITE handle always stays at 1 regardless. Turbo raises it to 8 (measured at 16-way concurrency: p50 -35%, p95 -30-45%, QPS +26-54%; free at low concurrency). SQLite-only — it is not consulted for hosted Postgres stores. |
+
+### Lexical (BM25) Sidecar
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_LEXICAL_MAX_RATIO` | float | `2.0` | yes | Rebuild the BM25 lexical sidecar when it exceeds this multiple of the graph DB's logical size (<=0 disables the ratio check). |
+| `ATLAS_MAX_LEXICAL_BYTES` | bytes | `0` | yes | Absolute lexical sidecar bound; replaces the ratio check when set (0 = ratio-only). |
+| `ATLAS_LEXICAL_OPEN_TIMEOUT` | duration | `2s` | yes | Flock-acquisition deadline when opening the BM25 sidecar. Raise it when indexing a large repo alongside a warm daemon so the open waits out the writer instead of degrading to SQL search (default 2s keeps small repos fast). |
+
+### Indexing and Watching
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_INDEX_MAX_FILES` | int | `25000` | yes | Parseable-file ceiling for auto/lazy index runs (0 = unlimited; manual atlas index is always unlimited). |
+| `ATLAS_INDEX_WORKERS` | int | `0 (profile cap, else all cores)` | yes | Cap the index parse/hash worker pool (the default for --workers). 0/unset follows the machine profile the way the indexer does: eco caps every process, one-shot commands included; balanced's cap applies only in warm daemons (serve, mcp, watch), so a one-shot command such as an explicit `atlas index` uses all cores; performance and turbo carry no cap (all cores). An explicit value outranks the machine profile and is reported live in `atlas doctor` machine_profile.workers. |
+| `ATLAS_IMAGE_OCR_CMD` | string | unset | no | Opt-in OCR for image pixels at index time ([#26](https://github.com/aziron-ai/atlas/issues/26)): a command, split on whitespace and run without a shell, that reads one image on stdin (ATLAS_IMAGE_PATH, the repo-relative path, in its env) and prints the image's text; when set, its stdout is indexed as the image's OCR text, e.g. "tesseract - stdout" (30s per image). Unset = pixel text is not indexed and the image entry shows ocr: off; text the file itself carries (PNG text chunks, EXIF, XMP, IPTC, comments) is indexed either way. Read when an image is parsed, so images already indexed keep their text until `atlas index --reindex`. |
+| `ATLAS_INDEX_NESTED_REPOS` | bool | `false` | no | Absorb files inside NESTED git repositories/worktrees into the parent index. Default false treats a nested repo (a subdir with its own .git) as an index boundary and skips it; the segmented workspace path still indexes such repos separately. |
+| `ATLAS_NO_WATCH` | bool | unset | no | Disable the default-on background file watcher in serve/mcp (any non-empty value). |
+| `ATLAS_WATCH_MODE` | enum | `auto` | no | File-watch backend: auto (fsnotify, falling back to polling) or poll (force polling — required for some bind-mount deployments). |
+| `ATLAS_WATCH_POLL_INTERVAL` | duration | `45s (90s balanced, 180s eco)` | no | Polling interval when the watcher runs in poll mode. Each tick is a full working-tree re-walk, and any drift it finds triggers a re-index. |
+| `ATLAS_STALENESS_INTERVAL` | duration | `120s` | yes | How often a non-watching daemon re-checks the working tree for drift on query (0 disables). |
+| `ATLAS_FRESHNESS_TTL` | duration | `2s` | yes | How long one working-tree probe (HEAD + git status of the indexable files) answers for a repo when stamping indexed_sha/head_sha/dirty/stale on an answer (0 probes on every answer). |
+| `ATLAS_FRESHNESS_PROBE` | bool | `on` | yes | Set 0/off to stop probing the working tree on answers; every answer then reports head_sha "unknown" (stale omitted), never a fabricated fresh. |
+| `ATLAS_ONESHOT_REFRESH` | enum (`off`, `sync`) | `off` | yes | What a one-shot command (any CLI command except serve/mcp/watch) does about a stale repo. Accepted values: `off` (default) \| `sync`, case-insensitive; any other value warns once on stderr and behaves as `off`. `off`: nothing — the process exits before background index work could land, so none is enqueued; a stale answer says `refresh: "none"` with `refresh_skipped: "one_shot"` (run `atlas index`). `sync`: when git reports the repo stale, re-index it synchronously before answering, bounded by `ATLAS_ONESHOT_REFRESH_TIMEOUT`; the answer is then fresh (`refresh: "completed"`), or says `refresh_skipped: "budget_exceeded"` / `"failed"`. Long-lived processes keep their background backstop either way. |
+| `ATLAS_ONESHOT_REFRESH_TIMEOUT` | duration | `10s` | yes | Wall-clock bound on one synchronous refresh under `ATLAS_ONESHOT_REFRESH=sync`. A run that does not finish in time is cancelled, persists nothing, and the answer reports `refresh_skipped: "budget_exceeded"`. |
+| `ATLAS_INDEX_DIRTY_IDENTITY` | bool | `on` | yes | Index a dirty working tree into its own snapshot labeled `<sha>+dirty` instead of overwriting the clean snapshot of HEAD. 0/off restores the pre-[#65](https://github.com/aziron-ai/atlas/issues/65) in-place labeling. |
+
+### Machine Profile and Runtime
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_PROFILE` | enum | `auto (eco on <=12GiB RAM or rotational db disk; balanced on 12-16GiB; performance otherwise; turbo is explicit-only)` | no | Machine profile tier. eco bounds Atlas for a small box (half the cores for indexing, soft heap limit max(512MiB, RAM/8), GOGC=50, slower background cadences, larger WAL checkpoints, and it defers watch refreshes while foreground commands run); balanced is the 12-16GiB middle rung and bounds BACKGROUND work only: in a warm daemon (serve/mcp/watch) it takes 3/4 of the cores with a soft heap limit of max(1GiB, RAM/4), while an explicit `atlas index` you are waiting on runs at FULL speed (measured: the daemon-sized bounds cost a one-shot up to +15.69% wall on a 10-CPU box, so they are not applied to it); GOGC=75, 10s/90s cadences and 4096-page WAL checkpoints apply process-wide on both paths, and no scheduling behavior changes; performance is stock behavior on any hardware; turbo is above stock for big workstations/CI and moves exactly one knob, the sqlite read pool 4 -> 8. The [#127](https://github.com/aziron-ai/atlas/issues/127) names still work as input aliases: low = eco, default = performance. Unset = AUTO: eco on <=12GiB RAM or a rotational db disk, balanced on 12-16GiB, performance otherwise; turbo is NEVER auto-selected (it takes more of the machine than stock, so it must be asked for). `atlas doctor` reports the detected tier and every active bound. |
+| `ATLAS_MEMORY_LIMIT` | bytes | unset | yes | Soft Go heap limit for the atlas process (debug.SetMemoryLimit). |
+| `ATLAS_GOGC` | int | `75 (warm daemons)` | yes | GC target percent; warm daemons default to 75 when nothing is set. |
+| `ATLAS_FEDERATED_CONCURRENCY` | int | `eco 2, balanced 4, performance 6, turbo min(cores,8); clamped to the read pool` | yes | How many repository legs the federated (repo="*") passages answer runs at once — the Ask page's all-repos scope and GET /api/v1/passages/federated. Each leg holds a SQLite read connection while it runs, so the width is ALWAYS clamped to the store's read pool (ATLAS_READ_POOL) and to [1,32]. Per-tier default: eco 2, balanced 4, performance 6, turbo min(cores, 8) — with the stock read pool of 4 that means eco 2 and 4 everywhere else (turbo's pool is 8). Results are byte-identical at every width. Read per request. |
+
+### Context and Query Budgets
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_CODE_QUERY_MAX_TOKENS` | int | `16000` | yes | Default token budget for a code_query with no explicit max_tokens (0 = unlimited; context is trimmed to fit). |
+| `ATLAS_CONTEXT_LIMIT` | int | unset | no | Default max symbols packed into a context/code_query bundle when the request sets no --limit (unset = the selected intent budget). |
+| `ATLAS_CONTEXT_MAX_FILES` | int | unset | no | Default max files referenced in a context/code_query bundle when the request sets no --max-files (unset = the selected intent budget). |
+| `ATLAS_CONTEXT_MAX_EDGES` | int | unset | no | Default max scoped edges in a context/code_query bundle when the request sets no --max-edges (unset = the selected intent budget). |
+| `ATLAS_CONTEXT_MAX_DEPTH` | int | unset | no | Default impact-traversal depth for a context/code_query bundle when the request sets no --max-depth (unset = the selected intent budget). |
+| `ATLAS_CROSS_REPO_V2` | bool | `auto (on at >=2 repos)` | yes | Cross-repo intelligence in code_query/impact (route consumers, cross-repo blast radius). Unset = AUTO: on when >=2 repos are indexed; 1/0 forces on/off. |
+| `ATLAS_FEEDBACK_RANKING` | bool | `true` | yes | Let stored record_feedback verdicts re-rank retrieval hits. |
+
+### MCP Surface
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_MCP_CALL_TIMEOUT` | duration | `30s` | yes | Per-tool-call deadline on the MCP surface — the guard that keeps a blocked engine from hanging an agent forever. |
+| `ATLAS_MCP_MAX_RESULT_BYTES` | bytes | `96KiB` | yes | Ceiling on a single MCP tool result before it degrades to the compact rendering (0 disables). |
+| `ATLAS_MCP_MAX_RECALL_TOOLS` | int | `15` | yes | How many trusted recall__<slug> tools the MCP catalog advertises. |
+| `ATLAS_MCP_ALLOWED_ORIGINS` | string | unset | yes | Comma-separated Origin allowlist for the MCP HTTP transports (DNS-rebinding guard). |
+| `ATLAS_MCP_REQUIRE_SESSION` | bool | `1` | yes | Enforce the MCP initialize lifecycle on the Streamable HTTP transport: requests other than initialize/ping must carry the Mcp-Session-Id minted at initialize. 0 restores the legacy stateless behavior, where any caller could execute tools/call without ever initializing. |
+| `ATLAS_MCP_SESSION_TTL` | duration | `30m` | yes | Idle lifetime of an initialized MCP Streamable-HTTP session before its Mcp-Session-Id is rejected as expired. |
+| `ATLAS_MCP_PUBLIC_READONLY` | bool | `false` | no | Open the PUBLIC READ-ONLY MCP door on `atlas serve --mcp` (the --mcp-public-readonly flag, which wins when given): POST /mcp then answers a caller that sends NO bearer, with the read-only catalog only — every tool annotated readOnlyHint:true except record_feedback, record_task and link, and within them no incidents op=refresh or op=rca, no code_query allow_lazy_index, no report allow_large; anything else is refused with a JSON-RPC error naming the mode. The read-write token keeps the full catalog on the same mount and every /api/v1 route keeps its gate. For hosts that reach Atlas only over public HTTPS with no static bearer, such as the ChatGPT desktop app's custom connectors. Needs a read-write API token (atlas token init); refused with --mcp absent or under central --jira-oauth. Read when the serve starts. PUT /api/v1/system/config refuses it with 403 setting_not_writable_via_api (it would open POST /mcp to callers with no bearer at the next restart), so set it on the serve's machine: the --mcp-public-readonly flag, the serve's environment, or `atlas config set`. |
+| `ATLAS_MCP_PUBLIC_RATE` | int | `60` | no | Requests per minute one remote address may make on the public read-only MCP door: a token bucket holding a minute's worth, so a quiet caller may burst that many; a request over it is answered 429 with Retry-After. The key is the TCP peer, never a forwarding header, so behind a tunnel or proxy it is the one budget every caller through it shares. A non-positive or unparsable value falls back to 60 — there is no unlimited spelling. Read when the serve starts. |
+
+### Embeddings and Semantic Search
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_ENABLE_VECTORS` | bool | `false` | no | Compute and store embeddings at index time (semantic search + the semantic cache need them). |
+| `ATLAS_EMBED_URL` | string | unset | no | Embedding provider endpoint. Unset = the offline hashing provider, whose matches are honestly flagged degraded. Atlas holds NO model key and never calls an LLM. |
+
+### Recall: Service Posture
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_RECALL_CACHE` | enum | `off` | yes | Opt-in snapshot-pinned answer cache stored in the selected observability store (telemetry.db for SQLite; the observability schema for PostgreSQL): off writes no CodeQuery results; shadow stores recursively redacted results but serves live; serve may return redacted cached answers. Questions containing maskable secrets or private coordinates always bypass lookup/storage. Delete query/cache data with `atlas privacy purge-recall --apply --yes`. |
+| `ATLAS_RECALL_SHADOW` | bool | `true` | no | Semantic/exact recall service posture: true = observe-only (never serve a cached answer). A token-less hub is forced into shadow regardless. |
+| `ATLAS_RECALL_SEMANTIC` | bool | `true` | no | Tier-1 semantic (embedding) cache on top of the exact cache. |
+| `ATLAS_RECALL_SIM_THRESHOLD` | float | `0.92` | no | Cosine floor a semantic candidate must clear before it may be served (0,1]. |
+| `ATLAS_RECALL_MIN_USERS` | int | `2` | no | Cross-user corroboration floor: how many DISTINCT users must have asked a cluster before its cached answer may be served. |
+| `ATLAS_RECALL_MAX_AGE_SECONDS` | int | `0` | no | Wall-clock staleness ceiling on a served cached answer (0 = no ceiling; the snapshot gate still applies). |
+| `ATLAS_RECALL_SERVE_DEGRADED` | bool | `false` | no | May an OFFLINE-hashing (token-overlap, not learned) semantic match be served? Off by default — a degraded match is honest, not trustworthy. |
+| `ATLAS_MINER_INTERVAL_SEC` | int | `600` | no | How often a serve daemon mines clusters + runs the fleet sweep (0 disables the miner). |
+| `ATLAS_RECALL_USD_PER_MTOKEN` | float | `3.0` | yes | Price used for the dashboard's ESTIMATED savings figure (explicitly labeled an estimate; never a fabricated constant). |
+
+### Recall: Privacy and Retention
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_RECALL_STORE_PROMPT_TEXT` | bool | `false` | yes | Opt in to storing redacted prompt text for recall query events in the selected observability store (telemetry.db for SQLite; the observability schema for PostgreSQL). Default stores only the redacted normalized/hash signal plus metrics; raw secrets are never retained. Delete with `atlas privacy purge-recall --apply --yes`. |
+| `ATLAS_RECALL_RETENTION_DAYS` | int | `30` | yes | Bounded retention window for recall query events and captured transcript episodes in the selected observability store; non-positive or invalid values fall back to 30 days and values above one year clamp to 365 days. Delete immediately with `atlas privacy purge-recall --apply --yes`. |
+| `ATLAS_RECALL_CACHE_RETENTION_DAYS` | int | `30` | yes | Bounded retention window for opt-in recursively redacted CodeQuery answer-cache rows in the selected observability store; non-positive or invalid values fall back to 30 days and values above one year clamp to 365 days. Delete immediately with `atlas privacy purge-recall --apply --yes`. |
+| `ATLAS_SERVE_CAPTURE` | bool | `0` | no | Explicit opt-in for a serve daemon to scan ~/.claude/projects and ~/.codex/sessions into the selected observability store (telemetry.db for SQLite; the observability schema for PostgreSQL). A separately connected sync may uplink redacted/normalized events; startup discloses stored fields, scope, prompt redaction, retention, and `atlas privacy purge-recall --apply --yes` before the first scan. |
+| `ATLAS_SERVE_CAPTURE_SEC` | int | `20` | no | How often an explicitly opted-in serve daemon scans ~/.claude/projects and ~/.codex/sessions. |
+| `ATLAS_SERVE_CAPTURE_PROMPT_MODE` | enum | `norm` | no | Prompt posture for explicitly opted-in transcript capture: off stores hash only; norm stores redacted normalized text; raw stores redacted prompt text. Tool traces are always redacted. |
+
+### Fleet Uplink and Telemetry
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_SYNC_ACCEPT_LEVEL` | enum | `interactions` | yes | HUB accept policy for pushed fleet data: off \| telemetry (metrics only) \| interactions (normalized prompts) \| full (raw). |
+| `ATLAS_TELEMETRY_PUSH` | bool | `1` | yes | Spoke-side uplink kill switch: 0 pauses every push without disconnecting. |
+| `ATLAS_TELEMETRY_LEVEL` | enum | unset | yes | Spoke-side data-sharing ceiling: off \| telemetry \| interactions \| full. Overrides the connected level. |
+| `ATLAS_GA_TELEMETRY` | bool | `0 (opt-in consent required)` | yes | Anonymous aggregated usage export to Google Analytics (label=atlas + version): tool name, source, status, and bucketed latency/token magnitudes only — never code, paths, repo names, query text, arguments, device ids, or user ids; client_id is random per batch. CONSENT-GATED and off by default: it runs only after an explicit recorded opt-in (the installer prompt or `atlas telemetry grant`), or when this knob is set explicitly truthy with no decision recorded. Set 0/false/off to hard-disable even over recorded consent; DO_NOT_TRACK is equally absolute. A recorded denial holds against a truthy value — re-grant with `atlas telemetry grant`. |
+| `ATLAS_TELEMETRY_LOCAL` | bool | `1` | yes | LOCAL observability collection into telemetry.db (tool_events rows from the Recorder, resource_samples rows from the Sampler). Local-only — these rows never leave the machine, so this is not an egress knob. Default on; set 0/false/off to stop writing new rows entirely. In-memory session stats (latency rings, dashboard Latest()) stay live regardless: they are process RAM, not collection. |
+| `ATLAS_TELEMETRY_SAMPLE_INTERVAL` | duration | `5s (10s balanced, 30s eco)` | no | How often the resource sampler writes a resource_samples row and stats the db/lexical files. The 5s default never lets a rotational disk idle. |
+| `ATLAS_TELEMETRY_SAMPLE_RETENTION` | int | `20000` | yes | Row cap (retention) on the shared resource_samples ring buffer: each write prunes to the newest N rows, so telemetry.db cannot grow without limit no matter how long a daemon runs or how many Atlas processes (mcp, serve, watch, cli, index) share it. Downsample by RAISING ATLAS_TELEMETRY_SAMPLE_INTERVAL — the two together set the retained window: 20000 rows is ~28h at the 5s default and ~7 days at the eco 30s cadence. The cap is global, not per process role, because it bounds one shared file; every row records the process_id/process_role that wrote it, so a shared series stays attributable. Invalid values (0, negative, non-numeric) warn on stderr and keep the default — 0 is NOT 'unlimited', and there is deliberately no way to spell unbounded growth. Note cpu_pct: it is measured per process from getrusage(2) on Linux/macOS and from GetProcessTimes (kernel+user) on Windows, as CPU time over wall time since the previous sample (so it can exceed 100 on several cores); -1 is the honest 'unmeasured' sentinel — the first sample of every process (there is no previous reading to diff against yet), or a failed syscall — and must never be averaged in as 0. |
+
+### Auto-update
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_AUTO_UPDATE` | bool | `1 (recorded at install; on\|off here overrides the record)` | yes | Background auto-update: a jittered daily check against the public GitHub releases API (one unauthenticated GET, no identifiers) plus checksum-verified staged upgrades (atomic swap on the binary channel, which keeps the previous binary as atlas.bak for revert and refuses downgrades — only a strictly newer version is applied; npm/brew get a notice with their package manager's command). Default on via the decision recorded at install (`atlas update on\|off` manages it); this knob OVERRIDES THE RECORDED decision in both directions. Off means ZERO update-related network — no check, no download. |
+| `ATLAS_UPDATE_CHECK_INTERVAL` | duration | `24h` | yes | Ceiling on how often ANY atlas process on this machine checks for a new release (the cursor is shared via ~/.atlas/update-config.json). Go duration or bare seconds. |
+| `ATLAS_UPDATE_URL` | string | unset | yes | Mirror override for the release-check endpoint (default: the public GitHub releases API for aziron-ai/atlas). Must serve the same latest-release JSON shape (tag_name + assets[].browser_download_url); artifact and checksum downloads follow the asset URLs in that response, so an air-gapped mirror controls both. |
+
+### Skills
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_SKILL_EXEC` | bool | `1` | yes | Kill switch for the fenced skill test-run executor: unset/1 = enabled, 0 = every test-run refuses. |
+
+### Observe: Log Streams, Pulls, Sources, Metrics, Traces, Incidents
+
+See [Observe](observe).
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_LOGSTREAM_MAX_TEMPLATES` | int | `5000` | yes | How many distinct log templates one stream may hold. Once it is reached, lines whose template is UNSEEN are counted under the reserved "__overflow__" template instead of being admitted — the counts survive, the table stops growing, and every ingest reports how many deltas it folded. Raise it for a stream that keeps folding; a stream that folds constantly is usually emitting values the skeletonizer is not masking. Non-positive or invalid values fall back to 5000. |
+| `ATLAS_LOGSTREAM_MAX_EXEMPLARS` | int | `3` | yes | How many secret-masked example lines each log template keeps as proof it is real, first-arrived wins. Exemplars are the only line text Atlas persists (masked with the same lexicon as every other stored free-text field); raise it to see more of the variance behind one skeleton, at proportional storage. Non-positive or invalid values fall back to 3. |
+| `ATLAS_LOGSTREAM_FOLD_CONTINUATIONS` | bool | `true` | yes | Fold continuation lines into the log record they continue before templating, within one ingest batch: a line that starts with a space or tab, or an unindented line with no timestamp, level token, bracketed tag or JSON shape that follows a record which had one (a SQL statement's body, a stack trace's frames, a panic's goroutine dump). One multi-line event then counts as ONE template instead of one per line. A JSON line never absorbs anything (it is complete by construction), and a record is capped at 64 lines and 8 KiB. Only 0/false/no/off disables it; anything else, including unset, leaves it on. |
+| `ATLAS_LOGPULL_TOKEN_ENVS` | string | `ATLAS_LOKI_TOKEN,ATLAS_ELASTIC_TOKEN,ATLAS_JENKINS_TOKEN,ATLAS_JENKINS_USER` | yes | Comma-separated NAMES of the environment variables a scheduled log pull (atlas logs pull add, POST /api/v1/logs/pulls) may read its credential from — names, never credentials. A pull sends its credential to the url it names, so a pull whose token_env (or, for a jenkins pull, user_env: the Jenkins user ID rides in the same Authorization header) is not listed is refused when it is added, never probed, and skipped by the serve (log_pull_token_env_not_allowed, logged once an hour). none = no variable, anonymous pulls only. The config API cannot change this knob — it constrains that API's own write token — so set it in the serve's environment, or in settings.json from the serve's machine (atlas config set). |
+| `ATLAS_SOURCE_TOKEN_ENVS` | string | `GITHUB_TOKEN,GRAFANA_SA_TOKEN,ATLAS_JENKINS_TOKEN,ATLAS_ONEDRIVE_TOKEN,PROMETHEUS_TOKEN,TEMPO_TOKEN` | yes | Comma-separated NAMES of the environment variables a source configured through POST /api/v1/sources (the Command Center's Fleet › Connectors form) may name as its token_env IN ADDITION to the connectors' own conventional variables, which are always allowed (the default list) — names, never credentials. A source sends its credential to the base_url it names, and the caller of that route chooses the url, so a token_env that neither list names (nor the variable the same-named source already uses) is refused before any variable is read (source_token_env_not_allowed). `atlas source add` is not bound by it: the shell that runs it already holds its own environment. An entry that is not a variable name is refused when set and dropped when read. The config API cannot change this knob — it constrains that API's own write token — so set it in the serve's environment, or in settings.json from the serve's machine (atlas config set). |
+| `ATLAS_JENKINS_CONSOLE_MAX_BYTES` | int | `8388608` | yes | How many bytes of ONE build's console a scheduled jenkins log pull reads (atlas logs pull add --source jenkins). A console past it is cut at the last whole line inside the bound, the cut is counted in the poll's console_truncated, and the build is still marked ingested — the bound is what keeps a build that looped for an hour from becoming one gigantic ingest. Non-positive or invalid values fall back to 8388608 (8 MiB); there is no spelling for unbounded. |
+| `ATLAS_METRICS_MAX_POINTS` | int | `60` | yes | Default point budget per series for `metrics op=query` over a range (MCP, `atlas metrics query`, POST /api/v1/metrics/query): the step is ceil(window / budget) rounded up to a multiple of 15s, so no series ever carries more points than this; a call's own max_points overrides it. Values above 1000 clamp to 1000; non-positive or invalid values fall back to 60. |
+| `ATLAS_METRICS_TIMEOUT` | duration | `10s` | yes | Deadline for one metrics question to a Prometheus source (alerts, targets, rules or a query), also sent to Prometheus as its own query timeout so a heavy expression is abandoned server-side too. Go duration or bare seconds, clamped to [1s, 5m]; invalid values fall back to 10s. |
+| `ATLAS_TRACES_TIMEOUT` | duration | `10s` | yes | Deadline for one traces question to a Tempo source (`traces op=services\|search\|trace\|metrics` over MCP, `atlas traces`, GET /api/v1/traces) — the whole question, including op=services' one presence search per service. Past it the answer is an error naming this knob, never a partial list. Go duration or bare seconds, clamped to [1s, 5m]; invalid values fall back to 10s. |
+| `ATLAS_INCIDENTS_EVERY` | duration | `2m` | no | How often `atlas serve` recomputes incidents — the clusters of error/warn log templates that share a cause, joined with the firing alerts that watch them — from the log streams it pulls (and, when a Prometheus source is configured, its firing alerts). Go duration or bare seconds, never under 30s; 0/off disables the loop (POST /api/v1/incidents/refresh and `atlas incidents refresh` still work). Invalid values fall back to 2m. |
+| `ATLAS_INCIDENTS_WINDOW` | duration | `24h` | yes | How far back an incident refresh reads the hourly template buckets: a template counts toward an incident when it was seen inside this window, an incident's rate is its lines per hour within it, and an incident no member of which has been seen for TWICE this window is resolved automatically. Go duration or 30m/6h/2d/1w, clamped to [1h, 7d]; invalid values fall back to 24h. |
+| `ATLAS_SOURCE_DIR` | string | `~/.atlas/sources` | yes | Root of the materialized knowledge-source corpora. Each source gets <root>/<name>, which becomes the virtual repo's root and is walked and indexed like any checkout — so it must be on a filesystem the indexer can read and must stay put across syncs (a root that moves mints a second repo carrying a duplicate index of the same documents). Unset = ~/.atlas/sources. |
+| `ATLAS_SOURCE_MAX_DOCS` | int | `20000` | yes | How many documents one `atlas source sync` may pull. Reaching it ABORTS the sync: the cursor does not move, the pages already materialized stay on disk behind their checkpoint (the next sync resumes there), and the error names the filter to narrow. It is a bound on a filter mistake — a JQL that selects a whole instance by accident would otherwise fill a disk before anyone noticed — not a page size; a source that genuinely holds a million tickets sets it above that. Non-positive or invalid values fall back to 20000; there is deliberately no spelling for unbounded. |
+
+### AI Answers (Optional)
+
+The model providers behind the Ask page and the Ask Workbench; see [Search and Ask](search-and-ask) and [Ask Workbench](workbench).
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_LLM_ANTHROPIC_BIN` | string | `unused` | yes | Unused: the anthropic entry calls the vendor HTTPS API and runs no binary (kept so every entry has the same three fields). |
+| `ATLAS_LLM_ANTHROPIC_CLI_BIN` | string | `PATH, else detected` | yes | Path to the claude binary the anthropic-cli AI-answer entry runs. Written by `atlas llm set --provider anthropic-cli --bin`. Empty = found on PATH, else the binary the detector finds (~/.nvm, ~/.volta, ~/.local/bin, Homebrew, npm's global prefix, app bundles — the newest; ATLAS_LLM_DETECT=off disables that fallback) — a serve started by launchd or a container often has a narrower PATH than your shell. |
+| `ATLAS_LLM_ANTHROPIC_CLI_KEY_ENV` | string | `CLAUDE_CODE_OAUTH_TOKEN, else a stored setup-token, else the claude login` | yes | NAME of the environment variable holding the anthropic-cli entry's credential — never the credential itself; a value shaped like a key is refused. Written by `atlas llm set --provider anthropic-cli --key-env`. Empty = CLAUDE_CODE_OAUTH_TOKEN, else a stored setup-token, else the claude login. |
+| `ATLAS_LLM_ANTHROPIC_CLI_MODEL` | string | `claude-sonnet-5` | yes | Model id the anthropic-cli AI-answer entry asks Anthropic for, passed through unchecked (any id the vendor accepts). Written by `atlas llm set --provider anthropic-cli --model`. Empty = claude-sonnet-5. |
+| `ATLAS_LLM_ANTHROPIC_CLI_SOURCE` | enum | `user` | yes | "detected" when Atlas registered the anthropic-cli entry itself from what the detector found (zero configuration); unset = the user's entry. A detected entry may be updated by the detector (its binary path); a user entry never is. `atlas llm set --provider anthropic-cli` makes it the user's. |
+| `ATLAS_LLM_ANTHROPIC_KEY_ENV` | string | `ANTHROPIC_API_KEY, else a stored key` | yes | NAME of the environment variable holding the anthropic entry's credential — never the credential itself; a value shaped like a key is refused. Written by `atlas llm set --provider anthropic --key-env`. Empty = ANTHROPIC_API_KEY, else a stored key. |
+| `ATLAS_LLM_ANTHROPIC_MODEL` | string | `claude-sonnet-5` | yes | Model id the anthropic AI-answer entry asks Anthropic for, passed through unchecked (any id the vendor accepts). Written by `atlas llm set --provider anthropic --model`. Empty = claude-sonnet-5. |
+| `ATLAS_LLM_ANTHROPIC_SOURCE` | enum | `user` | yes | "detected" when Atlas registered the anthropic entry itself from what the detector found (zero configuration); unset = the user's entry. A detected entry may be updated by the detector (its binary path); a user entry never is. `atlas llm set --provider anthropic` makes it the user's. |
+| `ATLAS_LLM_CLI_BIN` | string | `PATH, else detected` | yes | First-release single-provider knob: path to the claude / codex binary for the DEFAULT provider when its own ATLAS_LLM_<ID>_BIN is unset. `atlas llm set` migrates a settings.json value into the default's scoped key. Empty = found on PATH, else the binary the detector finds (a serve started by launchd or a container often has a narrower PATH than your shell). |
+| `ATLAS_LLM_DETECT` | enum | `on` | yes | Zero-configuration AI answers: on (default) registers the claude / codex CLIs (and API keys) the detector finds ready as DETECTED providers whenever no provider is configured by hand, and lets a -cli provider with no --bin fall back to the binary the detector found when PATH has none (a serve under launchd). off turns both off; `atlas llm detect` still runs on demand. `atlas llm off` writes off; `atlas llm detect --apply` clears it. |
+| `ATLAS_LLM_DETECT_DIRS` | string | `built-in list` | yes | Directories the AI-provider detector searches for claude / codex after PATH, colon-separated (~ expanded). Set, it REPLACES the built-in list (~/.nvm/versions/node/*/bin, ~/.volta/bin, ~/.local/bin, /opt/homebrew/bin, /usr/local/bin, npm's global prefix, ~/.claude/local, /Applications/*.app/Contents/Resources) — for an unusual install, or to pin the search in CI. |
+| `ATLAS_LLM_DETECT_IGNORE` | string | `none` | yes | Providers the user removed (`atlas llm off --provider`), comma-separated: neither the automatic detection nor a blanket `atlas llm detect --apply` registers them again. `atlas llm set --provider P` or `atlas llm detect --apply --provider P` (the System page's Use) takes one off the list. |
+| `ATLAS_LLM_KEY_ENV` | string | `vendor default` | yes | First-release single-provider knob: NAME of the environment variable holding the DEFAULT provider's credential when its own ATLAS_LLM_<ID>_KEY_ENV is unset — never the credential itself. `atlas llm set` migrates a settings.json value into the default's scoped key. Empty = ANTHROPIC_API_KEY / OPENAI_API_KEY for the API providers, CLAUDE_CODE_OAUTH_TOKEN (a `claude setup-token` value) else the claude login for anthropic-cli, and the codex login for openai-cli. |
+| `ATLAS_LLM_MODEL` | string | `provider default` | yes | First-release single-provider knob: the DEFAULT provider's model when its own ATLAS_LLM_<ID>_MODEL is unset — never another provider's. `atlas llm set` migrates a settings.json value into the default's scoped key. Passed through unchecked (any id the vendor accepts); empty = claude-sonnet-5 for anthropic/anthropic-cli, gpt-5.4 for openai, codex's own default for openai-cli. |
+| `ATLAS_LLM_OPENAI_BIN` | string | `unused` | yes | Unused: the openai entry calls the vendor HTTPS API and runs no binary (kept so every entry has the same three fields). |
+| `ATLAS_LLM_OPENAI_CLI_BIN` | string | `PATH, else detected` | yes | Path to the codex binary the openai-cli AI-answer entry runs. Written by `atlas llm set --provider openai-cli --bin`. Empty = found on PATH, else the binary the detector finds (~/.nvm, ~/.volta, ~/.local/bin, Homebrew, npm's global prefix, app bundles — the newest; ATLAS_LLM_DETECT=off disables that fallback) — a serve started by launchd or a container often has a narrower PATH than your shell. |
+| `ATLAS_LLM_OPENAI_CLI_KEY_ENV` | string | `a stored key, else the codex login` | yes | NAME of the environment variable holding the openai-cli entry's credential — never the credential itself; a value shaped like a key is refused. Written by `atlas llm set --provider openai-cli --key-env`. Empty = a stored key, else the codex login. |
+| `ATLAS_LLM_OPENAI_CLI_MODEL` | string | `codex's own default` | yes | Model id the openai-cli AI-answer entry asks OpenAI for, passed through unchecked (any id the vendor accepts). Written by `atlas llm set --provider openai-cli --model`. Empty = codex's own default. |
+| `ATLAS_LLM_OPENAI_CLI_SOURCE` | enum | `user` | yes | "detected" when Atlas registered the openai-cli entry itself from what the detector found (zero configuration); unset = the user's entry. A detected entry may be updated by the detector (its binary path); a user entry never is. `atlas llm set --provider openai-cli` makes it the user's. |
+| `ATLAS_LLM_OPENAI_KEY_ENV` | string | `OPENAI_API_KEY, else a stored key` | yes | NAME of the environment variable holding the openai entry's credential — never the credential itself; a value shaped like a key is refused. Written by `atlas llm set --provider openai --key-env`. Empty = OPENAI_API_KEY, else a stored key. |
+| `ATLAS_LLM_OPENAI_MODEL` | string | `gpt-5.4` | yes | Model id the openai AI-answer entry asks OpenAI for, passed through unchecked (any id the vendor accepts). Written by `atlas llm set --provider openai --model`. Empty = gpt-5.4. |
+| `ATLAS_LLM_OPENAI_SOURCE` | enum | `user` | yes | "detected" when Atlas registered the openai entry itself from what the detector found (zero configuration); unset = the user's entry. A detected entry may be updated by the detector (its binary path); a user entry never is. `atlas llm set --provider openai` makes it the user's. |
+| `ATLAS_LLM_PROVIDER` | enum | `off` | yes | The DEFAULT provider for the Ask page's optional AI answer — the one that answers when a request names none: anthropic \| openai call the vendor HTTPS API with a key; anthropic-cli \| openai-cli drive the claude / codex binary on the user's own subscription login. Several providers can be configured at once (ATLAS_LLM_PROVIDERS, `atlas llm set`); this picks the default among them. Empty with no ATLAS_LLM_PROVIDERS = off: answers stay deterministic quoted passages. Only the retrieved passages and their paths are sent. |
+| `ATLAS_LLM_PROVIDERS` | string | `none` | yes | Every configured AI-answer provider, comma-separated in the order added (anthropic, anthropic-cli, openai, openai-cli) — the registry a reader picks from on the Ask page. Each keeps its own model, key-variable NAME and binary in ATLAS_LLM_<ID>_MODEL / _KEY_ENV / _BIN. Written by `atlas llm set` / `off --provider`; ATLAS_LLM_PROVIDER names the default among them. |
+| `ATLAS_LLM_SECRET_STORE` | enum | `auto` | yes | Where a provider key supplied explicitly (`atlas llm set --key-stdin`, PUT /api/v1/system/llm/secret, the System page form) is kept — never in settings.json: auto (default) = the macOS Keychain (service com.aziron.atlas.llm, account = the provider) on macOS, the Secret Service through secret-tool on Linux with a session bus, else the encrypted file store; keychain \| secret-tool \| file force one. The file store is $ATLAS_HOME/llm-secrets/<provider>, 0600, AES-256-GCM under a key derived from this machine's id and a salt kept beside it — it keeps keys out of backups, sync folders and a copied ATLAS_HOME, not away from processes running as this OS user. |
+
+### Ask Workbench
+
+See [Ask Workbench](workbench).
+
+| Setting | Type | Default | Live | Description |
+| --- | --- | --- | --- | --- |
+| `ATLAS_WORKBENCH_ANSWER_EFFORT` | enum | unset | yes | The reasoning effort of every other Ask Workbench model call — an answer, the round after an asking one, the last round, a revision or a patch — on a transport that takes one: the claude CLI (anthropic-cli) as --effort, when the installed build advertises it; the API transports ignore it. meta.effort reports it when set. low \| medium \| high \| xhigh \| max; empty or default = the CLI's own default; invalid = empty. |
+| `ATLAS_WORKBENCH_ANSWER_MAX_TOKENS` | int | `4000` | yes | The most tokens an Ask Workbench model reply may hold (the answer format: the model writes the whole answer, asked to stay under 900 words), sent as max_tokens on the API transports (anthropic, openai). The claude CLI (anthropic-cli) is not given it: it reads a cap per API request and continues past it (see Ask Workbench). 0 or invalid = 4000. |
+| `ATLAS_WORKBENCH_ASK_EFFORT` | enum | `low` | yes | The reasoning effort of an Ask Workbench model call that only asks for context — the first call of a turn whose evidence holds nothing an answer could lead with (documents, nothing found), where the model decides what Atlas should fetch — on a transport that takes one: the claude CLI (anthropic-cli) as --effort, when the installed build advertises it; the API transports ignore it. meta.effort reports it. low \| medium \| high \| xhigh \| max, or default (none: the CLI's own); invalid = low. |
+| `ATLAS_WORKBENCH_HISTORY_RUNES` | int | `4000` | yes | The ceiling, in characters (runes), on an Ask Workbench prompt's "Conversation so far" block: the oldest turns are dropped first, and a single turn longer than it is cut. done.history_runes reports the block's length. 0 = no block. Invalid values fall back to 4000. |
+| `ATLAS_WORKBENCH_HISTORY_TURNS` | int | `6` | yes | How many earlier turns of a thread the server keeps an Ask Workbench model prompt reads, as its "Conversation so far" block (Q: the question / A: the verdict — up to 3 takeaways; for a turn the model answered in the answer format, A: the first 400 characters of its answer), oldest first. Context only, never evidence: every sentence still cites the turn's own evidence. done.history_turns reports what a turn carried. 0 = no block. Invalid values fall back to 6. |
+| `ATLAS_WORKBENCH_MAX_EVIDENCE_TOKENS` | int | `24000` | yes | The evidence an Ask Workbench model prompt may carry, in tokens estimated at bytes/4. Past it the prompt is trimmed — what Atlas computed (the S items) first, then by lane priority (atlas, git/github, jira, pulse, confluence) — and every trimmed item is listed in merge.excluded with reason evidence_budget; the exact verdict still uses all evidence, and what the model asks for in a later round is added — a file it asks for gives up its last lines to keep the prompt within this budget, never below 150 lines, and says so. 0 or invalid = 24000. |
+| `ATLAS_WORKBENCH_MODEL_FALLBACK` | enum | `auto` | yes | What an Ask Workbench turn does when the chosen model cannot run on this host (the provider's CLI is older than the model needs: GET /api/v1/system/llm marks it available:false). auto: known before the lanes run, the entry's configured model runs instead (plan.model.fallback_from); refused only at call time, the turn retries ONCE on the configured model (a second meta frame, done.model_fallback). off: no fallback — done.model_failed {code: llm_model_unsupported, installed_version, required_version, retry_with, fix} and the model turn is refunded. A request's model_fallback overrides it for one turn. |
+| `ATLAS_WORKBENCH_MODEL_FORMAT` | enum | `answer` | yes | The reply an Ask Workbench model writes. answer (default): the model writes the answer in whatever shape the question calls for, citing the labelled evidence and what Atlas computed (S items), and may ask for more context (MORE: lines) and suggest follow-ups (NEXT: lines) — meta.format answer, plan.answer_mode model\|exact. chat: the earlier one-call format (EVIDENCE USED, then ANSWER; meta.format chat, delta.part), kept as a switch back. |
+| `ATLAS_WORKBENCH_MODEL_REVISIONS` | int | `1` | yes | How many times one Ask Workbench answer may be written again. A model that answers AND asks for more (an answer-and-ask) gets what it asked for and writes the complete answer again — a full model call; the last allowed rewrite is told its MORE: lines are no longer read, and one that asks again is not fetched (done.more: "not fetched: one rewrite per turn"): the answer stands and what it asked for is offered as a suggestion. Request rounds (only MORE: lines) write no answer and are not counted. plan.revisions_max reports it. Clamped to [0, ATLAS_WORKBENCH_MODEL_ROUNDS − 1]; 0 = the first answer always stands; invalid = 1. |
+| `ATLAS_WORKBENCH_MODEL_ROUNDS` | int | `3` | yes | How many model calls one Ask Workbench answer may make: the model answers in one, or — when it replies with MORE: lines (a symbol, a file, read whole up to 400 lines, a search, callers, a git blame, a ticket) — Atlas fetches what it asked for (at most 3 requests a round, each bounded to 2 s) and asks again with the new items, up to this many calls (the rewrites among them bounded by ATLAS_WORKBENCH_MODEL_REVISIONS). All of them are ONE model turn for the hourly budget; a request round past the last round or past ATLAS_WORKBENCH_HARD_BUDGET (Atlas's own time in the turn) is not fetched and the answer so far stands. plan.rounds_max reports it. 1 = the model is never asked again; clamped to [1, 6]; invalid = 3. |
+| `ATLAS_WORKBENCH_MODEL_TURNS_PER_HOUR` | int | `30` | yes | How many Ask Workbench turns per bearer token per hour may call the AI model. Past it a turn still runs and returns the exact verdict, WITHOUT the model (plan.model.skipped = rate_limited); plan.budget shows the count. 0 = no model turns. Invalid values fall back to 30. |
+| `ATLAS_WORKBENCH_TURNS_PER_HOUR` | int | `240` | yes | How many Ask Workbench turns per bearer token per hour the serve answers at all. Past it POST /api/v1/ask/workbench answers 429 workbench_rate_limited with retry_after (seconds until the window resets) before the stream. Invalid values fall back to 240. |
 
 ---
 
@@ -4684,6 +5382,358 @@ post-upgrade sequence — the binary and the on-disk data have separate version
 contracts, and skipping the sequence is the most common source of
 post-upgrade drift.
 
+## What's New in 0.1.55
+
+Atlas 0.1.55 is a correctness and trust release. A dirty working tree gets a
+snapshot of its own, every repo-scoped answer says how fresh it is,
+`code_query` refuses rather than cite code that does not carry the question,
+and qualified, case-exact and cross-file names resolve the same way on every
+surface. There is no schema change. Each item links to its public issue, where
+the before-and-after evidence is posted.
+
+### How to Upgrade
+
+Homebrew:
+
+```sh
+brew update
+brew upgrade --cask aziron-ai/atlas/atlas
+atlas version
+```
+
+npm:
+
+```sh
+npm install -g @aziron/atlas@0.1.55
+atlas version
+```
+
+To install a binary you already have (offline, behind a proxy, or one you
+verified yourself), point `ATLAS_BINARY` at it. Postinstall now honours it: it
+checks that the file exists, is executable and that `atlas version` prints an
+Atlas version line within 30 s, then copies it into the package. It makes no
+request to the release host and never falls back to a download; an invalid
+path fails the install. `ATLAS_SKIP_DOWNLOAD=1` still makes postinstall do
+nothing and takes precedence
+([#151](https://github.com/aziron-ai/atlas/issues/151)).
+
+```sh
+ATLAS_BINARY=/absolute/path/to/atlas npm install -g @aziron/atlas
+```
+
+Archives and Linux packages are on the
+[release page](https://github.com/aziron-ai/atlas/releases/latest). Then run the
+post-upgrade sequence further down this page.
+
+**Store compatibility.** No schema change. A dirty snapshot is stored as
+`<sha>+dirty:<tree_hash>` in the existing `commit_sha` column, so an older
+binary can still open a store 0.1.55 wrote
+([#65](https://github.com/aziron-ai/atlas/issues/65)). Some improvements are
+written when a file is indexed: import bindings and Go import resolution
+([#126](https://github.com/aziron-ai/atlas/issues/126)), cross-file type
+provenance for Scala, PHP and Java
+([#21](https://github.com/aziron-ai/atlas/issues/21),
+[#24](https://github.com/aziron-ai/atlas/issues/24),
+[#34](https://github.com/aziron-ai/atlas/issues/34),
+[#137](https://github.com/aziron-ai/atlas/issues/137),
+[#139](https://github.com/aziron-ai/atlas/issues/139)) and image text
+([#26](https://github.com/aziron-ai/atlas/issues/26)). An existing snapshot
+shows them after one `atlas index --reindex`.
+
+### Resolution and Provenance
+
+- **Owner-qualified names.** `explain Module._findPath` and the MCP `symbol`
+  default view now find the method that `callers` finds;
+  `Widget.prototype.render` keeps its prototype owner; a Go `util.Helper` is
+  checked against the package clause and fails closed when two directories
+  answer to it. Each explain definition names its `owner`, and an unknown
+  owner never widens to the bare name
+  ([#150](https://github.com/aziron-ai/atlas/issues/150)).
+- **Case twins stay apart.** In case-sensitive languages a name binds only to
+  its exact spelling, so Go's `newEntry()` calling `NewEntry()` no longer binds
+  to itself, and an answer no longer depends on which spelling was asked first.
+  PowerShell, SQL, Fortran, PHP, Pascal/Delphi, Apex and VB keep folding case
+  ([#125](https://github.com/aziron-ai/atlas/issues/125)).
+- **Impact parity.** The in-memory impact walk follows heritage and proven
+  references like the store walk
+  ([#136](https://github.com/aziron-ai/atlas/issues/136)). Go package variables
+  in a flat-layout module (the package at the module root) bind on `impact`,
+  focused `export` and `export --all`
+  ([#142](https://github.com/aziron-ai/atlas/issues/142)).
+- **Scala, PHP and Java type scope.** An index-time resolver stamps the
+  declaring file of a type use from the file's package and imports, failing
+  closed when ambiguous, so `export` and `impact` keep cross-file type uses.
+  Scala universal `apply` binds to its class; Java return, field and annotation
+  element types become references; PHP class constants, static properties,
+  container and event rows prove their class
+  ([#21](https://github.com/aziron-ai/atlas/issues/21),
+  [#24](https://github.com/aziron-ai/atlas/issues/24),
+  [#34](https://github.com/aziron-ai/atlas/issues/34)). Scala import selectors
+  resolve by Scala's lookup order and gain `resolved_path` only when exactly
+  one file declares the target under a verified package clause; `import a.B,
+  c.{D, E}` no longer runs together
+  ([#137](https://github.com/aziron-ai/atlas/issues/137)).
+- **Go and Python import bindings.** `from X import A, B` keeps one edge per
+  statement: binding rows are marked `import_binding` / `import_module` and
+  fold onto the module edge in `export`. Parenthesized imports are read from
+  the syntax tree, and `from . import foo` stores `.foo`. Go imports resolve
+  through `go.mod` (nested modules and in-repo `replace` directives included)
+  to the package directory, and a delta refreshes that when a package
+  directory or `go.mod` changes
+  ([#126](https://github.com/aziron-ai/atlas/issues/126)).
+- **PHP use-imports and anonymous classes.** `use` clauses are read from the
+  syntax tree per namespace region, one row per clause, so grouped and aliased
+  imports (`use App\Events\Shipped as ShippedEvent`) prove their class and
+  `use function` / `use const` never resolve to a class
+  ([#139](https://github.com/aziron-ai/atlas/issues/139)). Anonymous-class
+  heritage belongs to the method or function that constructs the class; at
+  file top level it keeps the module-scope identity
+  ([#138](https://github.com/aziron-ai/atlas/issues/138)).
+- **More languages.** Ruby `class Child < Base` follows Ruby constant lookup
+  to a base in another directory
+  ([#120](https://github.com/aziron-ai/atlas/issues/120)); a call inside a
+  `.rake` task binds to a same-file `def`
+  ([#32](https://github.com/aziron-ai/atlas/issues/32)); a call from an
+  anonymous `test()` / `it()` callback counts as coverage and lists the test
+  in `impacted_tests` ([#6](https://github.com/aziron-ai/atlas/issues/6)).
+  A Go package-level initializer (`var std = New()`) is a call edge, writes
+  are `mutation: true` rows that `refs --mutations` (alias `--writes`) and the
+  MCP `symbol` tool's `mutations` parameter list, and `declared_type` is
+  inferred ([#55](https://github.com/aziron-ai/atlas/issues/55)).
+- **Call extraction.** Rust gets a syntax-tree call extractor with
+  scope-aware receiver typing; C++ types receivers from locals, parameters,
+  fields and factories, and JavaScript/TypeScript from casts, `new`, field
+  chains and class property types; a Python constructor call is
+  typed as its class; Kotlin constructors are indexed, and Java, Kotlin and C#
+  share the inline-constructor tie-break. `callers` answers lead with
+  `caller_names`, mark a `--limit` page `truncated`, and take `--brief`.
+- **Routes.** `mock.patch` targets and mock receivers never become HTTP
+  routes or consumers ([#131](https://github.com/aziron-ai/atlas/issues/131));
+  Go, Python, Java and JavaScript consumers read the URL from the call's own
+  argument, not an earlier string on the same line
+  ([#161](https://github.com/aziron-ai/atlas/issues/161)).
+
+### Freshness
+
+- **Dirty working trees are their own snapshots.** Uncommitted edits or
+  untracked indexable files index as `<sha>+dirty` (with a `tree_hash`)
+  instead of overwriting the clean snapshot of that commit. `status`,
+  `history`, `snapshots list`, `snapshot-diff` and the index JSON show the
+  label. A superseded dirty snapshot of the same commit is retired by
+  retention, so edit churn cannot evict commit history
+  ([#65](https://github.com/aziron-ai/atlas/issues/65)).
+- **Every answer says how fresh it is.** Repo-scoped answers on the CLI, MCP
+  and HTTP carry `indexed_sha`, `head_sha`, `dirty`, `stale` and
+  `stale_reason` (`head_moved`, `working_tree_dirty`, `working_tree_changed`,
+  `working_tree_reverted`), stamped before the output budget is applied. When
+  git cannot answer, `stale` is omitted, never reported as fresh. Plain output
+  opens with a `stale:` line
+  ([#59](https://github.com/aziron-ai/atlas/issues/59)).
+- **Refreshes are announced.** A stale answer from a daemon says
+  `refresh: "started"` with `refresh_target`; answers from the refreshed
+  snapshot in the next 10 minutes say `refresh: "completed"` with
+  `refresh_snapshot` and `refreshed_at`. A clean tree says `refresh: "none"`.
+  An in-place rebuild moves `indexed_at` and stops older cached answers from
+  replaying ([#62](https://github.com/aziron-ai/atlas/issues/62)).
+- **One-shot commands do not queue work they cannot finish.** A stale
+  one-shot CLI answer says `refresh: "none"` and
+  `refresh_skipped: "one_shot"`. `ATLAS_ONESHOT_REFRESH=sync` re-indexes a
+  git-stale repo before answering, bounded by `ATLAS_ONESHOT_REFRESH_TIMEOUT`
+  (10 s) ([#141](https://github.com/aziron-ai/atlas/issues/141)).
+
+### code_query and Context
+
+- **Relevance gate.** With `require_citations: true`, an answer whose
+  citations do not carry what the question names is refused:
+  `status: "insufficient"`, `reason: "citations_below_relevance_floor"`, a
+  `relevance` block naming the missing terms, and up to 5 candidates as
+  `low_confidence_hits`, never as citations. On a grounded answer, keyword-only
+  citations that matched only generic words move to `low_confidence_hits`
+  ([#60](https://github.com/aziron-ai/atlas/issues/60)). Under the same flag,
+  trimming to `max_tokens` keeps at least one citation or refuses with
+  `budget_exceeded`, naming the budget that would fit ([#160](https://github.com/aziron-ai/atlas/issues/160)).
+- **Evidence inside large functions.** When a body is longer than its stored
+  excerpt, `code_query` and `context` re-read the lines that match the
+  question from the file (only when its hash matches the index): signature,
+  up to 4 windows and the closing line, with explicit
+  `// ... elided N lines (La-Lb) ...` markers and a `metadata.body_elision`
+  record. Citations keep their real range
+  ([#156](https://github.com/aziron-ai/atlas/issues/156)).
+- **One `detail` table.** `--detail x`, `?detail=x` and MCP `detail: "x"` all
+  mean `xhigh`; the MCP schema's `detail` enum lists every accepted spelling.
+  The OpenAPI document now declares every query parameter the `/api/v1`
+  handlers read: 245 on 73 operations, up from 58
+  ([#146](https://github.com/aziron-ai/atlas/issues/146)).
+- **Context companions are resolved.** Callers and callees come from resolved
+  call edges and import provenance, so a Python builtin `type()` is no longer
+  labelled the callee of a same-named method
+  ([#162](https://github.com/aziron-ai/atlas/issues/162)), and a review context
+  ranks the seed's own edges first with quotas for callers, callees,
+  references, imports and tests
+  ([#75](https://github.com/aziron-ai/atlas/issues/75)).
+
+### Observability
+
+- `stats` names its four count projections and checks seven invariants
+  between them; `graph.edge_binding` accounts for every edge row and counts
+  `multi_bound_rows` instead of assuming one target per row
+  ([#14](https://github.com/aziron-ai/atlas/issues/14)).
+- `stats`, `atlas status` (local and server mode), MCP `status` and
+  `/api/v1/status` carry a `telemetry` block, so `--read-only` says
+  `unavailable_read_only` with a remedy instead of leaving fields out
+  ([#154](https://github.com/aziron-ai/atlas/issues/154)).
+- `status --repo <path|org/name|repo_id>` scopes the whole report to that
+  repo and refuses an unknown one exactly as `stats` does
+  ([#155](https://github.com/aziron-ai/atlas/issues/155)).
+- The Command Center's **Indexed symbols** tile shows the same totals as
+  Workspace and a dash until the first frame; **Graph edges** is now
+  **Indexed edges** ([#158](https://github.com/aziron-ai/atlas/issues/158)).
+- Stack frames resolve by their coordinate on `atlas logsites resolve` and the
+  Resolve page (Go, Node, Python, Java/Kotlin, C#, Ruby), and a miss says which
+  miss: `unsupported_frame_format`, `frame_file_not_indexed`,
+  `frame_symbol_not_found` and the ambiguous cases
+  ([#163](https://github.com/aziron-ai/atlas/issues/163)).
+
+### Store and CLI
+
+- **`--read-only` follows a live writer.** It reads the WAL once a writer
+  appears, refuses a store another Atlas moved to a different schema
+  (`store_superseded`), and leaves a quiescent store byte-identical. The WAL
+  is bounded and truncated after an index even with a reader attached,
+  `index --reindex` heals crash residue, and readiness checks the graph tables
+  ([#130](https://github.com/aziron-ai/atlas/issues/130)).
+- Telemetry retention is atomic, so one-shot commands keep `resource_samples`
+  at its cap ([#67](https://github.com/aziron-ai/atlas/issues/67)), and
+  `snapshots prune --dry-run` opens no telemetry sink
+  ([#133](https://github.com/aziron-ai/atlas/issues/133)).
+- The `eco` and `balanced` profiles also bound SQLite residency (mmap window,
+  write cache, read-pool cache) with two new knobs; `status --repo` probes that
+  repo's watch lock; `ATLAS_INDEX_WORKERS` set in `settings.json` is honoured
+  ([#127](https://github.com/aziron-ai/atlas/issues/127)). A tier set in
+  `settings.json` reports `reason: settings`
+  ([#129](https://github.com/aziron-ai/atlas/issues/129)).
+- **A new commit costs what it changed.** The lexical sidecar carries forward
+  per snapshot, and the shapes that used to rebuild the whole graph (JS/TS or
+  Python adds and deletes, Go file deletion, C/C++/Rust edits) run on the SQL
+  delta path: a one-line TensorFlow edit went from 1,528 MB / 36 s to
+  529 MB / 13 s ([#128](https://github.com/aziron-ai/atlas/issues/128),
+  [#118](https://github.com/aziron-ai/atlas/issues/118)).
+
+### Search and Analytics Determinism
+
+- **Equal scores have one order:** score, then path, name, kind, signature,
+  line and end line. Fresh indexes, any `--workers` count and a delta return
+  the same page, and a large low-scoring tie can no longer push a
+  higher-scored row off it ([#135](https://github.com/aziron-ai/atlas/issues/135)).
+- **Communities are a function of content:** canonical node order, ties to
+  the canonically first node, ids by size then first member, isolated
+  singletons flagged ([#149](https://github.com/aziron-ai/atlas/issues/149)).
+- **Graph health:** `hubs` never ranks degree-zero symbols and reports
+  `eligible`, `excluded_isolated`, `ranking` and `warnings`; `stats` and
+  `report` add `isolated_ratio`, `connected_components`, `largest_component`,
+  the community split, relation coverage by language and kind, and the
+  `isolated_majority` / `fragmented_communities` warnings
+  ([#45](https://github.com/aziron-ai/atlas/issues/45)).
+- A search whose only hits are hidden locals returns a clean empty result
+  with no false `degraded` flag
+  ([#64](https://github.com/aziron-ai/atlas/issues/64)).
+
+### Images
+
+- The text an image file carries is indexed and searchable: PNG text chunks
+  (including XMP) and EXIF, JPEG EXIF/XMP/IPTC/comments, TIFF text tags, WebP
+  EXIF/XMP and GIF comments, plus format and size. Reading pixels needs OCR,
+  which is now opt-in through `ATLAS_IMAGE_OCR_CMD`, and every image entry
+  states its `ocr_status` ([#26](https://github.com/aziron-ai/atlas/issues/26)).
+
+### Workspaces
+
+- **Unowned checkouts reuse an index.** A linked worktree, another clone or a
+  worktree of a bare clone is served by an existing index when its git
+  identity matches and its HEAD and working-tree state equal that repo's
+  latest snapshot. Same identity with different content is refused
+  (`content_differs`); several equal checkouts are `ambiguous_repo` with
+  `candidates[]` ([#42](https://github.com/aziron-ai/atlas/issues/42)).
+- **Windows roots.** MCP roots such as `file:///C:/…`, VS Code's
+  `file:///c%3A/…`, UNC paths and plain `C:\` paths resolve, and match
+  without regard to case or separators. Verified by tests on macOS; a run on
+  Windows is still pending ([#72](https://github.com/aziron-ai/atlas/issues/72)).
+- **Refusals name their source:** `scope_source` (`workspace`, `cwd`, `roots`,
+  `launch_roots`), `roots_tried[]` for a roots-only miss, and `searched_stores`
+  with a `checkout` diagnosis
+  ([#72](https://github.com/aziron-ai/atlas/issues/72),
+  [#42](https://github.com/aziron-ai/atlas/issues/42)).
+
+### Benchmarks
+
+- **Relevance benchmark and gate.** 216 frozen, labelled natural-language
+  queries over three pinned corpora (cJSON, leveldb with requests, vuejs/core)
+  score precision@k, MRR, recall@10, entity-first routing and 36 generic-term
+  adversaries, and 159 thresholds gate regressions. No ranking code changed;
+  the baseline findings are filed as follow-ups
+  ([#44](https://github.com/aziron-ai/atlas/issues/44)).
+- **Multi-language agent benchmark.** Across Go, Python, C, JavaScript,
+  TypeScript, Java, C++ and Rust, with Claude and with Codex, Atlas beats both
+  the no-tool baseline and graphify on accuracy and on tokens in all 16
+  agent-language cells. See [Benchmarks](benchmarks).
+
+### Behaviour Changes to Know About
+
+- **Uncommitted edits cost a new-commit delta.** An edit to a dirty tree now
+  takes the O(change) new-commit path (copy forward, then retire the
+  superseded dirty snapshot) instead of rewriting in place, so watch mode on a
+  large repo pays roughly what a new commit costs.
+  `ATLAS_INDEX_DIRTY_IDENTITY=0` restores the old labelling
+  ([#65](https://github.com/aziron-ai/atlas/issues/65)).
+- **OCR is no longer an implicit `tesseract`.** A `tesseract` on PATH used to
+  run on every image. Now pixel text is not indexed unless you set
+  `ATLAS_IMAGE_OCR_CMD="tesseract - stdout"`, and an image without OCR says
+  `ocr: off` ([#26](https://github.com/aziron-ai/atlas/issues/26)).
+- **Search tie order is by path.** Equal-score hits come back in path order,
+  and the SQL fallback orders hits within one file by line, not by name
+  ([#135](https://github.com/aziron-ai/atlas/issues/135)).
+- **Shorter hub lists; isolates out of the report.** Hub lists are shorter on
+  sparse graphs (the dashboard's hub card shows fewer rows), the report lists
+  only clusters and counts isolated symbols in its summary, and community
+  partitions differ from previously recorded output
+  ([#45](https://github.com/aziron-ai/atlas/issues/45),
+  [#149](https://github.com/aziron-ai/atlas/issues/149)).
+- **One-shot CLI commands never refresh in the background.** Run
+  `atlas index`, or set `ATLAS_ONESHOT_REFRESH=sync`
+  ([#141](https://github.com/aziron-ai/atlas/issues/141)).
+- **`code_query` may answer `insufficient`.** With `require_citations: true`,
+  a question the index does not carry is refused where it used to get `ok`
+  with name-overlap citations; branch on `reason`
+  ([#60](https://github.com/aziron-ai/atlas/issues/60)).
+- **MCP `report` sections are objects.** The `hubs` and `communities`
+  sections are now the whole `atlas hubs` / `atlas communities` answers, not
+  bare arrays ([#45](https://github.com/aziron-ai/atlas/issues/45)).
+- **False case-twin edges are gone.** On logrus, `export --all --max-nodes 0`
+  loses 15 false `calls` edges (762 to 747) and gains 2 true `references`
+  edges; caller accuracy is unchanged
+  ([#125](https://github.com/aziron-ai/atlas/issues/125)).
+- **Same identity, different content is refused.** A checkout that shares a
+  repo's git identity but sits at another commit or has uncommitted edits is
+  refused rather than served stale line numbers
+  ([#42](https://github.com/aziron-ai/atlas/issues/42)).
+
+### New and Changed Settings
+
+| Setting | Default | Meaning |
+| --- | --- | --- |
+| `ATLAS_FRESHNESS_TTL` | `2s` | How long one working-tree probe answers for a repo when an answer is stamped with `indexed_sha`, `head_sha`, `dirty` and `stale` (stretched to 5× a slow probe, at most 30 s); `0` probes on every answer |
+| `ATLAS_FRESHNESS_PROBE` | on | `0`/`off` stops probing; every answer then reports `head_sha: "unknown"` and omits `stale` |
+| `ATLAS_INDEX_DIRTY_IDENTITY` | on | Index a dirty working tree into its own `<sha>+dirty` snapshot; `0`/`off` restores in-place labelling |
+| `ATLAS_IMAGE_OCR_CMD` | unset | Opt-in OCR: a command (no shell) that reads one image on stdin and prints its text, e.g. `tesseract - stdout`; 30 s per image |
+| `ATLAS_ONESHOT_REFRESH` | `off` | What a one-shot CLI command does about a stale repo: `off` reports it, `sync` re-indexes before answering |
+| `ATLAS_ONESHOT_REFRESH_TIMEOUT` | `10s` | Bound on one synchronous refresh; past it the answer reports `refresh_skipped: "budget_exceeded"` and nothing is persisted |
+| `ATLAS_SQLITE_CACHE_SIZE` | `64MiB` (`16MiB` eco) | Page cache of the SQLite write handle; outside the Go heap and `ATLAS_MEMORY_LIMIT` |
+| `ATLAS_SQLITE_READ_CACHE_SIZE` | `16MiB` | Page cache of each read-pool connection; the tiers never move it |
+| `ATLAS_MMAP_SIZE` (changed) | `512MiB` read (`256MiB` balanced, `64MiB` eco) | The read pool maps the tier's window, and the write handle maps the whole database when it fits that window and none of it otherwise |
+
+The full catalogue, with types and liveness, is on
+[Configuration](configuration).
+
 ## Upgrade per Channel
 
 Use the same channel you installed from (see [Installation](installation)).
@@ -4706,11 +5756,11 @@ atlas version
 Pin a version for reproducible automation:
 
 ```sh
-npm install -g @aziron/atlas@0.1.43
+npm install -g @aziron/atlas@0.1.55
 ```
 
 For installations sourced from GitHub Packages, use the equivalent
-`@aziron-ai/atlas@0.1.43` coordinate with the existing registry authentication.
+`@aziron-ai/atlas@0.1.55` coordinate with the existing registry authentication.
 
 Archives: download the new tar.gz, .deb, .rpm, or .apk from
 [GitHub Releases](https://github.com/aziron-ai/atlas/releases/latest), replace
@@ -4865,6 +5915,13 @@ for the harder cases follow the table.
 | `atlas: command not found` | Check `command -v atlas` and `$PATH`; reinstall via your channel — `brew reinstall --cask aziron-ai/atlas/atlas` or `npm install -g @aziron/atlas` (verify `npm prefix -g` is on PATH) |
 | Results are stale or from the wrong repository | `atlas index .` then `atlas status`; pin scope with `atlas --repo /absolute/path status`; if still stale, `atlas doctor` then `atlas index . --reindex` |
 | `workspace_required` from MCP | Supply a workspace root, `workspace`, `repo_id`, or launch-time `--repo`. Atlas does not silently select a repository for scoped requests |
+| An answer opens with `stale: indexed … vs head …`, or carries `stale: true` | The checkout has moved past the snapshot that answered; `stale_reason` says how (`head_moved`, `working_tree_dirty`, …). Run `atlas index .`. A one-shot CLI command never refreshes in the background and says `refresh_skipped: "one_shot"`; set `ATLAS_ONESHOT_REFRESH=sync` to refresh before answering, or let a running `serve`, `mcp` or `watch` keep the index fresh ([#59](https://github.com/aziron-ai/atlas/issues/59), [#141](https://github.com/aziron-ai/atlas/issues/141)) |
+| `workspace_not_indexed` naming `searched_stores` and a `checkout` | No repository in the searched store owns the path. Read the `checkout` diagnosis: `content_differs` means the same repository at another commit or with uncommitted edits — index it, or read the existing index explicitly with `--db <dsn> --repo <repo_id>` (its line numbers then describe the checkout that index was built from); `not_a_git_checkout` means a plain copy, which is never matched to another checkout's index — index the directory itself. An index written to another store is reached only through `--db` ([#42](https://github.com/aziron-ai/atlas/issues/42)) |
+| `ambiguous_repo` with `candidates[]` | Several indexed repositories match the path. Pin one: `--repo <repo_id>` on the CLI, `repo_id` over MCP ([#42](https://github.com/aziron-ai/atlas/issues/42)) |
+| MCP on Windows finds no repository for the client's roots | Since 0.1.55, `file:///C:/…`, VS Code's `file:///c%3A/…`, UNC and plain `C:\` roots resolve. A refusal with `scope_source: "roots"` lists each root it tried in `roots_tried[]` and what is at that path; if none is the repository, pass `workspace` with its path. Windows-host behaviour is verified by tests, not yet on a Windows machine ([#72](https://github.com/aziron-ai/atlas/issues/72)) |
+| `stats` or `status` shows `telemetry unavailable_read_only` | Expected under `--read-only`, which attaches no telemetry sink; the index-run fields still come from the snapshot rows. Add `--telemetry-db PATH` to `--read-only` to attach one ([#154](https://github.com/aziron-ai/atlas/issues/154)) |
+| `code_query` answers `insufficient` with `reason: citations_below_relevance_floor` | With `require_citations: true`, the code Atlas retrieved does not carry what the question names; the `relevance` block lists the terms nothing matched and `low_confidence_hits` the nearest candidates. Ask with the identifier, file or path you mean ([#60](https://github.com/aziron-ai/atlas/issues/60)) |
+| A read-only reader or server returns `store_superseded` or `store_upgrading` | Another Atlas moved the store to a different schema generation (reconnect with a matching binary) or a migration is in flight (retry after a wait). Crash residue that left graph tables missing is healed by `atlas index . --reindex` ([#130](https://github.com/aziron-ai/atlas/issues/130)) |
 | SQLite is busy or locked | Stop `atlas serve`, `atlas watch`, and supervised MCP processes; inspect the owner with `lsof "$PWD/.atlas/atlas.db"`; run maintenance serially after all writers exit |
 | Retrieval reports `sql_fallback` | The lexical (BM25) sidecar is empty or wedged while the graph stays readable. Run `atlas doctor` to confirm, stop other Atlas processes, then `atlas compact --rebuild-lexical` and re-check with `atlas doctor` |
 | `index` warns `lexical sidecar unavailable, indexing without it` | A warning, not a failure — the graph indexed fine. Another Atlas process held the sidecar lock (~2s timeout). It self-heals via lazy backfill; or stop other Atlas processes and run `atlas compact --rebuild-lexical`. See **The lexical sidecar** below |
@@ -4960,7 +6017,10 @@ wrong fix.
 - **`atlas status`** reports storage/version health: the schema and
   index-format contracts plus per-repo snapshot format state. Add `--schema`
   to see the schema/index-format/lexical/MCP contract versions and per-repo
-  snapshot format drift.
+  snapshot format drift. Since 0.1.55, `--repo <path>` scopes the report to
+  one repository and refuses an unknown one exactly as `stats` does, and a
+  checkout served by another checkout's index shows `repo_scope.workspace_reuse`
+  ([#155](https://github.com/aziron-ai/atlas/issues/155), [#42](https://github.com/aziron-ai/atlas/issues/42)).
 - **`atlas migrate`** is the corresponding fix for schema findings: it applies
   storage migrations and reports the active contracts. `--all --root DIR`
   migrates every local SQLite database under a directory.
@@ -4975,7 +6035,10 @@ When you need runtime evidence rather than a health verdict, look here:
 - **Observability database:** telemetry is stored in `telemetry.db` beside the
   graph database by default; relocate it with `--telemetry-db PATH`. With
   `--read-only`, no `telemetry.db` is created unless you pass
-  `--telemetry-db` explicitly.
+  `--telemetry-db` explicitly. Since 0.1.55 `stats`, `status` and `doctor`
+  carry a `telemetry` block that says so — `unavailable_read_only`, with the
+  remedy — rather than leaving fields out
+  ([#154](https://github.com/aziron-ai/atlas/issues/154)).
 - **`atlas sync status`** (connected fleets only) shows uplink configuration,
   kill switches, and per-stream cursors.
 
@@ -5320,6 +6383,8 @@ correctly — every result is a dated measurement under stated conditions, not a
 general guarantee.
 
 [Open the Atlas benchmark explorer](https://atlas.aziro.com/#benchmarks)
+
+What 0.1.55 adds to the evidence, a labelled relevance benchmark with a regression gate and the multi-language agent benchmark, is summarised in the [0.1.55 release notes](upgrade).
 
 ## How to Read a Result
 

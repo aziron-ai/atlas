@@ -127,7 +127,8 @@ function mdToHtml(md) {
     }
     if (/^\s*\|.*\|\s*$/.test(line) && i + 1 < lines.length && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i + 1])) {
       flushList(listBuf);                                      // table
-      const cells = (row) => row.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
+      // split on unescaped pipes only: `a \| b` inside a cell is one literal "|"
+      const cells = (row) => row.trim().replace(/^\||\|$/g, "").split(/(?<!\\)\|/).map((c) => c.trim().replace(/\\\|/g, "|"));
       const header = cells(line);
       i += 2;
       const rows = [];

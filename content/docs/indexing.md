@@ -24,6 +24,19 @@ atlas --db "sqlite:///absolute/path/.atlas/atlas.db" index .
 the lexical search index. By default it indexes the working tree; use
 `--ref COMMIT_OR_BRANCH` to index a specific commit or branch instead.
 
+**Since 0.1.55, uncommitted work gets a snapshot of its own.** When the
+working tree has uncommitted edits or untracked files that Atlas indexes, the
+run stores a snapshot labelled `<sha>+dirty`, with a `tree_hash` of the dirty
+paths and their content, beside the clean snapshot of that commit instead of
+overwriting it. The index JSON reports `dirty`, `tree_hash` and `indexed_sha`,
+and `status`, `history`, `snapshots list` and `snapshot-diff` show the label.
+A clean re-index of the same commit still replaces its snapshot in place, and
+committing the work stores the new commit's snapshot. Files Atlas never reads
+(its own `.atlas/`, extensions it does not index, `.atlasignore` matches)
+never make a tree dirty. `ATLAS_INDEX_DIRTY_IDENTITY=0` restores the old
+behaviour of labelling the working tree with the clean commit
+([#65](https://github.com/aziron-ai/atlas/issues/65)).
+
 A first index of inference-gateway, a Go service of 307 files, looks like this
 on stderr (the JSON summary goes to stdout):
 
@@ -126,6 +139,87 @@ Incremental updates are the default because they are much faster than full
 rebuilds: Atlas computes a delta against the previous snapshot and reindexes
 only what changed. To diff against a specific commit rather than the stored
 base, pass `--base COMMIT`.
+
+**Since 0.1.55, a new commit costs what it changed.** The lexical sidecar is
+carried forward per snapshot, so a new commit re-streams only the changed
+files' documents, and the shapes that used to rebuild the whole graph — adding
+or deleting JS/TS, Python, C, C++ or Rust files, deleting a Go file, turning
+Go type analysis off, fact-changing header edits — run on the SQL delta path
+(`persist_path: sql_new_commit`) with bounded passes after the commit
+([#128](https://github.com/aziron-ai/atlas/issues/128)). A delta and a fresh
+full index of the same commit hold identical symbols, edges and file rows
+([#118](https://github.com/aziron-ai/atlas/issues/118)).
+
+Because uncommitted work is now its own snapshot, an edit to a dirty tree
+takes that same new-commit path (copy forward, then retire the superseded
+dirty snapshot) instead of rewriting a snapshot in place. Watch mode on a large
+repository therefore pays roughly what a new commit costs for each edit; set
+`ATLAS_INDEX_DIRTY_IDENTITY=0` if that matters more than an honest label
+([#65](https://github.com/aziron-ai/atlas/issues/65)).
+
+## Imports and Cross-File Types
+
+Atlas proves which file a name comes from before it counts a cross-file
+relationship, and fails closed when two files could answer. **Since 0.1.55**
+the proof reaches further:
+
+- **Python.** `from X import A, B` keeps the module row plus one row per
+  binding, marked `import_binding` / `import_module`, and `export` folds the
+  bindings onto one edge per statement. Parenthesized imports are read from
+  the syntax tree, and `from . import foo` stores `.foo`
+  ([#126](https://github.com/aziron-ai/atlas/issues/126)).
+- **Go.** Imports resolve through `go.mod` — nested modules and in-repo
+  `replace` directives included — to the package directory
+  (`resolved_kind: package_dir`); an in-module path with no package is marked
+  `module_not_found`, and the standard library and third-party modules fail
+  closed. A delta refreshes the resolution when a package directory is added
+  or removed or `go.mod` changes
+  ([#126](https://github.com/aziron-ai/atlas/issues/126)). Package-level
+  variables carry their initializer call, their writes and an inferred
+  `declared_type` ([#55](https://github.com/aziron-ai/atlas/issues/55)).
+- **Scala.** Each import selector resolves by Scala's lookup order and gains
+  `resolved_path` only when exactly one file declares the target under a
+  verified package clause ([#137](https://github.com/aziron-ai/atlas/issues/137));
+  type uses, universal `apply` and companions resolve through the same imports
+  ([#21](https://github.com/aziron-ai/atlas/issues/21)).
+- **PHP.** `use` clauses are read per namespace region, one row per clause,
+  so grouped and aliased imports prove their class, and `use function` /
+  `use const` resolve only to functions and constants
+  ([#139](https://github.com/aziron-ai/atlas/issues/139)). Class constants,
+  static properties, container and event rows prove their class too
+  ([#24](https://github.com/aziron-ai/atlas/issues/24)).
+- **Java.** Same-package, single-type and on-demand imports resolve type
+  uses, and method return types, field types and annotation element types
+  are references ([#34](https://github.com/aziron-ai/atlas/issues/34)).
+
+These facts are written when a file is indexed, so an existing store shows
+them after one `atlas index . --reindex`.
+
+## Images
+
+An image is a searchable file-level entry, never a call-graph node. **Since
+0.1.55** its entry holds the text the file itself carries — PNG text chunks
+(including XMP) and EXIF, JPEG EXIF/XMP/IPTC/comments, TIFF text tags, WebP
+EXIF/XMP and GIF comments — plus its format and size, so a title or caption
+embedded in an image is found by search
+([#26](https://github.com/aziron-ai/atlas/issues/26)). Binary data is never
+read as text.
+
+Text drawn in the pixels needs OCR, which is opt-in. Set
+`ATLAS_IMAGE_OCR_CMD` to a command that reads one image on stdin and prints
+its text; it runs without a shell, with the repo-relative path in
+`ATLAS_IMAGE_PATH`, for at most 30 s per image:
+
+```sh
+export ATLAS_IMAGE_OCR_CMD="tesseract - stdout"
+atlas index . --reindex
+```
+
+Every image entry states `ocr_status` (`off`, `ok`, `empty`, `unavailable` or
+`failed`), and its signature says `ocr: <status>` whenever no OCR text was
+indexed, for example `fixture.png png 320x60 ocr: off Title: ATLAS VISION
+TOKEN 7842`. Images already indexed keep their text until they are indexed
+again with `--reindex`.
 
 ## Forced Rebuild
 
@@ -248,12 +342,14 @@ Behaviors worth knowing on large or memory-constrained machines:
   `ATLAS_GOGC` bound the Go runtime directly and override whatever the tier
   would have set — the right tool for a container with a hard cgroup limit,
   where you want a specific number rather than a fraction of host RAM.
-- **Deletions cost more than edits.** Adding or modifying files takes the
-  scoped delta path (sub-second, tens of MB). Deleting a Go file currently
-  forces the whole-module type-check fallback — correctness requires
-  re-deriving reverse-dependency edges — so a delete delta can approach
-  cold-build time and RAM on Go-heavy repos. A scoped-deletion analyzer is
-  planned; until then, batch deletions together when you can.
+- **Deletions no longer rebuild the graph (since 0.1.55).** Deleting a Go
+  file used to force the whole-module type-check fallback, and adding or
+  deleting JS/TS or Python files took the whole-graph path. Those shapes now
+  run on the SQL delta path: on TensorFlow a one-line Python edit went from
+  1,528 MB / 36 s to 529 MB / 13 s, and adding a `.cc` file beside JavaScript
+  from 8.5 GB / 184 s to 752 MB / 24 s
+  ([#128](https://github.com/aziron-ai/atlas/issues/128)). Under `eco`, SQLite's
+  caches and memory map are bounded as well (see [Configuration](configuration)).
 
 ## Database Maintenance
 
@@ -297,6 +393,14 @@ stats inference-gateway  local/sqlite  history 1  coverage_facts 0
   graph files 89  symbols 3526  edges 1317  communities 3161  isolated 3121
   langs  go:3511 bash:9 typescript:6
 ```
+
+Since 0.1.55 the plain `stats` output also prints a `health` line (isolated
+ratio, connected components, the community split), an `edge_binding` line and
+an `invariants` line, and `atlas status --repo <path>` scopes the status
+report to one repository; the [CLI reference](cli) describes each. Every
+answer also carries its own `indexed_sha`, `head_sha` and `stale` fields, so
+a lookup tells you when the index lags the checkout
+([#59](https://github.com/aziron-ai/atlas/issues/59)).
 
 `store_rows` is what the index stored. `graph` is what the graph report reads —
 the same numbers the dashboard's **Orientation** view (`#/orient`) shows at the

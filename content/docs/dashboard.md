@@ -88,7 +88,15 @@ Below the tiles:
 - **Connector pulse** — events per connector in the live window.
 - **Skills lifecycle** — skills per stage: candidate, validating, trusted,
   quarantined, revoked.
-- **Code graph index** — links to **Orientation** and **Hot Symbols**.
+- **Code graph index** — **Indexed symbols**, **Repos indexed**, **Indexed
+  edges** and **Route records**: the stored rows of each indexed repository's
+  latest snapshot, summed over the repositories, the same totals the
+  Workspace view shows. Since 0.1.55 both views share one calculation, each
+  tile reads "—" until the first dashboard frame arrives (an empty index shows
+  a measured 0), hovering a tile names that scope, and **Graph edges** is
+  renamed **Indexed edges** because it counts stored edge rows, not the
+  graph's resolved edges ([#158](https://github.com/aziron-ai/atlas/issues/158)). The card links to **Orientation** and
+  **Hot Symbols**.
 - **Live activity** (right rail) — the seven newest events: what was asked,
   which connector, how many tokens, how long it took. **All** opens the full
   stream. Below it, an **Approvals** card appears when requests await a

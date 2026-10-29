@@ -7,6 +7,8 @@ general guarantee.
 
 [Open the Atlas benchmark explorer](https://atlas.aziro.com/#benchmarks)
 
+What 0.1.55 adds to the evidence, a labelled relevance benchmark with a regression gate and the multi-language agent benchmark, is summarised in the [0.1.55 release notes](upgrade).
+
 ## How to Read a Result
 
 Work through this checklist before comparing tools or quoting a number — a

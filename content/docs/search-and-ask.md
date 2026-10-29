@@ -37,6 +37,10 @@ Search is **code-aware lexical search**. In practice that means:
 - **It searches paths too.** `model_filter.go` or `providers/routing` name a
   file or folder; a path-shaped query ranks the file whose path is exactly
   that first.
+- **Ties have one order.** Since 0.1.55, results with equal scores come back
+  by path, then name, kind, signature and line, so two fresh indexes of the
+  same commit, at any worker count, return the same page in the same order
+  ([#135](https://github.com/aziron-ai/atlas/issues/135)).
 
 Results carry a kind: `function`, `method`, `method_spec` (an interface
 method), `type`, `field`, `constant`, `key` (a configuration or YAML key), and,
@@ -265,6 +269,54 @@ refs CreateChatCompletionRequest  total 44
 ```
 
 All flags are in the [CLI reference](cli).
+
+## How Fresh Is the Answer
+
+**Since 0.1.55**, every answer about a repository says which snapshot it came
+from and whether the code has moved since: `indexed_sha`, `head_sha`, `dirty`,
+`stale` and `stale_reason`, the same on the CLI, over MCP and from the API
+([#59](https://github.com/aziron-ai/atlas/issues/59)). Edit a file after
+indexing and the next lookup says so before anything else:
+
+```text
+$ atlas snippet helper --format plain
+stale: indexed 4fb9d0f74f1c vs head 4fb9d0f74f1c+dirty  (working_tree_dirty)  not refreshed (one-shot command; run `atlas index`)
+snippet helper  definitions 1  resolved true
+```
+
+`resolved: true` still means the symbol was found; `stale: true` means its
+line numbers and body may have moved. A one-shot command does not refresh in
+the background, so run `atlas index .`, or set `ATLAS_ONESHOT_REFRESH=sync`
+to refresh before answering
+([#141](https://github.com/aziron-ai/atlas/issues/141)). Indexing uncommitted
+work stores its own `<sha>+dirty` snapshot beside the commit's — see
+[Change lens and history](history).
+
+## Answers That Refuse Instead of Guessing
+
+Keyword search always matches something, so a list of citations is not proof
+that the code answers the question. When an assistant or a script calls
+`code_query` with `require_citations: true`, **since 0.1.55** the cited names
+and paths must carry what the question names — an identifier it spells, or
+enough of its specific words ([#60](https://github.com/aziron-ai/atlas/issues/60)).
+Otherwise the answer is `status: "insufficient"` with
+`reason: "citations_below_relevance_floor"`, a `relevance` block naming the
+words nothing matched, and the nearest candidates as `low_confidence_hits`,
+never as citations. Asked about "the quantum flux capacitor module" in a
+repository that has none, Atlas now says so instead of citing a `helper`
+whose doc comment mentions "module". The fields are described in
+[MCP tools](mcp).
+
+## Evidence Inside Large Functions
+
+The index keeps the start and end of a long function body, not every line.
+**Since 0.1.55**, when a question is about something inside a long function —
+a route registered on line 1,005 of a 2,000-line setup function — `code_query`
+and `context` re-read the matching lines from the file, as long as the file
+still matches the index, and quote them with every skipped run marked
+`// ... elided N lines (La-Lb) ...`. The answer's `metadata.body_elision`
+lists the line ranges shown, and the citation keeps the function's real range
+([#156](https://github.com/aziron-ai/atlas/issues/156)).
 
 ## From the API
 
