@@ -31,7 +31,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { deriveAgentBench, summarizeSuperseded, goFlagshipFrom, agentBenchArtifactEntry } from "./build-agent-bench-data.mjs";
+import { deriveAgentBenchWithHistory, goFlagshipFrom, agentBenchArtifactEntries } from "./build-agent-bench-data.mjs";
 import { deriveAgentBenchLanguages, loadLanguageEntries, languageArtifactEntries } from "./build-agent-bench-languages.mjs";
 import { deriveLspTruthLanguages } from "./build-lsp-truth-languages.mjs";
 import { deriveRelevance } from "./build-relevance-data.mjs";
@@ -527,16 +527,15 @@ fs.writeFileSync(path.join(rawDir, "MATRIX_TOOL_VERSIONS_LINUX.json"), JSON.stri
 /* ============ agent-harness bench — from the public artifacts =========== */
 // Produced by scripts/build-agent-bench-data.mjs (which sanitizes the private
 // AGENT_TOKEN_REPORT.json). Re-ingested here so full rebuilds keep the section.
-// The 2026-08-05 artifact stays in data/raw/ as the run this one supersedes.
+// The runs it superseded stay in data/raw/ and render as the run history,
+// newest first: the run this one replaces, then the one before it.
 
-const AGENT_BENCH_RAW = "data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json";
-const AGENT_BENCH_SUPERSEDED_RAW = "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json";
+const AGENT_BENCH_RAW = "data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261029.json";
+const AGENT_BENCH_SUPERSEDED_RAW = ["data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json", "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json"];
 let agentBench = null;
 try {
-  const ab = readData(path.join("raw", path.basename(AGENT_BENCH_RAW)));
-  const current = deriveAgentBench(ab, { artifactPath: AGENT_BENCH_RAW });
-  const old = readData(path.join("raw", path.basename(AGENT_BENCH_SUPERSEDED_RAW)));
-  agentBench = deriveAgentBench(ab, { artifactPath: AGENT_BENCH_RAW, supersedes: summarizeSuperseded(old, AGENT_BENCH_SUPERSEDED_RAW, current) });
+  const load = (p) => ({ artifact: readData(path.join("raw", path.basename(p))), path: p });
+  agentBench = deriveAgentBenchWithHistory(load(AGENT_BENCH_RAW), AGENT_BENCH_SUPERSEDED_RAW.map(load));
   // §06 flagship and the §01 card are a view of this same run.
   report.goFlagship = goFlagshipFrom(agentBench);
 } catch (e) {
@@ -727,11 +726,7 @@ const artifacts = [
   { name: "benchmark-data.json", path: "data/benchmark-data.json", tier: "carried", note: "the July derived dataset — superseded for every headline; kept so the retracted numbers stay auditable" },
   { name: "site-data.json", path: "data/site-data.json", tier: "derived", note: "the exact payload this page renders" },
 ];
-if (agentBench) {
-  artifacts.splice(artifacts.length - 1, 0,
-    { name: path.basename(AGENT_BENCH_SUPERSEDED_RAW), path: AGENT_BENCH_SUPERSEDED_RAW, tier: "carried", note: `SUPERSEDED by ${path.basename(AGENT_BENCH_RAW)} — the ${agentBench.supersedes.date} agent-harness run, kept so the previously published table stays auditable` },
-    agentBenchArtifactEntry(AGENT_BENCH_RAW, `agent-harness end-to-end token usage, ${agentBench.date} (claude + codex, per-run records)`));
-}
+if (agentBench) artifacts.splice(artifacts.length - 1, 0, ...agentBenchArtifactEntries(agentBench));
 if (agentBenchLanguages) artifacts.splice(artifacts.length - 1, 0, ...languageArtifactEntries(agentBenchLanguages));
 if (lspTruthLanguages) artifacts.splice(artifacts.length - 1, 0, { name: path.basename(LSP_TRUTH_RAW), path: LSP_TRUTH_RAW, tier: "fresh", note: "tool-level callers F1 vs LSP truth, 8 languages, fresh index each — per-question counts + verbatim scorer output" });
 if (relevance) artifacts.splice(artifacts.length - 1, 0, { name: path.basename(RELEVANCE_RAW), path: RELEVANCE_RAW, tier: "fresh", note: "natural-language relevance benchmark (#44): 216 labelled queries × 3 surfaces, per-query rows, aggregates, gate verdicts (verbatim copy of relevance-bench/RESULTS.json)" });
