@@ -1158,41 +1158,55 @@ function DocsPage({ slug }) {
               <tr><td><code>--detail</code></td><td>Output depth: <code>low</code>, <code>medium</code>, <code>high</code>, or <code>xhigh</code> — how much graph context to return per item. Default <code>high</code> for every format; <code>xhigh</code> opts into cross-repo context. Retrieval ops (callers/refs/impact) floor at <code>high</code>.</td></tr>
               <tr><td><code>--format</code></td><td>Output shape: <code>plain</code>, <code>json</code>, <code>compact</code>, or <code>ndjson</code> (<code>json</code> by default).</td></tr>
               <tr><td><code>--json</code></td><td>Shorthand for <code>--format json</code>.</td></tr>
-              <tr><td><code>--read-only</code></td><td>Open the database immutably: no migration, no WAL/journal files, no <code>telemetry.db</code> created beside it — artifact bytes hash identically after any query. A missing database errors instead of being created.</td></tr>
+              <tr><td><code>--read-only</code></td><td>Open the database read-only: no migration, no writes or checkpoints, no <code>telemetry.db</code> created beside it, and no <code>-wal</code>/<code>-shm</code> beside a quiescent store — artifact bytes hash identically after any query. Since 0.1.55 it follows a live writer: once a running Atlas has a WAL beside the store it reads it, and it refuses a store moved to another schema generation (<code>store_superseded</code>) (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/130" target="_blank" rel="noreferrer">#130</a>). A missing database errors instead of being created.</td></tr>
               <tr><td><code>--repo</code></td><td>Repo workspace: path, <code>org/name</code>, or repo_id. Defaults to the current directory; <code>'*'</code> means all repos on <code>search</code>/<code>semantic-search</code>.</td></tr>
               <tr><td><code>--telemetry-db</code></td><td>Explicit path for the observability database — required if you want telemetry with <code>--read-only</code>. Default: <code>telemetry.db</code> beside the graph database.</td></tr>
               <tr><td><code>--tenant</code></td><td>Tenant/org scope to isolate repos to (hosted multi-tenant; empty = all repos).</td></tr>
             </tbody></table></div>
             <p>Combine them freely with any command:</p>
             <Command>{`atlas --repo /absolute/path status\natlas --db "sqlite:///absolute/path/.atlas/atlas.db" --format plain stats\natlas --detail xhigh explain NewServer\natlas --repo '*' search "rate limiter"`}</Command>
+            <h3>How a Workspace Finds Its Index</h3>
+            <p>A workspace-scoped command answers in two steps: which store, then which repository in it. The store is the <code>--db</code> you typed, else a running server (<code>ATLAS_SERVER_URL</code>, or a local <code>atlas serve</code> on <code>127.0.0.1:3099</code>), else <code>./.atlas/atlas.db</code>. Inside the store an explicit <code>--repo</code> wins, then the registered root that contains the path.</p>
+            <p><strong>Since 0.1.55</strong>, a git checkout that no registered root contains — a linked worktree, another clone, a worktree of a bare clone — is served by an existing index when it shares that repository's git common directory or normalized <code>origin</code> URL, and its HEAD and working-tree state equal the repository's latest snapshot (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/42" target="_blank" rel="noreferrer">#42</a>). <code>atlas status --repo &lt;path&gt;</code> then reports <code>repo_scope.workspace_reuse</code> and the line <code>workspace &lt;path&gt; served by the index of &lt;root&gt;</code>.</p>
+            <p>A checkout with the same identity but different content is refused with <code>verdict: content_differs</code> rather than served stale line numbers, a copy that is not a git checkout is never matched (<code>not_a_git_checkout</code>), and several equal checkouts are <code>ambiguous_repo</code> with <code>candidates[]</code>. Every refusal names the <code>searched_stores</code> and the <code>checkout</code> diagnosis. To read an index explicitly, pin it with <code>atlas --db &lt;dsn&gt; --repo &lt;repo_id&gt;</code>.</p>
           </ProseSection>
           <ProseSection title="Index and Health">
             <p>Build the graph, keep it fresh, and verify that storage and schema are sound.</p>
             <div className="docs-table-wrap"><table><thead><tr><th>Command</th><th>Purpose</th></tr></thead><tbody>
               <tr><td><code>index</code></td><td>Index a repo: parse symbols, edges, and routes; persist the graph and lexical index. Incremental by default; <code>--reindex</code> forces a full rebuild; <code>--workers N</code> (or <code>ATLAS_INDEX_WORKERS</code>; 0 = all cores) caps the parse/hash pool and overrides whatever the machine profile would set. Since 0.1.48, <code>--format json</code> also reports <code>persist_mode</code>, <code>persist_path</code>, <code>files_reparsed</code>, <code>lexical_bytes</code>, and <code>lexical_settle</code>.</td></tr>
               <tr><td><code>watch</code></td><td>Index once, then watch the working tree and apply debounced incremental updates on every file change. Foreground until interrupted.</td></tr>
-              <tr><td><code>status</code></td><td>Storage and version health: schema/index-format contracts and per-repo snapshot format state (<code>--schema</code> for contract versions and drift).</td></tr>
-              <tr><td><code>stats</code></td><td>Graph and index telemetry statistics for an indexed repo.</td></tr>
+              <tr><td><code>status</code></td><td>Storage and version health: schema/index-format contracts and per-repo snapshot format state (<code>--schema</code> for contract versions and drift). Since 0.1.55 <code>--repo</code> scopes the whole report to one repo, and the report carries a <code>telemetry</code> block.</td></tr>
+              <tr><td><code>stats</code></td><td>Graph and index telemetry statistics for an indexed repo. Since 0.1.55 it names its count projections, checks seven <code>invariants</code> between them, and carries graph-health fields and a <code>telemetry</code> block.</td></tr>
               <tr><td><code>doctor</code></td><td>Report upgrade health and schema/index contract state; <code>--verify</code> also checks whether the <code>atlas</code> on PATH matches the running binary; <code>--deep</code> runs a page-level integrity scan (<code>PRAGMA quick_check</code>) to catch on-disk corruption that reads silently tolerate. Since 0.1.48 it also reports a <code>machine_profile</code> block — the detected tier, the probe facts behind it, <code>cpu_width_scope</code>, and every bound actually installed.</td></tr>
-              <tr><td><code>report</code></td><td>Compose graph stats, top hubs, and top communities; <code>--format plain</code> prints the Markdown report directly.</td></tr>
+              <tr><td><code>report</code></td><td>Compose graph stats, top hubs, and top communities; <code>--format plain</code> prints the Markdown report directly. Since 0.1.55 it lists clusters only and prints graph-health warnings and coverage tables.</td></tr>
               <tr><td><code>migrate</code></td><td>Apply storage migrations and report the active contracts.</td></tr>
               <tr><td><code>compact</code></td><td>Reclaim space and truncate the WAL; <code>--full</code> also runs a full VACUUM and rebuilds an oversized lexical sidecar; <code>--rebuild-lexical</code> fixes an empty or wedged sidecar.</td></tr>
               <tr><td><code>link</code></td><td>Register a repo into the graph without indexing it, so it joins cross-repo queries and appears in <code>status</code>. Idempotent.</td></tr>
               <tr><td><code>repo</code></td><td>Repo registry maintenance — <code>repo rm</code> forgets a repo: snapshots, symbols, edges, embeddings, and lexical docs.</td></tr>
             </tbody></table></div>
             <Command>{`atlas index . --enable-vectors\natlas watch .\natlas doctor --verbose\natlas report --format plain`}</Command>
+            <h3>Status, Stats and Telemetry</h3>
+            <p><strong>Since 0.1.55:</strong></p>
+            <Bullets>
+              <li><code>atlas status --repo &lt;path|org/name|repo_id&gt;</code> scopes the whole report — served snapshot, counts, format drift and watch lock — to that repo and adds <code>repo_scope</code>. An unknown repo is refused exactly as <code>stats</code> refuses it, with exit code 1. Without <code>--repo</code>, or with <code>--repo '*'</code>, the global view is unchanged (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/155" target="_blank" rel="noreferrer">#155</a>).</li>
+              <li><code>atlas stats</code> names its four count projections (<code>latest</code>, <code>store_rows</code>, <code>graph.raw_*</code>, <code>graph</code>) and checks seven <code>invariants</code> between them: <code>ok</code>, <code>partial</code> when the graph was not computed at this scale, or <code>violated</code> with the failing checks named. <code>graph.edge_binding</code> accounts for every edge row on its way into <code>graph.edges</code>, including rows bound to several targets (<code>multi_bound_rows</code>) (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/14" target="_blank" rel="noreferrer">#14</a>).</li>
+              <li><code>stats</code>, <code>status</code> and <code>doctor</code> carry a <code>telemetry</code> block — <code>available</code>, <code>unavailable_read_only</code>, <code>unavailable</code>, <code>stale</code> or <code>missing</code>, with <code>reason</code> and <code>remedy</code> — and plain output prints a <code>telemetry</code> line whenever it is not <code>available</code> (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/154" target="_blank" rel="noreferrer">#154</a>).</li>
+            </Bullets>
+            <Command label="Output">{`  edge_binding  raw 3 = graph-kind 2 + other 1;  graph-kind = bound 1 + unresolved 1;  multi-bound 0;  pairs 1 -> edges 1 (collapsed 0)
+  invariants ok  (7 checked)
+  telemetry unavailable_read_only  sink not_attached  index_run present`}</Command>
           </ProseSection>
           <ProseSection title="Search and Retrieval">
             <p>Find code and pull bounded, deterministic context about it.</p>
             <div className="docs-table-wrap"><table><thead><tr><th>Command</th><th>Purpose</th></tr></thead><tbody>
-              <tr><td><code>search</code></td><td>Code-aware lexical search (BM25 + trigram) over the symbol index; <code>--mode lexical|semantic|hybrid</code>, plus <code>--kind</code> and <code>--path</code> filters.</td></tr>
+              <tr><td><code>search</code></td><td>Code-aware lexical search (BM25 + trigram) over the symbol index; <code>--mode lexical|semantic|hybrid</code>, plus <code>--kind</code> and <code>--path</code> filters. Since 0.1.55 equal scores are ordered by path, name, kind, signature and line, so every fresh index returns the same page (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/135" target="_blank" rel="noreferrer">#135</a>).</td></tr>
               <tr><td><code>semantic-search</code></td><td>Embedding-based nearest-symbol search; transparently degrades to lexical (<code>degraded=true</code>) when vectors are unavailable.</td></tr>
               <tr><td><code>context</code></td><td>Bounded review-context bundle for changed/seed paths; budgets via <code>--intent</code> (<code>auto</code> is 16-32 KiB), per-request flags, or env vars.</td></tr>
               <tr><td><code>explain</code></td><td>Deterministic context bundle for a symbol: defs, callers/callees, imports, served routes, cross-repo consumers.</td></tr>
               <tr><td><code>symbol</code></td><td>Show a symbol's definition(s) with its callers and callees.</td></tr>
               <tr><td><code>snippet</code></td><td>Show a symbol's bounded implementation body (path:line, signature, source excerpt).</td></tr>
-              <tr><td><code>callers</code></td><td>List symbols that directly call a symbol; scope overloaded names with <code>--package</code>, <code>--receiver</code>, or <code>--arity</code>.</td></tr>
-              <tr><td><code>refs</code></td><td>List references to a symbol: call sites plus type-use references (params, fields, returns).</td></tr>
+              <tr><td><code>callers</code></td><td>List symbols that directly call a symbol; scope overloaded names with <code>--package</code>, <code>--receiver</code>, or <code>--arity</code>. Since 0.1.55 the answer leads with <code>caller_names</code>, and <code>--brief</code> keeps the whole caller list with less detail per caller.</td></tr>
+              <tr><td><code>refs</code></td><td>List references to a symbol: call sites plus type-use references (params, fields, returns). Since 0.1.55 <code>--mutations</code> (alias <code>--writes</code>) lists only the references that write the symbol (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/55" target="_blank" rel="noreferrer">#55</a>).</td></tr>
               <tr><td><code>neighbors</code></td><td>Depth-1 call neighborhood: a symbol's direct callers and callees.</td></tr>
               <tr><td><code>path</code></td><td>Shortest forward call path from one symbol to another (<code>--max-depth</code>, default 6).</td></tr>
             </tbody></table></div>
@@ -1208,14 +1222,50 @@ function DocsPage({ slug }) {
               <tr><td><code>dependencies</code></td><td>Producer repos/handlers that serve HTTP calls this repo makes.</td></tr>
               <tr><td><code>route-contracts</code></td><td>The producer HTTP routes a repo serves — its public contract.</td></tr>
               <tr><td><code>coverage</code></td><td>Real covered/total line ratio when a runtime profile was imported (<code>coverage import</code>); otherwise static call-graph reachability.</td></tr>
-              <tr><td><code>hubs</code></td><td>Rank the graph's hubs ("god nodes") by call-graph degree centrality.</td></tr>
-              <tr><td><code>communities</code></td><td>Detect deterministic clusters of densely connected symbols.</td></tr>
-              <tr><td><code>history</code></td><td>Per-commit snapshot timeline for a repo.</td></tr>
-              <tr><td><code>snapshot-diff</code></td><td>Structural diff between two snapshots: symbols/edges added, removed, modified (alias: <code>diff</code>).</td></tr>
+              <tr><td><code>hubs</code></td><td>Rank the graph's hubs ("god nodes") by call-graph degree centrality. Since 0.1.55 degree-zero symbols are never hubs (see Graph Health below).</td></tr>
+              <tr><td><code>communities</code></td><td>Detect deterministic clusters of densely connected symbols; since 0.1.55 identical across fresh indexes of one commit, with isolated symbols flagged.</td></tr>
+              <tr><td><code>history</code></td><td>Per-commit snapshot timeline for a repo; since 0.1.55 a snapshot built from uncommitted work is its own row, labelled <code>&lt;sha&gt;+dirty</code>.</td></tr>
+              <tr><td><code>snapshot-diff</code></td><td>Structural diff between two snapshots: symbols/edges added, removed, modified (alias: <code>diff</code>). <code>--from</code>/<code>--to</code> take a commit sha, a snapshot id, or since 0.1.55 <code>&lt;sha&gt;+dirty</code>.</td></tr>
               <tr><td><code>export</code></td><td>Export the call graph as <code>json</code>, <code>mermaid</code>, <code>dot</code>, or a self-contained interactive <code>html</code> page; <code>--bundle DIR</code> writes graph.html plus report.md.</td></tr>
             </tbody></table></div>
             <Command>{`atlas impact --paths internal/api/handler.go --max-depth 3\natlas cross-repo-impact --paths internal/api/handler.go\natlas consumers --max-staleness-days 30\natlas export --symbol NewServer --depth 2 --format html -o graph.html`}</Command>
             <p>Cross-repository results depend on linked repositories and indexed service contracts — see <code>atlas link</code> above.</p>
+          </ProseSection>
+          <ProseSection title="Freshness on Every Answer">
+            <p><strong>Since 0.1.55</strong>, every repo-scoped answer — <code>search</code>, <code>symbol</code>, <code>callers</code>, <code>refs</code>, <code>impact</code>, <code>context</code>, <code>explain</code>, <code>snippet</code> — says how its snapshot relates to the checkout, with the same fields on MCP and the HTTP API (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/59" target="_blank" rel="noreferrer">#59</a>):</p>
+            <div className="docs-table-wrap"><table><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody>
+              <tr><td><code>indexed_sha</code></td><td>the snapshot that answered; <code>&lt;sha&gt;+dirty</code> when it was built from uncommitted work</td></tr>
+              <tr><td><code>head_sha</code></td><td>the live HEAD, or <code>unknown</code> when git cannot answer</td></tr>
+              <tr><td><code>dirty</code></td><td>whether the working tree has indexable changes</td></tr>
+              <tr><td><code>stale</code>, <code>stale_reason</code></td><td>whether the answer lags the checkout, and why: <code>head_moved</code>, <code>working_tree_dirty</code>, <code>working_tree_changed</code> or <code>working_tree_reverted</code>. Omitted, never <code>false</code>, when git cannot answer</td></tr>
+              <tr><td><code>refresh</code>, <code>refresh_skipped</code></td><td>what Atlas did about it: <code>none</code>, <code>started</code> or <code>completed</code>; a one-shot command reports <code>refresh_skipped: "one_shot"</code></td></tr>
+            </tbody></table></div>
+            <p>Plain output opens with a notice when an answer is stale:</p>
+            <Command label="Output">{`stale: indexed 4fb9d0f74f1c vs head 4fb9d0f74f1c+dirty  (working_tree_dirty)  not refreshed (one-shot command; run \`atlas index\`)`}</Command>
+            <p>A one-shot command (anything but <code>serve</code>, <code>mcp</code> and <code>watch</code>) never starts background index work, because the process would exit before it landed (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/141" target="_blank" rel="noreferrer">#141</a>). Refresh with <code>atlas index</code>, or set <code>ATLAS_ONESHOT_REFRESH=sync</code> to re-index a git-stale repo before answering, bounded by <code>ATLAS_ONESHOT_REFRESH_TIMEOUT</code> (default 10s); an overrun reports <code>refresh_skipped: "budget_exceeded"</code> and persists nothing. The check costs one HEAD read and one <code>git status</code> of the indexable files per repo, reused for <code>ATLAS_FRESHNESS_TTL</code> (default 2s); <code>ATLAS_FRESHNESS_PROBE=0</code> turns it off.</p>
+          </ProseSection>
+          <ProseSection title="Graph Health">
+            <p><strong>Since 0.1.55</strong>, <code>hubs</code>, <code>communities</code>, <code>report</code> and <code>stats</code> describe how connected the graph is, so a sparse graph is not mistaken for an architecture (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/45" target="_blank" rel="noreferrer">#45</a>, <a className="text-link" href="https://github.com/aziron-ai/atlas/issues/149" target="_blank" rel="noreferrer">#149</a>):</p>
+            <Bullets>
+              <li><code>hubs</code> ranks only symbols with at least one resolved call or inheritance relation and reports <code>eligible</code>, <code>excluded_isolated</code>, <code>ranking</code> and <code>warnings</code>; on a sparse graph the list is shorter than <code>--limit</code>.</li>
+              <li><code>communities</code> is deterministic: one commit gives the same partition, ids and order on every fresh index and at any <code>--workers</code> count. <code>total</code> splits into <code>multi_member</code> and <code>singletons</code>, and isolated one-symbol communities are flagged.</li>
+              <li><code>report</code> lists clusters only, counts isolated symbols in its summary, and prints <code>WARNING:</code> lines and relation-coverage tables by language and by symbol kind.</li>
+              <li><code>stats</code> (under <code>graph</code>) and <code>report</code> carry <code>isolated_ratio</code>, <code>connected_components</code>, <code>largest_component</code>, <code>multi_member_communities</code>, <code>singleton_communities</code>, relation coverage and <code>warnings</code>.</li>
+            </Bullets>
+            <div className="docs-table-wrap"><table><thead><tr><th>Warning</th><th>Fires when</th></tr></thead><tbody>
+              <tr><td><code>isolated_majority</code></td><td>at least half the symbols have no resolved relation</td></tr>
+              <tr><td><code>fragmented_communities</code></td><td>the connected symbols split into communities of two or fewer on average (evaluated with a computed partition and at least 20 connected symbols)</td></tr>
+            </tbody></table></div>
+            <p>On a three-function repository where one function calls nothing and nothing calls it:</p>
+            <Command label="Output">{`$ atlas hubs --format plain
+hubs  total 2  eligible 2  excluded_isolated 1
+  helper  function  in 1  out 0  total 1  main.go
+  main  function  in 0  out 1  total 1  main.go
+
+$ atlas communities --format plain
+communities  total 2  shown 2  multi_member 1  singletons 1  isolated 1
+  #0  size 2  helper, main
+  #1  size 1  extra  (isolated)`}</Command>
           </ProseSection>
           <ProseSection title="Assistants and Surfaces">
             <p>Wire Atlas into AI assistants and serve it over MCP or HTTP. See <a className="text-link" href="#docs/mcp">MCP Tools</a> and <a className="text-link" href="#docs/service">Dashboard and HTTP API</a>.</p>
