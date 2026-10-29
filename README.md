@@ -92,29 +92,48 @@ scored against `gopls` call-hierarchy as ground truth:
 
 A production function has callers spread across many files; raw dumps drown the model
 in noise and still miss callers. Atlas returns the complete, precise caller set as
-structured, cited context. What that is worth shows up inside a real agent loop —
-19 questions, each agent restricted to one tool, `gopls` call-hierarchy as truth,
-all 114 runs completed (2026-10-28, released Atlas 0.1.54, Claude Code 2.1.304 with
-claude-sonnet-5, Codex CLI 0.162.1 with gpt-6.1-sol, graph tool graphify 0.8.49):
+structured, cited context. What that is worth shows up inside a real agent loop — 19
+questions, each agent restricted to one tool, `gopls` call-hierarchy as truth, all 114
+runs completed (2026-10-29, Atlas 0.1.55 — the release code, built from 3790ba95 —
+Claude Code 2.1.304 with claude-sonnet-5, Codex CLI 0.162.1 with gpt-6.1-sol, graph
+tool graphify 0.8.49):
 
 | Agent | Mode | Total tokens | Turns | Answer F1 | Wall time |
 | --- | --- | ---: | ---: | ---: | ---: |
-| claude | Graph tool | 251,586 | 7.6 | 0.233 | 33.4 s |
-| claude | Grep-and-read baseline | 163,187 | 4.5 | 0.504 | 17.8 s |
-| **claude** | **With Atlas** | **76,205** | **2.0** | **0.995** | **10.2 s** |
-| codex | Graph tool | 155,242 | 5.2 | 0.275 | 19.2 s |
-| codex | Grep-and-read baseline | 99,172 | 2.5 | 0.941 | 12.9 s |
-| **codex** | **With Atlas** | **52,776** | **1.0** | **0.995** | **8.7 s** |
+| claude | Graph tool | 289,085 | 7.3 | 0.204 | 40.2 s |
+| claude | Grep-and-read baseline | 158,806 | 4.5 | 0.480 | 16.7 s |
+| **claude** | **With Atlas** | **76,572** | **2.0** | **0.996** | **11.0 s** |
+| codex | Graph tool | 122,985 | 6.5 | 0.290 | 32.8 s |
+| codex | Grep-and-read baseline | 54,655 | 2.1 | 0.987 | 16.4 s |
+| **codex** | **With Atlas** | **34,964** | **1.0** | **0.996** | **12.6 s** |
 
-The baseline spends **2.14×** (claude) and **1.88×** (codex) Atlas's tokens; the graph
-tool **3.30×** and **2.94×**. Cross-agent totals are not comparable — different
-tokenizers and system-prompt floors — so compare modes within an agent. This run
-replaces the 2026-08-05 table (2.32× / 4.10× claude, 2.22× / 3.92× codex, on Claude
-Code 2.1.178 and Codex CLI 0.146.0-alpha.9.2 with gpt-5.6-sol). Atlas's F1 is unchanged
-at 0.995. The harnesses' fixed token floors rose (+5,173 claude, +9,428 codex), which
-pulls every ratio toward 1, and the newer codex is stronger without help; Atlas's own
-per-question totals rose too, and the run does not isolate why. Both runs' per-run
-records are in [data/raw/](data/raw/).
+The baseline spends **2.07×** (claude) and **1.56×** (codex) Atlas's total tokens; the
+graph tool **3.78×** and **3.52×**. Every run first pays its harness's fixed floor — a
+no-tool "Reply with exactly: OK" costs 39,927 tokens on claude and 15,274 on codex —
+so above that floor the baseline spends **3.24×** and **2.00×** Atlas's tokens and the
+graph tool **6.80×** and **5.47×**. Cross-agent totals are not comparable — different
+tokenizers and system-prompt floors — so compare modes within an agent. On codex, 7 of
+the 19 graph-tool runs named no function; each scores F1 0 and its tokens count.
+
+This run replaces the 2026-10-28 table (Atlas 0.1.54). Changed between the runs: Atlas
+0.1.54 (e4b0dc22) → 0.1.55 (3790ba95). Unchanged: Claude Code 2.1.304 with
+claude-sonnet-5, codex-cli 0.162.1 with gpt-6.1-sol, graphify 0.8.49. Atlas's F1 0.995
+→ 0.996 on both harnesses. Claude: Atlas totals flat (76,205 → 76,572), harness floor
+35,961 → 39,927, no-tool F1 0.504 → 0.480, graph-tool totals up (251,586 → 289,085).
+Codex: Atlas totals down (52,776 → 34,964), harness floor 24,846 → 15,274, no-tool F1
+0.941 → 0.987, graph-tool totals down (155,242 → 122,985). Neither run isolates a
+cause for any of these moves.
+
+| Run | Atlas | Floor claude / codex | Atlas F1 | Total × claude | Total × codex | Above-floor × claude | Above-floor × codex |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 2026-10-29 | 0.1.55 | 39,927 / 15,274 | 0.996 | 2.07× / 3.78× | 1.56× / 3.52× | 3.24× / 6.80× | 2.00× / 5.47× |
+| 2026-10-28 | 0.1.54 | 35,961 / 24,846 | 0.995 | 2.14× / 3.30× | 1.88× / 2.94× | 3.16× / 5.36× | 2.66× / 4.67× |
+| 2026-08-05 | v0.1.47-256-gfc68e26-dirty (dev build) | 30,788 / 15,418 | 0.995 | 2.32× / 4.10× | 2.22× / 3.92× | 3.79× / 7.59× | 3.26× / 6.42× |
+
+Ratios are no tool / graph tool over Atlas. The 2026-08-05 run used Claude Code
+2.1.178 with claude-sonnet-5 and Codex CLI 0.146.0-alpha.9.2 with gpt-5.6-sol; the two
+October runs used the same harnesses and models. All three runs' per-run records are
+in [data/raw/](data/raw/).
 
 ### Eight languages, both agents
 

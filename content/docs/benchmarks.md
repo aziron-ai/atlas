@@ -63,54 +63,90 @@ and a location, so its token ratio measures a non-answer and is excluded from th
 headline rather than averaged into it. Several of those excluded ratios are large
 (lua 35.8×, rust 46.1×, terraform 38.5×); that is precisely why they are excluded.
 
-## Agent-Harness Token Benchmark (2026-10-28, Atlas 0.1.54)
+## Agent-Harness Token Benchmark (2026-10-29, Atlas 0.1.55)
 
 This measures what a real agent actually spends. Claude Code 2.1.304
 (claude-sonnet-5) and Codex CLI 0.162.1 (gpt-6.1-sol) ran headless in
 sirupsen/logrus (@a23d315), restricted to one code-intelligence CLI per run,
 answering 19 caller questions scored against gopls call_hierarchy (LSP-truth)
-at the pinned commit. The Atlas binary was the released 0.1.54 (e4b0dc22); the
-graph tool was graphify 0.8.49. Token numbers are each harness's own usage
-accounting. All 114 runs completed.
+at the pinned commit. The Atlas binary was the Atlas 0.1.55 release code,
+built from 3790ba95 (version string v0.1.52-699-g3790ba95); the graph tool was
+graphify 0.8.49. Token numbers are each harness's own usage accounting. All
+114 runs completed.
 
 | Agent | Context source | Mean total tokens | Billed-proxy tokens | Mean turns | Mean F1 | Mean wall time |
 | --- | --- | --- | --- | --- | --- | --- |
-| claude (claude-sonnet-5) | Atlas | 76,205 | 7,948 | 2.0 | 0.995 | 10.2 s |
-| claude (claude-sonnet-5) | No tool (raw exploration) | 163,187 | 11,336 | 4.5 | 0.504 | 17.8 s |
-| claude (claude-sonnet-5) | Graph tool | 251,586 | 11,429 | 7.6 | 0.233 | 33.4 s |
-| codex (gpt-6.1-sol) | Atlas | 52,776 | 13,440 | 1.0 | 0.995 | 8.7 s |
-| codex (gpt-6.1-sol) | No tool (raw exploration) | 99,172 | 16,881 | 2.5 | 0.941 | 12.9 s |
-| codex (gpt-6.1-sol) | Graph tool | 155,242 | 14,537 | 5.2 | 0.275 | 19.2 s |
+| claude (claude-sonnet-5) | Atlas | 76,572 | 9,977 | 2.0 | 0.996 | 11.0 s |
+| claude (claude-sonnet-5) | No tool (raw exploration) | 158,806 | 9,103 | 4.5 | 0.480 | 16.7 s |
+| claude (claude-sonnet-5) | Graph tool | 289,085 | 14,990 | 7.3 | 0.204 | 40.2 s |
+| codex (gpt-6.1-sol) | Atlas | 34,964 | 7,221 | 1.0 | 0.996 | 12.6 s |
+| codex (gpt-6.1-sol) | No tool (raw exploration) | 54,655 | 9,963 | 2.1 | 0.987 | 16.4 s |
+| codex (gpt-6.1-sol) | Graph tool | 122,985 | 13,215 | 6.5 | 0.290 | 32.8 s |
 
-Against the no-tool baseline, the other mode spends 2.14× Atlas's total
-tokens on claude and 1.88× on codex; the graph tool spends 3.30× and 2.94×.
-Turns: 2.26× and 2.53× (baseline), 3.79× and 5.21× (graph tool). Ratios are
-taken between the unrounded per-run means. The harness floors (a no-tool
-"Reply with exactly: OK") were 35,961 tokens for claude and 24,846 for codex.
+Against the no-tool baseline, the other mode spends 2.07× Atlas's total tokens
+on claude and 1.56× on codex; the graph tool spends 3.78× and 3.52×. Turns:
+2.26× and 2.05× (baseline), 3.63× and 6.53× (graph tool). Ratios are taken
+between the unrounded per-run means. The harness floors (a no-tool "Reply with
+exactly: OK") were 39,927 tokens for claude and 15,274 for codex.
+
+**Marginal cost.** Marginal = mean total tokens − the harness floor, where the
+floor is what the same harness spends on a no-tool "Reply with exactly: OK"
+before any question (its calibration run); the marginal ratio leaves out that
+one fixed cost, which otherwise sits on both sides of every total ratio and
+pulls it toward 1.
+
+| Agent | Floor | Atlas | No tool | Graph tool | Marginal × (no tool / graph tool) | Total × (no tool / graph tool) |
+| --- | --- | --- | --- | --- | --- | --- |
+| claude | 39,927 | 36,645 | 118,879 | 249,158 | 3.24× / 6.80× | 2.07× / 3.78× |
+| codex | 15,274 | 19,690 | 39,381 | 107,711 | 2.00× / 5.47× | 1.56× / 3.52× |
 
 Cross-agent absolute totals are **not comparable** — the two harnesses use
 different tokenizers and system-prompt floors (see each agent's calibration).
 Compare modes within an agent only. Billed-proxy = fresh input + cache writes
 + output (codex: fresh input + output); cache reads bill at about 10% and are
-excluded.
+excluded. 7 of codex's 19 graph tool runs finished without naming any
+function; each is scored F1 0, not dropped, and its tokens count.
 
-**Replaces the 2026-08-05 run.** That run used an Atlas development build
-(fc68e26, released as 0.1.51), Claude Code 2.1.178 with claude-sonnet-5 and
-Codex CLI 0.146.0-alpha.9.2 with gpt-5.6-sol, and measured 2.32× / 4.10×
-(claude) and 2.22× / 3.92× (codex) against the baseline / graph tool. Atlas's
-F1 did not move (0.995 on both harnesses, then and now). Two measured changes
-account for part of the narrower gap: each harness's fixed floor rose (claude
-+5,173, codex +9,428 tokens), and a larger floor added to both sides pulls
-every ratio toward 1; and the newer codex is stronger without help (no-tool
-F1 0.831 → 0.941 in 2.5 turns instead of 3.3). Atlas's own per-question
-totals rose too (claude 58,234 → 76,205, codex 33,471 → 52,776); the run
-does not isolate why. The superseded per-run records stay in
+**Replaces the 2026-10-28 run.** That run used the released Atlas 0.1.54
+(e4b0dc22) with Claude Code 2.1.304 (claude-sonnet-5) and Codex CLI 0.162.1
+(gpt-6.1-sol), and measured 2.14× / 3.30× (claude) and 1.88× / 2.94× (codex)
+against the baseline / graph tool — 3.16× / 5.36× and 2.66× / 4.67× above the
+floor. Changed between the runs: Atlas 0.1.54 (e4b0dc22) → 0.1.55 (3790ba95).
+Unchanged: Claude Code 2.1.304 with claude-sonnet-5, codex-cli 0.162.1 with
+gpt-6.1-sol, graphify 0.8.49. Atlas's F1 0.995 → 0.996 on both harnesses.
+Claude: Atlas totals flat (76,205 → 76,572), harness floor 35,961 → 39,927,
+no-tool F1 0.504 → 0.480, graph-tool totals up (251,586 → 289,085). Codex:
+Atlas totals down (52,776 → 34,964), harness floor 24,846 → 15,274, no-tool F1
+0.941 → 0.987, graph-tool totals down (155,242 → 122,985). Neither run
+isolates a cause for any of these moves. Its per-run records stay in
+[AGENT_TOKEN_BENCH_PUBLIC_20261028.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json).
+
+**Run history.** Same repository, pinned commit and 19 questions in every run; ratios are no tool / graph tool over Atlas.
+
+| Run | Atlas build | Agent · harness · model | Floor | Atlas F1 | Total tokens × | Marginal × |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2026-10-29 (current) | 0.1.55 (3790ba95) | claude · Claude Code 2.1.304 · claude-sonnet-5 | 39,927 | 0.996 | 2.07× / 3.78× | 3.24× / 6.80× |
+| 2026-10-29 (current) | 0.1.55 (3790ba95) | codex · codex-cli 0.162.1 · gpt-6.1-sol | 15,274 | 0.996 | 1.56× / 3.52× | 2.00× / 5.47× |
+| 2026-10-28 | 0.1.54 (e4b0dc22) | claude · Claude Code 2.1.304 · claude-sonnet-5 | 35,961 | 0.995 | 2.14× / 3.30× | 3.16× / 5.36× |
+| 2026-10-28 | 0.1.54 (e4b0dc22) | codex · codex-cli 0.162.1 · gpt-6.1-sol | 24,846 | 0.995 | 1.88× / 2.94× | 2.66× / 4.67× |
+| 2026-08-05 | v0.1.47-256-gfc68e26-dirty | claude · Claude Code 2.1.178 · claude-sonnet-5 | 30,788 | 0.995 | 2.32× / 4.10× | 3.79× / 7.59× |
+| 2026-08-05 | v0.1.47-256-gfc68e26-dirty | codex · codex-cli 0.146.0-alpha.9.2 · gpt-5.6-sol | 15,418 | 0.995 | 2.22× / 3.92× | 3.26× / 6.42× |
+
+2026-08-05 → 2026-10-28: Changed between the runs: Atlas
+v0.1.47-256-gfc68e26-dirty → 0.1.54 (e4b0dc22); Claude Code 2.1.178 → 2.1.304;
+codex-cli 0.146.0-alpha.9.2 → 0.162.1; Codex model gpt-5.6-sol → gpt-6.1-sol.
+Unchanged: graphify 0.8.49. Atlas's F1 held at 0.995 on both harnesses.
+Claude: Atlas totals up (58,234 → 76,205), harness floor 30,788 → 35,961,
+no-tool F1 0.589 → 0.504, graph-tool totals up (239,026 → 251,586). Codex:
+Atlas totals up (33,471 → 52,776), harness floor 15,418 → 24,846, no-tool F1
+0.831 → 0.941, graph-tool totals up (131,335 → 155,242). Neither run isolates
+a cause for any of these moves. The 2026-10-28 run: Re-scored after the run
+when the scorer learned to strip "::" qualifiers: claude · Graph tool · Errorf
+0.40 → 0.50. The stored answers did not change; every pass is recorded in the
+artifact. Per-run records:
 [AGENT_TOKEN_BENCH_PUBLIC.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json).
 
-One stored answer was re-scored after the run, when the scorer learned to
-strip `::` qualifiers: claude · graph tool · `Errorf` 0.40 → 0.50, which raises
-the graph tool's claude mean from 0.228 to 0.233. Per-run records:
-[AGENT_TOKEN_BENCH_PUBLIC_20261028.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json).
+Per-run records of this run: [AGENT_TOKEN_BENCH_PUBLIC_20261029.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261029.json).
 
 ## Multi-Language Agent Benchmark (2026-10-28)
 
@@ -306,8 +342,9 @@ Read
 [agent-bench/README.md](https://github.com/aziron-ai/atlas/blob/main/agent-bench/README.md)
 for prerequisites, expected external cost, pinned inputs, and interpretation.
 Per-run records are in
-[AGENT_TOKEN_BENCH_PUBLIC_20261028.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json)
-and the per-language `AGENT_TOKEN_BENCH_<LANG>_20261028.json` files beside it;
+[AGENT_TOKEN_BENCH_PUBLIC_20261029.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261029.json)
+(the two earlier logrus runs beside it) and the per-language
+`AGENT_TOKEN_BENCH_<LANG>_20261028.json` files;
 [relevance-bench/README.md](https://github.com/aziron-ai/atlas/blob/main/relevance-bench/README.md)
 covers the relevance harness.
 

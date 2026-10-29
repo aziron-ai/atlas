@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-29T05:47:15.021Z",
+  "generatedAt": "2026-10-29T06:40:52.408Z",
   "version": "0.1.55",
   "report": {
     "label": "Benchmark & field comparison — refreshed at fc3b875 (2026-08-05, shipped in v0.1.51)",
@@ -863,9 +863,10 @@
       }
     },
     "goFlagship": {
-      "label": "Agent-harness token benchmark — 2026-10-28 · Atlas 0.1.54",
-      "date": "2026-10-28",
-      "atlasBuild": "atlas 0.1.54 (e4b0dc22344f8a1713516188b1eb87fbcda6fbb7, 2026-10-27T17:29:37Z)",
+      "label": "Agent-harness token benchmark — 2026-10-29 · Atlas 0.1.55",
+      "date": "2026-10-29",
+      "atlasBuild": "atlas v0.1.52-699-g3790ba95 (3790ba95, 2026-10-29T04:39:52Z)",
+      "atlasRelease": "0.1.55",
       "repo": "sirupsen/logrus",
       "commit7": "a23d315",
       "truth": "gopls call_hierarchy (LSP-truth), frozen at the pinned commit",
@@ -875,47 +876,47 @@
         {
           "agent": "claude",
           "tool": "Atlas",
-          "f1": 0.995,
-          "tokens": 76205,
+          "f1": 0.996,
+          "tokens": 76572,
           "turns": 2
         },
         {
           "agent": "claude",
           "tool": "No tool (raw exploration)",
-          "f1": 0.504,
-          "tokens": 163187,
+          "f1": 0.48,
+          "tokens": 158806,
           "turns": 4.5
         },
         {
           "agent": "claude",
           "tool": "Graph tool",
-          "f1": 0.233,
-          "tokens": 251586,
-          "turns": 7.6
+          "f1": 0.204,
+          "tokens": 289085,
+          "turns": 7.3
         },
         {
           "agent": "codex",
           "tool": "Atlas",
-          "f1": 0.995,
-          "tokens": 52776,
+          "f1": 0.996,
+          "tokens": 34964,
           "turns": 1
         },
         {
           "agent": "codex",
           "tool": "No tool (raw exploration)",
-          "f1": 0.941,
-          "tokens": 99172,
-          "turns": 2.5
+          "f1": 0.987,
+          "tokens": 54655,
+          "turns": 2.1
         },
         {
           "agent": "codex",
           "tool": "Graph tool",
-          "f1": 0.275,
-          "tokens": 155242,
-          "turns": 5.2
+          "f1": 0.29,
+          "tokens": 122985,
+          "turns": 6.5
         }
       ],
-      "why": "A production function has many more callers than a fixture does, spread across files. Given only the graph tool, the two agents spent 3.8× and 5.2× Atlas's turns and still scored F1 0.233–0.275; given Atlas, both answered in 1–2 turns at F1 0.995.",
+      "why": "A production function has many more callers than a fixture does, spread across files. Given only the graph tool, the two agents spent 3.6× and 6.5× Atlas's turns and still scored F1 0.204–0.290; given Atlas, both answered in 1–2 turns at F1 0.996.",
       "caveat": "Cross-agent absolute totals are not comparable — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent."
     }
   },
@@ -4630,9 +4631,13 @@
     }
   ],
   "agentBench": {
-    "label": "Agent-harness token benchmark — 2026-10-28 · Atlas 0.1.54",
-    "date": "2026-10-28",
-    "atlasBuild": "atlas 0.1.54 (e4b0dc22344f8a1713516188b1eb87fbcda6fbb7, 2026-10-27T17:29:37Z)",
+    "label": "Agent-harness token benchmark — 2026-10-29 · Atlas 0.1.55",
+    "date": "2026-10-29",
+    "atlasBuild": "atlas v0.1.52-699-g3790ba95 (3790ba95, 2026-10-29T04:39:52Z)",
+    "atlasRelease": "0.1.55",
+    "atlasVersion": "v0.1.52-699-g3790ba95",
+    "atlasCommit": "3790ba95",
+    "atlasBinary": "the Atlas 0.1.55 release code, built from 3790ba95 (version string v0.1.52-699-g3790ba95)",
     "graphifyVersion": "graphify 0.8.49",
     "repo": "sirupsen/logrus",
     "commit7": "a23d315",
@@ -4649,17 +4654,24 @@
         "id": "claude",
         "model": "claude-sonnet-5",
         "harness": "Claude Code 2.1.304",
-        "calibrationTotal": 35961,
+        "calibrationTotal": 39927,
+        "marginalTokens": {
+          "atlas": 36645,
+          "graphify": 249158,
+          "baseline": 118879
+        },
         "vsAtlas": {
           "graphify": {
-            "totalTokens": 3.3,
-            "billedProxy": 1.44,
-            "turns": 3.79
+            "totalTokens": 3.78,
+            "billedProxy": 1.5,
+            "turns": 3.63,
+            "marginal": 6.8
           },
           "baseline": {
-            "totalTokens": 2.14,
-            "billedProxy": 1.43,
-            "turns": 2.26
+            "totalTokens": 2.07,
+            "billedProxy": 0.91,
+            "turns": 2.26,
+            "marginal": 3.24
           }
         }
       },
@@ -4667,17 +4679,24 @@
         "id": "codex",
         "model": "gpt-6.1-sol",
         "harness": "codex-cli 0.162.1",
-        "calibrationTotal": 24846,
+        "calibrationTotal": 15274,
+        "marginalTokens": {
+          "atlas": 19690,
+          "graphify": 107711,
+          "baseline": 39381
+        },
         "vsAtlas": {
           "graphify": {
-            "totalTokens": 2.94,
-            "billedProxy": 1.08,
-            "turns": 5.21
+            "totalTokens": 3.52,
+            "billedProxy": 1.83,
+            "turns": 6.53,
+            "marginal": 5.47
           },
           "baseline": {
-            "totalTokens": 1.88,
-            "billedProxy": 1.26,
-            "turns": 2.53
+            "totalTokens": 1.56,
+            "billedProxy": 1.38,
+            "turns": 2.05,
+            "marginal": 2
           }
         }
       }
@@ -4686,12 +4705,12 @@
       {
         "agent": "claude",
         "mode": "atlas",
-        "totalTokens": 76205,
-        "billedProxy": 7948,
-        "outputTokens": 353,
+        "totalTokens": 76572,
+        "billedProxy": 9977,
+        "outputTokens": 352,
         "turns": 2,
-        "f1": 0.995,
-        "wallS": 10.2,
+        "f1": 0.996,
+        "wallS": 11,
         "ok": 19,
         "n": 19,
         "emptyAnswers": 0
@@ -4699,12 +4718,12 @@
       {
         "agent": "claude",
         "mode": "baseline",
-        "totalTokens": 163187,
-        "billedProxy": 11336,
-        "outputTokens": 908,
+        "totalTokens": 158806,
+        "billedProxy": 9103,
+        "outputTokens": 831,
         "turns": 4.5,
-        "f1": 0.504,
-        "wallS": 17.8,
+        "f1": 0.48,
+        "wallS": 16.7,
         "ok": 19,
         "n": 19,
         "emptyAnswers": 0
@@ -4712,12 +4731,12 @@
       {
         "agent": "claude",
         "mode": "graphify",
-        "totalTokens": 251586,
-        "billedProxy": 11429,
-        "outputTokens": 1707,
-        "turns": 7.6,
-        "f1": 0.233,
-        "wallS": 33.4,
+        "totalTokens": 289085,
+        "billedProxy": 14990,
+        "outputTokens": 2118,
+        "turns": 7.3,
+        "f1": 0.204,
+        "wallS": 40.2,
         "ok": 19,
         "n": 19,
         "emptyAnswers": 0
@@ -4725,12 +4744,12 @@
       {
         "agent": "codex",
         "mode": "atlas",
-        "totalTokens": 52776,
-        "billedProxy": 13440,
-        "outputTokens": 191,
+        "totalTokens": 34964,
+        "billedProxy": 7221,
+        "outputTokens": 192,
         "turns": 1,
-        "f1": 0.995,
-        "wallS": 8.7,
+        "f1": 0.996,
+        "wallS": 12.6,
         "ok": 19,
         "n": 19,
         "emptyAnswers": 0
@@ -4738,12 +4757,12 @@
       {
         "agent": "codex",
         "mode": "baseline",
-        "totalTokens": 99172,
-        "billedProxy": 16881,
-        "outputTokens": 210,
-        "turns": 2.5,
-        "f1": 0.941,
-        "wallS": 12.9,
+        "totalTokens": 54655,
+        "billedProxy": 9963,
+        "outputTokens": 207,
+        "turns": 2.1,
+        "f1": 0.987,
+        "wallS": 16.4,
         "ok": 19,
         "n": 19,
         "emptyAnswers": 0
@@ -4751,102 +4770,280 @@
       {
         "agent": "codex",
         "mode": "graphify",
-        "totalTokens": 155242,
-        "billedProxy": 14537,
-        "outputTokens": 235,
-        "turns": 5.2,
-        "f1": 0.275,
-        "wallS": 19.2,
+        "totalTokens": 122985,
+        "billedProxy": 13215,
+        "outputTokens": 277,
+        "turns": 6.5,
+        "f1": 0.29,
+        "wallS": 32.8,
         "ok": 19,
         "n": 19,
-        "emptyAnswers": 0
+        "emptyAnswers": 7
       }
     ],
     "atlasF1": {
-      "claude": 0.995,
-      "codex": 0.995
+      "claude": 0.996,
+      "codex": 0.996
     },
     "caveat": "Cross-agent absolute totals are not comparable — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent.",
     "billedProxyNote": "billed-proxy = fresh input + cache writes + output (codex: fresh input + output); cache reads bill at ~10% and are excluded.",
     "ratioNote": "Ratios are the other mode's mean over Atlas's mean, computed from the unrounded per-run means.",
-    "artifact": "data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json",
+    "marginalNote": "Marginal = mean total tokens − the harness floor, where the floor is what the same harness spends on a no-tool “Reply with exactly: OK” before any question (its calibration run); the marginal ratio leaves out that one fixed cost, which otherwise sits on both sides of every total ratio and pulls it toward 1.",
+    "artifact": "data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261029.json",
     "suiteCmd": "python3 agent-bench/agent_token_bench.py --setup --agents auto \\\n    --modes atlas,graphify,baseline \\\n    --qa-set agent-bench/QA_SET_logrus.json --workdir agentbench-work",
     "suiteNeeds": "python3, git, atlas on PATH, graphify (uv tool install graphifyy), and claude and/or codex logged in",
-    "rescoreNote": "Re-scored after the run when the scorer learned to strip \"::\" qualifiers: claude · Graph tool · Errorf 0.40 → 0.50. The stored answers did not change; every pass is recorded in the artifact.",
+    "emptyNote": "7 of codex's 19 graph tool runs finished without naming any function; each is scored F1 0, not dropped, and its tokens count.",
     "supersedes": {
-      "label": "Agent-harness token benchmark — 2026-08-05 · Atlas 0.1.47-256-gfc68e26-dirty",
-      "date": "2026-08-05",
-      "atlasBuild": "atlas v0.1.47-256-gfc68e26-dirty (fc68e26, 2026-08-05T06:32:22Z)",
+      "label": "Agent-harness token benchmark — 2026-10-28 · Atlas 0.1.54",
+      "date": "2026-10-28",
+      "atlasBuild": "atlas 0.1.54 (e4b0dc22344f8a1713516188b1eb87fbcda6fbb7, 2026-10-27T17:29:37Z)",
+      "atlasRelease": "0.1.54",
+      "atlasBinary": "the released Atlas 0.1.54 (e4b0dc22)",
       "graphifyVersion": "graphify 0.8.49",
       "harnesses": {
-        "claude": "Claude Code 2.1.178",
-        "codex": "codex-cli 0.146.0-alpha.9.2"
+        "claude": "Claude Code 2.1.304",
+        "codex": "codex-cli 0.162.1"
       },
       "models": {
         "claude": "claude-sonnet-5",
-        "codex": "gpt-5.6-sol"
+        "codex": "gpt-6.1-sol"
       },
       "calibration": {
-        "claude": 30788,
-        "codex": 15418
+        "claude": 35961,
+        "codex": 24846
       },
       "vsAtlasTotalTokens": {
         "claude": {
-          "baseline": 2.32,
-          "graphify": 4.1
+          "baseline": 2.14,
+          "graphify": 3.3
         },
         "codex": {
-          "baseline": 2.22,
-          "graphify": 3.92
+          "baseline": 1.88,
+          "graphify": 2.94
+        }
+      },
+      "vsAtlasMarginal": {
+        "claude": {
+          "baseline": 3.16,
+          "graphify": 5.36
+        },
+        "codex": {
+          "baseline": 2.66,
+          "graphify": 4.67
         }
       },
       "cells": [
         {
           "agent": "claude",
           "mode": "atlas",
-          "totalTokens": 58234,
+          "totalTokens": 76205,
           "turns": 2,
           "f1": 0.995
         },
         {
           "agent": "claude",
           "mode": "baseline",
-          "totalTokens": 134886,
-          "turns": 4.7,
-          "f1": 0.589
+          "totalTokens": 163187,
+          "turns": 4.5,
+          "f1": 0.504
         },
         {
           "agent": "claude",
           "mode": "graphify",
-          "totalTokens": 239026,
-          "turns": 7.7,
-          "f1": 0.203
+          "totalTokens": 251586,
+          "turns": 7.6,
+          "f1": 0.233
         },
         {
           "agent": "codex",
           "mode": "atlas",
-          "totalTokens": 33471,
+          "totalTokens": 52776,
           "turns": 1,
           "f1": 0.995
         },
         {
           "agent": "codex",
           "mode": "baseline",
-          "totalTokens": 74229,
-          "turns": 3.3,
-          "f1": 0.831
+          "totalTokens": 99172,
+          "turns": 2.5,
+          "f1": 0.941
         },
         {
           "agent": "codex",
           "mode": "graphify",
-          "totalTokens": 131335,
-          "turns": 12.7,
-          "f1": 0.379
+          "totalTokens": 155242,
+          "turns": 5.2,
+          "f1": 0.275
         }
       ],
-      "artifact": "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json",
-      "why": "The gap narrowed. Atlas's F1 did not move (claude 0.995 → 0.995, codex 0.995 → 0.995). Two measured changes account for part of it: each harness's fixed floor rose (claude +5,173, codex +9,428 tokens), and a larger floor added to both sides pulls every ratio toward 1; and the newer codex is stronger without help (no-tool F1 0.831 → 0.941, 3.3 → 2.5 turns). Atlas's own per-question totals rose too (claude 58,234 → 76,205, codex 33,471 → 52,776); this run does not isolate why."
-    }
+      "artifact": "data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json",
+      "moved": "Changed between the runs: Atlas 0.1.54 (e4b0dc22) → 0.1.55 (3790ba95). Unchanged: Claude Code 2.1.304 with claude-sonnet-5, codex-cli 0.162.1 with gpt-6.1-sol, graphify 0.8.49. Atlas's F1 0.995 → 0.996 on both harnesses. Claude: Atlas totals flat (76,205 → 76,572), harness floor 35,961 → 39,927, no-tool F1 0.504 → 0.480, graph-tool totals up (251,586 → 289,085). Codex: Atlas totals down (52,776 → 34,964), harness floor 24,846 → 15,274, no-tool F1 0.941 → 0.987, graph-tool totals down (155,242 → 122,985). Neither run isolates a cause for any of these moves."
+    },
+    "history": [
+      {
+        "date": "2026-10-29",
+        "label": "Agent-harness token benchmark — 2026-10-29 · Atlas 0.1.55",
+        "current": true,
+        "atlasBuild": "atlas v0.1.52-699-g3790ba95 (3790ba95, 2026-10-29T04:39:52Z)",
+        "atlasRelease": "0.1.55",
+        "atlasVersion": "v0.1.52-699-g3790ba95",
+        "atlasCommit": "3790ba95",
+        "graphifyVersion": "graphify 0.8.49",
+        "agents": [
+          {
+            "id": "claude",
+            "harness": "Claude Code 2.1.304",
+            "model": "claude-sonnet-5",
+            "calibrationTotal": 39927,
+            "atlasF1": 0.996,
+            "vsAtlasTotalTokens": {
+              "baseline": 2.07,
+              "graphify": 3.78
+            },
+            "vsAtlasMarginal": {
+              "baseline": 3.24,
+              "graphify": 6.8
+            },
+            "marginalTokens": {
+              "atlas": 36645,
+              "graphify": 249158,
+              "baseline": 118879
+            }
+          },
+          {
+            "id": "codex",
+            "harness": "codex-cli 0.162.1",
+            "model": "gpt-6.1-sol",
+            "calibrationTotal": 15274,
+            "atlasF1": 0.996,
+            "vsAtlasTotalTokens": {
+              "baseline": 1.56,
+              "graphify": 3.52
+            },
+            "vsAtlasMarginal": {
+              "baseline": 2,
+              "graphify": 5.47
+            },
+            "marginalTokens": {
+              "atlas": 19690,
+              "graphify": 107711,
+              "baseline": 39381
+            }
+          }
+        ],
+        "emptyNote": "7 of codex's 19 graph tool runs finished without naming any function; each is scored F1 0, not dropped, and its tokens count.",
+        "artifact": "data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261029.json",
+        "moved": "Changed between the runs: Atlas 0.1.54 (e4b0dc22) → 0.1.55 (3790ba95). Unchanged: Claude Code 2.1.304 with claude-sonnet-5, codex-cli 0.162.1 with gpt-6.1-sol, graphify 0.8.49. Atlas's F1 0.995 → 0.996 on both harnesses. Claude: Atlas totals flat (76,205 → 76,572), harness floor 35,961 → 39,927, no-tool F1 0.504 → 0.480, graph-tool totals up (251,586 → 289,085). Codex: Atlas totals down (52,776 → 34,964), harness floor 24,846 → 15,274, no-tool F1 0.941 → 0.987, graph-tool totals down (155,242 → 122,985). Neither run isolates a cause for any of these moves."
+      },
+      {
+        "date": "2026-10-28",
+        "label": "Agent-harness token benchmark — 2026-10-28 · Atlas 0.1.54",
+        "current": false,
+        "atlasBuild": "atlas 0.1.54 (e4b0dc22344f8a1713516188b1eb87fbcda6fbb7, 2026-10-27T17:29:37Z)",
+        "atlasRelease": "0.1.54",
+        "atlasVersion": "0.1.54",
+        "atlasCommit": "e4b0dc22",
+        "graphifyVersion": "graphify 0.8.49",
+        "agents": [
+          {
+            "id": "claude",
+            "harness": "Claude Code 2.1.304",
+            "model": "claude-sonnet-5",
+            "calibrationTotal": 35961,
+            "atlasF1": 0.995,
+            "vsAtlasTotalTokens": {
+              "baseline": 2.14,
+              "graphify": 3.3
+            },
+            "vsAtlasMarginal": {
+              "baseline": 3.16,
+              "graphify": 5.36
+            },
+            "marginalTokens": {
+              "atlas": 40244,
+              "graphify": 215625,
+              "baseline": 127226
+            }
+          },
+          {
+            "id": "codex",
+            "harness": "codex-cli 0.162.1",
+            "model": "gpt-6.1-sol",
+            "calibrationTotal": 24846,
+            "atlasF1": 0.995,
+            "vsAtlasTotalTokens": {
+              "baseline": 1.88,
+              "graphify": 2.94
+            },
+            "vsAtlasMarginal": {
+              "baseline": 2.66,
+              "graphify": 4.67
+            },
+            "marginalTokens": {
+              "atlas": 27930,
+              "graphify": 130396,
+              "baseline": 74326
+            }
+          }
+        ],
+        "rescoreNote": "Re-scored after the run when the scorer learned to strip \"::\" qualifiers: claude · Graph tool · Errorf 0.40 → 0.50. The stored answers did not change; every pass is recorded in the artifact.",
+        "artifact": "data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json",
+        "moved": "Changed between the runs: Atlas v0.1.47-256-gfc68e26-dirty → 0.1.54 (e4b0dc22); Claude Code 2.1.178 → 2.1.304; codex-cli 0.146.0-alpha.9.2 → 0.162.1; Codex model gpt-5.6-sol → gpt-6.1-sol. Unchanged: graphify 0.8.49. Atlas's F1 held at 0.995 on both harnesses. Claude: Atlas totals up (58,234 → 76,205), harness floor 30,788 → 35,961, no-tool F1 0.589 → 0.504, graph-tool totals up (239,026 → 251,586). Codex: Atlas totals up (33,471 → 52,776), harness floor 15,418 → 24,846, no-tool F1 0.831 → 0.941, graph-tool totals up (131,335 → 155,242). Neither run isolates a cause for any of these moves."
+      },
+      {
+        "date": "2026-08-05",
+        "label": "Agent-harness token benchmark — 2026-08-05 · Atlas 0.1.47-256-gfc68e26-dirty",
+        "current": false,
+        "atlasBuild": "atlas v0.1.47-256-gfc68e26-dirty (fc68e26, 2026-08-05T06:32:22Z)",
+        "atlasRelease": null,
+        "atlasVersion": "v0.1.47-256-gfc68e26-dirty",
+        "atlasCommit": "fc68e26",
+        "graphifyVersion": "graphify 0.8.49",
+        "agents": [
+          {
+            "id": "claude",
+            "harness": "Claude Code 2.1.178",
+            "model": "claude-sonnet-5",
+            "calibrationTotal": 30788,
+            "atlasF1": 0.995,
+            "vsAtlasTotalTokens": {
+              "baseline": 2.32,
+              "graphify": 4.1
+            },
+            "vsAtlasMarginal": {
+              "baseline": 3.79,
+              "graphify": 7.59
+            },
+            "marginalTokens": {
+              "atlas": 27446,
+              "graphify": 208238,
+              "baseline": 104098
+            }
+          },
+          {
+            "id": "codex",
+            "harness": "codex-cli 0.146.0-alpha.9.2",
+            "model": "gpt-5.6-sol",
+            "calibrationTotal": 15418,
+            "atlasF1": 0.995,
+            "vsAtlasTotalTokens": {
+              "baseline": 2.22,
+              "graphify": 3.92
+            },
+            "vsAtlasMarginal": {
+              "baseline": 3.26,
+              "graphify": 6.42
+            },
+            "marginalTokens": {
+              "atlas": 18053,
+              "graphify": 115917,
+              "baseline": 58811
+            }
+          }
+        ],
+        "artifact": "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json"
+      }
+    ]
   },
   "agentBenchLanguages": {
     "label": "Multi-language agent benchmark — 2026-10-28 · 8 languages × 2 agents × 3 modes",
@@ -7541,13 +7738,19 @@
       "name": "AGENT_TOKEN_BENCH_PUBLIC.json",
       "path": "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json",
       "tier": "carried",
-      "note": "SUPERSEDED by AGENT_TOKEN_BENCH_PUBLIC_20261028.json — the 2026-08-05 agent-harness run, kept so the previously published table stays auditable"
+      "note": "SUPERSEDED by AGENT_TOKEN_BENCH_PUBLIC_20261029.json — the 2026-08-05 agent-harness run (Atlas v0.1.47-256-gfc68e26-dirty), kept in the run history so its published table stays auditable"
     },
     {
       "name": "AGENT_TOKEN_BENCH_PUBLIC_20261028.json",
       "path": "data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json",
+      "tier": "carried",
+      "note": "SUPERSEDED by AGENT_TOKEN_BENCH_PUBLIC_20261029.json — the 2026-10-28 agent-harness run (Atlas 0.1.54), kept in the run history so its published table stays auditable"
+    },
+    {
+      "name": "AGENT_TOKEN_BENCH_PUBLIC_20261029.json",
+      "path": "data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261029.json",
       "tier": "fresh",
-      "note": "agent-harness end-to-end token usage, 2026-10-28 (claude + codex, 114 per-run records)"
+      "note": "agent-harness end-to-end token usage, 2026-10-29, Atlas 0.1.55 (claude + codex, 114 per-run records)"
     },
     {
       "name": "AGENT_TOKEN_BENCH_GO_20261028.json",

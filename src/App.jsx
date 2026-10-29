@@ -551,7 +551,7 @@ function ExecSummary({ data }) {
             <span style={{ fontSize: 15, color: "var(--danger)" }}>vs {f1fmt(r.goFlagship.rows.find((x) => x.agent === "claude" && x.tool === "Graph tool")?.f1)}</span>
           </div>
           <p className="mt-1" style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
-            On {r.goFlagship.repo} against gopls call-hierarchy truth ({r.goFlagship.date || "agent run"}), two real agent
+            On {r.goFlagship.repo} against gopls call-hierarchy truth ({r.goFlagship.date || "agent run"}{r.goFlagship.atlasRelease ? `, Atlas ${r.goFlagship.atlasRelease}` : ""}), two real agent
             harnesses restricted to one tool each. {r.goFlagship.why.replace(/^A production function[^.]*\.\s*/, "")}
           </p>
           <div className="mt-4">
@@ -1463,7 +1463,7 @@ function RealRepo({ data }) {
         <div className="grid gap-4 lg:grid-cols-3">
           <div className="panel min-w-0 p-5">
             <div className="flex items-start justify-between gap-2">
-              <div className="kicker">Go flagship · {flagship.repo}{flagship.date ? ` · ${flagship.date}` : ""}</div>
+              <div className="kicker">Go flagship · {flagship.repo}{flagship.date ? ` · ${flagship.date}` : ""}{flagship.atlasRelease ? ` · Atlas ${flagship.atlasRelease}` : ""}</div>
               <EvidenceTag kind="LSP-truth" />
             </div>
             <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>
@@ -1592,6 +1592,7 @@ function AgentPanel({ agentMeta, cells }) {
               <div className="mono mt-1 flex flex-wrap gap-x-4" style={{ fontSize: 10.5, color: "var(--faint)" }}>
                 <span>F1 {r.f1 == null ? "—" : r.f1.toFixed(3)}</span>
                 <span>{r.turns == null ? "—" : r.turns} turns</span>
+                {agentMeta.marginalTokens?.[r.mode] != null && <span>{num(agentMeta.marginalTokens[r.mode])} above floor</span>}
                 <span>{num(r.billedProxy)} billed-proxy tok</span>
                 <span>{r.wallS == null ? "—" : r.wallS} s</span>
                 <span>{r.ok}/{r.n} ok</span>
@@ -1614,6 +1615,126 @@ function AgentPanel({ agentMeta, cells }) {
           ) : null
         ))}
       </div>
+      {Object.values(agentMeta.vsAtlas || {}).some((v) => v?.marginal != null) && (
+        <div className="mono mt-2 flex flex-wrap gap-2" style={{ fontSize: 11 }} data-testid={`agent-marginal-chips-${agentMeta.id}`}>
+          {Object.entries(agentMeta.vsAtlas || {}).map(([m, v]) => (
+            v?.marginal != null ? (
+              <span key={m} className="chip" title="ratio of mean total tokens minus the harness floor">
+                {MODE_LABELS[m] || m}: {xfmt(v.marginal)} above the floor
+              </span>
+            ) : null
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+const atlasTag = (row) => (row.atlasRelease ? `${row.atlasRelease}${row.atlasCommit ? ` · ${row.atlasCommit}` : ""}` : row.atlasVersion || "—");
+const ratioPair = (v) => `${xfmt(v?.baseline)} / ${xfmt(v?.graphify)}`;
+
+function AgentMarginal({ ab }) {
+  const rows = ab.agents.filter((a) => a.marginalTokens);
+  if (!rows.length) return null;
+  return (
+    <div className="panel mt-4 p-5" data-testid="agent-marginal">
+      <div className="flex items-start justify-between gap-2">
+        <div className="kicker">Marginal cost · tokens above each harness's floor · {ab.date}</div>
+        <EvidenceTag kind="agent-harness" />
+      </div>
+      <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--muted)" }}>{ab.marginalNote}</p>
+      <div className="tablewrap mt-3">
+        <table className="dtable" style={{ minWidth: 760 }}>
+          <thead>
+            <tr>
+              <th>agent</th>
+              <th>floor</th>
+              <th>Atlas</th>
+              <th>no tool</th>
+              <th>graph tool</th>
+              <th>marginal × (no tool / graph)</th>
+              <th>total × (no tool / graph)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((a) => (
+              <tr key={a.id} data-testid="agent-marginal-row">
+                <td className="mono" style={{ fontSize: 11.5 }}>{a.id}</td>
+                <td className="num">{num(a.calibrationTotal)}</td>
+                <td className="num" style={{ color: "var(--primary)", fontWeight: 700 }}>{num(a.marginalTokens.atlas)}</td>
+                <td className="num">{num(a.marginalTokens.baseline)}</td>
+                <td className="num">{num(a.marginalTokens.graphify)}</td>
+                <td className="num" style={{ whiteSpace: "nowrap", color: "var(--g2)", fontWeight: 700 }}>{xfmt(a.vsAtlas.baseline?.marginal)} / {xfmt(a.vsAtlas.graphify?.marginal)}</td>
+                <td className="num" style={{ whiteSpace: "nowrap", color: "var(--muted)" }}>{xfmt(a.vsAtlas.baseline?.totalTokens)} / {xfmt(a.vsAtlas.graphify?.totalTokens)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="mono mt-2" style={{ fontSize: 11, color: "var(--faint)" }}>
+        Mean tokens per question above the floor; ratios from the unrounded per-run means. The same view for the two earlier runs is in the run history below.
+      </p>
+    </div>
+  );
+}
+
+function AgentHistory({ ab }) {
+  const H = ab.history;
+  if (!H || H.length < 2) return null;
+  const agents = H[0].agents.map((a) => a.id);
+  const per = (row, render, wrap = false) => agents.map((id) => {
+    const a = row.agents.find((x) => x.id === id);
+    return <div key={id} style={{ whiteSpace: wrap ? "normal" : "nowrap" }}><span style={{ color: "var(--faint)" }}>{id} </span>{a ? render(a) : "—"}</div>;
+  });
+  return (
+    <div className="panel mt-4 p-5" data-testid="agent-history">
+      <div className="kicker">Run history · this run and the {H.length - 1} before it</div>
+      <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--muted)" }}>
+        Same repository, pinned commit and {ab.nQuestions} questions in every run. Each row names the Atlas build, harnesses and models it ran and
+        each harness's floor; the floors moved between runs, which is why the marginal ratios sit beside the total ones.
+      </p>
+      <div className="tablewrap mt-3">
+        <table className="dtable" style={{ minWidth: 900 }}>
+          <thead>
+            <tr>
+              <th>run</th>
+              <th>Atlas build</th>
+              <th>harness · model</th>
+              <th>floor</th>
+              <th>Atlas F1</th>
+              <th>total × (no tool / graph)</th>
+              <th>marginal × (no tool / graph)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {H.map((row) => (
+              <tr key={row.date} data-testid="agent-history-row">
+                <td className="mono" style={{ fontSize: 11.5, whiteSpace: "nowrap" }}>
+                  {row.date}
+                  {row.current && <div style={{ color: "var(--primary)" }}>current</div>}
+                  <div>
+                    <a className="link focusring" href={row.artifact} download title={basename(row.artifact)}>records ↓</a>
+                  </div>
+                </td>
+                <td className="mono" style={{ fontSize: 11.5, maxWidth: 150, overflowWrap: "anywhere" }} title={row.atlasBuild || ""}>{atlasTag(row)}</td>
+                <td className="mono" style={{ fontSize: 11.5 }}>{per(row, (a) => `${a.harness} · ${a.model}`, true)}</td>
+                <td className="num">{per(row, (a) => num(a.calibrationTotal))}</td>
+                <td className="num">{per(row, (a) => f1fmt(a.atlasF1))}</td>
+                <td className="num">{per(row, (a) => ratioPair(a.vsAtlasTotalTokens))}</td>
+                <td className="num" style={{ color: "var(--g2)", fontWeight: 700 }}>{per(row, (a) => ratioPair(a.vsAtlasMarginal))}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <ul className="mt-3 flex flex-col gap-2" style={{ fontSize: 12, lineHeight: 1.55, color: "var(--muted)" }}>
+        {H.map((row, i) => ({ row, prev: H[i + 1] })).slice(1).filter(({ row, prev }) => row.moved && prev).map(({ row, prev }) => (
+          <li key={row.date}>
+            <span className="mono" style={{ color: "var(--faint)" }}>{prev.date} → {row.date}:</span> {row.moved}
+            {row.rescoreNote && <span style={{ color: "var(--faint)" }}> The {row.date} run: {row.rescoreNote}</span>}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -1654,7 +1775,7 @@ function AgentBench({ data }) {
         Context-size benchmarks measure the tool's output. This measures the whole loop: Claude Code and OpenAI Codex
         run headless in a checkout of {ab.repo} (@{ab.commit7}), restricted to one code-intelligence CLI per run, and the
         harness's own token accounting is recorded — {ab.nQuestions} caller questions, ground truth {ab.truth}.
-        Measured {ab.date} on the released {ab.atlasBuild ? ab.atlasBuild.replace(/\s*\(.*$/, "") : "Atlas"} binary.
+        Measured {ab.date} on {ab.atlasBinary || ab.atlasBuild || "Atlas"}.
       </SectionHeader>
 
       <div className="grid gap-4 lg:grid-cols-2" data-testid="agent-panels">
@@ -1663,23 +1784,29 @@ function AgentBench({ data }) {
         ))}
       </div>
 
+      <AgentMarginal ab={ab} />
+
       {sup && (
         <div className="panel mt-4 p-5" data-testid="agent-supersedes" style={{ borderStyle: "dashed" }}>
-          <div className="kicker" style={{ color: "var(--warning)" }}>Replaces the {sup.date} run</div>
+          <div className="kicker" style={{ color: "var(--warning)" }}>Replaces the {sup.date} run · what moved</div>
           <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--muted)" }}>
-            The table this page published before ran {sup.atlasBuild ? sup.atlasBuild.replace(/\s*\(.*$/, "") : "an earlier build"} with{" "}
+            The table this page published before ran {sup.atlasBinary || sup.atlasBuild || "an earlier build"} with{" "}
             {ab.agents.map((a) => `${sup.harnesses?.[a.id] || a.id} / ${sup.models?.[a.id] || "default model"}`).join(" and ")}; it measured{" "}
             {ab.agents.map((a) => `${a.id} ${xfmt(sup.vsAtlasTotalTokens?.[a.id]?.baseline)} / ${xfmt(sup.vsAtlasTotalTokens?.[a.id]?.graphify)}`).join(", ")}{" "}
-            (no tool / graph tool over Atlas, total tokens). This run, with {ab.agents.map((a) => `${a.harness} / ${a.model}`).join(" and ")}, measures{" "}
-            {ab.agents.map((a) => `${a.id} ${xfmt(a.vsAtlas.baseline?.totalTokens)} / ${xfmt(a.vsAtlas.graphify?.totalTokens)}`).join(", ")}.
+            (no tool / graph tool over Atlas, total tokens; {ab.agents.map((a) => `${a.id} ${xfmt(sup.vsAtlasMarginal?.[a.id]?.baseline)} / ${xfmt(sup.vsAtlasMarginal?.[a.id]?.graphify)}`).join(", ")} marginal).
+            This run, with {ab.agents.map((a) => `${a.harness} / ${a.model}`).join(" and ")}, measures{" "}
+            {ab.agents.map((a) => `${a.id} ${xfmt(a.vsAtlas.baseline?.totalTokens)} / ${xfmt(a.vsAtlas.graphify?.totalTokens)}`).join(", ")}{" "}
+            ({ab.agents.map((a) => `${a.id} ${xfmt(a.vsAtlas.baseline?.marginal)} / ${xfmt(a.vsAtlas.graphify?.marginal)}`).join(", ")} marginal).
           </p>
-          <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--muted)" }}>{sup.why}</p>
+          <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--text)" }} data-testid="agent-moved">{sup.moved}</p>
           <p className="mono mt-2" style={{ fontSize: 11, color: "var(--faint)" }}>
             Superseded per-run records:{" "}
             <a className="link focusring" href={sup.artifact} download>{basename(sup.artifact)}</a>.
           </p>
         </div>
       )}
+
+      <AgentHistory ab={ab} />
 
       <RunYourself
         testId="agent-run-yourself"
@@ -1691,7 +1818,7 @@ function AgentBench({ data }) {
         hrefLabel="agent-bench/"
       >
         <p className="mono mt-3" style={{ fontSize: 11, color: "var(--faint)" }}>
-          {ab.caveat} {ab.billedProxyNote} {ab.ratioNote} {ab.rescoreNote} Graph tool: {ab.graphifyVersion}. Raw per-run records:{" "}
+          {ab.caveat} {ab.billedProxyNote} {ab.ratioNote} {ab.emptyNote} {ab.rescoreNote} Graph tool: {ab.graphifyVersion}. Raw per-run records:{" "}
           <a className="link focusring" href={ab.artifact} download>{basename(ab.artifact)}</a>.
         </p>
       </RunYourself>
