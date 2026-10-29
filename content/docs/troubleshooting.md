@@ -29,6 +29,13 @@ for the harder cases follow the table.
 | `atlas: command not found` | Check `command -v atlas` and `$PATH`; reinstall via your channel — `brew reinstall --cask aziron-ai/atlas/atlas` or `npm install -g @aziron/atlas` (verify `npm prefix -g` is on PATH) |
 | Results are stale or from the wrong repository | `atlas index .` then `atlas status`; pin scope with `atlas --repo /absolute/path status`; if still stale, `atlas doctor` then `atlas index . --reindex` |
 | `workspace_required` from MCP | Supply a workspace root, `workspace`, `repo_id`, or launch-time `--repo`. Atlas does not silently select a repository for scoped requests |
+| An answer opens with `stale: indexed … vs head …`, or carries `stale: true` | The checkout has moved past the snapshot that answered; `stale_reason` says how (`head_moved`, `working_tree_dirty`, …). Run `atlas index .`. A one-shot CLI command never refreshes in the background and says `refresh_skipped: "one_shot"`; set `ATLAS_ONESHOT_REFRESH=sync` to refresh before answering, or let a running `serve`, `mcp` or `watch` keep the index fresh ([#59](https://github.com/aziron-ai/atlas/issues/59), [#141](https://github.com/aziron-ai/atlas/issues/141)) |
+| `workspace_not_indexed` naming `searched_stores` and a `checkout` | No repository in the searched store owns the path. Read the `checkout` diagnosis: `content_differs` means the same repository at another commit or with uncommitted edits — index it, or read the existing index explicitly with `--db <dsn> --repo <repo_id>`; `not_a_git_checkout` means a plain copy, which is never matched to another checkout's index — index the directory itself. An index written to another store is reached only through `--db` ([#42](https://github.com/aziron-ai/atlas/issues/42)) |
+| `ambiguous_repo` with `candidates[]` | Several indexed repositories match the path. Pin one: `--repo <repo_id>` on the CLI, `repo_id` over MCP ([#42](https://github.com/aziron-ai/atlas/issues/42)) |
+| MCP on Windows finds no repository for the client's roots | Since 0.1.55, `file:///C:/…`, VS Code's `file:///c%3A/…`, UNC and plain `C:\` roots resolve. A refusal with `scope_source: "roots"` lists each root it tried in `roots_tried[]` and what is at that path; if none is the repository, pass `workspace` with its path. Windows-host behaviour is verified by tests, not yet on a Windows machine ([#72](https://github.com/aziron-ai/atlas/issues/72)) |
+| `stats` or `status` shows `telemetry unavailable_read_only` | Expected under `--read-only`, which attaches no telemetry sink; the index-run fields still come from the snapshot rows. Add `--telemetry-db PATH` to `--read-only` to attach one ([#154](https://github.com/aziron-ai/atlas/issues/154)) |
+| `code_query` answers `insufficient` with `reason: citations_below_relevance_floor` | With `require_citations: true`, the code Atlas retrieved does not carry what the question names; the `relevance` block lists the terms nothing matched and `low_confidence_hits` the nearest candidates. Ask with the identifier, file or path you mean ([#60](https://github.com/aziron-ai/atlas/issues/60)) |
+| A read-only reader or server returns `store_superseded` or `store_upgrading` | Another Atlas moved the store to a different schema generation (reconnect with a matching binary) or a migration is in flight (retry after a wait). Crash residue that left graph tables missing is healed by `atlas index . --reindex` ([#130](https://github.com/aziron-ai/atlas/issues/130)) |
 | SQLite is busy or locked | Stop `atlas serve`, `atlas watch`, and supervised MCP processes; inspect the owner with `lsof "$PWD/.atlas/atlas.db"`; run maintenance serially after all writers exit |
 | Retrieval reports `sql_fallback` | The lexical (BM25) sidecar is empty or wedged while the graph stays readable. Run `atlas doctor` to confirm, stop other Atlas processes, then `atlas compact --rebuild-lexical` and re-check with `atlas doctor` |
 | `index` warns `lexical sidecar unavailable, indexing without it` | A warning, not a failure — the graph indexed fine. Another Atlas process held the sidecar lock (~2s timeout). It self-heals via lazy backfill; or stop other Atlas processes and run `atlas compact --rebuild-lexical`. See **The lexical sidecar** below |
@@ -124,7 +131,10 @@ wrong fix.
 - **`atlas status`** reports storage/version health: the schema and
   index-format contracts plus per-repo snapshot format state. Add `--schema`
   to see the schema/index-format/lexical/MCP contract versions and per-repo
-  snapshot format drift.
+  snapshot format drift. Since 0.1.55, `--repo <path>` scopes the report to
+  one repository and refuses an unknown one exactly as `stats` does, and a
+  checkout served by another checkout's index shows `repo_scope.workspace_reuse`
+  ([#155](https://github.com/aziron-ai/atlas/issues/155), [#42](https://github.com/aziron-ai/atlas/issues/42)).
 - **`atlas migrate`** is the corresponding fix for schema findings: it applies
   storage migrations and reports the active contracts. `--all --root DIR`
   migrates every local SQLite database under a directory.
@@ -139,7 +149,10 @@ When you need runtime evidence rather than a health verdict, look here:
 - **Observability database:** telemetry is stored in `telemetry.db` beside the
   graph database by default; relocate it with `--telemetry-db PATH`. With
   `--read-only`, no `telemetry.db` is created unless you pass
-  `--telemetry-db` explicitly.
+  `--telemetry-db` explicitly. Since 0.1.55 `stats`, `status` and `doctor`
+  carry a `telemetry` block that says so — `unavailable_read_only`, with the
+  remedy — rather than leaving fields out
+  ([#154](https://github.com/aziron-ai/atlas/issues/154)).
 - **`atlas sync status`** (connected fleets only) shows uplink configuration,
   kill switches, and per-stream cursors.
 
