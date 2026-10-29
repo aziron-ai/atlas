@@ -1759,6 +1759,7 @@ communities  total 2  shown 2  multi_member 1  singletons 1  isolated 1
         <>
           <p className="docs-lead">Atlas publishes benchmark results for accuracy, token use, latency, language compatibility, and agent workflows. Use this page to interpret those numbers correctly — every result is a dated measurement under stated conditions, not a general guarantee.</p>
           <p><a className="text-link" href="https://atlas.aziro.com/#benchmarks" target="_blank" rel="noreferrer">Open the Atlas benchmark explorer</a></p>
+          <p>What 0.1.55 adds to the evidence, a labelled relevance benchmark with a regression gate and the multi-language agent benchmark, is summarised in the <a className="text-link" href="#docs/upgrade">0.1.55 release notes</a>.</p>
           <ProseSection title="How to Read a Result">
             <p>Work through this checklist before comparing tools or quoting a number — a result you cannot place in it is not evidence:</p>
             <ol className="docs-list numbered">
