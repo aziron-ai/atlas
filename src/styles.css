@@ -1989,6 +1989,12 @@ a.sheet-cell:hover .go {
   background: var(--contour);
 }
 
+/* a sub-heading after a list or table needs air above it, or it reads as the
+   list's last line (the release notes use several in one section) */
+.docs-prose-section h3 {
+  margin-top: 28px;
+}
+
 .docs-prose-section p {
   margin-top: 14px;
   color: var(--body-ink);
