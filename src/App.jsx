@@ -1798,7 +1798,7 @@ function AgentLanguages({ data }) {
           </table>
         </div>
         <p className="mono mt-2" style={{ fontSize: 11, color: "var(--faint)" }}>
-          {L.ratioNote} {L.caveat}
+          {L.ratioNote} {L.billedNote} {L.caveat}
         </p>
 
         <details className="panel mt-4 p-5" data-testid="agent-languages-provenance">

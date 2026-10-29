@@ -1080,7 +1080,7 @@ function BenchmarkDocsRuns({ data }) {
               );
             })}
           </tbody></table></div>
-          <p>Agents: {agentLine(L.agents)}; graph tool {L.graphifyVersion}. {L.ratioNote} {L.caveat}</p>
+          <p>Agents: {agentLine(L.agents)}; graph tool {L.graphifyVersion}. {L.ratioNote} {L.billedNote} {L.caveat}</p>
           <Bullets>
             <li>{L.atlasBuildNote}</li>
             {L.languages.flatMap((l) => l.notes.map((n, i) => <li key={`${l.lang}-${i}`}><strong>{l.label}:</strong> {n}</li>))}

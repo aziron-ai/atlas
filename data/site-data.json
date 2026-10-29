@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-29T05:43:56.174Z",
+  "generatedAt": "2026-10-29T05:47:15.021Z",
   "version": "0.1.55",
   "report": {
     "label": "Benchmark & field comparison — refreshed at fc3b875 (2026-08-05, shipped in v0.1.51)",
@@ -4890,6 +4890,7 @@
     },
     "caveat": "Cross-agent and cross-language absolute totals are not comparable — different tokenizers, system-prompt floors and repositories. Compare modes within one agent on one language.",
     "ratioNote": "Token ratios are the other mode's mean total tokens over Atlas's, from the unrounded per-run means.",
+    "billedNote": "The verdict counts total tokens. On billed-proxy tokens (cache reads excluded), the other mode spends less than Atlas in 4 of 32 comparisons: codex · Graph tool · C 0.80×; codex · Graph tool · JavaScript 0.84×; codex · Graph tool · TypeScript 0.82×; codex · Graph tool · Rust 0.75×. Every billed-proxy ratio is in the per-language data.",
     "suiteCmd": "python3 agent-bench/agent_token_bench.py --setup --agents auto \\\n    --modes atlas,graphify,baseline \\\n    --qa-set agent-bench/QA_SET_<lang>.json --workdir agentbench-<lang>",
     "languages": [
       {

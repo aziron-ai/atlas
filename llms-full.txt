@@ -5446,7 +5446,11 @@ mean total tokens are lower than both. **Atlas passes 16 of 16 cells.**
 
 F1 is the mean over the 19 questions; **bold** is Atlas. “Tokens vs Atlas” is
 the no-tool baseline's and the graph tool's mean total tokens over Atlas's.
-Absolute totals are not comparable across agents or languages.
+Absolute totals are not comparable across agents or languages. The verdict
+counts total tokens. On billed-proxy tokens (cache reads excluded) the graph
+tool spends less than Atlas in 4 of 32 comparisons, all on codex: C 0.80×,
+JavaScript 0.84×, TypeScript 0.82× and Rust 0.75×. Every billed-proxy ratio is
+in the per-language data.
 
 Provenance, stated plainly:
 

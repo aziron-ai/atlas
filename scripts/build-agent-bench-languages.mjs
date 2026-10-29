@@ -111,6 +111,10 @@ export function deriveAgentBenchLanguages(entries) {
     }
   }
   const builds = [...new Set(languages.flatMap((l) => l.atlasBuilds.map((b) => b.build)))].sort();
+  // The verdict is on total tokens. Say where the cache-discounted view disagrees.
+  const cheaperBilled = languages.flatMap((l) => Object.entries(l.vsAtlas).flatMap(([a, v]) =>
+    Object.entries(v).filter(([, r]) => r.billedProxy != null && r.billedProxy < 1)
+      .map(([m, r]) => `${a} · ${MODE_LABELS[m] || m} · ${l.label} ${r.billedProxy.toFixed(2)}×`)));
   return {
     label: `Multi-language agent benchmark — ${first.date} · ${languages.length} languages × 2 agents × 3 modes`,
     date: first.date,
@@ -132,6 +136,9 @@ export function deriveAgentBenchLanguages(entries) {
     verdict: { pass: all.filter((v) => v && v.pass).length, total: all.length },
     caveat: "Cross-agent and cross-language absolute totals are not comparable — different tokenizers, system-prompt floors and repositories. Compare modes within one agent on one language.",
     ratioNote: "Token ratios are the other mode's mean total tokens over Atlas's, from the unrounded per-run means.",
+    billedNote: cheaperBilled.length
+      ? `The verdict counts total tokens. On billed-proxy tokens (cache reads excluded), the other mode spends less than Atlas in ${cheaperBilled.length} of ${languages.length * 4} comparisons: ${cheaperBilled.join("; ")}. Every billed-proxy ratio is in the per-language data.`
+      : "On billed-proxy tokens (cache reads excluded) Atlas is also the cheapest mode in every comparison.",
     suiteCmd: "python3 agent-bench/agent_token_bench.py --setup --agents auto \\\n    --modes atlas,graphify,baseline \\\n    --qa-set agent-bench/QA_SET_<lang>.json --workdir agentbench-<lang>",
     languages,
   };

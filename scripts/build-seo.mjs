@@ -295,7 +295,7 @@ const agentLanguagesBlock = !L ? "" : `
           }).join("\n          ")}
           </tbody>
         </table>
-        <p>${esc(L.atlasBuildNote)} ${esc(L.caveat)} Per-run records: ${L.languages.map((l) => `<a href="${esc(l.artifact)}">${esc(baseName(l.artifact))}</a>`).join(", ")}.</p>`;
+        <p>${esc(L.atlasBuildNote)} ${esc(L.billedNote || "")} ${esc(L.caveat)} Per-run records: ${L.languages.map((l) => `<a href="${esc(l.artifact)}">${esc(baseName(l.artifact))}</a>`).join(", ")}.</p>`;
 
 const T = site.lspTruthLanguages;
 const lspTruthBlock = !T ? "" : `

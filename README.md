@@ -122,8 +122,9 @@ The same harness on one pinned public repository per language — Go (logrus), P
 (requests), C (cJSON), Java (gson), C++ (leveldb), JavaScript (axios), TypeScript
 (vue core) and Rust (ripgrep) — with each language's own server as ground truth:
 **Atlas beats both the grep-and-read baseline and the graph tool, on accuracy and on
-tokens, in 16 of 16 agent × language cells** (912 runs, 2026-10-28, develop builds that
-ship in 0.1.55). Straight from the CLI with no agent, `atlas callers` scores F1
+total tokens, in 16 of 16 agent × language cells** (912 runs, 2026-10-28, develop builds
+that ship in 0.1.55; on cache-discounted billed-proxy tokens the graph tool is cheaper in
+four codex cells, all listed on the site). Straight from the CLI with no agent, `atlas callers` scores F1
 0.858–1.000 against those servers across the eight languages. Per-language tables:
 [atlas.aziro.com/#agent-languages](https://atlas.aziro.com/#agent-languages).
 
