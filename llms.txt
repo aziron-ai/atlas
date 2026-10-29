@@ -3,11 +3,12 @@
 > Atlas is a local code-intelligence CLI: one native binary that indexes a
 > repository into a SQLite symbol and relationship graph and answers focused context queries
 > (definition, callers, callees, imports, routes) in single-digit milliseconds and tens of tokens.
-> Benchmark &amp; field comparison — refreshed at fc3b875 (2026-08-05): 3.17× fewer answer tokens than the graph tool pooled over a
+> Benchmark &amp; field comparison — refreshed at fc3b875 (2026-08-05, shipped in v0.1.51): 3.17× fewer answer tokens than the graph tool pooled over a
 > 7-repository matrix, at a higher answer quality — caller-F1 0.865 vs 0.541.
-> Inside a real agent harness on sirupsen/logrus with gopls ground truth: F1 0.995.
+> Inside a real agent harness on sirupsen/logrus with gopls ground truth (2026-10-28): F1 0.995.
+> Same harness, 8 languages: Atlas beats both comparators on accuracy and tokens in 16/16 agent × language cells.
 > 16 of 40 code languages are reference-validated (L5) on a five-level
-> maturity ladder; dart was RETRACTED from L5 this refresh. Version 0.1.54.
+> maturity ladder; dart was RETRACTED from L5 this refresh. Version 0.1.55.
 > Earlier 20× and 36× token claims are RETRACTED: they were measured against a build whose
 > caller answers were a two-token placeholder.
 
@@ -16,7 +17,18 @@
 - [CALLERS_F1_AFTER.json](https://atlas.aziro.com/data/raw/CALLERS_F1_AFTER.json): 37/37 native callers F1 (Linux corroboration run)
 - [DIMENSIONS_BENCH_PUBLIC.json](https://atlas.aziro.com/data/raw/DIMENSIONS_BENCH_PUBLIC.json): per-language F1 / tokens / latency / index speed
 - [LSP_F1_SUMMARY.json](https://atlas.aziro.com/data/raw/LSP_F1_SUMMARY.json): gopls LSP-truth aggregate
-- [AGENT_TOKEN_BENCH_PUBLIC.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json): end-to-end token usage of real agent harnesses (Claude Code, OpenAI Codex) with Atlas vs graph tool vs no tool — reproducible via agent-bench/ in the GitHub repo
+- [AGENT_TOKEN_BENCH_PUBLIC_20261028.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json): end-to-end token usage of real agent harnesses (Claude Code, OpenAI Codex) with Atlas vs graph tool vs no tool, 2026-10-28 — reproducible via agent-bench/ in the GitHub repo
+- [AGENT_TOKEN_BENCH_GO_20261028.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_GO_20261028.json): the same harness on Go (sirupsen/logrus), 2026-10-28
+- [AGENT_TOKEN_BENCH_PYTHON_20261028.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PYTHON_20261028.json): the same harness on Python (psf/requests), 2026-10-28
+- [AGENT_TOKEN_BENCH_C_20261028.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_C_20261028.json): the same harness on C (DaveGamble/cJSON), 2026-10-28
+- [AGENT_TOKEN_BENCH_JAVA_20261028.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_JAVA_20261028.json): the same harness on Java (google/gson), 2026-10-28
+- [AGENT_TOKEN_BENCH_CPP_20261028.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_CPP_20261028.json): the same harness on C++ (google/leveldb), 2026-10-28
+- [AGENT_TOKEN_BENCH_JAVASCRIPT_20261028.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_JAVASCRIPT_20261028.json): the same harness on JavaScript (axios/axios), 2026-10-28
+- [AGENT_TOKEN_BENCH_TYPESCRIPT_20261028.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_TYPESCRIPT_20261028.json): the same harness on TypeScript (vuejs/core), 2026-10-28
+- [AGENT_TOKEN_BENCH_RUST_20261028.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_RUST_20261028.json): the same harness on Rust (BurntSushi/ripgrep), 2026-10-28
+- [TOOL_CALLERS_F1_LSP_20261029.json](https://atlas.aziro.com/data/raw/TOOL_CALLERS_F1_LSP_20261029.json): tool-level callers F1 against each language's LSP server, 8 languages, 2026-10-29
+- [RELEVANCE_BENCH_20261029.json](https://atlas.aziro.com/data/raw/RELEVANCE_BENCH_20261029.json): natural-language relevance benchmark (216 labelled queries, 3 surfaces, regression gate), 2026-10-29 — harness in relevance-bench/
+- [AGENT_TOKEN_BENCH_PUBLIC.json](https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json): the superseded 2026-08-05 agent-harness run, kept for audit
 
 ## Project
 - [Product documentation](https://atlas.aziro.com/#docs/getting-started): install, index, query, configure, connect, troubleshoot, and upgrade

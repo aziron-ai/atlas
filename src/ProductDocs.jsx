@@ -118,6 +118,9 @@ export const BENCHMARK_ANCHORS = new Set([
   "field",
   "real",
   "agents",
+  "agent-languages",
+  "lsp-truth",
+  "relevance",
   "graph",
   "evidence",
   "install",
@@ -1021,7 +1024,111 @@ function StationGlyph() {
 
 
 
-function DocsPage({ slug }) {
+/* Benchmarks docs page: the dated runs, rendered from site-data.json so the
+   numbers here can never drift from the benchmark explorer's. The static page
+   and llms-full.txt mirror the same runs from content/docs/benchmarks.md. */
+const DOC_MODE_LABELS = { atlas: "Atlas", baseline: "No tool (raw exploration)", graphify: "Graph tool" };
+const docX = (v) => (v === null || v === undefined ? "—" : `${Number(v).toFixed(2)}×`);
+const docF3 = (v) => (v === null || v === undefined ? "—" : Number(v).toFixed(3));
+const docNum = (v) => (v === null || v === undefined ? "—" : Number(v).toLocaleString("en-US"));
+
+function BenchmarkDocsRuns({ data }) {
+  if (!data) return null;
+  const ab = data.agentBench;
+  const L = data.agentBenchLanguages;
+  const T = data.lspTruthLanguages;
+  const R = data.relevance;
+  const order = { atlas: 0, baseline: 1, graphify: 2 };
+  const abVersion = ab?.atlasBuild ? (ab.atlasBuild.match(/^atlas v?(\S+)/) || [])[1] : null;
+  const agentLine = (agents) => agents.map((a) => `${a.harness} (${a.model})`).join(" and ");
+  return (
+    <>
+      {ab && (
+        <ProseSection title={`Agent-Harness Token Benchmark (${ab.date}${abVersion ? `, Atlas ${abVersion}` : ""})`}>
+          <p>This measures what a real agent actually spends. {agentLine(ab.agents)} ran headless in {ab.repo} (@{ab.commit7}), restricted to one code-intelligence CLI per run, answering {ab.nQuestions} caller questions scored against {ab.truth}. The Atlas binary was {ab.atlasBuild}; the graph tool was {ab.graphifyVersion}. Token numbers are each harness's own usage accounting. All {ab.cells.reduce((s, c) => s + c.n, 0)} runs completed.</p>
+          <div className="docs-table-wrap"><table><thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Billed-proxy tokens</th><th>Mean turns</th><th>Mean F1</th><th>Mean wall time</th></tr></thead><tbody>
+            {ab.agents.flatMap((a) => ab.cells.filter((c) => c.agent === a.id).sort((x, y) => order[x.mode] - order[y.mode]).map((c) => (
+              <tr key={`${a.id}-${c.mode}`}><td>{a.id} ({a.model})</td><td>{DOC_MODE_LABELS[c.mode] || c.mode}</td><td>{docNum(c.totalTokens)}</td><td>{docNum(c.billedProxy)}</td><td>{Number(c.turns).toFixed(1)}</td><td>{docF3(c.f1)}</td><td>{Number(c.wallS).toFixed(1)} s</td></tr>
+            )))}
+          </tbody></table></div>
+          <p>Against the no-tool baseline, the other mode spends {ab.agents.map((a) => `${docX(a.vsAtlas.baseline?.totalTokens)} Atlas's total tokens on ${a.id}`).join(" and ")}; the graph tool spends {ab.agents.map((a) => `${docX(a.vsAtlas.graphify?.totalTokens)} on ${a.id}`).join(" and ")}. Harness floors: {ab.agents.map((a) => `${a.id} ${docNum(a.calibrationTotal)}`).join(", ")} tokens. {ab.ratioNote} Cross-agent absolute totals are <strong>not comparable</strong> — the two harnesses use different tokenizers and system-prompt floors. Compare modes within an agent only. {ab.billedProxyNote}</p>
+          {ab.supersedes && (
+            <Callout kind="note" label={`Replaces the ${ab.supersedes.date} run`}>
+              <p>That run used {ab.supersedes.atlasBuild} with {Object.entries(ab.supersedes.harnesses || {}).map(([a, h]) => `${h} (${ab.supersedes.models?.[a]})`).join(" and ")}, and measured {Object.entries(ab.supersedes.vsAtlasTotalTokens || {}).map(([a, v]) => `${docX(v.baseline)} / ${docX(v.graphify)} (${a})`).join(" and ")} against the baseline / graph tool. {ab.supersedes.why}</p>
+            </Callout>
+          )}
+          {ab.rescoreNote && <p>{ab.rescoreNote}</p>}
+        </ProseSection>
+      )}
+      {L && (
+        <ProseSection title={`Multi-Language Agent Benchmark (${L.date})`}>
+          <p>{L.what} {L.totalRuns} runs, {L.okRuns} answered. {L.verdictRule} <strong>Atlas passes {L.verdict.pass} of {L.verdict.total} cells.</strong></p>
+          <div className="docs-table-wrap"><table><thead><tr><th>Language</th><th>Repository @ commit</th><th>Truth</th><th>claude F1 (Atlas · no tool · graph)</th><th>claude tokens vs Atlas (no tool · graph)</th><th>codex F1 (Atlas · no tool · graph)</th><th>codex tokens vs Atlas (no tool · graph)</th><th>Verdict</th></tr></thead><tbody>
+            {L.languages.map((l) => {
+              const c = (a, m) => l.cells.find((x) => x.agent === a && x.mode === m);
+              return (
+                <tr key={l.lang}>
+                  <td>{l.label}</td><td>{l.repo} @{l.commit7}</td><td>{l.truthTool}</td>
+                  {["claude", "codex"].map((a) => (
+                    <React.Fragment key={a}>
+                      <td><strong>{docF3(c(a, "atlas")?.f1)}</strong> · {docF3(c(a, "baseline")?.f1)} · {docF3(c(a, "graphify")?.f1)}</td>
+                      <td>{docX(l.vsAtlas[a]?.baseline?.totalTokens)} · {docX(l.vsAtlas[a]?.graphify?.totalTokens)}</td>
+                    </React.Fragment>
+                  ))}
+                  <td>{["claude", "codex"].map((a) => `${a} ${l.verdict[a]?.pass ? "✓" : "✗"}`).join(" ")}</td>
+                </tr>
+              );
+            })}
+          </tbody></table></div>
+          <p>Agents: {agentLine(L.agents)}; graph tool {L.graphifyVersion}. {L.ratioNote} {L.caveat}</p>
+          <Bullets>
+            <li>{L.atlasBuildNote}</li>
+            {L.languages.flatMap((l) => l.notes.map((n, i) => <li key={`${l.lang}-${i}`}><strong>{l.label}:</strong> {n}</li>))}
+          </Bullets>
+        </ProseSection>
+      )}
+      {T && (
+        <ProseSection title={`Tool-Level Callers F1 Against LSP Truth (${T.date})`}>
+          <p>{T.what}</p>
+          <div className="docs-table-wrap"><table><thead><tr><th>Language</th><th>Repository @ commit</th><th>Truth</th><th>Questions</th><th>Mean callers F1</th><th>Perfect</th></tr></thead><tbody>
+            {T.languages.map((l) => (
+              <tr key={l.lang}><td>{l.label}</td><td>{l.repo} @{l.commit7}</td><td>{l.truthTool}</td><td>{l.n}</td><td>{docF3(l.meanF1)}</td><td>{l.perfect}/{l.n}</td></tr>
+            ))}
+          </tbody></table></div>
+          <p>{T.scoring} {T.buildNote}</p>
+          {data.fresh?.lspTruth && <p>Older and smaller results stay on the benchmark page with their dates: {data.fresh.lspTruth.label}, F1 {docF3(data.fresh.lspTruth.meanF1)} over {data.fresh.lspTruth.symbols} symbols.</p>}
+        </ProseSection>
+      )}
+      {R && (
+        <ProseSection title={`Natural-Language Relevance Benchmark (${R.date})`}>
+          <p>{R.what} Built for <a className="text-link" href={R.ticketUrl} target="_blank" rel="noreferrer">{R.ticket}</a>. {R.outOfScope}</p>
+          <div className="docs-table-wrap"><table><thead><tr><th>Corpus</th><th>Sources (pinned)</th><th>Files · symbols</th><th>definition · callers · error handling · adversarial</th></tr></thead><tbody>
+            {R.corpora.map((c) => (
+              <tr key={c.id}><td>{c.id}</td><td>{c.sources.map((s) => `${s.slug} @${s.commit7}${s.prefix ? ` under ${s.prefix}/` : ""}`).join("; ")}</td><td>{docNum(c.files)} · {docNum(c.symbols)}</td><td>{c.labels.definition} · {c.labels.callers} · {c.labels.error_handling} · {c.labels.adversarial} = {c.labels.total}</td></tr>
+            ))}
+          </tbody></table></div>
+          <div className="docs-table-wrap"><table><thead><tr><th>Question</th><th>Surface</th><th>n</th><th>P@1</th><th>MRR</th><th>R@10</th><th>Entity first</th><th>Query-word top-1</th></tr></thead><tbody>
+            {Object.entries(R.pooled).flatMap(([cls, rows]) => rows.map((r) => (
+              <tr key={`${cls}-${r.surface}`}><td>{{ definition: "where is E defined?", callers: "what calls E?", error_handling: "E error exception handling" }[cls] || cls}</td><td>{r.surface === "search_exact" ? "search, bare entity name (control)" : r.surface}</td><td>{r.n}</td><td>{docF3(r.p1)}</td><td>{docF3(r.mrr)}</td><td>{docF3(r.r10)}</td><td>{docF3(r.entityFirst)}</td><td>{docF3(r.queryWordTop1)}</td></tr>
+            )))}
+          </tbody></table></div>
+          <div className="docs-table-wrap"><table><thead><tr><th>Adversarial (generic / stopword)</th><th>n</th><th>Refused</th><th>Grounded</th><th>Safe</th><th>Confident noise</th></tr></thead><tbody>
+            {R.adversarial.map((a) => (
+              <tr key={a.surface}><td>{a.surface}</td><td>{a.n}</td><td>{docF3(a.refused)}</td><td>{docF3(a.grounded)}</td><td>{docF3(a.safe)}</td><td>{docF3(a.noise)}</td></tr>
+            ))}
+          </tbody></table></div>
+          <p><strong>The gate.</strong> {R.gate.thresholds - R.gate.failures} of {R.gate.thresholds} frozen thresholds hold. Each {R.gate.rule} {R.gate.driftNote} {R.gate.catches}</p>
+          <Bullets>
+            {R.findings.map((f) => <li key={f.id}><strong>{f.id}</strong> — {f.title}{/^FIXED/.test(f.status) ? ` (${f.status.replace(/^FIXED/, "fixed")})` : ""}</li>)}
+          </Bullets>
+          <p>{R.buildNote} Measured {R.measuredAt}. Repro, likely cause and acceptance for every finding: <a className="text-link" href="https://github.com/aziron-ai/atlas/blob/main/relevance-bench/RESULTS.md" target="_blank" rel="noreferrer">relevance-bench/RESULTS.md</a>.</p>
+        </ProseSection>
+      )}
+    </>
+  );
+}
+
+function DocsPage({ slug, data }) {
   const Page = DOC_COMPONENTS[slug];
   if (Page) return <Page />;
   switch (slug) {
@@ -1680,7 +1787,7 @@ function DocsPage({ slug }) {
               <li><strong>Agent workflow:</strong> end-to-end behavior for a pinned assistant and task set</li>
             </Bullets>
           </ProseSection>
-          <ProseSection title="Published Headline Results (refreshed 2026-08-05)">
+          <ProseSection title="Published Headline Results (refreshed 2026-08-05, shipped in v0.1.51)">
             <p>These are the current published numbers, each with its evidence conditions and the definition of its metric:</p>
             <div className="docs-table-wrap"><table><thead><tr><th>Result</th><th>Conditions and definition</th></tr></thead><tbody>
               <tr><td>3.17× fewer answer tokens than the graph tool</td><td>Pooled: sum of answer tokens over the 26 queries both tools answered, across a 7-repository matrix run on one host in one pass (Darwin arm64, graphify 0.8.49). Per-language mean 5.06×, median 3.66×, worst language cpp at 1.41×</td></tr>
@@ -1693,21 +1800,7 @@ function DocsPage({ slug }) {
             </Callout>
             <p><strong>Live repositories, honestly.</strong> On 36 pinned public repositories the current CLI answers in <strong>4.25× fewer tokens</strong> (median across languages) or <strong>3.70×</strong> (pooled), and runs <strong>4.78×</strong> faster. Those figures cover the 25 repositories whose Atlas answers actually named a caller. On the other 11 — astro, blade, byond, delphi, ejs, lua, powershell, rust, scala, sql, terraform — the CLI still returns a bare name or a name and a location, so its token ratio measures a non-answer and is excluded from the headline rather than averaged into it. Several of those excluded ratios are large (lua 35.8×, rust 46.1×, terraform 38.5×); that is precisely why they are excluded.</p>
           </ProseSection>
-          <ProseSection title="Agent-Harness Token Benchmark (2026-08-05)">
-            <p>This measures what a real agent actually spends. Claude Code and OpenAI Codex ran headless in sirupsen/logrus (@a23d315), restricted to one code-intelligence CLI per run, answering 19 caller questions scored against gopls call_hierarchy (LSP-truth) at the pinned commit. Token numbers are each harness's own usage accounting. All 114 runs completed.</p>
-            <div className="docs-table-wrap"><table><thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Mean tool calls</th><th>Mean F1</th></tr></thead><tbody>
-              <tr><td>claude (claude-sonnet-5)</td><td>Atlas</td><td>58,234</td><td>2.0</td><td>0.995</td></tr>
-              <tr><td>claude (claude-sonnet-5)</td><td>No tool (raw exploration)</td><td>134,886</td><td>4.7</td><td>0.589</td></tr>
-              <tr><td>claude (claude-sonnet-5)</td><td>Graph tool</td><td>239,026</td><td>7.7</td><td>0.203</td></tr>
-              <tr><td>codex (gpt-5.6-sol)</td><td>Atlas</td><td>33,471</td><td>1.0</td><td>0.995</td></tr>
-              <tr><td>codex (gpt-5.6-sol)</td><td>No tool (raw exploration)</td><td>74,229</td><td>3.3</td><td>0.831</td></tr>
-              <tr><td>codex (gpt-5.6-sol)</td><td>Graph tool</td><td>131,335</td><td>12.7</td><td>0.379</td></tr>
-            </tbody></table></div>
-            <p>Against the baseline, Atlas saves 2.32× the tokens on claude and 2.22× on codex; against the graph tool, 4.10× and 3.92×. Cross-agent absolute totals are <strong>not comparable</strong> — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent only.</p>
-            <Callout kind="note" label="Two changes from the previously published table">
-              <p>Atlas's F1 is <strong>0.995 on both harnesses</strong>; the figure published before was 0.88. And this run used <strong>graphify 0.8.49</strong> where the published run used <strong>0.9.12</strong>, so part of the movement in the competitor column is a version change on their side rather than a change on ours. Both versions are recorded in the artifacts.</p>
-            </Callout>
-          </ProseSection>
+          <BenchmarkDocsRuns data={data} />
           <ProseSection title="Reproduce It Yourself">
             <p>Every published number is reproducible from committed artifacts — verify before you cite:</p>
             <Bullets>
@@ -1715,10 +1808,14 @@ function DocsPage({ slug }) {
               <li><a className="text-link" href="https://github.com/aziron-ai/atlas/tree/main/data/raw" target="_blank" rel="noreferrer">Raw benchmark artifacts (data/raw)</a></li>
               <li><a className="text-link" href="https://github.com/aziron-ai/atlas/tree/main/data" target="_blank" rel="noreferrer">Evidence manifests</a></li>
               <li><a className="text-link" href="https://github.com/aziron-ai/atlas/tree/main/agent-bench" target="_blank" rel="noreferrer">Agent benchmark kit (agent-bench/)</a></li>
+              <li><a className="text-link" href="https://github.com/aziron-ai/atlas/tree/main/relevance-bench" target="_blank" rel="noreferrer">Relevance benchmark kit (relevance-bench/)</a></li>
             </Bullets>
             <p>The agent suite ships with the pinned commit, frozen gopls question set, and isolation flags baked in:</p>
-            <Command>{`python3 agent-bench/agent_token_bench.py \\\n  --setup \\\n  --agents auto \\\n  --qa-set agent-bench/QA_SET_logrus.json \\\n  --workdir agentbench-work`}</Command>
-            <p>Read <a className="text-link" href="https://github.com/aziron-ai/atlas/blob/main/agent-bench/README.md" target="_blank" rel="noreferrer">agent-bench/README.md</a> for prerequisites, expected external cost, pinned inputs, and interpretation. Per-run records are in <a className="text-link" href="https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC.json" target="_blank" rel="noreferrer">AGENT_TOKEN_BENCH_PUBLIC.json</a>.</p>
+            <Command>{`python3 agent-bench/agent_token_bench.py \\\n  --setup \\\n  --agents auto \\\n  --modes atlas,graphify,baseline \\\n  --qa-set agent-bench/QA_SET_logrus.json \\\n  --workdir agentbench-work`}</Command>
+            <p>Any other language: pass its question set, for example <code>--qa-set agent-bench/QA_SET_rust.json --workdir agentbench-rust</code>. The harness clones the commit pinned inside the set.</p>
+            <p>The relevance benchmark drives the <code>atlas</code> binary you have installed and fetches the three pinned corpora:</p>
+            <Command>{`python3 relevance-bench/relevance_bench.py --atlas "$(command -v atlas)" \\\n  --work relevance-work \\\n  --results-json my-relevance.json --results-md my-relevance.md`}</Command>
+            <p>Read <a className="text-link" href="https://github.com/aziron-ai/atlas/blob/main/agent-bench/README.md" target="_blank" rel="noreferrer">agent-bench/README.md</a> for prerequisites, expected external cost, pinned inputs, and interpretation, and <a className="text-link" href="https://github.com/aziron-ai/atlas/blob/main/relevance-bench/README.md" target="_blank" rel="noreferrer">relevance-bench/README.md</a> for the relevance harness. Per-run records are in <a className="text-link" href="https://atlas.aziro.com/data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json" target="_blank" rel="noreferrer">AGENT_TOKEN_BENCH_PUBLIC_20261028.json</a> and the per-language <code>AGENT_TOKEN_BENCH_&lt;LANG&gt;_20261028.json</code> files beside it.</p>
           </ProseSection>
           <ProseSection title="Important Limitations">
             <Bullets>
@@ -1990,7 +2087,7 @@ export function Documentation({ data, page = "getting-started" }) {
             <p className="doc-summary">{selected.summary}</p>
           </header>
           <div className="docs-prose mt-6">
-            <DocsPage slug={selected.slug} />
+            <DocsPage slug={selected.slug} data={data} />
           </div>
 
           <nav className="adjoining" aria-label="Adjoining sheets">

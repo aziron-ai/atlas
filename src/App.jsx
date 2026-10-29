@@ -200,6 +200,9 @@ const NAV_ITEMS = [
   ["Field", "field"],
   ["Proof", "real"],
   ["Agents", "agents"],
+  ["8 languages", "agent-languages"],
+  ["LSP truth", "lsp-truth"],
+  ["Relevance", "relevance"],
   ["Evidence", "evidence"],
 ];
 
@@ -404,10 +407,19 @@ function Hero({ data }) {
                 CORROBORATED —
               </span>
               <FreshChip>{f.saturation.perfect}/{f.saturation.total} langs fixture-perfect</FreshChip>
-              <FreshChip>gopls-truth F1 {f.lspTruth.meanF1.toFixed(3)}</FreshChip>
-              <FreshChip>agent-harness F1 0.995 · both CLIs</FreshChip>
+              <FreshChip title={f.lspTruth.label}>gopls-truth F1 {f.lspTruth.meanF1.toFixed(3)} · Aug 2026</FreshChip>
+              {data.agentBench && (
+                <FreshChip title={data.agentBench.label}>
+                  agent-harness F1 {[...new Set(Object.values(data.agentBench.atlasF1))].map((v) => v.toFixed(3)).join(" / ")} · both CLIs · {data.agentBench.date}
+                </FreshChip>
+              )}
+              {data.agentBenchLanguages && (
+                <FreshChip title={data.agentBenchLanguages.label}>
+                  {data.agentBenchLanguages.verdict.pass}/{data.agentBenchLanguages.verdict.total} agent × language cells · {data.agentBenchLanguages.languages.length} languages
+                </FreshChip>
+              )}
               <span className="mono hidden sm:inline" style={{ fontSize: 11, color: "var(--faint)" }}>
-                Linux re-run, deterministic
+                Linux re-run (Aug) · agent runs (Oct)
               </span>
             </div>
 
@@ -445,7 +457,8 @@ function Hero({ data }) {
             ["01", "#summary", "Executive summary", `${h.f1Advantage}× the caller F1 of the graph tool`],
             ["03", "#languages", "Languages", `${r.perLanguage.length} languages · constructed ground truth`],
             ["04", "#versus", "Head-to-head", `${h.tokensPooled}× fewer answer tokens`],
-            ["08", "#graph", "Live graph", "query facebook/react right here ❯"],
+            ["08", "#agent-languages", "Eight languages", data.agentBenchLanguages ? `${data.agentBenchLanguages.verdict.pass}/${data.agentBenchLanguages.verdict.total} agent × language cells won` : "agent benchmark per language"],
+            ["11", "#graph", "Live graph", "query facebook/react right here ❯"],
           ].map(([no, href, t, sub]) => (
             <a className="hj focusring" key={no} href={href}>
               <span className="hj-no">{no}</span>
@@ -533,14 +546,16 @@ function ExecSummary({ data }) {
             <div className="kicker">Holds inside a real agent</div>
             <EvidenceTag kind="LSP-truth" />
           </div>
-          <div className="num mt-3" style={{ fontSize: 30, fontWeight: 600 }}>0.995 <span style={{ fontSize: 15, color: "var(--danger)" }}>vs {r.goFlagship.rows.find((x) => x.agent === "claude" && x.tool === "Graph tool").f1}</span></div>
+          <div className="num mt-3" style={{ fontSize: 30, fontWeight: 600 }}>
+            {f1fmt(r.goFlagship.rows.find((x) => x.agent === "claude" && x.tool === "Atlas")?.f1)}{" "}
+            <span style={{ fontSize: 15, color: "var(--danger)" }}>vs {f1fmt(r.goFlagship.rows.find((x) => x.agent === "claude" && x.tool === "Graph tool")?.f1)}</span>
+          </div>
           <p className="mt-1" style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)" }}>
-            On {r.goFlagship.repo} against gopls call-hierarchy truth, two real agent harnesses restricted to one
-            tool each answered at F1 0.995 with Atlas. Given the graph tool they spent three to thirteen times the
-            turns and still answered wrong more often than not.
+            On {r.goFlagship.repo} against gopls call-hierarchy truth ({r.goFlagship.date || "agent run"}), two real agent
+            harnesses restricted to one tool each. {r.goFlagship.why.replace(/^A production function[^.]*\.\s*/, "")}
           </p>
           <div className="mt-4">
-            <FreshChip>second Go service, gopls truth: {f.lspTruth.meanF1.toFixed(3)}</FreshChip>
+            <FreshChip title={f.lspTruth.label}>second Go service, gopls truth: {f.lspTruth.meanF1.toFixed(3)} · Aug 2026</FreshChip>
           </div>
         </div>
 
@@ -1448,7 +1463,7 @@ function RealRepo({ data }) {
         <div className="grid gap-4 lg:grid-cols-3">
           <div className="panel min-w-0 p-5">
             <div className="flex items-start justify-between gap-2">
-              <div className="kicker">Go flagship · {flagship.repo}</div>
+              <div className="kicker">Go flagship · {flagship.repo}{flagship.date ? ` · ${flagship.date}` : ""}</div>
               <EvidenceTag kind="LSP-truth" />
             </div>
             <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>
@@ -1457,12 +1472,12 @@ function RealRepo({ data }) {
             </p>
             <FlagshipBars flagship={flagship} agent="claude" />
             <p className="mono mt-2" style={{ fontSize: 10.5, color: "var(--faint)" }}>
-              claude harness shown. The codex harness scores the same F1 with Atlas (0.995) and
-              {" "}{flagship.rows.find((r) => r.agent === "codex" && r.tool === "Graph tool").f1} with the graph
-              tool; its absolute token totals use a different tokenizer and are not plotted on this axis.
+              claude harness shown. The codex harness scores {f1fmt(flagship.rows.find((r) => r.agent === "codex" && r.tool === "Atlas")?.f1)} with Atlas and
+              {" "}{f1fmt(flagship.rows.find((r) => r.agent === "codex" && r.tool === "Graph tool")?.f1)} with the graph
+              tool; its absolute token totals use a different tokenizer and are not plotted on this axis. Full run in §07.
             </p>
             <div className="mt-4">
-              <FreshChip>re-run vs gopls on a second production Go service: F1 {f.lspTruth.meanF1.toFixed(3)} over {f.lspTruth.symbols} symbols</FreshChip>
+              <FreshChip title={f.lspTruth.label}>re-run vs gopls on a second production Go service (2026-08-05): F1 {f.lspTruth.meanF1.toFixed(3)} over {f.lspTruth.symbols} symbols</FreshChip>
             </div>
           </div>
 
@@ -1531,6 +1546,8 @@ function RealRepo({ data }) {
 
 const MODE_LABELS = { atlas: "Atlas", graphify: "Graph tool", baseline: "No tool (raw exploration)" };
 const MODE_ORDER = { atlas: 0, graphify: 1, baseline: 2 };
+const xfmt = (v) => (v === null || v === undefined || Number.isNaN(Number(v)) ? "—" : `${Number(v).toFixed(2)}×`);
+const basename = (p) => String(p || "").split("/").pop();
 
 function AgentPanel({ agentMeta, cells }) {
   const rows = cells
@@ -1540,7 +1557,12 @@ function AgentPanel({ agentMeta, cells }) {
   return (
     <div className="panel min-w-0 p-5" data-testid={`agent-panel-${agentMeta.id}`}>
       <div className="flex items-start justify-between gap-2">
-        <div className="kicker">{agentMeta.id} · {agentMeta.model || "default model"}</div>
+        <div className="min-w-0">
+          <div className="kicker">{agentMeta.id} · {agentMeta.model || "default model"}</div>
+          {agentMeta.harness && (
+            <div className="mono mt-1" style={{ fontSize: 10.5, color: "var(--faint)" }}>{agentMeta.harness}</div>
+          )}
+        </div>
         <EvidenceTag kind="agent-harness" />
       </div>
       <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>
@@ -1569,8 +1591,9 @@ function AgentPanel({ agentMeta, cells }) {
               </div>
               <div className="mono mt-1 flex flex-wrap gap-x-4" style={{ fontSize: 10.5, color: "var(--faint)" }}>
                 <span>F1 {r.f1 == null ? "—" : r.f1.toFixed(3)}</span>
-                <span>{r.turns == null ? "—" : r.turns} tool calls</span>
+                <span>{r.turns == null ? "—" : r.turns} turns</span>
                 <span>{num(r.billedProxy)} billed-proxy tok</span>
+                <span>{r.wallS == null ? "—" : r.wallS} s</span>
                 <span>{r.ok}/{r.n} ok</span>
               </div>
             </div>
@@ -1580,8 +1603,13 @@ function AgentPanel({ agentMeta, cells }) {
       <div className="mono mt-4 flex flex-wrap gap-2" style={{ fontSize: 11 }}>
         {Object.entries(agentMeta.vsAtlas || {}).map(([m, v]) => (
           v?.totalTokens ? (
-            <span key={m} className="chip" style={{ borderColor: "var(--g2)", color: "var(--g2)" }}>
-              {MODE_LABELS[m] || m}: {v.totalTokens}× Atlas tokens
+            <span
+              key={m}
+              className="chip"
+              style={{ borderColor: "var(--g2)", color: "var(--g2)" }}
+              title={`billed-proxy ${xfmt(v.billedProxy)} · turns ${xfmt(v.turns)}`}
+            >
+              {MODE_LABELS[m] || m}: {xfmt(v.totalTokens)} Atlas tokens
             </span>
           ) : null
         ))}
@@ -1590,9 +1618,31 @@ function AgentPanel({ agentMeta, cells }) {
   );
 }
 
+function RunYourself({ testId, intro, cmd, href, hrefLabel, children }) {
+  return (
+    <div className="panel mt-4 p-5" data-testid={testId}>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="kicker">Run it from your machine</div>
+          <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>{intro}</p>
+        </div>
+        <a className="focusring chip" href={href} target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
+          <ExternalLink className="h-3.5 w-3.5" aria-hidden /> {hrefLabel}
+        </a>
+      </div>
+      <div className="codeblock mt-3 flex items-start justify-between gap-2 rounded-md p-3" style={{ background: "var(--surface-raised)" }}>
+        <pre className="mono min-w-0 overflow-x-auto" style={{ fontSize: 12, lineHeight: 1.6 }}>{cmd}</pre>
+        <CopyButton text={cmd.replace(/\\\n\s*/g, "")} />
+      </div>
+      {children}
+    </div>
+  );
+}
+
 function AgentBench({ data }) {
   const ab = data.agentBench;
   if (!ab) return null;
+  const sup = ab.supersedes;
   return (
     <section id="agents" data-testid="agents" className="shell py-16" aria-labelledby="agents-title">
       <SectionHeader
@@ -1604,6 +1654,7 @@ function AgentBench({ data }) {
         Context-size benchmarks measure the tool's output. This measures the whole loop: Claude Code and OpenAI Codex
         run headless in a checkout of {ab.repo} (@{ab.commit7}), restricted to one code-intelligence CLI per run, and the
         harness's own token accounting is recorded — {ab.nQuestions} caller questions, ground truth {ab.truth}.
+        Measured {ab.date} on the released {ab.atlasBuild ? ab.atlasBuild.replace(/\s*\(.*$/, "") : "Atlas"} binary.
       </SectionHeader>
 
       <div className="grid gap-4 lg:grid-cols-2" data-testid="agent-panels">
@@ -1612,34 +1663,410 @@ function AgentBench({ data }) {
         ))}
       </div>
 
-      <div className="panel mt-4 p-5" data-testid="agent-run-yourself">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <div className="kicker">Run it from your machine</div>
-            <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>
-              The whole suite ships in this repository under <span className="mono">agent-bench/</span> — pinned repo
-              commit, frozen gopls question set, isolation flags baked in. Needs {ab.suiteNeeds}. Your absolute numbers
-              will differ with models and dates; the mode-vs-mode gap is the reproducible part.
+      {sup && (
+        <div className="panel mt-4 p-5" data-testid="agent-supersedes" style={{ borderStyle: "dashed" }}>
+          <div className="kicker" style={{ color: "var(--warning)" }}>Replaces the {sup.date} run</div>
+          <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--muted)" }}>
+            The table this page published before ran {sup.atlasBuild ? sup.atlasBuild.replace(/\s*\(.*$/, "") : "an earlier build"} with{" "}
+            {ab.agents.map((a) => `${sup.harnesses?.[a.id] || a.id} / ${sup.models?.[a.id] || "default model"}`).join(" and ")}; it measured{" "}
+            {ab.agents.map((a) => `${a.id} ${xfmt(sup.vsAtlasTotalTokens?.[a.id]?.baseline)} / ${xfmt(sup.vsAtlasTotalTokens?.[a.id]?.graphify)}`).join(", ")}{" "}
+            (no tool / graph tool over Atlas, total tokens). This run, with {ab.agents.map((a) => `${a.harness} / ${a.model}`).join(" and ")}, measures{" "}
+            {ab.agents.map((a) => `${a.id} ${xfmt(a.vsAtlas.baseline?.totalTokens)} / ${xfmt(a.vsAtlas.graphify?.totalTokens)}`).join(", ")}.
+          </p>
+          <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--muted)" }}>{sup.why}</p>
+          <p className="mono mt-2" style={{ fontSize: 11, color: "var(--faint)" }}>
+            Superseded per-run records:{" "}
+            <a className="link focusring" href={sup.artifact} download>{basename(sup.artifact)}</a>.
+          </p>
+        </div>
+      )}
+
+      <RunYourself
+        testId="agent-run-yourself"
+        intro={<>The whole suite ships in this repository under <span className="mono">agent-bench/</span> — pinned repo
+          commit, frozen gopls question set, isolation flags baked in. Needs {ab.suiteNeeds}. Your absolute numbers
+          will differ with models and dates; the mode-vs-mode gap is the reproducible part.</>}
+        cmd={ab.suiteCmd}
+        href="https://github.com/aziron-ai/atlas/tree/main/agent-bench"
+        hrefLabel="agent-bench/"
+      >
+        <p className="mono mt-3" style={{ fontSize: 11, color: "var(--faint)" }}>
+          {ab.caveat} {ab.billedProxyNote} {ab.ratioNote} {ab.rescoreNote} Graph tool: {ab.graphifyVersion}. Raw per-run records:{" "}
+          <a className="link focusring" href={ab.artifact} download>{basename(ab.artifact)}</a>.
+        </p>
+      </RunYourself>
+    </section>
+  );
+}
+
+/* ============ eight languages — the same harness, per language ========== */
+
+function F1Triple({ cells, agent }) {
+  const c = (m) => cells.find((x) => x.agent === agent && x.mode === m);
+  return (
+    <span className="num" style={{ whiteSpace: "nowrap" }}>
+      <span style={{ color: "var(--primary)", fontWeight: 700 }}>{f1fmt(c("atlas")?.f1)}</span>
+      <span style={{ color: "var(--faint)" }}> · </span>
+      <span style={{ color: "var(--muted)" }}>{f1fmt(c("baseline")?.f1)}</span>
+      <span style={{ color: "var(--faint)" }}> · </span>
+      <span style={{ color: "var(--muted)" }}>{f1fmt(c("graphify")?.f1)}</span>
+    </span>
+  );
+}
+
+function AgentLanguages({ data }) {
+  const L = data.agentBenchLanguages;
+  if (!L) return null;
+  const agents = L.agents.map((a) => a.id);
+  return (
+    <section id="agent-languages" data-testid="agent-languages" className="py-16" style={{ background: "var(--bg2)" }} aria-labelledby="agent-languages-title">
+      <div className="shell">
+        <SectionHeader
+          id="agent-languages-title"
+          kicker="08 · Eight languages"
+          title={`The same harness in ${L.languages.length} languages: Atlas beats both comparators in ${L.verdict.pass} of ${L.verdict.total} cells`}
+          actions={<EvidenceTag kind="LSP-truth" />}
+        >
+          {L.what} Measured {L.date}.
+        </SectionHeader>
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="panel p-5" data-testid="agent-languages-verdict">
+            <div className="num" style={{ fontSize: 30, fontWeight: 700, color: "var(--primary)" }}>{L.verdict.pass}/{L.verdict.total}</div>
+            <div className="kicker mt-2">agent × language cells won</div>
+            <p className="mt-2" style={{ fontSize: 12, lineHeight: 1.5, color: "var(--muted)" }}>{L.verdictRule}</p>
+          </div>
+          <div className="panel p-5">
+            <div className="num" style={{ fontSize: 30, fontWeight: 700 }}>{num(L.okRuns)}/{num(L.totalRuns)}</div>
+            <div className="kicker mt-2">agent runs answered</div>
+            <p className="mt-2" style={{ fontSize: 12, lineHeight: 1.5, color: "var(--muted)" }}>
+              {L.languages.length} languages × {L.nQuestionsPerLanguage} questions × {agents.length} agents × {L.modes.length} modes.
+              A run that names no function is scored F1 0, not dropped.
             </p>
           </div>
-          <a
-            className="focusring chip"
-            href="https://github.com/aziron-ai/atlas/tree/main/agent-bench"
-            target="_blank"
-            rel="noreferrer"
-            style={{ textDecoration: "none" }}
-          >
-            <ExternalLink className="h-3.5 w-3.5" aria-hidden /> agent-bench/
-          </a>
+          <div className="panel p-5">
+            <div className="kicker">agents · graph tool</div>
+            <ul className="mono mt-2 flex flex-col gap-1" style={{ fontSize: 11.5, color: "var(--muted)" }}>
+              {L.agents.map((a) => <li key={a.id}>{a.id}: {a.model} · {a.harness}</li>)}
+              <li>graph tool: {L.graphifyVersion}</li>
+            </ul>
+          </div>
         </div>
-        <div className="codeblock mt-3 flex items-start justify-between gap-2 rounded-md p-3" style={{ background: "var(--surface-raised)" }}>
-          <pre className="mono min-w-0 overflow-x-auto" style={{ fontSize: 12, lineHeight: 1.6 }}>{ab.suiteCmd}</pre>
-          <CopyButton text={ab.suiteCmd.replace(/\\\n\s*/g, "")} />
-        </div>
-        <p className="mono mt-3" style={{ fontSize: 11, color: "var(--faint)" }}>
-          {ab.caveat} {ab.billedProxyNote} Raw per-run records:{" "}
-          <a className="link focusring" href={ab.artifact} download>AGENT_TOKEN_BENCH_PUBLIC.json</a>.
+
+        <p className="mono mt-5" style={{ fontSize: 11, color: "var(--muted)" }}>
+          F1 columns: <span style={{ color: "var(--primary)" }}>Atlas</span> · no tool · graph tool, mean over {L.nQuestionsPerLanguage} questions.
+          {" "}× tokens: no tool · graph tool mean total tokens over Atlas's.
         </p>
+        <div className="tablewrap mt-2">
+          <table className="dtable" data-testid="agent-languages-table" style={{ minWidth: 940 }}>
+            <thead>
+              <tr>
+                <th>language</th>
+                <th>repository · truth</th>
+                {agents.map((a) => <th key={`${a}-f1`}>{a} F1</th>)}
+                {agents.map((a) => <th key={`${a}-x`}>{a} × tokens</th>)}
+                <th>verdict</th>
+              </tr>
+            </thead>
+            <tbody>
+              {L.languages.map((l) => (
+                <tr key={l.lang} data-testid="agent-languages-row">
+                  <td style={{ fontWeight: 600 }}>{l.label}</td>
+                  <td className="mono" style={{ fontSize: 11.5 }}>
+                    <div style={{ whiteSpace: "nowrap" }}>
+                      <a className="link focusring" href={`${l.repoUrl}/tree/${l.commit}`} target="_blank" rel="noreferrer">{l.repo}</a>
+                      <span style={{ color: "var(--faint)" }}> @{l.commit7}</span>
+                    </div>
+                    <div style={{ color: "var(--faint)" }}>{l.truthTool}</div>
+                  </td>
+                  {agents.map((a) => <td key={`${a}-f1`}><F1Triple cells={l.cells} agent={a} /></td>)}
+                  {agents.map((a) => (
+                    <td key={`${a}-x`} className="num" style={{ whiteSpace: "nowrap", color: "var(--g2)" }}>
+                      {xfmt(l.vsAtlas[a]?.baseline?.totalTokens)} · {xfmt(l.vsAtlas[a]?.graphify?.totalTokens)}
+                    </td>
+                  ))}
+                  <td className="mono" style={{ fontSize: 11.5, whiteSpace: "nowrap" }}>
+                    {agents.map((a) => (
+                      <div key={a} style={{ color: l.verdict[a]?.pass ? "var(--primary)" : "var(--danger)" }}>
+                        {a} {l.verdict[a]?.pass ? "✓ wins" : "✗"}
+                      </div>
+                    ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mono mt-2" style={{ fontSize: 11, color: "var(--faint)" }}>
+          {L.ratioNote} {L.caveat}
+        </p>
+
+        <details className="panel mt-4 p-5" data-testid="agent-languages-provenance">
+          <summary className="kicker" style={{ cursor: "pointer" }}>Per-language provenance — builds, re-runs, re-scores, raw records</summary>
+          <p className="mt-3" style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--muted)" }}>{L.atlasBuildNote}</p>
+          <ul className="mt-3 flex flex-col gap-3" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>
+            {L.languages.map((l) => (
+              <li key={l.lang} className="hairline pt-3">
+                <div style={{ color: "var(--text)", fontWeight: 600 }}>
+                  {l.label} — {l.repo} @{l.commit7}
+                </div>
+                <div className="mono" style={{ fontSize: 11, color: "var(--faint)" }}>
+                  truth: {l.truth} · harness floors: {Object.entries(l.calibration).map(([a, v]) => `${a} ${num(v)}`).join(", ")} tok
+                </div>
+                <div className="mono" style={{ fontSize: 11, color: "var(--faint)" }}>
+                  Atlas: {l.atlasBuilds.map((b) => `${b.build} (${b.cells} cells)`).join("; ")}
+                </div>
+                {l.notes.map((n, i) => <div key={i} className="mt-1">{n}</div>)}
+                <div className="mono mt-1" style={{ fontSize: 11 }}>
+                  <a className="link focusring" href={l.artifact} download>{basename(l.artifact)}</a>
+                  {" · "}
+                  <a className="link focusring" href={l.qaSet} download>{basename(l.qaSet)}</a>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </details>
+
+        <RunYourself
+          testId="agent-languages-run-yourself"
+          intro={<>Every language's frozen question set ships beside the logrus one in <span className="mono">agent-bench/</span>;
+            the harness clones the pinned commit named inside it. Replace <span className="mono">&lt;lang&gt;</span> with{" "}
+            {L.languages.map((l) => (l.lang === "go" ? "logrus" : l.lang)).join(", ")}.</>}
+          cmd={L.suiteCmd}
+          href="https://github.com/aziron-ai/atlas/tree/main/agent-bench"
+          hrefLabel="agent-bench/"
+        />
+      </div>
+    </section>
+  );
+}
+
+/* ========== the tool alone — callers F1 against LSP truth =============== */
+
+function LspTruthSection({ data }) {
+  const T = data.lspTruthLanguages;
+  if (!T) return null;
+  const old = data.fresh?.lspTruth;
+  return (
+    <section id="lsp-truth" data-testid="lsp-truth" className="shell py-16" aria-labelledby="lsp-truth-title">
+      <SectionHeader
+        id="lsp-truth-title"
+        kicker="09 · The tool alone"
+        title="No agent, no model: atlas callers against each language's own server"
+        actions={<EvidenceTag kind="LSP-truth" />}
+      >
+        {T.what.replace(/`/g, "")} Measured {T.date}.
+      </SectionHeader>
+      <div className="tablewrap">
+        <table className="dtable" data-testid="lsp-truth-table" style={{ minWidth: 820 }}>
+          <thead>
+            <tr>
+              <th>language</th>
+              <th>repository</th>
+              <th>truth</th>
+              <th>questions</th>
+              <th>mean callers F1</th>
+              <th>perfect</th>
+              <th>weakest questions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {T.languages.map((l) => (
+              <tr key={l.lang} data-testid="lsp-truth-row">
+                <td style={{ fontWeight: 600 }}>{l.label}</td>
+                <td className="mono" style={{ fontSize: 11.5 }}>{l.repo} <span style={{ color: "var(--faint)" }}>@{l.commit7}</span></td>
+                <td className="mono" style={{ fontSize: 11.5, color: "var(--muted)" }}>{l.truthTool}</td>
+                <td className="num">{l.n}</td>
+                <td>
+                  <div className="flex items-center gap-2">
+                    <span className="num" style={{ fontWeight: 700, color: "var(--primary)", minWidth: 44 }}>{f1fmt(l.meanF1)}</span>
+                    <div className="h-2 flex-1 rounded" style={{ background: "var(--surface-raised)", minWidth: 60 }}>
+                      <div className="h-full rounded" style={{ width: `${Math.max(l.meanF1 * 100, 2)}%`, background: "var(--primary)", opacity: 0.8 }} />
+                    </div>
+                  </div>
+                </td>
+                <td className="num">{l.perfect}/{l.n}</td>
+                <td className="mono" style={{ fontSize: 11, color: "var(--muted)" }}>
+                  {l.weakest.length ? l.weakest.map((w) => `${w.symbol} ${w.f1.toFixed(2)}`).join(" · ") : "none below 0.95"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="mono mt-2" style={{ fontSize: 11, color: "var(--faint)" }}>
+        {T.scoring} {T.buildNote} Per-question counts and the scorer's verbatim output:{" "}
+        <a className="link focusring" href={T.artifact} download>{basename(T.artifact)}</a>.
+      </p>
+      {old && (
+        <p className="mt-3" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>
+          Older and smaller, kept on this page with their dates: {old.label || "the Linux corroboration leg"}, F1{" "}
+          {f1fmt(old.meanF1)} over {old.symbols} symbols{data.fresh.perLanguageLabel ? <>; and the {data.fresh.perLanguageLabel.split(";")[0]}</> : null}.
+        </p>
+      )}
+    </section>
+  );
+}
+
+/* ============ retrieval relevance — natural-language questions ========== */
+
+const SURFACE_LABELS = {
+  search: "search",
+  search_exact: "search · bare name (control)",
+  context: "context",
+  code_query: "code_query (MCP)",
+};
+const CLASS_LABELS = { definition: "where is E defined?", callers: "what calls E?", error_handling: "E error handling" };
+
+function RelevanceSection({ data }) {
+  const R = data.relevance;
+  if (!R) return null;
+  const cls = Object.keys(R.pooled);
+  return (
+    <section id="relevance" data-testid="relevance" className="py-16" style={{ background: "var(--bg2)" }} aria-labelledby="relevance-title">
+      <div className="shell">
+        <SectionHeader
+          id="relevance-title"
+          kicker="10 · Retrieval relevance"
+          title="Asked in plain language: where retrieval holds, and where it does not yet"
+          actions={<EvidenceTag kind="LSP-truth">LSP + hand-labelled</EvidenceTag>}
+        >
+          {R.what} Built for <a className="link focusring" href={R.ticketUrl} target="_blank" rel="noreferrer">{R.ticket}</a>; measured {R.date}.
+        </SectionHeader>
+
+        <div className="tablewrap">
+          <table className="dtable" data-testid="relevance-corpora" style={{ minWidth: 820 }}>
+            <thead>
+              <tr><th>corpus</th><th>sources (pinned)</th><th>tree</th><th>files · symbols</th><th>definition · callers · error · adversarial</th></tr>
+            </thead>
+            <tbody>
+              {R.corpora.map((c) => (
+                <tr key={c.id}>
+                  <td className="mono" style={{ fontWeight: 600 }}>{c.id}</td>
+                  <td className="mono" style={{ fontSize: 11.5 }}>
+                    {c.sources.map((s) => <div key={s.slug}>{s.slug} @{s.commit7}{s.prefix ? ` → ${s.prefix}/` : ""}</div>)}
+                  </td>
+                  <td className="mono" style={{ fontSize: 11.5, color: "var(--muted)" }}>{String(c.tree).slice(0, 12)}</td>
+                  <td className="num">{num(c.files)} · {num(c.symbols)}</td>
+                  <td className="num">{c.labels.definition} · {c.labels.callers} · {c.labels.error_handling} · {c.labels.adversarial} = {c.labels.total}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mono mt-2" style={{ fontSize: 11, color: "var(--faint)" }}>
+          {R.labelTotals.total} queries. Definition and caller labels are mechanical, taken from the same LSP-truth QA sets as
+          the agent benchmark; error-handling labels are {R.labelSources.error_handling.replace(/^hand-labelled/, "hand-labelled")}; adversarial
+          questions are {R.labelSources.adversarial.replace(/^hand-written /, "hand-written ")}. {R.outOfScope}
+        </p>
+
+        <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] lg:items-start">
+          <div className="min-w-0">
+            <div className="tablewrap">
+              <table className="dtable" data-testid="relevance-pooled" style={{ minWidth: 700 }}>
+                <thead>
+                  <tr><th>question</th><th>surface</th><th>n</th><th>P@1</th><th>MRR</th><th>R@10</th><th>entity first</th><th>query-word top-1</th></tr>
+                </thead>
+                <tbody>
+                  {cls.flatMap((c) => R.pooled[c].map((row, i) => (
+                    <tr key={`${c}-${row.surface}`} data-testid="relevance-pooled-row">
+                      <td className="mono" style={{ fontSize: 11.5, color: i ? "var(--faint)" : "var(--text)" }}>{i ? "" : CLASS_LABELS[c] || c}</td>
+                      <td className="mono" style={{ fontSize: 11.5, color: row.surface === "search_exact" ? "var(--muted)" : "var(--text)" }}>{SURFACE_LABELS[row.surface] || row.surface}</td>
+                      <td className="num">{row.n}</td>
+                      <td className="num">{f1fmt(row.p1)}</td>
+                      <td className="num" style={{ color: "var(--primary)", fontWeight: 600 }}>{f1fmt(row.mrr)}</td>
+                      <td className="num">{f1fmt(row.r10)}</td>
+                      <td className="num">{f1fmt(row.entityFirst)}</td>
+                      <td className="num" style={{ color: row.queryWordTop1 > 0.1 ? "var(--danger)" : "var(--muted)" }}>{f1fmt(row.queryWordTop1)}</td>
+                    </tr>
+                  )))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mono mt-2" style={{ fontSize: 11, color: "var(--faint)" }}>
+              Pooled over the three corpora, top 10. MRR and R@10 count only relevant labels; P@k also credits acceptable
+              ones. Entity first = the rank-1 result names the entity. Query-word top-1 = a miss that matches only the
+              question's phrasing (“where”, “is”, “calls”) ranked first.
+            </p>
+
+            <div className="tablewrap mt-4">
+              <table className="dtable" data-testid="relevance-adversarial" style={{ minWidth: 560 }}>
+                <thead>
+                  <tr><th>adversarial (generic / stopword)</th><th>n</th><th>refused</th><th>grounded</th><th>safe</th><th>confident noise</th></tr>
+                </thead>
+                <tbody>
+                  {R.adversarial.map((a) => (
+                    <tr key={a.surface}>
+                      <td className="mono" style={{ fontSize: 11.5 }}>{SURFACE_LABELS[a.surface] || a.surface}</td>
+                      <td className="num">{a.n}</td>
+                      <td className="num">{f1fmt(a.refused)}</td>
+                      <td className="num">{f1fmt(a.grounded)}</td>
+                      <td className="num" style={{ color: "var(--primary)", fontWeight: 600 }}>{f1fmt(a.safe)}</td>
+                      <td className="num" style={{ color: a.noise > 0.5 ? "var(--danger)" : "var(--muted)" }}>{f1fmt(a.noise)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mono mt-2" style={{ fontSize: 11, color: "var(--faint)" }}>
+              Safe = refused, or grounded in the corpus's own error machinery. A generic question answered with a
+              confident list of unrelated symbols is noise.
+            </p>
+          </div>
+
+          <div className="flex min-w-0 flex-col gap-4">
+            <div className="panel p-5" data-testid="relevance-gate">
+              <div className="kicker">Regression gate</div>
+              <div className="num mt-2" style={{ fontSize: 30, fontWeight: 700, color: R.gate.status === "pass" ? "var(--primary)" : "var(--danger)" }}>
+                {R.gate.thresholds - R.gate.failures}/{R.gate.thresholds}
+              </div>
+              <div className="mono" style={{ fontSize: 11, color: "var(--faint)" }}>frozen thresholds hold · {R.gate.status}</div>
+              <p className="mt-3" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>Each {R.gate.rule}</p>
+              {R.gate.driftNote && <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>{R.gate.driftNote}</p>}
+              <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>{R.gate.catches}</p>
+            </div>
+            {R.holdsUp && (
+              <div className="panel p-5">
+                <div className="kicker">What holds up</div>
+                <p className="mt-2" style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)" }}>{R.holdsUp.replace(/`/g, "")}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="panel mt-6 p-5" data-testid="relevance-findings">
+          <div className="kicker">Ten findings, each a published follow-up</div>
+          <ol className="mt-3 flex flex-col gap-2.5" style={{ fontSize: 13, lineHeight: 1.55 }}>
+            {R.findings.map((f) => (
+              <li key={f.id} className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <span className="mono" style={{ color: "var(--faint)", minWidth: 28 }}>{f.id}</span>
+                <span className="min-w-0 flex-1" style={{ color: "var(--text)" }}>{f.title}</span>
+                <span className="chip" style={/^FIXED/.test(f.status) ? { borderColor: "var(--primary)", color: "var(--primary)" } : { borderColor: "var(--warning)", color: "var(--warning)" }}>
+                  {/^FIXED/.test(f.status) ? "fixed" : "open"}
+                </span>
+              </li>
+            ))}
+          </ol>
+          <p className="mono mt-3" style={{ fontSize: 11, color: "var(--faint)" }}>
+            The repro, likely cause and proposed acceptance for each finding are in{" "}
+            <a className="link focusring" href="https://github.com/aziron-ai/atlas/blob/main/relevance-bench/RESULTS.md" target="_blank" rel="noreferrer">relevance-bench/RESULTS.md</a>.
+            {" "}Caveats: {R.caveats.map((c) => c.replace(/\s*See README\.md\.$/, "")).join(" ")}
+          </p>
+        </div>
+
+        <RunYourself
+          testId="relevance-run-yourself"
+          intro={<>The harness ships in <span className="mono">relevance-bench/</span>: frozen corpora pinned by tree SHA, frozen
+            labels, the scorer and the gate. Needs {R.runNeeds}.</>}
+          cmd={R.runCmd}
+          href="https://github.com/aziron-ai/atlas/tree/main/relevance-bench"
+          hrefLabel="relevance-bench/"
+        >
+          <p className="mono mt-3" style={{ fontSize: 11, color: "var(--faint)" }}>
+            {R.buildNote} Measured {R.measuredAt} on {R.platform} in {R.seconds} s. Per-query rows, aggregates and every gate verdict:{" "}
+            <a className="link focusring" href={R.artifact} download>{basename(R.artifact)}</a>.
+          </p>
+        </RunYourself>
       </div>
     </section>
   );
@@ -1811,7 +2238,7 @@ function GraphWithPrompt() {
 function GraphSection() {
   return (
     <section id="graph" data-testid="graph" className="shell py-16" aria-labelledby="graph-title">
-      <SectionHeader id="graph-title" kicker="08 · The map Atlas builds" title="Query the graph — live, in your browser">
+      <SectionHeader id="graph-title" kicker="11 · The map Atlas builds" title="Query the graph — live, in your browser">
         A real Atlas terminal running client-side over a pre-indexed slice of
         <span className="mono"> facebook/react</span> (280 symbols · 675 call edges). Type a command, click a suggestion,
         or click a node — every answer is genuinely computed and cited to file:line.
@@ -1830,10 +2257,10 @@ function GraphSection() {
 function EvidenceSection({ data }) {
   const r = data.report;
   const f = data.fresh;
-  const tiers = { report: "report", fresh: "fresh run", derived: "derived" };
+  const tiers = { report: "report", fresh: "fresh run", derived: "derived", carried: "carried" };
   return (
     <section id="evidence" data-testid="evidence" className="shell py-16" aria-labelledby="evidence-title">
-      <SectionHeader id="evidence-title" kicker="09 · Evidence & limits" title="Graded evidence, disclosed limits, downloadable data">
+      <SectionHeader id="evidence-title" kicker="12 · Evidence & limits" title="Graded evidence, disclosed limits, downloadable data">
         No result mixes a favorable subset with an all-language headline without saying so. These are the rules the
         numbers on this page play by — and the places Atlas is not yet proven.
       </SectionHeader>
@@ -2036,7 +2463,7 @@ function Install({ version }) {
     <section id="install" data-testid="install" className="shell py-16" aria-labelledby="install-title">
       <SectionHeader
         id="install-title"
-        kicker="10 · Install & connect"
+        kicker="13 · Install & connect"
         title="One local binary, a SQLite graph, MCP for agents"
         actions={
           <>
@@ -2128,7 +2555,7 @@ function useScrollSpy(ids) {
 }
 
 function BenchmarkExperience({ data }) {
-  const active = useScrollSpy(["hero", "summary", "knob", "languages", "versus", "field", "real", "agents", "graph", "evidence", "install"]);
+  const active = useScrollSpy(["hero", "summary", "knob", "languages", "versus", "field", "real", "agents", "agent-languages", "lsp-truth", "relevance", "graph", "evidence", "install"]);
   useReveal([data.version]);
 
   return (
@@ -2145,6 +2572,9 @@ function BenchmarkExperience({ data }) {
         <FieldSection data={data} />
         <RealRepo data={data} />
         <AgentBench data={data} />
+        <AgentLanguages data={data} />
+        <LspTruthSection data={data} />
+        <RelevanceSection data={data} />
         <GraphSection />
         <EvidenceSection data={data} />
         <Install version={data.version} />
@@ -2152,7 +2582,7 @@ function BenchmarkExperience({ data }) {
       <footer className="hairline" style={{ marginTop: 8 }}>
         <div className="shell flex flex-col gap-2 py-8 sm:flex-row sm:items-center sm:justify-between">
           <span className="mono" style={{ fontSize: 12, color: "var(--faint)" }}>
-            {data.report.label} · fresh run {data.generatedAt.slice(0, 10)}
+            {data.report.label} · site data generated {data.generatedAt.slice(0, 10)}
           </span>
           <span className="mono" style={{ fontSize: 12, color: "var(--faint)" }}>
             Atlas v{data.version} · static, data-driven, self-contained
@@ -2255,7 +2685,7 @@ function ConsoleOverlay() {
 }
 
 /* Mount heavy children only when the user nears them — the benchmarks page pays
-   zero console cost (fetch/layout/engine) until §08 approaches the viewport. */
+   zero console cost (fetch/layout/engine) until §11 approaches the viewport. */
 function LazyMount({ children, height = 620 }) {
   const ref = useRef(null);
   const [on, setOn] = useState(false);

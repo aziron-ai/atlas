@@ -23,7 +23,8 @@ const INSTALL_COMMANDS = [
 
 const SECTIONS = [
   "hero", "summary", "knob", "languages", "versus",
-  "field", "real", "agents", "graph", "evidence", "install",
+  "field", "real", "agents", "agent-languages", "lsp-truth", "relevance",
+  "graph", "evidence", "install",
 ];
 
 const DOC_PAGES = [
@@ -140,7 +141,7 @@ test.describe("atlas benchmark evidence", () => {
     await page.waitForSelector("#hero");
   });
 
-  test("renders every section of the 11-section story", async ({ page }) => {
+  test("renders every section of the story", async ({ page }) => {
     for (const id of SECTIONS) {
       await expect(page.locator(`#${id}`), id).toHaveCount(1);
     }
@@ -165,6 +166,56 @@ test.describe("atlas benchmark evidence", () => {
     const run = page.getByTestId("agent-run-yourself");
     await expect(run).toContainText("agent-bench/agent_token_bench.py");
     await expect(page.getByTestId("agents")).toContainText("not comparable");
+    // the run it replaces is named, dated and linked — never silently swapped
+    if (site.agentBench.supersedes) {
+      const sup = page.getByTestId("agent-supersedes");
+      await expect(sup).toContainText(site.agentBench.supersedes.date);
+      await expect(sup.locator("a[download]")).toHaveAttribute("href", site.agentBench.supersedes.artifact);
+    }
+  });
+
+  test("eight-language agent section: one row per language and the verdict", async ({ page }) => {
+    const L = site.agentBenchLanguages;
+    test.skip(!L, "no multi-language run in this payload");
+    const rows = page.getByTestId("agent-languages-row");
+    await expect(rows).toHaveCount(L.languages.length);
+    await expect(page.getByTestId("agent-languages-verdict")).toContainText(`${L.verdict.pass}/${L.verdict.total}`);
+    for (const [i, l] of L.languages.entries()) {
+      await expect(rows.nth(i)).toContainText(l.repo);
+      for (const a of ["claude", "codex"]) {
+        const atlas = l.cells.find((c) => c.agent === a && c.mode === "atlas");
+        await expect(rows.nth(i)).toContainText(atlas.f1.toFixed(3));
+      }
+    }
+  });
+
+  test("tool-level LSP-truth section: one row per language", async ({ page }) => {
+    const T = site.lspTruthLanguages;
+    test.skip(!T, "no LSP-truth run in this payload");
+    const rows = page.getByTestId("lsp-truth-row");
+    await expect(rows).toHaveCount(T.languages.length);
+    for (const [i, l] of T.languages.entries()) {
+      await expect(rows.nth(i)).toContainText(l.meanF1.toFixed(3));
+    }
+    await expect(page.getByTestId("lsp-truth")).toContainText(T.atlasBuild);
+  });
+
+  test("relevance section: pooled and adversarial tables, gate, findings, runnable harness", async ({ page }) => {
+    const R = site.relevance;
+    test.skip(!R, "no relevance run in this payload");
+    const pooledRows = Object.values(R.pooled).reduce((n, rows) => n + rows.length, 0);
+    await expect(page.getByTestId("relevance-pooled-row")).toHaveCount(pooledRows);
+    for (const a of R.adversarial) {
+      await expect(page.getByTestId("relevance-adversarial")).toContainText(a.safe.toFixed(3));
+    }
+    await expect(page.getByTestId("relevance-gate")).toContainText(`${R.gate.thresholds - R.gate.failures}/${R.gate.thresholds}`);
+    await expect(page.getByTestId("relevance-findings").locator("li")).toHaveCount(R.findings.length);
+    await expect(page.getByTestId("relevance-run-yourself")).toContainText("relevance-bench/relevance_bench.py");
+  });
+
+  test("benchmark page renders no NaN or undefined", async ({ page }) => {
+    const text = await page.locator("main").evaluate((el) => el.textContent);
+    expect(text).not.toMatch(/\bNaN\b|\bundefined\b/);
   });
 
   test("hero carries report headlines and fresh-run corroboration chips", async ({ page }) => {

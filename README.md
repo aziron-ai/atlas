@@ -58,7 +58,8 @@ over MCP.
 ## The numbers
 
 Measured on a public benchmark — 222 cells, 666 real LLM-scored model calls,
-across 37 languages. Full methodology and raw artifacts are
+across 37 languages (refreshed 2026-08-05 at fc3b875, shipped in v0.1.51). Full
+methodology and raw artifacts are
 [published and reproducible](https://atlas.aziro.com/#benchmarks).
 
 | Approach | Answer accuracy (F1) | Context tokens / query |
@@ -93,20 +94,46 @@ A production function has callers spread across many files; raw dumps drown the 
 in noise and still miss callers. Atlas returns the complete, precise caller set as
 structured, cited context. What that is worth shows up inside a real agent loop —
 19 questions, each agent restricted to one tool, `gopls` call-hierarchy as truth,
-all 114 runs completed:
+all 114 runs completed (2026-10-28, released Atlas 0.1.54, Claude Code 2.1.304 with
+claude-sonnet-5, Codex CLI 0.162.1 with gpt-6.1-sol, graph tool graphify 0.8.49):
 
 | Agent | Mode | Total tokens | Turns | Answer F1 | Wall time |
 | --- | --- | ---: | ---: | ---: | ---: |
-| claude | Graph tool | 239,026 | 7.7 | 0.20 | 32.5 s |
-| claude | Grep-and-read baseline | 134,886 | 4.7 | 0.59 | 18.1 s |
-| **claude** | **With Atlas** | **58,234** | **2.0** | **0.995** | **9.2 s** |
-| codex | Graph tool | 131,335 | 12.7 | 0.38 | 45.4 s |
-| codex | Grep-and-read baseline | 74,229 | 3.3 | 0.83 | 35.9 s |
-| **codex** | **With Atlas** | **33,471** | **1.0** | **0.995** | **13.5 s** |
+| claude | Graph tool | 251,586 | 7.6 | 0.233 | 33.4 s |
+| claude | Grep-and-read baseline | 163,187 | 4.5 | 0.504 | 17.8 s |
+| **claude** | **With Atlas** | **76,205** | **2.0** | **0.995** | **10.2 s** |
+| codex | Graph tool | 155,242 | 5.2 | 0.275 | 19.2 s |
+| codex | Grep-and-read baseline | 99,172 | 2.5 | 0.941 | 12.9 s |
+| **codex** | **With Atlas** | **52,776** | **1.0** | **0.995** | **8.7 s** |
 
-Cross-agent totals are not comparable — different tokenizers and system-prompt
-floors — so compare modes within an agent. The graph-tool column ran version
-0.8.49; the previously published table ran 0.9.12.
+The baseline spends **2.14×** (claude) and **1.88×** (codex) Atlas's tokens; the graph
+tool **3.30×** and **2.94×**. Cross-agent totals are not comparable — different
+tokenizers and system-prompt floors — so compare modes within an agent. This run
+replaces the 2026-08-05 table (2.32× / 4.10× claude, 2.22× / 3.92× codex, on Claude
+Code 2.1.178 and Codex CLI 0.146.0-alpha.9.2 with gpt-5.6-sol). Atlas's F1 is unchanged
+at 0.995. The harnesses' fixed token floors rose (+5,173 claude, +9,428 codex), which
+pulls every ratio toward 1, and the newer codex is stronger without help; Atlas's own
+per-question totals rose too, and the run does not isolate why. Both runs' per-run
+records are in [data/raw/](data/raw/).
+
+### Eight languages, both agents
+
+The same harness on one pinned public repository per language — Go (logrus), Python
+(requests), C (cJSON), Java (gson), C++ (leveldb), JavaScript (axios), TypeScript
+(vue core) and Rust (ripgrep) — with each language's own server as ground truth:
+**Atlas beats both the grep-and-read baseline and the graph tool, on accuracy and on
+tokens, in 16 of 16 agent × language cells** (912 runs, 2026-10-28, develop builds that
+ship in 0.1.55). Straight from the CLI with no agent, `atlas callers` scores F1
+0.858–1.000 against those servers across the eight languages. Per-language tables:
+[atlas.aziro.com/#agent-languages](https://atlas.aziro.com/#agent-languages).
+
+### Asked in plain language
+
+A labelled relevance benchmark — 216 natural-language questions over three frozen
+corpora, three retrieval surfaces, 159 gated thresholds — measures where Atlas's
+retrieval holds and where it does not yet, and publishes ten findings as follow-ups.
+Results: [atlas.aziro.com/#relevance](https://atlas.aziro.com/#relevance); harness:
+[relevance-bench/](relevance-bench/).
 
 ## Quickstart
 
@@ -247,7 +274,8 @@ evidence levels. The underlying data is downloadable:
 
 - [Processed site data](data/site-data.json)
 - [Raw benchmark artifacts](data/raw/)
-- [Agent benchmark reproduction guide](agent-bench/README.md)
+- [Agent benchmark reproduction guide](agent-bench/README.md) — logrus plus seven more languages
+- [Relevance benchmark harness](relevance-bench/README.md)
 
 Results describe the published test conditions and are not a guarantee for every
 repository, language, machine, or coding assistant.
