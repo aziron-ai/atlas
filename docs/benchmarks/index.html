@@ -68,6 +68,7 @@
 <h1>Benchmarks and Methodology</h1>
 <p>Atlas publishes benchmark results for accuracy, token use, latency, language compatibility, and agent workflows. Use this page to interpret those numbers correctly — every result is a dated measurement under stated conditions, not a general guarantee.</p>
 <p><a href="https://atlas.aziro.com/#benchmarks">Open the Atlas benchmark explorer</a></p>
+<p>What 0.1.55 adds to the evidence, a labelled relevance benchmark with a regression gate and the multi-language agent benchmark, is summarised in the <a href="../upgrade/">0.1.55 release notes</a>.</p>
 <h2>How to Read a Result</h2>
 <p>Work through this checklist before comparing tools or quoting a number — a result you cannot place in it is not evidence:</p>
 <ol><li><strong>Identify the setup.</strong> Atlas and baseline tool versions, repository URL and pinned commit, language and query set.</li><li><strong>Identify the conditions.</strong> Hardware and operating system, cold-cache or warm-cache state, repeat count and aggregation method.</li><li><strong>Identify the scoring.</strong> The accuracy oracle or reviewer, and the token measurement method (provider-reported usage versus a documented estimate).</li><li><strong>Identify the failure handling.</strong> How failed and timed-out cases were counted. A mean that silently drops failures is not comparable to one that scores them.</li></ol>
