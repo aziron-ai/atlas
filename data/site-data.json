@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-05T10:52:58.617Z",
-  "version": "0.1.54",
+  "generatedAt": "2026-10-29T05:43:56.174Z",
+  "version": "0.1.55",
   "report": {
-    "label": "Benchmark & field comparison — refreshed at fc3b875 (2026-08-05)",
+    "label": "Benchmark & field comparison — refreshed at fc3b875 (2026-08-05, shipped in v0.1.51)",
     "supersedes": "The July 2026 report this page used to cite. Its live-repo multipliers (36× tokens, and the older 20×) were measured against a build whose caller answers were a two-token placeholder — across 224 live answers it named zero callers. Those figures are retracted in full, not adjusted. The numbers here are smaller and they are real.",
     "method": {
       "scoringModel": "claude-haiku-4-5-20251001",
@@ -863,6 +863,9 @@
       }
     },
     "goFlagship": {
+      "label": "Agent-harness token benchmark — 2026-10-28 · Atlas 0.1.54",
+      "date": "2026-10-28",
+      "atlasBuild": "atlas 0.1.54 (e4b0dc22344f8a1713516188b1eb87fbcda6fbb7, 2026-10-27T17:29:37Z)",
       "repo": "sirupsen/logrus",
       "commit7": "a23d315",
       "truth": "gopls call_hierarchy (LSP-truth), frozen at the pinned commit",
@@ -873,51 +876,51 @@
           "agent": "claude",
           "tool": "Atlas",
           "f1": 0.995,
-          "tokens": 58234,
+          "tokens": 76205,
           "turns": 2
         },
         {
           "agent": "claude",
           "tool": "No tool (raw exploration)",
-          "f1": 0.589,
-          "tokens": 134886,
-          "turns": 4.7
+          "f1": 0.504,
+          "tokens": 163187,
+          "turns": 4.5
         },
         {
           "agent": "claude",
           "tool": "Graph tool",
-          "f1": 0.203,
-          "tokens": 239026,
-          "turns": 7.7
+          "f1": 0.233,
+          "tokens": 251586,
+          "turns": 7.6
         },
         {
           "agent": "codex",
           "tool": "Atlas",
           "f1": 0.995,
-          "tokens": 33471,
+          "tokens": 52776,
           "turns": 1
         },
         {
           "agent": "codex",
           "tool": "No tool (raw exploration)",
-          "f1": 0.831,
-          "tokens": 74229,
-          "turns": 3.3
+          "f1": 0.941,
+          "tokens": 99172,
+          "turns": 2.5
         },
         {
           "agent": "codex",
           "tool": "Graph tool",
-          "f1": 0.379,
-          "tokens": 131335,
-          "turns": 12.7
+          "f1": 0.275,
+          "tokens": 155242,
+          "turns": 5.2
         }
       ],
-      "why": "A production function has many more callers than a fixture does, spread across files. Given only the graph tool, both agents spent three to thirteen times the turns and still answered wrong more often than not; given Atlas, both answered in one or two turns at F1 0.995.",
+      "why": "A production function has many more callers than a fixture does, spread across files. Given only the graph tool, the two agents spent 3.8× and 5.2× Atlas's turns and still scored F1 0.233–0.275; given Atlas, both answered in 1–2 turns at F1 0.995.",
       "caveat": "Cross-agent absolute totals are not comparable — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent."
     }
   },
   "fresh": {
-    "label": "Linux corroboration run",
+    "label": "Linux corroboration run — fc68e26, 2026-08-05 (shipped in v0.1.51)",
     "platform": "Linux 6.12.54-linuxkit aarch64",
     "platformNote": "Docker container golang:1.26-bookworm on the Darwin workstation — arm64/aarch64. PUBLISHED reference run was Linux 6.18.5 x86_64. This leg is arm64. F1/accuracy is architecture-independent; latency_ms and index_ms are NOT comparable across these two architectures.",
     "hostCaveat": "all four candidate Linux hosts (172.30.47.69, 172.30.62.31, 172.30.38.241, 172.30.36.100) refused passwordless ssh (Permission denied (publickey,password)); per the run rules password prompts are never guessed, so all four were skipped",
@@ -958,6 +961,7 @@
       "medianMs": 60.1
     },
     "lspTruth": {
+      "label": "gopls LSP-truth on a private Go service — Linux leg, 2026-08-05 (fc68e26, shipped in v0.1.51)",
       "meanF1": 0.9,
       "precision": 0.9,
       "recall": 0.9,
@@ -1394,10 +1398,11 @@
         "tool": "gcc",
         "version": "gcc (Debian 12.2.0-14+deb12u1) 12.2.0"
       }
-    ]
+    ],
+    "perLanguageLabel": "native fixture callers F1 per language — Linux leg, 2026-08-05 (fc68e26, shipped in v0.1.51); the 8-language LSP-truth table (lspTruthLanguages) is the 2026-10-29 measurement"
   },
   "matrix": {
-    "label": "7-repo tool matrix",
+    "label": "7-repo tool matrix — fc3b875, 2026-08-05 (shipped in v0.1.51)",
     "platform": "Darwin arm64 (macOS)",
     "what": "one host, one run, both CLIs present: `atlas explain <symbol> --format plain` against the graph tool's equivalent query, on seven public repositories",
     "comparability": "a query counts only when BOTH tools returned an answer; queries either tool missed are excluded from every ratio below",
@@ -1798,7 +1803,7 @@
     ]
   },
   "llmQa": {
-    "label": "Real-LLM caller-QA sweep",
+    "label": "Real-LLM caller-QA sweep — fc3b875, 2026-08-05 (shipped in v0.1.51)",
     "what": "a real model is handed ONE context source and asked which functions call `target`; the answer is scored against the fixture's constructed truth. This measures the context, not the model.",
     "model": [
       "claude-haiku-4-5-20251001"
@@ -3665,7 +3670,7 @@
     ]
   },
   "liveSummary": {
-    "label": "36 live public repositories",
+    "label": "36 live public repositories — fc68e26, 2026-08-05 (shipped in v0.1.51)",
     "platform": "Darwin arm64 (macOS)",
     "atlasBinary": "atlas v0.1.47-256-gfc68e26-dirty (fc68e26, 2026-08-05T06:32:22Z)",
     "stubBinary": "v0.1.26-4-gd882e08",
@@ -4625,11 +4630,15 @@
     }
   ],
   "agentBench": {
-    "label": "Agent-harness token benchmark — 2026-08-05",
+    "label": "Agent-harness token benchmark — 2026-10-28 · Atlas 0.1.54",
+    "date": "2026-10-28",
+    "atlasBuild": "atlas 0.1.54 (e4b0dc22344f8a1713516188b1eb87fbcda6fbb7, 2026-10-27T17:29:37Z)",
+    "graphifyVersion": "graphify 0.8.49",
     "repo": "sirupsen/logrus",
     "commit7": "a23d315",
     "nQuestions": 19,
     "truth": "gopls call_hierarchy (LSP-truth), frozen at the pinned commit",
+    "qaSet": "agent-bench/QA_SET_logrus.json",
     "modes": [
       "atlas",
       "graphify",
@@ -4639,34 +4648,36 @@
       {
         "id": "claude",
         "model": "claude-sonnet-5",
-        "calibrationTotal": 30788,
+        "harness": "Claude Code 2.1.304",
+        "calibrationTotal": 35961,
         "vsAtlas": {
           "graphify": {
-            "totalTokens": 4.1,
-            "billedProxy": 1.6,
-            "turns": 3.9
+            "totalTokens": 3.3,
+            "billedProxy": 1.44,
+            "turns": 3.79
           },
           "baseline": {
-            "totalTokens": 2.3,
-            "billedProxy": 1,
-            "turns": 2.4
+            "totalTokens": 2.14,
+            "billedProxy": 1.43,
+            "turns": 2.26
           }
         }
       },
       {
         "id": "codex",
-        "model": "gpt-5.6-sol",
-        "calibrationTotal": 15418,
+        "model": "gpt-6.1-sol",
+        "harness": "codex-cli 0.162.1",
+        "calibrationTotal": 24846,
         "vsAtlas": {
           "graphify": {
-            "totalTokens": 3.9,
-            "billedProxy": 2.4,
-            "turns": 12.7
+            "totalTokens": 2.94,
+            "billedProxy": 1.08,
+            "turns": 5.21
           },
           "baseline": {
-            "totalTokens": 2.2,
-            "billedProxy": 1.5,
-            "turns": 3.3
+            "totalTokens": 1.88,
+            "billedProxy": 1.26,
+            "turns": 2.53
           }
         }
       }
@@ -4675,83 +4686,2259 @@
       {
         "agent": "claude",
         "mode": "atlas",
-        "totalTokens": 58234,
-        "billedProxy": 8727,
-        "outputTokens": 305,
+        "totalTokens": 76205,
+        "billedProxy": 7948,
+        "outputTokens": 353,
         "turns": 2,
         "f1": 0.995,
-        "wallS": 9.2,
+        "wallS": 10.2,
         "ok": 19,
-        "n": 19
+        "n": 19,
+        "emptyAnswers": 0
       },
       {
         "agent": "claude",
         "mode": "baseline",
-        "totalTokens": 134886,
-        "billedProxy": 9153,
-        "outputTokens": 945,
-        "turns": 4.7,
-        "f1": 0.589,
-        "wallS": 18.1,
+        "totalTokens": 163187,
+        "billedProxy": 11336,
+        "outputTokens": 908,
+        "turns": 4.5,
+        "f1": 0.504,
+        "wallS": 17.8,
         "ok": 19,
-        "n": 19
+        "n": 19,
+        "emptyAnswers": 0
       },
       {
         "agent": "claude",
         "mode": "graphify",
-        "totalTokens": 239026,
-        "billedProxy": 13582,
-        "outputTokens": 1333,
-        "turns": 7.7,
-        "f1": 0.203,
-        "wallS": 32.5,
+        "totalTokens": 251586,
+        "billedProxy": 11429,
+        "outputTokens": 1707,
+        "turns": 7.6,
+        "f1": 0.233,
+        "wallS": 33.4,
         "ok": 19,
-        "n": 19
+        "n": 19,
+        "emptyAnswers": 0
       },
       {
         "agent": "codex",
         "mode": "atlas",
-        "totalTokens": 33471,
-        "billedProxy": 8221,
-        "outputTokens": 245,
+        "totalTokens": 52776,
+        "billedProxy": 13440,
+        "outputTokens": 191,
         "turns": 1,
         "f1": 0.995,
-        "wallS": 13.5,
+        "wallS": 8.7,
         "ok": 19,
-        "n": 19
+        "n": 19,
+        "emptyAnswers": 0
       },
       {
         "agent": "codex",
         "mode": "baseline",
-        "totalTokens": 74229,
-        "billedProxy": 12654,
-        "outputTokens": 765,
-        "turns": 3.3,
-        "f1": 0.831,
-        "wallS": 35.9,
+        "totalTokens": 99172,
+        "billedProxy": 16881,
+        "outputTokens": 210,
+        "turns": 2.5,
+        "f1": 0.941,
+        "wallS": 12.9,
         "ok": 19,
-        "n": 19
+        "n": 19,
+        "emptyAnswers": 0
       },
       {
         "agent": "codex",
         "mode": "graphify",
-        "totalTokens": 131335,
-        "billedProxy": 19799,
-        "outputTokens": 954,
-        "turns": 12.7,
-        "f1": 0.379,
-        "wallS": 45.4,
+        "totalTokens": 155242,
+        "billedProxy": 14537,
+        "outputTokens": 235,
+        "turns": 5.2,
+        "f1": 0.275,
+        "wallS": 19.2,
         "ok": 19,
-        "n": 19
+        "n": 19,
+        "emptyAnswers": 0
       }
     ],
+    "atlasF1": {
+      "claude": 0.995,
+      "codex": 0.995
+    },
     "caveat": "Cross-agent absolute totals are not comparable — the two harnesses use different tokenizers and system-prompt floors (see each agent's calibration). Compare modes within an agent.",
-    "billedProxyNote": "billed-proxy = fresh input + cache writes + output; cache reads bill at ~10% and are excluded.",
-    "artifact": "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json",
-    "suiteCmd": "python3 agent-bench/agent_token_bench.py --setup --agents auto \\\n    --qa-set agent-bench/QA_SET_logrus.json --workdir agentbench-work",
+    "billedProxyNote": "billed-proxy = fresh input + cache writes + output (codex: fresh input + output); cache reads bill at ~10% and are excluded.",
+    "ratioNote": "Ratios are the other mode's mean over Atlas's mean, computed from the unrounded per-run means.",
+    "artifact": "data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json",
+    "suiteCmd": "python3 agent-bench/agent_token_bench.py --setup --agents auto \\\n    --modes atlas,graphify,baseline \\\n    --qa-set agent-bench/QA_SET_logrus.json --workdir agentbench-work",
     "suiteNeeds": "python3, git, atlas on PATH, graphify (uv tool install graphifyy), and claude and/or codex logged in",
-    "graphifyVersionNote": "This run used graphify 0.8.49. The previously published table ran graphify 0.9.12, so part of the change in the competitor column is a version change on their side rather than a change on ours.",
-    "f1Note": "Atlas's F1 here is 0.995 on BOTH harnesses. The figure this page published before was 0.88, from the July run."
+    "rescoreNote": "Re-scored after the run when the scorer learned to strip \"::\" qualifiers: claude · Graph tool · Errorf 0.40 → 0.50. The stored answers did not change; every pass is recorded in the artifact.",
+    "supersedes": {
+      "label": "Agent-harness token benchmark — 2026-08-05 · Atlas 0.1.47-256-gfc68e26-dirty",
+      "date": "2026-08-05",
+      "atlasBuild": "atlas v0.1.47-256-gfc68e26-dirty (fc68e26, 2026-08-05T06:32:22Z)",
+      "graphifyVersion": "graphify 0.8.49",
+      "harnesses": {
+        "claude": "Claude Code 2.1.178",
+        "codex": "codex-cli 0.146.0-alpha.9.2"
+      },
+      "models": {
+        "claude": "claude-sonnet-5",
+        "codex": "gpt-5.6-sol"
+      },
+      "calibration": {
+        "claude": 30788,
+        "codex": 15418
+      },
+      "vsAtlasTotalTokens": {
+        "claude": {
+          "baseline": 2.32,
+          "graphify": 4.1
+        },
+        "codex": {
+          "baseline": 2.22,
+          "graphify": 3.92
+        }
+      },
+      "cells": [
+        {
+          "agent": "claude",
+          "mode": "atlas",
+          "totalTokens": 58234,
+          "turns": 2,
+          "f1": 0.995
+        },
+        {
+          "agent": "claude",
+          "mode": "baseline",
+          "totalTokens": 134886,
+          "turns": 4.7,
+          "f1": 0.589
+        },
+        {
+          "agent": "claude",
+          "mode": "graphify",
+          "totalTokens": 239026,
+          "turns": 7.7,
+          "f1": 0.203
+        },
+        {
+          "agent": "codex",
+          "mode": "atlas",
+          "totalTokens": 33471,
+          "turns": 1,
+          "f1": 0.995
+        },
+        {
+          "agent": "codex",
+          "mode": "baseline",
+          "totalTokens": 74229,
+          "turns": 3.3,
+          "f1": 0.831
+        },
+        {
+          "agent": "codex",
+          "mode": "graphify",
+          "totalTokens": 131335,
+          "turns": 12.7,
+          "f1": 0.379
+        }
+      ],
+      "artifact": "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json",
+      "why": "The gap narrowed. Atlas's F1 did not move (claude 0.995 → 0.995, codex 0.995 → 0.995). Two measured changes account for part of it: each harness's fixed floor rose (claude +5,173, codex +9,428 tokens), and a larger floor added to both sides pulls every ratio toward 1; and the newer codex is stronger without help (no-tool F1 0.831 → 0.941, 3.3 → 2.5 turns). Atlas's own per-question totals rose too (claude 58,234 → 76,205, codex 33,471 → 52,776); this run does not isolate why."
+    }
+  },
+  "agentBenchLanguages": {
+    "label": "Multi-language agent benchmark — 2026-10-28 · 8 languages × 2 agents × 3 modes",
+    "date": "2026-10-28",
+    "what": "The logrus harness, generalized: one pinned public repository per language, 19 caller questions each with the language's own server as ground truth, Claude Code and Codex restricted to one code-intelligence CLI per run, each harness's own token accounting.",
+    "shipsIn": "0.1.55",
+    "atlasBuildNote": "Atlas cells ran on develop working-tree builds made during the campaign (6 distinct builds, listed per language); the changes merged to develop the same night and ship in 0.1.55. The tool-level table below re-measures the merged code on fresh indexes.",
+    "atlasBuilds": [
+      "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T07:12:06Z)",
+      "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T08:14:39Z)",
+      "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T08:45:16Z)",
+      "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T13:34:27Z)",
+      "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T15:45:17Z)",
+      "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T17:41:03Z)"
+    ],
+    "agents": [
+      {
+        "id": "claude",
+        "model": "claude-sonnet-5",
+        "harness": "Claude Code 2.1.304"
+      },
+      {
+        "id": "codex",
+        "model": "gpt-6.1-sol",
+        "harness": "codex-cli 0.162.1"
+      }
+    ],
+    "graphifyVersion": "graphify 0.8.49",
+    "modes": [
+      "atlas",
+      "baseline",
+      "graphify"
+    ],
+    "nQuestionsPerLanguage": 19,
+    "totalRuns": 912,
+    "okRuns": 912,
+    "verdictRule": "A cell passes when Atlas's mean F1 is higher than BOTH the no-tool baseline's and the graph tool's, AND its mean total tokens are lower than both — for that agent, on that language.",
+    "verdict": {
+      "pass": 16,
+      "total": 16
+    },
+    "caveat": "Cross-agent and cross-language absolute totals are not comparable — different tokenizers, system-prompt floors and repositories. Compare modes within one agent on one language.",
+    "ratioNote": "Token ratios are the other mode's mean total tokens over Atlas's, from the unrounded per-run means.",
+    "suiteCmd": "python3 agent-bench/agent_token_bench.py --setup --agents auto \\\n    --modes atlas,graphify,baseline \\\n    --qa-set agent-bench/QA_SET_<lang>.json --workdir agentbench-<lang>",
+    "languages": [
+      {
+        "lang": "go",
+        "label": "Go",
+        "repo": "sirupsen/logrus",
+        "repoUrl": "https://github.com/sirupsen/logrus",
+        "commit": "a23d315dfebb6de47d18c92c8ae1430736a60b0c",
+        "commit7": "a23d315",
+        "nQuestions": 19,
+        "truthTool": "gopls",
+        "truth": "gopls call_hierarchy, union over all same-name definitions (bench/llm_qa.py)",
+        "qaSet": "agent-bench/QA_SET_logrus.json",
+        "artifact": "data/raw/AGENT_TOKEN_BENCH_GO_20261028.json",
+        "atlasBuilds": [
+          {
+            "build": "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T13:34:27Z)",
+            "cells": 38
+          }
+        ],
+        "calibration": {
+          "claude": 39734,
+          "codex": 17993
+        },
+        "cells": [
+          {
+            "agent": "claude",
+            "mode": "atlas",
+            "totalTokens": 75458,
+            "billedProxy": 7937,
+            "turns": 2,
+            "f1": 0.996,
+            "wallS": 12.2,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "baseline",
+            "totalTokens": 152356,
+            "billedProxy": 8492,
+            "turns": 4.7,
+            "f1": 0.539,
+            "wallS": 16,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "graphify",
+            "totalTokens": 257910,
+            "billedProxy": 11335,
+            "turns": 6.7,
+            "f1": 0.249,
+            "wallS": 41.9,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "atlas",
+            "totalTokens": 33132,
+            "billedProxy": 5464,
+            "turns": 1,
+            "f1": 0.996,
+            "wallS": 22.1,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "baseline",
+            "totalTokens": 51209,
+            "billedProxy": 7864,
+            "turns": 2,
+            "f1": 0.985,
+            "wallS": 30.8,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "graphify",
+            "totalTokens": 110007,
+            "billedProxy": 8679,
+            "turns": 6.2,
+            "f1": 0.275,
+            "wallS": 41.2,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 9
+          }
+        ],
+        "vsAtlas": {
+          "claude": {
+            "baseline": {
+              "totalTokens": 2.02,
+              "billedProxy": 1.07,
+              "turns": 2.34
+            },
+            "graphify": {
+              "totalTokens": 3.42,
+              "billedProxy": 1.43,
+              "turns": 3.37
+            }
+          },
+          "codex": {
+            "baseline": {
+              "totalTokens": 1.55,
+              "billedProxy": 1.44,
+              "turns": 2
+            },
+            "graphify": {
+              "totalTokens": 3.32,
+              "billedProxy": 1.59,
+              "turns": 6.16
+            }
+          }
+        },
+        "verdict": {
+          "claude": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          },
+          "codex": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          }
+        },
+        "notes": [
+          "9 runs finished without naming any function (codex · Graph tool 9); each is scored F1 0, not dropped."
+        ]
+      },
+      {
+        "lang": "python",
+        "label": "Python",
+        "repo": "psf/requests",
+        "repoUrl": "https://github.com/psf/requests",
+        "commit": "3c7baaa05ab4aa49cc819ce3a819d260de19c157",
+        "commit7": "3c7baaa",
+        "nQuestions": 19,
+        "truthTool": "pyright-langserver",
+        "truth": "pyright-langserver LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+        "qaSet": "agent-bench/QA_SET_python.json",
+        "artifact": "data/raw/AGENT_TOKEN_BENCH_PYTHON_20261028.json",
+        "atlasBuilds": [
+          {
+            "build": "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T13:34:27Z)",
+            "cells": 38
+          }
+        ],
+        "calibration": {
+          "claude": 39732,
+          "codex": 18015
+        },
+        "cells": [
+          {
+            "agent": "claude",
+            "mode": "atlas",
+            "totalTokens": 75331,
+            "billedProxy": 8076,
+            "turns": 2,
+            "f1": 0.965,
+            "wallS": 10.3,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "baseline",
+            "totalTokens": 283925,
+            "billedProxy": 11615,
+            "turns": 6.6,
+            "f1": 0.467,
+            "wallS": 27.3,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "graphify",
+            "totalTokens": 247883,
+            "billedProxy": 11687,
+            "turns": 6,
+            "f1": 0.479,
+            "wallS": 37.1,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "atlas",
+            "totalTokens": 33516,
+            "billedProxy": 5518,
+            "turns": 1,
+            "f1": 0.965,
+            "wallS": 67.2,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "baseline",
+            "totalTokens": 59964,
+            "billedProxy": 9195,
+            "turns": 2.3,
+            "f1": 0.861,
+            "wallS": 75.5,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "graphify",
+            "totalTokens": 73478,
+            "billedProxy": 6514,
+            "turns": 4.1,
+            "f1": 0.469,
+            "wallS": 69.1,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 3
+          }
+        ],
+        "vsAtlas": {
+          "claude": {
+            "baseline": {
+              "totalTokens": 3.77,
+              "billedProxy": 1.44,
+              "turns": 3.32
+            },
+            "graphify": {
+              "totalTokens": 3.29,
+              "billedProxy": 1.45,
+              "turns": 3
+            }
+          },
+          "codex": {
+            "baseline": {
+              "totalTokens": 1.79,
+              "billedProxy": 1.67,
+              "turns": 2.26
+            },
+            "graphify": {
+              "totalTokens": 2.19,
+              "billedProxy": 1.18,
+              "turns": 4.05
+            }
+          }
+        },
+        "verdict": {
+          "claude": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          },
+          "codex": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          }
+        },
+        "notes": [
+          "1 re-run pass completed cells that timed out or hit provider errors (26 ok results came back from re-runs); every final cell is ok.",
+          "3 runs finished without naming any function (codex · Graph tool 3); each is scored F1 0, not dropped."
+        ]
+      },
+      {
+        "lang": "c",
+        "label": "C",
+        "repo": "DaveGamble/cJSON",
+        "repoUrl": "https://github.com/DaveGamble/cJSON",
+        "commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c",
+        "commit7": "6d9f244",
+        "nQuestions": 19,
+        "truthTool": "clangd",
+        "truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+        "qaSet": "agent-bench/QA_SET_c.json",
+        "artifact": "data/raw/AGENT_TOKEN_BENCH_C_20261028.json",
+        "atlasBuilds": [
+          {
+            "build": "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T07:12:06Z)",
+            "cells": 38
+          }
+        ],
+        "calibration": {
+          "claude": 39862,
+          "codex": 14858
+        },
+        "cells": [
+          {
+            "agent": "claude",
+            "mode": "atlas",
+            "totalTokens": 93232,
+            "billedProxy": 9180,
+            "turns": 2.4,
+            "f1": 1,
+            "wallS": 14.3,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "baseline",
+            "totalTokens": 205623,
+            "billedProxy": 11067,
+            "turns": 5.4,
+            "f1": 0.64,
+            "wallS": 21.7,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "graphify",
+            "totalTokens": 125416,
+            "billedProxy": 9550,
+            "turns": 3.2,
+            "f1": 0.983,
+            "wallS": 19,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "atlas",
+            "totalTokens": 35063,
+            "billedProxy": 7240,
+            "turns": 1.1,
+            "f1": 1,
+            "wallS": 11.9,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "baseline",
+            "totalTokens": 71543,
+            "billedProxy": 13518,
+            "turns": 2.5,
+            "f1": 0.988,
+            "wallS": 21.6,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "graphify",
+            "totalTokens": 42953,
+            "billedProxy": 5772,
+            "turns": 1.7,
+            "f1": 0.997,
+            "wallS": 16.3,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          }
+        ],
+        "vsAtlas": {
+          "claude": {
+            "baseline": {
+              "totalTokens": 2.21,
+              "billedProxy": 1.21,
+              "turns": 2.22
+            },
+            "graphify": {
+              "totalTokens": 1.35,
+              "billedProxy": 1.04,
+              "turns": 1.33
+            }
+          },
+          "codex": {
+            "baseline": {
+              "totalTokens": 2.04,
+              "billedProxy": 1.87,
+              "turns": 2.35
+            },
+            "graphify": {
+              "totalTokens": 1.23,
+              "billedProxy": 0.8,
+              "turns": 1.6
+            }
+          }
+        },
+        "verdict": {
+          "claude": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          },
+          "codex": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          }
+        },
+        "notes": []
+      },
+      {
+        "lang": "java",
+        "label": "Java",
+        "repo": "google/gson",
+        "repoUrl": "https://github.com/google/gson",
+        "commit": "57731049da3e415be3d5d34db1ca3b80f3c73810",
+        "commit7": "5773104",
+        "nQuestions": 19,
+        "truthTool": "jdtls",
+        "truth": "jdtls LSP references+documentSymbol, union over all same-name definitions (bench/make_qa_set.py)",
+        "qaSet": "agent-bench/QA_SET_java.json",
+        "artifact": "data/raw/AGENT_TOKEN_BENCH_JAVA_20261028.json",
+        "atlasBuilds": [
+          {
+            "build": "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T08:45:16Z)",
+            "cells": 31
+          },
+          {
+            "build": "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T13:34:27Z)",
+            "cells": 7
+          }
+        ],
+        "calibration": {
+          "claude": 39835,
+          "codex": 14858
+        },
+        "cells": [
+          {
+            "agent": "claude",
+            "mode": "atlas",
+            "totalTokens": 184618,
+            "billedProxy": 12936,
+            "turns": 4.7,
+            "f1": 0.806,
+            "wallS": 37.4,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "baseline",
+            "totalTokens": 384609,
+            "billedProxy": 23521,
+            "turns": 9.8,
+            "f1": 0.175,
+            "wallS": 55.2,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "graphify",
+            "totalTokens": 454781,
+            "billedProxy": 25132,
+            "turns": 9.9,
+            "f1": 0.269,
+            "wallS": 71.5,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "atlas",
+            "totalTokens": 74811,
+            "billedProxy": 16841,
+            "turns": 1.7,
+            "f1": 0.86,
+            "wallS": 39.9,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "baseline",
+            "totalTokens": 139184,
+            "billedProxy": 20568,
+            "turns": 3.3,
+            "f1": 0.622,
+            "wallS": 75.2,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "graphify",
+            "totalTokens": 201923,
+            "billedProxy": 17980,
+            "turns": 6.6,
+            "f1": 0.307,
+            "wallS": 88.5,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 3
+          }
+        ],
+        "vsAtlas": {
+          "claude": {
+            "baseline": {
+              "totalTokens": 2.08,
+              "billedProxy": 1.82,
+              "turns": 2.09
+            },
+            "graphify": {
+              "totalTokens": 2.46,
+              "billedProxy": 1.94,
+              "turns": 2.12
+            }
+          },
+          "codex": {
+            "baseline": {
+              "totalTokens": 1.86,
+              "billedProxy": 1.22,
+              "turns": 1.94
+            },
+            "graphify": {
+              "totalTokens": 2.7,
+              "billedProxy": 1.07,
+              "turns": 3.94
+            }
+          }
+        },
+        "verdict": {
+          "claude": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          },
+          "codex": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          }
+        },
+        "notes": [
+          "Atlas cells came from 2 builds of the same branch: 31 on atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T08:45:16Z); 7 on atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T13:34:27Z). The later build answered only cells re-run after a timeout or provider error; each atlas run's build is recorded in the artifact.",
+          "3 re-run passes completed cells that timed out or hit provider errors (20 ok results came back from re-runs); every final cell is ok.",
+          "3 runs finished without naming any function (codex · Graph tool 3); each is scored F1 0, not dropped."
+        ]
+      },
+      {
+        "lang": "cpp",
+        "label": "C++",
+        "repo": "google/leveldb",
+        "repoUrl": "https://github.com/google/leveldb",
+        "commit": "bb74ef739973a70ca9f0d90788a1da89b788c0ad",
+        "commit7": "bb74ef7",
+        "nQuestions": 19,
+        "truthTool": "clangd",
+        "truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+        "qaSet": "agent-bench/QA_SET_cpp.json",
+        "artifact": "data/raw/AGENT_TOKEN_BENCH_CPP_20261028.json",
+        "atlasBuilds": [
+          {
+            "build": "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T17:41:03Z)",
+            "cells": 38
+          }
+        ],
+        "calibration": {
+          "claude": 39735,
+          "codex": 18015
+        },
+        "cells": [
+          {
+            "agent": "claude",
+            "mode": "atlas",
+            "totalTokens": 78061,
+            "billedProxy": 10518,
+            "turns": 2,
+            "f1": 0.978,
+            "wallS": 12.7,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "baseline",
+            "totalTokens": 598257,
+            "billedProxy": 32414,
+            "turns": 17.8,
+            "f1": 0.683,
+            "wallS": 85.6,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "graphify",
+            "totalTokens": 767258,
+            "billedProxy": 31547,
+            "turns": 16.2,
+            "f1": 0.179,
+            "wallS": 111.9,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "atlas",
+            "totalTokens": 36204,
+            "billedProxy": 9014,
+            "turns": 1,
+            "f1": 0.978,
+            "wallS": 8.6,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "baseline",
+            "totalTokens": 127858,
+            "billedProxy": 23128,
+            "turns": 4,
+            "f1": 0.844,
+            "wallS": 27.5,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "graphify",
+            "totalTokens": 117897,
+            "billedProxy": 9845,
+            "turns": 6.8,
+            "f1": 0.153,
+            "wallS": 36.5,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 5
+          }
+        ],
+        "vsAtlas": {
+          "claude": {
+            "baseline": {
+              "totalTokens": 7.66,
+              "billedProxy": 3.08,
+              "turns": 8.89
+            },
+            "graphify": {
+              "totalTokens": 9.83,
+              "billedProxy": 3,
+              "turns": 8.08
+            }
+          },
+          "codex": {
+            "baseline": {
+              "totalTokens": 3.53,
+              "billedProxy": 2.57,
+              "turns": 4
+            },
+            "graphify": {
+              "totalTokens": 3.26,
+              "billedProxy": 1.09,
+              "turns": 6.84
+            }
+          }
+        },
+        "verdict": {
+          "claude": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          },
+          "codex": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          }
+        },
+        "notes": [
+          "3 re-run passes completed cells that timed out or hit provider errors (101 ok results came back from re-runs); every final cell is ok.",
+          "Re-scored after the run: the scorer learned to strip C++ qualifiers (\"Class::method\" scores as \"method\") and a destructor's leading \"~\", which the clangd truth set spells without it. 16 stored answers changed score (No tool (raw exploration) 16); the answers themselves did not change, and every pass is listed in the artifact.",
+          "5 runs finished without naming any function (codex · Graph tool 5); each is scored F1 0, not dropped."
+        ]
+      },
+      {
+        "lang": "javascript",
+        "label": "JavaScript",
+        "repo": "axios/axios",
+        "repoUrl": "https://github.com/axios/axios",
+        "commit": "8f4ed5691168cf5bfd94c0b01086d9ad926e5240",
+        "commit7": "8f4ed56",
+        "nQuestions": 19,
+        "truthTool": "typescript-language-server",
+        "truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+        "qaSet": "agent-bench/QA_SET_javascript.json",
+        "artifact": "data/raw/AGENT_TOKEN_BENCH_JAVASCRIPT_20261028.json",
+        "atlasBuilds": [
+          {
+            "build": "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T17:41:03Z)",
+            "cells": 38
+          }
+        ],
+        "calibration": {
+          "claude": 39740,
+          "codex": 21346
+        },
+        "cells": [
+          {
+            "agent": "claude",
+            "mode": "atlas",
+            "totalTokens": 74462,
+            "billedProxy": 6916,
+            "turns": 2,
+            "f1": 0.991,
+            "wallS": 10.5,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "baseline",
+            "totalTokens": 326986,
+            "billedProxy": 12998,
+            "turns": 8.2,
+            "f1": 0.78,
+            "wallS": 37.3,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "graphify",
+            "totalTokens": 139206,
+            "billedProxy": 7190,
+            "turns": 3.7,
+            "f1": 0.594,
+            "wallS": 18.5,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "atlas",
+            "totalTokens": 38753,
+            "billedProxy": 8154,
+            "turns": 1,
+            "f1": 0.991,
+            "wallS": 8.3,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "baseline",
+            "totalTokens": 68013,
+            "billedProxy": 12959,
+            "turns": 2.4,
+            "f1": 0.913,
+            "wallS": 16.2,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "graphify",
+            "totalTokens": 69183,
+            "billedProxy": 6881,
+            "turns": 2.5,
+            "f1": 0.601,
+            "wallS": 15.7,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 2
+          }
+        ],
+        "vsAtlas": {
+          "claude": {
+            "baseline": {
+              "totalTokens": 4.39,
+              "billedProxy": 1.88,
+              "turns": 4.08
+            },
+            "graphify": {
+              "totalTokens": 1.87,
+              "billedProxy": 1.04,
+              "turns": 1.87
+            }
+          },
+          "codex": {
+            "baseline": {
+              "totalTokens": 1.76,
+              "billedProxy": 1.59,
+              "turns": 2.37
+            },
+            "graphify": {
+              "totalTokens": 1.79,
+              "billedProxy": 0.84,
+              "turns": 2.53
+            }
+          }
+        },
+        "verdict": {
+          "claude": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          },
+          "codex": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          }
+        },
+        "notes": [
+          "1 re-run pass completed cells that timed out or hit provider errors (38 ok results came back from re-runs); every final cell is ok.",
+          "Re-scored after the run: the QA set was regenerated on 2026-10-29 after the truth generator stopped counting references passed as values (for example bind(…)) as calls, and the stored answers were re-scored against it. 4 stored answers changed score (Atlas 2, No tool (raw exploration) 2); the answers themselves did not change, and every pass is listed in the artifact.",
+          "2 runs finished without naming any function (codex · Graph tool 2); each is scored F1 0, not dropped."
+        ]
+      },
+      {
+        "lang": "typescript",
+        "label": "TypeScript",
+        "repo": "vuejs/core",
+        "repoUrl": "https://github.com/vuejs/core",
+        "commit": "ca034820b8288ab6da3a033626a7857401ee64a5",
+        "commit7": "ca03482",
+        "nQuestions": 19,
+        "truthTool": "typescript-language-server",
+        "truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+        "qaSet": "agent-bench/QA_SET_typescript.json",
+        "artifact": "data/raw/AGENT_TOKEN_BENCH_TYPESCRIPT_20261028.json",
+        "atlasBuilds": [
+          {
+            "build": "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T08:14:39Z)",
+            "cells": 38
+          }
+        ],
+        "calibration": {
+          "claude": 39860,
+          "codex": 14874
+        },
+        "cells": [
+          {
+            "agent": "claude",
+            "mode": "atlas",
+            "totalTokens": 114804,
+            "billedProxy": 9790,
+            "turns": 2.9,
+            "f1": 0.98,
+            "wallS": 15,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "baseline",
+            "totalTokens": 353840,
+            "billedProxy": 21489,
+            "turns": 10.4,
+            "f1": 0.767,
+            "wallS": 52.6,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "graphify",
+            "totalTokens": 202240,
+            "billedProxy": 11815,
+            "turns": 4.9,
+            "f1": 0.55,
+            "wallS": 33.4,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "atlas",
+            "totalTokens": 39919,
+            "billedProxy": 7906,
+            "turns": 1.2,
+            "f1": 0.957,
+            "wallS": 34.1,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "baseline",
+            "totalTokens": 74928,
+            "billedProxy": 11736,
+            "turns": 3,
+            "f1": 0.82,
+            "wallS": 49.3,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "graphify",
+            "totalTokens": 53658,
+            "billedProxy": 6473,
+            "turns": 2.5,
+            "f1": 0.582,
+            "wallS": 42.6,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 2
+          }
+        ],
+        "vsAtlas": {
+          "claude": {
+            "baseline": {
+              "totalTokens": 3.08,
+              "billedProxy": 2.2,
+              "turns": 3.54
+            },
+            "graphify": {
+              "totalTokens": 1.76,
+              "billedProxy": 1.21,
+              "turns": 1.68
+            }
+          },
+          "codex": {
+            "baseline": {
+              "totalTokens": 1.88,
+              "billedProxy": 1.48,
+              "turns": 2.59
+            },
+            "graphify": {
+              "totalTokens": 1.34,
+              "billedProxy": 0.82,
+              "turns": 2.14
+            }
+          }
+        },
+        "verdict": {
+          "claude": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          },
+          "codex": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          }
+        },
+        "notes": [
+          "Re-scored after the run: the QA set was regenerated on 2026-10-29 after the truth generator stopped counting references passed as values (for example bind(…)) as calls, and the stored answers were re-scored against it. 12 stored answers changed score (Atlas 4, No tool (raw exploration) 4, Graph tool 4); the answers themselves did not change, and every pass is listed in the artifact.",
+          "2 runs finished without naming any function (codex · Graph tool 2); each is scored F1 0, not dropped."
+        ]
+      },
+      {
+        "lang": "rust",
+        "label": "Rust",
+        "repo": "BurntSushi/ripgrep",
+        "repoUrl": "https://github.com/BurntSushi/ripgrep",
+        "commit": "91f5d22ef48bde459d90a8c7dbeab416e97d0f2b",
+        "commit7": "91f5d22",
+        "nQuestions": 19,
+        "truthTool": "rust-analyzer",
+        "truth": "rust-analyzer LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+        "qaSet": "agent-bench/QA_SET_rust.json",
+        "artifact": "data/raw/AGENT_TOKEN_BENCH_RUST_20261028.json",
+        "atlasBuilds": [
+          {
+            "build": "atlas v0.1.52-656-ge4b0dc22-dirty (e4b0dc22, 2026-10-28T15:45:17Z)",
+            "cells": 38
+          }
+        ],
+        "calibration": {
+          "claude": 39721,
+          "codex": 14703
+        },
+        "cells": [
+          {
+            "agent": "claude",
+            "mode": "atlas",
+            "totalTokens": 251969,
+            "billedProxy": 15078,
+            "turns": 6.2,
+            "f1": 0.892,
+            "wallS": 45.6,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "baseline",
+            "totalTokens": 497398,
+            "billedProxy": 24771,
+            "turns": 9.9,
+            "f1": 0.394,
+            "wallS": 63.6,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "claude",
+            "mode": "graphify",
+            "totalTokens": 331286,
+            "billedProxy": 17393,
+            "turns": 7.7,
+            "f1": 0.315,
+            "wallS": 47.6,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "atlas",
+            "totalTokens": 52780,
+            "billedProxy": 12433,
+            "turns": 1.5,
+            "f1": 0.991,
+            "wallS": 14.2,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "baseline",
+            "totalTokens": 82748,
+            "billedProxy": 17866,
+            "turns": 2.9,
+            "f1": 0.86,
+            "wallS": 35.5,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 0
+          },
+          {
+            "agent": "codex",
+            "mode": "graphify",
+            "totalTokens": 82200,
+            "billedProxy": 9381,
+            "turns": 4.3,
+            "f1": 0.327,
+            "wallS": 29.5,
+            "ok": 19,
+            "n": 19,
+            "emptyAnswers": 1
+          }
+        ],
+        "vsAtlas": {
+          "claude": {
+            "baseline": {
+              "totalTokens": 1.97,
+              "billedProxy": 1.64,
+              "turns": 1.6
+            },
+            "graphify": {
+              "totalTokens": 1.31,
+              "billedProxy": 1.15,
+              "turns": 1.24
+            }
+          },
+          "codex": {
+            "baseline": {
+              "totalTokens": 1.57,
+              "billedProxy": 1.44,
+              "turns": 1.9
+            },
+            "graphify": {
+              "totalTokens": 1.56,
+              "billedProxy": 0.75,
+              "turns": 2.83
+            }
+          }
+        },
+        "verdict": {
+          "claude": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          },
+          "codex": {
+            "pass": true,
+            "accuracy": true,
+            "tokens": true
+          }
+        },
+        "notes": [
+          "3 re-run passes completed cells that timed out or hit provider errors (90 ok results came back from re-runs); every final cell is ok.",
+          "1 run finished without naming any function (codex · Graph tool 1); each is scored F1 0, not dropped."
+        ]
+      }
+    ]
+  },
+  "lspTruthLanguages": {
+    "label": "Tool-level callers F1 vs LSP truth — 2026-10-29 · 8 languages, fresh index each",
+    "date": "2026-10-29",
+    "atlasBuild": "atlas v0.1.52-697-gadb57f43 (adb57f43, 2026-10-29T03:44:57Z)",
+    "shipsIn": "0.1.55",
+    "buildNote": "Measured on atlas v0.1.52-697-gadb57f43 (adb57f43, 2026-10-29T03:44:57Z), a commit of the fix branch that develop merged at 3790ba95 (ships in 0.1.55); it was not re-run on the merge commit itself. Every per-question row was identical on the 3 builds measured before it that night (1290d8a8, a3e9065b, 87b5330a).",
+    "what": "The ceiling an agent gets from the tool: `atlas callers <symbol> --json` straight from the CLI, no model in the loop, on a store built from scratch, scored by caller name against the same frozen LSP-truth QA sets as the agent benchmark.",
+    "scoring": "per question: P = hits / names returned, R = hits / truth names, F1 = 2PR/(P+R); a question whose truth and answer are both empty scores 1. Mean over the 19 questions; perfect = F1 1.000.",
+    "artifact": "data/raw/TOOL_CALLERS_F1_LSP_20261029.json",
+    "languages": [
+      {
+        "lang": "go",
+        "label": "Go",
+        "repo": "sirupsen/logrus",
+        "commit7": "a23d315",
+        "truthTool": "gopls",
+        "n": 19,
+        "meanF1": 0.9959,
+        "perfect": 17,
+        "minF1": 0.9412,
+        "weakest": [
+          {
+            "symbol": "Warn",
+            "f1": 0.9412,
+            "truth": 9,
+            "got": 8,
+            "hit": 8
+          }
+        ],
+        "index": {
+          "files": 57,
+          "symbols": 802,
+          "edges": 3587,
+          "durationMs": 804
+        },
+        "qaSet": "agent-bench/QA_SET_logrus.json"
+      },
+      {
+        "lang": "python",
+        "label": "Python",
+        "repo": "psf/requests",
+        "commit7": "3c7baaa",
+        "truthTool": "pyright-langserver",
+        "n": 19,
+        "meanF1": 0.9646,
+        "perfect": 14,
+        "minF1": 0.6667,
+        "weakest": [
+          {
+            "symbol": "close",
+            "f1": 0.6667,
+            "truth": 6,
+            "got": 3,
+            "hit": 3
+          },
+          {
+            "symbol": "send",
+            "f1": 0.9,
+            "truth": 20,
+            "got": 20,
+            "hit": 18
+          },
+          {
+            "symbol": "json",
+            "f1": 0.9143,
+            "truth": 19,
+            "got": 16,
+            "hit": 16
+          }
+        ],
+        "index": {
+          "files": 105,
+          "symbols": 1745,
+          "edges": 4027,
+          "durationMs": 390
+        },
+        "qaSet": "agent-bench/QA_SET_python.json"
+      },
+      {
+        "lang": "c",
+        "label": "C",
+        "repo": "DaveGamble/cJSON",
+        "commit7": "6d9f244",
+        "truthTool": "clangd",
+        "n": 19,
+        "meanF1": 1,
+        "perfect": 19,
+        "minF1": 1,
+        "weakest": [],
+        "index": {
+          "files": 178,
+          "symbols": 2474,
+          "edges": 8066,
+          "durationMs": 515
+        },
+        "qaSet": "agent-bench/QA_SET_c.json"
+      },
+      {
+        "lang": "java",
+        "label": "Java",
+        "repo": "google/gson",
+        "commit7": "5773104",
+        "truthTool": "jdtls",
+        "n": 19,
+        "meanF1": 0.8582,
+        "perfect": 5,
+        "minF1": 0.1458,
+        "weakest": [
+          {
+            "symbol": "registerTypeAdapter",
+            "f1": 0.1458,
+            "truth": 87,
+            "got": 9,
+            "hit": 7
+          },
+          {
+            "symbol": "containsKey",
+            "f1": 0.2857,
+            "truth": 42,
+            "got": 7,
+            "hit": 7
+          },
+          {
+            "symbol": "put",
+            "f1": 0.5301,
+            "truth": 55,
+            "got": 28,
+            "hit": 22
+          }
+        ],
+        "index": {
+          "files": 304,
+          "symbols": 6496,
+          "edges": 43230,
+          "durationMs": 1634
+        },
+        "qaSet": "agent-bench/QA_SET_java.json"
+      },
+      {
+        "lang": "cpp",
+        "label": "C++",
+        "repo": "google/leveldb",
+        "commit7": "bb74ef7",
+        "truthTool": "clangd",
+        "n": 19,
+        "meanF1": 0.9354,
+        "perfect": 7,
+        "minF1": 0.5957,
+        "weakest": [
+          {
+            "symbol": "Unref",
+            "f1": 0.5957,
+            "truth": 24,
+            "got": 23,
+            "hit": 14
+          },
+          {
+            "symbol": "Close",
+            "f1": 0.7333,
+            "truth": 15,
+            "got": 15,
+            "hit": 11
+          },
+          {
+            "symbol": "RemoveFile",
+            "f1": 0.8718,
+            "truth": 17,
+            "got": 22,
+            "hit": 17
+          }
+        ],
+        "index": {
+          "files": 144,
+          "symbols": 2623,
+          "edges": 14811,
+          "durationMs": 658
+        },
+        "qaSet": "agent-bench/QA_SET_cpp.json"
+      },
+      {
+        "lang": "javascript",
+        "label": "JavaScript",
+        "repo": "axios/axios",
+        "commit7": "8f4ed56",
+        "truthTool": "typescript-language-server",
+        "n": 19,
+        "meanF1": 0.94,
+        "perfect": 10,
+        "minF1": 0.75,
+        "weakest": [
+          {
+            "symbol": "request",
+            "f1": 0.75,
+            "truth": 3,
+            "got": 5,
+            "hit": 3
+          },
+          {
+            "symbol": "buildFullPath",
+            "f1": 0.8571,
+            "truth": 3,
+            "got": 4,
+            "hit": 3
+          },
+          {
+            "symbol": "buildURL",
+            "f1": 0.8571,
+            "truth": 3,
+            "got": 4,
+            "hit": 3
+          }
+        ],
+        "index": {
+          "files": 488,
+          "symbols": 8931,
+          "edges": 23305,
+          "durationMs": 1591
+        },
+        "qaSet": "agent-bench/QA_SET_javascript.json"
+      },
+      {
+        "lang": "typescript",
+        "label": "TypeScript",
+        "repo": "vuejs/core",
+        "commit7": "ca03482",
+        "truthTool": "typescript-language-server",
+        "n": 19,
+        "meanF1": 0.9497,
+        "perfect": 2,
+        "minF1": 0.9091,
+        "weakest": [
+          {
+            "symbol": "computed",
+            "f1": 0.9091,
+            "truth": 5,
+            "got": 6,
+            "hit": 5
+          },
+          {
+            "symbol": "isProxy",
+            "f1": 0.9091,
+            "truth": 5,
+            "got": 6,
+            "hit": 5
+          },
+          {
+            "symbol": "markRaw",
+            "f1": 0.9091,
+            "truth": 5,
+            "got": 6,
+            "hit": 5
+          }
+        ],
+        "index": {
+          "files": 644,
+          "symbols": 21378,
+          "edges": 66571,
+          "durationMs": 3944
+        },
+        "qaSet": "agent-bench/QA_SET_typescript.json"
+      },
+      {
+        "lang": "rust",
+        "label": "Rust",
+        "repo": "BurntSushi/ripgrep",
+        "commit7": "91f5d22",
+        "truthTool": "rust-analyzer",
+        "n": 19,
+        "meanF1": 0.9908,
+        "perfect": 11,
+        "minF1": 0.9581,
+        "weakest": [],
+        "index": {
+          "files": 165,
+          "symbols": 5241,
+          "edges": 19984,
+          "durationMs": 992
+        },
+        "qaSet": "agent-bench/QA_SET_rust.json"
+      }
+    ]
+  },
+  "relevance": {
+    "label": "Natural-language relevance benchmark (#44) — 2026-10-29",
+    "ticket": "aziron-ai/atlas#44",
+    "ticketUrl": "https://github.com/aziron-ai/atlas/issues/44",
+    "date": "2026-10-29",
+    "measuredAt": "2026-10-29T04:41:28Z",
+    "atlasBuild": "atlas v0.1.52-700-g1a75deae (1a75deae, 2026-10-29T04:39:47Z)",
+    "binarySha256": "6bf53b424fc6b307ef0b222c863e0388104afad7552d85ed69e48eda786b1cfd",
+    "buildNote": "Measured on develop 3790ba95 plus the benchmark branch (atlas v0.1.52-700-g1a75deae (1a75deae, 2026-10-29T04:39:47Z)); no ranking code changed in the benchmark PR. Ships in 0.1.55.",
+    "shipsIn": "0.1.55",
+    "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "seconds": 80.8,
+    "what": "216 labelled questions over three frozen corpora, asked in natural language of three Atlas retrieval surfaces, each corpus indexed into a fresh store, scored offline against frozen labels — with a regression gate of 159 thresholds.",
+    "corpora": [
+      {
+        "id": "c-cjson",
+        "languages": [
+          "c"
+        ],
+        "sources": [
+          {
+            "slug": "DaveGamble/cJSON",
+            "commit7": "6d9f244",
+            "prefix": null
+          }
+        ],
+        "tree": "43196d72eeaf223f8494df8315f3d0dfba07dd6d",
+        "head": "6d9f2443ab071f86e5d9b43025a40929ec41c46c",
+        "files": 178,
+        "symbols": 2474,
+        "edges": 8066,
+        "indexSeconds": 0.8,
+        "labels": {
+          "definition": 19,
+          "callers": 19,
+          "error_handling": 9,
+          "adversarial": 12,
+          "total": 59
+        }
+      },
+      {
+        "id": "mixed-cpp-python",
+        "languages": [
+          "cpp",
+          "python"
+        ],
+        "sources": [
+          {
+            "slug": "google/leveldb",
+            "commit7": "bb74ef7",
+            "prefix": "leveldb"
+          },
+          {
+            "slug": "psf/requests",
+            "commit7": "3c7baaa",
+            "prefix": "requests"
+          }
+        ],
+        "tree": "0036e745e7f673593e91c84560092cd6e353b363",
+        "head": "fa87647ca24977307a4af3151f6f7de95c616573",
+        "files": 249,
+        "symbols": 4368,
+        "edges": 18826,
+        "indexSeconds": 1.08,
+        "labels": {
+          "definition": 38,
+          "callers": 38,
+          "error_handling": 10,
+          "adversarial": 12,
+          "total": 98
+        }
+      },
+      {
+        "id": "ts-vue",
+        "languages": [
+          "typescript"
+        ],
+        "sources": [
+          {
+            "slug": "vuejs/core",
+            "commit7": "ca03482",
+            "prefix": null
+          }
+        ],
+        "tree": "8c37cc4ea9cfd921e1386ad7ade9f80273627149",
+        "head": "ca034820b8288ab6da3a033626a7857401ee64a5",
+        "files": 644,
+        "symbols": 21378,
+        "edges": 66571,
+        "indexSeconds": 4.55,
+        "labels": {
+          "definition": 19,
+          "callers": 19,
+          "error_handling": 9,
+          "adversarial": 12,
+          "total": 59
+        }
+      }
+    ],
+    "outOfScope": "Chromium is out of scope for the gate: a Chromium index takes hours and tens of GB, which is a manual release check rather than a regression gate. The harness accepts any pinned corpus, so a Chromium entry can run as release validation.",
+    "labelTotals": {
+      "definition": 76,
+      "callers": 76,
+      "error_handling": 28,
+      "adversarial": 36,
+      "total": 216
+    },
+    "labelSources": {
+      "definition": "mechanical — the LSP definitions recorded in the QA set",
+      "callers": "mechanical — the LSP caller names recorded in the QA set (matched by name)",
+      "error_handling": "hand-labelled from the code at the pinned commit; every item cites file:line",
+      "adversarial": "hand-written generic or stopword phrasings with no entity; the safe outcome is a refusal, or a grounded answer where the corpus has dedicated error machinery"
+    },
+    "surfaces": [
+      {
+        "id": "search",
+        "label": "search",
+        "invocation": "atlas search QUERY --limit 10 --json",
+        "scored": "results in order"
+      },
+      {
+        "id": "search_exact",
+        "label": "search, bare entity name (control)",
+        "invocation": "atlas search <E> --limit 10 --json — definition questions only",
+        "scored": "results in order; the ticket's exact-search comparison"
+      },
+      {
+        "id": "context",
+        "label": "context",
+        "invocation": "atlas context --query QUERY --json (intent auto)",
+        "scored": "symbols in emitted order, then unseen search hits"
+      },
+      {
+        "id": "code_query",
+        "label": "code_query (MCP)",
+        "invocation": "MCP tools/call code_query {question, workspace, require_citations: true, detail: high}",
+        "scored": "citations in order; status insufficient is a refusal"
+      }
+    ],
+    "pooled": {
+      "definition": [
+        {
+          "surface": "search",
+          "n": 76,
+          "p1": 0.6184,
+          "p3": 0.4035,
+          "p5": 0.2921,
+          "p10": 0.1658,
+          "mrr": 0.7525,
+          "r10": 0.9605,
+          "entityFirst": 0.6184,
+          "empty": 0,
+          "queryWordTop1": 0.3289,
+          "testShare10": 0.1408,
+          "noncodeShare10": 0.0671,
+          "truncated": 1,
+          "meanBytes": 2699,
+          "latencyP50Ms": 87.3,
+          "latencyP95Ms": 127.9
+        },
+        {
+          "surface": "search_exact",
+          "n": 76,
+          "p1": 0.9342,
+          "p3": 0.5219,
+          "p5": 0.3395,
+          "p10": 0.1909,
+          "mrr": 0.9241,
+          "r10": 0.9868,
+          "entityFirst": 0.9342,
+          "empty": 0,
+          "queryWordTop1": 0,
+          "testShare10": 0.1439,
+          "noncodeShare10": 0.0316,
+          "truncated": 0.8289,
+          "meanBytes": 2482,
+          "latencyP50Ms": 85.9,
+          "latencyP95Ms": 135.6
+        },
+        {
+          "surface": "context",
+          "n": 76,
+          "p1": 0.6316,
+          "p3": 0.3465,
+          "p5": 0.25,
+          "p10": 0.1513,
+          "mrr": 0.762,
+          "r10": 0.9605,
+          "entityFirst": 0.6316,
+          "empty": 0,
+          "queryWordTop1": 0.3421,
+          "testShare10": 0.2632,
+          "noncodeShare10": 0.0421,
+          "truncated": 1,
+          "meanBytes": 31359,
+          "latencyP50Ms": 142.7,
+          "latencyP95Ms": 205.8
+        },
+        {
+          "surface": "code_query",
+          "n": 76,
+          "p1": 0.6316,
+          "p3": 0.3465,
+          "p5": 0.25,
+          "p10": 0.1513,
+          "mrr": 0.762,
+          "r10": 0.9605,
+          "entityFirst": 0.6316,
+          "empty": 0,
+          "queryWordTop1": 0.3421,
+          "testShare10": 0.2632,
+          "noncodeShare10": 0.0421,
+          "truncated": 0,
+          "meanBytes": 32263,
+          "latencyP50Ms": 62.7,
+          "latencyP95Ms": 141
+        }
+      ],
+      "callers": [
+        {
+          "surface": "search",
+          "n": 76,
+          "p1": 0.6447,
+          "p3": 0.4759,
+          "p5": 0.3671,
+          "p10": 0.2863,
+          "mrr": 0.2082,
+          "r10": 0.0894,
+          "entityFirst": 0.6447,
+          "empty": 0.0658,
+          "queryWordTop1": 0.2895,
+          "testShare10": 0.0737,
+          "noncodeShare10": 0.0079,
+          "truncated": 0.9342,
+          "meanBytes": 2342,
+          "latencyP50Ms": 83,
+          "latencyP95Ms": 139.3
+        },
+        {
+          "surface": "context",
+          "n": 76,
+          "p1": 0.6316,
+          "p3": 0.6667,
+          "p5": 0.6579,
+          "p10": 0.5711,
+          "mrr": 0.3971,
+          "r10": 0.4878,
+          "entityFirst": 0.6316,
+          "empty": 0,
+          "queryWordTop1": 0.3684,
+          "testShare10": 0.2237,
+          "noncodeShare10": 0.0118,
+          "truncated": 1,
+          "meanBytes": 30632,
+          "latencyP50Ms": 133,
+          "latencyP95Ms": 214.2
+        },
+        {
+          "surface": "code_query",
+          "n": 76,
+          "p1": 0.9211,
+          "p3": 0.75,
+          "p5": 0.6947,
+          "p10": 0.5882,
+          "mrr": 0.4766,
+          "r10": 0.4984,
+          "entityFirst": 0.9211,
+          "empty": 0,
+          "queryWordTop1": 0.0132,
+          "testShare10": 0.2395,
+          "noncodeShare10": 0.0171,
+          "truncated": 0,
+          "meanBytes": 29800,
+          "latencyP50Ms": 67.4,
+          "latencyP95Ms": 144.7
+        }
+      ],
+      "error_handling": [
+        {
+          "surface": "search",
+          "n": 28,
+          "p1": 0.8214,
+          "p3": 0.5714,
+          "p5": 0.4214,
+          "p10": 0.2901,
+          "mrr": 0.7798,
+          "r10": 0.5918,
+          "entityFirst": 0.6786,
+          "empty": 0,
+          "queryWordTop1": 0.1071,
+          "testShare10": 0.1325,
+          "noncodeShare10": 0.0147,
+          "truncated": 1,
+          "meanBytes": 3084,
+          "latencyP50Ms": 111.2,
+          "latencyP95Ms": 172.1
+        },
+        {
+          "surface": "context",
+          "n": 28,
+          "p1": 0.8571,
+          "p3": 0.5357,
+          "p5": 0.4071,
+          "p10": 0.2821,
+          "mrr": 0.7738,
+          "r10": 0.5272,
+          "entityFirst": 0.75,
+          "empty": 0,
+          "queryWordTop1": 0.1071,
+          "testShare10": 0.25,
+          "noncodeShare10": 0,
+          "truncated": 1,
+          "meanBytes": 32165,
+          "latencyP50Ms": 143.8,
+          "latencyP95Ms": 378.1
+        },
+        {
+          "surface": "code_query",
+          "n": 28,
+          "p1": 0.8571,
+          "p3": 0.5357,
+          "p5": 0.4071,
+          "p10": 0.2821,
+          "mrr": 0.7738,
+          "r10": 0.5272,
+          "entityFirst": 0.75,
+          "empty": 0,
+          "queryWordTop1": 0.1071,
+          "testShare10": 0.25,
+          "noncodeShare10": 0,
+          "truncated": 0,
+          "meanBytes": 33037,
+          "latencyP50Ms": 65.6,
+          "latencyP95Ms": 316.2
+        }
+      ]
+    },
+    "adversarial": [
+      {
+        "surface": "search",
+        "n": 36,
+        "refused": 0.3333,
+        "grounded": 0.0833,
+        "safe": 0.4167,
+        "noise": 0.5833,
+        "meanReturned": 6.6667,
+        "meanBytes": 2120
+      },
+      {
+        "surface": "context",
+        "n": 36,
+        "refused": 0,
+        "grounded": 0.1111,
+        "safe": 0.1111,
+        "noise": 0.8889,
+        "meanReturned": 28.25,
+        "meanBytes": 30648
+      },
+      {
+        "surface": "code_query",
+        "n": 36,
+        "refused": 0.4444,
+        "grounded": 0.0833,
+        "safe": 0.5278,
+        "noise": 0.4722,
+        "meanReturned": 21.7222,
+        "meanBytes": 15604
+      }
+    ],
+    "byCorpus": {
+      "c-cjson": {
+        "code_query": {
+          "definition": {
+            "mrr": 1,
+            "r10": 1,
+            "entityFirst": 1
+          },
+          "callers": {
+            "mrr": 0.4596,
+            "r10": 0.7965,
+            "entityFirst": 1
+          },
+          "error_handling": {
+            "mrr": 0.9259,
+            "r10": 0.5463,
+            "entityFirst": 1
+          },
+          "adversarialSafe": 0.75
+        },
+        "context": {
+          "definition": {
+            "mrr": 1,
+            "r10": 1,
+            "entityFirst": 1
+          },
+          "callers": {
+            "mrr": 0.4596,
+            "r10": 0.7965,
+            "entityFirst": 1
+          },
+          "error_handling": {
+            "mrr": 0.9259,
+            "r10": 0.5463,
+            "entityFirst": 1
+          },
+          "adversarialSafe": 0.1667
+        },
+        "search": {
+          "definition": {
+            "mrr": 0.9737,
+            "r10": 1,
+            "entityFirst": 0.9474
+          },
+          "callers": {
+            "mrr": 0.2917,
+            "r10": 0.2041,
+            "entityFirst": 1
+          },
+          "error_handling": {
+            "mrr": 0.8889,
+            "r10": 0.7778,
+            "entityFirst": 0.8889
+          },
+          "adversarialSafe": 0.4167
+        },
+        "search_exact": {
+          "definition": {
+            "mrr": 1,
+            "r10": 1,
+            "entityFirst": 1
+          }
+        }
+      },
+      "mixed-cpp-python": {
+        "code_query": {
+          "definition": {
+            "mrr": 0.6386,
+            "r10": 0.9474,
+            "entityFirst": 0.4211
+          },
+          "callers": {
+            "mrr": 0.4484,
+            "r10": 0.3114,
+            "entityFirst": 0.8684
+          },
+          "error_handling": {
+            "mrr": 0.5333,
+            "r10": 0.2829,
+            "entityFirst": 0.6
+          },
+          "adversarialSafe": 0.4167
+        },
+        "context": {
+          "definition": {
+            "mrr": 0.6386,
+            "r10": 0.9474,
+            "entityFirst": 0.4211
+          },
+          "callers": {
+            "mrr": 0.3195,
+            "r10": 0.2903,
+            "entityFirst": 0.4211
+          },
+          "error_handling": {
+            "mrr": 0.5333,
+            "r10": 0.2829,
+            "entityFirst": 0.6
+          },
+          "adversarialSafe": 0.0833
+        },
+        "search": {
+          "definition": {
+            "mrr": 0.6329,
+            "r10": 0.9474,
+            "entityFirst": 0.4211
+          },
+          "callers": {
+            "mrr": 0.1798,
+            "r10": 0.0609,
+            "entityFirst": 0.4211
+          },
+          "error_handling": {
+            "mrr": 0.5833,
+            "r10": 0.3519,
+            "entityFirst": 0.5
+          },
+          "adversarialSafe": 0.3333
+        },
+        "search_exact": {
+          "definition": {
+            "mrr": 0.8789,
+            "r10": 0.9737,
+            "entityFirst": 0.8947
+          }
+        }
+      },
+      "ts-vue": {
+        "code_query": {
+          "definition": {
+            "mrr": 0.7707,
+            "r10": 0.9474,
+            "entityFirst": 0.6842
+          },
+          "callers": {
+            "mrr": 0.55,
+            "r10": 0.5742,
+            "entityFirst": 0.9474
+          },
+          "error_handling": {
+            "mrr": 0.8889,
+            "r10": 0.7796,
+            "entityFirst": 0.6667
+          },
+          "adversarialSafe": 0.4167
+        },
+        "context": {
+          "definition": {
+            "mrr": 0.7707,
+            "r10": 0.9474,
+            "entityFirst": 0.6842
+          },
+          "callers": {
+            "mrr": 0.4895,
+            "r10": 0.5742,
+            "entityFirst": 0.6842
+          },
+          "error_handling": {
+            "mrr": 0.8889,
+            "r10": 0.7796,
+            "entityFirst": 0.6667
+          },
+          "adversarialSafe": 0.0833
+        },
+        "search": {
+          "definition": {
+            "mrr": 0.7707,
+            "r10": 0.9474,
+            "entityFirst": 0.6842
+          },
+          "callers": {
+            "mrr": 0.1816,
+            "r10": 0.0316,
+            "entityFirst": 0.7368
+          },
+          "error_handling": {
+            "mrr": 0.8889,
+            "r10": 0.6722,
+            "entityFirst": 0.6667
+          },
+          "adversarialSafe": 0.5
+        },
+        "search_exact": {
+          "definition": {
+            "mrr": 0.9386,
+            "r10": 1,
+            "entityFirst": 0.9474
+          }
+        }
+      }
+    },
+    "gate": {
+      "thresholds": 159,
+      "status": "pass",
+      "failures": 0,
+      "rule": "each min = the measured develop baseline minus a margin, floored at 0: 0.03 pooled precision/MRR/recall/entity-first, 0.05 pooled refusal/safe, 0.06 per corpus, 0.09 per-corpus safe; every margin widened to one query's worth (1/n) for small sets. A missing metric fails closed.",
+      "drift": {
+        "gatedDrift": 0,
+        "thresholds": 159,
+        "listsDiffering": 16,
+        "lists": 724
+      },
+      "driftNote": "Two back-to-back runs on fresh stores: 16 of 724 ranked lists differ, none at rank 1, gated drift 0 over all 159 thresholds (RESULTS.md, F8).",
+      "catches": "The gate catches regressions; it does not certify that retrieval is good — the baseline encodes today's defects, listed below as follow-ups. When a fix lands, the gate is re-frozen from a reviewed run so it ratchets."
+    },
+    "holdsUp": "Bare-identifier lookup works: the `search_exact` control puts the entity first in 71 of 76 cases (0.934). `code_query` routes `what calls <E>?` well: entity-first is 0.921 and query-word pollution is 0.013. Every definition is somewhere in the top 10 for 73 of 76 questions (R@10 0.961). On the clean, single-vocabulary C corpus, definition MRR is 0.97–1.00 on every surface. The trouble is in natural-language phrasing, mixed vocabularies and generic words, which is what the ticket reported.",
+    "findings": [
+      {
+        "id": "F1",
+        "title": "Question-template words are ranked as search terms (stopword pollution)",
+        "status": "open — proposed as a follow-up ticket",
+        "proposed": "\"Lexical retrieval: drop question-template words from the BM25 query when the question also names an identifier.\" Acceptance: query-word top-1 ≤ 0.05 for definition and callers on all three surfaces."
+      },
+      {
+        "id": "F2",
+        "title": "Entity-first routing exists for \"what calls\", not for \"where is … defined\"",
+        "status": "open — proposed as a follow-up ticket",
+        "proposed": "\"Entity-first routing for where-defined and entity-scoped questions: a question token that is an exact indexed symbol name anchors that symbol at rank 1, as code_query already does for 'what calls'.\" Acceptance: definition entity-first ≥ the search_exact control on all surfaces, and error_handling MRR > 0 for Open/Append."
+      },
+      {
+        "id": "F3",
+        "title": "A case-exact whole-name match does not outrank case-folded or partial matches",
+        "status": "open — proposed as a follow-up ticket",
+        "proposed": "\"search: a case-exact whole-name symbol match ranks above case-folded and identifier-piece matches.\""
+      },
+      {
+        "id": "F4",
+        "title": "Non-code facts outrank code for code-shaped questions",
+        "status": "open — proposed as a follow-up ticket",
+        "proposed": "\"Config keys, workflow YAML and Makefile targets rank below code symbols for code-shaped questions, and `--corpus code` excludes file-level config facts.\" Acceptance: non-code@10 = 0 on definition and callers questions."
+      },
+      {
+        "id": "F5",
+        "title": "search refuses real identifiers inside a question (false off-topic)",
+        "status": "open — proposed as a follow-up ticket",
+        "proposed": "\"Off-topic guard: a query token that is an exact indexed symbol name qualifies the query as code.\" Acceptance: search callers empty rate 0."
+      },
+      {
+        "id": "F6",
+        "title": "code_query's relevance floor (#60) grounds on generic words that happen to be symbol names, and keeps citations retrieved only by stopwords",
+        "status": "open — proposed as a follow-up ticket",
+        "proposed": "(a) \"relevance floor: the exact_name rule ignores generic and stop words\". (b) \"relevance floor: prune lexical citations that match no query term\". Acceptance: code_query adversarial safe ≥ 0.9."
+      },
+      {
+        "id": "F7",
+        "title": "context never refuses and always ships a ~30 KB bundle",
+        "status": "open — proposed as a follow-up ticket",
+        "proposed": "\"context: apply the code_query relevance floor (an `insufficient` / below-floor status) and size the bundle to the question's specificity.\" Acceptance: context adversarial safe ≥ 0.9, and definition-question bytes ≤ 8 KB."
+      },
+      {
+        "id": "F8",
+        "title": "Tied results ordered by store insertion order",
+        "status": "FIXED on develop by #135 (kept as a regression control)",
+        "proposed": "\"Quantize lexical scores (e.g. to 1e-9) before applying the #135 total order.\" Acceptance: two fresh indexes of every bench corpus give 0 of 724 differing lists."
+      },
+      {
+        "id": "F9",
+        "title": "Graph packing puts test callers ahead of the error types a question names",
+        "status": "open — proposed as a follow-up ticket",
+        "proposed": "\"context/code_query: when a question carries terms beyond the entity, rank term-matching neighbours above test-file callers.\""
+      },
+      {
+        "id": "F10",
+        "title": "A vendored test framework answers generic questions (fixture pollution)",
+        "status": "open — proposed as a follow-up ticket",
+        "proposed": "\"Detect vendored and third-party trees (`tests/unity`, `third_party/`, `vendor/`) at index time, and down-weight them or expose an exclude control\". This is the ticket's acceptance item 4, \"generated/test-file and stopword controls\"."
+      }
+    ],
+    "caveats": [
+      "Callers labels are matched by name, which is the granularity of the LSP QA sets, so a same-named non-caller counts as a hit.",
+      "P@k for single-target definition questions is bounded by targets ÷ k. Read MRR and entity-first for those.",
+      "The error_handling and adversarial labels are one reviewer's reading of the code, with every item citing file:line.",
+      "Search callers recall (0.089) is low by design: search is lexical, not a graph walk. It is reported, not a defect.",
+      "Chromium (the ticket's large-repository corpus) is not in this gate. See README.md."
+    ],
+    "artifact": "data/raw/RELEVANCE_BENCH_20261029.json",
+    "harness": "relevance-bench/",
+    "runCmd": "python3 relevance-bench/relevance_bench.py --atlas \"$(command -v atlas)\" \\\n    --work relevance-work \\\n    --results-json my-relevance.json --results-md my-relevance.md",
+    "runNeeds": "python3 (3.10+), git, an atlas binary, and network to fetch the three pinned corpora (or --source SLUG=PATH for local clones); about 80 s and 80 MB of temporary stores"
   },
   "l5run": {
     "label": "L4 → L5 promotion matrix — wave 2 verifier re-run, 2026-08-05 · macOS arm64",
@@ -5344,16 +7531,82 @@
       "note": "the July derived dataset — superseded for every headline; kept so the retracted numbers stay auditable"
     },
     {
-      "name": "AGENT_TOKEN_BENCH_PUBLIC.json",
-      "path": "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json",
-      "tier": "fresh",
-      "note": "agent-harness end-to-end token usage (claude + codex, per-run records)"
-    },
-    {
       "name": "L5_MATRIX_PUBLIC.json",
       "path": "data/raw/L5_MATRIX_PUBLIC.json",
       "tier": "fresh",
       "note": "L4→L5 promotion run — per-language LSP-truth callers F1 + query-cost multipliers (macOS)"
+    },
+    {
+      "name": "AGENT_TOKEN_BENCH_PUBLIC.json",
+      "path": "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json",
+      "tier": "carried",
+      "note": "SUPERSEDED by AGENT_TOKEN_BENCH_PUBLIC_20261028.json — the 2026-08-05 agent-harness run, kept so the previously published table stays auditable"
+    },
+    {
+      "name": "AGENT_TOKEN_BENCH_PUBLIC_20261028.json",
+      "path": "data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json",
+      "tier": "fresh",
+      "note": "agent-harness end-to-end token usage, 2026-10-28 (claude + codex, 114 per-run records)"
+    },
+    {
+      "name": "AGENT_TOKEN_BENCH_GO_20261028.json",
+      "path": "data/raw/AGENT_TOKEN_BENCH_GO_20261028.json",
+      "tier": "fresh",
+      "note": "multi-language agent benchmark — Go (sirupsen/logrus), claude + codex × atlas/baseline/graph tool, per-run records"
+    },
+    {
+      "name": "AGENT_TOKEN_BENCH_PYTHON_20261028.json",
+      "path": "data/raw/AGENT_TOKEN_BENCH_PYTHON_20261028.json",
+      "tier": "fresh",
+      "note": "multi-language agent benchmark — Python (psf/requests), claude + codex × atlas/baseline/graph tool, per-run records"
+    },
+    {
+      "name": "AGENT_TOKEN_BENCH_C_20261028.json",
+      "path": "data/raw/AGENT_TOKEN_BENCH_C_20261028.json",
+      "tier": "fresh",
+      "note": "multi-language agent benchmark — C (DaveGamble/cJSON), claude + codex × atlas/baseline/graph tool, per-run records"
+    },
+    {
+      "name": "AGENT_TOKEN_BENCH_JAVA_20261028.json",
+      "path": "data/raw/AGENT_TOKEN_BENCH_JAVA_20261028.json",
+      "tier": "fresh",
+      "note": "multi-language agent benchmark — Java (google/gson), claude + codex × atlas/baseline/graph tool, per-run records"
+    },
+    {
+      "name": "AGENT_TOKEN_BENCH_CPP_20261028.json",
+      "path": "data/raw/AGENT_TOKEN_BENCH_CPP_20261028.json",
+      "tier": "fresh",
+      "note": "multi-language agent benchmark — C++ (google/leveldb), claude + codex × atlas/baseline/graph tool, per-run records"
+    },
+    {
+      "name": "AGENT_TOKEN_BENCH_JAVASCRIPT_20261028.json",
+      "path": "data/raw/AGENT_TOKEN_BENCH_JAVASCRIPT_20261028.json",
+      "tier": "fresh",
+      "note": "multi-language agent benchmark — JavaScript (axios/axios), claude + codex × atlas/baseline/graph tool, per-run records"
+    },
+    {
+      "name": "AGENT_TOKEN_BENCH_TYPESCRIPT_20261028.json",
+      "path": "data/raw/AGENT_TOKEN_BENCH_TYPESCRIPT_20261028.json",
+      "tier": "fresh",
+      "note": "multi-language agent benchmark — TypeScript (vuejs/core), claude + codex × atlas/baseline/graph tool, per-run records"
+    },
+    {
+      "name": "AGENT_TOKEN_BENCH_RUST_20261028.json",
+      "path": "data/raw/AGENT_TOKEN_BENCH_RUST_20261028.json",
+      "tier": "fresh",
+      "note": "multi-language agent benchmark — Rust (BurntSushi/ripgrep), claude + codex × atlas/baseline/graph tool, per-run records"
+    },
+    {
+      "name": "TOOL_CALLERS_F1_LSP_20261029.json",
+      "path": "data/raw/TOOL_CALLERS_F1_LSP_20261029.json",
+      "tier": "fresh",
+      "note": "tool-level callers F1 vs LSP truth, 8 languages, fresh index each — per-question counts + verbatim scorer output"
+    },
+    {
+      "name": "RELEVANCE_BENCH_20261029.json",
+      "path": "data/raw/RELEVANCE_BENCH_20261029.json",
+      "tier": "fresh",
+      "note": "natural-language relevance benchmark (#44): 216 labelled queries × 3 surfaces, per-query rows, aggregates, gate verdicts (verbatim copy of relevance-bench/RESULTS.json)"
     },
     {
       "name": "site-data.json",
