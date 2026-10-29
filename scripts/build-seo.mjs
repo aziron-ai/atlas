@@ -127,7 +127,8 @@ function mdToHtml(md) {
     }
     if (/^\s*\|.*\|\s*$/.test(line) && i + 1 < lines.length && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i + 1])) {
       flushList(listBuf);                                      // table
-      const cells = (row) => row.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
+      // split on unescaped pipes only: `a \| b` inside a cell is one literal "|"
+      const cells = (row) => row.trim().replace(/^\||\|$/g, "").split(/(?<!\\)\|/).map((c) => c.trim().replace(/\\\|/g, "|"));
       const header = cells(line);
       i += 2;
       const rows = [];
@@ -201,14 +202,16 @@ const jsonLd = [
     "@type": "Dataset",
     name: "Atlas Benchmark & Field Comparison — July 2026",
     description:
-      "Per-language code-intelligence benchmark: answer accuracy (F1), context tokens, query latency and index speed for Atlas vs a graph tool, an LSP-truth real-repository flagship, and a 40-language maturity ladder. Native ground truth by construction; real-LLM scored (222 cells, 666 model calls).",
+      "Per-language code-intelligence benchmark: answer accuracy (F1), context tokens, query latency and index speed for Atlas vs a graph tool, an LSP-truth real-repository flagship, and a 40-language maturity ladder. Native ground truth by construction; real-LLM scored (222 cells, 666 model calls). Plus dated agent-harness runs (Claude Code and Codex, 8 languages), tool-level callers F1 against each language's LSP server, and a labelled natural-language relevance benchmark.",
     url: BASE,
     isAccessibleForFree: true,
     creator: { "@type": "Organization", name: "Aziron" },
     distribution: [
       { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${BASE}data/site-data.json` },
       { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${BASE}data/raw/CALLERS_F1_AFTER.json` },
-      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${BASE}data/raw/AGENT_TOKEN_BENCH_PUBLIC.json` },
+      ...[site.agentBench?.artifact, site.lspTruthLanguages?.artifact, site.relevance?.artifact, ...(site.agentBenchLanguages?.languages || []).map((l) => l.artifact)]
+        .filter(Boolean)
+        .map((a) => ({ "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${BASE}${a}` })),
     ],
   },
 ];
@@ -253,25 +256,83 @@ const scorecardRows = r.scorecard.rows
 // agent-harness bench digest — present only when the section has shipped
 const ab = site.agentBench;
 const MODE_LABELS = { atlas: "Atlas", graphify: "Graph tool", baseline: "No tool (raw exploration)" };
+const MODE_ORDER = { atlas: 0, baseline: 1, graphify: 2 };
+const xf = (v) => (v == null ? "—" : `${Number(v).toFixed(2)}×`);
+const f3 = (v) => (v == null ? "—" : Number(v).toFixed(3));
+const baseName = (p) => String(p || "").split("/").pop();
 const agentBenchBlock = !ab ? "" : `
         <h2>What a real agent actually spends — ${esc(ab.label)}</h2>
-        <p>Claude Code and OpenAI Codex, run headless in ${esc(ab.repo)} (@${esc(ab.commit7)}) and restricted to one
+        <p>${esc(ab.agents.map((a) => `${a.harness} (${a.model})`).join(" and "))}, run headless in ${esc(ab.repo)} (@${esc(ab.commit7)}) and restricted to one
            code-intelligence CLI per run; token numbers are each harness's own usage accounting over
-           ${ab.nQuestions} caller questions with ${esc(ab.truth)}. ${esc(ab.caveat)}</p>
+           ${ab.nQuestions} caller questions with ${esc(ab.truth)}. Atlas binary: ${esc(ab.atlasBuild || "—")}; graph tool: ${esc(ab.graphifyVersion || "—")}. ${esc(ab.caveat)}</p>
         <table>
-          <thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Mean tool calls</th><th>Mean F1</th></tr></thead>
+          <thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Mean turns</th><th>Mean F1</th></tr></thead>
           <tbody>
           ${ab.agents.map((a) =>
-            ab.cells.filter((c) => c.agent === a.id)
+            ab.cells.filter((c) => c.agent === a.id).sort((x, y) => MODE_ORDER[x.mode] - MODE_ORDER[y.mode])
               .map((c) => `<tr><td>${esc(a.id)} (${esc(a.model || "default")})</td><td>${esc(MODE_LABELS[c.mode] || c.mode)}</td><td>${c.totalTokens?.toLocaleString("en-US") ?? "—"}</td><td>${c.turns ?? "—"}</td><td>${c.f1?.toFixed(3) ?? "—"}</td></tr>`)
               .join("\n          ")
           ).join("\n          ")}
           </tbody>
         </table>
+        <p>No tool / graph tool over Atlas, total tokens: ${esc(ab.agents.map((a) => `${a.id} ${xf(a.vsAtlas.baseline?.totalTokens)} / ${xf(a.vsAtlas.graphify?.totalTokens)}`).join(", "))}.${ab.supersedes ? ` This replaces the ${esc(ab.supersedes.date)} run (${esc(Object.entries(ab.supersedes.vsAtlasTotalTokens || {}).map(([a, v]) => `${a} ${xf(v.baseline)} / ${xf(v.graphify)}`).join(", "))}). ${esc(ab.supersedes.why)}` : ""}</p>
         <p>Reproducible from any machine: the suite ships in
            <a href="https://github.com/aziron-ai/atlas/tree/main/agent-bench">agent-bench/</a> (pinned commit, frozen
            gopls question set, isolation flags baked in); per-run records in
-           <a href="data/raw/AGENT_TOKEN_BENCH_PUBLIC.json">AGENT_TOKEN_BENCH_PUBLIC.json</a>.</p>`;
+           <a href="${esc(ab.artifact)}">${esc(baseName(ab.artifact))}</a>.</p>`;
+
+const L = site.agentBenchLanguages;
+const agentLanguagesBlock = !L ? "" : `
+        <h2>The same harness in ${L.languages.length} languages — ${esc(L.label)}</h2>
+        <p>${esc(L.what)} ${esc(L.verdictRule)} Atlas passes <strong>${L.verdict.pass} of ${L.verdict.total}</strong> cells (${L.okRuns}/${L.totalRuns} runs answered).</p>
+        <table>
+          <thead><tr><th>Language</th><th>Repository @ commit</th><th>Truth</th><th>claude F1 (Atlas · no tool · graph)</th><th>codex F1 (Atlas · no tool · graph)</th><th>Tokens vs Atlas, claude / codex (no tool · graph)</th></tr></thead>
+          <tbody>
+          ${L.languages.map((l) => {
+            const c = (a, m) => l.cells.find((x) => x.agent === a && x.mode === m);
+            const trip = (a) => `${f3(c(a, "atlas")?.f1)} · ${f3(c(a, "baseline")?.f1)} · ${f3(c(a, "graphify")?.f1)}`;
+            const rat = (a) => `${xf(l.vsAtlas[a]?.baseline?.totalTokens)} · ${xf(l.vsAtlas[a]?.graphify?.totalTokens)}`;
+            return `<tr><td>${esc(l.label)}</td><td>${esc(l.repo)} @${esc(l.commit7)}</td><td>${esc(l.truthTool)}</td><td>${trip("claude")}</td><td>${trip("codex")}</td><td>${rat("claude")} / ${rat("codex")}</td></tr>`;
+          }).join("\n          ")}
+          </tbody>
+        </table>
+        <p>${esc(L.atlasBuildNote)} ${esc(L.billedNote || "")} ${esc(L.caveat)} Per-run records: ${L.languages.map((l) => `<a href="${esc(l.artifact)}">${esc(baseName(l.artifact))}</a>`).join(", ")}.</p>`;
+
+const T = site.lspTruthLanguages;
+const lspTruthBlock = !T ? "" : `
+        <h2>The tool alone — ${esc(T.label)}</h2>
+        <p>${esc(T.what)}</p>
+        <table>
+          <thead><tr><th>Language</th><th>Repository @ commit</th><th>Truth</th><th>Questions</th><th>Mean callers F1</th><th>Perfect</th></tr></thead>
+          <tbody>
+          ${T.languages.map((l) => `<tr><td>${esc(l.label)}</td><td>${esc(l.repo)} @${esc(l.commit7)}</td><td>${esc(l.truthTool)}</td><td>${l.n}</td><td>${f3(l.meanF1)}</td><td>${l.perfect}/${l.n}</td></tr>`).join("\n          ")}
+          </tbody>
+        </table>
+        <p>${esc(T.buildNote)} Per-question counts: <a href="${esc(T.artifact)}">${esc(baseName(T.artifact))}</a>.</p>`;
+
+const RV = site.relevance;
+const SURF = { search: "search", search_exact: "search, bare entity name (control)", context: "context", code_query: "code_query (MCP)" };
+const QCLS = { definition: "where is E defined?", callers: "what calls E?", error_handling: "E error exception handling" };
+const relevanceBlock = !RV ? "" : `
+        <h2>Retrieval relevance — ${esc(RV.label)}</h2>
+        <p>${esc(RV.what)} Corpora: ${RV.corpora.map((c) => `${esc(c.id)} (${c.sources.map((s) => `${esc(s.slug)} @${esc(s.commit7)}`).join(" + ")}, ${c.labels.total} queries)`).join("; ")}. ${esc(RV.outOfScope || "")}</p>
+        <table>
+          <thead><tr><th>Question</th><th>Surface</th><th>n</th><th>P@1</th><th>MRR</th><th>R@10</th><th>Entity first</th></tr></thead>
+          <tbody>
+          ${Object.entries(RV.pooled).flatMap(([cls, rows]) => rows.map((x) => `<tr><td>${esc(QCLS[cls] || cls)}</td><td>${esc(SURF[x.surface] || x.surface)}</td><td>${x.n}</td><td>${f3(x.p1)}</td><td>${f3(x.mrr)}</td><td>${f3(x.r10)}</td><td>${f3(x.entityFirst)}</td></tr>`)).join("\n          ")}
+          </tbody>
+        </table>
+        <table>
+          <thead><tr><th>Adversarial (generic / stopword)</th><th>n</th><th>Refused</th><th>Safe</th></tr></thead>
+          <tbody>
+          ${RV.adversarial.map((a) => `<tr><td>${esc(SURF[a.surface] || a.surface)}</td><td>${a.n}</td><td>${f3(a.refused)}</td><td>${f3(a.safe)}</td></tr>`).join("\n          ")}
+          </tbody>
+        </table>
+        <p>Gate: ${RV.gate.thresholds - RV.gate.failures} of ${RV.gate.thresholds} frozen thresholds hold. ${esc(RV.gate.driftNote || "")} ${esc(RV.gate.catches)}</p>
+        <ul>
+          ${RV.findings.map((f) => `<li>${esc(f.id)} — ${esc(f.title)}${/^FIXED/.test(f.status) ? ` (${esc(f.status)})` : ""}</li>`).join("\n          ")}
+        </ul>
+        <p>${esc(RV.buildNote)} Harness: <a href="https://github.com/aziron-ai/atlas/tree/main/relevance-bench">relevance-bench/</a>; per-query rows: <a href="${esc(RV.artifact)}">${esc(baseName(RV.artifact))}</a>.</p>`;
 
 const knobRows = r.detailKnob.levels
   .map((lv) => `<tr><td>--detail ${lv.id}${lv.id === r.detailKnob.defaultLevel ? " (default)" : ""}</td><td>${esc(lv.what)}</td><td>${lv.tokens}</td><td>${lv.f1.toFixed(2)}</td></tr>`)
@@ -311,9 +372,11 @@ const body = `
           <li>${h.tokensPooled}× fewer answer tokens than the graph tool, pooled across a ${h.matrixRepos}-repository matrix (${h.matrixQueries} queries both tools answered). Per-language mean ${h.tokensPerLanguageMean}×, median ${h.tokensPerLanguageMedian}×, worst language ${h.tokensWorstLanguage} at ${h.tokensWorstRatio}×.</li>
           <li>And a better answer: caller-F1 ${h.atlasF1.toFixed(3)} vs ${h.graphifyF1.toFixed(3)} — ${h.f1Advantage}× — scored by ${esc(r.method.scoringModel)} over ${r.method.cells} cells / ${r.method.modelCalls} model calls on 37 constructed-truth fixtures.</li>
           <li>The shipped default matches the maximum-detail level exactly (F1 ${r.efficiency.highF1.toFixed(3)} both) at ${r.efficiency.xCheaper}× fewer tokens — ${r.efficiency.highTok} vs ${r.efficiency.xhighTok}. ${r.efficiency.perfectLangs} of ${r.efficiency.totalLangs} languages score a perfect 1.000.</li>
-          <li>Inside a real agent (${esc(r.goFlagship.repo)}, gopls call-hierarchy ground truth, ${r.goFlagship.questions} questions): F1 0.995 with Atlas on both the claude and codex harnesses.</li>
+          <li>Inside a real agent (${esc(r.goFlagship.repo)}, gopls call-hierarchy ground truth, ${r.goFlagship.questions} questions${ab ? `, ${esc(ab.date)}` : ""}): F1 ${ab ? [...new Set(Object.values(ab.atlasF1))].map((v) => v.toFixed(3)).join(" / ") : "—"} with Atlas on both the claude and codex harnesses.</li>${L ? `
+          <li>The same harness in ${L.languages.length} languages (${esc(L.date)}): Atlas beats the no-tool baseline and the graph tool on both accuracy and tokens in ${L.verdict.pass} of ${L.verdict.total} agent × language cells.</li>` : ""}${T ? `
+          <li>The tool alone, against each language's LSP server (${esc(T.date)}): callers F1 ${T.languages.map((l) => `${esc(l.label)} ${f3(l.meanF1)}`).join(", ")}.</li>` : ""}
           <li>Queries run ${r.latencyAtScale.matrixLatencyMean}× faster than the graph tool on the same matrix (mean of the seven per-repository ratios); warm-serve <code>explain</code> lands between ${r.latencyAtScale.warmServeMinMs} and ${r.latencyAtScale.warmServeMaxMs} ms.</li>
-          <li>Corroborated by an independent Linux re-run: ${f.saturation.perfect}/${f.saturation.total} languages fixture-perfect, gopls-truth F1 ${f.lspTruth.meanF1.toFixed(3)}. That leg ran on ${esc(f.platform)}; it has no graph-tool binary, so it publishes no competitor ratio.</li>
+          <li>Corroborated by an independent Linux re-run (2026-08-05): ${f.saturation.perfect}/${f.saturation.total} languages fixture-perfect, gopls-truth F1 ${f.lspTruth.meanF1.toFixed(3)}. That leg ran on ${esc(f.platform)}; it has no graph-tool binary, so it publishes no competitor ratio.</li>
         </ul>
         <h3>Retracted claims</h3>
         <ul>
@@ -328,6 +391,9 @@ const body = `
           </tbody>
         </table>
 ${agentBenchBlock}
+${agentLanguagesBlock}
+${lspTruthBlock}
+${relevanceBlock}
         <h2>The --detail knob</h2>
         <p>${esc(r.detailKnob.floorNote)}</p>
         <table>
@@ -424,7 +490,8 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intellig
 > (definition, callers, callees, imports, routes) in single-digit milliseconds and tens of tokens.
 > ${esc(r.label)}: ${h.tokensPooled}× fewer answer tokens than the graph tool pooled over a
 > ${h.matrixRepos}-repository matrix, at a higher answer quality — caller-F1 ${h.atlasF1.toFixed(3)} vs ${h.graphifyF1.toFixed(3)}.
-> Inside a real agent harness on ${esc(r.goFlagship.repo)} with gopls ground truth: F1 0.995.
+> Inside a real agent harness on ${esc(r.goFlagship.repo)} with gopls ground truth${ab ? ` (${esc(ab.date)})` : ""}: F1 ${ab ? [...new Set(Object.values(ab.atlasF1))].map((v) => v.toFixed(3)).join(" / ") : "—"}.${L ? `
+> Same harness, ${L.languages.length} languages: Atlas beats both comparators on accuracy and tokens in ${L.verdict.pass}/${L.verdict.total} agent × language cells.` : ""}
 > ${r.maturity.promoted.total} of ${r.maturity.totalCodeLanguages} code languages are reference-validated (L5) on a five-level
 > maturity ladder; dart was RETRACTED from L5 this refresh. Version ${pkg.version}.
 > Earlier 20× and 36× token claims are RETRACTED: they were measured against a build whose
@@ -435,7 +502,10 @@ fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intellig
 - [CALLERS_F1_AFTER.json](${BASE}data/raw/CALLERS_F1_AFTER.json): 37/37 native callers F1 (Linux corroboration run)
 - [DIMENSIONS_BENCH_PUBLIC.json](${BASE}data/raw/DIMENSIONS_BENCH_PUBLIC.json): per-language F1 / tokens / latency / index speed
 - [LSP_F1_SUMMARY.json](${BASE}data/raw/LSP_F1_SUMMARY.json): gopls LSP-truth aggregate
-- [AGENT_TOKEN_BENCH_PUBLIC.json](${BASE}data/raw/AGENT_TOKEN_BENCH_PUBLIC.json): end-to-end token usage of real agent harnesses (Claude Code, OpenAI Codex) with Atlas vs graph tool vs no tool — reproducible via agent-bench/ in the GitHub repo
+${ab ? `- [${baseName(ab.artifact)}](${BASE}${ab.artifact}): end-to-end token usage of real agent harnesses (Claude Code, OpenAI Codex) with Atlas vs graph tool vs no tool, ${ab.date} — reproducible via agent-bench/ in the GitHub repo
+` : ""}${L ? L.languages.map((l) => `- [${baseName(l.artifact)}](${BASE}${l.artifact}): the same harness on ${l.label} (${l.repo}), ${L.date}`).join("\n") + "\n" : ""}${T ? `- [${baseName(T.artifact)}](${BASE}${T.artifact}): tool-level callers F1 against each language's LSP server, 8 languages, ${T.date}
+` : ""}${RV ? `- [${baseName(RV.artifact)}](${BASE}${RV.artifact}): natural-language relevance benchmark (216 labelled queries, 3 surfaces, regression gate), ${RV.date} — harness in relevance-bench/
+` : ""}- [AGENT_TOKEN_BENCH_PUBLIC.json](${BASE}data/raw/AGENT_TOKEN_BENCH_PUBLIC.json): the superseded 2026-08-05 agent-harness run, kept for audit
 
 ## Project
 - [Product documentation](${BASE}#docs/getting-started): install, index, query, configure, connect, troubleshoot, and upgrade

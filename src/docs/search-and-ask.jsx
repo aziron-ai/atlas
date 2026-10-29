@@ -20,6 +20,7 @@ export default function Page() {
           <li><strong>It ranks by BM25.</strong> A result where your words are rare and concentrated — in the name, the signature, the doc comment or the path — ranks above one where they are common and scattered.</li>
           <li><strong>It forgives small typos.</strong> Trigram matching compares three-letter fragments, so <code>modlDenied</code> still finds <code>modelDenied</code>.</li>
           <li><strong>It searches paths too.</strong> <code>model_filter.go</code> or <code>providers/routing</code> name a file or folder; a path-shaped query ranks the file whose path is exactly that first.</li>
+          <li><strong>Ties have one order.</strong> Since 0.1.55, results with equal scores come back by path, then name, kind, signature and line, so two fresh indexes of the same commit, at any worker count, return the same page in the same order (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/135" target="_blank" rel="noreferrer">#135</a>).</li>
         </Bullets>
         <p>Results carry a kind: <code>function</code>, <code>method</code>, <code>method_spec</code> (an interface method), <code>type</code>, <code>field</code>, <code>constant</code>, <code>key</code> (a configuration or YAML key), and, from documentation, <code>section</code> and <code>document</code>. Filter with <code>--kind</code>, <code>--path</code> and <code>--corpus</code> on the command line.</p>
       </ProseSection>
@@ -168,6 +169,22 @@ refs CreateChatCompletionRequest  total 44
   handleMCPStreamingRequest  method  api/middlewares/mcp.go:242  :: func (m *MCPMiddlewareImpl) handleMCPStreamingRequest(c *gin.Context, request *types.CreateChatCompletionRequest, result *MCPProviderModelResult) error
   …`}</Command>
         <p>All flags are in the <a className="text-link" href="#docs/cli">CLI reference</a>.</p>
+      </ProseSection>
+
+      <ProseSection title="How Fresh Is the Answer">
+        <p><strong>Since 0.1.55</strong>, every answer about a repository says which snapshot it came from and whether the code has moved since: <code>indexed_sha</code>, <code>head_sha</code>, <code>dirty</code>, <code>stale</code> and <code>stale_reason</code>, the same on the CLI, over MCP and from the API (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/59" target="_blank" rel="noreferrer">#59</a>). Edit a file after indexing and the next lookup says so before anything else:</p>
+        <Command label="Output">{`$ atlas snippet helper --format plain
+stale: indexed 4fb9d0f74f1c vs head 4fb9d0f74f1c+dirty  (working_tree_dirty)  not refreshed (one-shot command; run \`atlas index\`)
+snippet helper  definitions 1  resolved true`}</Command>
+        <p><code>resolved: true</code> still means the symbol was found; <code>stale: true</code> means its line numbers and body may have moved. A one-shot command does not refresh in the background, so run <code>atlas index .</code>, or set <code>ATLAS_ONESHOT_REFRESH=sync</code> to refresh before answering (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/141" target="_blank" rel="noreferrer">#141</a>). Indexing uncommitted work stores its own <code>&lt;sha&gt;+dirty</code> snapshot beside the commit's — see <a className="text-link" href="#docs/history">Change lens and history</a>.</p>
+      </ProseSection>
+
+      <ProseSection title="Answers That Refuse Instead of Guessing">
+        <p>Keyword search always matches something, so a list of citations is not proof that the code answers the question. When an assistant or a script calls <code>code_query</code> with <code>require_citations: true</code>, <strong>since 0.1.55</strong> the cited names and paths must carry what the question names — an identifier it spells, or enough of its specific words (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/60" target="_blank" rel="noreferrer">#60</a>). Otherwise the answer is <code>status: "insufficient"</code> with <code>reason: "citations_below_relevance_floor"</code>, a <code>relevance</code> block naming the words nothing matched, and the nearest candidates as <code>low_confidence_hits</code>, never as citations. Asked about "the quantum flux capacitor module" in a repository that has none, Atlas now says so instead of citing a <code>helper</code> whose doc comment mentions "module". The fields are described in <a className="text-link" href="#docs/mcp">MCP tools</a>.</p>
+      </ProseSection>
+
+      <ProseSection title="Evidence Inside Large Functions">
+        <p>The index keeps the start and end of a long function body, not every line. <strong>Since 0.1.55</strong>, when a question is about something inside a long function — a route registered on line 1,005 of a 2,000-line setup function — <code>code_query</code> and <code>context</code> re-read the matching lines from the file, as long as the file still matches the index, and quote them with every skipped run marked <code>// ... elided N lines (La-Lb) ...</code>. The answer's <code>metadata.body_elision</code> lists the line ranges shown, and the citation keeps the function's real range (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/156" target="_blank" rel="noreferrer">#156</a>).</p>
       </ProseSection>
 
       <ProseSection title="From the API">

@@ -24,7 +24,7 @@
   <meta name="twitter:title" content="Change Lens and History — Atlas">
   <meta name="twitter:description" content="What changed, hot files, staleness, snapshots and structural diffs.">
   <meta name="twitter:image" content="https://atlas.aziro.com/assets/og.png">
-  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Change Lens and History","description":"What changed, hot files, staleness, snapshots and structural diffs.","url":"https://atlas.aziro.com/docs/history/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-08-05"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"Change Lens and History","item":"https://atlas.aziro.com/docs/history/"}]}]</script>
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Change Lens and History","description":"What changed, hot files, staleness, snapshots and structural diffs.","url":"https://atlas.aziro.com/docs/history/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-10-29"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"Change Lens and History","item":"https://atlas.aziro.com/docs/history/"}]}]</script>
   <style>
   :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
   * { box-sizing:border-box; }
@@ -120,6 +120,18 @@ atlas index .</code></pre>
   &quot;retention&quot;: { &quot;max_snapshots_per_repo&quot;: 5, &quot;max_total_bytes&quot;: 5368709120, &quot;max_age&quot;: &quot;disabled&quot; }
 }</code></pre>
 <p><code>atlas snapshots prune --dry-run</code> prints exactly what a prune would delete without touching anything; <code>--keep N</code> and <code>--keep-since 90d</code> override the policy for one run.</p>
+<h2>Snapshots of Uncommitted Work</h2>
+<p><strong>Since 0.1.55</strong>, indexing a working tree with uncommitted edits or untracked files stores a snapshot of its own, labelled <code>&lt;sha&gt;+dirty</code>, beside the clean snapshot of that commit (<a href="https://github.com/aziron-ai/atlas/issues/65">#65</a>). The timeline lists both, and <code>snapshot-diff</code> compares them: <code>--from</code> and <code>--to</code> accept <code>&lt;sha&gt;+dirty</code> as well as a commit sha or a snapshot id. On a small repository after adding one function without committing it:</p>
+<pre><code>$ atlas history --format plain
+history repo  snapshots 2
+  4fb9d0f7+dirty  e0596478-…  files 2  symbols 4  edges 3  2026-10-29T05:18:49Z
+  4fb9d0f7  777a3e52-…  files 2  symbols 3  edges 3  2026-10-29T05:18:35Z
+
+$ atlas snapshot-diff --format plain
+snapshot_diff 4fb9d0f7 -&gt; 4fb9d0f7+dirty  +1 -0 ~0  files 1
+  added(1)  extra
+  files(1)  main.go</code></pre>
+<p>In <code>snapshots list</code> the dirty row carries <code>dirty: true</code> and its <code>tree_hash</code>. A newer dirty state of the same commit retires the one before it, so edit churn never pushes commit history out of the per-repository cap, and committing the work stores the new commit's snapshot.</p>
 <h2>Find the Symbols That Carry the Most Weight</h2>
 <p><strong>Hot Symbols</strong> ranks the graph's hubs by total degree — the calls in plus the calls out. A hub is where a change spreads: a symbol many others call, or one that calls many others.</p>
 <figure><img src="../../assets/docs/history/hot-symbols.png" alt="Hot Symbols: the hub leaderboard with main at degree 71, ProviderImpl.ListModels and RouterImpl.handleImagesMultipart at 55, and the detail rail for main" loading="lazy" decoding="async"><figcaption>The hub leaderboard of inference-gateway. main in cmd/gateway/main.go leads with 71 outgoing edges and none incoming.</figcaption></figure>
@@ -132,10 +144,12 @@ atlas index .</code></pre>
   RouterImpl.MessagesHandler  method  in 0  out 52  total 52  api/routes.go
   LoggerZapImpl.Error  method  in 41  out 6  total 47  logger/logger.go
   …</code></pre>
+<p>Since 0.1.55 a hub needs at least one resolved call or inheritance relation: the header adds <code>eligible</code> and <code>excluded_isolated</code>, and on a sparse graph the list is shorter than the limit rather than padded with symbols nothing calls (<a href="https://github.com/aziron-ai/atlas/issues/45">#45</a>).</p>
 <h2>Check How Fresh the Index Is</h2>
 <p><strong>Freshness</strong> lists the operations Atlas derives from the latest snapshot — on the demo, one <strong>Observe repo</strong> card per indexed repository — and checks each against two signals: <strong>Code</strong> (the snapshot it was built from is still the one loaded) and <strong>Time</strong> (when that snapshot was indexed). Hover a signal for its detail. A card whose signals all hold reads <strong>fresh</strong>; the badge at the top counts the stale ones. <strong>Inspect</strong> opens the operation.</p>
 <figure><img src="../../assets/docs/history/freshness.png" alt="The Freshness view: three cards, Observe repo github://github, inference-gateway and prometheus://promlabs, each fresh with 2/2 signals, and the badge 0 stale" loading="lazy" decoding="async"><figcaption>Three operations, each fresh on both signals; 0 stale.</figcaption></figure>
 <p>When the code moves on and the index does not, re-index: <code>atlas index .</code> brings the snapshot, and with it every derived operation, up to date. <a href="../indexing/">Indexing and reindexing</a> covers watching a repository so this happens on every change.</p>
+<p>The answers themselves say how fresh they are too. Since 0.1.55 every lookup carries <code>indexed_sha</code>, <code>head_sha</code>, <code>dirty</code> and <code>stale</code>, and a plain answer opens with a <code>stale:</code> line when the checkout has moved past the snapshot that answered — see <a href="../search-and-ask/">Search and Ask</a> (<a href="https://github.com/aziron-ai/atlas/issues/59">#59</a>).</p>
 <h2>See What a Service Started or Stopped Saying</h2>
 <p><strong>What Changed</strong> compares two windows of one log stream from its hourly counts: templates <strong>New in B</strong>, <strong>Gone in B</strong>, and <strong>Rate changed</strong> per minute, biggest move first. Each row names the line of code that emits the template in <strong>CALLER</strong>. Choose the stream, then one shape: <strong>Recent window</strong> (the last 1–24 h against the same length before), <strong>Around an instant</strong> (either side of a deploy) or <strong>Explicit windows</strong>, and press <strong>Compare</strong>.</p>
 <figure><img src="../../assets/docs/history/what-changed.png" alt="What Changed for prod / inference-gateway: Gone in B has route not found, Rate changed shows failed to generate tokens up 187 percent, with callers such as api/routes.go:805" loading="lazy" decoding="async"><figcaption>The last hour of the prod stream against the hour before. failed to generate tokens (api/routes.go:805) is up 187 % per minute; route not found stopped.</figcaption></figure>
@@ -189,7 +203,7 @@ changed  12       44       +190%   error     api/routes.go:805         failed to
         <a href="../benchmarks/">Benchmarks and Methodology</a>
     </nav>
     <footer class="site">
-      Atlas v0.1.54 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      Atlas v0.1.55 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
       This page mirrors the interactive documentation for search engines and AI assistants.
     </footer>
   </main>

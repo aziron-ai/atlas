@@ -132,6 +132,32 @@ atlas snapshots list
 without touching anything; `--keep N` and `--keep-since 90d` override the
 policy for one run.
 
+## Snapshots of Uncommitted Work
+
+**Since 0.1.55**, indexing a working tree with uncommitted edits or untracked
+files stores a snapshot of its own, labelled `<sha>+dirty`, beside the clean
+snapshot of that commit ([#65](https://github.com/aziron-ai/atlas/issues/65)).
+The timeline lists both, and `snapshot-diff` compares them: `--from` and `--to`
+accept `<sha>+dirty` as well as a commit sha or a snapshot id. On a small
+repository after adding one function without committing it:
+
+```text
+$ atlas history --format plain
+history repo  snapshots 2
+  4fb9d0f7+dirty  e0596478-…  files 2  symbols 4  edges 3  2026-10-29T05:18:49Z
+  4fb9d0f7  777a3e52-…  files 2  symbols 3  edges 3  2026-10-29T05:18:35Z
+
+$ atlas snapshot-diff --format plain
+snapshot_diff 4fb9d0f7 -> 4fb9d0f7+dirty  +1 -0 ~0  files 1
+  added(1)  extra
+  files(1)  main.go
+```
+
+In `snapshots list` the dirty row carries `dirty: true` and its `tree_hash`.
+A newer dirty state of the same commit retires the one before it, so edit
+churn never pushes commit history out of the per-repository cap, and
+committing the work stores the new commit's snapshot.
+
 ## Find the Symbols That Carry the Most Weight
 
 **Hot Symbols** ranks the graph's hubs by total degree — the calls in plus the
@@ -163,6 +189,11 @@ hubs  total 20
   …
 ```
 
+Since 0.1.55 a hub needs at least one resolved call or inheritance relation:
+the header adds `eligible` and `excluded_isolated`, and on a sparse graph the
+list is shorter than the limit rather than padded with symbols nothing calls
+([#45](https://github.com/aziron-ai/atlas/issues/45)).
+
 ## Check How Fresh the Index Is
 
 **Freshness** lists the operations Atlas derives from the latest snapshot — on
@@ -178,6 +209,12 @@ When the code moves on and the index does not, re-index: `atlas index .` brings
 the snapshot, and with it every derived operation, up to date.
 [Indexing and reindexing](indexing) covers watching a repository so this
 happens on every change.
+
+The answers themselves say how fresh they are too. Since 0.1.55 every
+lookup carries `indexed_sha`, `head_sha`, `dirty` and `stale`, and a plain
+answer opens with a `stale:` line when the checkout has moved past the
+snapshot that answered — see [Search and Ask](search-and-ask)
+([#59](https://github.com/aziron-ai/atlas/issues/59)).
 
 ## See What a Service Started or Stopped Saying
 

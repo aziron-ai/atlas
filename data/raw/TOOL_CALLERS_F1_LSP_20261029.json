@@ -1,0 +1,1734 @@
+{
+  "label": "Tool-level callers F1 against LSP truth",
+  "what": "`atlas callers <symbol> --json` from the CLI (no agent), each repository indexed into a brand-new store, scored by caller name against the frozen LSP-truth QA sets of the multi-language agent benchmark",
+  "date": "2026-10-29",
+  "atlas_build": "atlas v0.1.52-697-gadb57f43 (adb57f43, 2026-10-29T03:44:57Z)",
+  "identical_on": [
+    "atlas v0.1.52-677-g1290d8a8-dirty (1290d8a8, 2026-10-28T23:22:51Z)",
+    "atlas v0.1.52-682-ga3e9065b-dirty (a3e9065b, 2026-10-29T01:25:10Z)",
+    "atlas v0.1.52-692-g87b5330a (87b5330a, 2026-10-29T02:39:42Z)"
+  ],
+  "scoring": "per question: P = hits / names returned, R = hits / truth names, F1 = 2PR/(P+R); a question whose truth and answer are both empty scores 1. Mean over the 19 questions; perfect = F1 1.000.",
+  "languages": [
+    {
+      "lang": "go",
+      "repo_slug": "sirupsen/logrus",
+      "repo_commit": "a23d315dfebb6de47d18c92c8ae1430736a60b0c",
+      "truth": "gopls call_hierarchy, union over all same-name definitions (bench/llm_qa.py)",
+      "qa_set": "agent-bench/QA_SET_logrus.json",
+      "index": {
+        "commit": "a23d315dfebb6de47d18c92c8ae1430736a60b0c",
+        "files": 57,
+        "symbols": 802,
+        "edges": 3587,
+        "durationMs": 804
+      },
+      "n_questions": 19,
+      "mean_f1": 0.9959,
+      "mean_f1_printed": "0.996",
+      "perfect": 17,
+      "questions": [
+        {
+          "symbol": "New",
+          "truth": 55,
+          "got": 55,
+          "hit": 54,
+          "precision": 0.9818,
+          "recall": 0.9818,
+          "f1": 0.9818
+        },
+        {
+          "symbol": "SetLevel",
+          "truth": 10,
+          "got": 10,
+          "hit": 10,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "WithError",
+          "truth": 4,
+          "got": 4,
+          "hit": 4,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "Errorf",
+          "truth": 2,
+          "got": 2,
+          "hit": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "NewEntry",
+          "truth": 16,
+          "got": 16,
+          "hit": 16,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "WithField",
+          "truth": 46,
+          "got": 46,
+          "hit": 46,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "WithFields",
+          "truth": 16,
+          "got": 16,
+          "hit": 16,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "SetOutput",
+          "truth": 35,
+          "got": 35,
+          "hit": 35,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "SetFormatter",
+          "truth": 12,
+          "got": 12,
+          "hit": 12,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "AddHook",
+          "truth": 15,
+          "got": 15,
+          "hit": 15,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "WithContext",
+          "truth": 3,
+          "got": 3,
+          "hit": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "WithTime",
+          "truth": 6,
+          "got": 6,
+          "hit": 6,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "StandardLogger",
+          "truth": 3,
+          "got": 3,
+          "hit": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "GetLevel",
+          "truth": 2,
+          "got": 2,
+          "hit": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "IsLevelEnabled",
+          "truth": 6,
+          "got": 6,
+          "hit": 6,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "SetReportCaller",
+          "truth": 8,
+          "got": 8,
+          "hit": 8,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "Exit",
+          "truth": 7,
+          "got": 7,
+          "hit": 7,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "RegisterExitHandler",
+          "truth": 2,
+          "got": 2,
+          "hit": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "Warn",
+          "truth": 9,
+          "got": 8,
+          "hit": 8,
+          "precision": 1,
+          "recall": 0.8889,
+          "f1": 0.9412
+        }
+      ],
+      "scorer_output": [
+        "symbol                       truth  got  hit   P     R     F1",
+        "New                             55   55   54  0.98  0.98  0.98",
+        "SetLevel                        10   10   10  1.00  1.00  1.00",
+        "WithError                        4    4    4  1.00  1.00  1.00",
+        "Errorf                           2    2    2  1.00  1.00  1.00",
+        "NewEntry                        16   16   16  1.00  1.00  1.00",
+        "WithField                       46   46   46  1.00  1.00  1.00",
+        "WithFields                      16   16   16  1.00  1.00  1.00",
+        "SetOutput                       35   35   35  1.00  1.00  1.00",
+        "SetFormatter                    12   12   12  1.00  1.00  1.00",
+        "AddHook                         15   15   15  1.00  1.00  1.00",
+        "WithContext                      3    3    3  1.00  1.00  1.00",
+        "WithTime                         6    6    6  1.00  1.00  1.00",
+        "StandardLogger                   3    3    3  1.00  1.00  1.00",
+        "GetLevel                         2    2    2  1.00  1.00  1.00",
+        "IsLevelEnabled                   6    6    6  1.00  1.00  1.00",
+        "SetReportCaller                  8    8    8  1.00  1.00  1.00",
+        "Exit                             7    7    7  1.00  1.00  1.00",
+        "RegisterExitHandler              2    2    2  1.00  1.00  1.00",
+        "Warn                             9    8    8  1.00  0.89  0.94  <--",
+        "",
+        "questions 19  mean tool F1 0.996  perfect 17/19"
+      ]
+    },
+    {
+      "lang": "python",
+      "repo_slug": "psf/requests",
+      "repo_commit": "3c7baaa05ab4aa49cc819ce3a819d260de19c157",
+      "truth": "pyright-langserver LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+      "qa_set": "agent-bench/QA_SET_python.json",
+      "index": {
+        "commit": "3c7baaa05ab4aa49cc819ce3a819d260de19c157",
+        "files": 105,
+        "symbols": 1745,
+        "edges": 4027,
+        "durationMs": 390
+      },
+      "n_questions": 19,
+      "mean_f1": 0.9646,
+      "mean_f1_printed": "0.965",
+      "perfect": 14,
+      "questions": [
+        {
+          "symbol": "prepare",
+          "truth": 55,
+          "got": 55,
+          "hit": 55,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "post",
+          "truth": 22,
+          "got": 22,
+          "hit": 22,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "send",
+          "truth": 20,
+          "got": 20,
+          "hit": 18,
+          "precision": 0.9,
+          "recall": 0.9,
+          "f1": 0.9
+        },
+        {
+          "symbol": "json",
+          "truth": 19,
+          "got": 16,
+          "hit": 16,
+          "precision": 1,
+          "recall": 0.8421,
+          "f1": 0.9143
+        },
+        {
+          "symbol": "session",
+          "truth": 16,
+          "got": 16,
+          "hit": 16,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "super_len",
+          "truth": 14,
+          "got": 14,
+          "hit": 14,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "prepare_request",
+          "truth": 13,
+          "got": 13,
+          "hit": 13,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "request",
+          "truth": 13,
+          "got": 13,
+          "hit": 13,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "mount",
+          "truth": 9,
+          "got": 9,
+          "hit": 9,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "should_bypass_proxies",
+          "truth": 9,
+          "got": 9,
+          "hit": 9,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cookiejar_from_dict",
+          "truth": 8,
+          "got": 8,
+          "hit": 8,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "to_native_string",
+          "truth": 8,
+          "got": 8,
+          "hit": 8,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "iter_content",
+          "truth": 7,
+          "got": 6,
+          "hit": 6,
+          "precision": 1,
+          "recall": 0.8571,
+          "f1": 0.9231
+        },
+        {
+          "symbol": "close",
+          "truth": 6,
+          "got": 3,
+          "hit": 3,
+          "precision": 1,
+          "recall": 0.5,
+          "f1": 0.6667
+        },
+        {
+          "symbol": "get_adapter",
+          "truth": 6,
+          "got": 7,
+          "hit": 6,
+          "precision": 0.8571,
+          "recall": 1,
+          "f1": 0.9231
+        },
+        {
+          "symbol": "get_environ_proxies",
+          "truth": 6,
+          "got": 6,
+          "hit": 6,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "morsel_to_cookie",
+          "truth": 6,
+          "got": 6,
+          "hit": 6,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "resolve_redirects",
+          "truth": 6,
+          "got": 6,
+          "hit": 6,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "rewind_body",
+          "truth": 6,
+          "got": 6,
+          "hit": 6,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        }
+      ],
+      "scorer_output": [
+        "symbol                       truth  got  hit   P     R     F1",
+        "prepare                         55   55   55  1.00  1.00  1.00",
+        "post                            22   22   22  1.00  1.00  1.00",
+        "send                            20   20   18  0.90  0.90  0.90  <--",
+        "json                            19   16   16  1.00  0.84  0.91  <--",
+        "session                         16   16   16  1.00  1.00  1.00",
+        "super_len                       14   14   14  1.00  1.00  1.00",
+        "prepare_request                 13   13   13  1.00  1.00  1.00",
+        "request                         13   13   13  1.00  1.00  1.00",
+        "mount                            9    9    9  1.00  1.00  1.00",
+        "should_bypass_proxies            9    9    9  1.00  1.00  1.00",
+        "cookiejar_from_dict              8    8    8  1.00  1.00  1.00",
+        "to_native_string                 8    8    8  1.00  1.00  1.00",
+        "iter_content                     7    6    6  1.00  0.86  0.92  <--",
+        "close                            6    3    3  1.00  0.50  0.67  <--",
+        "get_adapter                      6    7    6  0.86  1.00  0.92  <--",
+        "get_environ_proxies              6    6    6  1.00  1.00  1.00",
+        "morsel_to_cookie                 6    6    6  1.00  1.00  1.00",
+        "resolve_redirects                6    6    6  1.00  1.00  1.00",
+        "rewind_body                      6    6    6  1.00  1.00  1.00",
+        "",
+        "questions 19  mean tool F1 0.965  perfect 14/19"
+      ]
+    },
+    {
+      "lang": "c",
+      "repo_slug": "DaveGamble/cJSON",
+      "repo_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c",
+      "truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+      "qa_set": "agent-bench/QA_SET_c.json",
+      "index": {
+        "commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c",
+        "files": 178,
+        "symbols": 2474,
+        "edges": 8066,
+        "durationMs": 515
+      },
+      "n_questions": 19,
+      "mean_f1": 1,
+      "mean_f1_printed": "1.000",
+      "perfect": 19,
+      "questions": [
+        {
+          "symbol": "cJSON_Delete",
+          "truth": 105,
+          "got": 105,
+          "hit": 105,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_CreateObject",
+          "truth": 40,
+          "got": 40,
+          "hit": 40,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_Parse",
+          "truth": 22,
+          "got": 22,
+          "hit": 22,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_GetObjectItemCaseSensitive",
+          "truth": 17,
+          "got": 17,
+          "hit": 17,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_New_Item",
+          "truth": 17,
+          "got": 17,
+          "hit": 17,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_CreateArray",
+          "truth": 14,
+          "got": 14,
+          "hit": 14,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_InitHooks",
+          "truth": 14,
+          "got": 14,
+          "hit": 14,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_AddItemToObject",
+          "truth": 13,
+          "got": 13,
+          "hit": 13,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "add_item_to_object",
+          "truth": 12,
+          "got": 12,
+          "hit": 12,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_AddItemToArray",
+          "truth": 12,
+          "got": 12,
+          "hit": 12,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_CreateNumber",
+          "truth": 12,
+          "got": 12,
+          "hit": 12,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_CreateString",
+          "truth": 12,
+          "got": 12,
+          "hit": 12,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_IsArray",
+          "truth": 11,
+          "got": 11,
+          "hit": 11,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_Compare",
+          "truth": 10,
+          "got": 10,
+          "hit": 10,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_IsObject",
+          "truth": 10,
+          "got": 10,
+          "hit": 10,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_GetObjectItem",
+          "truth": 9,
+          "got": 9,
+          "hit": 9,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_Minify",
+          "truth": 9,
+          "got": 9,
+          "hit": 9,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_ParseWithOpts",
+          "truth": 9,
+          "got": 9,
+          "hit": 9,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "cJSON_free",
+          "truth": 9,
+          "got": 9,
+          "hit": 9,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        }
+      ],
+      "scorer_output": [
+        "symbol                       truth  got  hit   P     R     F1",
+        "cJSON_Delete                   105  105  105  1.00  1.00  1.00",
+        "cJSON_CreateObject              40   40   40  1.00  1.00  1.00",
+        "cJSON_Parse                     22   22   22  1.00  1.00  1.00",
+        "cJSON_GetObjectItemCaseSensitive    17   17   17  1.00  1.00  1.00",
+        "cJSON_New_Item                  17   17   17  1.00  1.00  1.00",
+        "cJSON_CreateArray               14   14   14  1.00  1.00  1.00",
+        "cJSON_InitHooks                 14   14   14  1.00  1.00  1.00",
+        "cJSON_AddItemToObject           13   13   13  1.00  1.00  1.00",
+        "add_item_to_object              12   12   12  1.00  1.00  1.00",
+        "cJSON_AddItemToArray            12   12   12  1.00  1.00  1.00",
+        "cJSON_CreateNumber              12   12   12  1.00  1.00  1.00",
+        "cJSON_CreateString              12   12   12  1.00  1.00  1.00",
+        "cJSON_IsArray                   11   11   11  1.00  1.00  1.00",
+        "cJSON_Compare                   10   10   10  1.00  1.00  1.00",
+        "cJSON_IsObject                  10   10   10  1.00  1.00  1.00",
+        "cJSON_GetObjectItem              9    9    9  1.00  1.00  1.00",
+        "cJSON_Minify                     9    9    9  1.00  1.00  1.00",
+        "cJSON_ParseWithOpts              9    9    9  1.00  1.00  1.00",
+        "cJSON_free                       9    9    9  1.00  1.00  1.00",
+        "",
+        "questions 19  mean tool F1 1.000  perfect 19/19"
+      ]
+    },
+    {
+      "lang": "java",
+      "repo_slug": "google/gson",
+      "repo_commit": "57731049da3e415be3d5d34db1ca3b80f3c73810",
+      "truth": "jdtls LSP references+documentSymbol, union over all same-name definitions (bench/make_qa_set.py)",
+      "qa_set": "agent-bench/QA_SET_java.json",
+      "index": {
+        "commit": "57731049da3e415be3d5d34db1ca3b80f3c73810",
+        "files": 304,
+        "symbols": 6496,
+        "edges": 43230,
+        "durationMs": 1634
+      },
+      "n_questions": 19,
+      "mean_f1": 0.8582,
+      "mean_f1_printed": "0.858",
+      "perfect": 5,
+      "questions": [
+        {
+          "symbol": "beginObject",
+          "truth": 109,
+          "got": 109,
+          "hit": 108,
+          "precision": 0.9908,
+          "recall": 0.9908,
+          "f1": 0.9908
+        },
+        {
+          "symbol": "peek",
+          "truth": 106,
+          "got": 104,
+          "hit": 104,
+          "precision": 1,
+          "recall": 0.9811,
+          "f1": 0.9905
+        },
+        {
+          "symbol": "setStrictness",
+          "truth": 102,
+          "got": 96,
+          "hit": 96,
+          "precision": 1,
+          "recall": 0.9412,
+          "f1": 0.9697
+        },
+        {
+          "symbol": "Gson",
+          "truth": 101,
+          "got": 109,
+          "hit": 100,
+          "precision": 0.9174,
+          "recall": 0.9901,
+          "f1": 0.9524
+        },
+        {
+          "symbol": "JsonPrimitive",
+          "truth": 100,
+          "got": 102,
+          "hit": 100,
+          "precision": 0.9804,
+          "recall": 1,
+          "f1": 0.9901
+        },
+        {
+          "symbol": "endArray",
+          "truth": 95,
+          "got": 94,
+          "hit": 93,
+          "precision": 0.9894,
+          "recall": 0.9789,
+          "f1": 0.9841
+        },
+        {
+          "symbol": "registerTypeAdapter",
+          "truth": 87,
+          "got": 9,
+          "hit": 7,
+          "precision": 0.7778,
+          "recall": 0.0805,
+          "f1": 0.1458
+        },
+        {
+          "symbol": "JsonArray",
+          "truth": 83,
+          "got": 83,
+          "hit": 83,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "JsonWriter",
+          "truth": 67,
+          "got": 66,
+          "hit": 66,
+          "precision": 1,
+          "recall": 0.9851,
+          "f1": 0.9925
+        },
+        {
+          "symbol": "endObject",
+          "truth": 64,
+          "got": 65,
+          "hit": 64,
+          "precision": 0.9846,
+          "recall": 1,
+          "f1": 0.9922
+        },
+        {
+          "symbol": "JsonObject",
+          "truth": 63,
+          "got": 63,
+          "hit": 63,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "nextString",
+          "truth": 62,
+          "got": 62,
+          "hit": 62,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "nextName",
+          "truth": 60,
+          "got": 60,
+          "hit": 60,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "getAsString",
+          "truth": 56,
+          "got": 27,
+          "hit": 27,
+          "precision": 1,
+          "recall": 0.4821,
+          "f1": 0.6506
+        },
+        {
+          "symbol": "put",
+          "truth": 55,
+          "got": 28,
+          "hit": 22,
+          "precision": 0.7857,
+          "recall": 0.4,
+          "f1": 0.5301
+        },
+        {
+          "symbol": "skipValue",
+          "truth": 52,
+          "got": 52,
+          "hit": 52,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "containsKey",
+          "truth": 42,
+          "got": 7,
+          "hit": 7,
+          "precision": 1,
+          "recall": 0.1667,
+          "f1": 0.2857
+        },
+        {
+          "symbol": "nextInt",
+          "truth": 40,
+          "got": 40,
+          "hit": 39,
+          "precision": 0.975,
+          "recall": 0.975,
+          "f1": 0.975
+        },
+        {
+          "symbol": "getAdapter",
+          "truth": 39,
+          "got": 38,
+          "hit": 33,
+          "precision": 0.8684,
+          "recall": 0.8462,
+          "f1": 0.8571
+        }
+      ],
+      "scorer_output": [
+        "symbol                       truth  got  hit   P     R     F1",
+        "beginObject                    109  109  108  0.99  0.99  0.99",
+        "peek                           106  104  104  1.00  0.98  0.99",
+        "setStrictness                  102   96   96  1.00  0.94  0.97",
+        "Gson                           101  109  100  0.92  0.99  0.95",
+        "JsonPrimitive                  100  102  100  0.98  1.00  0.99",
+        "endArray                        95   94   93  0.99  0.98  0.98",
+        "registerTypeAdapter             87    9    7  0.78  0.08  0.15  <--",
+        "JsonArray                       83   83   83  1.00  1.00  1.00",
+        "JsonWriter                      67   66   66  1.00  0.99  0.99",
+        "endObject                       64   65   64  0.98  1.00  0.99",
+        "JsonObject                      63   63   63  1.00  1.00  1.00",
+        "nextString                      62   62   62  1.00  1.00  1.00",
+        "nextName                        60   60   60  1.00  1.00  1.00",
+        "getAsString                     56   27   27  1.00  0.48  0.65  <--",
+        "put                             55   28   22  0.79  0.40  0.53  <--",
+        "skipValue                       52   52   52  1.00  1.00  1.00",
+        "containsKey                     42    7    7  1.00  0.17  0.29  <--",
+        "nextInt                         40   40   39  0.97  0.97  0.97",
+        "getAdapter                      39   38   33  0.87  0.85  0.86  <--",
+        "",
+        "questions 19  mean tool F1 0.858  perfect 5/19"
+      ]
+    },
+    {
+      "lang": "cpp",
+      "repo_slug": "google/leveldb",
+      "repo_commit": "bb74ef739973a70ca9f0d90788a1da89b788c0ad",
+      "truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+      "qa_set": "agent-bench/QA_SET_cpp.json",
+      "index": {
+        "commit": "bb74ef739973a70ca9f0d90788a1da89b788c0ad",
+        "files": 144,
+        "symbols": 2623,
+        "edges": 14811,
+        "durationMs": 658
+      },
+      "n_questions": 19,
+      "mean_f1": 0.9354,
+      "mean_f1_printed": "0.935",
+      "perfect": 7,
+      "questions": [
+        {
+          "symbol": "ToString",
+          "truth": 53,
+          "got": 56,
+          "hit": 52,
+          "precision": 0.9286,
+          "recall": 0.9811,
+          "f1": 0.9541
+        },
+        {
+          "symbol": "Valid",
+          "truth": 43,
+          "got": 42,
+          "hit": 42,
+          "precision": 1,
+          "recall": 0.9767,
+          "f1": 0.9882
+        },
+        {
+          "symbol": "key",
+          "truth": 37,
+          "got": 37,
+          "hit": 36,
+          "precision": 0.973,
+          "recall": 0.973,
+          "f1": 0.973
+        },
+        {
+          "symbol": "Compare",
+          "truth": 30,
+          "got": 30,
+          "hit": 29,
+          "precision": 0.9667,
+          "recall": 0.9667,
+          "f1": 0.9667
+        },
+        {
+          "symbol": "NewIterator",
+          "truth": 30,
+          "got": 30,
+          "hit": 30,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "Next",
+          "truth": 30,
+          "got": 32,
+          "hit": 30,
+          "precision": 0.9375,
+          "recall": 1,
+          "f1": 0.9677
+        },
+        {
+          "symbol": "Unref",
+          "truth": 24,
+          "got": 23,
+          "hit": 14,
+          "precision": 0.6087,
+          "recall": 0.5833,
+          "f1": 0.5957
+        },
+        {
+          "symbol": "Default",
+          "truth": 22,
+          "got": 22,
+          "hit": 21,
+          "precision": 0.9545,
+          "recall": 0.9545,
+          "f1": 0.9545
+        },
+        {
+          "symbol": "Lock",
+          "truth": 22,
+          "got": 22,
+          "hit": 21,
+          "precision": 0.9545,
+          "recall": 0.9545,
+          "f1": 0.9545
+        },
+        {
+          "symbol": "Ref",
+          "truth": 22,
+          "got": 22,
+          "hit": 22,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "Unlock",
+          "truth": 22,
+          "got": 22,
+          "hit": 20,
+          "precision": 0.9091,
+          "recall": 0.9091,
+          "f1": 0.9091
+        },
+        {
+          "symbol": "Log",
+          "truth": 20,
+          "got": 20,
+          "hit": 20,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "SeekToFirst",
+          "truth": 19,
+          "got": 19,
+          "hit": 19,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "Append",
+          "truth": 17,
+          "got": 17,
+          "hit": 17,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "RemoveFile",
+          "truth": 17,
+          "got": 22,
+          "hit": 17,
+          "precision": 0.7727,
+          "recall": 1,
+          "f1": 0.8718
+        },
+        {
+          "symbol": "BytewiseComparator",
+          "truth": 16,
+          "got": 16,
+          "hit": 16,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "Open",
+          "truth": 16,
+          "got": 16,
+          "hit": 16,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "Close",
+          "truth": 15,
+          "got": 15,
+          "hit": 11,
+          "precision": 0.7333,
+          "recall": 0.7333,
+          "f1": 0.7333
+        },
+        {
+          "symbol": "Corruption",
+          "truth": 15,
+          "got": 16,
+          "hit": 14,
+          "precision": 0.875,
+          "recall": 0.9333,
+          "f1": 0.9032
+        }
+      ],
+      "scorer_output": [
+        "symbol                       truth  got  hit   P     R     F1",
+        "ToString                        53   56   52  0.93  0.98  0.95",
+        "Valid                           43   42   42  1.00  0.98  0.99",
+        "key                             37   37   36  0.97  0.97  0.97",
+        "Compare                         30   30   29  0.97  0.97  0.97",
+        "NewIterator                     30   30   30  1.00  1.00  1.00",
+        "Next                            30   32   30  0.94  1.00  0.97",
+        "Unref                           24   23   14  0.61  0.58  0.60  <--",
+        "Default                         22   22   21  0.95  0.95  0.95",
+        "Lock                            22   22   21  0.95  0.95  0.95",
+        "Ref                             22   22   22  1.00  1.00  1.00",
+        "Unlock                          22   22   20  0.91  0.91  0.91  <--",
+        "Log                             20   20   20  1.00  1.00  1.00",
+        "SeekToFirst                     19   19   19  1.00  1.00  1.00",
+        "Append                          17   17   17  1.00  1.00  1.00",
+        "RemoveFile                      17   22   17  0.77  1.00  0.87  <--",
+        "BytewiseComparator              16   16   16  1.00  1.00  1.00",
+        "Open                            16   16   16  1.00  1.00  1.00",
+        "Close                           15   15   11  0.73  0.73  0.73  <--",
+        "Corruption                      15   16   14  0.88  0.93  0.90  <--",
+        "",
+        "questions 19  mean tool F1 0.935  perfect 7/19"
+      ]
+    },
+    {
+      "lang": "javascript",
+      "repo_slug": "axios/axios",
+      "repo_commit": "8f4ed5691168cf5bfd94c0b01086d9ad926e5240",
+      "truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+      "qa_set": "agent-bench/QA_SET_javascript.json",
+      "index": {
+        "commit": "8f4ed5691168cf5bfd94c0b01086d9ad926e5240",
+        "files": 488,
+        "symbols": 8931,
+        "edges": 23305,
+        "durationMs": 1591
+      },
+      "n_questions": 19,
+      "mean_f1": 0.94,
+      "mean_f1_printed": "0.940",
+      "perfect": 10,
+      "questions": [
+        {
+          "symbol": "from",
+          "truth": 14,
+          "got": 14,
+          "hit": 13,
+          "precision": 0.9286,
+          "recall": 0.9286,
+          "f1": 0.9286
+        },
+        {
+          "symbol": "mergeConfig",
+          "truth": 6,
+          "got": 7,
+          "hit": 6,
+          "precision": 0.8571,
+          "recall": 1,
+          "f1": 0.9231
+        },
+        {
+          "symbol": "getMergedValue",
+          "truth": 5,
+          "got": 5,
+          "hit": 5,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "isBuffer",
+          "truth": 5,
+          "got": 5,
+          "hit": 5,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "normalizeHeader",
+          "truth": 5,
+          "got": 5,
+          "hit": 5,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "settle",
+          "truth": 5,
+          "got": 6,
+          "hit": 5,
+          "precision": 0.8333,
+          "recall": 1,
+          "f1": 0.9091
+        },
+        {
+          "symbol": "normalize",
+          "truth": 4,
+          "got": 5,
+          "hit": 4,
+          "precision": 0.8,
+          "recall": 1,
+          "f1": 0.8889
+        },
+        {
+          "symbol": "request",
+          "truth": 3,
+          "got": 5,
+          "hit": 3,
+          "precision": 0.6,
+          "recall": 1,
+          "f1": 0.75
+        },
+        {
+          "symbol": "syncHandlerEntries",
+          "truth": 4,
+          "got": 4,
+          "hit": 4,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "toFormData",
+          "truth": 4,
+          "got": 5,
+          "hit": 4,
+          "precision": 0.8,
+          "recall": 1,
+          "f1": 0.8889
+        },
+        {
+          "symbol": "buildFullPath",
+          "truth": 3,
+          "got": 4,
+          "hit": 3,
+          "precision": 0.75,
+          "recall": 1,
+          "f1": 0.8571
+        },
+        {
+          "symbol": "buildURL",
+          "truth": 3,
+          "got": 4,
+          "hit": 3,
+          "precision": 0.75,
+          "recall": 1,
+          "f1": 0.8571
+        },
+        {
+          "symbol": "createMultipartBody",
+          "truth": 3,
+          "got": 3,
+          "hit": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "matchHeaderValue",
+          "truth": 3,
+          "got": 3,
+          "hit": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "parseProtocol",
+          "truth": 3,
+          "got": 4,
+          "hit": 3,
+          "precision": 0.75,
+          "recall": 1,
+          "f1": 0.8571
+        },
+        {
+          "symbol": "sanitizeValue",
+          "truth": 3,
+          "got": 3,
+          "hit": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "throwIfCancellationRequested",
+          "truth": 3,
+          "got": 3,
+          "hit": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "toByteStringHeaderObject",
+          "truth": 3,
+          "got": 3,
+          "hit": 3,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "arrayToObject",
+          "truth": 2,
+          "got": 2,
+          "hit": 2,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        }
+      ],
+      "scorer_output": [
+        "symbol                       truth  got  hit   P     R     F1",
+        "from                            14   14   13  0.93  0.93  0.93  <--",
+        "mergeConfig                      6    7    6  0.86  1.00  0.92  <--",
+        "getMergedValue                   5    5    5  1.00  1.00  1.00",
+        "isBuffer                         5    5    5  1.00  1.00  1.00",
+        "normalizeHeader                  5    5    5  1.00  1.00  1.00",
+        "settle                           5    6    5  0.83  1.00  0.91  <--",
+        "normalize                        4    5    4  0.80  1.00  0.89  <--",
+        "request                          3    5    3  0.60  1.00  0.75  <--",
+        "syncHandlerEntries               4    4    4  1.00  1.00  1.00",
+        "toFormData                       4    5    4  0.80  1.00  0.89  <--",
+        "buildFullPath                    3    4    3  0.75  1.00  0.86  <--",
+        "buildURL                         3    4    3  0.75  1.00  0.86  <--",
+        "createMultipartBody              3    3    3  1.00  1.00  1.00",
+        "matchHeaderValue                 3    3    3  1.00  1.00  1.00",
+        "parseProtocol                    3    4    3  0.75  1.00  0.86  <--",
+        "sanitizeValue                    3    3    3  1.00  1.00  1.00",
+        "throwIfCancellationRequested     3    3    3  1.00  1.00  1.00",
+        "toByteStringHeaderObject         3    3    3  1.00  1.00  1.00",
+        "arrayToObject                    2    2    2  1.00  1.00  1.00",
+        "",
+        "questions 19  mean tool F1 0.940  perfect 10/19"
+      ]
+    },
+    {
+      "lang": "typescript",
+      "repo_slug": "vuejs/core",
+      "repo_commit": "ca034820b8288ab6da3a033626a7857401ee64a5",
+      "truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+      "qa_set": "agent-bench/QA_SET_typescript.json",
+      "index": {
+        "commit": "ca034820b8288ab6da3a033626a7857401ee64a5",
+        "files": 644,
+        "symbols": 21378,
+        "edges": 66571,
+        "durationMs": 3944
+      },
+      "n_questions": 19,
+      "mean_f1": 0.9497,
+      "mean_f1_printed": "0.950",
+      "perfect": 2,
+      "questions": [
+        {
+          "symbol": "warn",
+          "truth": 109,
+          "got": 113,
+          "hit": 108,
+          "precision": 0.9558,
+          "recall": 0.9908,
+          "f1": 0.973
+        },
+        {
+          "symbol": "toRaw",
+          "truth": 31,
+          "got": 32,
+          "hit": 31,
+          "precision": 0.9688,
+          "recall": 1,
+          "f1": 0.9841
+        },
+        {
+          "symbol": "ref",
+          "truth": 26,
+          "got": 29,
+          "hit": 26,
+          "precision": 0.8966,
+          "recall": 1,
+          "f1": 0.9455
+        },
+        {
+          "symbol": "isRef",
+          "truth": 20,
+          "got": 19,
+          "hit": 18,
+          "precision": 0.9474,
+          "recall": 0.9,
+          "f1": 0.9231
+        },
+        {
+          "symbol": "reactive",
+          "truth": 14,
+          "got": 14,
+          "hit": 13,
+          "precision": 0.9286,
+          "recall": 0.9286,
+          "f1": 0.9286
+        },
+        {
+          "symbol": "isShallow",
+          "truth": 13,
+          "got": 14,
+          "hit": 13,
+          "precision": 0.9286,
+          "recall": 1,
+          "f1": 0.963
+        },
+        {
+          "symbol": "track",
+          "truth": 12,
+          "got": 11,
+          "hit": 11,
+          "precision": 1,
+          "recall": 0.9167,
+          "f1": 0.9565
+        },
+        {
+          "symbol": "trigger",
+          "truth": 12,
+          "got": 11,
+          "hit": 11,
+          "precision": 1,
+          "recall": 0.9167,
+          "f1": 0.9565
+        },
+        {
+          "symbol": "pauseTracking",
+          "truth": 12,
+          "got": 13,
+          "hit": 12,
+          "precision": 0.9231,
+          "recall": 1,
+          "f1": 0.96
+        },
+        {
+          "symbol": "resetTracking",
+          "truth": 12,
+          "got": 13,
+          "hit": 12,
+          "precision": 0.9231,
+          "recall": 1,
+          "f1": 0.96
+        },
+        {
+          "symbol": "isReactive",
+          "truth": 10,
+          "got": 11,
+          "hit": 10,
+          "precision": 0.9091,
+          "recall": 1,
+          "f1": 0.9524
+        },
+        {
+          "symbol": "isReadonly",
+          "truth": 9,
+          "got": 10,
+          "hit": 9,
+          "precision": 0.9,
+          "recall": 1,
+          "f1": 0.9474
+        },
+        {
+          "symbol": "toWrapped",
+          "truth": 7,
+          "got": 8,
+          "hit": 7,
+          "precision": 0.875,
+          "recall": 1,
+          "f1": 0.9333
+        },
+        {
+          "symbol": "unref",
+          "truth": 7,
+          "got": 8,
+          "hit": 7,
+          "precision": 0.875,
+          "recall": 1,
+          "f1": 0.9333
+        },
+        {
+          "symbol": "computed",
+          "truth": 5,
+          "got": 6,
+          "hit": 5,
+          "precision": 0.8333,
+          "recall": 1,
+          "f1": 0.9091
+        },
+        {
+          "symbol": "isProxy",
+          "truth": 5,
+          "got": 6,
+          "hit": 5,
+          "precision": 0.8333,
+          "recall": 1,
+          "f1": 0.9091
+        },
+        {
+          "symbol": "markRaw",
+          "truth": 5,
+          "got": 6,
+          "hit": 5,
+          "precision": 0.8333,
+          "recall": 1,
+          "f1": 0.9091
+        },
+        {
+          "symbol": "noTracking",
+          "truth": 5,
+          "got": 5,
+          "hit": 5,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "reactiveReadArray",
+          "truth": 5,
+          "got": 5,
+          "hit": 5,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        }
+      ],
+      "scorer_output": [
+        "symbol                       truth  got  hit   P     R     F1",
+        "warn                           109  113  108  0.96  0.99  0.97",
+        "toRaw                           31   32   31  0.97  1.00  0.98",
+        "ref                             26   29   26  0.90  1.00  0.95  <--",
+        "isRef                           20   19   18  0.95  0.90  0.92  <--",
+        "reactive                        14   14   13  0.93  0.93  0.93  <--",
+        "isShallow                       13   14   13  0.93  1.00  0.96",
+        "track                           12   11   11  1.00  0.92  0.96",
+        "trigger                         12   11   11  1.00  0.92  0.96",
+        "pauseTracking                   12   13   12  0.92  1.00  0.96",
+        "resetTracking                   12   13   12  0.92  1.00  0.96",
+        "isReactive                      10   11   10  0.91  1.00  0.95",
+        "isReadonly                       9   10    9  0.90  1.00  0.95  <--",
+        "toWrapped                        7    8    7  0.88  1.00  0.93  <--",
+        "unref                            7    8    7  0.88  1.00  0.93  <--",
+        "computed                         5    6    5  0.83  1.00  0.91  <--",
+        "isProxy                          5    6    5  0.83  1.00  0.91  <--",
+        "markRaw                          5    6    5  0.83  1.00  0.91  <--",
+        "noTracking                       5    5    5  1.00  1.00  1.00",
+        "reactiveReadArray                5    5    5  1.00  1.00  1.00",
+        "",
+        "questions 19  mean tool F1 0.950  perfect 2/19"
+      ]
+    },
+    {
+      "lang": "rust",
+      "repo_slug": "BurntSushi/ripgrep",
+      "repo_commit": "91f5d22ef48bde459d90a8c7dbeab416e97d0f2b",
+      "truth": "rust-analyzer LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+      "qa_set": "agent-bench/QA_SET_rust.json",
+      "index": {
+        "commit": "91f5d22ef48bde459d90a8c7dbeab416e97d0f2b",
+        "files": 165,
+        "symbols": 5241,
+        "edges": 19984,
+        "durationMs": 992
+      },
+      "n_questions": 19,
+      "mean_f1": 0.9908,
+      "mean_f1_printed": "0.991",
+      "perfect": 11,
+      "questions": [
+        {
+          "symbol": "path",
+          "truth": 114,
+          "got": 113,
+          "hit": 109,
+          "precision": 0.9646,
+          "recall": 0.9561,
+          "f1": 0.9604
+        },
+        {
+          "symbol": "line_number",
+          "truth": 113,
+          "got": 113,
+          "hit": 113,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "search_reader",
+          "truth": 108,
+          "got": 108,
+          "hit": 108,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "args",
+          "truth": 104,
+          "got": 111,
+          "hit": 103,
+          "precision": 0.9279,
+          "recall": 0.9904,
+          "f1": 0.9581
+        },
+        {
+          "symbol": "printer_contents",
+          "truth": 92,
+          "got": 92,
+          "hit": 92,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "sink",
+          "truth": 79,
+          "got": 79,
+          "hit": 79,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "is_ignore",
+          "truth": 77,
+          "got": 76,
+          "hit": 76,
+          "precision": 1,
+          "recall": 0.987,
+          "f1": 0.9935
+        },
+        {
+          "symbol": "tmpdir",
+          "truth": 74,
+          "got": 75,
+          "hit": 74,
+          "precision": 0.9867,
+          "recall": 1,
+          "f1": 0.9933
+        },
+        {
+          "symbol": "wfile",
+          "truth": 66,
+          "got": 66,
+          "hit": 66,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "matched",
+          "truth": 58,
+          "got": 58,
+          "hit": 58,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "mkdirp",
+          "truth": 57,
+          "got": 58,
+          "hit": 57,
+          "precision": 0.9828,
+          "recall": 1,
+          "f1": 0.9913
+        },
+        {
+          "symbol": "is_none",
+          "truth": 54,
+          "got": 53,
+          "hit": 53,
+          "precision": 1,
+          "recall": 0.9815,
+          "f1": 0.9907
+        },
+        {
+          "symbol": "builder",
+          "truth": 47,
+          "got": 47,
+          "hit": 47,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "multi_line",
+          "truth": 40,
+          "got": 38,
+          "hit": 38,
+          "precision": 1,
+          "recall": 0.95,
+          "f1": 0.9744
+        },
+        {
+          "symbol": "command",
+          "truth": 35,
+          "got": 35,
+          "hit": 35,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "is_whitelist",
+          "truth": 34,
+          "got": 34,
+          "hit": 34,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "absolute_byte_offset",
+          "truth": 29,
+          "got": 29,
+          "hit": 29,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "add_child",
+          "truth": 29,
+          "got": 29,
+          "hit": 29,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        {
+          "symbol": "start",
+          "truth": 29,
+          "got": 27,
+          "hit": 27,
+          "precision": 1,
+          "recall": 0.931,
+          "f1": 0.9643
+        }
+      ],
+      "scorer_output": [
+        "symbol                       truth  got  hit   P     R     F1",
+        "path                           114  113  109  0.96  0.96  0.96",
+        "line_number                    113  113  113  1.00  1.00  1.00",
+        "search_reader                  108  108  108  1.00  1.00  1.00",
+        "args                           104  111  103  0.93  0.99  0.96",
+        "printer_contents                92   92   92  1.00  1.00  1.00",
+        "sink                            79   79   79  1.00  1.00  1.00",
+        "is_ignore                       77   76   76  1.00  0.99  0.99",
+        "tmpdir                          74   75   74  0.99  1.00  0.99",
+        "wfile                           66   66   66  1.00  1.00  1.00",
+        "matched                         58   58   58  1.00  1.00  1.00",
+        "mkdirp                          57   58   57  0.98  1.00  0.99",
+        "is_none                         54   53   53  1.00  0.98  0.99",
+        "builder                         47   47   47  1.00  1.00  1.00",
+        "multi_line                      40   38   38  1.00  0.95  0.97",
+        "command                         35   35   35  1.00  1.00  1.00",
+        "is_whitelist                    34   34   34  1.00  1.00  1.00",
+        "absolute_byte_offset            29   29   29  1.00  1.00  1.00",
+        "add_child                       29   29   29  1.00  1.00  1.00",
+        "start                           29   27   27  1.00  0.93  0.96",
+        "",
+        "questions 19  mean tool F1 0.991  perfect 11/19"
+      ]
+    }
+  ]
+}

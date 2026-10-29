@@ -6,3 +6,6 @@ playwright-report/
 
 # Atlas local index stores must never be committed
 .atlas/
+
+# Python bytecode from running agent-bench/ or relevance-bench/
+__pycache__/

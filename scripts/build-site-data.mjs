@@ -31,7 +31,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { deriveAgentBench, AGENT_BENCH_ARTIFACT_ENTRY } from "./build-agent-bench-data.mjs";
+import { deriveAgentBench, summarizeSuperseded, goFlagshipFrom, agentBenchArtifactEntry } from "./build-agent-bench-data.mjs";
+import { deriveAgentBenchLanguages, loadLanguageEntries, languageArtifactEntries } from "./build-agent-bench-languages.mjs";
+import { deriveLspTruthLanguages } from "./build-lsp-truth-languages.mjs";
+import { deriveRelevance } from "./build-relevance-data.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const benchDir = path.resolve(process.argv[2] || process.env.ATLAS_BENCH_DIR || "");
@@ -67,7 +70,7 @@ const qaLangs = [...new Set(qaPub.per_cell.map((c) => c.language))].sort();
 const cellOf = (lang, source) => qaPub.per_cell.find((c) => c.language === lang && c.source === source) || {};
 
 const report = {
-  label: "Benchmark & field comparison — refreshed at fc3b875 (2026-08-05)",
+  label: "Benchmark & field comparison — refreshed at fc3b875 (2026-08-05, shipped in v0.1.51)",
   supersedes: "The July 2026 report this page used to cite. Its live-repo multipliers (36× tokens, and the older 20×) were measured against a build whose caller answers were a two-token placeholder — across 224 live answers it named zero callers. Those figures are retracted in full, not adjusted. The numbers here are smaller and they are real.",
   method: {
     scoringModel: (qaPub.model || []).join(", "),
@@ -354,7 +357,7 @@ const producerRoutes = Object.values(xe).reduce((s, r) => s + (r.producer || 0),
 const consumerRefs = Object.values(xe).reduce((s, r) => s + (r.consumer || 0), 0);
 
 const fresh = {
-  label: "Linux corroboration run",
+  label: "Linux corroboration run — fc68e26, 2026-08-05 (shipped in v0.1.51)",
   // Publish the arch the artifact reports. The previous line here was
   //   (toolsLinux.platform || "Linux x86_64").replace(/\s+\S*$/, " x86_64")
   // which FORCED the last token to x86_64 whatever the run said — this leg is
@@ -393,6 +396,7 @@ const fresh = {
   },
   index: { medianMs: round(median(dRows.map((r) => r.index_ms))) },
   lspTruth: {
+    label: "gopls LSP-truth on a private Go service — Linux leg, 2026-08-05 (fc68e26, shipped in v0.1.51)",
     meanF1: lsp.mean_f1,
     precision: lsp.mean_precision,
     recall: lsp.mean_recall,
@@ -407,6 +411,7 @@ const fresh = {
     queries: Object.fromEntries(Object.entries(xq).map(([op, v]) => [op, { count: v.count ?? null, latencyMs: v.latency_ms ?? null }])),
     consumerRepoCount: ((xq.consumers || {}).consumer_repos || []).length,
   },
+  perLanguageLabel: "native fixture callers F1 per language — Linux leg, 2026-08-05 (fc68e26, shipped in v0.1.51); the 8-language LSP-truth table (lspTruthLanguages) is the 2026-10-29 measurement",
   perLanguage: dRows.map((r) => ({
     lang: r.language,
     f1: r.f1,
@@ -461,7 +466,7 @@ const liveRepos = live36.languages.map((r) => ({
 })).filter((r) => r.symbols != null);
 
 const liveSummary = {
-  label: live36.label,
+  label: `${live36.label} — fc68e26, 2026-08-05 (shipped in v0.1.51)`,
   platform: live36.platform,
   atlasBinary: live36.atlas_binary,
   stubBinary: live36.stub_binary,
@@ -519,37 +524,60 @@ fs.writeFileSync(path.join(rawDir, "MATRIX_TOOL_VERSIONS_LINUX.json"), JSON.stri
   tools: Object.fromEntries(fresh.tools.map((t) => [t.tool, t.version])),
 }, null, 2) + "\n");
 
-/* ============ agent-harness bench — from the public artifact ============ */
+/* ============ agent-harness bench — from the public artifacts =========== */
 // Produced by scripts/build-agent-bench-data.mjs (which sanitizes the private
 // AGENT_TOKEN_REPORT.json). Re-ingested here so full rebuilds keep the section.
+// The 2026-08-05 artifact stays in data/raw/ as the run this one supersedes.
 
+const AGENT_BENCH_RAW = "data/raw/AGENT_TOKEN_BENCH_PUBLIC_20261028.json";
+const AGENT_BENCH_SUPERSEDED_RAW = "data/raw/AGENT_TOKEN_BENCH_PUBLIC.json";
 let agentBench = null;
 try {
-  const ab = readData(path.join("raw", "AGENT_TOKEN_BENCH_PUBLIC.json"));
-  agentBench = deriveAgentBench(ab);
-  agentBench.graphifyVersionNote = `This run used ${ab.tool_versions?.graphify || "the graph tool"}. The previously published table ran graphify 0.9.12, so part of the change in the competitor column is a version change on their side rather than a change on ours.`;
-  agentBench.f1Note = "Atlas's F1 here is 0.995 on BOTH harnesses. The figure this page published before was 0.88, from the July run.";
+  const ab = readData(path.join("raw", path.basename(AGENT_BENCH_RAW)));
+  const current = deriveAgentBench(ab, { artifactPath: AGENT_BENCH_RAW });
+  const old = readData(path.join("raw", path.basename(AGENT_BENCH_SUPERSEDED_RAW)));
+  agentBench = deriveAgentBench(ab, { artifactPath: AGENT_BENCH_RAW, supersedes: summarizeSuperseded(old, AGENT_BENCH_SUPERSEDED_RAW, current) });
+  // §06 flagship and the §01 card are a view of this same run.
+  report.goFlagship = goFlagshipFrom(agentBench);
+} catch (e) {
+  console.warn(`agent bench: ${AGENT_BENCH_RAW} unreadable (${e.message}) — section omitted (run scripts/build-agent-bench-data.mjs)`);
+}
 
-  // §06 flagship — same repository, same ground truth, re-measured at this
-  // commit. This is an END-TO-END agent result: an agent restricted to one
-  // tool answers the question, and the harness's own accounting is the token
-  // number. It is NOT the July context-only comparison and does not restate it.
-  const cell = (agent, mode) => agentBench.cells.find((c) => c.agent === agent && c.mode === mode) || {};
-  report.goFlagship = {
-    repo: agentBench.repo,
-    commit7: agentBench.commit7,
-    truth: agentBench.truth,
-    lane: "end-to-end agent harness, one code-intel tool per run",
-    questions: agentBench.nQuestions,
-    rows: agentBench.agents.flatMap((a) => ["atlas", "baseline", "graphify"].map((mode) => {
-      const c = cell(a.id, mode);
-      return { agent: a.id, tool: { atlas: "Atlas", baseline: "No tool (raw exploration)", graphify: "Graph tool" }[mode], f1: c.f1 ?? null, tokens: c.totalTokens ?? null, turns: c.turns ?? null };
-    })),
-    why: "A production function has many more callers than a fixture does, spread across files. Given only the graph tool, both agents spent three to thirteen times the turns and still answered wrong more often than not; given Atlas, both answered in one or two turns at F1 0.995.",
-    caveat: agentBench.caveat,
-  };
-} catch {
-  console.warn("agent bench: data/raw/AGENT_TOKEN_BENCH_PUBLIC.json missing — section omitted (run scripts/build-agent-bench-data.mjs)");
+/* ===== multi-language agent bench, LSP-truth tool F1, NL relevance ====== */
+// Each derived ONLY from public files: data/raw/*, agent-bench/QA_SET_*.json
+// and relevance-bench/. The ingest scripts that wrote those files from the
+// private runs are build-agent-bench-languages.mjs, build-lsp-truth-languages.mjs
+// and build-relevance-data.mjs.
+
+let agentBenchLanguages = null;
+try {
+  const entries = loadLanguageEntries(repoRoot, "2026-10-28");
+  if (entries.length) agentBenchLanguages = deriveAgentBenchLanguages(entries);
+} catch (e) {
+  console.warn(`multi-language agent bench omitted: ${e.message}`);
+}
+
+const LSP_TRUTH_RAW = "data/raw/TOOL_CALLERS_F1_LSP_20261029.json";
+let lspTruthLanguages = null;
+try {
+  lspTruthLanguages = deriveLspTruthLanguages(readData(path.join("raw", path.basename(LSP_TRUTH_RAW))), LSP_TRUTH_RAW);
+} catch (e) {
+  console.warn(`LSP-truth tool F1 omitted: ${e.message}`);
+}
+
+const RELEVANCE_RAW = "data/raw/RELEVANCE_BENCH_20261029.json";
+let relevance = null;
+try {
+  const rb = (f) => path.join(repoRoot, "relevance-bench", f);
+  relevance = deriveRelevance(
+    readData(path.join("raw", path.basename(RELEVANCE_RAW))),
+    JSON.parse(fs.readFileSync(rb("CORPORA.json"), "utf8")),
+    JSON.parse(fs.readFileSync(rb("GATE.json"), "utf8")),
+    fs.readFileSync(rb("RESULTS.md"), "utf8"),
+    RELEVANCE_RAW,
+  );
+} catch (e) {
+  console.warn(`relevance benchmark omitted: ${e.message}`);
 }
 
 /* ============ l5run — the macOS L4→L5 promotion run ===================== */
@@ -699,7 +727,14 @@ const artifacts = [
   { name: "benchmark-data.json", path: "data/benchmark-data.json", tier: "carried", note: "the July derived dataset — superseded for every headline; kept so the retracted numbers stay auditable" },
   { name: "site-data.json", path: "data/site-data.json", tier: "derived", note: "the exact payload this page renders" },
 ];
-if (agentBench) artifacts.splice(artifacts.length - 1, 0, AGENT_BENCH_ARTIFACT_ENTRY);
+if (agentBench) {
+  artifacts.splice(artifacts.length - 1, 0,
+    { name: path.basename(AGENT_BENCH_SUPERSEDED_RAW), path: AGENT_BENCH_SUPERSEDED_RAW, tier: "carried", note: `SUPERSEDED by ${path.basename(AGENT_BENCH_RAW)} — the ${agentBench.supersedes.date} agent-harness run, kept so the previously published table stays auditable` },
+    agentBenchArtifactEntry(AGENT_BENCH_RAW, `agent-harness end-to-end token usage, ${agentBench.date} (claude + codex, per-run records)`));
+}
+if (agentBenchLanguages) artifacts.splice(artifacts.length - 1, 0, ...languageArtifactEntries(agentBenchLanguages));
+if (lspTruthLanguages) artifacts.splice(artifacts.length - 1, 0, { name: path.basename(LSP_TRUTH_RAW), path: LSP_TRUTH_RAW, tier: "fresh", note: "tool-level callers F1 vs LSP truth, 8 languages, fresh index each — per-question counts + verbatim scorer output" });
+if (relevance) artifacts.splice(artifacts.length - 1, 0, { name: path.basename(RELEVANCE_RAW), path: RELEVANCE_RAW, tier: "fresh", note: "natural-language relevance benchmark (#44): 216 labelled queries × 3 surfaces, per-query rows, aggregates, gate verdicts (verbatim copy of relevance-bench/RESULTS.json)" });
 if (l5run) artifacts.splice(artifacts.length - 1, 0, {
   name: "L5_MATRIX_PUBLIC.json", path: "data/raw/L5_MATRIX_PUBLIC.json", tier: "fresh",
   note: "L4→L5 promotion run — per-language LSP-truth callers F1 + query-cost multipliers (macOS)",
@@ -718,11 +753,14 @@ const out = {
   version: pkg.version,
   report,
   fresh,
-  matrix: matrixPub,
-  llmQa: qaPub,
+  matrix: { ...matrixPub, label: `${matrixPub.label} — fc3b875, 2026-08-05 (shipped in v0.1.51)` },
+  llmQa: { ...qaPub, label: `${qaPub.label} — fc3b875, 2026-08-05 (shipped in v0.1.51)` },
   liveSummary,
   liveRepos,
   ...(agentBench ? { agentBench } : {}),
+  ...(agentBenchLanguages ? { agentBenchLanguages } : {}),
+  ...(lspTruthLanguages ? { lspTruthLanguages } : {}),
+  ...(relevance ? { relevance } : {}),
   ...(l5run ? { l5run } : {}),
   artifacts,
 };

@@ -38,8 +38,28 @@ atlas version
 Pin an exact version for reproducible environments:
 
 ```sh
-npm install -g @aziron/atlas@0.1.54
+npm install -g @aziron/atlas@0.1.55
 ```
+
+### Installing a Binary You Already Have
+
+Offline, behind a TLS-intercepting proxy, or with a binary you built or
+verified yourself, point `ATLAS_BINARY` at it:
+
+```sh
+ATLAS_BINARY=/absolute/path/to/atlas npm install -g @aziron/atlas
+```
+
+**Since 0.1.55** postinstall honours it. It checks that the path exists, is
+a file, is executable, and that `atlas version` prints an Atlas version line
+within 30 seconds, then copies the binary into the package, replacing any
+earlier copy. It makes no request to the release host and never falls back to
+a download: an invalid path fails the install with a message that names the
+problem. A relative path resolves against the directory you ran `npm` from.
+`ATLAS_SKIP_DOWNLOAD=1` makes postinstall do nothing and takes precedence over
+`ATLAS_BINARY`. `checksums.txt` covers the release archives, not a binary you
+supply, so verify that binary yourself
+([#151](https://github.com/aziron-ai/atlas/issues/151)).
 
 ### GitHub Packages alternative
 
@@ -55,7 +75,7 @@ atlas version
 ```
 
 ```sh
-npm install -g @aziron-ai/atlas@0.1.54
+npm install -g @aziron-ai/atlas@0.1.55
 ```
 
 Both npm coordinates install the same wrapper and native Atlas binary for the
@@ -70,7 +90,7 @@ version and platform from
 [GitHub Releases](https://github.com/aziron-ai/atlas/releases/latest):
 
 ```sh
-VERSION=0.1.54
+VERSION=0.1.55
 OS=darwin       # darwin or linux
 ARCH=arm64      # arm64 or amd64
 ASSET="atlas_${VERSION}_${OS}_${ARCH}.tar.gz"
@@ -100,13 +120,13 @@ and arm64. Download the matching package from the release page, then install:
 
 ```sh
 # Debian or Ubuntu
-sudo dpkg -i atlas_0.1.54_linux_amd64.deb
+sudo dpkg -i atlas_0.1.55_linux_amd64.deb
 
 # Fedora or RHEL
-sudo rpm -U atlas_0.1.54_linux_amd64.rpm
+sudo rpm -U atlas_0.1.55_linux_amd64.rpm
 
 # Alpine
-sudo apk add --allow-untrusted atlas_0.1.54_linux_amd64.apk
+sudo apk add --allow-untrusted atlas_0.1.55_linux_amd64.apk
 ```
 
 ## Post-Install: Assistant Bootstrap
