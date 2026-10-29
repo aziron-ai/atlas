@@ -41,6 +41,26 @@ Pin an exact version for reproducible environments:
 npm install -g @aziron/atlas@0.1.54
 ```
 
+### Installing a Binary You Already Have
+
+Offline, behind a TLS-intercepting proxy, or with a binary you built or
+verified yourself, point `ATLAS_BINARY` at it:
+
+```sh
+ATLAS_BINARY=/absolute/path/to/atlas npm install -g @aziron/atlas
+```
+
+**Since 0.1.55** postinstall honours it. It checks that the path exists, is
+a file, is executable, and that `atlas version` prints an Atlas version line
+within 30 seconds, then copies the binary into the package, replacing any
+earlier copy. It makes no request to the release host and never falls back to
+a download: an invalid path fails the install with a message that names the
+problem. A relative path resolves against the directory you ran `npm` from.
+`ATLAS_SKIP_DOWNLOAD=1` makes postinstall do nothing and takes precedence over
+`ATLAS_BINARY`. `checksums.txt` covers the release archives, not a binary you
+supply, so verify that binary yourself
+([#151](https://github.com/aziron-ai/atlas/issues/151)).
+
 ### GitHub Packages alternative
 
 Atlas is also published to GitHub Packages as `@aziron-ai/atlas`. Use this

@@ -1047,6 +1047,10 @@ function DocsPage({ slug }) {
             <Command>{`npm install -g @aziron/atlas\natlas version`}</Command>
             <p>Pin an exact version for reproducible environments:</p>
             <Command>{`npm install -g @aziron/atlas@${RELEASE}`}</Command>
+            <h3>Installing a Binary You Already Have</h3>
+            <p>Offline, behind a TLS-intercepting proxy, or with a binary you built or verified yourself, point <code>ATLAS_BINARY</code> at it:</p>
+            <Command>{`ATLAS_BINARY=/absolute/path/to/atlas npm install -g @aziron/atlas`}</Command>
+            <p><strong>Since 0.1.55</strong> postinstall honours it. It checks that the path exists, is a file, is executable, and that <code>atlas version</code> prints an Atlas version line within 30 seconds, then copies the binary into the package, replacing any earlier copy. It makes no request to the release host and never falls back to a download: an invalid path fails the install with a message that names the problem. A relative path resolves against the directory you ran <code>npm</code> from. <code>ATLAS_SKIP_DOWNLOAD=1</code> makes postinstall do nothing and takes precedence over <code>ATLAS_BINARY</code>. <code>checksums.txt</code> covers the release archives, not a binary you supply, so verify that binary yourself (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/151" target="_blank" rel="noreferrer">#151</a>).</p>
             <h3>GitHub Packages alternative</h3>
             <p>Atlas is also published to GitHub Packages as <code>@aziron-ai/atlas</code>. Use this coordinate when organization CI already authenticates to GitHub Packages. Point the <code>@aziron-ai</code> scope at GitHub and use a token with <code>read:packages</code>:</p>
             <Command>{`npm config set @aziron-ai:registry https://npm.pkg.github.com\nnpm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN\nnpm install -g @aziron-ai/atlas\natlas version`}</Command>
