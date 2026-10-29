@@ -73,6 +73,20 @@ atlas index .`}</Command>
         <p><code>atlas snapshots prune --dry-run</code> prints exactly what a prune would delete without touching anything; <code>--keep N</code> and <code>--keep-since 90d</code> override the policy for one run.</p>
       </ProseSection>
 
+      <ProseSection title="Snapshots of Uncommitted Work">
+        <p><strong>Since 0.1.55</strong>, indexing a working tree with uncommitted edits or untracked files stores a snapshot of its own, labelled <code>&lt;sha&gt;+dirty</code>, beside the clean snapshot of that commit (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/65" target="_blank" rel="noreferrer">#65</a>). The timeline lists both, and <code>snapshot-diff</code> compares them: <code>--from</code> and <code>--to</code> accept <code>&lt;sha&gt;+dirty</code> as well as a commit sha or a snapshot id. On a small repository after adding one function without committing it:</p>
+        <Command label="Output">{`$ atlas history --format plain
+history repo  snapshots 2
+  4fb9d0f7+dirty  e0596478-…  files 2  symbols 4  edges 3  2026-10-29T05:18:49Z
+  4fb9d0f7  777a3e52-…  files 2  symbols 3  edges 3  2026-10-29T05:18:35Z
+
+$ atlas snapshot-diff --format plain
+snapshot_diff 4fb9d0f7 -> 4fb9d0f7+dirty  +1 -0 ~0  files 1
+  added(1)  extra
+  files(1)  main.go`}</Command>
+        <p>In <code>snapshots list</code> the dirty row carries <code>dirty: true</code> and its <code>tree_hash</code>. A newer dirty state of the same commit retires the one before it, so edit churn never pushes commit history out of the per-repository cap, and committing the work stores the new commit's snapshot.</p>
+      </ProseSection>
+
       <ProseSection title="Find the Symbols That Carry the Most Weight">
         <p><strong>Hot Symbols</strong> ranks the graph's hubs by total degree — the calls in plus the calls out. A hub is where a change spreads: a symbol many others call, or one that calls many others.</p>
         <Figure src="assets/docs/history/hot-symbols.png" alt="Hot Symbols: the hub leaderboard with main at degree 71, ProviderImpl.ListModels and RouterImpl.handleImagesMultipart at 55, and the detail rail for main" caption="The hub leaderboard of inference-gateway. main in cmd/gateway/main.go leads with 71 outgoing edges and none incoming." />
@@ -89,12 +103,14 @@ atlas index .`}</Command>
   RouterImpl.MessagesHandler  method  in 0  out 52  total 52  api/routes.go
   LoggerZapImpl.Error  method  in 41  out 6  total 47  logger/logger.go
   …`}</Command>
+        <p>Since 0.1.55 a hub needs at least one resolved call or inheritance relation: the header adds <code>eligible</code> and <code>excluded_isolated</code>, and on a sparse graph the list is shorter than the limit rather than padded with symbols nothing calls (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/45" target="_blank" rel="noreferrer">#45</a>).</p>
       </ProseSection>
 
       <ProseSection title="Check How Fresh the Index Is">
         <p><strong>Freshness</strong> lists the operations Atlas derives from the latest snapshot — on the demo, one <strong>Observe repo</strong> card per indexed repository — and checks each against two signals: <strong>Code</strong> (the snapshot it was built from is still the one loaded) and <strong>Time</strong> (when that snapshot was indexed). Hover a signal for its detail. A card whose signals all hold reads <strong>fresh</strong>; the badge at the top counts the stale ones. <strong>Inspect</strong> opens the operation.</p>
         <Figure src="assets/docs/history/freshness.png" alt="The Freshness view: three cards, Observe repo github://github, inference-gateway and prometheus://promlabs, each fresh with 2/2 signals, and the badge 0 stale" caption="Three operations, each fresh on both signals; 0 stale." />
         <p>When the code moves on and the index does not, re-index: <code>atlas index .</code> brings the snapshot, and with it every derived operation, up to date. <a className="text-link" href="#docs/indexing">Indexing and reindexing</a> covers watching a repository so this happens on every change.</p>
+        <p>The answers themselves say how fresh they are too. Since 0.1.55 every lookup carries <code>indexed_sha</code>, <code>head_sha</code>, <code>dirty</code> and <code>stale</code>, and a plain answer opens with a <code>stale:</code> line when the checkout has moved past the snapshot that answered — see <a className="text-link" href="#docs/search-and-ask">Search and Ask</a> (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/59" target="_blank" rel="noreferrer">#59</a>).</p>
       </ProseSection>
 
       <ProseSection title="See What a Service Started or Stopped Saying">
