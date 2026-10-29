@@ -12,6 +12,7 @@ import {
 import SurveyChart, { LatencyScaleBar } from "./SurveyChart";
 import { Command, CopyCommand, ProseSection, Bullets, Callout, sectionId, RELEASE, GITHUB, WIKI } from "./docs/ui.jsx";
 import { DOC_COMPONENTS } from "./docs/pages.js";
+import KnobCatalogue from "./docs/knob-catalogue.jsx";
 import packageMetadata from "../package.json";
 
 
@@ -1407,6 +1408,7 @@ function DocsPage({ slug }) {
             <Command>{`atlas config list                        # every knob, value, and provenance\natlas config get ATLAS_MAX_DB_BYTES      # one knob's value and origin\natlas config set ATLAS_MAX_DB_BYTES 10GiB  # persist into .atlas/settings.json\natlas config set ATLAS_MAX_DB_BYTES ""     # clear a persisted override`}</Command>
           </ProseSection>
           <ProseSection title="Known Settings">
+            <p>The settings most people change, including environment-only variables such as <code>ATLAS_API_TOKEN</code> and <code>ATLAS_SERVER_URL</code> that <code>atlas config</code> does not list:</p>
             <div className="docs-table-wrap"><table><thead><tr><th>Setting</th><th>Purpose</th></tr></thead><tbody>
               <tr><td><code>ATLAS_ENABLE_VECTORS</code></td><td>Enable optional semantic retrieval (pairs with an index built with <code>--enable-vectors</code>)</td></tr>
               <tr><td><code>ATLAS_EMBED_URL</code></td><td>Point semantic search at a real embedding model; the default embedder is offline (deterministic token overlap)</td></tr>
@@ -1431,7 +1433,7 @@ function DocsPage({ slug }) {
               <tr><td><code>ATLAS_WORKBENCH_MODEL_ROUNDS</code>, <code>ATLAS_WORKBENCH_MODEL_REVISIONS</code>, <code>ATLAS_WORKBENCH_MAX_EVIDENCE_TOKENS</code>, <code>ATLAS_WORKBENCH_ASK_EFFORT</code>, <code>ATLAS_WORKBENCH_ANSWER_EFFORT</code>, <code>ATLAS_WORKBENCH_HISTORY_TURNS</code>, <code>ATLAS_WORKBENCH_MODEL_TURNS_PER_HOUR</code>, <code>ATLAS_WORKBENCH_TURNS_PER_HOUR</code></td><td><strong>Since 0.1.54.</strong> How many model calls and rewrites one Workbench answer may make, how much evidence and thread history a prompt carries, the reasoning effort per call on the Claude CLI, and the per-token hourly budgets. Defaults and meanings in <a className="text-link" href="#docs/workbench">Ask Workbench</a></td></tr>
               <tr><td><code>ATLAS_LEXICAL_SETTLE</code>, <code>ATLAS_LEXICAL_SETTLE_TIMEOUT</code></td><td><strong>Since 0.1.48.</strong> How <code>atlas index</code> brings the lexical sidecar to its on-disk steady state before returning: <code>auto</code> (default — merge, reclaim, measure), <code>reclaim</code> (skip the merge), <code>off</code> (measure only). The timeout budgets the merge (default 30s)</td></tr>
             </tbody></table></div>
-            <p>Run <code>atlas config list</code> for the complete catalog with current names, defaults, descriptions, and accepted values for your installed release.</p>
+            <p>The complete catalogue of the 122 settings <code>atlas config</code> manages in 0.1.55 is at the end of this page, under The Knob Catalogue. <code>atlas config list</code> prints it for the release you have installed, with each knob's effective value and where that value came from.</p>
           </ProseSection>
           <ProseSection title="Machine Profiles">
             <p><strong>Since 0.1.48.</strong> Atlas sizes itself to the machine it is running on. A profile decides how much of the box Atlas takes while it works; it never changes what Atlas produces. Symbol, edge, and route counts are identical on every tier.</p>
@@ -1445,6 +1447,13 @@ function DocsPage({ slug }) {
               <tr><td><code>turbo</code></td><td>≥32&nbsp;GiB workstations and CI</td><td>all cores</td><td>none</td><td>100 (75 in warm daemons)</td><td>5s</td><td>45s</td><td>1000 pages (~4&nbsp;MB)</td><td>8</td></tr>
             </tbody></table></div>
             <p><code>performance</code> is stock Atlas by construction rather than by gating: it carries no bounds at all, so every read site falls through to its compiled default. <code>turbo</code> moves exactly one knob — the SQLite read-pool connection count, 4 to 8 — because that is the only candidate that survived measurement.</p>
+            <p><strong>SQLite residency (since 0.1.55).</strong> The soft heap limit bounds the Go heap only. SQLite's memory-mapped window and its page caches live outside it, so <code>eco</code> and <code>balanced</code> now bound them too (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/127" target="_blank" rel="noreferrer">#127</a>):</p>
+            <div className="docs-table-wrap"><table><thead><tr><th>Tier</th><th>Read window (<code>ATLAS_MMAP_SIZE</code>)</th><th>Write window</th><th>Write cache (<code>ATLAS_SQLITE_CACHE_SIZE</code>)</th><th>Per read connection (<code>ATLAS_SQLITE_READ_CACHE_SIZE</code>)</th></tr></thead><tbody>
+              <tr><td><code>performance</code>, <code>turbo</code></td><td>512MiB</td><td>whole database if at most 512MiB, else none</td><td>64MiB</td><td>16MiB</td></tr>
+              <tr><td><code>balanced</code></td><td>256MiB</td><td>whole database if at most 256MiB, else none</td><td>64MiB</td><td>16MiB</td></tr>
+              <tr><td><code>eco</code></td><td>64MiB</td><td>whole database if at most 64MiB, else none</td><td>16MiB</td><td>16MiB</td></tr>
+            </tbody></table></div>
+            <p>An explicit <code>ATLAS_MMAP_SIZE</code> sets both windows; an explicit cache knob replaces the tier's cache. Under <code>eco</code> with the 1&nbsp;GiB limit an 8&nbsp;GB machine gets, a one-line TensorFlow delta now peaks at 393&nbsp;MB instead of 1,510&nbsp;MB. <code>atlas doctor</code> reports the values the handles open with as <code>sqlite_read_mmap_bytes</code>, <code>sqlite_write_mmap_bytes</code>, <code>sqlite_write_cache_bytes</code> and <code>sqlite_read_cache_bytes_per_conn</code>.</p>
             <p><strong>Auto-detection.</strong> With <code>ATLAS_PROFILE</code> unset, Atlas picks a tier from what it can actually measure, highest trigger first:</p>
             <Bullets>
               <li><strong>≤12 GiB RAM</strong> selects <code>eco</code> (reported reason <code>ram</code>).</li>
@@ -1470,10 +1479,11 @@ function DocsPage({ slug }) {
             <p><strong>Reading it back.</strong> <code>atlas doctor</code> reports a <code>machine_profile</code> block. It is informational — a low-spec machine is not a fault, so it never sets doctor's status — and its numbers are <strong>live read-backs</strong> from the running process, not what detection intended. If something overrode a bound, this block shows the override.</p>
             <div className="docs-table-wrap"><table><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody>
               <tr><td><code>profile</code></td><td>the tier in force: <code>eco</code>, <code>balanced</code>, <code>performance</code>, <code>turbo</code></td></tr>
-              <tr><td><code>reason</code></td><td><code>ram</code>, <code>rotational_disk</code>, <code>env</code>, <code>flag</code>, or empty when the hardware simply qualified</td></tr>
+              <tr><td><code>reason</code></td><td><code>ram</code>, <code>rotational_disk</code>, <code>env</code>, <code>settings</code> (a tier set in <code>.atlas/settings.json</code>, since 0.1.55), <code>flag</code>, or empty when the hardware simply qualified</td></tr>
               <tr><td><code>cpu_width_scope</code></td><td><strong>where</strong> the tier's CPU width and soft heap limit apply: <code>process</code> under <code>eco</code>, <code>daemon</code> under <code>balanced</code>, empty under <code>performance</code>/<code>turbo</code></td></tr>
               <tr><td><code>total_ram_bytes</code>, <code>num_cpu</code>, <code>rotational_db</code></td><td>the probe facts behind the verdict; <code>rotational_db</code> may be <code>unknown</code></td></tr>
-              <tr><td><code>gomaxprocs</code>, <code>workers</code>, <code>memory_limit_bytes</code>, <code>gogc</code></td><td>the bounds actually installed</td></tr>
+              <tr><td><code>gomaxprocs</code>, <code>workers</code>, <code>memory_limit_bytes</code>, <code>gogc</code></td><td>the bounds actually installed. Since 0.1.55 a one-shot <code>doctor</code> under <code>balanced</code> reports the daemon-only heap limit as <code>daemon_memory_limit_bytes</code>, with a note, rather than as its own</td></tr>
+              <tr><td><code>sqlite_read_mmap_bytes</code>, <code>sqlite_write_mmap_bytes</code>, <code>sqlite_write_cache_bytes</code>, <code>sqlite_read_cache_bytes_per_conn</code></td><td><strong>Since 0.1.55.</strong> The SQLite windows and caches the handles open with (see SQLite residency above)</td></tr>
               <tr><td><code>sampler_interval</code>, <code>watch_poll_interval</code>, <code>wal_autocheckpoint_pages</code>, <code>read_pool</code></td><td>the cadences and pool this tier resolved to</td></tr>
               <tr><td><code>go_types_note</code></td><td>under <code>eco</code> only: <code>atlas index --go-types=off</code> skips Go type analysis for −78% cold first-index wall and −194&nbsp;MB RSS, at the cost of type-derived edges</td></tr>
             </tbody></table></div>
@@ -1495,11 +1505,13 @@ function DocsPage({ slug }) {
             <Bullets>
               <li><code>--format</code> selects the shape: <code>plain</code>, <code>json</code> (default), <code>compact</code>, or <code>ndjson</code>. <code>--json</code> is shorthand for <code>--format json</code>.</li>
               <li><code>--detail</code> selects the depth: <code>low</code>, <code>medium</code>, <code>high</code> (default for every format), or <code>xhigh</code>, which opts into cross-repo context. Retrieval operations (callers/refs/impact) floor at <code>high</code>.</li>
+              <li><strong>Since 0.1.55, one alias table serves every surface:</strong> <code>l</code>/<code>0</code>, <code>med</code>/<code>m</code>/<code>1</code>, <code>h</code>/<code>2</code> and <code>x</code>/<code>max</code>/<code>full</code>/<code>3</code> mean the same on <code>--detail</code>, the HTTP <code>?detail=</code> parameter and the MCP <code>detail</code> argument, and <code>ATLAS_DETAIL_DEFAULT</code> reads through the same table. An unrecognised value falls back to <code>high</code> (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/146" target="_blank" rel="noreferrer">#146</a>).</li>
             </Bullets>
           </ProseSection>
           <ProseSection title="Read-Only Mode and Telemetry">
-            <p>Use <code>--read-only</code> when the database must not change — for example when hashing artifacts or querying a shared, immutable index. It opens the database immutably: no migration runs, no WAL/journal files are created, and no <code>telemetry.db</code> is created beside it, so the artifact bytes hash identically after any query. A missing database errors instead of being created.</p>
-            <p>Because read-only mode suppresses the default telemetry database, telemetry with <code>--read-only</code> requires an explicit <code>--telemetry-db PATH</code>. Without <code>--read-only</code>, telemetry defaults to <code>telemetry.db</code> beside the graph database.</p>
+            <p>Use <code>--read-only</code> when the database must not change — for example when hashing artifacts or querying a shared index. No migration runs, nothing is written or checkpointed, and no <code>telemetry.db</code> is created beside the store. Beside a quiescent store it creates no <code>-wal</code> or <code>-shm</code> file either, so the artifact bytes hash identically after any query. A missing database errors instead of being created.</p>
+            <p><strong>Since 0.1.55, a read-only reader follows a live writer.</strong> Once a running Atlas has a WAL beside the store, the reader reads that WAL, so it sees snapshots the writer has committed; it refuses a store another Atlas moved to a different schema generation (<code>store_superseded</code>), and it drops its warm search, context and report caches when the store changes underneath it (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/130" target="_blank" rel="noreferrer">#130</a>).</p>
+            <p>Because read-only mode attaches no telemetry sink, telemetry with <code>--read-only</code> requires an explicit <code>--telemetry-db PATH</code>. Without <code>--read-only</code>, telemetry defaults to <code>telemetry.db</code> beside the graph database. Since 0.1.55 <code>stats</code> and <code>status</code> say so instead of leaving fields out: their <code>telemetry</code> block reads <code>unavailable_read_only</code> with the remedy (<a className="text-link" href="https://github.com/aziron-ai/atlas/issues/154" target="_blank" rel="noreferrer">#154</a>).</p>
             <Command>{`atlas --read-only --telemetry-db /srv/atlas/telemetry.db \\\n  --db "sqlite:///shared/index/.atlas/atlas.db" search "payment handler"`}</Command>
           </ProseSection>
           <ProseSection title="Resource-Constrained Environments">
@@ -1510,6 +1522,7 @@ function DocsPage({ slug }) {
             <p>On a large repo, <code>--workers N</code> (or <code>ATLAS_INDEX_WORKERS</code>) caps indexing CPU, and the streaming index (auto above ~15,000 files; force with <code>ATLAS_STREAM_INDEX=1</code>) bounds peak memory.</p>
             <p>For very large repositories, exclude generated files and dependency caches (see <a className="text-link" href="#docs/indexing">Indexing and Reindexing</a>) before tightening limits — a smaller candidate set beats a tighter bound. Confirm behavior with <code>atlas status</code>, <code>atlas stats</code>, and <code>atlas doctor</code>.</p>
           </ProseSection>
+          <KnobCatalogue />
         </>
       );
     case "privacy":
