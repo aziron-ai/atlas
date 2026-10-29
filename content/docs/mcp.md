@@ -147,8 +147,8 @@ that floor it refuses:
 
 On a grounded answer, a keyword-only citation that matched only generic words
 moves to `low_confidence_hits`; graph evidence is never pruned. An answer the
-floor did not touch is unchanged. Trimming to `max_tokens` never removes the
-last citation: a budget that cannot hold one is refused with
+floor did not touch is unchanged. With `require_citations`, trimming to
+`max_tokens` never removes the last citation: a budget that cannot hold one is refused with
 `budget_exceeded`, and the message names the budget that would fit
 ([#160](https://github.com/aziron-ai/atlas/issues/160)).
 

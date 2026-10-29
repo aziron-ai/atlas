@@ -172,9 +172,9 @@ shows them after one `atlas index --reindex`.
   `relevance` block naming the missing terms, and up to 5 candidates as
   `low_confidence_hits`, never as citations. On a grounded answer, keyword-only
   citations that matched only generic words move to `low_confidence_hits`
-  ([#60](https://github.com/aziron-ai/atlas/issues/60)). A trimmed answer keeps
-  at least one citation or is refused with `budget_exceeded`, naming the
-  budget that would fit ([#160](https://github.com/aziron-ai/atlas/issues/160)).
+  ([#60](https://github.com/aziron-ai/atlas/issues/60)). Under the same flag,
+  trimming to `max_tokens` keeps at least one citation or refuses with
+  `budget_exceeded`, naming the budget that would fit ([#160](https://github.com/aziron-ai/atlas/issues/160)).
 - **Evidence inside large functions.** When a body is longer than its stored
   excerpt, `code_query` and `context` re-read the lines that match the
   question from the file (only when its hash matches the index): signature,

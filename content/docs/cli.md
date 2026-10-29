@@ -51,7 +51,8 @@ A checkout with the same identity but different content is refused with
 is not a git checkout is never matched (`not_a_git_checkout`), and several
 equal checkouts are `ambiguous_repo` with `candidates[]`. Every refusal names
 the `searched_stores` and the `checkout` diagnosis. To read an index
-explicitly, pin it with `atlas --db <dsn> --repo <repo_id>`.
+explicitly, pin it with `atlas --db <dsn> --repo <repo_id>`; its line numbers
+then describe the checkout that index was built from.
 
 ## Index and Health
 
