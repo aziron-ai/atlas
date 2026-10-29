@@ -5500,8 +5500,9 @@ shows them after one `atlas index --reindex`.
   MCP `symbol` tool's `mutations` parameter list, and `declared_type` is
   inferred ([#55](https://github.com/aziron-ai/atlas/issues/55)).
 - **Call extraction.** Rust gets a syntax-tree call extractor with
-  scope-aware receiver typing; C++ and JavaScript/TypeScript type receivers
-  from locals, parameters, fields and factories; a Python constructor call is
+  scope-aware receiver typing; C++ types receivers from locals, parameters,
+  fields and factories, and JavaScript/TypeScript from casts, `new`, field
+  chains and class property types; a Python constructor call is
   typed as its class; Kotlin constructors are indexed, and Java, Kotlin and C#
   share the inline-constructor tie-break. `callers` answers lead with
   `caller_names`, mark a `--limit` page `truncated`, and take `--brief`.
