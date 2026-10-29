@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "description": "Frozen corpora for the natural-language retrieval relevance benchmark (aziron-ai/atlas#44). Each corpus is materialized from pinned upstream commits; `tree` is the git tree SHA the materialized checkout must have, so a run on a different tree fails closed. Single-component corpora check out the upstream commit itself (HEAD == commit). The mixed corpus grafts two upstream trees under fixed prefixes into one synthetic commit with a fixed author, committer and date, so its commit SHA is reproducible too.",
+  "corpora": {
+    "c-cjson": {
+      "languages": [
+        "c"
+      ],
+      "why": "small C library; every query class has an unambiguous LSP truth; header/implementation pairs test duplicate-definition handling",
+      "components": [
+        {
+          "slug": "DaveGamble/cJSON",
+          "url": "https://github.com/DaveGamble/cJSON",
+          "commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c",
+          "prefix": "",
+          "qa_set": "bench/QA_SET_c.json"
+        }
+      ],
+      "tree": "43196d72eeaf223f8494df8315f3d0dfba07dd6d",
+      "head": "6d9f2443ab071f86e5d9b43025a40929ec41c46c"
+    },
+    "mixed-cpp-python": {
+      "languages": [
+        "cpp",
+        "python"
+      ],
+      "why": "the ticket's mixed C++/Python corpus: leveldb and requests in one repository, so generic names (Open, Close, send, request, ToString) collide across languages and stopword-heavy prose has two vocabularies to pollute",
+      "components": [
+        {
+          "slug": "google/leveldb",
+          "url": "https://github.com/google/leveldb",
+          "commit": "bb74ef739973a70ca9f0d90788a1da89b788c0ad",
+          "prefix": "leveldb",
+          "qa_set": "bench/QA_SET_cpp.json"
+        },
+        {
+          "slug": "psf/requests",
+          "url": "https://github.com/psf/requests",
+          "commit": "3c7baaa05ab4aa49cc819ce3a819d260de19c157",
+          "prefix": "requests",
+          "qa_set": "bench/QA_SET_python.json"
+        }
+      ],
+      "synthetic_commit": {
+        "author": "atlas-relevance-bench <relevance-bench@atlas.invalid>",
+        "date": "2026-10-29T00:00:00Z",
+        "message": "atlas relevance corpus mixed-cpp-python: google/leveldb@bb74ef7 under leveldb/, psf/requests@3c7baaa under requests/"
+      },
+      "tree": "0036e745e7f673593e91c84560092cd6e353b363",
+      "head": "fa87647ca24977307a4af3151f6f7de95c616573"
+    },
+    "ts-vue": {
+      "languages": [
+        "typescript"
+      ],
+      "why": "the ticket's React-like corpus: vuejs/core is a component/reactivity UI framework monorepo with __tests__ fixtures, generated d.ts and benchmark files next to the source",
+      "components": [
+        {
+          "slug": "vuejs/core",
+          "url": "https://github.com/vuejs/core",
+          "commit": "ca034820b8288ab6da3a033626a7857401ee64a5",
+          "prefix": "",
+          "qa_set": "bench/QA_SET_typescript.json"
+        }
+      ],
+      "tree": "8c37cc4ea9cfd921e1386ad7ade9f80273627149",
+      "head": "ca034820b8288ab6da3a033626a7857401ee64a5"
+    }
+  },
+  "out_of_scope": {
+    "chromium": "The ticket names Chromium as its large-repository corpus. It is out of scope for this frozen gate: a Chromium index takes hours and tens of GB, which is the manual large-public tier of docs/RETEST_PROTOCOL.md (§ large-public: hours, weekend slot), not a regression gate. The harness accepts any corpus defined in this file, so a Chromium entry (pinned commit, labelled queries) can be added and run with --corpus chromium as release validation."
+  }
+}
