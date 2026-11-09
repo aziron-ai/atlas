@@ -1,0 +1,1190 @@
+{
+ "schema_version": 1,
+ "corpus": "c-cjson",
+ "frozen": "2026-10-29",
+ "derivation": {"definition": "LSP `definitions` of the QA-set entity; relevant = name at any of those paths; acceptable = any symbol named exactly the entity", "callers": "LSP `truth` caller names, matched by name; paths from Atlas for humans; acceptable = any symbol named exactly the entity", "error_handling": "hand-labelled by reading the code at the pinned commit; file:line cited per item", "adversarial": "generic/stopword phrasings; expected refusal (code_query insufficient) or, where an acceptable list exists, a grounded answer", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)", "corpus_tree": "43196d72eeaf223f8494df8315f3d0dfba07dd6d"},
+ "queries": [
+  {
+   "id": "definition::cJSON_Delete",
+   "class": "definition",
+   "entity": "cJSON_Delete",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_Delete defined?",
+   "relevant": [
+    {"names": ["cJSON_Delete"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:253", "cJSON.h:171"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_Delete"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_Delete", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_Delete",
+   "class": "callers",
+   "entity": "cJSON_Delete",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_Delete?",
+   "relevant": [
+    {"names": ["LLVMFuzzerTestOneInput"], "paths": ["fuzzing/cjson_read_fuzzer.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["apply_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddArrayToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddBoolToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddFalseToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddNullToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddNumberToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddObjectToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddRawToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddStringToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddTrueToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateDoubleArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateFloatArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateIntArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateRaw"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateString"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateStringArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_Delete"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_DeleteItemFromArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_DeleteItemFromObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_DeleteItemFromObjectCaseSensitive"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_Duplicate_rec"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_ParseWithLengthOpts"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_ReplaceItemViaPointer"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_add_array_should_add_array"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_add_object_should_add_object"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_array_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_array_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_bool_should_add_bool"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_bool_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_bool_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_false_should_add_false"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_false_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_false_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_item_to_object_or_array_should_not_add_itself"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_add_item_to_object_should_not_use_after_free_when_string_is_aliased"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_add_null_should_add_null"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_null_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_null_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_number_should_add_number"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_number_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_number_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_object_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_object_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_raw_should_add_raw"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_raw_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_add_raw_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_add_string_should_add_string"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_add_string_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_add_string_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_add_true_should_add_true"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_add_true_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_add_true_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_compare_should_compare_raw"], "paths": ["tests/compare_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_create_array_reference_should_create_an_array_reference"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_create_object_reference_should_create_an_object_reference"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_create_string_reference_should_create_a_string_reference"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_delete_item_from_array_should_not_broken_list_structure"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_get_number_value_should_get_a_number"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_get_object_item_case_sensitive_should_get_object_items"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_get_object_item_case_sensitive_should_not_crash_with_array"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_get_object_item_should_get_object_items"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_get_object_item_should_not_crash_with_array"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_get_string_value_should_get_a_string"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_parse_big_numbers_should_not_report_error"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_replace_item_in_object_should_preserve_name"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_set_bool_value_must_not_break_objects"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_set_valuestring_should_return_null_if_strings_overlap"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_set_valuestring_to_object_should_not_leak_memory"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_should_not_follow_too_deep_circular_references"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_utils_functions_shouldnt_crash_with_null_pointers"], "paths": ["tests/misc_utils_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_utils_should_pass_json_patch_test_cjson_utils_tests"], "paths": ["tests/json_patch_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_utils_should_pass_json_patch_test_spec_tests"], "paths": ["tests/json_patch_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["cjson_utils_should_pass_json_patch_test_tests"], "paths": ["tests/json_patch_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["compare_from_string"], "paths": ["tests/compare_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["create_monitor"], "paths": ["tests/readme_examples.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["create_monitor_with_helpers"], "paths": ["tests/readme_examples.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["create_objects"], "paths": ["test.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["do_test"], "paths": ["tests/parse_examples.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["file_test6_should_not_be_parsed"], "paths": ["tests/parse_examples.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["generate_merge_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["generate_merge_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["json_pointer_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["main"], "paths": ["fuzzing/afl.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["merge_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["merge_patch_should_not_read_freed_memory_when_patch_is_subtree"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["merge_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["misc_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["overwrite_item"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_array"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_object"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_with_opts_should_handle_null"], "paths": ["tests/parse_with_opts.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["parse_with_opts_should_parse_utf8_bom"], "paths": ["tests/parse_with_opts.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["parse_with_opts_should_require_null_if_requested"], "paths": ["tests/parse_with_opts.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["parse_with_opts_should_return_parse_end"], "paths": ["tests/parse_with_opts.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["reset"], "paths": ["tests/common.h"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["sort_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["supports_full_hd"], "paths": ["tests/readme_examples.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["test12_should_not_be_parsed"], "paths": ["tests/parse_examples.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["test13_should_be_parsed_without_null_termination"], "paths": ["tests/parse_examples.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["test14_should_not_be_parsed"], "paths": ["tests/parse_examples.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["test15_should_not_heap_buffer_overflow"], "paths": ["tests/parse_examples.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["test_apply_patch"], "paths": ["tests/json_patch_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["test_generate_test"], "paths": ["tests/json_patch_tests.c"], "paths_source": "atlas symbol definitions", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_Delete"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_Delete", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_CreateObject",
+   "class": "definition",
+   "entity": "cJSON_CreateObject",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_CreateObject defined?",
+   "relevant": [
+    {"names": ["cJSON_CreateObject"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:2609", "cJSON.h:210"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_CreateObject"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_CreateObject", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_CreateObject",
+   "class": "callers",
+   "entity": "cJSON_CreateObject",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_CreateObject?",
+   "relevant": [
+    {"names": ["cJSON_AddObjectToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_add_array_should_add_array"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_add_object_should_add_object"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_array_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_array_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_bool_should_add_bool"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_bool_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_bool_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_false_should_add_false"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_false_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_false_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_item_to_object_or_array_should_not_add_itself"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_item_to_object_should_not_use_after_free_when_string_is_aliased"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_null_should_add_null"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_null_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_null_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_number_should_add_number"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_number_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_number_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_object_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_object_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_raw_should_add_raw"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_raw_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_raw_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_string_should_add_string"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_string_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_string_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_true_should_add_true"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_true_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_true_should_fail_with_null_pointers"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_create_object_reference_should_create_an_object_reference"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_set_bool_value_must_not_break_objects"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["compose_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_monitor"], "paths": ["tests/readme_examples.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_monitor_with_helpers"], "paths": ["tests/readme_examples.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_objects"], "paths": ["test.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["generate_merge_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["merge_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["misc_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["sort_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_CreateObject"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_CreateObject", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_Parse",
+   "class": "definition",
+   "entity": "cJSON_Parse",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_Parse defined?",
+   "relevant": [
+    {"names": ["cJSON_Parse"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:1227", "cJSON.h:154"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_Parse"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_Parse", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_Parse",
+   "class": "callers",
+   "entity": "cJSON_Parse",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_Parse?",
+   "relevant": [
+    {"names": ["cjson_compare_should_compare_raw"], "paths": ["tests/compare_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_delete_item_from_array_should_not_broken_list_structure"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_get_object_item_case_sensitive_should_get_object_items"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_get_object_item_case_sensitive_should_not_crash_with_array"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_get_object_item_should_get_object_items"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_get_object_item_should_not_crash_with_array"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_parse_big_numbers_should_not_report_error"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_set_valuestring_should_return_null_if_strings_overlap"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_set_valuestring_to_object_should_not_leak_memory"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_should_not_parse_to_deeply_nested_jsons"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["compare_from_string"], "paths": ["tests/compare_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["file_test6_should_not_be_parsed"], "paths": ["tests/parse_examples.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["generate_merge_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["json_pointer_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["main"], "paths": ["fuzzing/afl.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["merge_patch_should_not_read_freed_memory_when_patch_is_subtree"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["merge_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_file"], "paths": ["tests/parse_examples.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_test_file"], "paths": ["tests/json_patch_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["supports_full_hd"], "paths": ["tests/readme_examples.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["test12_should_not_be_parsed"], "paths": ["tests/parse_examples.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_Parse"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_Parse", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_GetObjectItemCaseSensitive",
+   "class": "definition",
+   "entity": "cJSON_GetObjectItemCaseSensitive",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_GetObjectItemCaseSensitive defined?",
+   "relevant": [
+    {"names": ["cJSON_GetObjectItemCaseSensitive"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:1988", "cJSON.h:179"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_GetObjectItemCaseSensitive"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_GetObjectItemCaseSensitive", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_GetObjectItemCaseSensitive",
+   "class": "callers",
+   "entity": "cJSON_GetObjectItemCaseSensitive",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_GetObjectItemCaseSensitive?",
+   "relevant": [
+    {"names": ["cJSON_DetachItemFromObjectCaseSensitive"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_add_array_should_add_array"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_add_object_should_add_object"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_bool_should_add_bool"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_false_should_add_false"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_null_should_add_null"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_number_should_add_number"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_raw_should_add_raw"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_string_should_add_string"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_true_should_add_true"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_get_object_item_case_sensitive_should_get_object_items"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_get_object_item_case_sensitive_should_not_crash_with_array"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["get_object_item"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["supports_full_hd"], "paths": ["tests/readme_examples.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["test_apply_patch"], "paths": ["tests/json_patch_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["test_generate_test"], "paths": ["tests/json_patch_tests.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_GetObjectItemCaseSensitive"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_GetObjectItemCaseSensitive", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_New_Item",
+   "class": "definition",
+   "entity": "cJSON_New_Item",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_New_Item defined?",
+   "relevant": [
+    {"names": ["cJSON_New_Item"], "paths": ["cJSON.c"], "locations": ["cJSON.c:241"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_New_Item"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_New_Item", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_New_Item",
+   "class": "callers",
+   "entity": "cJSON_New_Item",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_New_Item?",
+   "relevant": [
+    {"names": ["cJSON_CreateArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateArrayReference"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateBool"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateFalse"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateNull"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateNumber"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateObjectReference"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateRaw"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateString"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateStringReference"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateTrue"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_Duplicate_rec"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_ParseWithLengthOpts"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_reference"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_array"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_object"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_New_Item"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_New_Item", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_CreateArray",
+   "class": "definition",
+   "entity": "cJSON_CreateArray",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_CreateArray defined?",
+   "relevant": [
+    {"names": ["cJSON_CreateArray"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:2598", "cJSON.h:209"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_CreateArray"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_CreateArray", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_CreateArray",
+   "class": "callers",
+   "entity": "cJSON_CreateArray",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_CreateArray?",
+   "relevant": [
+    {"names": ["cJSONUtils_GeneratePatches"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSONUtils_GeneratePatchesCaseSensitive"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddArrayToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateDoubleArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateFloatArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateIntArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateStringArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_item_to_object_or_array_should_not_add_itself"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_create_array_reference_should_create_an_array_reference"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_replace_item_via_pointer_should_replace_items"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_should_not_follow_too_deep_circular_references"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_monitor"], "paths": ["tests/readme_examples.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_objects"], "paths": ["test.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_CreateArray"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_CreateArray", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_InitHooks",
+   "class": "definition",
+   "entity": "cJSON_InitHooks",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_InitHooks defined?",
+   "relevant": [
+    {"names": ["cJSON_InitHooks"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:209", "cJSON.h:150"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_InitHooks"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_InitHooks", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_InitHooks",
+   "class": "callers",
+   "entity": "cJSON_InitHooks",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_InitHooks?",
+   "relevant": [
+    {"names": ["cjson_add_array_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_bool_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_false_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_null_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_number_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_object_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_raw_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_string_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_true_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_create_double_array_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_create_float_array_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_create_int_array_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_create_string_array_should_fail_on_allocation_failure"], "paths": ["tests/cjson_add.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_InitHooks"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_InitHooks", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_AddItemToObject",
+   "class": "definition",
+   "entity": "cJSON_AddItemToObject",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_AddItemToObject defined?",
+   "relevant": [
+    {"names": ["cJSON_AddItemToObject"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:2119", "cJSON.h:229"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_AddItemToObject"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_AddItemToObject", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_AddItemToObject",
+   "class": "callers",
+   "entity": "cJSON_AddItemToObject",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_AddItemToObject?",
+   "relevant": [
+    {"names": ["apply_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_item_to_object_or_array_should_not_add_itself"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_item_to_object_should_not_use_after_free_when_string_is_aliased"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_replace_item_in_object_should_preserve_name"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_set_valuestring_to_object_should_not_leak_memory"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["compose_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_monitor"], "paths": ["tests/readme_examples.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_objects"], "paths": ["test.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["generate_merge_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["merge_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["misc_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["sort_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_AddItemToObject"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_AddItemToObject", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::add_item_to_object",
+   "class": "definition",
+   "entity": "add_item_to_object",
+   "component": "DaveGamble/cJSON",
+   "question": "where is add_item_to_object defined?",
+   "relevant": [
+    {"names": ["add_item_to_object"], "paths": ["cJSON.c"], "locations": ["cJSON.c:2082"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["add_item_to_object"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::add_item_to_object", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::add_item_to_object",
+   "class": "callers",
+   "entity": "add_item_to_object",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls add_item_to_object?",
+   "relevant": [
+    {"names": ["cJSON_AddArrayToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddBoolToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddFalseToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddItemReferenceToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddItemToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddItemToObjectCS"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddNullToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddNumberToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddObjectToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddRawToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddStringToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_AddTrueToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["add_item_to_object"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::add_item_to_object", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_AddItemToArray",
+   "class": "definition",
+   "entity": "cJSON_AddItemToArray",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_AddItemToArray defined?",
+   "relevant": [
+    {"names": ["cJSON_AddItemToArray"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:2061", "cJSON.h:228"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_AddItemToArray"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_AddItemToArray", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_AddItemToArray",
+   "class": "callers",
+   "entity": "cJSON_AddItemToArray",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_AddItemToArray?",
+   "relevant": [
+    {"names": ["apply_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_item_to_object_or_array_should_not_add_itself"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_create_array_reference_should_create_an_array_reference"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_delete_item_from_array_should_not_broken_list_structure"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_replace_item_via_pointer_should_replace_items"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_should_not_follow_too_deep_circular_references"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["compose_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_monitor"], "paths": ["tests/readme_examples.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_monitor_with_helpers"], "paths": ["tests/readme_examples.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_objects"], "paths": ["test.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["insert_item_in_array"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_AddItemToArray"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_AddItemToArray", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_CreateNumber",
+   "class": "definition",
+   "entity": "cJSON_CreateNumber",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_CreateNumber defined?",
+   "relevant": [
+    {"names": ["cJSON_CreateNumber"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:2505", "cJSON.h:205"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_CreateNumber"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_CreateNumber", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_CreateNumber",
+   "class": "callers",
+   "entity": "cJSON_CreateNumber",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_CreateNumber?",
+   "relevant": [
+    {"names": ["cJSON_AddNumberToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateDoubleArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateFloatArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateIntArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_add_item_to_object_should_not_use_after_free_when_string_is_aliased"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_create_array_reference_should_create_an_array_reference"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_create_object_reference_should_create_an_object_reference"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_get_number_value_should_get_a_number"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_get_string_value_should_get_a_string"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_replace_item_in_object_should_preserve_name"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_monitor"], "paths": ["tests/readme_examples.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["sort_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_CreateNumber"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_CreateNumber", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_CreateString",
+   "class": "definition",
+   "entity": "cJSON_CreateString",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_CreateString defined?",
+   "relevant": [
+    {"names": ["cJSON_CreateString"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:2531", "cJSON.h:206"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_CreateString"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_CreateString", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_CreateString",
+   "class": "callers",
+   "entity": "cJSON_CreateString",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_CreateString?",
+   "relevant": [
+    {"names": ["cJSON_AddStringToObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_CreateStringArray"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_get_number_value_should_get_a_number"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_get_string_value_should_get_a_string"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_set_bool_value_must_not_break_objects"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_set_valuestring_to_object_should_not_leak_memory"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_utils_functions_shouldnt_crash_with_null_pointers"], "paths": ["tests/misc_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["compose_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_monitor"], "paths": ["tests/readme_examples.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_objects"], "paths": ["test.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["misc_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_CreateString"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_CreateString", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_IsArray",
+   "class": "definition",
+   "entity": "cJSON_IsArray",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_IsArray defined?",
+   "relevant": [
+    {"names": ["cJSON_IsArray"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:3042", "cJSON.h:196"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_IsArray"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_IsArray", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_IsArray",
+   "class": "callers",
+   "entity": "cJSON_IsArray",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_IsArray?",
+   "relevant": [
+    {"names": ["apply_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSONUtils_ApplyPatches"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSONUtils_ApplyPatchesCaseSensitive"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSONUtils_FindPointerFromObjectTo"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_create_array_reference_should_create_an_array_reference"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["detach_path"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["get_item_from_pointer"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["merge_patch_should_not_read_freed_memory_when_patch_is_subtree"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_test_file"], "paths": ["tests/json_patch_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["typecheck_functions_should_check_type"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_IsArray"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_IsArray", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_Compare",
+   "class": "definition",
+   "entity": "cJSON_Compare",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_Compare defined?",
+   "relevant": [
+    {"names": ["cJSON_Compare"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:3072", "cJSON.h:261"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_Compare"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_Compare", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_Compare",
+   "class": "callers",
+   "entity": "cJSON_Compare",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_Compare?",
+   "relevant": [
+    {"names": ["cJSON_Compare"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_compare_should_compare_invalid_as_not_equal"], "paths": ["tests/compare_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_compare_should_compare_null_pointer_as_not_equal"], "paths": ["tests/compare_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_compare_should_compare_raw"], "paths": ["tests/compare_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_compare_should_not_accept_invalid_types"], "paths": ["tests/compare_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["compare_from_string"], "paths": ["tests/compare_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_with_opts_should_parse_utf8_bom"], "paths": ["tests/parse_with_opts.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["test_apply_patch"], "paths": ["tests/json_patch_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["test_generate_test"], "paths": ["tests/json_patch_tests.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_Compare"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_Compare", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_IsObject",
+   "class": "definition",
+   "entity": "cJSON_IsObject",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_IsObject defined?",
+   "relevant": [
+    {"names": ["cJSON_IsObject"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:3052", "cJSON.h:197"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_IsObject"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_IsObject", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_IsObject",
+   "class": "callers",
+   "entity": "cJSON_IsObject",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_IsObject?",
+   "relevant": [
+    {"names": ["apply_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSONUtils_FindPointerFromObjectTo"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_create_object_reference_should_create_an_object_reference"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_set_bool_value_must_not_break_objects"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["detach_path"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["generate_merge_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["get_item_from_pointer"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["merge_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["typecheck_functions_should_check_type"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_IsObject"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_IsObject", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_GetObjectItem",
+   "class": "definition",
+   "entity": "cJSON_GetObjectItem",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_GetObjectItem defined?",
+   "relevant": [
+    {"names": ["cJSON_GetObjectItem"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:1983", "cJSON.h:178"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_GetObjectItem"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_GetObjectItem", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_GetObjectItem",
+   "class": "callers",
+   "entity": "cJSON_GetObjectItem",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_GetObjectItem?",
+   "relevant": [
+    {"names": ["cJSON_DetachItemFromObject"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_HasObjectItem"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_get_object_item_should_get_object_items"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_get_object_item_should_not_crash_with_array"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_set_valuestring_to_object_should_not_leak_memory"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["get_object_item"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["json_pointer_tests"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["merge_patch_should_not_read_freed_memory_when_patch_is_subtree"], "paths": ["tests/old_utils_tests.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_GetObjectItem"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_GetObjectItem", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_Minify",
+   "class": "definition",
+   "entity": "cJSON_Minify",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_Minify defined?",
+   "relevant": [
+    {"names": ["cJSON_Minify"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:2924", "cJSON.h:266"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_Minify"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_Minify", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_Minify",
+   "class": "callers",
+   "entity": "cJSON_Minify",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_Minify?",
+   "relevant": [
+    {"names": ["LLVMFuzzerTestOneInput"], "paths": ["fuzzing/cjson_read_fuzzer.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_minify_should_minify_json"], "paths": ["tests/minify_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_minify_should_not_loop_infinitely"], "paths": ["tests/minify_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_minify_should_not_modify_strings"], "paths": ["tests/minify_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_minify_should_not_overflow_buffer"], "paths": ["tests/minify_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_minify_should_remove_multiline_comments"], "paths": ["tests/minify_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_minify_should_remove_single_line_comments"], "paths": ["tests/minify_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_minify_should_remove_spaces"], "paths": ["tests/minify_tests.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_Minify"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_Minify", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_ParseWithOpts",
+   "class": "definition",
+   "entity": "cJSON_ParseWithOpts",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_ParseWithOpts defined?",
+   "relevant": [
+    {"names": ["cJSON_ParseWithOpts"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:1131", "cJSON.h:158"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_ParseWithOpts"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_ParseWithOpts", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_ParseWithOpts",
+   "class": "callers",
+   "entity": "cJSON_ParseWithOpts",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_ParseWithOpts?",
+   "relevant": [
+    {"names": ["LLVMFuzzerTestOneInput"], "paths": ["fuzzing/cjson_read_fuzzer.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_Parse"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_functions_should_not_crash_with_null_pointers"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_with_opts_should_handle_empty_strings"], "paths": ["tests/parse_with_opts.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_with_opts_should_handle_incomplete_json"], "paths": ["tests/parse_with_opts.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_with_opts_should_handle_null"], "paths": ["tests/parse_with_opts.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_with_opts_should_parse_utf8_bom"], "paths": ["tests/parse_with_opts.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_with_opts_should_require_null_if_requested"], "paths": ["tests/parse_with_opts.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["parse_with_opts_should_return_parse_end"], "paths": ["tests/parse_with_opts.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_ParseWithOpts"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_ParseWithOpts", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::cJSON_free",
+   "class": "definition",
+   "entity": "cJSON_free",
+   "component": "DaveGamble/cJSON",
+   "question": "where is cJSON_free defined?",
+   "relevant": [
+    {"names": ["cJSON_free"], "paths": ["cJSON.c", "cJSON.h"], "locations": ["cJSON.c:3202", "cJSON.h:300"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_free"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_free", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::cJSON_free",
+   "class": "callers",
+   "entity": "cJSON_free",
+   "component": "DaveGamble/cJSON",
+   "question": "what calls cJSON_free?",
+   "relevant": [
+    {"names": ["apply_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSONUtils_FindPointerFromObjectTo"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cJSON_SetValuestring"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["cjson_replace_item_via_pointer_should_replace_items"], "paths": ["tests/misc_tests.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["compose_patch"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["create_patches"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["detach_path"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["overwrite_item"], "paths": ["cJSON_Utils.c"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["replace_item_in_object"], "paths": ["cJSON.c"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_free"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_c.json", "qa_id": "callers::cJSON_free", "qa_commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c", "lsp_truth": "clangd LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "error_handling::cJSON_Parse",
+   "class": "error_handling",
+   "entity": "cJSON_Parse",
+   "component": "DaveGamble/cJSON",
+   "question": "cJSON_Parse error exception handling",
+   "relevant": [
+    {"names": ["cJSON_ParseWithLengthOpts"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1147"], "match": "name+path", "why": "fail: label (1194-1223) records the error position into global_error and returns NULL"},
+    {"names": ["global_error"], "paths": ["cJSON.c"], "locations": ["cJSON.c:92"], "match": "name+path", "why": "the parse-error state"},
+    {"names": ["cJSON_GetErrorPtr"], "paths": ["cJSON.c"], "locations": ["cJSON.c:94"], "match": "name+path", "why": "the public accessor for the parse error position"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_Parse"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1227"], "match": "name+path", "why": "the entity; delegates to cJSON_ParseWithOpts"},
+    {"names": ["cJSON_ParseWithOpts"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1131"], "match": "name+path"},
+    {"names": ["error"], "paths": ["cJSON.c"], "locations": ["cJSON.c:88"], "match": "name+path", "why": "error record typedef"},
+    {"names": ["cJSON_Parse"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": "cJSON_Parse itself has no error logic; errors surface through cJSON_ParseWithLengthOpts' fail path and cJSON_GetErrorPtr"}
+  },
+  {
+   "id": "error_handling::cJSON_ParseWithOpts",
+   "class": "error_handling",
+   "entity": "cJSON_ParseWithOpts",
+   "component": "DaveGamble/cJSON",
+   "question": "cJSON_ParseWithOpts error exception handling",
+   "relevant": [
+    {"names": ["cJSON_ParseWithOpts"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1131"], "match": "name+path", "why": "NULL input guard returns NULL (1135-1138)"},
+    {"names": ["cJSON_ParseWithLengthOpts"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1147"], "match": "name+path", "why": "fail: label sets global_error"},
+    {"names": ["global_error"], "paths": ["cJSON.c"], "locations": ["cJSON.c:92"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_GetErrorPtr"], "paths": ["cJSON.c"], "locations": ["cJSON.c:94"], "match": "name+path"},
+    {"names": ["error"], "paths": ["cJSON.c"], "locations": ["cJSON.c:88"], "match": "name+path"},
+    {"names": ["cJSON_ParseWithOpts"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": "return_parse_end is set from the error position on failure (1215-1218)"}
+  },
+  {
+   "id": "error_handling::cJSON_GetErrorPtr",
+   "class": "error_handling",
+   "entity": "cJSON_GetErrorPtr",
+   "component": "DaveGamble/cJSON",
+   "question": "cJSON_GetErrorPtr error exception handling",
+   "relevant": [
+    {"names": ["cJSON_GetErrorPtr"], "paths": ["cJSON.c"], "locations": ["cJSON.c:94"], "match": "name+path"},
+    {"names": ["global_error"], "paths": ["cJSON.c"], "locations": ["cJSON.c:92"], "match": "name+path"},
+    {"names": ["error"], "paths": ["cJSON.c"], "locations": ["cJSON.c:88"], "match": "name+path"},
+    {"names": ["cJSON_ParseWithLengthOpts"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1147"], "match": "name+path", "why": "the only writer of global_error (1153-1154 reset, 1220 set)"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_Parse"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1227"], "match": "name+path"},
+    {"names": ["cJSON_ParseWithOpts"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1131"], "match": "name+path"},
+    {"names": ["cJSON_GetErrorPtr"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": "the error pointer is global parse state"}
+  },
+  {
+   "id": "error_handling::cJSON_SetValuestring",
+   "class": "error_handling",
+   "entity": "cJSON_SetValuestring",
+   "component": "DaveGamble/cJSON",
+   "question": "cJSON_SetValuestring error exception handling",
+   "relevant": [
+    {"names": ["cJSON_SetValuestring"], "paths": ["cJSON.c"], "locations": ["cJSON.c:435"], "match": "name+path", "why": "returns NULL on wrong type (441-444), NULL strings (446-449), overlapping strings (456-459), strdup failure (463-466)"}
+   ],
+   "acceptable": [
+    {"names": ["cJSON_strdup"], "paths": ["cJSON.c"], "locations": ["cJSON.c:188"], "match": "name+path", "why": "allocation that can fail"},
+    {"names": ["cjson_set_valuestring_should_return_null_if_strings_overlap"], "paths": ["tests/misc_tests.c"], "locations": ["tests/misc_tests.c:492"], "match": "name+path", "why": "the regression test for the overlap guard"},
+    {"names": ["cJSON_SetValuestring"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": "single-function error handling"}
+  },
+  {
+   "id": "error_handling::cJSON_AddItemToObject",
+   "class": "error_handling",
+   "entity": "cJSON_AddItemToObject",
+   "component": "DaveGamble/cJSON",
+   "question": "cJSON_AddItemToObject error exception handling",
+   "relevant": [
+    {"names": ["add_item_to_object"], "paths": ["cJSON.c"], "locations": ["cJSON.c:2082"], "match": "name+path", "why": "returns false on NULL object/string/item, object==item (2087-2090) and key strdup failure (2099-2103)"},
+    {"names": ["cJSON_AddItemToObject"], "paths": ["cJSON.c"], "locations": ["cJSON.c:2119"], "match": "name+path", "why": "the entity; forwards add_item_to_object's false"}
+   ],
+   "acceptable": [
+    {"names": ["add_item_to_array"], "paths": ["cJSON.c"], "locations": ["cJSON.c:2027"], "match": "name+path"},
+    {"names": ["cJSON_strdup"], "paths": ["cJSON.c"], "locations": ["cJSON.c:188"], "match": "name+path"},
+    {"names": ["cjson_add_item_to_object_or_array_should_not_add_itself"], "paths": ["tests/misc_tests.c"], "locations": ["tests/misc_tests.c:624"], "match": "name+path"},
+    {"names": ["cJSON_AddItemToObject"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": ""}
+  },
+  {
+   "id": "error_handling::cJSON_PrintPreallocated",
+   "class": "error_handling",
+   "entity": "cJSON_PrintPreallocated",
+   "component": "DaveGamble/cJSON",
+   "question": "cJSON_PrintPreallocated error exception handling",
+   "relevant": [
+    {"names": ["cJSON_PrintPreallocated"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1348"], "match": "name+path", "why": "returns false on negative length or NULL buffer (1352-1355); noalloc buffer"},
+    {"names": ["ensure"], "paths": ["cJSON.c"], "locations": ["cJSON.c:490"], "match": "name+path", "why": "returns NULL when a noalloc buffer is too small (516-518), on INT_MAX overflow and on realloc failure"}
+   ],
+   "acceptable": [
+    {"names": ["print_value"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1423"], "match": "name+path"},
+    {"names": ["print"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1239"], "match": "name+path", "why": "fail: label for the allocating printers"},
+    {"names": ["cJSON_PrintPreallocated"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": ""}
+  },
+  {
+   "id": "error_handling::cJSON_InitHooks",
+   "class": "error_handling",
+   "entity": "cJSON_InitHooks",
+   "component": "DaveGamble/cJSON",
+   "question": "cJSON_InitHooks error exception handling",
+   "relevant": [
+    {"names": ["cJSON_InitHooks"], "paths": ["cJSON.c"], "locations": ["cJSON.c:209"], "match": "name+path", "why": "NULL hooks reset to malloc/free/realloc (211-218); realloc disabled for custom allocators"},
+    {"names": ["failing_malloc"], "paths": ["tests/cjson_add.c"], "locations": ["tests/cjson_add.c:31"], "match": "name+path", "why": "the allocation-failure hook the *_should_fail_on_allocation_failure tests install"},
+    {"names": ["failing_hooks"], "paths": ["tests/cjson_add.c"], "locations": ["tests/cjson_add.c:43"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["global_hooks"], "paths": ["cJSON.c"], "locations": ["cJSON.c:186"], "match": "name+path"},
+    {"names": ["internal_hooks"], "paths": ["cJSON.c"], "locations": ["cJSON.c:156"], "match": "name+path"},
+    {"names": ["cJSON_New_Item"], "paths": ["cJSON.c"], "locations": ["cJSON.c:241"], "match": "name+path", "why": "returns NULL when the hook's allocate fails"},
+    {"names": ["cJSON_InitHooks"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": "allocation-failure handling is exercised through custom hooks"}
+  },
+  {
+   "id": "error_handling::cJSONUtils_ApplyPatches",
+   "class": "error_handling",
+   "entity": "cJSONUtils_ApplyPatches",
+   "component": "DaveGamble/cJSON",
+   "question": "cJSONUtils_ApplyPatches error exception handling",
+   "relevant": [
+    {"names": ["cJSONUtils_ApplyPatches"], "paths": ["cJSON_Utils.c"], "locations": ["cJSON_Utils.c:1038"], "match": "name+path", "why": "returns 1 for malformed patches (1043-1047) and the first non-zero apply_patch status"},
+    {"names": ["apply_patch"], "paths": ["cJSON_Utils.c"], "locations": ["cJSON_Utils.c:807"], "match": "name+path", "why": "status codes 2-13 with a single cleanup: label"},
+    {"names": ["decode_patch_operation"], "paths": ["cJSON_Utils.c"], "locations": ["cJSON_Utils.c:742"], "match": "name+path", "why": "INVALID opcode -> status 3"}
+   ],
+   "acceptable": [
+    {"names": ["cJSONUtils_ApplyPatchesCaseSensitive"], "paths": ["cJSON_Utils.c"], "locations": ["cJSON_Utils.c:1067"], "match": "name+path"},
+    {"names": ["test_apply_patch"], "paths": ["tests/json_patch_tests.c"], "locations": ["tests/json_patch_tests.c:49"], "match": "name+path"},
+    {"names": ["cJSONUtils_ApplyPatches"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": "error codes, not exceptions"}
+  },
+  {
+   "id": "error_handling::parse_string",
+   "class": "error_handling",
+   "entity": "parse_string",
+   "component": "DaveGamble/cJSON",
+   "question": "parse_string error exception handling",
+   "relevant": [
+    {"names": ["parse_string"], "paths": ["cJSON.c"], "locations": ["cJSON.c:824"], "match": "name+path", "why": "goto fail on non-string, unexpected end, allocation failure and bad escapes; fail: label frees output and records the offset (938-950)"}
+   ],
+   "acceptable": [
+    {"names": ["parse_value"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1368"], "match": "name+path"},
+    {"names": ["cJSON_ParseWithLengthOpts"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1147"], "match": "name+path", "why": "turns parse_value's false into global_error"},
+    {"names": ["parse_string"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": ""}
+  },
+  {
+   "id": "adversarial::purpose-of-module",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "what is the purpose of the module",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::error-handling",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "error handling",
+   "expect": "refuse_or_grounded",
+   "relevant": [],
+   "acceptable": [
+    {"names": ["error"], "paths": ["cJSON.c"], "locations": ["cJSON.c:88"], "match": "name+path"},
+    {"names": ["global_error"], "paths": ["cJSON.c"], "locations": ["cJSON.c:92"], "match": "name+path"},
+    {"names": ["cJSON_GetErrorPtr"], "paths": ["cJSON.c"], "locations": ["cJSON.c:94"], "match": "name+path"},
+    {"names": ["cJSON_ParseWithLengthOpts"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1147"], "match": "name+path"},
+    {"names": ["parse_string"], "paths": ["cJSON.c"], "locations": ["cJSON.c:824"], "match": "name+path"},
+    {"names": ["ensure"], "paths": ["cJSON.c"], "locations": ["cJSON.c:490"], "match": "name+path"},
+    {"names": ["apply_patch"], "paths": ["cJSON_Utils.c"], "locations": ["cJSON_Utils.c:807"], "match": "name+path"},
+    {"names": ["cJSONUtils_ApplyPatches"], "paths": ["cJSON_Utils.c"], "locations": ["cJSON_Utils.c:1038"], "match": "name+path"},
+    {"names": ["failing_malloc"], "paths": ["tests/cjson_add.c"], "locations": ["tests/cjson_add.c:31"], "match": "name+path"}
+   ],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; generic-domain term: refusing is safe, and so is an answer whose top-5 holds >=3 of the corpus's hand-labelled error machinery", "labelled": "2026-10-29", "acceptable_rule": "the corpus's dedicated error machinery, read from source: cJSON.c error state + fail paths, cJSON_Utils.c patch status codes, the allocation-failure test hook"}
+  },
+  {
+   "id": "adversarial::errors-handled",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "how are errors handled and what exceptions are thrown?",
+   "expect": "refuse_or_grounded",
+   "relevant": [],
+   "acceptable": [
+    {"names": ["error"], "paths": ["cJSON.c"], "locations": ["cJSON.c:88"], "match": "name+path"},
+    {"names": ["global_error"], "paths": ["cJSON.c"], "locations": ["cJSON.c:92"], "match": "name+path"},
+    {"names": ["cJSON_GetErrorPtr"], "paths": ["cJSON.c"], "locations": ["cJSON.c:94"], "match": "name+path"},
+    {"names": ["cJSON_ParseWithLengthOpts"], "paths": ["cJSON.c"], "locations": ["cJSON.c:1147"], "match": "name+path"},
+    {"names": ["parse_string"], "paths": ["cJSON.c"], "locations": ["cJSON.c:824"], "match": "name+path"},
+    {"names": ["ensure"], "paths": ["cJSON.c"], "locations": ["cJSON.c:490"], "match": "name+path"},
+    {"names": ["apply_patch"], "paths": ["cJSON_Utils.c"], "locations": ["cJSON_Utils.c:807"], "match": "name+path"},
+    {"names": ["cJSONUtils_ApplyPatches"], "paths": ["cJSON_Utils.c"], "locations": ["cJSON_Utils.c:1038"], "match": "name+path"},
+    {"names": ["failing_malloc"], "paths": ["tests/cjson_add.c"], "locations": ["tests/cjson_add.c:31"], "match": "name+path"}
+   ],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; generic-domain term: refusing is safe, and so is an answer whose top-5 holds >=3 of the corpus's hand-labelled error machinery", "labelled": "2026-10-29", "acceptable_rule": "the corpus's dedicated error machinery, read from source: cJSON.c error state + fail paths, cJSON_Utils.c patch status codes, the allocation-failure test hook"}
+  },
+  {
+   "id": "adversarial::how-does-it-work",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "how does this code work",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::main-logic",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "where is the main logic implemented",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::function-called-from",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "what does the function do and where is it called from",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::stopwords-only",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "the of and to in is it for that with",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::utility-helpers",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "utility helper functions",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::architecture",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "explain the architecture of this repository",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::what-calls-function",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "what calls the function?",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::where-defined",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "where is it defined?",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::fix-the-bug",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "fix the bug in the code",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  }
+ ]
+}

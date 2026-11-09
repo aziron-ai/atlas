@@ -1,0 +1,633 @@
+{
+  "language": "groovy",
+  "repo": "https://github.com/nextflow-io/nextflow",
+  "commit": "83d452a51796aca34f136f796383185d703c349c",
+  "graphify_detector_only": "",
+  "commands": {
+    "clone": "git clone --depth 1 https://github.com/nextflow-io/nextflow $WORK/atlas-live-groovy-nextflow/repo",
+    "sparse_checkout": "",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-groovy-nextflow/atlas.db --json index $WORK/atlas-live-groovy-nextflow/repo/modules/nf-commons/src/main",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-groovy-nextflow/atlas.db --json index $WORK/atlas-live-groovy-nextflow/repo/modules/nf-commons/src/main",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "$WORK/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> $WORK/atlas-live-groovy-nextflow/repo/modules/nf-commons/src/main",
+    "query_symbols": [
+      "SysEnv",
+      "Const",
+      "Duration",
+      "getVersion",
+      "format"
+    ],
+    "target_path": "$WORK/atlas-live-groovy-nextflow/repo/modules/nf-commons/src/main",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-groovy-nextflow/atlas.db serve --addr 127.0.0.1:4292"
+  },
+  "atlas": {
+    "cold_wall_seconds": 0.897,
+    "reindex_wall_seconds": 0.023,
+    "index": {
+      "repo_id": "2d060b70-cbce-47e5-83d3-60b187526f7c",
+      "repo_full_name": "main",
+      "snapshot_id": "6368f490-f562-4c27-8031-8c847abdc9af",
+      "commit_sha": "83d452a51796aca34f136f796383185d703c349c",
+      "indexed_files": 206,
+      "symbols": 3989,
+      "edges": 3733,
+      "edge_kinds": {
+        "calls": 3131,
+        "imports": 602
+      },
+      "routes": 0,
+      "languages": {
+        "groovy": 88,
+        "html": 1,
+        "java": 12,
+        "json": 104,
+        "markdown": 1
+      },
+      "mode": "full",
+      "duration_ms": 897,
+      "timings_ms": {
+        "build_symbols_edges": 1,
+        "delta_check": 0,
+        "discover_files": 2,
+        "doc_links": 0,
+        "ensure_repo": 0,
+        "gitignore_scan": 12,
+        "go_types": 0,
+        "lexical": 766,
+        "parse": 113,
+        "persist": 766,
+        "resolve_head": 0,
+        "routes": 0,
+        "sort": 0,
+        "walk": 2,
+        "write_sqlite": 766
+      }
+    },
+    "reindex": {
+      "repo_id": "193c04a8-f450-4272-b78b-f33fed978452",
+      "repo_full_name": "main",
+      "snapshot_id": "96712eb9-5bee-4a98-a4b4-aba10fdb37e7",
+      "commit_sha": "83d452a51796aca34f136f796383185d703c349c",
+      "indexed_files": 100,
+      "symbols": 1049,
+      "edges": 3712,
+      "routes": 0,
+      "languages": {
+        "groovy": 88,
+        "java": 12
+      },
+      "mode": "noop",
+      "duration_ms": 0,
+      "timings_ms": {
+        "delta_check": 0,
+        "resolve_head": 0
+      }
+    },
+    "symbol_breakdown": {
+      "repo_id": "2d060b70-cbce-47e5-83d3-60b187526f7c",
+      "repo_full_name": "main",
+      "tier": "local",
+      "storage_driver": "sqlite",
+      "latest": {
+        "snapshot_id": "6368f490-f562-4c27-8031-8c847abdc9af",
+        "commit_sha": "83d452a51796aca34f136f796383185d703c349c",
+        "created_at": "2026-06-30T07:45:19Z",
+        "files": 206,
+        "symbols": 3989,
+        "edges": 3733,
+        "routes": 0,
+        "mode": "full",
+        "duration_ms": 897,
+        "timings_ms": {
+          "build_symbols_edges": 1,
+          "delta_check": 0,
+          "discover_files": 2,
+          "doc_links": 0,
+          "ensure_repo": 0,
+          "gitignore_scan": 12,
+          "go_types": 0,
+          "lexical": 766,
+          "parse": 113,
+          "persist": 766,
+          "resolve_head": 0,
+          "routes": 0,
+          "sort": 0,
+          "walk": 2,
+          "write_sqlite": 766
+        }
+      },
+      "graph": {
+        "files": 98,
+        "symbols": 1075,
+        "edges": 2515,
+        "raw_symbols": 1075,
+        "raw_edges": 3733,
+        "communities": 391,
+        "isolated_nodes": 315,
+        "edge_kinds": [
+          {
+            "key": "calls",
+            "count": 3131
+          },
+          {
+            "key": "imports",
+            "count": 602
+          }
+        ],
+        "languages": [
+          {
+            "key": "groovy",
+            "count": 837
+          },
+          {
+            "key": "java",
+            "count": 238
+          }
+        ]
+      },
+      "coverage_facts": 0,
+      "history": [
+        {
+          "snapshot_id": "6368f490-f562-4c27-8031-8c847abdc9af",
+          "commit_sha": "83d452a51796aca34f136f796383185d703c349c",
+          "created_at": "2026-06-30T07:45:19Z",
+          "files": 206,
+          "symbols": 3989,
+          "edges": 3733,
+          "routes": 0,
+          "mode": "full",
+          "duration_ms": 897,
+          "timings_ms": {
+            "build_symbols_edges": 1,
+            "delta_check": 0,
+            "discover_files": 2,
+            "doc_links": 0,
+            "ensure_repo": 0,
+            "gitignore_scan": 12,
+            "go_types": 0,
+            "lexical": 766,
+            "parse": 113,
+            "persist": 766,
+            "resolve_head": 0,
+            "routes": 0,
+            "sort": 0,
+            "walk": 2,
+            "write_sqlite": 766
+          }
+        }
+      ],
+      "history_returned": 1
+    },
+    "edge_breakdown": {
+      "repo_id": "2d060b70-cbce-47e5-83d3-60b187526f7c",
+      "repo_full_name": "main",
+      "tier": "local",
+      "storage_driver": "sqlite",
+      "latest": {
+        "snapshot_id": "6368f490-f562-4c27-8031-8c847abdc9af",
+        "commit_sha": "83d452a51796aca34f136f796383185d703c349c",
+        "created_at": "2026-06-30T07:45:19Z",
+        "files": 206,
+        "symbols": 3989,
+        "edges": 3733,
+        "routes": 0,
+        "mode": "full",
+        "duration_ms": 897,
+        "timings_ms": {
+          "build_symbols_edges": 1,
+          "delta_check": 0,
+          "discover_files": 2,
+          "doc_links": 0,
+          "ensure_repo": 0,
+          "gitignore_scan": 12,
+          "go_types": 0,
+          "lexical": 766,
+          "parse": 113,
+          "persist": 766,
+          "resolve_head": 0,
+          "routes": 0,
+          "sort": 0,
+          "walk": 2,
+          "write_sqlite": 766
+        }
+      },
+      "graph": {
+        "files": 98,
+        "symbols": 1075,
+        "edges": 2515,
+        "raw_symbols": 1075,
+        "raw_edges": 3733,
+        "communities": 391,
+        "isolated_nodes": 315,
+        "edge_kinds": [
+          {
+            "key": "calls",
+            "count": 3131
+          },
+          {
+            "key": "imports",
+            "count": 602
+          }
+        ],
+        "languages": [
+          {
+            "key": "groovy",
+            "count": 837
+          },
+          {
+            "key": "java",
+            "count": 238
+          }
+        ]
+      },
+      "coverage_facts": 0,
+      "history": [
+        {
+          "snapshot_id": "6368f490-f562-4c27-8031-8c847abdc9af",
+          "commit_sha": "83d452a51796aca34f136f796383185d703c349c",
+          "created_at": "2026-06-30T07:45:19Z",
+          "files": 206,
+          "symbols": 3989,
+          "edges": 3733,
+          "routes": 0,
+          "mode": "full",
+          "duration_ms": 897,
+          "timings_ms": {
+            "build_symbols_edges": 1,
+            "delta_check": 0,
+            "discover_files": 2,
+            "doc_links": 0,
+            "ensure_repo": 0,
+            "gitignore_scan": 12,
+            "go_types": 0,
+            "lexical": 766,
+            "parse": 113,
+            "persist": 766,
+            "resolve_head": 0,
+            "routes": 0,
+            "sort": 0,
+            "walk": 2,
+            "write_sqlite": 766
+          }
+        }
+      ],
+      "history_returned": 1
+    },
+    "groovy_definition_symbols": 836
+  },
+  "graphify": {
+    "status": "ok",
+    "ok": true,
+    "seconds": 0.937,
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "stdout_head": [
+      "Re-extracting code files in . (no LLM needed)...",
+      "  AST extraction: 100/100 uncached files (100%) [14 workers]",
+      "  AST extraction: 100/100 files (100%) [14 workers]",
+      "[graphify watch] Rebuilt: 742 nodes, 1227 edges, 67 communities",
+      "[graphify watch] graph.json, graph.html and GRAPH_REPORT.md updated in graphify-out",
+      "Code graph updated. For doc/paper/image changes run /graphify --update in your AI assistant.",
+      "Tip: set GEMINI_API_KEY or GOOGLE_API_KEY to use Gemini for semantic extraction."
+    ],
+    "stderr_head": [],
+    "metrics": {
+      "nodes": 742,
+      "links": 1227,
+      "calls": 358
+    }
+  },
+  "native_baseline": {
+    "tool": "tree-sitter-groovy",
+    "status": "partial",
+    "ok": false,
+    "seconds": 0.11,
+    "command": "$WORK/atlas-live-groovy-nextflow/tree-sitter-groovy-venv/bin/python -c <tree-sitter-groovy definition counter> $WORK/atlas-live-groovy-nextflow/repo/modules/nf-commons/src/main",
+    "metrics": {
+      "files": 88,
+      "parsed_files": 21,
+      "parse_errors": 67,
+      "definition_counts": {
+        "class": 62,
+        "interface": 11,
+        "enum": 2,
+        "trait": 0,
+        "method": 435,
+        "function": 15,
+        "task": 0
+      },
+      "definitions": 525,
+      "tree_sitter_version": "0.25.2",
+      "tree_sitter_groovy_version": "0.1.2",
+      "parse_error_samples": [
+        {
+          "path": "nextflow/BuildInfo.groovy",
+          "error": "tree-sitter parse error"
+        },
+        {
+          "path": "nextflow/Const.groovy",
+          "error": "tree-sitter parse error"
+        },
+        {
+          "path": "nextflow/Global.groovy",
+          "error": "tree-sitter parse error"
+        },
+        {
+          "path": "nextflow/SysEnv.groovy",
+          "error": "tree-sitter parse error"
+        },
+        {
+          "path": "nextflow/config/RegistryConfig.groovy",
+          "error": "tree-sitter parse error"
+        },
+        {
+          "path": "nextflow/extension/Bolts.groovy",
+          "error": "tree-sitter parse error"
+        },
+        {
+          "path": "nextflow/extension/FilesEx.groovy",
+          "error": "tree-sitter parse error"
+        },
+        {
+          "path": "nextflow/file/CopyOptions.groovy",
+          "error": "tree-sitter parse error"
+        }
+      ]
+    }
+  },
+  "richer_native_baselines": {
+    "groovy": {
+      "status": "missing",
+      "ok": false,
+      "note": "groovy CLI not installed; tree-sitter-groovy parser used as the isolated definition baseline"
+    },
+    "gradle": {
+      "status": "missing",
+      "ok": false,
+      "note": "gradle not installed; source parser baseline used instead of dependency/build execution"
+    },
+    "groovy-language-server": {
+      "status": "missing",
+      "ok": false,
+      "note": "Groovy language server is not installed; tree-sitter-groovy parse coverage used for this benchmark"
+    }
+  },
+  "coverage": {
+    "atlas_vs_tree_sitter_groovy_definition_ratio": 1.59,
+    "atlas_groovy_definition_symbols": 836,
+    "native_definitions": 525
+  },
+  "optimization": {
+    "cycles_run": 3,
+    "stop_reason": "Groovy/Gradle live benchmark met the current 5x latency/token thresholds after widening Atlas Groovy declaration handling; definition coverage is saturated by tree-sitter-groovy parse errors on real Nextflow files, so the 1.59x native ratio is not claimed as exact recall.",
+    "cycle_notes": [
+      "cycle 1: Nextflow nf-commons probe showed the biggest Atlas gap was typed Groovy methods, interfaces, enums, traits, constructors, and Gradle task declarations beyond class plus untyped def parsing.",
+      "cycle 2: after parser widening, Atlas/tree-sitter-groovy definition ratio was inflated by control-flow false positives such as if/for/catch/synchronized being indexed as methods.",
+      "cycle 3: after restricting constructor and return-type matching, Atlas resolves the shared query symbols and exceeds 5x latency/token output vs graphify; native coverage remains partial because tree-sitter-groovy reports parse errors for most files in this real repo slice."
+    ]
+  },
+  "query_warmup": {
+    "symbol": "SysEnv",
+    "atlas_command": "curl -fsS http://127.0.0.1:4292/api/v1/symbols/SysEnv/explain?repo_id=main&format=plain",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain SysEnv",
+    "atlas_returncode": 0,
+    "graphify_returncode": 0,
+    "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
+  },
+  "queries": [
+    {
+      "symbol": "SysEnv",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4292/api/v1/symbols/SysEnv/explain?repo_id=main&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain SysEnv",
+      "atlas_tokens": 2,
+      "graphify_tokens": 125,
+      "atlas_ms": 8.034,
+      "graphify_ms": 86.908,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "SysEnv c@SysEnv:29"
+      ],
+      "graphify_stdout_head": [
+        "Node: SysEnv",
+        "  ID:        nextflow_sysenv_sysenv",
+        "  Source:    nextflow/SysEnv.groovy L28",
+        "  Type:      code",
+        "  Community: 2",
+        "  Degree:    9",
+        "",
+        "Connections (9):"
+      ],
+      "atlas_ms_samples": [
+        13.555,
+        9.809,
+        9.279,
+        9.176,
+        8.034,
+        7.995,
+        7.521,
+        7.779,
+        7.512
+      ]
+    },
+    {
+      "symbol": "Const",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4292/api/v1/symbols/Const/explain?repo_id=main&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Const",
+      "atlas_tokens": 2,
+      "graphify_tokens": 77,
+      "atlas_ms": 7.323,
+      "graphify_ms": 88.607,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "Const c@Const:26"
+      ],
+      "graphify_stdout_head": [
+        "Node: Const.groovy",
+        "  ID:        nextflow_const",
+        "  Source:    nextflow/Const.groovy L1",
+        "  Type:      code",
+        "  Community: 5",
+        "  Degree:    4",
+        "",
+        "Connections (4):"
+      ],
+      "atlas_ms_samples": [
+        7.328,
+        7.821,
+        7.323,
+        7.286,
+        6.53,
+        6.996,
+        6.931,
+        7.402,
+        7.93
+      ]
+    },
+    {
+      "symbol": "Duration",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4292/api/v1/symbols/Duration/explain?repo_id=main&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Duration",
+      "atlas_tokens": 2,
+      "graphify_tokens": 36,
+      "atlas_ms": 7.085,
+      "graphify_ms": 86.62,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "Duration c@Duration:39"
+      ],
+      "graphify_stdout_head": [
+        "Node: Duration.groovy",
+        "  ID:        util_duration",
+        "  Source:    nextflow/util/Duration.groovy L1",
+        "  Type:      code",
+        "  Community: 63",
+        "  Degree:    0"
+      ],
+      "atlas_ms_samples": [
+        6.991,
+        7.479,
+        6.65,
+        7.262,
+        7.085,
+        6.882,
+        7.793,
+        6.94,
+        7.32
+      ]
+    },
+    {
+      "symbol": "getVersion",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4292/api/v1/symbols/getVersion/explain?repo_id=main&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain getVersion",
+      "atlas_tokens": 2,
+      "graphify_tokens": 64,
+      "atlas_ms": 6.908,
+      "graphify_ms": 83.422,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "getVersion f@BuildInfo:49"
+      ],
+      "graphify_stdout_head": [
+        "Node: getVersion()",
+        "  ID:        nextflow_buildinfo_getversion",
+        "  Source:    nextflow/BuildInfo.groovy L49",
+        "  Type:      code",
+        "  Community: 5",
+        "  Degree:    2",
+        "",
+        "Connections (2):"
+      ],
+      "atlas_ms_samples": [
+        6.578,
+        7.687,
+        6.935,
+        6.897,
+        7.404,
+        6.617,
+        6.908,
+        6.835,
+        7.445
+      ]
+    },
+    {
+      "symbol": "format",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4292/api/v1/symbols/format/explain?repo_id=main&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain format",
+      "atlas_tokens": 2,
+      "graphify_tokens": 97,
+      "atlas_ms": 7.204,
+      "graphify_ms": 85.268,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "format f@Bolts:82"
+      ],
+      "graphify_stdout_head": [
+        "Node: .format()",
+        "  ID:        extension_bolts_bolts_format",
+        "  Source:    nextflow/extension/Bolts.groovy L87",
+        "  Type:      code",
+        "  Community: 5",
+        "  Degree:    5",
+        "",
+        "Connections (5):"
+      ],
+      "atlas_ms_samples": [
+        7.28,
+        7.315,
+        7.409,
+        6.499,
+        7.204,
+        6.668,
+        7.61,
+        7.181,
+        6.604
+      ]
+    }
+  ],
+  "atlas_cli": {
+    "version": "v0.1.26-4-gd882e08",
+    "commit": "d882e08",
+    "date": "2026-06-30T07:15:57Z",
+    "measurement_note": "Query rows refreshed from nine-sample medians against atlas serve format=plain using curl; Graphify rows retained as the saved comparison baseline."
+  },
+  "multi_repo_validation": {
+    "minimum_repos": 3,
+    "status": "passed",
+    "generated_at": "2026-06-30T14:01:36Z",
+    "scope": "groovy parser random public-repo validation uses the first three passing GitHub repos from a deterministic shuffled sample of public non-archived Groovy repos with 50..500 stars and size <= 5000. Atlas indexed each clean checkout after removing graphify-out, the native denominator came from Python tree-sitter-groovy binding, and Graphify was run on the same checkout as the comparison baseline.",
+    "selection_method": "gh search repos --language Groovy --stars 50..500 --archived=false --limit 100; size <= 5000; deterministic shuffled sample seed 2026-06-30-atlas-random-validation-tags-v3-tight; first 3 passing repos",
+    "measurement_order": "Atlas index after removing graphify-out, then language-specific Python tree-sitter counter, then graphify update for comparison metrics. Atlas/Graphify candidates time out after 75s and are rejected.",
+    "rejected_candidates": [],
+    "repos": [
+      {
+        "repo": "https://github.com/jvoegele/gradle-android-plugin",
+        "commit": "2063680c8d2a777aa1311b1865d299c8aa65d5be",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/groovy/1-jvoegele__gradle-android-plugin",
+        "atlas_definitions": 195,
+        "native_definitions": 124,
+        "coverage_ratio": 1.5726,
+        "ok": true,
+        "note": "jvoegele/gradle-android-plugin: 50 groovy files; tree-sitter-groovy native counts {\"class\":30,\"function\":2,\"interface\":1,\"method\":91}; Atlas counts {\"class\":44,\"interface\":1,\"method\":146,\"task\":4}; Graphify rebuilt 205 nodes and 205 edges on the same checkout."
+      },
+      {
+        "repo": "https://github.com/allegro/json-avro-converter",
+        "commit": "ad871e8a497003a90da1ff523b18d96e4afbf5c7",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/groovy/2-allegro__json-avro-converter",
+        "atlas_definitions": 38,
+        "native_definitions": 35,
+        "coverage_ratio": 1.0857,
+        "ok": true,
+        "note": "allegro/json-avro-converter: 20 groovy files; tree-sitter-groovy native counts {\"class\":11,\"method\":24}; Atlas counts {\"class\":16,\"method\":22}; Graphify rebuilt 416 nodes and 912 edges on the same checkout."
+      },
+      {
+        "repo": "https://github.com/jaredsburrows/gradle-license-plugin",
+        "commit": "062bcdcdbc88325f62b3d5e92cf0a1ed57af37a7",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/groovy/3-jaredsburrows__gradle-license-plugin",
+        "atlas_definitions": 18,
+        "native_definitions": 10,
+        "coverage_ratio": 1.8,
+        "ok": true,
+        "note": "jaredsburrows/gradle-license-plugin: 12 groovy files; tree-sitter-groovy native counts {\"class\":3,\"method\":7}; Atlas counts {\"class\":9,\"method\":8,\"task\":1}; Graphify rebuilt 269 nodes and 454 edges on the same checkout."
+      }
+    ]
+  }
+}

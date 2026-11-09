@@ -1,0 +1,789 @@
+{
+  "language": "objc",
+  "repo": "https://github.com/SDWebImage/SDWebImage",
+  "commit": "c3ad5e1a9bf55c9b76d4c362430b5fcded96c502",
+  "graphify_detector_only": "",
+  "commands": {
+    "clone": "git clone --depth 1 https://github.com/SDWebImage/SDWebImage $WORK/atlas-live-objc-sdwebimage/repo",
+    "sparse_checkout": "",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-objc-sdwebimage/atlas.db --json index $WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-objc-sdwebimage/atlas.db --json index $WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> $WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
+    "query_symbols": [
+      "SDImageCache",
+      "SDWebImageManager",
+      "sharedImageCache",
+      "storeImage:forKey:completion:",
+      "objectForKey:"
+    ],
+    "target_path": "$WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-objc-sdwebimage/atlas.db serve --addr 127.0.0.1:4295"
+  },
+  "atlas": {
+    "cold_wall_seconds": 0.132,
+    "reindex_wall_seconds": 0.026,
+    "index": {
+      "repo_id": "823ef655-791f-46c8-b8c5-a7caccdfc308",
+      "repo_full_name": "SDWebImage",
+      "snapshot_id": "2570b573-30c6-4573-a9ad-410c622df7c2",
+      "commit_sha": "c3ad5e1a9bf55c9b76d4c362430b5fcded96c502",
+      "indexed_files": 147,
+      "symbols": 979,
+      "edges": 2118,
+      "edge_kinds": {
+        "calls": 1828,
+        "imports": 290
+      },
+      "routes": 0,
+      "languages": {
+        "c": 75,
+        "objc": 72
+      },
+      "mode": "full",
+      "duration_ms": 132,
+      "timings_ms": {
+        "build_symbols_edges": 0,
+        "delta_check": 0,
+        "discover_files": 0,
+        "doc_links": 0,
+        "ensure_repo": 0,
+        "gitignore_scan": 10,
+        "go_types": 0,
+        "lexical": 52,
+        "parse": 66,
+        "persist": 52,
+        "resolve_head": 0,
+        "routes": 0,
+        "sort": 0,
+        "walk": 0,
+        "write_sqlite": 52
+      }
+    },
+    "reindex": {
+      "repo_id": "a48c73ae-6956-44b7-96a4-0fb3f88c33a5",
+      "repo_full_name": "SDWebImage",
+      "snapshot_id": "83611102-304f-4c3f-956e-3ee3831b6afb",
+      "commit_sha": "c3ad5e1a9bf55c9b76d4c362430b5fcded96c502",
+      "indexed_files": 147,
+      "symbols": 975,
+      "edges": 1742,
+      "routes": 0,
+      "languages": {
+        "c": 75,
+        "objc": 72
+      },
+      "mode": "noop",
+      "duration_ms": 0,
+      "timings_ms": {
+        "delta_check": 0,
+        "resolve_head": 0
+      }
+    },
+    "symbol_breakdown": {
+      "repo_id": "823ef655-791f-46c8-b8c5-a7caccdfc308",
+      "repo_full_name": "SDWebImage",
+      "tier": "local",
+      "storage_driver": "sqlite",
+      "latest": {
+        "snapshot_id": "2570b573-30c6-4573-a9ad-410c622df7c2",
+        "commit_sha": "c3ad5e1a9bf55c9b76d4c362430b5fcded96c502",
+        "created_at": "2026-06-30T07:45:25Z",
+        "files": 147,
+        "symbols": 979,
+        "edges": 2118,
+        "routes": 0,
+        "mode": "full",
+        "duration_ms": 132,
+        "timings_ms": {
+          "build_symbols_edges": 0,
+          "delta_check": 0,
+          "discover_files": 0,
+          "doc_links": 0,
+          "ensure_repo": 0,
+          "gitignore_scan": 10,
+          "go_types": 0,
+          "lexical": 52,
+          "parse": 66,
+          "persist": 52,
+          "resolve_head": 0,
+          "routes": 0,
+          "sort": 0,
+          "walk": 0,
+          "write_sqlite": 52
+        }
+      },
+      "graph": {
+        "files": 70,
+        "symbols": 979,
+        "edges": 17,
+        "raw_symbols": 979,
+        "raw_edges": 2118,
+        "communities": 971,
+        "isolated_nodes": 960,
+        "edge_kinds": [
+          {
+            "key": "calls",
+            "count": 1828
+          },
+          {
+            "key": "imports",
+            "count": 290
+          }
+        ],
+        "languages": [
+          {
+            "key": "objc",
+            "count": 971
+          },
+          {
+            "key": "c",
+            "count": 8
+          }
+        ]
+      },
+      "coverage_facts": 0,
+      "history": [
+        {
+          "snapshot_id": "2570b573-30c6-4573-a9ad-410c622df7c2",
+          "commit_sha": "c3ad5e1a9bf55c9b76d4c362430b5fcded96c502",
+          "created_at": "2026-06-30T07:45:25Z",
+          "files": 147,
+          "symbols": 979,
+          "edges": 2118,
+          "routes": 0,
+          "mode": "full",
+          "duration_ms": 132,
+          "timings_ms": {
+            "build_symbols_edges": 0,
+            "delta_check": 0,
+            "discover_files": 0,
+            "doc_links": 0,
+            "ensure_repo": 0,
+            "gitignore_scan": 10,
+            "go_types": 0,
+            "lexical": 52,
+            "parse": 66,
+            "persist": 52,
+            "resolve_head": 0,
+            "routes": 0,
+            "sort": 0,
+            "walk": 0,
+            "write_sqlite": 52
+          }
+        }
+      ],
+      "history_returned": 1
+    },
+    "edge_breakdown": {
+      "repo_id": "823ef655-791f-46c8-b8c5-a7caccdfc308",
+      "repo_full_name": "SDWebImage",
+      "tier": "local",
+      "storage_driver": "sqlite",
+      "latest": {
+        "snapshot_id": "2570b573-30c6-4573-a9ad-410c622df7c2",
+        "commit_sha": "c3ad5e1a9bf55c9b76d4c362430b5fcded96c502",
+        "created_at": "2026-06-30T07:45:25Z",
+        "files": 147,
+        "symbols": 979,
+        "edges": 2118,
+        "routes": 0,
+        "mode": "full",
+        "duration_ms": 132,
+        "timings_ms": {
+          "build_symbols_edges": 0,
+          "delta_check": 0,
+          "discover_files": 0,
+          "doc_links": 0,
+          "ensure_repo": 0,
+          "gitignore_scan": 10,
+          "go_types": 0,
+          "lexical": 52,
+          "parse": 66,
+          "persist": 52,
+          "resolve_head": 0,
+          "routes": 0,
+          "sort": 0,
+          "walk": 0,
+          "write_sqlite": 52
+        }
+      },
+      "graph": {
+        "files": 70,
+        "symbols": 979,
+        "edges": 17,
+        "raw_symbols": 979,
+        "raw_edges": 2118,
+        "communities": 971,
+        "isolated_nodes": 960,
+        "edge_kinds": [
+          {
+            "key": "calls",
+            "count": 1828
+          },
+          {
+            "key": "imports",
+            "count": 290
+          }
+        ],
+        "languages": [
+          {
+            "key": "objc",
+            "count": 971
+          },
+          {
+            "key": "c",
+            "count": 8
+          }
+        ]
+      },
+      "coverage_facts": 0,
+      "history": [
+        {
+          "snapshot_id": "2570b573-30c6-4573-a9ad-410c622df7c2",
+          "commit_sha": "c3ad5e1a9bf55c9b76d4c362430b5fcded96c502",
+          "created_at": "2026-06-30T07:45:25Z",
+          "files": 147,
+          "symbols": 979,
+          "edges": 2118,
+          "routes": 0,
+          "mode": "full",
+          "duration_ms": 132,
+          "timings_ms": {
+            "build_symbols_edges": 0,
+            "delta_check": 0,
+            "discover_files": 0,
+            "doc_links": 0,
+            "ensure_repo": 0,
+            "gitignore_scan": 10,
+            "go_types": 0,
+            "lexical": 52,
+            "parse": 66,
+            "persist": 52,
+            "resolve_head": 0,
+            "routes": 0,
+            "sort": 0,
+            "walk": 0,
+            "write_sqlite": 52
+          }
+        }
+      ],
+      "history_returned": 1
+    },
+    "objc_definition_symbols": 973
+  },
+  "graphify": {
+    "status": "ok",
+    "ok": true,
+    "seconds": 0.644,
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "stdout_head": [
+      "Re-extracting code files in . (no LLM needed)...",
+      "  AST extraction: 100/208 uncached files (48%) [14 workers]",
+      "  AST extraction: 200/208 uncached files (96%) [14 workers]",
+      "  AST extraction: 208/208 files (100%) [14 workers]",
+      "[graphify watch] Rebuilt: 1101 nodes, 1009 edges, 145 communities",
+      "[graphify watch] graph.json, graph.html and GRAPH_REPORT.md updated in graphify-out",
+      "Code graph updated. For doc/paper/image changes run /graphify --update in your AI assistant.",
+      "Tip: set GEMINI_API_KEY or GOOGLE_API_KEY to use Gemini for semantic extraction."
+    ],
+    "stderr_head": [],
+    "metrics": {
+      "nodes": 1101,
+      "links": 1009,
+      "calls": 0
+    }
+  },
+  "native_baseline": {
+    "tool": "tree-sitter-objc",
+    "status": "partial",
+    "ok": false,
+    "seconds": 0.131,
+    "command": "$WORK/atlas-live-objc-sdwebimage/tree-sitter-objc-venv/bin/python -c <tree-sitter-objc definition counter> $WORK/atlas-live-objc-sdwebimage/repo/SDWebImage",
+    "metrics": {
+      "files": 72,
+      "parsed_files": 67,
+      "parse_errors": 5,
+      "definition_counts": {
+        "type": 141,
+        "method": 830
+      },
+      "definitions": 971,
+      "tree_sitter_version": "0.25.2",
+      "tree_sitter_objc_version": "3.0.2",
+      "parse_error_samples": [
+        {
+          "path": "Core/SDAnimatedImageView.m",
+          "error": "tree-sitter parse error"
+        },
+        {
+          "path": "Core/SDGraphicsImageRenderer.m",
+          "error": "tree-sitter parse error"
+        },
+        {
+          "path": "Core/SDImageCoderHelper.m",
+          "error": "tree-sitter parse error"
+        },
+        {
+          "path": "Core/SDImageIOAnimatedCoder.m",
+          "error": "tree-sitter parse error"
+        },
+        {
+          "path": "Core/UIView+WebCache.m",
+          "error": "tree-sitter parse error"
+        }
+      ]
+    }
+  },
+  "richer_native_baselines": {
+    "clang": {
+      "status": "available",
+      "ok": true,
+      "note": "clang is available for syntax/build checks; tree-sitter-objc is used for source-only definition coverage"
+    },
+    "sourcekit-lsp": {
+      "status": "available",
+      "ok": true,
+      "note": "sourcekit-lsp is available but Objective-C documentSymbol coverage is not wired into this harness; tree-sitter-objc used instead"
+    },
+    "clangd": {
+      "status": "missing_adapter",
+      "ok": false,
+      "note": "clangd adapter not implemented for Objective-C in this harness yet"
+    }
+  },
+  "coverage": {
+    "atlas_vs_tree_sitter_objc_definition_ratio": 1.0021,
+    "atlas_objc_definition_symbols": 973,
+    "native_definitions": 971
+  },
+  "optimization": {
+    "cycles_run": 2,
+    "stop_reason": "Objective-C live benchmark matched the graphify-scoped tree-sitter-objc definition coverage proxy and exceeded 5x latency/token thresholds on equivalent rows after preserving full multi-part selectors in Atlas.",
+    "cycle_notes": [
+      "cycle 1: SDWebImage probe showed Atlas only captured the first Objective-C selector segment, losing precision for multi-argument methods.",
+      "cycle 2: after adding an Objective-C-specific parser, Atlas preserves selectors such as `storeImage:forKey:completion:`; graphify flattens those selector names, so the colon-selector row is kept as a visible graphify-missing caveat."
+    ]
+  },
+  "query_warmup": {
+    "symbol": "SDImageCache",
+    "atlas_command": "curl -fsS http://127.0.0.1:4295/api/v1/symbols/SDImageCache/explain?repo_id=SDWebImage&format=plain",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain SDImageCache",
+    "atlas_returncode": 0,
+    "graphify_returncode": 0,
+    "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
+  },
+  "queries": [
+    {
+      "symbol": "SDImageCache",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4295/api/v1/symbols/SDImageCache/explain?repo_id=SDWebImage&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain SDImageCache",
+      "atlas_tokens": 2,
+      "graphify_tokens": 300,
+      "atlas_ms": 8.893,
+      "graphify_ms": 91.936,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "SDImageCache t@SDImageCache:69"
+      ],
+      "graphify_stdout_head": [
+        "Node: SDImageCache",
+        "  ID:        core_sdimagecache_sdimagecache",
+        "  Source:    Core/SDImageCache.m L69",
+        "  Type:      code",
+        "  Community: 0",
+        "  Degree:    64",
+        "",
+        "Connections (64):"
+      ],
+      "atlas_ms_samples": [
+        9.886,
+        9.118,
+        9.282,
+        8.893,
+        8.924,
+        7.977,
+        8.563,
+        7.649,
+        8.446
+      ]
+    },
+    {
+      "symbol": "SDWebImageManager",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4295/api/v1/symbols/SDWebImageManager/explain?repo_id=SDWebImage&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain SDWebImageManager",
+      "atlas_tokens": 2,
+      "graphify_tokens": 414,
+      "atlas_ms": 7.725,
+      "graphify_ms": 91.515,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "SDWebImageManager c@SDWebImageManager:48"
+      ],
+      "graphify_stdout_head": [
+        "Node: SDWebImageManager",
+        "  ID:        core_sdwebimagemanager_sdwebimagemanager",
+        "  Source:    Core/SDWebImageManager.m L30",
+        "  Type:      code",
+        "  Community: 8",
+        "  Degree:    32",
+        "",
+        "Connections (32):"
+      ],
+      "atlas_ms_samples": [
+        7.581,
+        7.497,
+        7.876,
+        7.725,
+        7.538,
+        8.051,
+        7.605,
+        7.765,
+        8.013
+      ]
+    },
+    {
+      "symbol": "sharedImageCache",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4295/api/v1/symbols/sharedImageCache/explain?repo_id=SDWebImage&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain sharedImageCache",
+      "atlas_tokens": 2,
+      "graphify_tokens": 57,
+      "atlas_ms": 7.358,
+      "graphify_ms": 93.5,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "sharedImageCache f@SDImageCache:85"
+      ],
+      "graphify_stdout_head": [
+        "Node: -sharedImageCache",
+        "  ID:        core_sdimagecache_sdimagecache_sharedimagecache",
+        "  Source:    Core/SDImageCache.m L85",
+        "  Type:      code",
+        "  Community: 0",
+        "  Degree:    1",
+        "",
+        "Connections (1):"
+      ],
+      "atlas_ms_samples": [
+        7.76,
+        7.753,
+        7.358,
+        7.345,
+        7.513,
+        7.532,
+        7.348,
+        7.057,
+        7.013
+      ]
+    },
+    {
+      "symbol": "storeImage:forKey:completion:",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4295/api/v1/symbols/storeImage%3AforKey%3Acompletion%3A/explain?repo_id=SDWebImage&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain storeImage:forKey:completion:",
+      "atlas_tokens": 2,
+      "graphify_tokens": 14,
+      "atlas_ms": 7.165,
+      "graphify_ms": 90.502,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": true,
+      "atlas_stdout_head": [
+        "storeImage:forKey:completion: f@SDImageCache:209"
+      ],
+      "graphify_stdout_head": [
+        "No node matching 'storeImage:forKey:completion:' found."
+      ],
+      "atlas_ms_samples": [
+        7.54,
+        7.209,
+        7.2,
+        7.165,
+        7.342,
+        7.125,
+        6.815,
+        7.161,
+        7.152
+      ]
+    },
+    {
+      "symbol": "objectForKey:",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4295/api/v1/symbols/objectForKey%3A/explain?repo_id=SDWebImage&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain objectForKey:",
+      "atlas_tokens": 2,
+      "graphify_tokens": 56,
+      "atlas_ms": 7.151,
+      "graphify_ms": 92.899,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "objectForKey: f@SDMemoryCache:97"
+      ],
+      "graphify_stdout_head": [
+        "Node: -objectForKey",
+        "  ID:        core_sdmemorycache_sdmemorycache_objectforkey",
+        "  Source:    Core/SDMemoryCache.m L97",
+        "  Type:      code",
+        "  Community: 18",
+        "  Degree:    1",
+        "",
+        "Connections (1):"
+      ],
+      "atlas_ms_samples": [
+        7.151,
+        7.269,
+        6.599,
+        7.061,
+        7.204,
+        7.44,
+        7.263,
+        6.494,
+        6.794
+      ]
+    }
+  ],
+  "atlas_cli": {
+    "version": "v0.1.26-4-gd882e08",
+    "commit": "d882e08",
+    "date": "2026-06-30T07:15:57Z",
+    "measurement_note": "Query rows refreshed from nine-sample medians against atlas serve format=plain using curl; Graphify rows retained as the saved comparison baseline."
+  },
+  "multi_repo_validation": {
+    "minimum_repos": 3,
+    "status": "passed",
+    "generated_at": "2026-06-30T14:25:45Z",
+    "scope": "objc parser random public-repo validation uses the first three passing GitHub repos from a deterministic shuffled sample of public non-archived Objective-C repos with 50..500 stars and size <= 7000. Atlas indexed each clean checkout after removing graphify-out, dependency folders were excluded from the validation count, the native denominator came from Python tree-sitter-objc, and Graphify was run on the same checkout as the comparison baseline.",
+    "selection_method": "gh search repos --language Objective-C --stars 50..500 --archived=false --limit 100; size <= 7000; deterministic shuffled sample seed 2026-06-30-atlas-random-validation-remaining-v1; skip dependency folders for the validation count; first 3 passing repos",
+    "measurement_order": "Atlas index after removing graphify-out, then language-specific parser/source counter, then graphify update for comparison metrics. Atlas/Graphify candidates time out after 75s and are rejected.",
+    "rejected_candidates": [
+      {
+        "repo": "TigerWf/WFCoretext",
+        "stage": "coverage",
+        "atlas_definitions": 531,
+        "native_definitions": 542,
+        "coverage_ratio": 0.9797,
+        "file_count": 54,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "justinmfischer/7blur",
+        "stage": "coverage",
+        "atlas_definitions": 61,
+        "native_definitions": 63,
+        "coverage_ratio": 0.9683,
+        "file_count": 10,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "Citrrus/MBContactPicker",
+        "stage": "coverage",
+        "atlas_definitions": 160,
+        "native_definitions": 161,
+        "coverage_ratio": 0.9938,
+        "file_count": 12,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "jpsim/JPSThumbnailAnnotation",
+        "stage": "coverage",
+        "atlas_definitions": 37,
+        "native_definitions": 38,
+        "coverage_ratio": 0.9737,
+        "file_count": 6,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "mattgemmell/MGTemplateEngine",
+        "stage": "coverage",
+        "atlas_definitions": 91,
+        "native_definitions": 92,
+        "coverage_ratio": 0.9891,
+        "file_count": 9,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "opa334/Choicy",
+        "stage": "coverage",
+        "atlas_definitions": 182,
+        "native_definitions": 199,
+        "coverage_ratio": 0.9146,
+        "file_count": 22,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "spicyShrimp/UINavigation-SXFixSpace",
+        "stage": "coverage",
+        "atlas_definitions": 46,
+        "native_definitions": 48,
+        "coverage_ratio": 0.9583,
+        "file_count": 5,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "SmileZXLee/ZXHookDetection",
+        "stage": "coverage",
+        "atlas_definitions": 81,
+        "native_definitions": 138,
+        "coverage_ratio": 0.587,
+        "file_count": 18,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "naoufal/react-native-activity-view",
+        "stage": "coverage",
+        "atlas_definitions": 10,
+        "native_definitions": 15,
+        "coverage_ratio": 0.6667,
+        "file_count": 4,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "naoufal/react-native-safari-view",
+        "stage": "coverage",
+        "atlas_definitions": 12,
+        "native_definitions": 16,
+        "coverage_ratio": 0.75,
+        "file_count": 4,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "andreamazz/UIView-Shake",
+        "stage": "coverage",
+        "atlas_definitions": 25,
+        "native_definitions": 26,
+        "coverage_ratio": 0.9615,
+        "file_count": 5,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "TeehanLax/UICollectionView-Spring-Demo",
+        "stage": "coverage",
+        "atlas_definitions": 17,
+        "native_definitions": 18,
+        "coverage_ratio": 0.9444,
+        "file_count": 4,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "d-ronnqvist/blogpost-codesample-PullToRefresh",
+        "stage": "coverage",
+        "atlas_definitions": 32,
+        "native_definitions": 33,
+        "coverage_ratio": 0.9697,
+        "file_count": 6,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "sibahota059/SPHChatCollectionView",
+        "stage": "coverage",
+        "atlas_definitions": 75,
+        "native_definitions": 77,
+        "coverage_ratio": 0.974,
+        "file_count": 11,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "Sephiroth87/Crayons",
+        "stage": "coverage",
+        "atlas_definitions": 116,
+        "native_definitions": 118,
+        "coverage_ratio": 0.9831,
+        "file_count": 19,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "EleTeam/Shop-iOS",
+        "stage": "coverage",
+        "atlas_definitions": 649,
+        "native_definitions": 650,
+        "coverage_ratio": 0.9985,
+        "file_count": 103,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "mavris/MMLanScan",
+        "stage": "coverage",
+        "atlas_definitions": 124,
+        "native_definitions": 128,
+        "coverage_ratio": 0.9688,
+        "file_count": 15,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "dongxinb/DBSphereTagCloud",
+        "stage": "coverage",
+        "atlas_definitions": 34,
+        "native_definitions": 35,
+        "coverage_ratio": 0.9714,
+        "file_count": 5,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "NeoTheCapt/aweme-algorithm",
+        "stage": "coverage",
+        "atlas_definitions": 1,
+        "native_definitions": 4,
+        "coverage_ratio": 0.25,
+        "file_count": 2,
+        "note": "Atlas/native coverage below passing threshold"
+      },
+      {
+        "repo": "netyouli/WHCNetWorkKit",
+        "stage": "coverage",
+        "atlas_definitions": 441,
+        "native_definitions": 445,
+        "coverage_ratio": 0.991,
+        "file_count": 27,
+        "note": "Atlas/native coverage below passing threshold"
+      }
+    ],
+    "repos": [
+      {
+        "repo": "https://github.com/thetron/StringScore",
+        "commit": "0a6151c63d859e1a6a788b1a6cdfd5debfffe109",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/objc/5-thetron__StringScore",
+        "atlas_definitions": 4,
+        "native_definitions": 4,
+        "coverage_ratio": 1,
+        "ok": true,
+        "note": "thetron/StringScore: 1 objc files; tree-sitter-objc native counts {\"function\":0,\"method\":3,\"type\":1}; Atlas counts {\"method\":3,\"type\":1}; Graphify rebuilt 15 nodes and 13 edges on the same checkout."
+      },
+      {
+        "repo": "https://github.com/rs/SafariTabSwitching",
+        "commit": "a5b8ab9c4232fd99e15c672fd60b84acdfab5f9b",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/objc/12-rs__SafariTabSwitching",
+        "atlas_definitions": 8,
+        "native_definitions": 8,
+        "coverage_ratio": 1,
+        "ok": true,
+        "note": "rs/SafariTabSwitching: 2 objc files; tree-sitter-objc native counts {\"function\":0,\"method\":5,\"type\":3}; Atlas counts {\"method\":5,\"type\":3}; Graphify rebuilt 13 nodes and 8 edges on the same checkout."
+      },
+      {
+        "repo": "https://github.com/iosphere/ISHPullUp",
+        "commit": "13539b8938e697b1f9a2a47a6a8f86d40f2e5068",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/objc/29-iosphere__ISHPullUp",
+        "atlas_definitions": 101,
+        "native_definitions": 101,
+        "coverage_ratio": 1,
+        "ok": true,
+        "note": "iosphere/ISHPullUp: 4 objc files; tree-sitter-objc native counts {\"function\":0,\"method\":89,\"type\":12}; Atlas counts {\"method\":89,\"type\":12}; Graphify rebuilt 204 nodes and 223 edges on the same checkout."
+      }
+    ]
+  }
+}

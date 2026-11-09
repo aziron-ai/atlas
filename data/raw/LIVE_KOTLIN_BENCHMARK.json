@@ -1,0 +1,595 @@
+{
+  "language": "kotlin",
+  "repo": "https://github.com/square/okhttp",
+  "commit": "0cadfa2997513d20bf88ca530c963a1266f17af9",
+  "graphify_detector_only": "",
+  "commands": {
+    "clone": "git clone --depth 1 https://github.com/square/okhttp $WORK/atlas-live-kotlin-okhttp/repo",
+    "sparse_checkout": "",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-kotlin-okhttp/atlas.db --json index $WORK/atlas-live-kotlin-okhttp/repo/okhttp/src/commonJvmAndroid/kotlin",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-kotlin-okhttp/atlas.db --json index $WORK/atlas-live-kotlin-okhttp/repo/okhttp/src/commonJvmAndroid/kotlin",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "$WORK/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> $WORK/atlas-live-kotlin-okhttp/repo/okhttp/src/commonJvmAndroid/kotlin",
+    "query_symbols": [
+      "OkHttpClient",
+      "Request",
+      "Response",
+      "HttpUrl",
+      "Headers"
+    ],
+    "target_path": "$WORK/atlas-live-kotlin-okhttp/repo/okhttp/src/commonJvmAndroid/kotlin",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-kotlin-okhttp/atlas.db serve --addr 127.0.0.1:4293"
+  },
+  "atlas": {
+    "cold_wall_seconds": 1.636,
+    "reindex_wall_seconds": 0.024,
+    "index": {
+      "repo_id": "907cc614-89ca-4aa8-b2ab-c70d550b32a2",
+      "repo_full_name": "kotlin",
+      "snapshot_id": "122d4796-a15f-42c2-a249-9306be634afb",
+      "commit_sha": "0cadfa2997513d20bf88ca530c963a1266f17af9",
+      "indexed_files": 279,
+      "symbols": 7848,
+      "edges": 7504,
+      "edge_kinds": {
+        "calls": 6285,
+        "imports": 1219
+      },
+      "routes": 0,
+      "languages": {
+        "json": 140,
+        "kotlin": 138,
+        "markdown": 1
+      },
+      "mode": "full",
+      "duration_ms": 1636,
+      "timings_ms": {
+        "build_symbols_edges": 2,
+        "delta_check": 0,
+        "discover_files": 3,
+        "doc_links": 0,
+        "ensure_repo": 0,
+        "gitignore_scan": 12,
+        "go_types": 0,
+        "lexical": 1530,
+        "parse": 86,
+        "persist": 1530,
+        "resolve_head": 0,
+        "routes": 0,
+        "sort": 1,
+        "walk": 3,
+        "write_sqlite": 1530
+      }
+    },
+    "reindex": {
+      "repo_id": "0e9aa060-e6ba-42d6-bd25-13124ae891c0",
+      "repo_full_name": "kotlin",
+      "snapshot_id": "14d6d251-99ae-4978-b6df-7b097cdce7bf",
+      "commit_sha": "0cadfa2997513d20bf88ca530c963a1266f17af9",
+      "indexed_files": 138,
+      "symbols": 3912,
+      "edges": 7554,
+      "routes": 0,
+      "languages": {
+        "kotlin": 138
+      },
+      "mode": "noop",
+      "duration_ms": 0,
+      "timings_ms": {
+        "delta_check": 0,
+        "resolve_head": 0
+      }
+    },
+    "symbol_breakdown": {
+      "repo_id": "907cc614-89ca-4aa8-b2ab-c70d550b32a2",
+      "repo_full_name": "kotlin",
+      "tier": "local",
+      "storage_driver": "sqlite",
+      "latest": {
+        "snapshot_id": "122d4796-a15f-42c2-a249-9306be634afb",
+        "commit_sha": "0cadfa2997513d20bf88ca530c963a1266f17af9",
+        "created_at": "2026-06-30T07:45:21Z",
+        "files": 279,
+        "symbols": 7848,
+        "edges": 7504,
+        "routes": 0,
+        "mode": "full",
+        "duration_ms": 1636,
+        "timings_ms": {
+          "build_symbols_edges": 2,
+          "delta_check": 0,
+          "discover_files": 3,
+          "doc_links": 0,
+          "ensure_repo": 0,
+          "gitignore_scan": 12,
+          "go_types": 0,
+          "lexical": 1530,
+          "parse": 86,
+          "persist": 1530,
+          "resolve_head": 0,
+          "routes": 0,
+          "sort": 1,
+          "walk": 3,
+          "write_sqlite": 1530
+        }
+      },
+      "graph": {
+        "files": 138,
+        "symbols": 3901,
+        "edges": 9035,
+        "raw_symbols": 3901,
+        "raw_edges": 7504,
+        "communities": 1589,
+        "isolated_nodes": 1275,
+        "edge_kinds": [
+          {
+            "key": "calls",
+            "count": 6285
+          },
+          {
+            "key": "imports",
+            "count": 1219
+          }
+        ],
+        "languages": [
+          {
+            "key": "kotlin",
+            "count": 3901
+          }
+        ]
+      },
+      "coverage_facts": 0,
+      "history": [
+        {
+          "snapshot_id": "122d4796-a15f-42c2-a249-9306be634afb",
+          "commit_sha": "0cadfa2997513d20bf88ca530c963a1266f17af9",
+          "created_at": "2026-06-30T07:45:21Z",
+          "files": 279,
+          "symbols": 7848,
+          "edges": 7504,
+          "routes": 0,
+          "mode": "full",
+          "duration_ms": 1636,
+          "timings_ms": {
+            "build_symbols_edges": 2,
+            "delta_check": 0,
+            "discover_files": 3,
+            "doc_links": 0,
+            "ensure_repo": 0,
+            "gitignore_scan": 12,
+            "go_types": 0,
+            "lexical": 1530,
+            "parse": 86,
+            "persist": 1530,
+            "resolve_head": 0,
+            "routes": 0,
+            "sort": 1,
+            "walk": 3,
+            "write_sqlite": 1530
+          }
+        }
+      ],
+      "history_returned": 1
+    },
+    "edge_breakdown": {
+      "repo_id": "907cc614-89ca-4aa8-b2ab-c70d550b32a2",
+      "repo_full_name": "kotlin",
+      "tier": "local",
+      "storage_driver": "sqlite",
+      "latest": {
+        "snapshot_id": "122d4796-a15f-42c2-a249-9306be634afb",
+        "commit_sha": "0cadfa2997513d20bf88ca530c963a1266f17af9",
+        "created_at": "2026-06-30T07:45:21Z",
+        "files": 279,
+        "symbols": 7848,
+        "edges": 7504,
+        "routes": 0,
+        "mode": "full",
+        "duration_ms": 1636,
+        "timings_ms": {
+          "build_symbols_edges": 2,
+          "delta_check": 0,
+          "discover_files": 3,
+          "doc_links": 0,
+          "ensure_repo": 0,
+          "gitignore_scan": 12,
+          "go_types": 0,
+          "lexical": 1530,
+          "parse": 86,
+          "persist": 1530,
+          "resolve_head": 0,
+          "routes": 0,
+          "sort": 1,
+          "walk": 3,
+          "write_sqlite": 1530
+        }
+      },
+      "graph": {
+        "files": 138,
+        "symbols": 3901,
+        "edges": 9035,
+        "raw_symbols": 3901,
+        "raw_edges": 7504,
+        "communities": 1589,
+        "isolated_nodes": 1275,
+        "edge_kinds": [
+          {
+            "key": "calls",
+            "count": 6285
+          },
+          {
+            "key": "imports",
+            "count": 1219
+          }
+        ],
+        "languages": [
+          {
+            "key": "kotlin",
+            "count": 3901
+          }
+        ]
+      },
+      "coverage_facts": 0,
+      "history": [
+        {
+          "snapshot_id": "122d4796-a15f-42c2-a249-9306be634afb",
+          "commit_sha": "0cadfa2997513d20bf88ca530c963a1266f17af9",
+          "created_at": "2026-06-30T07:45:21Z",
+          "files": 279,
+          "symbols": 7848,
+          "edges": 7504,
+          "routes": 0,
+          "mode": "full",
+          "duration_ms": 1636,
+          "timings_ms": {
+            "build_symbols_edges": 2,
+            "delta_check": 0,
+            "discover_files": 3,
+            "doc_links": 0,
+            "ensure_repo": 0,
+            "gitignore_scan": 12,
+            "go_types": 0,
+            "lexical": 1530,
+            "parse": 86,
+            "persist": 1530,
+            "resolve_head": 0,
+            "routes": 0,
+            "sort": 1,
+            "walk": 3,
+            "write_sqlite": 1530
+          }
+        }
+      ],
+      "history_returned": 1
+    },
+    "kotlin_definition_symbols": 3912
+  },
+  "graphify": {
+    "status": "ok",
+    "ok": true,
+    "seconds": 1.095,
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "stdout_head": [
+      "Re-extracting code files in . (no LLM needed)...",
+      "  AST extraction: 100/137 uncached files (72%) [14 workers]",
+      "  AST extraction: 137/137 files (100%) [14 workers]",
+      "[graphify watch] Rebuilt: 1844 nodes, 5202 edges, 107 communities",
+      "[graphify watch] graph.json, graph.html and GRAPH_REPORT.md updated in graphify-out",
+      "Code graph updated. For doc/paper/image changes run /graphify --update in your AI assistant.",
+      "Tip: set GEMINI_API_KEY or GOOGLE_API_KEY to use Gemini for semantic extraction."
+    ],
+    "stderr_head": [],
+    "metrics": {
+      "nodes": 1844,
+      "links": 5202,
+      "calls": 1096
+    }
+  },
+  "native_baseline": {
+    "tool": "tree-sitter-kotlin",
+    "status": "partial",
+    "ok": false,
+    "seconds": 0.176,
+    "command": "$WORK/atlas-live-kotlin-okhttp/tree-sitter-kotlin-venv/bin/python -c <tree-sitter-kotlin definition counter> $WORK/atlas-live-kotlin-okhttp/repo/okhttp/src/commonJvmAndroid/kotlin",
+    "metrics": {
+      "files": 138,
+      "parsed_files": 136,
+      "parse_errors": 2,
+      "definition_counts": {
+        "type": 187,
+        "function": 1586,
+        "variable": 2103
+      },
+      "definitions": 3876,
+      "tree_sitter_version": "0.25.2",
+      "tree_sitter_kotlin_version": "1.1.0",
+      "parse_error_samples": [
+        {
+          "path": "okhttp3/internal/http2/Http2Stream.kt",
+          "error": "tree-sitter parse error"
+        },
+        {
+          "path": "okhttp3/internal/http2/Settings.kt",
+          "error": "tree-sitter parse error"
+        }
+      ]
+    }
+  },
+  "richer_native_baselines": {
+    "kotlinc": {
+      "status": "missing",
+      "ok": false,
+      "note": "kotlinc not installed; tree-sitter-kotlin parser used as the isolated definition baseline"
+    },
+    "kotlin-language-server": {
+      "status": "missing",
+      "ok": false,
+      "note": "kotlin-language-server not installed"
+    },
+    "ktlint": {
+      "status": "missing",
+      "ok": false,
+      "note": "ktlint not installed"
+    }
+  },
+  "coverage": {
+    "atlas_vs_tree_sitter_kotlin_definition_ratio": 1.01,
+    "atlas_kotlin_definition_symbols": 3912,
+    "native_definitions": 3876
+  },
+  "optimization": {
+    "cycles_run": 2,
+    "stop_reason": "Kotlin live benchmark met the current 5x latency/token thresholds and exceeded the tree-sitter-kotlin definition coverage proxy after widening Atlas Kotlin modifier handling.",
+    "cycle_notes": [
+      "cycle 1: square/okhttp benchmark found Atlas/tree-sitter-kotlin definition ratio 0.78; biggest gap was Kotlin modifiers before type/function/property declarations.",
+      "cycle 2: after widening Kotlin declaration regexes for actual/open/value/fun-interface/override forms, Atlas/tree-sitter-kotlin definition ratio reached 1.01 and equivalent query rows exceeded 5x for latency and token output vs graphify."
+    ]
+  },
+  "query_warmup": {
+    "symbol": "OkHttpClient",
+    "atlas_command": "curl -fsS http://127.0.0.1:4293/api/v1/symbols/OkHttpClient/explain?repo_id=kotlin&format=plain",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain OkHttpClient",
+    "atlas_returncode": 0,
+    "graphify_returncode": 0,
+    "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
+  },
+  "queries": [
+    {
+      "symbol": "OkHttpClient",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4293/api/v1/symbols/OkHttpClient/explain?repo_id=kotlin&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain OkHttpClient",
+      "atlas_tokens": 2,
+      "graphify_tokens": 255,
+      "atlas_ms": 10.362,
+      "graphify_ms": 104.149,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "OkHttpClient t@OkHttpClient:132"
+      ],
+      "graphify_stdout_head": [
+        "Node: OkHttpClient",
+        "  ID:        okhttp3_okhttpclient_okhttpclient",
+        "  Source:    okhttp3/OkHttpClient.kt L132",
+        "  Type:      code",
+        "  Community: 40",
+        "  Degree:    62",
+        "",
+        "Connections (62):"
+      ],
+      "atlas_ms_samples": [
+        12.427,
+        11.884,
+        11.046,
+        10.944,
+        10.362,
+        9.341,
+        9.97,
+        8.219,
+        7.807
+      ]
+    },
+    {
+      "symbol": "Request",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4293/api/v1/symbols/Request/explain?repo_id=kotlin&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Request",
+      "atlas_tokens": 2,
+      "graphify_tokens": 56,
+      "atlas_ms": 7.469,
+      "graphify_ms": 103.731,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "Request t@Request:34"
+      ],
+      "graphify_stdout_head": [
+        "Node: .request()",
+        "  ID:        okhttp3_call_call_request",
+        "  Source:    okhttp3/Call.kt L28",
+        "  Type:      code",
+        "  Community: 39",
+        "  Degree:    2",
+        "",
+        "Connections (2):"
+      ],
+      "atlas_ms_samples": [
+        7.895,
+        7.735,
+        7.469,
+        7.506,
+        8.202,
+        7.046,
+        6.943,
+        7.367,
+        7.362
+      ]
+    },
+    {
+      "symbol": "Response",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4293/api/v1/symbols/Response/explain?repo_id=kotlin&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Response",
+      "atlas_tokens": 2,
+      "graphify_tokens": 97,
+      "atlas_ms": 7.091,
+      "graphify_ms": 105.045,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "Response t@Response:41"
+      ],
+      "graphify_stdout_head": [
+        "Node: .response()",
+        "  ID:        okhttp3_cache_entry_response",
+        "  Source:    okhttp3/Cache.kt L687",
+        "  Type:      code",
+        "  Community: 19",
+        "  Degree:    6",
+        "",
+        "Connections (6):"
+      ],
+      "atlas_ms_samples": [
+        7.048,
+        6.908,
+        7.561,
+        7.091,
+        7.438,
+        6.733,
+        7.43,
+        6.885,
+        7.196
+      ]
+    },
+    {
+      "symbol": "HttpUrl",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4293/api/v1/symbols/HttpUrl/explain?repo_id=kotlin&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain HttpUrl",
+      "atlas_tokens": 2,
+      "graphify_tokens": 239,
+      "atlas_ms": 7.102,
+      "graphify_ms": 102.528,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "HttpUrl t@HttpUrl:294"
+      ],
+      "graphify_stdout_head": [
+        "Node: HttpUrl",
+        "  ID:        okhttp3_httpurl_httpurl",
+        "  Source:    okhttp3/HttpUrl.kt L294",
+        "  Type:      code",
+        "  Community: 6",
+        "  Degree:    80",
+        "",
+        "Connections (80):"
+      ],
+      "atlas_ms_samples": [
+        7.267,
+        6.625,
+        7.294,
+        6.675,
+        7.047,
+        7.102,
+        7.331,
+        7.674,
+        6.707
+      ]
+    },
+    {
+      "symbol": "Headers",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4293/api/v1/symbols/Headers/explain?repo_id=kotlin&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Headers",
+      "atlas_tokens": 2,
+      "graphify_tokens": 246,
+      "atlas_ms": 7.302,
+      "graphify_ms": 103.337,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "Headers t@Headers:65"
+      ],
+      "graphify_stdout_head": [
+        "Node: Headers",
+        "  ID:        okhttp3_headers_headers",
+        "  Source:    okhttp3/Headers.kt L65",
+        "  Type:      code",
+        "  Community: 0",
+        "  Degree:    68",
+        "",
+        "Connections (68):"
+      ],
+      "atlas_ms_samples": [
+        7.164,
+        7.302,
+        7.717,
+        7.071,
+        7.239,
+        7.466,
+        7.472,
+        7.796,
+        6.804
+      ]
+    }
+  ],
+  "atlas_cli": {
+    "version": "v0.1.26-4-gd882e08",
+    "commit": "d882e08",
+    "date": "2026-06-30T07:15:57Z",
+    "measurement_note": "Query rows refreshed from nine-sample medians against atlas serve format=plain using curl; Graphify rows retained as the saved comparison baseline."
+  },
+  "multi_repo_validation": {
+    "minimum_repos": 3,
+    "status": "passed",
+    "generated_at": "2026-06-30T14:01:36Z",
+    "scope": "kotlin parser random public-repo validation uses the first three passing GitHub repos from a deterministic shuffled sample of public non-archived Kotlin repos with 50..500 stars and size <= 5000. Atlas indexed each clean checkout after removing graphify-out, the native denominator came from Python tree-sitter-kotlin binding, and Graphify was run on the same checkout as the comparison baseline.",
+    "selection_method": "gh search repos --language Kotlin --stars 50..500 --archived=false --limit 100; size <= 5000; deterministic shuffled sample seed 2026-06-30-atlas-random-validation-tags-v3-tight; first 3 passing repos",
+    "measurement_order": "Atlas index after removing graphify-out, then language-specific Python tree-sitter counter, then graphify update for comparison metrics. Atlas/Graphify candidates time out after 75s and are rejected.",
+    "rejected_candidates": [],
+    "repos": [
+      {
+        "repo": "https://github.com/gothinkster/kotlin-spring-realworld-example-app",
+        "commit": "848c29e3abfe1bd72001cc7d7a3227aebec96e9b",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/kotlin/1-gothinkster__kotlin-spring-realworld-example-app",
+        "atlas_definitions": 188,
+        "native_definitions": 140,
+        "coverage_ratio": 1.3429,
+        "ok": true,
+        "note": "gothinkster/kotlin-spring-realworld-example-app: 43 kotlin files; tree-sitter-kotlin native counts {\"function\":77,\"type\":44,\"variable\":19}; Atlas counts {\"function\":77,\"type\":44,\"variable\":67}; Graphify rebuilt 203 nodes and 357 edges on the same checkout."
+      },
+      {
+        "repo": "https://github.com/VKCOM/vk-android-sdk",
+        "commit": "a0da7abf54acac8910fae43f0a189cc163cb9694",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/kotlin/2-VKCOM__vk-android-sdk",
+        "atlas_definitions": 10150,
+        "native_definitions": 5604,
+        "coverage_ratio": 1.8112,
+        "ok": true,
+        "note": "VKCOM/vk-android-sdk: 1966 kotlin files; tree-sitter-kotlin native counts {\"function\":1233,\"type\":2677,\"variable\":1694}; Atlas counts {\"constant\":4104,\"function\":1233,\"type\":2677,\"variable\":2136}; Graphify rebuilt 5997 nodes and 9593 edges on the same checkout."
+      },
+      {
+        "repo": "https://github.com/husaynhakeem/android-face-detector",
+        "commit": "a8162ac724d1a439b9e2040c33cd2a1e69ae657a",
+        "target_path": "$WORK/atlas-random-validation-tags/work-tight/kotlin/3-husaynhakeem__android-face-detector",
+        "atlas_definitions": 67,
+        "native_definitions": 44,
+        "coverage_ratio": 1.5227,
+        "ok": true,
+        "note": "husaynhakeem/android-face-detector: 6 kotlin files; tree-sitter-kotlin native counts {\"function\":21,\"type\":7,\"variable\":16}; Atlas counts {\"constant\":2,\"function\":21,\"type\":7,\"variable\":37}; Graphify rebuilt 55 nodes and 71 edges on the same checkout."
+      }
+    ]
+  }
+}

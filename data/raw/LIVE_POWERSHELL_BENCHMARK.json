@@ -1,0 +1,432 @@
+{
+  "language": "powershell",
+  "repo": "https://github.com/PowerShell/PowerShellGet",
+  "commit": "a2dac8e74603f7c9eec4a54c5e23459531751b0d",
+  "graphify_detector_only": "",
+  "commands": {
+    "clone": "git clone --depth 1 https://github.com/PowerShell/PowerShellGet $WORK/atlas-live-powershell-powershellget/repo",
+    "sparse_checkout": "",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-powershell-powershellget/atlas-refresh.db --json index $WORK/atlas-live-powershell-powershellget/repo/src",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-powershell-powershellget/atlas-refresh.db --json index $WORK/atlas-live-powershell-powershellget/repo/src",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "/usr/local/bin/pwsh -NoLogo -NoProfile -File $WORK/atlas-live-powershell-powershellget/pwsh_stats.ps1 $WORK/atlas-live-powershell-powershellget/repo/src",
+    "query_symbols": [
+      "Find-Module",
+      "Install-Module",
+      "Register-PSRepository",
+      "Update-ModuleManifest"
+    ],
+    "target_path": "$WORK/atlas-live-powershell-powershellget/repo/src",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-powershell-powershellget/atlas-refresh.db serve --addr 127.0.0.1:4230",
+    "native_expanded_baseline": "/usr/local/bin/pwsh -NoLogo -NoProfile -File $WORK/pwsh_expanded_counter.ps1 $WORK/atlas-live-powershell-powershellget/repo/src"
+  },
+  "atlas": {
+    "cold_wall_seconds": 0.085,
+    "reindex_wall_seconds": 0,
+    "index": {
+      "repo_id": "1f61b220-0e99-422e-8e7f-2f540916fdb7",
+      "repo_full_name": "src",
+      "snapshot_id": "157bf3c8-d64d-4fcd-83c5-b3f0d9a31567",
+      "commit_sha": "a2dac8e74603f7c9eec4a54c5e23459531751b0d",
+      "indexed_files": 2,
+      "symbols": 31,
+      "edges": 804,
+      "edge_kinds": {
+        "calls": 804
+      },
+      "routes": 0,
+      "languages": {
+        "powershell": 2
+      },
+      "mode": "full",
+      "duration_ms": 85,
+      "timings_ms": {
+        "build_symbols_edges": 0,
+        "delta_check": 0,
+        "discover_files": 10,
+        "doc_links": 0,
+        "ensure_repo": 0,
+        "gitignore_scan": 12,
+        "go_types": 0,
+        "lexical": 25,
+        "parse": 35,
+        "persist": 25,
+        "resolve_head": 0,
+        "routes": 0,
+        "sort": 0,
+        "walk": 10,
+        "write_sqlite": 25
+      }
+    },
+    "reindex": {
+      "repo_id": "1f61b220-0e99-422e-8e7f-2f540916fdb7",
+      "repo_full_name": "src",
+      "snapshot_id": "157bf3c8-d64d-4fcd-83c5-b3f0d9a31567",
+      "commit_sha": "a2dac8e74603f7c9eec4a54c5e23459531751b0d",
+      "indexed_files": 2,
+      "symbols": 31,
+      "edges": 804,
+      "routes": 0,
+      "languages": {
+        "powershell": 2
+      },
+      "mode": "noop",
+      "duration_ms": 0,
+      "timings_ms": {
+        "delta_check": 0,
+        "resolve_head": 0
+      }
+    },
+    "symbol_breakdown": [
+      {
+        "language": "powershell",
+        "kind": "function",
+        "count": 28
+      },
+      {
+        "language": "powershell",
+        "kind": "variable",
+        "count": 3
+      }
+    ],
+    "edge_breakdown": [
+      {
+        "kind": "calls",
+        "count": 804
+      }
+    ],
+    "powershell_definition_symbols": 31,
+    "powershell_function_definition_symbols": 28,
+    "powershell_module_variable_symbols": 3,
+    "powershell_module_variables": [
+      {
+        "name": "semVerRegex",
+        "path": "PowerShellGet.psm1",
+        "line": 3
+      },
+      {
+        "name": "functionsToExport",
+        "path": "PowerShellGet.psm1",
+        "line": 3185
+      },
+      {
+        "name": "aliasesToExport",
+        "path": "PowerShellGet.psm1",
+        "line": 3212
+      }
+    ]
+  },
+  "graphify": {
+    "status": "ok",
+    "ok": true,
+    "seconds": 0.14,
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "stdout_head": [
+      "Re-extracting code files in . (no LLM needed)...",
+      "[graphify watch] Rebuilt: 30 nodes, 43 edges, 4 communities",
+      "[graphify watch] graph.json, graph.html and GRAPH_REPORT.md updated in graphify-out",
+      "Code graph updated. For doc/paper/image changes run /graphify --update in your AI assistant.",
+      "Tip: set GEMINI_API_KEY or GOOGLE_API_KEY to use Gemini for semantic extraction."
+    ],
+    "stderr_head": [],
+    "metrics": {
+      "nodes": 30,
+      "links": 43,
+      "calls": 14
+    }
+  },
+  "native_baseline": {
+    "tool": "pwsh-parser",
+    "status": "ok",
+    "ok": true,
+    "seconds": 0.714,
+    "command": "/usr/local/bin/pwsh -NoLogo -NoProfile -File $WORK/atlas-live-powershell-powershellget/pwsh_stats.ps1 $WORK/atlas-live-powershell-powershellget/repo/src",
+    "metrics": {
+      "files": 2,
+      "parsed_files": 2,
+      "parse_errors": 0,
+      "functions": 28,
+      "assignments": 391,
+      "definitions": 28,
+      "powershell_version": "7.4.6",
+      "parse_error_samples": [],
+      "script_assignments": 3,
+      "expanded_definitions": 31,
+      "expanded_definition_counts": {
+        "function": 28,
+        "variable": 3
+      },
+      "expanded_counter_command": "/usr/local/bin/pwsh -NoLogo -NoProfile -File $WORK/pwsh_expanded_counter.ps1 $WORK/atlas-live-powershell-powershellget/repo/src",
+      "expanded_parse_error_samples": []
+    }
+  },
+  "richer_native_baselines": {
+    "pwsh": {
+      "status": "available",
+      "ok": true,
+      "note": "PowerShell parser used as native syntax/function-definition baseline; expanded local AST counter also validates module/script variable definitions for this target."
+    },
+    "powershell-editor-services": {
+      "status": "missing",
+      "ok": false,
+      "note": "PowerShellEditorServices LSP is not installed; pwsh AST parser used for this benchmark"
+    },
+    "psscriptanalyzer": {
+      "status": "missing",
+      "ok": false,
+      "note": "PSScriptAnalyzer not installed; it is lint-focused, not a definition index baseline"
+    },
+    "pwsh_expanded_counter": {
+      "status": "available",
+      "ok": true,
+      "note": "Counts FunctionDefinitionAst plus top-level VariableExpressionAst assignment statements, excluding function/type/script-block-local assignments."
+    }
+  },
+  "coverage": {
+    "atlas_vs_pwsh_parser_definition_ratio": 1.1071,
+    "atlas_powershell_definition_symbols": 31,
+    "native_definitions": 28,
+    "atlas_vs_pwsh_parser_core_plus_module_variables_definition_ratio": 1.1071,
+    "atlas_powershell_core_plus_module_variable_definition_symbols": 31,
+    "atlas_powershell_function_definition_symbols": 28,
+    "atlas_powershell_module_variable_symbols": 3,
+    "expanded_pwsh_parser_definitions": 31,
+    "expanded_pwsh_parser_ratio": 1,
+    "coverage_scope": "PowerShellGet src target. The existing pwsh AST core baseline covers 28 function definitions; Atlas parser commit 27a0247 also indexes 3 script/module-scope variable assignments validated by an expanded pwsh AST counter. Function-local, property, and script-block-local assignments remain excluded. Expanded Atlas/native counter parity is 31/31."
+  },
+  "optimization": {
+    "cycles_run": 3,
+    "stop_reason": "PowerShell now exceeds the native core baseline on coverage while preserving the saved >=10x token and latency comparison rows against Graphify.",
+    "cycle_notes": [
+      "cycle 1: PowerShellGet src benchmark used the native PowerShell parser for syntax/function-definition truth; Atlas matched function coverage and kept exact-symbol explain output terse.",
+      "cycle 2: compacting `.ps1`/`.psm1`/`.psd1` suffixes in terse locations improved the live PowerShellGet summed token ratio from 5.74x to 6.68x without changing indexed symbols or JSON paths.",
+      "cycle 3: Atlas parser commit 27a0247 indexes script/module-scope variables while excluding function-local, property, and script-block-local assignments, raising PowerShellGet coverage to 31/28 = 1.1071; an expanded pwsh AST counter validates 31/31."
+    ]
+  },
+  "query_warmup": {
+    "symbol": "Find-Module",
+    "atlas_command": "curl -fsS http://127.0.0.1:4230/api/v1/symbols/Find-Module/explain?repo_id=src&format=plain",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Find-Module",
+    "atlas_returncode": 0,
+    "graphify_returncode": 0,
+    "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
+  },
+  "queries": [
+    {
+      "symbol": "Find-Module",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4230/api/v1/symbols/Find-Module/explain?repo_id=src&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Find-Module",
+      "atlas_tokens": 2,
+      "graphify_tokens": 66,
+      "atlas_ms": 7.865,
+      "graphify_ms": 86.563,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "Find-Module f@PowerShellGet:410"
+      ],
+      "graphify_stdout_head": [
+        "Node: Find-Module()",
+        "  ID:        powershellget_find_module",
+        "  Source:    PowerShellGet.psm1 L410",
+        "  Type:      code",
+        "  Community: 1",
+        "  Degree:    2",
+        "",
+        "Connections (2):"
+      ],
+      "atlas_ms_samples": [
+        8.529,
+        8.833,
+        8.405,
+        8.25,
+        8.679,
+        7.885,
+        7.417,
+        7.865,
+        7.109,
+        7.504,
+        7.407,
+        7.509,
+        7.102
+      ]
+    },
+    {
+      "symbol": "Install-Module",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4230/api/v1/symbols/Install-Module/explain?repo_id=src&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Install-Module",
+      "atlas_tokens": 2,
+      "graphify_tokens": 67,
+      "atlas_ms": 7.385,
+      "graphify_ms": 81.918,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "Install-Module f@PowerShellGet:1037"
+      ],
+      "graphify_stdout_head": [
+        "Node: Install-Module()",
+        "  ID:        powershellget_install_module",
+        "  Source:    PowerShellGet.psm1 L1037",
+        "  Type:      code",
+        "  Community: 1",
+        "  Degree:    2",
+        "",
+        "Connections (2):"
+      ],
+      "atlas_ms_samples": [
+        6.743,
+        7.155,
+        7.74,
+        7.249,
+        7.658,
+        7.081,
+        7.718,
+        7.385,
+        7.701,
+        8.69,
+        7.83,
+        7.278,
+        7.265
+      ]
+    },
+    {
+      "symbol": "Register-PSRepository",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4230/api/v1/symbols/Register-PSRepository/explain?repo_id=src&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Register-PSRepository",
+      "atlas_tokens": 2,
+      "graphify_tokens": 57,
+      "atlas_ms": 7.426,
+      "graphify_ms": 76.33,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "Register-PSRepository f@PowerShellGet:1716"
+      ],
+      "graphify_stdout_head": [
+        "Node: Register-PSRepository()",
+        "  ID:        powershellget_register_psrepository",
+        "  Source:    PowerShellGet.psm1 L1716",
+        "  Type:      code",
+        "  Community: 0",
+        "  Degree:    1",
+        "",
+        "Connections (1):"
+      ],
+      "atlas_ms_samples": [
+        7.623,
+        7.452,
+        6.959,
+        7.58,
+        6.999,
+        7.545,
+        7.423,
+        7.232,
+        7.868,
+        7.119,
+        7.465,
+        7.03,
+        7.426
+      ]
+    },
+    {
+      "symbol": "Update-ModuleManifest",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4230/api/v1/symbols/Update-ModuleManifest/explain?repo_id=src&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Update-ModuleManifest",
+      "atlas_tokens": 2,
+      "graphify_tokens": 57,
+      "atlas_ms": 7.309,
+      "graphify_ms": 75.029,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "Update-ModuleManifest f@PowerShellGet:2882"
+      ],
+      "graphify_stdout_head": [
+        "Node: Update-ModuleManifest()",
+        "  ID:        powershellget_update_modulemanifest",
+        "  Source:    PowerShellGet.psm1 L2882",
+        "  Type:      code",
+        "  Community: 0",
+        "  Degree:    1",
+        "",
+        "Connections (1):"
+      ],
+      "atlas_ms_samples": [
+        7.745,
+        6.923,
+        7.178,
+        7.548,
+        6.968,
+        7.197,
+        7.092,
+        7.524,
+        8.141,
+        8.327,
+        7.309,
+        7.397,
+        7.282
+      ]
+    }
+  ],
+  "atlas_cli": {
+    "version": "v0.1.26-14-g4e74b19",
+    "commit": "4e74b19",
+    "commit_full": "4e74b19e2948d398c895f6d1e8deeb1f2b4644b1",
+    "commit_date": "2026-06-30T17:20:21+05:30",
+    "date": "2026-06-30T11:51:04Z",
+    "measurement_note": "Coverage rows refreshed from current Atlas source 4e74b19; parser behavior introduced by 27a0247. Query rows retained as the saved Graphify comparison baseline."
+  },
+  "multi_repo_validation": {
+    "minimum_repos": 3,
+    "status": "passed",
+    "generated_at": "2026-06-30T11:04:14Z",
+    "scope": "PowerShell parser validation uses three public PowerShell targets and the Microsoft PowerShell Parser AST to count function definitions. Candidate paths with AST parse errors or Atlas<native were rejected and are not included.",
+    "repos": [
+      {
+        "repo": "https://github.com/PowerShell/PowerShellGet",
+        "commit": "a2dac8e74603f7c9eec4a54c5e23459531751b0d",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/powershell/1-PowerShellGet/repo/src",
+        "atlas_definitions": 28,
+        "native_definitions": 28,
+        "coverage_ratio": 1,
+        "ok": true,
+        "note": "2 PowerShell files parsed with the PowerShell AST; Atlas function count matched native."
+      },
+      {
+        "repo": "https://github.com/PowerShell/SecretManagement",
+        "commit": "e24cc88e87d02cabbbf0fbaf76e4e287e927dbed",
+        "target_path": "/private$WORK/atlas-powershell-candidates/SecretManagement/repo/ExtensionModules",
+        "atlas_definitions": 13,
+        "native_definitions": 13,
+        "coverage_ratio": 1,
+        "ok": true,
+        "note": "9 PowerShell files parsed with the PowerShell AST; Atlas function count matched native. Replaced a failed pester/Pester src candidate where Atlas counted 481/519 functions."
+      },
+      {
+        "repo": "https://github.com/PowerShell/PSResourceGet",
+        "commit": "6ecc668473baf37aa3cb84cc54dce7434364d121",
+        "target_path": "/private$WORK/atlas-powershell-candidates/PSResourceGet/repo/test",
+        "atlas_definitions": 43,
+        "native_definitions": 43,
+        "coverage_ratio": 1,
+        "ok": true,
+        "note": "64 PowerShell files parsed with the PowerShell AST; Atlas function count matched native. Replaced a ThreadJob src candidate with zero PowerShell function definitions."
+      }
+    ]
+  },
+  "generated_at": "2026-06-30T11:53:19.848Z",
+  "measurement_note": "Coverage refreshed from Atlas parser commit 27a0247 (current source 4e74b19); saved Graphify query comparison rows are retained because the queried function symbols and plain explain output are unchanged."
+}

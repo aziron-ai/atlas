@@ -1,0 +1,729 @@
+#!/usr/bin/env node
+// Make the site legible to crawlers that never run JavaScript.
+//
+// The page is a client-rendered React app: Googlebot eventually renders it,
+// but LLM crawlers (GPTBot, ClaudeBot, PerplexityBot, CCBot) and most search
+// engines' first-pass fetchers read raw HTML only — without this step they
+// see an empty <div id="root">. This script injects, between stable markers:
+//
+//   index.html <head>   canonical + Open Graph + Twitter card + JSON-LD
+//                       (SoftwareApplication + Dataset)
+//   index.html #root    a complete static HTML digest of the benchmark story
+//                       — real headings, tables and numbers. React's
+//                       createRoot().render() replaces it the moment the app
+//                       mounts, so humans see the live page; crawlers and
+//                       no-JS readers get the full content.
+//   robots.txt          allow-all (incl. AI crawlers) + sitemap pointer
+//   sitemap.xml         the single canonical URL
+//   llms.txt            llmstxt.org summary pointing at the raw data
+//
+// Idempotent: re-running replaces the marked blocks in place.
+// Usage: node scripts/build-seo.mjs   (run after build-site-data.mjs)
+"use strict";
+
+import fs from "node:fs";
+import { createHash } from "node:crypto";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const site = JSON.parse(fs.readFileSync(path.join(repoRoot, "data", "site-data.json"), "utf8"));
+const pkg = JSON.parse(fs.readFileSync(path.join(repoRoot, "package.json"), "utf8"));
+
+const ORIGIN = "https://atlas.aziro.com";
+const BASE = `${ORIGIN}/`;
+const r = site.report;
+const h = r.headline;
+const f = site.fresh;
+const today = site.generatedAt.slice(0, 10);
+
+const TITLE = "Local code intelligence for developers & AI agents | Atlas";
+const DESC =
+  "Atlas indexes repositories locally and returns focused, source-grounded context about symbols, callers, references, routes, and change impact through CLI, MCP, and HTTP.";
+
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+/* --------------------- docs: indexable static pages --------------------- */
+// The interactive docs live at hash routes (#docs/<slug>) that search engines
+// cannot index as distinct URLs. To make each guide separately discoverable we
+// render a real HTML page per doc under /atlas/docs/<slug>/ from the consumer
+// markdown in content/docs/. Content mirrors the GitHub Wiki guide.
+
+const DOCS = [
+  { slug: "tour", title: "What Atlas Does", desc: "Every surface in one pass: map, search, ask, impact, history, observe, assistants." },
+  { slug: "getting-started", title: "Getting Started", desc: "Create a local Atlas index, run the first cited queries, and connect an AI coding assistant." },
+  { slug: "installation", title: "Installation", desc: "Install Atlas via Homebrew, npm, release archives, or native Linux packages, then verify it." },
+  { slug: "concepts", title: "Core Concepts", desc: "The Atlas mental model: the code knowledge graph, snapshots, workspace resolution, output control, and the CLI, HTTP, and MCP surfaces." },
+  { slug: "dashboard", title: "The Dashboard", desc: "Command Center, omnibox, inspector, pins, repositories and the system view." },
+  { slug: "code-map", title: "Code Map and Graph", desc: "Walk the call graph: map modes, files, paths, neighbors, hubs." },
+  { slug: "search-and-ask", title: "Search and Ask", desc: "Exact search, symbol answers and the AI answer on the Ask page." },
+  { slug: "workbench", title: "Ask Workbench", desc: "Ask the codebase in plain language: Atlas gathers cited evidence from the index, git and connected sources, and a model you choose writes the answer, kept as a conversation." },
+  { slug: "impact", title: "Impact and Review", desc: "Blast radius, routes, cross-repo consumers and review context for a change." },
+  { slug: "history", title: "Change Lens and History", desc: "What changed, hot files, staleness, snapshots and structural diffs." },
+  { slug: "sources", title: "Connected Sources", desc: "GitHub, Jira, Confluence, Jenkins, Prometheus, Tempo, Grafana and OneDrive as virtual repos." },
+  { slug: "observe", title: "Observe", desc: "Logs, incidents, alerts, builds and traces, bounded and cited." },
+  { slug: "skills", title: "Skills and Automations", desc: "Skill Studio, recall, automations and approvals." },
+  { slug: "assistants", title: "AI Assistant Setup", desc: "Connect Claude, Codex, and other MCP-compatible assistants to Atlas." },
+  { slug: "mcp", title: "MCP Tools", desc: "Atlas MCP tools that give coding assistants bounded, cited code context." },
+  { slug: "cli", title: "CLI Reference", desc: "Atlas command-line reference: search, symbols, relationships, impact, routes, and maintenance." },
+  { slug: "indexing", title: "Indexing and Reindexing", desc: "Keep the Atlas index fresh: incremental updates, watch mode, exclusions, and recovery." },
+  { slug: "service", title: "Dashboard and HTTP API", desc: "Run the local Atlas dashboard and the HTTP / MCP service." },
+  { slug: "configuration", title: "Configuration", desc: "Configure Atlas limits, storage location, and runtime behavior." },
+  { slug: "teams", title: "One Atlas for a Team", desc: "Shared service, tokens, identity, fleet connect and devices." },
+  { slug: "upgrade", title: "Upgrade and Uninstall", desc: "Update Atlas safely, or remove it and its local data." },
+  { slug: "troubleshooting", title: "Troubleshooting", desc: "Diagnose stale, missing, or incomplete Atlas results." },
+  { slug: "privacy", title: "Privacy and Data Handling", desc: "How Atlas stores repository intelligence locally and what stays on your machine." },
+  { slug: "languages", title: "Supported Languages and Formats", desc: "Languages and formats Atlas indexes, with capability levels." },
+  { slug: "benchmarks", title: "Benchmarks and Methodology", desc: "How to read and reproduce the published Atlas benchmark evidence." },
+];
+
+// Wiki page name -> doc slug, for rewriting the guides' internal links.
+const WIKI_TO_SLUG = {
+  "Getting-Started": "getting-started", "Installation": "installation",
+  "Indexing-and-Reindexing": "indexing", "CLI-Reference": "cli", "Core-Concepts": "concepts",
+  "AI-Assistant-Setup": "assistants", "MCP-Tools": "mcp",
+  "Dashboard-and-HTTP-API": "service", "Ask-Workbench": "workbench", "Configuration": "configuration",
+  "What-Atlas-Does": "tour", "The-Dashboard": "dashboard", "Code-Map-and-Graph": "code-map", "Search-and-Ask": "search-and-ask",
+  "Impact-and-Review": "impact", "Change-Lens-and-History": "history", "Connected-Sources": "sources", "Observe": "observe",
+  "Skills-and-Automations": "skills", "One-Atlas-for-a-Team": "teams",
+  "Privacy-and-Data-Handling": "privacy", "Supported-Languages": "languages",
+  "Benchmarks-and-Methodology": "benchmarks", "Troubleshooting": "troubleshooting",
+  "Upgrade-and-Uninstall": "upgrade",
+};
+const slugSet = new Set(DOCS.map((d) => d.slug));
+
+const rewriteHref = (href) => {
+  if (/^https?:\/\//.test(href) || href.startsWith("#") || href.startsWith("mailto:")) return href;
+  if (href === "Home") return `${BASE}`;
+  if (WIKI_TO_SLUG[href]) return `../${WIKI_TO_SLUG[href]}/`;
+  if (slugSet.has(href)) return `../${href}/`;
+  return href;
+};
+
+// Inline markdown: operate on already HTML-escaped text (markers survive escaping).
+const inline = (t) =>
+  esc(t)
+    .replace(/`([^`]+)`/g, (_m, c) => `<code>${c}</code>`)
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, txt, href) => `<a href="${esc(rewriteHref(href))}">${txt}</a>`)
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+
+// Block markdown -> HTML for the constructs the guides use.
+function mdToHtml(md) {
+  const lines = md.replace(/\r\n/g, "\n").split("\n");
+  const out = [];
+  let i = 0;
+  const flushList = (buf) => { if (buf.length) { const tag = buf.ordered ? "ol" : "ul"; out.push(`<${tag}>${buf.map((li) => `<li>${inline(li)}</li>`).join("")}</${tag}>`); buf.length = 0; buf.ordered = false; } };
+  const listBuf = [];
+  while (i < lines.length) {
+    const line = lines[i];
+    if (/^```/.test(line)) {                                   // fenced code
+      flushList(listBuf);
+      const code = [];
+      i++;
+      while (i < lines.length && !/^```/.test(lines[i])) { code.push(lines[i]); i++; }
+      i++;
+      out.push(`<pre><code>${esc(code.join("\n"))}</code></pre>`);
+      continue;
+    }
+    if (/^\s*\|.*\|\s*$/.test(line) && i + 1 < lines.length && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i + 1])) {
+      flushList(listBuf);                                      // table
+      // split on unescaped pipes only: `a \| b` inside a cell is one literal "|"
+      const cells = (row) => row.trim().replace(/^\||\|$/g, "").split(/(?<!\\)\|/).map((c) => c.trim().replace(/\\\|/g, "|"));
+      const header = cells(line);
+      i += 2;
+      const rows = [];
+      while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) { rows.push(cells(lines[i])); i++; }
+      out.push(`<table><thead><tr>${header.map((c) => `<th>${inline(c)}</th>`).join("")}</tr></thead><tbody>${rows.map((rw) => `<tr>${rw.map((c) => `<td>${inline(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`);
+      continue;
+    }
+    const fm = line.match(/^!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)\s*$/);  // figure: image or clip
+    if (fm) {
+      flushList(listBuf);
+      const [, alt, src, cap] = fm;
+      const url = /^(https?:)?\/\//.test(src) ? src : `../../${src}`;
+      const caption = cap ? `<figcaption>${inline(cap)}</figcaption>` : "";
+      if (/\.mp4$/.test(src)) {
+        const poster = url.replace(/\.mp4$/, ".png");
+        const gif = url.replace(/\.mp4$/, ".gif");
+        out.push(`<figure class="clip"><video autoplay muted loop playsinline preload="metadata" poster="${esc(poster)}" aria-label="${esc(alt)}"><source src="${esc(url)}" type="video/mp4"><img src="${esc(gif)}" alt="${esc(alt)}"></video>${caption}</figure>`);
+      } else {
+        out.push(`<figure><img src="${esc(url)}" alt="${esc(alt)}" loading="lazy" decoding="async">${caption}</figure>`);
+      }
+      i++;
+      continue;
+    }
+    const hm = line.match(/^(#{1,4})\s+(.*)$/);
+    if (hm) { flushList(listBuf); const n = hm[1].length; out.push(`<h${n}>${inline(hm[2])}</h${n}>`); i++; continue; }
+    const lm = line.match(/^\s*(?:[-*]|\d+[.)])\s+(.*)$/);                // bullet or numbered item
+    if (lm) {
+      const ordered = /^\s*\d/.test(line);
+      if (listBuf.length && listBuf.ordered !== ordered) flushList(listBuf);
+      listBuf.ordered = ordered;
+      listBuf.push(lm[1]);
+      i++;
+      continue;
+    }
+    if (listBuf.length && /^\s+\S/.test(line)) {                          // wrapped item continues
+      listBuf[listBuf.length - 1] += " " + line.trim();
+      i++;
+      continue;
+    }
+    if (line.trim() === "") { flushList(listBuf); i++; continue; }
+    // paragraph: gather until blank line
+    flushList(listBuf);
+    const para = [line];
+    i++;
+    while (i < lines.length && lines[i].trim() !== "" && !/^(#{1,4}\s|```|\s*[-*]\s|\s*\d+[.)]\s|\s*\||!\[)/.test(lines[i])) { para.push(lines[i]); i++; }
+    out.push(`<p>${inline(para.join(" "))}</p>`);
+  }
+  flushList(listBuf);
+  return out.join("\n");
+}
+
+/* ----------------------------- head block ------------------------------- */
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Atlas",
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "macOS, Linux, Windows",
+    softwareVersion: pkg.version,
+    url: BASE,
+    downloadUrl: `https://github.com/aziron-ai/atlas/releases/download/v${pkg.version}/atlas_${pkg.version}_linux_amd64.tar.gz`,
+    installUrl: "https://github.com/aziron-ai/atlas/releases/latest",
+    description: DESC,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    publisher: { "@type": "Organization", name: "Aziron", url: "https://github.com/aziron-ai" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    name: "Atlas Benchmark & Field Comparison — July 2026",
+    description:
+      "Per-language code-intelligence benchmark: answer accuracy (F1), context tokens, query latency and index speed for Atlas vs a graph tool, an LSP-truth real-repository flagship, and a 40-language maturity ladder. Native ground truth by construction; real-LLM scored (222 cells, 666 model calls). Plus dated agent-harness runs (Claude Code and Codex, 8 languages), tool-level callers F1 against each language's LSP server, and a labelled natural-language relevance benchmark.",
+    url: BASE,
+    isAccessibleForFree: true,
+    creator: { "@type": "Organization", name: "Aziron" },
+    distribution: [
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${BASE}data/site-data.json` },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${BASE}data/raw/CALLERS_F1_AFTER.json` },
+      ...[site.agentBench?.artifact, site.lspTruthLanguages?.artifact, site.relevance?.artifact, ...(site.agentBenchLanguages?.languages || []).map((l) => l.artifact)]
+        .filter(Boolean)
+        .map((a) => ({ "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${BASE}${a}` })),
+    ],
+  },
+];
+
+const head = `
+    <link rel="canonical" href="${BASE}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Aziron Atlas">
+    <meta property="og:title" content="${esc(TITLE)}">
+    <meta property="og:description" content="${esc(DESC)}">
+    <meta property="og:url" content="${BASE}">
+    <meta property="og:image" content="${BASE}assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${esc(TITLE)}">
+    <meta name="twitter:description" content="${esc(DESC)}">
+    <meta name="twitter:image" content="${BASE}assets/og.png">
+    <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+`;
+
+/* ------------------------- static content digest ------------------------ */
+
+const langLabel = (v) => ({ cpp: "C++", javascript: "JavaScript", typescript: "TypeScript", objc: "Objective-C", csharp: "C#", ejs: "EJS", ets: "ETS", sql: "SQL", php: "PHP", r: "R", c: "C", powershell: "PowerShell", p4: "P4", byond: "BYOND" }[v] || v.charAt(0).toUpperCase() + v.slice(1));
+
+// A fixture pass is a floor, not a promotion: these languages are annotated
+// in place at their real level rather than drawn one rung higher.
+const fixtureOnlySet = new Set(r.maturity.fixtureOnly.langs);
+const maturityRows = r.maturity.levels
+  .map((lv) => {
+    const langs = lv.langs.map((l) =>
+      fixtureOnlySet.has(l) ? `${esc(langLabel(l))} (fixture-perfect only)` : esc(langLabel(l))
+    );
+    return `<tr><td>${lv.id} — ${esc(lv.name)}</td><td>${esc(lv.desc)}</td><td>${langs.join(", ")}</td></tr>`;
+  })
+  .join("\n          ");
+
+const scorecardRows = r.scorecard.rows
+  .map((row) => `<tr><td>${esc(row.metric)}</td><td>${esc(row.atlas)}</td><td>${esc(row.graphify)}</td><td>${esc(row.advantage)}</td><td>${esc(row.evidence)}</td></tr>`)
+  .join("\n          ");
+
+// agent-harness bench digest — present only when the section has shipped
+const ab = site.agentBench;
+const MODE_LABELS = { atlas: "Atlas", graphify: "Graph tool", baseline: "No tool (raw exploration)" };
+const MODE_ORDER = { atlas: 0, baseline: 1, graphify: 2 };
+const xf = (v) => (v == null ? "—" : `${Number(v).toFixed(2)}×`);
+const f3 = (v) => (v == null ? "—" : Number(v).toFixed(3));
+const baseName = (p) => String(p || "").split("/").pop();
+const agentBenchBlock = !ab ? "" : `
+        <h2>What a real agent actually spends — ${esc(ab.label)}</h2>
+        <p>${esc(ab.agents.map((a) => `${a.harness} (${a.model})`).join(" and "))}, run headless in ${esc(ab.repo)} (@${esc(ab.commit7)}) and restricted to one
+           code-intelligence CLI per run; token numbers are each harness's own usage accounting over
+           ${ab.nQuestions} caller questions with ${esc(ab.truth)}. Atlas binary: ${esc(ab.atlasBinary || ab.atlasBuild || "—")}; graph tool: ${esc(ab.graphifyVersion || "—")}. ${esc(ab.caveat)}</p>
+        <table>
+          <thead><tr><th>Agent</th><th>Context source</th><th>Mean total tokens</th><th>Mean turns</th><th>Mean F1</th></tr></thead>
+          <tbody>
+          ${ab.agents.map((a) =>
+            ab.cells.filter((c) => c.agent === a.id).sort((x, y) => MODE_ORDER[x.mode] - MODE_ORDER[y.mode])
+              .map((c) => `<tr><td>${esc(a.id)} (${esc(a.model || "default")})</td><td>${esc(MODE_LABELS[c.mode] || c.mode)}</td><td>${c.totalTokens?.toLocaleString("en-US") ?? "—"}</td><td>${c.turns ?? "—"}</td><td>${c.f1?.toFixed(3) ?? "—"}</td></tr>`)
+              .join("\n          ")
+          ).join("\n          ")}
+          </tbody>
+        </table>
+        <p>No tool / graph tool over Atlas, total tokens: ${esc(ab.agents.map((a) => `${a.id} ${xf(a.vsAtlas.baseline?.totalTokens)} / ${xf(a.vsAtlas.graphify?.totalTokens)}`).join(", "))}; marginal (total minus the harness floor): ${esc(ab.agents.map((a) => `${a.id} ${xf(a.vsAtlas.baseline?.marginal)} / ${xf(a.vsAtlas.graphify?.marginal)}`).join(", "))}. ${esc(ab.marginalNote || "")}${ab.supersedes ? ` This replaces the ${esc(ab.supersedes.date)} run (${esc(Object.entries(ab.supersedes.vsAtlasTotalTokens || {}).map(([a, v]) => `${a} ${xf(v.baseline)} / ${xf(v.graphify)}`).join(", "))}). ${esc(ab.supersedes.moved || "")}` : ""}</p>${ab.history?.length > 1 ? `
+        <table>
+          <thead><tr><th>Run</th><th>Atlas build</th><th>Agent · harness · model</th><th>Floor</th><th>Atlas F1</th><th>Total tokens × (no tool / graph tool)</th><th>Marginal × (no tool / graph tool)</th></tr></thead>
+          <tbody>
+          ${ab.history.flatMap((h) => h.agents.map((a) =>
+            `<tr><td>${esc(h.date)}${h.current ? " (current)" : ""}</td><td>${esc(h.atlasRelease ? `${h.atlasRelease}${h.atlasCommit ? ` (${h.atlasCommit})` : ""}` : h.atlasVersion || "—")}</td><td>${esc(`${a.id} · ${a.harness} · ${a.model}`)}</td><td>${a.calibrationTotal?.toLocaleString("en-US") ?? "—"}</td><td>${f3(a.atlasF1)}</td><td>${xf(a.vsAtlasTotalTokens?.baseline)} / ${xf(a.vsAtlasTotalTokens?.graphify)}</td><td>${xf(a.vsAtlasMarginal?.baseline)} / ${xf(a.vsAtlasMarginal?.graphify)}</td></tr>`)).join("\n          ")}
+          </tbody>
+        </table>` : ""}
+        <p>Reproducible from any machine: the suite ships in
+           <a href="https://github.com/aziron-ai/atlas/tree/main/agent-bench">agent-bench/</a> (pinned commit, frozen
+           gopls question set, isolation flags baked in); per-run records in
+           <a href="${esc(ab.artifact)}">${esc(baseName(ab.artifact))}</a>.</p>`;
+
+const L = site.agentBenchLanguages;
+const agentLanguagesBlock = !L ? "" : `
+        <h2>The same harness in ${L.languages.length} languages — ${esc(L.label)}</h2>
+        <p>${esc(L.what)} ${esc(L.verdictRule)} Atlas passes <strong>${L.verdict.pass} of ${L.verdict.total}</strong> cells (${L.okRuns}/${L.totalRuns} runs answered).</p>
+        <table>
+          <thead><tr><th>Language</th><th>Repository @ commit</th><th>Truth</th><th>claude F1 (Atlas · no tool · graph)</th><th>codex F1 (Atlas · no tool · graph)</th><th>Tokens vs Atlas, claude / codex (no tool · graph)</th></tr></thead>
+          <tbody>
+          ${L.languages.map((l) => {
+            const c = (a, m) => l.cells.find((x) => x.agent === a && x.mode === m);
+            const trip = (a) => `${f3(c(a, "atlas")?.f1)} · ${f3(c(a, "baseline")?.f1)} · ${f3(c(a, "graphify")?.f1)}`;
+            const rat = (a) => `${xf(l.vsAtlas[a]?.baseline?.totalTokens)} · ${xf(l.vsAtlas[a]?.graphify?.totalTokens)}`;
+            return `<tr><td>${esc(l.label)}</td><td>${esc(l.repo)} @${esc(l.commit7)}</td><td>${esc(l.truthTool)}</td><td>${trip("claude")}</td><td>${trip("codex")}</td><td>${rat("claude")} / ${rat("codex")}</td></tr>`;
+          }).join("\n          ")}
+          </tbody>
+        </table>
+        <p>${esc(L.atlasBuildNote)} ${esc(L.billedNote || "")} ${esc(L.caveat)} Per-run records: ${L.languages.map((l) => `<a href="${esc(l.artifact)}">${esc(baseName(l.artifact))}</a>`).join(", ")}.</p>`;
+
+const T = site.lspTruthLanguages;
+const lspTruthBlock = !T ? "" : `
+        <h2>The tool alone — ${esc(T.label)}</h2>
+        <p>${esc(T.what)}</p>
+        <table>
+          <thead><tr><th>Language</th><th>Repository @ commit</th><th>Truth</th><th>Questions</th><th>Mean callers F1</th><th>Perfect</th></tr></thead>
+          <tbody>
+          ${T.languages.map((l) => `<tr><td>${esc(l.label)}</td><td>${esc(l.repo)} @${esc(l.commit7)}</td><td>${esc(l.truthTool)}</td><td>${l.n}</td><td>${f3(l.meanF1)}</td><td>${l.perfect}/${l.n}</td></tr>`).join("\n          ")}
+          </tbody>
+        </table>
+        <p>${esc(T.buildNote)} Per-question counts: <a href="${esc(T.artifact)}">${esc(baseName(T.artifact))}</a>.</p>`;
+
+const RV = site.relevance;
+const SURF = { search: "search", search_exact: "search, bare entity name (control)", context: "context", code_query: "code_query (MCP)" };
+const QCLS = { definition: "where is E defined?", callers: "what calls E?", error_handling: "E error exception handling" };
+const relevanceBlock = !RV ? "" : `
+        <h2>Retrieval relevance — ${esc(RV.label)}</h2>
+        <p>${esc(RV.what)} Corpora: ${RV.corpora.map((c) => `${esc(c.id)} (${c.sources.map((s) => `${esc(s.slug)} @${esc(s.commit7)}`).join(" + ")}, ${c.labels.total} queries)`).join("; ")}. ${esc(RV.outOfScope || "")}</p>
+        <table>
+          <thead><tr><th>Question</th><th>Surface</th><th>n</th><th>P@1</th><th>MRR</th><th>R@10</th><th>Entity first</th></tr></thead>
+          <tbody>
+          ${Object.entries(RV.pooled).flatMap(([cls, rows]) => rows.map((x) => `<tr><td>${esc(QCLS[cls] || cls)}</td><td>${esc(SURF[x.surface] || x.surface)}</td><td>${x.n}</td><td>${f3(x.p1)}</td><td>${f3(x.mrr)}</td><td>${f3(x.r10)}</td><td>${f3(x.entityFirst)}</td></tr>`)).join("\n          ")}
+          </tbody>
+        </table>
+        <table>
+          <thead><tr><th>Adversarial (generic / stopword)</th><th>n</th><th>Refused</th><th>Safe</th></tr></thead>
+          <tbody>
+          ${RV.adversarial.map((a) => `<tr><td>${esc(SURF[a.surface] || a.surface)}</td><td>${a.n}</td><td>${f3(a.refused)}</td><td>${f3(a.safe)}</td></tr>`).join("\n          ")}
+          </tbody>
+        </table>
+        <p>Gate: ${RV.gate.thresholds - RV.gate.failures} of ${RV.gate.thresholds} frozen thresholds hold. ${esc(RV.gate.driftNote || "")} ${esc(RV.gate.catches)}</p>
+        <ul>
+          ${RV.findings.map((f) => `<li>${esc(f.id)} — ${esc(f.title)}${/^FIXED/.test(f.status) ? ` (${esc(f.status)})` : ""}</li>`).join("\n          ")}
+        </ul>
+        <p>${esc(RV.buildNote)} Harness: <a href="https://github.com/aziron-ai/atlas/tree/main/relevance-bench">relevance-bench/</a>; per-query rows: <a href="${esc(RV.artifact)}">${esc(baseName(RV.artifact))}</a>.</p>`;
+
+const knobRows = r.detailKnob.levels
+  .map((lv) => `<tr><td>--detail ${lv.id}${lv.id === r.detailKnob.defaultLevel ? " (default)" : ""}</td><td>${esc(lv.what)}</td><td>${lv.tokens}</td><td>${lv.f1.toFixed(2)}</td></tr>`)
+  .join("\n          ");
+
+const body = `
+      <div class="shell seo-static" style="padding:48px 0 64px;max-width:820px">
+        <h1>Atlas — local code intelligence for developers and AI agents</h1>
+        <p>${esc(DESC)}</p>
+        <p><a href="https://github.com/aziron-ai/atlas">GitHub</a> ·
+           <a href="https://github.com/aziron-ai/atlas/releases/latest">Download v${pkg.version}</a> ·
+           <a href="data/site-data.json">Benchmark data (JSON)</a></p>
+
+        <h2>Get started</h2>
+        <p>Install with <code>brew install --cask aziron-ai/atlas/atlas</code> or from the public
+           npm registry with <code>npm install -g @aziron/atlas</code>. The
+           <a href="docs/installation/">installation guide</a> also covers the authenticated
+           GitHub Packages coordinate.
+           Then run <code>atlas index .</code>,
+           inspect readiness with <code>atlas status</code>, and preview assistant setup with
+           <code>atlas bootstrap --dry-run</code>.</p>
+
+        <h2>Product documentation</h2>
+        <ul>
+          <li><a href="docs/getting-started/">Getting started</a> — first index, query, and assistant connection.</li>
+          <li><a href="docs/installation/">Installation</a> — Homebrew, npm, archives, and Linux packages.</li>
+          <li><a href="docs/indexing/">Indexing and reindexing</a> — freshness, watch mode, and recovery.</li>
+          <li><a href="docs/cli/">CLI reference</a> — search, symbols, relationships, impact, and routes.</li>
+          <li><a href="docs/assistants/">AI assistant setup</a> and <a href="docs/mcp/">MCP tools</a>.</li>
+          <li>User guide: <a href="docs/tour/">what Atlas does</a>, <a href="docs/dashboard/">the dashboard</a>, <a href="docs/code-map/">Code Map</a>, <a href="docs/search-and-ask/">search and Ask</a>, <a href="docs/workbench/">Ask Workbench</a>, <a href="docs/impact/">impact and review</a>, <a href="docs/history/">change lens</a>, <a href="docs/sources/">connected sources</a>, <a href="docs/observe/">Observe</a>, <a href="docs/skills/">skills</a>, <a href="docs/teams/">one Atlas for a team</a>.</li>
+          <li><a href="docs/troubleshooting/">Troubleshooting</a>, <a href="docs/privacy/">privacy</a>, <a href="docs/configuration/">configuration</a>, and <a href="docs/upgrade/">upgrades</a>.</li>
+          <li><a href="docs/">Browse all documentation →</a></li>
+        </ul>
+
+        <h2>Headline results — ${esc(r.label)}</h2>
+        <ul>
+          <li>${h.tokensPooled}× fewer answer tokens than the graph tool, pooled across a ${h.matrixRepos}-repository matrix (${h.matrixQueries} queries both tools answered). Per-language mean ${h.tokensPerLanguageMean}×, median ${h.tokensPerLanguageMedian}×, worst language ${h.tokensWorstLanguage} at ${h.tokensWorstRatio}×.</li>
+          <li>And a better answer: caller-F1 ${h.atlasF1.toFixed(3)} vs ${h.graphifyF1.toFixed(3)} — ${h.f1Advantage}× — scored by ${esc(r.method.scoringModel)} over ${r.method.cells} cells / ${r.method.modelCalls} model calls on 37 constructed-truth fixtures.</li>
+          <li>The shipped default matches the maximum-detail level exactly (F1 ${r.efficiency.highF1.toFixed(3)} both) at ${r.efficiency.xCheaper}× fewer tokens — ${r.efficiency.highTok} vs ${r.efficiency.xhighTok}. ${r.efficiency.perfectLangs} of ${r.efficiency.totalLangs} languages score a perfect 1.000.</li>
+          <li>Inside a real agent (${esc(r.goFlagship.repo)}, gopls call-hierarchy ground truth, ${r.goFlagship.questions} questions${ab ? `, ${esc(ab.date)}` : ""}): F1 ${ab ? [...new Set(Object.values(ab.atlasF1))].map((v) => v.toFixed(3)).join(" / ") : "—"} with Atlas on both the claude and codex harnesses.</li>${L ? `
+          <li>The same harness in ${L.languages.length} languages (${esc(L.date)}): Atlas beats the no-tool baseline and the graph tool on both accuracy and tokens in ${L.verdict.pass} of ${L.verdict.total} agent × language cells.</li>` : ""}${T ? `
+          <li>The tool alone, against each language's LSP server (${esc(T.date)}): callers F1 ${T.languages.map((l) => `${esc(l.label)} ${f3(l.meanF1)}`).join(", ")}.</li>` : ""}
+          <li>Queries run ${r.latencyAtScale.matrixLatencyMean}× faster than the graph tool on the same matrix (mean of the seven per-repository ratios); warm-serve <code>explain</code> lands between ${r.latencyAtScale.warmServeMinMs} and ${r.latencyAtScale.warmServeMaxMs} ms.</li>
+          <li>Corroborated by an independent Linux re-run (2026-08-05): ${f.saturation.perfect}/${f.saturation.total} languages fixture-perfect, gopls-truth F1 ${f.lspTruth.meanF1.toFixed(3)}. That leg ran on ${esc(f.platform)}; it has no graph-tool binary, so it publishes no competitor ratio.</li>
+        </ul>
+        <h3>Retracted claims</h3>
+        <ul>
+          ${r.scorecard.retired.map((x) => `<li><s>${esc(x.claim)}</s> → ${esc(x.replacedBy)} (${esc(x.why)})</li>`).join("\n          ")}
+        </ul>
+
+        <h2>Atlas vs Graphify — scorecard</h2>
+        <table>
+          <thead><tr><th>Metric</th><th>Atlas</th><th>Graphify</th><th>Advantage</th><th>Evidence</th></tr></thead>
+          <tbody>
+          ${scorecardRows}
+          </tbody>
+        </table>
+${agentBenchBlock}
+${agentLanguagesBlock}
+${lspTruthBlock}
+${relevanceBlock}
+        <h2>The --detail knob</h2>
+        <p>${esc(r.detailKnob.floorNote)}</p>
+        <table>
+          <thead><tr><th>Level</th><th>What the agent sees</th><th>Tokens</th><th>F1</th></tr></thead>
+          <tbody>
+          ${knobRows}
+          </tbody>
+        </table>
+
+        <h2>Language maturity ladder — ${r.maturity.totalCodeLanguages} code languages</h2>
+        <p>${esc(r.maturity.note)} Atlas also indexes ~${r.maturity.contentFormats} content formats (JSON, YAML, HTML, PDF, …) for search.</p>
+        <table>
+          <thead><tr><th>Level</th><th>Meaning</th><th>Languages</th></tr></thead>
+          <tbody>
+          ${maturityRows}
+          </tbody>
+        </table>
+        <p>L5 goes from ${r.maturity.promoted.previousTotal} to <strong>${r.maturity.promoted.total}</strong>. Added since the last published ladder: ${r.maturity.promoted.newSinceLastPublished.map((l) => esc(langLabel(l))).join(", ")}. Removed: ${r.maturity.promoted.removedSinceLastPublished.map((l) => esc(langLabel(l))).join(", ") || "none"} — ${esc(r.maturity.retracted.why)}</p>
+        <p><strong>Requalified.</strong> This page previously asserted “${esc(r.maturity.requalification.wasClaimed)}” for ${r.maturity.requalification.wasClaimedFor.map((l) => esc(langLabel(l))).join(", ")}. ${esc(r.maturity.requalification.why)} ${esc(r.maturity.requalification.rubyNote)}</p>
+
+        <h2>Install</h2>
+        <p>Homebrew: <code>brew install --cask aziron-ai/atlas/atlas</code> ·
+           npm: <code>npm install -g @aziron/atlas</code> ·
+           Linux: <a href="https://github.com/aziron-ai/atlas/releases/latest">tar.gz / .deb / .rpm / .apk from releases</a>.
+           Then <code>atlas index .</code> and <code>atlas mcp --transport stdio</code> for agents.</p>
+        <p>Every number above is reproducible from the committed artifacts under <a href="data/">data/</a>.
+           This static digest is replaced by the interactive page when JavaScript is available.</p>
+
+        <h2>Community</h2>
+        <p><a href="https://www.producthunt.com/products/atlas-44?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-atlas-47" target="_blank" rel="noopener noreferrer"><img alt="Atlas - Local code intelligence for developers and AI assistants | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1203538&amp;theme=light&amp;t=1784726889410"></a></p>
+      </div>
+`;
+
+/* ------------------------------ inject ---------------------------------- */
+
+const idx = path.join(repoRoot, "index.html");
+let html = fs.readFileSync(idx, "utf8");
+for (const asset of ["assets/app.js", "assets/styles.css"]) {
+  const digest = createHash("sha256").update(fs.readFileSync(path.join(repoRoot, asset))).digest("hex").slice(0, 12);
+  const reference = new RegExp(`(["'])${asset.replace(/\./g, "\\.")}(?:\\?[^"']*)?\\1`, "g");
+  html = html.replace(reference, `"${asset}?v=${digest}"`);
+}
+
+const inject = (text, startMark, endMark, payload, anchorRe) => {
+  const block = `${startMark}${payload}    ${endMark}`;
+  const re = new RegExp(`${startMark}[\\s\\S]*?${endMark}`);
+  if (re.test(text)) return text.replace(re, block);
+  return text.replace(anchorRe, (m) => `${m}\n    ${block}`);
+};
+
+html = inject(html, "<!-- seo-head:start -->", "<!-- seo-head:end -->", head, /<meta name="color-scheme"[^>]*>/);
+html = inject(html, "<!-- seo-body:start -->", "<!-- seo-body:end -->", body, /<div id="root">/);
+fs.writeFileSync(idx, html);
+
+/* --------------------------- crawler files ------------------------------ */
+
+fs.writeFileSync(path.join(repoRoot, "robots.txt"), `# Atlas product documentation and benchmark evidence.
+# Public benchmark data lives under /atlas/data/.
+User-agent: *
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: ${BASE}sitemap.xml
+`);
+
+const sitemapUrls = [
+  `  <url>\n    <loc>${BASE}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>`,
+  ...DOCS.map((d) => `  <url>\n    <loc>${BASE}docs/${d.slug}/</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`),
+];
+fs.writeFileSync(path.join(repoRoot, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${sitemapUrls.join("\n")}
+</urlset>
+`);
+
+fs.writeFileSync(path.join(repoRoot, "llms.txt"), `# Atlas - local code intelligence
+
+> Atlas is a local code-intelligence CLI: one native binary that indexes a
+> repository into a SQLite symbol and relationship graph and answers focused context queries
+> (definition, callers, callees, imports, routes) in single-digit milliseconds and tens of tokens.
+> ${esc(r.label)}: ${h.tokensPooled}× fewer answer tokens than the graph tool pooled over a
+> ${h.matrixRepos}-repository matrix, at a higher answer quality — caller-F1 ${h.atlasF1.toFixed(3)} vs ${h.graphifyF1.toFixed(3)}.
+> Inside a real agent harness on ${esc(r.goFlagship.repo)} with gopls ground truth${ab ? ` (${esc(ab.date)})` : ""}: F1 ${ab ? [...new Set(Object.values(ab.atlasF1))].map((v) => v.toFixed(3)).join(" / ") : "—"}.${L ? `
+> Same harness, ${L.languages.length} languages: Atlas beats both comparators on accuracy and tokens in ${L.verdict.pass}/${L.verdict.total} agent × language cells.` : ""}
+> ${r.maturity.promoted.total} of ${r.maturity.totalCodeLanguages} code languages are reference-validated (L5) on a five-level
+> maturity ladder; dart was RETRACTED from L5 this refresh. Version ${pkg.version}.
+> Earlier 20× and 36× token claims are RETRACTED: they were measured against a build whose
+> caller answers were a two-token placeholder.
+
+## Benchmark data
+- [site-data.json](${BASE}data/site-data.json): the full payload the page renders — headline table, efficiency frontier, detail knob, maturity ladder, scorecard, per-language results
+- [CALLERS_F1_AFTER.json](${BASE}data/raw/CALLERS_F1_AFTER.json): 37/37 native callers F1 (Linux corroboration run)
+- [DIMENSIONS_BENCH_PUBLIC.json](${BASE}data/raw/DIMENSIONS_BENCH_PUBLIC.json): per-language F1 / tokens / latency / index speed
+- [LSP_F1_SUMMARY.json](${BASE}data/raw/LSP_F1_SUMMARY.json): gopls LSP-truth aggregate
+${ab ? `- [${baseName(ab.artifact)}](${BASE}${ab.artifact}): end-to-end token usage of real agent harnesses (Claude Code, OpenAI Codex) with Atlas vs graph tool vs no tool, ${ab.date} — reproducible via agent-bench/ in the GitHub repo
+` : ""}${L ? L.languages.map((l) => `- [${baseName(l.artifact)}](${BASE}${l.artifact}): the same harness on ${l.label} (${l.repo}), ${L.date}`).join("\n") + "\n" : ""}${T ? `- [${baseName(T.artifact)}](${BASE}${T.artifact}): tool-level callers F1 against each language's LSP server, 8 languages, ${T.date}
+` : ""}${RV ? `- [${baseName(RV.artifact)}](${BASE}${RV.artifact}): natural-language relevance benchmark (216 labelled queries, 3 surfaces, regression gate), ${RV.date} — harness in relevance-bench/
+` : ""}${(ab?.history || []).filter((h) => !h.current).map((h) => `- [${baseName(h.artifact)}](${BASE}${h.artifact}): the superseded ${h.date} agent-harness run (Atlas ${h.atlasRelease || h.atlasVersion}), kept in the run history for audit`).join("\n")}
+
+## Project
+- [Product documentation](${BASE}#docs/getting-started): install, index, query, configure, connect, troubleshoot, and upgrade
+- [Ask Workbench](${BASE}#docs/workbench): a conversation about the codebase in the dashboard — Atlas gathers cited evidence (index, git, GitHub, Jira, Confluence, Pulse) and what it computed, a model you choose writes the answer; threads are kept by the server
+- [User guide](${BASE}#docs/tour): what Atlas does, the dashboard, Code Map, search and Ask, impact and review, change lens, connected sources, Observe, skills and automations, one Atlas for a team — each page with screenshots and short clips recorded from a running Atlas
+- [Benchmark & comparison](${BASE}#benchmarks): interactive version of the published evidence
+- [GitHub repository](https://github.com/aziron-ai/atlas): releases (macOS, Linux, Windows), issues
+- [GitHub Wiki](https://github.com/aziron-ai/atlas/wiki): mirror of the consumer product guide
+- [npm package](https://www.npmjs.com/package/@aziron/atlas): \`npm install -g @aziron/atlas\`
+- [GitHub Packages](https://github.com/aziron-ai/atlas/pkgs/npm/atlas): authenticated alternative \`@aziron-ai/atlas\`
+`);
+
+/* --------------------- per-doc indexable pages -------------------------- */
+
+const DOC_CSS = `
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .brand-logo { display:block; width:29px; height:24px; object-fit:contain; }
+  .brand-word { font-size:14px; letter-spacing:.22em; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#eef2f7; border:1px solid var(--line); padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:var(--raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; box-shadow:var(--shadow); }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#f8fafc; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+`;
+
+const docsNav = DOCS.map((d) => `<a href="../${d.slug}/">${esc(d.title)}</a>`).join("\n        ");
+
+const docPage = (doc, idx) => {
+  const md = fs.readFileSync(path.join(repoRoot, "content", "docs", `${doc.slug}.md`), "utf8");
+  const bodyHtml = mdToHtml(md);
+  const url = `${BASE}docs/${doc.slug}/`;
+  const prev = idx > 0 ? DOCS[idx - 1] : null;
+  const next = idx < DOCS.length - 1 ? DOCS[idx + 1] : null;
+  const ld = [
+    { "@context": "https://schema.org", "@type": "TechArticle", headline: doc.title, description: doc.desc, url, inLanguage: "en",
+      isPartOf: { "@type": "WebSite", name: "Aziron Atlas", url: BASE },
+      publisher: { "@type": "Organization", name: "Aziron", url: "https://github.com/aziron-ai" }, dateModified: today },
+    { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Atlas", item: BASE },
+      { "@type": "ListItem", position: 2, name: "Documentation", item: `${BASE}docs/` },
+      { "@type": "ListItem", position: 3, name: doc.title, item: url },
+    ] },
+  ];
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xs573jloed");</script>
+  <title>${esc(doc.title)} — Atlas documentation</title>
+  <meta name="description" content="${esc(doc.desc)}">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="../../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../../assets/atlas-icon-128.png">
+  <link rel="canonical" href="${url}">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="${esc(doc.title)} — Atlas">
+  <meta property="og:description" content="${esc(doc.desc)}">
+  <meta property="og:url" content="${url}">
+  <meta property="og:image" content="${BASE}assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${esc(doc.title)} — Atlas">
+  <meta name="twitter:description" content="${esc(doc.desc)}">
+  <meta name="twitter:image" content="${BASE}assets/og.png">
+  <script type="application/ld+json">${JSON.stringify(ld)}</script>
+  <style>${DOC_CSS}</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="${BASE}"><img class="brand-logo" src="../../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="${BASE}">Home</a> / <a href="${BASE}docs/">Docs</a> / ${esc(doc.title)}</nav>
+      <a class="open-app" href="${BASE}#docs/${doc.slug}">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+${bodyHtml}
+    </article>
+    <nav class="prevnext">
+      <span>${prev ? `<a href="../${prev.slug}/">← ${esc(prev.title)}</a>` : ""}</span>
+      <span>${next ? `<a href="../${next.slug}/">${esc(next.title)} →</a>` : ""}</span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        ${docsNav}
+    </nav>
+    <footer class="site">
+      Atlas v${pkg.version} · <a href="${BASE}">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>
+`;
+};
+
+DOCS.forEach((doc, idx) => {
+  const dir = path.join(repoRoot, "docs", doc.slug);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, "index.html"), docPage(doc, idx));
+});
+
+// docs hub
+const docsIndex = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xs573jloed");</script>
+  <title>Documentation — Atlas</title>
+  <meta name="description" content="Atlas product documentation: install, index, query, connect an AI assistant, configure, troubleshoot, and upgrade.">
+  <meta name="robots" content="index,follow">
+  <meta name="color-scheme" content="light">
+  <link rel="canonical" href="${BASE}docs/">
+  <link rel="icon" href="../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../assets/atlas-icon-128.png">
+  <style>${DOC_CSS}</style>
+</head>
+<body>
+  <header class="site"><div class="row">
+    <a class="brand" href="${BASE}"><img class="brand-logo" src="../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
+    <nav class="crumbs"><a href="${BASE}">Home</a> / Docs</nav>
+    <a class="open-app" href="${BASE}#docs/getting-started">Open interactive docs →</a>
+  </div></header>
+  <main class="wrap">
+    <article>
+      <h1>Atlas documentation</h1>
+      <p>Local code intelligence for developers and AI coding assistants. Install Atlas, index a repository, and return focused, source-grounded context through the CLI, MCP, and a local HTTP service.</p>
+      <ul>
+        ${DOCS.map((d) => `<li><a href="${d.slug}/">${esc(d.title)}</a> — ${esc(d.desc)}</li>`).join("\n        ")}
+      </ul>
+    </article>
+    <footer class="site">Atlas v${pkg.version} · <a href="${BASE}">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.</footer>
+  </main>
+</body>
+</html>
+`;
+fs.writeFileSync(path.join(repoRoot, "docs", "index.html"), docsIndex);
+
+/* -------------------------- llms-full.txt ------------------------------- */
+// Full-content dump for AI crawlers/agents that ingest a single file.
+const llmsFull = `# Atlas — full documentation for LLMs
+
+> Atlas is a local code-intelligence CLI: one native binary that indexes a
+> repository into a SQLite symbol and relationship graph and answers focused
+> context queries (definition, callers, callees, imports, routes) in
+> single-digit milliseconds and tens of tokens. Benchmark (${esc(r.label)}):
+> ${h.tokensPooled}× fewer answer tokens than the graph tool, pooled over ${h.matrixRepos} repositories,
+> at caller-F1 ${h.atlasF1.toFixed(3)} vs ${h.graphifyF1.toFixed(3)}. Version ${pkg.version}.
+>
+> This file inlines the complete consumer documentation. Canonical HTML pages
+> live at ${BASE}docs/<slug>/ ; the interactive site is at ${BASE}.
+
+- Product site: ${BASE}
+- Benchmarks: ${BASE}#benchmarks
+- GitHub: https://github.com/aziron-ai/atlas
+- Wiki: https://github.com/aziron-ai/atlas/wiki
+- npm: https://www.npmjs.com/package/@aziron/atlas
+- GitHub Packages: https://github.com/aziron-ai/atlas/pkgs/npm/atlas
+
+${DOCS.map((d) => {
+  const md = fs.readFileSync(path.join(repoRoot, "content", "docs", `${d.slug}.md`), "utf8").trim();
+  return `\n---\n\n# ${d.title}\nURL: ${BASE}docs/${d.slug}/\n\n${md}`;
+}).join("\n")}
+`;
+fs.writeFileSync(path.join(repoRoot, "llms-full.txt"), llmsFull);
+
+/* ------------------------------ verify ---------------------------------- */
+
+const finalHtml = fs.readFileSync(idx, "utf8");
+for (const probe of ["seo-head:start", "seo-body:start", "application/ld+json", "canonical", "maturity ladder"]) {
+  if (!finalHtml.toLowerCase().includes(probe.toLowerCase())) throw new Error(`index.html missing: ${probe}`);
+}
+const docFiles = DOCS.map((d) => `docs/${d.slug}/index.html`);
+const BANNED = [/\/Users\//, /\/home\//, /\/tmp\//, /damirdarasu/, /aziron-ui/i, /aziron-pulse/i];
+for (const p of ["index.html", "robots.txt", "sitemap.xml", "llms.txt", "llms-full.txt", "docs/index.html", ...docFiles]) {
+  const t = fs.readFileSync(path.join(repoRoot, p), "utf8");
+  for (const re of BANNED) if (re.test(t)) throw new Error(`${p} leak: ${re}`);
+}
+// every doc page must carry its canonical + real content
+for (const d of DOCS) {
+  const t = fs.readFileSync(path.join(repoRoot, "docs", d.slug, "index.html"), "utf8");
+  if (!t.includes(`canonical" href="${BASE}docs/${d.slug}/"`)) throw new Error(`doc ${d.slug}: missing canonical`);
+  if (!/<article>[\s\S]*<h1>[\s\S]*<\/article>/.test(t)) throw new Error(`doc ${d.slug}: missing article/h1`);
+}
+if (!fs.readFileSync(path.join(repoRoot, "llms-full.txt"), "utf8").includes("# Installation")) throw new Error("llms-full.txt missing doc content");
+console.log(`seo layer written: index.html digest (${Math.round(body.length / 1024)}kb), ${DOCS.length} doc pages, docs/ hub, robots.txt, sitemap.xml (${DOCS.length + 1} urls), llms.txt, llms-full.txt — v${pkg.version}, ${today}`);

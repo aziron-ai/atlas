@@ -1,0 +1,40 @@
+{
+  "name": "atlas-benchmark-site",
+  "version": "0.1.55",
+  "description": "Atlas public documentation, user guides, wiki, and benchmark evidence.",
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -i ./src/styles.css -o ./assets/styles.css --minify && esbuild ./src/App.jsx --bundle --format=iife --jsx=automatic --minify --outfile=./assets/app.js && node scripts/build-seo.mjs",
+    "sync:release": "node scripts/sync-release.mjs",
+    "validate:call-edges": "node scripts/call-edge-evidence-harness.mjs",
+    "validate:graphify-support": "node scripts/graphify-support-harness.mjs",
+    "validate:public-repos": "node scripts/public-repo-validation-harness.mjs",
+    "validate:precision": "node scripts/precision-evidence-harness.mjs",
+    "validate:remeasurement": "node scripts/validation-remeasurement-harness.mjs",
+    "test:site": "playwright test tests/benchmark-site.spec.js --reporter=line"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aziron-ai/atlas.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache-2.0",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/aziron-ai/atlas/issues"
+  },
+  "homepage": "https://atlas.aziro.com/",
+  "dependencies": {
+    "lucide-react": "^1.22.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "ejs": "3.1.10",
+    "esbuild": "^0.28.1",
+    "svelte": "5.56.4",
+    "tailwindcss": "^3.4.17"
+  }
+}

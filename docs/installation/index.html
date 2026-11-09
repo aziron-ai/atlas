@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-21KT1YM26P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-21KT1YM26P');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xs573jloed");</script>
+  <title>Installation — Atlas documentation</title>
+  <meta name="description" content="Install Atlas via Homebrew, npm, release archives, or native Linux packages, then verify it.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="../../assets/atlas-mark.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="../../assets/atlas-icon-128.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="../../assets/atlas-icon-128.png">
+  <link rel="canonical" href="https://atlas.aziro.com/docs/installation/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Aziron Atlas">
+  <meta property="og:title" content="Installation — Atlas">
+  <meta property="og:description" content="Install Atlas via Homebrew, npm, release archives, or native Linux packages, then verify it.">
+  <meta property="og:url" content="https://atlas.aziro.com/docs/installation/">
+  <meta property="og:image" content="https://atlas.aziro.com/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Installation — Atlas">
+  <meta name="twitter:description" content="Install Atlas via Homebrew, npm, release archives, or native Linux packages, then verify it.">
+  <meta name="twitter:image" content="https://atlas.aziro.com/assets/og.png">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"TechArticle","headline":"Installation","description":"Install Atlas via Homebrew, npm, release archives, or native Linux packages, then verify it.","url":"https://atlas.aziro.com/docs/installation/","inLanguage":"en","isPartOf":{"@type":"WebSite","name":"Aziron Atlas","url":"https://atlas.aziro.com/"},"publisher":{"@type":"Organization","name":"Aziron","url":"https://github.com/aziron-ai"},"dateModified":"2026-10-29"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Atlas","item":"https://atlas.aziro.com/"},{"@type":"ListItem","position":2,"name":"Documentation","item":"https://atlas.aziro.com/docs/"},{"@type":"ListItem","position":3,"name":"Installation","item":"https://atlas.aziro.com/docs/installation/"}]}]</script>
+  <style>
+  :root { color-scheme:light; --bg:#f9fafb; --panel:#fff; --raised:#f3f5f7; --text:#0f172a; --muted:#475569; --line:#d8e0ea; --primary:#2563eb; --link:#0369a1; --shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .wrap { max-width:820px; margin:0 auto; padding:0 20px 72px; }
+  figure { margin:22px 0 8px; } figure img, figure video { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; } figcaption { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.5; }
+  a { color:var(--link); } a:hover { text-decoration:underline; }
+  header.site { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 2px rgba(15,23,42,.05); }
+  header.site .row { max-width:820px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); text-decoration:none; }
+  .brand-logo { display:block; width:29px; height:24px; object-fit:contain; }
+  .brand-word { font-size:14px; letter-spacing:.22em; }
+  nav.crumbs { color:var(--muted); font-size:14px; }
+  nav.crumbs a { color:var(--muted); }
+  .open-app { margin-left:auto; font-size:14px; border:1px solid var(--line); padding:6px 12px; border-radius:8px; text-decoration:none; color:var(--text); }
+  main { padding-top:8px; }
+  article h1 { font-size:2rem; line-height:1.2; margin:28px 0 8px; }
+  article h2 { font-size:1.35rem; margin:34px 0 10px; padding-top:8px; border-top:1px solid var(--line); }
+  article h3 { font-size:1.1rem; margin:24px 0 8px; }
+  article code { background:#eef2f7; border:1px solid var(--line); padding:.12em .38em; border-radius:5px; font-size:.9em; }
+  article pre { background:var(--raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; box-shadow:var(--shadow); }
+  article pre code { background:none; padding:0; }
+  article table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.95em; display:block; overflow-x:auto; }
+  article th, article td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  article th { background:#f8fafc; }
+  .doclist { display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); margin-top:40px; font-size:14px; }
+  .prevnext { display:flex; justify-content:space-between; gap:16px; margin-top:24px; font-size:14px; }
+  footer.site { color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="row">
+      <a class="brand" href="https://atlas.aziro.com/"><img class="brand-logo" src="../../assets/atlas-mark.svg" alt="" width="29" height="24"><span class="brand-word">ATLAS</span></a>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://atlas.aziro.com/">Home</a> / <a href="https://atlas.aziro.com/docs/">Docs</a> / Installation</nav>
+      <a class="open-app" href="https://atlas.aziro.com/#docs/installation">Open interactive docs →</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <article>
+<h1>Installation</h1>
+<p>Atlas ships through five channels that all install the same native binary. Pick the channel that matches how you manage software on the target machine:</p>
+<table><thead><tr><th>Channel</th><th>Best for</th><th>Platforms</th></tr></thead><tbody><tr><td>Homebrew</td><td>macOS/Linux workstations; managed upgrades</td><td>macOS/Linux amd64 and arm64</td></tr><tr><td>npm (public registry)</td><td>Node toolchains, workstations, and public CI</td><td>macOS/Linux x64 and arm64; Windows x64</td></tr><tr><td>npm (GitHub Packages)</td><td>Organization CI that already uses GitHub Packages</td><td>macOS/Linux x64 and arm64; Windows x64</td></tr><tr><td>Release archive</td><td>Air-gapped hosts, exact-version pinning, Windows</td><td>macOS/Linux amd64 and arm64; Windows amd64</td></tr><tr><td>Linux package</td><td>Fleet management with <code>.deb</code>/<code>.rpm</code>/<code>.apk</code></td><td>amd64 and arm64</td></tr></tbody></table>
+<h2>Homebrew (macOS and Linux)</h2>
+<p>Use Homebrew when you want the shortest path and automatic upgrades alongside your other tooling.</p>
+<pre><code>brew install --cask aziron-ai/atlas/atlas
+atlas version</code></pre>
+<p>Homebrew names fully qualified casks as <code>&lt;owner&gt;/&lt;tap&gt;/&lt;cask&gt;</code>. The repository <code>aziron-ai/homebrew-atlas</code> becomes the tap <code>aziron-ai/atlas</code>; the cask and the installed executable are both named <code>atlas</code>.</p>
+<h2>npm (public registry)</h2>
+<p>Use npm when Atlas should install through an existing Node toolchain or CI pipeline. The public package needs no registry configuration or GitHub token:</p>
+<pre><code>npm install -g @aziron/atlas
+atlas version</code></pre>
+<p>Pin an exact version for reproducible environments:</p>
+<pre><code>npm install -g @aziron/atlas@0.1.55</code></pre>
+<h3>Installing a Binary You Already Have</h3>
+<p>Offline, behind a TLS-intercepting proxy, or with a binary you built or verified yourself, point <code>ATLAS_BINARY</code> at it:</p>
+<pre><code>ATLAS_BINARY=/absolute/path/to/atlas npm install -g @aziron/atlas</code></pre>
+<p><strong>Since 0.1.55</strong> postinstall honours it. It checks that the path exists, is a file, is executable, and that <code>atlas version</code> prints an Atlas version line within 30 seconds, then copies the binary into the package, replacing any earlier copy. It makes no request to the release host and never falls back to a download: an invalid path fails the install with a message that names the problem. A relative path resolves against the directory you ran <code>npm</code> from. <code>ATLAS_SKIP_DOWNLOAD=1</code> makes postinstall do nothing and takes precedence over <code>ATLAS_BINARY</code>. <code>checksums.txt</code> covers the release archives, not a binary you supply, so verify that binary yourself (<a href="https://github.com/aziron-ai/atlas/issues/151">#151</a>).</p>
+<h3>GitHub Packages alternative</h3>
+<p>Atlas is also published to GitHub Packages as <code>@aziron-ai/atlas</code>. Use this coordinate when organization CI already authenticates to GitHub Packages. Point the <code>@aziron-ai</code> scope at GitHub and use a token with <code>read:packages</code>:</p>
+<pre><code>npm config set @aziron-ai:registry https://npm.pkg.github.com
+npm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN
+npm install -g @aziron-ai/atlas
+atlas version</code></pre>
+<pre><code>npm install -g @aziron-ai/atlas@0.1.55</code></pre>
+<p>Both npm coordinates install the same wrapper and native Atlas binary for the current platform. If you do not need npm specifically, Homebrew is the simpler path on macOS and Linux.</p>
+<h2>Release Archives</h2>
+<p>Use a release archive when no package manager is available, on air-gapped hosts, or when you need to pin and checksum exact bytes. Choose the current version and platform from <a href="https://github.com/aziron-ai/atlas/releases/latest">GitHub Releases</a>:</p>
+<pre><code>VERSION=0.1.55
+OS=darwin       # darwin or linux
+ARCH=arm64      # arm64 or amd64
+ASSET=&quot;atlas_${VERSION}_${OS}_${ARCH}.tar.gz&quot;
+BASE=&quot;https://github.com/aziron-ai/atlas/releases/download/v${VERSION}&quot;
+
+curl -fLO &quot;$BASE/$ASSET&quot;
+curl -fLO &quot;$BASE/checksums.txt&quot;
+grep &quot; $ASSET\$&quot; checksums.txt | shasum -a 256 -c -
+tar -xzf &quot;$ASSET&quot;
+sudo install -m 0755 atlas /usr/local/bin/atlas
+atlas version</code></pre>
+<p>On Linux, replace the checksum command with <code>sha256sum -c -</code> when available.</p>
+<h3>Windows</h3>
+<p>Each release also includes a Windows amd64 archive. Download it from the same release page, extract the <code>atlas.exe</code> executable, and add its directory to <code>PATH</code>. Alternatively, the npm channel above supports Windows x64.</p>
+<h2>Native Linux Packages</h2>
+<p>Use native packages when your fleet is managed through a distribution package manager. Each release includes <code>.deb</code>, <code>.rpm</code>, and <code>.apk</code> packages for amd64 and arm64. Download the matching package from the release page, then install:</p>
+<pre><code># Debian or Ubuntu
+sudo dpkg -i atlas_0.1.55_linux_amd64.deb
+
+# Fedora or RHEL
+sudo rpm -U atlas_0.1.55_linux_amd64.rpm
+
+# Alpine
+sudo apk add --allow-untrusted atlas_0.1.55_linux_amd64.apk</code></pre>
+<h2>Post-Install: Assistant Bootstrap</h2>
+<p>Homebrew and npm installations run <code>atlas bootstrap</code> after install. Bootstrap registers Atlas as an MCP server and installs the atlas-first skill and CLAUDE.md directive for every detected assistant (Claude desktop and CLI, Codex, Copilot, Cursor, Gemini). It is idempotent — safe to run repeatedly and from a package post-install hook. Inspect the proposed changes at any time without writing anything:</p>
+<pre><code>atlas bootstrap --dry-run</code></pre>
+<p>To prevent the npm post-install bootstrap in managed environments:</p>
+<pre><code>ATLAS_SKIP_BOOTSTRAP=1 npm install -g @aziron/atlas</code></pre>
+<p>Archive and Linux-package installs do not configure assistants automatically; run <code>atlas bootstrap</code> yourself when you want them connected.</p>
+<h2>PATH Note</h2>
+<p>Assistants launch Atlas by resolving <code>atlas</code> from <code>PATH</code>, so the binary must be reachable from a login shell — not only your current session. Homebrew and the Linux packages handle this; for archives, <code>/usr/local/bin</code> (used above) is on <code>PATH</code> by default on most systems. For npm installs, ensure npm's global bin directory is on <code>PATH</code>.</p>
+<h2>Verify the Installation</h2>
+<p>Verification confirms three distinct things: the binary is on <code>PATH</code>, it runs, and it is the same binary your assistants will launch.</p>
+<pre><code>command -v atlas
+atlas version
+atlas doctor --verify atlas</code></pre>
+<p><code>atlas doctor</code> reports upgrade health and schema/index contract state; <code>--verify atlas</code> additionally checks for binary drift — whether the <code>atlas</code> on <code>PATH</code> (what assistants launch via <code>command:&quot;atlas&quot;</code>) matches the running binary. Drift typically means an old install shadows the new one earlier on <code>PATH</code>.</p>
+<p>Continue with <a href="../getting-started/">Getting Started</a>, or read <a href="../concepts/">Core Concepts</a> for the model behind the commands.</p>
+    </article>
+    <nav class="prevnext">
+      <span><a href="../getting-started/">← Getting Started</a></span>
+      <span><a href="../concepts/">Core Concepts →</a></span>
+    </nav>
+    <nav class="doclist" aria-label="All documentation">
+        <a href="../tour/">What Atlas Does</a>
+        <a href="../getting-started/">Getting Started</a>
+        <a href="../installation/">Installation</a>
+        <a href="../concepts/">Core Concepts</a>
+        <a href="../dashboard/">The Dashboard</a>
+        <a href="../code-map/">Code Map and Graph</a>
+        <a href="../search-and-ask/">Search and Ask</a>
+        <a href="../workbench/">Ask Workbench</a>
+        <a href="../impact/">Impact and Review</a>
+        <a href="../history/">Change Lens and History</a>
+        <a href="../sources/">Connected Sources</a>
+        <a href="../observe/">Observe</a>
+        <a href="../skills/">Skills and Automations</a>
+        <a href="../assistants/">AI Assistant Setup</a>
+        <a href="../mcp/">MCP Tools</a>
+        <a href="../cli/">CLI Reference</a>
+        <a href="../indexing/">Indexing and Reindexing</a>
+        <a href="../service/">Dashboard and HTTP API</a>
+        <a href="../configuration/">Configuration</a>
+        <a href="../teams/">One Atlas for a Team</a>
+        <a href="../upgrade/">Upgrade and Uninstall</a>
+        <a href="../troubleshooting/">Troubleshooting</a>
+        <a href="../privacy/">Privacy and Data Handling</a>
+        <a href="../languages/">Supported Languages and Formats</a>
+        <a href="../benchmarks/">Benchmarks and Methodology</a>
+    </nav>
+    <footer class="site">
+      Atlas v0.1.55 · <a href="https://atlas.aziro.com/">product site</a> · <a href="https://github.com/aziron-ai/atlas">GitHub</a> · <a href="https://github.com/aziron-ai/atlas/wiki">Wiki</a>.
+      This page mirrors the interactive documentation for search engines and AI assistants.
+    </footer>
+  </main>
+</body>
+</html>

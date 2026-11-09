@@ -1,0 +1,2547 @@
+{
+  "generatedAt": "2026-07-01T05:45:43.071Z",
+  "benchmarkGeneratedAt": "2026-07-01T05:45:43.071Z",
+  "scope": "Final pass over Atlas benchmark artifacts: supported-language fixture sweep for every parser.Supported family, public-repo matrix artifacts against Graphify plus native SCIP/LSP tools, live language artifacts against Graphify plus language-specific native/proxy baselines, and public three-repo validation metadata.",
+  "summary": {
+    "coreLanguages": 7,
+    "liveArtifacts": 36,
+    "liveCodeLanguages": 34,
+    "structuredLiveArtifacts": 2,
+    "totalCodeLanguageSurfaces": 41,
+    "strict10x": 36,
+    "strict10xArtifacts": 36,
+    "threeRepoValidated": 35,
+    "threeRepoValidationPending": 1,
+    "pendingCodeLanguages": [],
+    "publicRepoValidationHarness": true,
+    "publicRepoValidationWarnings": 34,
+    "validationRemeasurementHarness": true,
+    "validationRemeasurementRepoRows": 105,
+    "validationRemeasurementAtlasReplayReadyRows": 105,
+    "validationRemeasurementGraphifyReplayReadyRows": 105,
+    "validationRemeasurementNativeCandidateRows": 105,
+    "validationRemeasurementNativeCandidateExecutableRows": 21,
+    "validationRemeasurementNativeReadyRows": 0,
+    "validationRemeasurementFullReadyArtifacts": 0,
+    "validationRemeasurementNativePlaceholderRows": 69,
+    "validationRemeasurementNativeEphemeralHelperRows": 51,
+    "validationRemeasurementProxyOrDetectorArtifacts": 14,
+    "precisionEvidenceHarness": true,
+    "precisionNameLocationArtifacts": 32,
+    "precisionKindCountOnlyArtifacts": 4,
+    "precisionCountOnlyArtifacts": 0,
+    "precisionMatchedNameLocationRows": 161,
+    "precisionEquivalentRows": 199,
+    "precisionValidationKindRows": 81,
+    "precisionNativeMetricKindArtifacts": 27,
+    "callEdgeEvidenceHarness": true,
+    "callEdgeCoreReceiverTypedLanguages": 7,
+    "callEdgeCoreLanguages": 7,
+    "callEdgeCoreAtlasCalls": 21254,
+    "callEdgeCoreReceiverTypedCalls": 5016,
+    "callEdgeCoreReceiverTypedRatio": 0.236,
+    "callEdgeLiveArtifactsWithAtlasCalls": 36,
+    "callEdgeLiveArtifacts": 36,
+    "callEdgeLiveReceiverTypedArtifacts": 0,
+    "callEdgeLiveAtlasCalls": 258529,
+    "graphifySupportHarness": true,
+    "graphifyDeterministicDiscoveryRows": 39,
+    "graphifyDetectorOnlyExtensions": 3,
+    "graphifyLiveDeterministicArtifacts": 33,
+    "graphifyLiveDetectorOnlyArtifacts": 3,
+    "graphifyQueryRows": 224,
+    "graphifyEquivalentRows": 199,
+    "graphifyMissingRows": 25,
+    "graphifyVersion": "graphifyy 0.8.49",
+    "graphifyDispatchCount": 89,
+    "detectorOnlyLanguages": [
+      ".ejs",
+      ".ets",
+      ".r"
+    ],
+    "supportedFamilies": 64,
+    "supportedAtlasOk": 64,
+    "supportedFixtureOracleRows": 62,
+    "supportedFixtureRecall100": 43,
+    "supportedFixturePrecision100": 39,
+    "supportedFixtureExact": 36,
+    "supportedGraphifySupport": {
+      "detector_only": 3,
+      "deterministic": 40,
+      "unsupported": 21
+    },
+    "supportedNativeBaselineStatus": {
+      "missing": 42,
+      "ok": 22
+    }
+  },
+  "groundTruthCloseness": {
+    "statement": "Coverage ratios prove Atlas produced at least as many definitions as the selected independent denominator for that scoped benchmark. They do not by themselves prove precision, complete call-edge recall, or semantic equivalence across all repos.",
+    "lowRiskLiveLanguages": [
+      "astro",
+      "csharp",
+      "fortran",
+      "groovy",
+      "julia",
+      "kotlin",
+      "lua",
+      "objc",
+      "php",
+      "powershell",
+      "ruby",
+      "rust",
+      "scala",
+      "sql",
+      "svelte",
+      "swift",
+      "terraform",
+      "vue",
+      "zig"
+    ],
+    "weakOrProxyTruthRows": [
+      {
+        "language": "apex",
+        "nativeTool": "apex-source-counter",
+        "risk": "medium",
+        "detectorOnly": false,
+        "coverageRatio": 1.215,
+        "validationPassed": true,
+        "minValidationCoverage": 1.0607,
+        "reason": "Scriptable source-counter proxy rather than a full compiler/LSP/SCIP truth source."
+      },
+      {
+        "language": "bash",
+        "nativeTool": "bash-n",
+        "risk": "medium",
+        "detectorOnly": false,
+        "coverageRatio": 1.044,
+        "validationPassed": true,
+        "minValidationCoverage": 1,
+        "reason": "Atlas counts a wider code-target surface than the native denominator; inspect scope before treating the ratio as precision."
+      },
+      {
+        "language": "blade",
+        "nativeTool": "blade-directive-counter",
+        "risk": "medium",
+        "detectorOnly": false,
+        "coverageRatio": 1.0028,
+        "validationPassed": true,
+        "minValidationCoverage": 1.0121,
+        "reason": "Scriptable source-counter proxy rather than a full compiler/LSP/SCIP truth source."
+      },
+      {
+        "language": "byond",
+        "nativeTool": "byond-source-counter",
+        "risk": "medium",
+        "detectorOnly": false,
+        "coverageRatio": 1.2311,
+        "validationPassed": true,
+        "minValidationCoverage": 1,
+        "reason": "Scriptable source-counter proxy rather than a full compiler/LSP/SCIP truth source."
+      },
+      {
+        "language": "cuda",
+        "nativeTool": "cuda-source-counter",
+        "risk": "medium",
+        "detectorOnly": false,
+        "coverageRatio": 1.3333,
+        "validationPassed": true,
+        "minValidationCoverage": 2.5753,
+        "reason": "Scriptable source-counter proxy rather than a full compiler/LSP/SCIP truth source."
+      },
+      {
+        "language": "delphi",
+        "nativeTool": "delphi-lazarus-source-counter",
+        "risk": "medium",
+        "detectorOnly": false,
+        "coverageRatio": 3.4626,
+        "validationPassed": true,
+        "minValidationCoverage": 1,
+        "reason": "Scriptable source-counter proxy rather than a full compiler/LSP/SCIP truth source."
+      },
+      {
+        "language": "dotnet",
+        "nativeTool": "python-dotnet-project",
+        "risk": "medium",
+        "detectorOnly": false,
+        "coverageRatio": 17.235,
+        "validationPassed": true,
+        "minValidationCoverage": 1,
+        "reason": "Atlas counts a wider code-target surface than the native denominator; inspect scope before treating the ratio as precision."
+      },
+      {
+        "language": "ejs",
+        "nativeTool": "ejs-template-counter",
+        "risk": "high",
+        "detectorOnly": true,
+        "coverageRatio": 2.278,
+        "validationPassed": true,
+        "minValidationCoverage": 1,
+        "reason": "Graphify detector-only/source-counter proxy; weaker than a deterministic Graphify extractor and native compiler/LSP truth."
+      },
+      {
+        "language": "elixir",
+        "nativeTool": "tree-sitter-elixir module/function proxy",
+        "risk": "medium",
+        "detectorOnly": false,
+        "coverageRatio": 1.0116,
+        "validationPassed": true,
+        "minValidationCoverage": 1,
+        "reason": "Atlas counts a wider code-target surface than the native denominator; inspect scope before treating the ratio as precision."
+      },
+      {
+        "language": "ets",
+        "nativeTool": "ets-source-counter",
+        "risk": "high",
+        "detectorOnly": true,
+        "coverageRatio": 1.0523,
+        "validationPassed": true,
+        "minValidationCoverage": 1.0229,
+        "reason": "Graphify detector-only/source-counter proxy; weaker than a deterministic Graphify extractor and native compiler/LSP truth."
+      },
+      {
+        "language": "json",
+        "nativeTool": "python-json",
+        "risk": "structured",
+        "detectorOnly": false,
+        "coverageRatio": 1.483,
+        "validationPassed": false,
+        "minValidationCoverage": null,
+        "reason": "Structured artifact, not a code-parser ground-truth row; keep separate from regex-language completion claims."
+      },
+      {
+        "language": "markdown",
+        "nativeTool": "markdown-it-py",
+        "risk": "structured",
+        "detectorOnly": false,
+        "coverageRatio": 1.026,
+        "validationPassed": true,
+        "minValidationCoverage": 1,
+        "reason": "Structured artifact, not a code-parser ground-truth row; keep separate from regex-language completion claims."
+      },
+      {
+        "language": "pascal",
+        "nativeTool": "pascal-regex-counter",
+        "risk": "medium",
+        "detectorOnly": false,
+        "coverageRatio": 1.0067,
+        "validationPassed": true,
+        "minValidationCoverage": 1.21,
+        "reason": "Scriptable source-counter proxy rather than a full compiler/LSP/SCIP truth source."
+      },
+      {
+        "language": "r",
+        "nativeTool": "r-source-counter",
+        "risk": "high",
+        "detectorOnly": true,
+        "coverageRatio": 1.7531,
+        "validationPassed": true,
+        "minValidationCoverage": 1.6067,
+        "reason": "Graphify detector-only/source-counter proxy; weaker than a deterministic Graphify extractor and native compiler/LSP truth."
+      },
+      {
+        "language": "razor",
+        "nativeTool": "razor-directive-counter",
+        "risk": "medium",
+        "detectorOnly": false,
+        "coverageRatio": 5.101,
+        "validationPassed": true,
+        "minValidationCoverage": 1,
+        "reason": "Scriptable source-counter proxy rather than a full compiler/LSP/SCIP truth source."
+      },
+      {
+        "language": "verilog",
+        "nativeTool": "tree-sitter-systemverilog module/package/function proxy",
+        "risk": "medium",
+        "detectorOnly": false,
+        "coverageRatio": 1.5484,
+        "validationPassed": true,
+        "minValidationCoverage": 1,
+        "reason": "Atlas counts a wider code-target surface than the native denominator; inspect scope before treating the ratio as precision."
+      }
+    ],
+    "coreMatrix": [
+      {
+        "language": "go",
+        "nativeTools": [
+          {
+            "name": "scip-go",
+            "status": "ok",
+            "ok": true
+          },
+          {
+            "name": "gopls",
+            "status": "ok",
+            "ok": true
+          }
+        ],
+        "graphifyOk": true,
+        "equivalentRows": 4,
+        "graphifyMissingRows": 0,
+        "tokenRatio": 18.95,
+        "latencyRatio": 7.18
+      },
+      {
+        "language": "python",
+        "nativeTools": [
+          {
+            "name": "scip-python",
+            "status": "ok",
+            "ok": true
+          },
+          {
+            "name": "pyright",
+            "status": "ok",
+            "ok": true
+          }
+        ],
+        "graphifyOk": true,
+        "equivalentRows": 3,
+        "graphifyMissingRows": 0,
+        "tokenRatio": 24.31,
+        "latencyRatio": 7.51
+      },
+      {
+        "language": "javascript",
+        "nativeTools": [
+          {
+            "name": "scip-typescript",
+            "status": "ok",
+            "ok": true
+          },
+          {
+            "name": "tsserver",
+            "status": "ok",
+            "ok": true
+          }
+        ],
+        "graphifyOk": true,
+        "equivalentRows": 3,
+        "graphifyMissingRows": 1,
+        "tokenRatio": 8.24,
+        "latencyRatio": 6.54
+      },
+      {
+        "language": "typescript",
+        "nativeTools": [
+          {
+            "name": "scip-typescript",
+            "status": "ok",
+            "ok": true
+          },
+          {
+            "name": "tsserver",
+            "status": "ok",
+            "ok": true
+          }
+        ],
+        "graphifyOk": true,
+        "equivalentRows": 3,
+        "graphifyMissingRows": 1,
+        "tokenRatio": 12.06,
+        "latencyRatio": 6.89
+      },
+      {
+        "language": "java",
+        "nativeTools": [
+          {
+            "name": "scip-java",
+            "status": "ok",
+            "ok": true
+          },
+          {
+            "name": "jdtls",
+            "status": "ok",
+            "ok": true
+          }
+        ],
+        "graphifyOk": true,
+        "equivalentRows": 2,
+        "graphifyMissingRows": 0,
+        "tokenRatio": 21.4,
+        "latencyRatio": 7.99
+      },
+      {
+        "language": "c",
+        "nativeTools": [
+          {
+            "name": "clangd",
+            "status": "ok",
+            "ok": true
+          }
+        ],
+        "graphifyOk": true,
+        "equivalentRows": 4,
+        "graphifyMissingRows": 0,
+        "tokenRatio": 33.5,
+        "latencyRatio": 7.53
+      },
+      {
+        "language": "cpp",
+        "nativeTools": [
+          {
+            "name": "clangd",
+            "status": "ok",
+            "ok": true
+          }
+        ],
+        "graphifyOk": true,
+        "equivalentRows": 4,
+        "graphifyMissingRows": 0,
+        "tokenRatio": 11.85,
+        "latencyRatio": 8.73
+      }
+    ],
+    "nearParityValidationRows": [
+      {
+        "language": "astro",
+        "repo": "https://github.com/cssninjaStudio/krypton",
+        "coverageRatio": 1,
+        "atlasDefinitions": 46,
+        "nativeDefinitions": 46
+      },
+      {
+        "language": "bash",
+        "repo": "https://github.com/nvm-sh/nvm",
+        "coverageRatio": 1,
+        "atlasDefinitions": 158,
+        "nativeDefinitions": 158
+      },
+      {
+        "language": "bash",
+        "repo": "https://github.com/rbenv/rbenv",
+        "coverageRatio": 1,
+        "atlasDefinitions": 12,
+        "nativeDefinitions": 12
+      },
+      {
+        "language": "bash",
+        "repo": "https://github.com/pyenv/pyenv",
+        "coverageRatio": 1,
+        "atlasDefinitions": 36,
+        "nativeDefinitions": 36
+      },
+      {
+        "language": "byond",
+        "repo": "https://github.com/tgstation/tgstation",
+        "coverageRatio": 1,
+        "atlasDefinitions": 8874,
+        "nativeDefinitions": 8874
+      },
+      {
+        "language": "byond",
+        "repo": "https://github.com/goonstation/goonstation",
+        "coverageRatio": 1,
+        "atlasDefinitions": 810,
+        "nativeDefinitions": 810
+      },
+      {
+        "language": "byond",
+        "repo": "https://github.com/ParadiseSS13/Paradise",
+        "coverageRatio": 1,
+        "atlasDefinitions": 8198,
+        "nativeDefinitions": 8198
+      },
+      {
+        "language": "delphi",
+        "repo": "https://github.com/fpc/Lazarus",
+        "coverageRatio": 1,
+        "atlasDefinitions": 11308,
+        "nativeDefinitions": 11308
+      },
+      {
+        "language": "delphi",
+        "repo": "https://github.com/transmission-remote-gui/transgui",
+        "coverageRatio": 1,
+        "atlasDefinitions": 1460,
+        "nativeDefinitions": 1460
+      },
+      {
+        "language": "delphi",
+        "repo": "https://github.com/castle-engine/castle-engine",
+        "coverageRatio": 1,
+        "atlasDefinitions": 2429,
+        "nativeDefinitions": 2429
+      },
+      {
+        "language": "dotnet",
+        "repo": "https://github.com/Far0n/xgbfi",
+        "coverageRatio": 1,
+        "atlasDefinitions": 2,
+        "nativeDefinitions": 2
+      },
+      {
+        "language": "dotnet",
+        "repo": "https://github.com/Viladoman/StructLayout",
+        "coverageRatio": 1,
+        "atlasDefinitions": 13,
+        "nativeDefinitions": 13
+      },
+      {
+        "language": "dotnet",
+        "repo": "https://github.com/b2developer/MonopolyNEAT",
+        "coverageRatio": 1,
+        "atlasDefinitions": 4,
+        "nativeDefinitions": 4
+      },
+      {
+        "language": "ejs",
+        "repo": "https://github.com/aws-samples/eb-node-express-sample",
+        "coverageRatio": 1,
+        "atlasDefinitions": 1,
+        "nativeDefinitions": 1
+      },
+      {
+        "language": "ejs",
+        "repo": "https://github.com/ActiveCampaign/PactMaker",
+        "coverageRatio": 1,
+        "atlasDefinitions": 14,
+        "nativeDefinitions": 14
+      },
+      {
+        "language": "ejs",
+        "repo": "https://github.com/codemistic/HacktoberFest",
+        "coverageRatio": 1,
+        "atlasDefinitions": 2,
+        "nativeDefinitions": 2
+      },
+      {
+        "language": "elixir",
+        "repo": "https://github.com/phoenixframework/phoenix",
+        "coverageRatio": 1,
+        "atlasDefinitions": 1642,
+        "nativeDefinitions": 1642
+      },
+      {
+        "language": "elixir",
+        "repo": "https://github.com/elixir-plug/plug",
+        "coverageRatio": 1,
+        "atlasDefinitions": 909,
+        "nativeDefinitions": 909
+      },
+      {
+        "language": "elixir",
+        "repo": "https://github.com/elixir-ecto/ecto",
+        "coverageRatio": 1,
+        "atlasDefinitions": 2725,
+        "nativeDefinitions": 2725
+      },
+      {
+        "language": "fortran",
+        "repo": "https://github.com/fortran-lang/stdlib",
+        "coverageRatio": 1,
+        "atlasDefinitions": 364,
+        "nativeDefinitions": 364
+      }
+    ],
+    "validationRemeasurement": {
+      "statement": "The validation remeasurement manifest audits replay readiness for public validation rows. It proves pinned Atlas and Graphify replay commands can be reconstructed, but it does not execute native/proxy counters unless executable per-repo native commands are present in the artifacts.",
+      "manifest": {
+        "generatedAt": "2026-06-30T19:52:49.769Z",
+        "summary": {
+          "artifacts": 36,
+          "codeArtifacts": 34,
+          "structuredArtifacts": 2,
+          "validationArtifacts": 35,
+          "repoRows": 105,
+          "codeRepoRows": 102,
+          "pinnedRepoRows": 105,
+          "atlasReplayReadyRows": 105,
+          "graphifyReplayReadyRows": 105,
+          "nativeRemeasurementCandidateRows": 105,
+          "nativeRemeasurementCandidateExecutableRows": 21,
+          "nativeRemeasurementReadyRows": 0,
+          "fullRemeasurementReadyRows": 0,
+          "fullRemeasurementReadyArtifacts": 0,
+          "nativeCandidatePlaceholderRows": 69,
+          "nativeCandidateEphemeralHelperRows": 51,
+          "proxyOrDetectorCodeArtifacts": 14,
+          "warnings": 35,
+          "errors": 0,
+          "passed": true
+        },
+        "blockers": [
+          {
+            "language": "apex",
+            "toolClass": "source-counter-proxy",
+            "risk": "medium",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_or_proxy_remeasurement_command_not_recorded",
+              "proxy_denominator_not_full_semantic_truth"
+            ]
+          },
+          {
+            "language": "astro",
+            "toolClass": "parser-library-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "bash",
+            "toolClass": "syntax-checker-proxy",
+            "risk": "medium",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_unexpanded_file_list",
+              "native_or_proxy_remeasurement_command_not_recorded",
+              "proxy_denominator_not_full_semantic_truth"
+            ]
+          },
+          {
+            "language": "blade",
+            "toolClass": "source-counter-proxy",
+            "risk": "medium",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_or_proxy_remeasurement_command_not_recorded",
+              "proxy_denominator_not_full_semantic_truth"
+            ]
+          },
+          {
+            "language": "byond",
+            "toolClass": "source-counter-proxy",
+            "risk": "medium",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_or_proxy_remeasurement_command_not_recorded",
+              "proxy_denominator_not_full_semantic_truth"
+            ]
+          },
+          {
+            "language": "csharp",
+            "toolClass": "compiler-or-lsp-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_inline_note",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "cuda",
+            "toolClass": "source-counter-proxy",
+            "risk": "medium",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_or_proxy_remeasurement_command_not_recorded",
+              "proxy_denominator_not_full_semantic_truth"
+            ]
+          },
+          {
+            "language": "dart",
+            "toolClass": "tree-sitter-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "delphi",
+            "toolClass": "source-counter-proxy",
+            "risk": "medium",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_or_proxy_remeasurement_command_not_recorded",
+              "proxy_denominator_not_full_semantic_truth"
+            ]
+          },
+          {
+            "language": "dotnet",
+            "toolClass": "scope-proxy",
+            "risk": "medium",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 3,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_or_proxy_remeasurement_command_not_recorded",
+              "proxy_denominator_not_full_semantic_truth"
+            ]
+          },
+          {
+            "language": "ejs",
+            "toolClass": "graphify-detector-only-proxy",
+            "risk": "high",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 3,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "graphify_detector_only_or_weak_proxy_truth",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "elixir",
+            "toolClass": "scope-proxy",
+            "risk": "medium",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded",
+              "proxy_denominator_not_full_semantic_truth"
+            ]
+          },
+          {
+            "language": "ets",
+            "toolClass": "graphify-detector-only-proxy",
+            "risk": "high",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "graphify_detector_only_or_weak_proxy_truth",
+              "native_command_contains_placeholder",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "fortran",
+            "toolClass": "tree-sitter-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "groovy",
+            "toolClass": "tree-sitter-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "json",
+            "toolClass": "structured-format",
+            "risk": "structured",
+            "repoCount": 0,
+            "atlasReplayReadyRows": 0,
+            "graphifyReplayReadyRows": 0,
+            "nativeRemeasurementCandidateRows": 0,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "no_public_repo_validation_rows",
+              "structured_format_outside_code_parser_gate"
+            ]
+          },
+          {
+            "language": "julia",
+            "toolClass": "tree-sitter-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "kotlin",
+            "toolClass": "tree-sitter-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "lua",
+            "toolClass": "parser-library-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 3,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "markdown",
+            "toolClass": "structured-format",
+            "risk": "structured",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded",
+              "structured_format_outside_code_parser_gate"
+            ]
+          },
+          {
+            "language": "objc",
+            "toolClass": "tree-sitter-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "pascal",
+            "toolClass": "source-counter-proxy",
+            "risk": "medium",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_or_proxy_remeasurement_command_not_recorded",
+              "proxy_denominator_not_full_semantic_truth"
+            ]
+          },
+          {
+            "language": "php",
+            "toolClass": "parser-library-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 3,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "powershell",
+            "toolClass": "parser-library-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 3,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "razor",
+            "toolClass": "source-counter-proxy",
+            "risk": "medium",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 3,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_or_proxy_remeasurement_command_not_recorded",
+              "proxy_denominator_not_full_semantic_truth"
+            ]
+          },
+          {
+            "language": "ruby",
+            "toolClass": "parser-library-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "rust",
+            "toolClass": "compiler-or-lsp-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_unexpanded_file_list",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "r",
+            "toolClass": "graphify-detector-only-proxy",
+            "risk": "high",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "graphify_detector_only_or_weak_proxy_truth",
+              "native_command_contains_placeholder",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "scala",
+            "toolClass": "tree-sitter-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "sql",
+            "toolClass": "parser-library-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "svelte",
+            "toolClass": "parser-library-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 3,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "swift",
+            "toolClass": "compiler-or-lsp-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "terraform",
+            "toolClass": "parser-library-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "verilog",
+            "toolClass": "scope-proxy",
+            "risk": "medium",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded",
+              "proxy_denominator_not_full_semantic_truth"
+            ]
+          },
+          {
+            "language": "vue",
+            "toolClass": "parser-library-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          },
+          {
+            "language": "zig",
+            "toolClass": "tree-sitter-baseline",
+            "risk": "low",
+            "repoCount": 3,
+            "atlasReplayReadyRows": 3,
+            "graphifyReplayReadyRows": 3,
+            "nativeRemeasurementCandidateRows": 3,
+            "nativeRemeasurementCandidateExecutableRows": 0,
+            "nativeRemeasurementReadyRows": 0,
+            "blockers": [
+              "full_symbol_name_kind_location_sets_not_persisted",
+              "native_command_contains_placeholder",
+              "native_command_uses_ephemeral_helper_path",
+              "native_or_proxy_remeasurement_command_not_recorded"
+            ]
+          }
+        ]
+      }
+    },
+    "precisionEvidence": {
+      "statement": "The precision manifest is an artifact-level audit of what the raw benchmark JSON can prove today: sampled query rows with matching symbol names and locations, native-vs-Atlas kind-count maps, or count-only gaps. It is not a full 99% precision oracle.",
+      "manifest": {
+        "generatedAt": "2026-06-30T19:52:49.947Z",
+        "summary": {
+          "artifacts": 36,
+          "sampledNameLocationArtifacts": 32,
+          "kindCountOnlyArtifacts": 4,
+          "countOnlyArtifacts": 0,
+          "equivalentRows": 199,
+          "matchedNameLocationRows": 161,
+          "validationRows": 105,
+          "validationKindRows": 81,
+          "nativeMetricKindArtifacts": 27,
+          "passed": true
+        },
+        "gaps": [
+          {
+            "language": "blade",
+            "status": "kind-count-only",
+            "matchedNameLocationRows": 0,
+            "equivalentRows": 6,
+            "validationKindRows": 3,
+            "validationRows": 3,
+            "nativeMetricKindEvidence": {
+              "hasDefinitionCounts": true,
+              "hasExpandedDefinitionCounts": false,
+              "definitionCounts": {
+                "template": 303,
+                "include": 528,
+                "layout": 102,
+                "section": 130,
+                "slot": 16,
+                "component": 11,
+                "handler": 0
+              },
+              "expandedDefinitionCounts": null
+            },
+            "gap": "No comparable query row currently proves both Atlas and Graphify returned the same symbol name with source locations; kind-count evidence is present."
+          },
+          {
+            "language": "dart",
+            "status": "kind-count-only",
+            "matchedNameLocationRows": 0,
+            "equivalentRows": 6,
+            "validationKindRows": 0,
+            "validationRows": 3,
+            "nativeMetricKindEvidence": {
+              "hasDefinitionCounts": true,
+              "hasExpandedDefinitionCounts": true,
+              "definitionCounts": {
+                "type": 28,
+                "function": 89,
+                "constructor": 30,
+                "getter": 20,
+                "setter": 11,
+                "typedef": 2
+              },
+              "expandedDefinitionCounts": {
+                "type": 28,
+                "function": 89,
+                "constructor": 30,
+                "getter": 20,
+                "setter": 11,
+                "typedef": 2,
+                "variable": 58
+              }
+            },
+            "gap": "No comparable query row currently proves both Atlas and Graphify returned the same symbol name with source locations; kind-count evidence is present."
+          },
+          {
+            "language": "ets",
+            "status": "kind-count-only",
+            "matchedNameLocationRows": 0,
+            "equivalentRows": 5,
+            "validationKindRows": 3,
+            "validationRows": 3,
+            "nativeMetricKindEvidence": {
+              "hasDefinitionCounts": true,
+              "hasExpandedDefinitionCounts": false,
+              "definitionCounts": {
+                "type": 20,
+                "function": 0,
+                "method": 69,
+                "constructor": 4,
+                "variable": 60
+              },
+              "expandedDefinitionCounts": null
+            },
+            "gap": "No comparable query row currently proves both Atlas and Graphify returned the same symbol name with source locations; kind-count evidence is present."
+          },
+          {
+            "language": "r",
+            "status": "kind-count-only",
+            "matchedNameLocationRows": 0,
+            "equivalentRows": 5,
+            "validationKindRows": 3,
+            "validationRows": 3,
+            "nativeMetricKindEvidence": {
+              "hasDefinitionCounts": true,
+              "hasExpandedDefinitionCounts": false,
+              "definitionCounts": {
+                "function": 1584,
+                "type": 133,
+                "variable": 1294
+              },
+              "expandedDefinitionCounts": null
+            },
+            "gap": "No comparable query row currently proves both Atlas and Graphify returned the same symbol name with source locations; kind-count evidence is present."
+          }
+        ]
+      }
+    },
+    "callEdgeEvidence": {
+      "statement": "The call-edge manifest audits what raw artifacts can prove today: receiver-typed call counts for the core matrix and call-count evidence for live artifacts. It does not prove receiver-type precision for live converted languages.",
+      "manifest": {
+        "generatedAt": "2026-06-30T19:52:50.142Z",
+        "summary": {
+          "coreLanguages": 7,
+          "coreReceiverTypedLanguages": 7,
+          "coreAtlasCalls": 21254,
+          "coreAtlasReceiverTypedCalls": 5016,
+          "coreAtlasReceiverTypedRatio": 0.236,
+          "liveArtifacts": 36,
+          "liveArtifactsWithAtlasCalls": 36,
+          "liveReceiverTypedArtifacts": 0,
+          "liveAtlasCalls": 258529,
+          "liveGraphifyCalls": 23248,
+          "passed": true
+        },
+        "liveGaps": [
+          {
+            "language": "apex",
+            "status": "calls-only",
+            "atlasCalls": 5006,
+            "graphifyCalls": 44,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "astro",
+            "status": "calls-only",
+            "atlasCalls": 50,
+            "graphifyCalls": 0,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "bash",
+            "status": "calls-only",
+            "atlasCalls": 102,
+            "graphifyCalls": 292,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "blade",
+            "status": "calls-only",
+            "atlasCalls": 4062,
+            "graphifyCalls": 0,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "byond",
+            "status": "calls-only",
+            "atlasCalls": 39076,
+            "graphifyCalls": 0,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "csharp",
+            "status": "calls-only",
+            "atlasCalls": 8113,
+            "graphifyCalls": 690,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "cuda",
+            "status": "calls-only",
+            "atlasCalls": 52,
+            "graphifyCalls": 2,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "dart",
+            "status": "calls-only",
+            "atlasCalls": 417,
+            "graphifyCalls": 0,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "delphi",
+            "status": "calls-only",
+            "atlasCalls": 65729,
+            "graphifyCalls": 10195,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "dotnet",
+            "status": "calls-only",
+            "atlasCalls": 8113,
+            "graphifyCalls": 693,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "ejs",
+            "status": "calls-only",
+            "atlasCalls": 669,
+            "graphifyCalls": 1,
+            "graphifyDetectorOnly": true,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "elixir",
+            "status": "calls-only",
+            "atlasCalls": 4783,
+            "graphifyCalls": null,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "ets",
+            "status": "calls-only",
+            "atlasCalls": 704,
+            "graphifyCalls": 0,
+            "graphifyDetectorOnly": true,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "fortran",
+            "status": "calls-only",
+            "atlasCalls": 4470,
+            "graphifyCalls": 58,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "groovy",
+            "status": "calls-only",
+            "atlasCalls": 3131,
+            "graphifyCalls": 358,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "json",
+            "status": "calls-only",
+            "atlasCalls": 359,
+            "graphifyCalls": 22,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "julia",
+            "status": "calls-only",
+            "atlasCalls": 1038,
+            "graphifyCalls": 70,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "kotlin",
+            "status": "calls-only",
+            "atlasCalls": 6285,
+            "graphifyCalls": 1096,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "lua",
+            "status": "calls-only",
+            "atlasCalls": 3347,
+            "graphifyCalls": 226,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "markdown",
+            "status": "calls-only",
+            "atlasCalls": 19,
+            "graphifyCalls": 1,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "objc",
+            "status": "calls-only",
+            "atlasCalls": 1828,
+            "graphifyCalls": 0,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "pascal",
+            "status": "calls-only",
+            "atlasCalls": 20943,
+            "graphifyCalls": 2187,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "php",
+            "status": "calls-only",
+            "atlasCalls": 5713,
+            "graphifyCalls": 169,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "powershell",
+            "status": "calls-only",
+            "atlasCalls": 804,
+            "graphifyCalls": 14,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "razor",
+            "status": "calls-only",
+            "atlasCalls": 2327,
+            "graphifyCalls": 103,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "ruby",
+            "status": "calls-only",
+            "atlasCalls": 3305,
+            "graphifyCalls": 737,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "rust",
+            "status": "calls-only",
+            "atlasCalls": 15805,
+            "graphifyCalls": 2657,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "r",
+            "status": "calls-only",
+            "atlasCalls": 16377,
+            "graphifyCalls": 0,
+            "graphifyDetectorOnly": true,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "scala",
+            "status": "calls-only",
+            "atlasCalls": 9157,
+            "graphifyCalls": 1161,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "sql",
+            "status": "calls-only",
+            "atlasCalls": 825,
+            "graphifyCalls": 0,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "svelte",
+            "status": "calls-only",
+            "atlasCalls": 3118,
+            "graphifyCalls": 114,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "swift",
+            "status": "calls-only",
+            "atlasCalls": 7224,
+            "graphifyCalls": 994,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "terraform",
+            "status": "calls-only",
+            "atlasCalls": 1078,
+            "graphifyCalls": 0,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "verilog",
+            "status": "calls-only",
+            "atlasCalls": 2656,
+            "graphifyCalls": null,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "vue",
+            "status": "calls-only",
+            "atlasCalls": 280,
+            "graphifyCalls": 2,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          },
+          {
+            "language": "zig",
+            "status": "calls-only",
+            "atlasCalls": 11564,
+            "graphifyCalls": 1362,
+            "graphifyDetectorOnly": false,
+            "note": "Raw live artifact exposes call counts but no receiver-type metric."
+          }
+        ]
+      }
+    },
+    "graphifySupport": {
+      "statement": "The Graphify support manifest separates deterministic extractor support from detector-only extension detection and sampled query rows with no Graphify equivalent.",
+      "manifest": {
+        "generatedAt": "2026-06-30T19:52:50.322Z",
+        "summary": {
+          "graphifyVersion": "graphifyy 0.8.49",
+          "dispatchCount": 89,
+          "deterministicDiscoveryRows": 39,
+          "detectorOnlyExtensions": 3,
+          "liveArtifacts": 36,
+          "liveDeterministicArtifacts": 33,
+          "liveDetectorOnlyArtifacts": 3,
+          "queryRows": 224,
+          "graphifyEquivalentRows": 199,
+          "graphifyMissingRows": 25,
+          "passed": true
+        },
+        "detectorOnly": [
+          {
+            "extension": ".ejs",
+            "language": "ejs",
+            "extractor": "detector only, no _DISPATCH extractor",
+            "artifact": "data/raw/GRAPHIFY_LANGUAGE_DISCOVERY.json"
+          },
+          {
+            "extension": ".ets",
+            "language": "ets",
+            "extractor": "detector only, no _DISPATCH extractor",
+            "artifact": "data/raw/GRAPHIFY_LANGUAGE_DISCOVERY.json"
+          },
+          {
+            "extension": ".r",
+            "language": "r",
+            "extractor": "detector only, no _DISPATCH extractor",
+            "artifact": "data/raw/GRAPHIFY_LANGUAGE_DISCOVERY.json"
+          }
+        ],
+        "liveDetectorOnly": [
+          {
+            "language": "ejs",
+            "artifact": "data/raw/LIVE_EJS_BENCHMARK.json",
+            "supportType": "detector-only",
+            "graphifyExtractor": "detector only, no _DISPATCH extractor",
+            "graphifyExtensions": ".ejs",
+            "graphifyDetectorOnly": true,
+            "totalQueryRows": 7,
+            "comparableRows": 1,
+            "graphifyEquivalentRows": 1,
+            "graphifyMissingRows": 6,
+            "atlasEquivalentRows": 7,
+            "graphifyMissingRatio": 0.8571,
+            "graphifyStatus": "ok",
+            "graphifyOk": true,
+            "note": "Graphify detects this extension but discovery reports no deterministic _DISPATCH extractor."
+          },
+          {
+            "language": "ets",
+            "artifact": "data/raw/LIVE_ETS_BENCHMARK.json",
+            "supportType": "detector-only",
+            "graphifyExtractor": "detector only, no _DISPATCH extractor",
+            "graphifyExtensions": ".ets",
+            "graphifyDetectorOnly": true,
+            "totalQueryRows": 13,
+            "comparableRows": 5,
+            "graphifyEquivalentRows": 5,
+            "graphifyMissingRows": 8,
+            "atlasEquivalentRows": 13,
+            "graphifyMissingRatio": 0.6154,
+            "graphifyStatus": "ok",
+            "graphifyOk": true,
+            "note": "Graphify detects this extension but discovery reports no deterministic _DISPATCH extractor."
+          },
+          {
+            "language": "r",
+            "artifact": "data/raw/LIVE_R_BENCHMARK.json",
+            "supportType": "detector-only",
+            "graphifyExtractor": "detector only, no _DISPATCH extractor",
+            "graphifyExtensions": ".r",
+            "graphifyDetectorOnly": true,
+            "totalQueryRows": 13,
+            "comparableRows": 5,
+            "graphifyEquivalentRows": 5,
+            "graphifyMissingRows": 8,
+            "atlasEquivalentRows": 13,
+            "graphifyMissingRatio": 0.6154,
+            "graphifyStatus": "ok",
+            "graphifyOk": true,
+            "note": "Graphify detects this extension but discovery reports no deterministic _DISPATCH extractor."
+          }
+        ],
+        "liveMissingRows": [
+          {
+            "language": "ejs",
+            "artifact": "data/raw/LIVE_EJS_BENCHMARK.json",
+            "supportType": "detector-only",
+            "graphifyExtractor": "detector only, no _DISPATCH extractor",
+            "graphifyExtensions": ".ejs",
+            "graphifyDetectorOnly": true,
+            "totalQueryRows": 7,
+            "comparableRows": 1,
+            "graphifyEquivalentRows": 1,
+            "graphifyMissingRows": 6,
+            "atlasEquivalentRows": 7,
+            "graphifyMissingRatio": 0.8571,
+            "graphifyStatus": "ok",
+            "graphifyOk": true,
+            "note": "Graphify detects this extension but discovery reports no deterministic _DISPATCH extractor."
+          },
+          {
+            "language": "ets",
+            "artifact": "data/raw/LIVE_ETS_BENCHMARK.json",
+            "supportType": "detector-only",
+            "graphifyExtractor": "detector only, no _DISPATCH extractor",
+            "graphifyExtensions": ".ets",
+            "graphifyDetectorOnly": true,
+            "totalQueryRows": 13,
+            "comparableRows": 5,
+            "graphifyEquivalentRows": 5,
+            "graphifyMissingRows": 8,
+            "atlasEquivalentRows": 13,
+            "graphifyMissingRatio": 0.6154,
+            "graphifyStatus": "ok",
+            "graphifyOk": true,
+            "note": "Graphify detects this extension but discovery reports no deterministic _DISPATCH extractor."
+          },
+          {
+            "language": "julia",
+            "artifact": "data/raw/LIVE_JULIA_BENCHMARK.json",
+            "supportType": "deterministic-extractor",
+            "graphifyExtractor": "extract_julia",
+            "graphifyExtensions": ".jl",
+            "graphifyDetectorOnly": false,
+            "totalQueryRows": 6,
+            "comparableRows": 5,
+            "graphifyEquivalentRows": 5,
+            "graphifyMissingRows": 1,
+            "atlasEquivalentRows": 6,
+            "graphifyMissingRatio": 0.1667,
+            "graphifyStatus": "ok",
+            "graphifyOk": true,
+            "note": "Graphify has a deterministic extractor but some sampled query rows have no Graphify equivalent."
+          },
+          {
+            "language": "objc",
+            "artifact": "data/raw/LIVE_OBJC_BENCHMARK.json",
+            "supportType": "deterministic-extractor",
+            "graphifyExtractor": "extract_objc",
+            "graphifyExtensions": ".m .mm",
+            "graphifyDetectorOnly": false,
+            "totalQueryRows": 5,
+            "comparableRows": 4,
+            "graphifyEquivalentRows": 4,
+            "graphifyMissingRows": 1,
+            "atlasEquivalentRows": 5,
+            "graphifyMissingRatio": 0.2,
+            "graphifyStatus": "ok",
+            "graphifyOk": true,
+            "note": "Graphify has a deterministic extractor but some sampled query rows have no Graphify equivalent."
+          },
+          {
+            "language": "php",
+            "artifact": "data/raw/LIVE_PHP_BENCHMARK.json",
+            "supportType": "deterministic-extractor",
+            "graphifyExtractor": "extract_php",
+            "graphifyExtensions": ".php",
+            "graphifyDetectorOnly": false,
+            "totalQueryRows": 4,
+            "comparableRows": 3,
+            "graphifyEquivalentRows": 3,
+            "graphifyMissingRows": 1,
+            "atlasEquivalentRows": 4,
+            "graphifyMissingRatio": 0.25,
+            "graphifyStatus": "ok",
+            "graphifyOk": true,
+            "note": "Graphify has a deterministic extractor but some sampled query rows have no Graphify equivalent."
+          },
+          {
+            "language": "r",
+            "artifact": "data/raw/LIVE_R_BENCHMARK.json",
+            "supportType": "detector-only",
+            "graphifyExtractor": "detector only, no _DISPATCH extractor",
+            "graphifyExtensions": ".r",
+            "graphifyDetectorOnly": true,
+            "totalQueryRows": 13,
+            "comparableRows": 5,
+            "graphifyEquivalentRows": 5,
+            "graphifyMissingRows": 8,
+            "atlasEquivalentRows": 13,
+            "graphifyMissingRatio": 0.6154,
+            "graphifyStatus": "ok",
+            "graphifyOk": true,
+            "note": "Graphify detects this extension but discovery reports no deterministic _DISPATCH extractor."
+          }
+        ]
+      }
+    },
+    "supportedLanguageBenchmark": {
+      "statement": "The supported-language fixture sweep proves every Atlas-supported parser family can be indexed and compared against Graphify/runtime support plus local native/tool availability. It is fixture evidence, not a public-repo semantic oracle.",
+      "generatedAt": "2026-07-01T05:45:14Z",
+      "artifact": "data/raw/SUPPORTED_LANGUAGE_BENCHMARK.json",
+      "summary": {
+        "atlas_ok": 64,
+        "atlas_ok_ratio": 1,
+        "fixture_oracle_exact": 36,
+        "fixture_oracle_precision_100": 39,
+        "fixture_oracle_recall_100": 43,
+        "fixture_oracle_rows": 62,
+        "graphify_detector_only_extensions": [
+          ".ejs",
+          ".ets",
+          ".r"
+        ],
+        "graphify_dispatch_count": 89,
+        "graphify_status": {
+          "ok": 43,
+          "unsupported": 21
+        },
+        "graphify_support": {
+          "detector_only": 3,
+          "deterministic": 40,
+          "unsupported": 21
+        },
+        "graphify_version": "graphifyy 0.8.49",
+        "native_baseline_status": {
+          "missing": 42,
+          "ok": 22
+        },
+        "supported_languages": 64
+      },
+      "gapRows": [
+        {
+          "language": "typescript",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 0.8,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "ok",
+          "missingSymbols": [],
+          "extraSymbols": [
+            "constructor"
+          ]
+        },
+        {
+          "language": "kotlin",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "scala",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "swift",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "lua",
+          "category": "code",
+          "oracleRecall": 0.5,
+          "oraclePrecision": 0.5,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "run"
+          ],
+          "extraSymbols": [
+            "M.run"
+          ]
+        },
+        {
+          "language": "zig",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 0.6,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": [
+            "_",
+            "std"
+          ]
+        },
+        {
+          "language": "elixir",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "objc",
+          "category": "code",
+          "oracleRecall": 0.6667,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "helper"
+          ],
+          "extraSymbols": []
+        },
+        {
+          "language": "julia",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "fortran",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "dart",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "verilog",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "pascal",
+          "category": "code",
+          "oracleRecall": 0.6667,
+          "oraclePrecision": 0.6667,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "TWorker"
+          ],
+          "extraSymbols": [
+            "TWorker.Run"
+          ]
+        },
+        {
+          "language": "delphi",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 0.5,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": [
+            "TButton",
+            "TMainForm"
+          ]
+        },
+        {
+          "language": "terraform",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "byond",
+          "category": "code",
+          "oracleRecall": 0.25,
+          "oraclePrecision": 0.3333,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "health",
+            "helper",
+            "run"
+          ],
+          "extraSymbols": [
+            "/proc",
+            "/proc/helper"
+          ]
+        },
+        {
+          "language": "dotnet",
+          "category": "project",
+          "oracleRecall": 1,
+          "oraclePrecision": 0.5,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": [
+            "Microsoft.NET.Sdk",
+            "Sample"
+          ]
+        },
+        {
+          "language": "razor",
+          "category": "template",
+          "oracleRecall": 0.5,
+          "oraclePrecision": 0.25,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "counter"
+          ],
+          "extraSymbols": [
+            "/counter",
+            "Counter",
+            "Microsoft.AspNetCore.Components"
+          ]
+        },
+        {
+          "language": "apex",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 0.6667,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": [
+            "Account"
+          ]
+        },
+        {
+          "language": "blade",
+          "category": "template",
+          "oracleRecall": 0.5,
+          "oraclePrecision": 0.3333,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "foreach"
+          ],
+          "extraSymbols": [
+            "layouts.app",
+            "view"
+          ]
+        },
+        {
+          "language": "vue",
+          "category": "template",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "svelte",
+          "category": "template",
+          "oracleRecall": 0.5,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "name"
+          ],
+          "extraSymbols": []
+        },
+        {
+          "language": "astro",
+          "category": "template",
+          "oracleRecall": 1,
+          "oraclePrecision": 0.5,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": [
+            "App",
+            "BaseLayout"
+          ]
+        },
+        {
+          "language": "ejs",
+          "category": "template",
+          "oracleRecall": 0.5,
+          "oraclePrecision": 0.5,
+          "graphifyStatus": "ok",
+          "graphifySupport": "detector_only",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "partials/header"
+          ],
+          "extraSymbols": [
+            "view"
+          ]
+        },
+        {
+          "language": "ets",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "detector_only",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "r",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "detector_only",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "p4",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 0.75,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": [
+            "start"
+          ]
+        },
+        {
+          "language": "csharp",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "groovy",
+          "category": "code",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "html",
+          "category": "markup",
+          "oracleRecall": null,
+          "oraclePrecision": null,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "css",
+          "category": "style",
+          "oracleRecall": null,
+          "oraclePrecision": null,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "markdown",
+          "category": "structured",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "mdx",
+          "category": "structured",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "yaml",
+          "category": "structured",
+          "oracleRecall": 0,
+          "oraclePrecision": 0,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "name",
+            "port",
+            "service"
+          ],
+          "extraSymbols": [
+            "config.yaml"
+          ]
+        },
+        {
+          "language": "proto",
+          "category": "structured",
+          "oracleRecall": 0.6667,
+          "oraclePrecision": 1,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "ok",
+          "missingSymbols": [
+            "Run"
+          ],
+          "extraSymbols": []
+        },
+        {
+          "language": "toml",
+          "category": "structured",
+          "oracleRecall": 0,
+          "oraclePrecision": 0,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "ok",
+          "missingSymbols": [
+            "database",
+            "name",
+            "service",
+            "url"
+          ],
+          "extraSymbols": [
+            "config.toml"
+          ]
+        },
+        {
+          "language": "xml",
+          "category": "structured",
+          "oracleRecall": 0,
+          "oraclePrecision": 0,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "ok",
+          "missingSymbols": [
+            "port",
+            "project",
+            "service"
+          ],
+          "extraSymbols": [
+            "config.xml"
+          ]
+        },
+        {
+          "language": "plist",
+          "category": "structured",
+          "oracleRecall": 0,
+          "oraclePrecision": 0,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "CFBundleName"
+          ],
+          "extraSymbols": [
+            "Info.plist"
+          ]
+        },
+        {
+          "language": "gomod",
+          "category": "structured",
+          "oracleRecall": 0,
+          "oraclePrecision": 0,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "example.com/atlas-fixture",
+            "github.com/google/uuid"
+          ],
+          "extraSymbols": [
+            "go.mod"
+          ]
+        },
+        {
+          "language": "gosum",
+          "category": "structured",
+          "oracleRecall": 0,
+          "oraclePrecision": 0,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "github.com/google/uuid"
+          ],
+          "extraSymbols": [
+            "go.sum"
+          ]
+        },
+        {
+          "language": "config",
+          "category": "structured",
+          "oracleRecall": 0,
+          "oraclePrecision": 0,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "ATLAS_DB",
+            "ATLAS_LOG_LEVEL"
+          ],
+          "extraSymbols": [
+            ".env.example"
+          ]
+        },
+        {
+          "language": "makefile",
+          "category": "structured",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "batch",
+          "category": "structured",
+          "oracleRecall": 0,
+          "oraclePrecision": 0,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "ATLAS_ENV"
+          ],
+          "extraSymbols": [
+            "build.cmd"
+          ]
+        },
+        {
+          "language": "sql",
+          "category": "structured",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "ok",
+          "graphifySupport": "deterministic",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "csv",
+          "category": "structured",
+          "oracleRecall": 0,
+          "oraclePrecision": 0,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "ok",
+          "missingSymbols": [
+            "name",
+            "role"
+          ],
+          "extraSymbols": [
+            "data.csv"
+          ]
+        },
+        {
+          "language": "text",
+          "category": "structured",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "missing",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "dockerfile",
+          "category": "structured",
+          "oracleRecall": 0,
+          "oraclePrecision": 0,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "missing",
+          "missingSymbols": [
+            "ARG",
+            "CMD",
+            "FROM",
+            "RUN"
+          ],
+          "extraSymbols": [
+            "Dockerfile"
+          ]
+        },
+        {
+          "language": "pptx",
+          "category": "binary",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "ok",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "docx",
+          "category": "binary",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "ok",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "xlsx",
+          "category": "binary",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "ok",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "image",
+          "category": "binary",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "ok",
+          "missingSymbols": [],
+          "extraSymbols": []
+        },
+        {
+          "language": "pdf",
+          "category": "binary",
+          "oracleRecall": 1,
+          "oraclePrecision": 1,
+          "graphifyStatus": "unsupported",
+          "graphifySupport": "unsupported",
+          "nativeStatus": "ok",
+          "missingSymbols": [],
+          "extraSymbols": []
+        }
+      ]
+    }
+  },
+  "stubsAndHallucinationAudit": {
+    "foundDuringFinalPass": [
+      "The supported-language fixture sweep now records 64 parser.Supported families, with Atlas indexing 64/64; Graphify is {\"detector_only\":3,\"deterministic\":40,\"unsupported\":21} and native/tool status is {\"missing\":42,\"ok\":22}.",
+      "The UI previously carried a hard-coded native tool manifest; this final pass renders tool status/version from provenance data so missing tools are no longer shown as healthy.",
+      "scip-java now resolves through the pinned bench/tools/scip-java-coursier launcher; Java is reported with both SCIP and JDTLS baselines present.",
+      "The committed public-repo validation harness regenerates data/public-repo-validation-manifest.* from raw live artifacts and fails when a code language lacks passing three-repo evidence.",
+      "The committed validation remeasurement readiness harness regenerates data/validation-remeasurement-manifest.* and separates Atlas/Graphify replay-ready validation rows, generated native/proxy command candidates, candidate-executable rows, and native/proxy rows that still lack executable per-repo commands.",
+      "The committed precision-evidence harness regenerates data/precision-evidence-manifest.* from raw live artifacts and separates sampled symbol/location evidence from weaker kind-count-only rows.",
+      "The committed call-edge evidence harness regenerates data/call-edge-evidence-manifest.* from raw artifacts and separates core receiver-typed call evidence from live call-count-only rows.",
+      "The committed Graphify support harness regenerates data/graphify-support-manifest.* and separates deterministic extractor rows from detector-only extension support.",
+      "Objective-C validation can be inflated by vendored Pods if Atlas and the native counter use different dependency filters; the final validation excludes dependency folders for the validation count.",
+      "CUDA host-function counters overcount the denominator for a CUDA-specific benchmark; the final validation labels and uses a CUDA-qualified __global__/__device__/__host__ function denominator."
+    ],
+    "notFound": "No published benchmark row in the final dataset is intentionally synthetic or sample-only. The weakest rows are labelled as detector-only or source-counter proxy rows rather than hidden.",
+    "missingAdapters": [],
+    "generatedButNotSourceOfTruth": [
+      {
+        "language": "json",
+        "rejected": []
+      }
+    ]
+  },
+  "improvementTodos": [
+    {
+      "priority": "P1",
+      "item": "Implement execution mode for validation remeasurement: the readiness manifest proves pinned Atlas/Graphify replay rows, native/proxy command candidates, and candidate-executable rows for committed helpers, but placeholder templates, remaining ephemeral helper paths, and persisted output sets still need to be replaced with executable committed commands."
+    },
+    {
+      "priority": "P1",
+      "item": "Replace the source-counter, proxy, detector-only, and structured/project denominators listed in the weak-truth table with fuller compiler, LSP, tree-sitter, or parser-library denominators where available."
+    },
+    {
+      "priority": "P1",
+      "item": "Close supported-family fixture gaps: 43/62 rows have 100% fixture recall, 39/62 have 100% fixture precision, and 42 rows still lack an executable local native/tool baseline."
+    },
+    {
+      "priority": "P1",
+      "item": "Close precision gaps by persisting full native and Atlas symbol name/kind/location sets for every validation repo; the current harness proves only sampled query name/location rows plus kind-count maps where raw artifacts expose them."
+    },
+    {
+      "priority": "P1",
+      "item": "Extend receiver-type measurement into live converted tree-sitter artifacts; the current call-edge harness proves live call counts but receiver typing is only present in the core matrix artifacts."
+    },
+    {
+      "priority": "P2",
+      "item": "Increase public-repo validation from 3 repos per language to a larger fixed sample for high-variance languages such as Objective-C, Razor, Apex, CUDA, and Swift."
+    }
+  ]
+}

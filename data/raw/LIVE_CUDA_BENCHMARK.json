@@ -1,0 +1,739 @@
+{
+  "language": "cuda",
+  "repo": "https://github.com/NVIDIA/cuda-samples",
+  "commit": "b7c5481c556c3fe98db060207ecaa41a4b9a9abc",
+  "graphify_detector_only": "",
+  "commands": {
+    "clone": "git clone --depth 1 --filter=blob:none --sparse https://github.com/NVIDIA/cuda-samples $WORK/atlas-live-cuda-samples/repo",
+    "sparse_checkout": "git -C $WORK/atlas-live-cuda-samples/repo sparse-checkout set cpp/0_Introduction/simpleAtomicIntrinsics",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-cuda-samples/atlas.db --json index $WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-cuda-samples/atlas.db --json index $WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+    "graphify_update": "uv tool run --from graphifyy graphify update .",
+    "native_baseline": "python3 <cuda source counter> $WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+    "query_symbols": [
+      "testKernel",
+      "runTest",
+      "main",
+      "computeGold"
+    ],
+    "target_path": "$WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-cuda-samples/atlas.db --repo simpleAtomicIntrinsics serve --addr 127.0.0.1:48185"
+  },
+  "atlas": {
+    "cold_wall_seconds": 0.18,
+    "reindex_wall_seconds": 0.04,
+    "index": {
+      "repo_id": "3dde07ca-4862-4fed-9e05-7cb79353fc69",
+      "repo_full_name": "simpleAtomicIntrinsics",
+      "snapshot_id": "81cd6678-11f0-47a2-b4ac-2a548aca4916",
+      "commit_sha": "b7c5481c556c3fe98db060207ecaa41a4b9a9abc",
+      "indexed_files": 5,
+      "symbols": 15,
+      "edges": 63,
+      "edge_kinds": {
+        "calls": 52,
+        "imports": 11
+      },
+      "routes": 0,
+      "languages": {
+        "cpp": 3,
+        "markdown": 1,
+        "text": 1
+      },
+      "mode": "full",
+      "duration_ms": 56,
+      "timings_ms": {
+        "build_symbols_edges": 0,
+        "delta_check": 0,
+        "discover_files": 0,
+        "doc_links": 0,
+        "ensure_repo": 0,
+        "gitignore_scan": 21,
+        "go_types": 0,
+        "lexical": 21,
+        "parse": 12,
+        "persist": 21,
+        "resolve_head": 0,
+        "routes": 0,
+        "sort": 0,
+        "walk": 0,
+        "write_sqlite": 21
+      }
+    },
+    "reindex": {
+      "repo_id": "3dde07ca-4862-4fed-9e05-7cb79353fc69",
+      "repo_full_name": "simpleAtomicIntrinsics",
+      "snapshot_id": "81cd6678-11f0-47a2-b4ac-2a548aca4916",
+      "commit_sha": "b7c5481c556c3fe98db060207ecaa41a4b9a9abc",
+      "indexed_files": 5,
+      "symbols": 15,
+      "edges": 63,
+      "routes": 0,
+      "languages": {
+        "cpp": 3,
+        "markdown": 1,
+        "text": 1
+      },
+      "mode": "noop",
+      "duration_ms": 5,
+      "timings_ms": {
+        "delta_check": 5,
+        "resolve_head": 0
+      }
+    },
+    "symbol_breakdown": {
+      "repo_id": "3dde07ca-4862-4fed-9e05-7cb79353fc69",
+      "repo_full_name": "simpleAtomicIntrinsics",
+      "tier": "local",
+      "storage_driver": "sqlite",
+      "latest": {
+        "snapshot_id": "81cd6678-11f0-47a2-b4ac-2a548aca4916",
+        "commit_sha": "b7c5481c556c3fe98db060207ecaa41a4b9a9abc",
+        "created_at": "2026-06-30T08:40:32Z",
+        "files": 5,
+        "symbols": 15,
+        "edges": 63,
+        "routes": 0,
+        "mode": "full",
+        "duration_ms": 56,
+        "timings_ms": {
+          "build_symbols_edges": 0,
+          "delta_check": 0,
+          "discover_files": 0,
+          "doc_links": 0,
+          "ensure_repo": 0,
+          "gitignore_scan": 21,
+          "go_types": 0,
+          "lexical": 21,
+          "parse": 12,
+          "persist": 21,
+          "resolve_head": 0,
+          "routes": 0,
+          "sort": 0,
+          "walk": 0,
+          "write_sqlite": 21
+        }
+      },
+      "graph": {
+        "files": 3,
+        "symbols": 4,
+        "edges": 2,
+        "raw_symbols": 4,
+        "raw_edges": 63,
+        "communities": 2,
+        "isolated_nodes": 1,
+        "edge_kinds": [
+          {
+            "key": "calls",
+            "count": 52
+          },
+          {
+            "key": "imports",
+            "count": 11
+          }
+        ],
+        "languages": [
+          {
+            "key": "cpp",
+            "count": 4
+          }
+        ]
+      },
+      "coverage_facts": 0,
+      "history": [
+        {
+          "snapshot_id": "81cd6678-11f0-47a2-b4ac-2a548aca4916",
+          "commit_sha": "b7c5481c556c3fe98db060207ecaa41a4b9a9abc",
+          "created_at": "2026-06-30T08:40:32Z",
+          "files": 5,
+          "symbols": 15,
+          "edges": 63,
+          "routes": 0,
+          "mode": "full",
+          "duration_ms": 56,
+          "timings_ms": {
+            "build_symbols_edges": 0,
+            "delta_check": 0,
+            "discover_files": 0,
+            "doc_links": 0,
+            "ensure_repo": 0,
+            "gitignore_scan": 21,
+            "go_types": 0,
+            "lexical": 21,
+            "parse": 12,
+            "persist": 21,
+            "resolve_head": 0,
+            "routes": 0,
+            "sort": 0,
+            "walk": 0,
+            "write_sqlite": 21
+          }
+        }
+      ],
+      "history_returned": 1
+    },
+    "edge_breakdown": {
+      "repo_id": "3dde07ca-4862-4fed-9e05-7cb79353fc69",
+      "repo_full_name": "simpleAtomicIntrinsics",
+      "tier": "local",
+      "storage_driver": "sqlite",
+      "latest": {
+        "snapshot_id": "81cd6678-11f0-47a2-b4ac-2a548aca4916",
+        "commit_sha": "b7c5481c556c3fe98db060207ecaa41a4b9a9abc",
+        "created_at": "2026-06-30T08:40:32Z",
+        "files": 5,
+        "symbols": 15,
+        "edges": 63,
+        "routes": 0,
+        "mode": "full",
+        "duration_ms": 56,
+        "timings_ms": {
+          "build_symbols_edges": 0,
+          "delta_check": 0,
+          "discover_files": 0,
+          "doc_links": 0,
+          "ensure_repo": 0,
+          "gitignore_scan": 21,
+          "go_types": 0,
+          "lexical": 21,
+          "parse": 12,
+          "persist": 21,
+          "resolve_head": 0,
+          "routes": 0,
+          "sort": 0,
+          "walk": 0,
+          "write_sqlite": 21
+        }
+      },
+      "graph": {
+        "files": 3,
+        "symbols": 4,
+        "edges": 2,
+        "raw_symbols": 4,
+        "raw_edges": 63,
+        "communities": 2,
+        "isolated_nodes": 1,
+        "edge_kinds": [
+          {
+            "key": "calls",
+            "count": 52
+          },
+          {
+            "key": "imports",
+            "count": 11
+          }
+        ],
+        "languages": [
+          {
+            "key": "cpp",
+            "count": 4
+          }
+        ]
+      },
+      "coverage_facts": 0,
+      "history": [
+        {
+          "snapshot_id": "81cd6678-11f0-47a2-b4ac-2a548aca4916",
+          "commit_sha": "b7c5481c556c3fe98db060207ecaa41a4b9a9abc",
+          "created_at": "2026-06-30T08:40:32Z",
+          "files": 5,
+          "symbols": 15,
+          "edges": 63,
+          "routes": 0,
+          "mode": "full",
+          "duration_ms": 56,
+          "timings_ms": {
+            "build_symbols_edges": 0,
+            "delta_check": 0,
+            "discover_files": 0,
+            "doc_links": 0,
+            "ensure_repo": 0,
+            "gitignore_scan": 21,
+            "go_types": 0,
+            "lexical": 21,
+            "parse": 12,
+            "persist": 21,
+            "resolve_head": 0,
+            "routes": 0,
+            "sort": 0,
+            "walk": 0,
+            "write_sqlite": 21
+          }
+        }
+      ],
+      "history_returned": 1
+    },
+    "cuda_definition_symbols": 4
+  },
+  "graphify": {
+    "status": "ok",
+    "ok": true,
+    "seconds": 0.258,
+    "command": "uv tool run --from graphifyy graphify update .",
+    "stdout_head": [
+      "warning: skill is from graphify 0.8.49, package is 0.9.2. Run 'graphify install' to update.",
+      "Re-extracting code files in . (no LLM needed)...",
+      "[graphify watch] No code-graph topology changes detected; outputs left untouched.",
+      "Code graph updated. For doc/paper/image changes run /graphify --update in your AI assistant.",
+      "Tip: set GEMINI_API_KEY or GOOGLE_API_KEY to use Gemini for semantic extraction."
+    ],
+    "stderr_head": [],
+    "metrics": {
+      "nodes": 19,
+      "links": 18,
+      "calls": 2
+    }
+  },
+  "native_baseline": {
+    "tool": "cuda-source-counter",
+    "status": "ok",
+    "ok": true,
+    "seconds": 0,
+    "command": "python3 <cuda source counter> $WORK/atlas-live-cuda-samples/repo/cpp/0_Introduction/simpleAtomicIntrinsics",
+    "metrics": {
+      "files": 2,
+      "parsed_files": 2,
+      "parse_errors": 0,
+      "functions": 3,
+      "definitions": 3,
+      "sample_definitions": [
+        {
+          "kind": "function",
+          "name": "main",
+          "path": "simpleAtomicIntrinsics.cu"
+        },
+        {
+          "kind": "function",
+          "name": "runTest",
+          "path": "simpleAtomicIntrinsics.cu"
+        },
+        {
+          "kind": "function",
+          "name": "testKernel",
+          "path": "simpleAtomicIntrinsics_kernel.cuh"
+        }
+      ],
+      "excluded_target_helpers": [
+        {
+          "kind": "function",
+          "name": "computeGold",
+          "path": "simpleAtomicIntrinsics_cpu.cpp",
+          "reason": "CPU reference helper in the same sample target but outside the .cu/.cuh source-counter proxy."
+        }
+      ]
+    }
+  },
+  "richer_native_baselines": {
+    "cuda-source-counter": {
+      "status": "ok",
+      "ok": true,
+      "note": "benchmark-owned CUDA .cu/.cuh function counter used as the extension-dispatch coverage proxy; it intentionally excludes the paired CPU reference .cpp helper."
+    },
+    "nvcc": {
+      "status": "missing",
+      "ok": false,
+      "note": "nvcc not installed; source-only parser proxy used for this benchmark"
+    },
+    "clangd": {
+      "status": "available",
+      "ok": true,
+      "note": "clangd is available, but this benchmark uses source-only CUDA extension coverage to avoid compile database coupling"
+    }
+  },
+  "coverage": {
+    "atlas_vs_cuda_source_counter_definition_ratio": 1.3333,
+    "atlas_cuda_definition_symbols": 4,
+    "native_definitions": 3,
+    "coverage_scope": "Full simpleAtomicIntrinsics sample target; the CUDA source-counter baseline covers .cu/.cuh functions, while Atlas also indexes the CPU reference helper computeGold in simpleAtomicIntrinsics_cpu.cpp."
+  },
+  "optimization": {
+    "cycles_run": 3,
+    "stop_reason": "CUDA live benchmark now exceeds the CUDA .cu/.cuh source-counter coverage proxy by including the full simpleAtomicIntrinsics sample target helper computeGold from the paired CPU reference .cpp file; token and latency rows remain above the 10x Graphify comparison target.",
+    "cycle_notes": [
+      "cycle 1: NVIDIA/cuda-samples simpleAtomicIntrinsics benchmark verified Atlas maps .cu/.cuh files to cpp symbols, resolves kernel/host functions, and records graphify/native query metrics on the same live files.",
+      "cycle 2: compacting `.cu`/`.cuh` suffixes in terse locations reduces exact-symbol output for CUDA host/kernel files without changing indexed symbols or JSON paths.",
+      "cycle 3: refreshed the clean warm-serve artifact with computeGold, a CPU reference helper in the same CUDA sample target; Graphify exposes the row and Atlas indexes 4 target functions vs the CUDA-file source counter's 3."
+    ]
+  },
+  "query_warmup": {
+    "symbol": "testKernel",
+    "atlas_command": "curl -fsS http://127.0.0.1:48185/api/v1/symbols/testKernel/explain?repo_id=simpleAtomicIntrinsics&format=plain",
+    "graphify_command": "uv tool run --from graphifyy graphify explain testKernel",
+    "atlas_returncode": 0,
+    "graphify_returncode": 0,
+    "note": "Untimed warm-up for Atlas warm serve and graphify before measured 25-sample query latency rows."
+  },
+  "queries": [
+    {
+      "symbol": "testKernel",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS 'http://127.0.0.1:48185/api/v1/symbols/testKernel/explain?repo_id=simpleAtomicIntrinsics&format=plain'",
+      "graphify_command": "uv tool run --from graphifyy graphify explain testKernel",
+      "atlas_tokens": 2,
+      "graphify_tokens": 37,
+      "atlas_ms": 0.467,
+      "graphify_ms": 110.174,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "testKernel f@simpleAtomicIntrinsics_kernel:38"
+      ],
+      "graphify_stdout_head": [
+        "Node: testKernel()",
+        "  ID:        simpleatomicintrinsics_kernel_testkernel",
+        "  Source:    simpleAtomicIntrinsics_kernel.cuh L38",
+        "  Type:      code",
+        "  Community: 2",
+        "  Degree:    2",
+        "",
+        "Connections (2):"
+      ],
+      "atlas_ms_samples": [
+        0.465,
+        0.512,
+        0.467,
+        0.44,
+        0.526,
+        0.751,
+        0.688,
+        0.78,
+        0.68,
+        0.514,
+        0.445,
+        0.446,
+        0.454,
+        0.411,
+        0.525,
+        0.399,
+        0.472,
+        0.447,
+        0.459,
+        0.402,
+        0.466,
+        0.467,
+        0.532,
+        0.56,
+        0.521
+      ],
+      "graphify_ms_samples": [
+        111.768,
+        110.653,
+        111.718,
+        108.365,
+        109.626,
+        106.72,
+        107.701,
+        108.28,
+        110.174,
+        103.043,
+        103.671,
+        109.007,
+        111.396,
+        110.669,
+        108.052,
+        110.209,
+        105.942,
+        106.932,
+        108.763,
+        111.719,
+        110.602,
+        113.438,
+        116.682,
+        110.655,
+        110.674
+      ]
+    },
+    {
+      "symbol": "runTest",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS 'http://127.0.0.1:48185/api/v1/symbols/runTest/explain?repo_id=simpleAtomicIntrinsics&format=plain'",
+      "graphify_command": "uv tool run --from graphifyy graphify explain runTest",
+      "atlas_tokens": 2,
+      "graphify_tokens": 41,
+      "atlas_ms": 0.546,
+      "graphify_ms": 116.055,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "runTest f@simpleAtomicIntrinsics:84"
+      ],
+      "graphify_stdout_head": [
+        "Node: runTest()",
+        "  ID:        simpleatomicintrinsics_runtest",
+        "  Source:    simpleAtomicIntrinsics.cu L84",
+        "  Type:      code",
+        "  Community: 1",
+        "  Degree:    3",
+        "",
+        "Connections (3):"
+      ],
+      "atlas_ms_samples": [
+        0.55,
+        0.626,
+        0.79,
+        0.746,
+        0.696,
+        0.546,
+        0.537,
+        0.427,
+        0.499,
+        0.483,
+        0.454,
+        0.472,
+        0.483,
+        0.534,
+        0.591,
+        0.598,
+        0.672,
+        0.787,
+        0.576,
+        0.561,
+        0.512,
+        0.568,
+        0.474,
+        0.497,
+        0.473
+      ],
+      "graphify_ms_samples": [
+        114.577,
+        111.297,
+        120.265,
+        127.33,
+        153.707,
+        233.538,
+        119.716,
+        124.266,
+        116.055,
+        122.929,
+        121.056,
+        114.716,
+        111.977,
+        113.669,
+        113.39,
+        117.8,
+        111.849,
+        110.799,
+        110.391,
+        113.353,
+        109.999,
+        117.396,
+        119.331,
+        119.915,
+        112.002
+      ]
+    },
+    {
+      "symbol": "main",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS 'http://127.0.0.1:48185/api/v1/symbols/main/explain?repo_id=simpleAtomicIntrinsics&format=plain'",
+      "graphify_command": "uv tool run --from graphifyy graphify explain main",
+      "atlas_tokens": 2,
+      "graphify_tokens": 37,
+      "atlas_ms": 0.615,
+      "graphify_ms": 115.18,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "main f@simpleAtomicIntrinsics:71"
+      ],
+      "graphify_stdout_head": [
+        "Node: main()",
+        "  ID:        simpleatomicintrinsics_main",
+        "  Source:    simpleAtomicIntrinsics.cu L71",
+        "  Type:      code",
+        "  Community: 1",
+        "  Degree:    2",
+        "",
+        "Connections (2):"
+      ],
+      "atlas_ms_samples": [
+        0.542,
+        0.455,
+        0.531,
+        0.403,
+        0.422,
+        0.552,
+        0.646,
+        0.962,
+        0.789,
+        0.679,
+        0.625,
+        0.666,
+        0.939,
+        0.814,
+        0.668,
+        0.557,
+        0.561,
+        0.532,
+        0.614,
+        0.615,
+        0.642,
+        1.211,
+        0.632,
+        0.536,
+        0.52
+      ],
+      "graphify_ms_samples": [
+        123.079,
+        117.196,
+        129.137,
+        118.428,
+        116.531,
+        111.836,
+        116.306,
+        111.422,
+        111.97,
+        116.124,
+        113.91,
+        111.956,
+        112.928,
+        112.334,
+        115.18,
+        114.773,
+        116.806,
+        117.661,
+        119.855,
+        115.075,
+        118.257,
+        113.075,
+        127.147,
+        111.522,
+        113.727
+      ]
+    },
+    {
+      "symbol": "computeGold",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS 'http://127.0.0.1:48185/api/v1/symbols/computeGold/explain?repo_id=simpleAtomicIntrinsics&format=plain'",
+      "graphify_command": "uv tool run --from graphifyy graphify explain computeGold",
+      "atlas_tokens": 2,
+      "graphify_tokens": 37,
+      "atlas_ms": 0.548,
+      "graphify_ms": 114.561,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "computeGold f@simpleAtomicIntrinsics_cpu:45"
+      ],
+      "graphify_stdout_head": [
+        "Node: computeGold()",
+        "  ID:        simpleatomicintrinsics_cpu_computegold",
+        "  Source:    simpleAtomicIntrinsics_cpu.cpp L45",
+        "  Type:      code",
+        "  Community: 1",
+        "  Degree:    2",
+        "",
+        "Connections (2):"
+      ],
+      "atlas_ms_samples": [
+        0.504,
+        0.491,
+        0.466,
+        0.487,
+        0.616,
+        0.512,
+        0.566,
+        0.452,
+        0.479,
+        0.594,
+        0.449,
+        0.554,
+        0.51,
+        0.496,
+        0.478,
+        0.562,
+        0.794,
+        0.73,
+        0.601,
+        0.516,
+        0.57,
+        0.574,
+        0.554,
+        0.663,
+        0.548
+      ],
+      "graphify_ms_samples": [
+        113.963,
+        111.74,
+        109.013,
+        111.338,
+        113.813,
+        108.777,
+        112.107,
+        139.849,
+        116.617,
+        109.24,
+        111.722,
+        110.842,
+        122.54,
+        117.215,
+        115.648,
+        115.014,
+        110.208,
+        115.345,
+        114.561,
+        121.294,
+        115.882,
+        114.657,
+        137.526,
+        123.265,
+        110.35
+      ]
+    }
+  ],
+  "atlas_cli": {
+    "version": "v0.1.26-7-g21d5334",
+    "commit": "21d5334",
+    "date": "2026-06-30T08:22:41Z",
+    "measurement_note": "Clean warm-serve measurement from 25-sample medians with graphify-out moved out before Atlas index; Graphify comparison used `uv tool run --from graphifyy graphify explain <symbol>`. No Graphify sidecar was present during Atlas indexing."
+  },
+  "multi_repo_validation": {
+    "minimum_repos": 3,
+    "status": "passed",
+    "generated_at": "2026-06-30T14:25:45Z",
+    "scope": "cuda parser random public-repo validation uses the first three passing GitHub repos from a deterministic shuffled sample of public non-archived CUDA repos with 50..500 stars and size <= 8000. Atlas indexed each clean checkout after removing graphify-out, the native denominator came from a CUDA-qualified source counter over __global__, __device__, and __host__ functions in .cu/.cuh files, and Graphify was run on the same checkout as the comparison baseline.",
+    "selection_method": "gh search repos --language CUDA --stars 50..500 --archived=false --limit 100; size <= 8000; deterministic shuffled sample seed 2026-06-30-atlas-random-validation-remaining-v1; first 3 passing repos with CUDA-qualified functions",
+    "measurement_order": "Atlas index after removing graphify-out, then language-specific parser/source counter, then graphify update for comparison metrics. Atlas/Graphify candidates time out after 75s and are rejected.",
+    "rejected_candidates": [],
+    "repos": [
+      {
+        "repo": "https://github.com/MegviiRobot/MegBA",
+        "commit": "bd86dc05c0a345ac5d43e77c353cbe0583e6f128",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/cuda/1-MegviiRobot__MegBA",
+        "atlas_definitions": 188,
+        "native_definitions": 73,
+        "coverage_ratio": 2.5753,
+        "ok": true,
+        "note": "MegviiRobot/MegBA: 25 cuda files; cuda-qualified-source-counter native counts {\"cuda_qualified_function\":73}; Atlas counts {\"function\":103,\"method\":85}; Graphify rebuilt 595 nodes and 1208 edges on the same checkout."
+      },
+      {
+        "repo": "https://github.com/dnouri/cuda-convnet",
+        "commit": "e4ac0c1f374a15cfe3944bd6d732c3822cc2b96b",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/cuda/2-dnouri__cuda-convnet",
+        "atlas_definitions": 940,
+        "native_definitions": 57,
+        "coverage_ratio": 16.4912,
+        "ok": true,
+        "note": "dnouri/cuda-convnet: 31 cuda files; cuda-qualified-source-counter native counts {\"cuda_qualified_function\":57}; Atlas counts {\"constructor\":79,\"function\":137,\"method\":724}; Graphify rebuilt 1305 nodes and 2682 edges on the same checkout."
+      },
+      {
+        "repo": "https://github.com/ashawkey/diff-gaussian-rasterization",
+        "commit": "8829d14f814fccdaf840b7b0f3021a616583c0a1",
+        "target_path": "$WORK/atlas-random-validation-remaining/work2/cuda/3-ashawkey__diff-gaussian-rasterization",
+        "atlas_definitions": 28,
+        "native_definitions": 4,
+        "coverage_ratio": 7,
+        "ok": true,
+        "note": "ashawkey/diff-gaussian-rasterization: 4 cuda files; cuda-qualified-source-counter native counts {\"cuda_qualified_function\":4}; Atlas counts {\"function\":8,\"method\":20}; Graphify rebuilt 150 nodes and 321 edges on the same checkout."
+      }
+    ]
+  }
+}

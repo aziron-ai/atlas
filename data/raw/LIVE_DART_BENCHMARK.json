@@ -1,0 +1,514 @@
+{
+  "language": "dart",
+  "repo": "https://github.com/dart-lang/http",
+  "commit": "5d94ef52582867e077bf41c3fa20fb8b1d1d834e",
+  "graphify_detector_only": "",
+  "commands": {
+    "clone": "git clone --depth 1 https://github.com/dart-lang/http $WORK/atlas-live-dart-http/repo",
+    "sparse_checkout": "",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-dart-http/atlas.db --json index $WORK/atlas-live-dart-http/repo/pkgs/http/lib",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-dart-http/atlas.db --json index $WORK/atlas-live-dart-http/repo/pkgs/http/lib",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> $WORK/atlas-live-dart-http/repo/pkgs/http/lib",
+    "query_symbols": [
+      "Client",
+      "BaseClient",
+      "Request",
+      "Response",
+      "send",
+      "RetryClient"
+    ],
+    "target_path": "$WORK/atlas-live-dart-http/repo/pkgs/http/lib",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-dart-http/atlas.db serve --addr 127.0.0.1:4219"
+  },
+  "atlas": {
+    "cold_wall_seconds": 0.055,
+    "reindex_wall_seconds": 0.005,
+    "index": {
+      "repo_id": "f6639338-3ae2-48e7-a032-a091f955140b",
+      "repo_full_name": "lib",
+      "snapshot_id": "d763569c-a5df-47ad-8dd2-dc7fa09e1244",
+      "commit_sha": "5d94ef52582867e077bf41c3fa20fb8b1d1d834e",
+      "indexed_files": 27,
+      "symbols": 238,
+      "edges": 543,
+      "edge_kinds": {
+        "calls": 417,
+        "imports": 126
+      },
+      "routes": 0,
+      "languages": {
+        "dart": 27
+      },
+      "mode": "reindex",
+      "duration_ms": 55,
+      "timings_ms": {
+        "build_symbols_edges": 0,
+        "discover_files": 0,
+        "doc_links": 0,
+        "ensure_repo": 0,
+        "gitignore_scan": 14,
+        "go_types": 0,
+        "lexical": 19,
+        "parse": 20,
+        "persist": 19,
+        "resolve_head": 0,
+        "routes": 0,
+        "sort": 0,
+        "walk": 0,
+        "write_sqlite": 19
+      }
+    },
+    "reindex": {
+      "repo_id": "f6639338-3ae2-48e7-a032-a091f955140b",
+      "repo_full_name": "lib",
+      "snapshot_id": "d763569c-a5df-47ad-8dd2-dc7fa09e1244",
+      "commit_sha": "5d94ef52582867e077bf41c3fa20fb8b1d1d834e",
+      "indexed_files": 27,
+      "symbols": 238,
+      "edges": 543,
+      "routes": 0,
+      "languages": {
+        "dart": 27
+      },
+      "mode": "noop",
+      "duration_ms": 5,
+      "timings_ms": {
+        "delta_check": 5,
+        "resolve_head": 0
+      }
+    },
+    "symbol_breakdown": [
+      {
+        "language": "dart",
+        "kind": "constructor",
+        "count": 30
+      },
+      {
+        "language": "dart",
+        "kind": "function",
+        "count": 89
+      },
+      {
+        "language": "dart",
+        "kind": "getter",
+        "count": 20
+      },
+      {
+        "language": "dart",
+        "kind": "setter",
+        "count": 11
+      },
+      {
+        "language": "dart",
+        "kind": "type",
+        "count": 28
+      },
+      {
+        "language": "dart",
+        "kind": "typedef",
+        "count": 2
+      },
+      {
+        "language": "dart",
+        "kind": "variable",
+        "count": 58
+      }
+    ],
+    "edge_breakdown": [
+      {
+        "kind": "calls",
+        "count": 417
+      },
+      {
+        "kind": "imports",
+        "count": 126
+      }
+    ],
+    "dart_definition_symbols": 238,
+    "dart_core_definition_symbols": 180,
+    "dart_variable_definition_symbols": 58
+  },
+  "graphify": {
+    "status": "ok",
+    "ok": true,
+    "seconds": 0.429,
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "stdout_head": [
+      "Re-extracting code files in . (no LLM needed)...",
+      "[graphify watch] Rebuilt: 314 nodes, 424 edges, 16 communities",
+      "[graphify watch] graph.json, graph.html and GRAPH_REPORT.md updated in graphify-out",
+      "Code graph updated. For doc/paper/image changes run /graphify --update in your AI assistant.",
+      "Tip: set GEMINI_API_KEY or GOOGLE_API_KEY to use Gemini for semantic extraction."
+    ],
+    "stderr_head": [],
+    "metrics": {
+      "nodes": 314,
+      "links": 424,
+      "calls": 0
+    }
+  },
+  "native_baseline": {
+    "tool": "tree-sitter-dart",
+    "status": "ok",
+    "ok": true,
+    "seconds": 0.081,
+    "command": "$WORK/atlas-live-dart-http/tree-sitter-dart-venv/bin/python -c <tree-sitter-dart definition counter> $WORK/atlas-live-dart-http/repo/pkgs/http/lib",
+    "metrics": {
+      "files": 27,
+      "parsed_files": 27,
+      "parse_errors": 0,
+      "definition_counts": {
+        "type": 28,
+        "function": 89,
+        "constructor": 30,
+        "getter": 20,
+        "setter": 11,
+        "typedef": 2
+      },
+      "definitions": 180,
+      "tree_sitter_version": "0.25.2",
+      "tree_sitter_dart_version": "0.1.0",
+      "parse_error_samples": [],
+      "expanded_definition_counts": {
+        "type": 28,
+        "function": 89,
+        "constructor": 30,
+        "getter": 20,
+        "setter": 11,
+        "typedef": 2,
+        "variable": 58
+      },
+      "expanded_definitions": 238,
+      "variable_definitions_excluded_from_core": 58,
+      "scope_note": "Core tree-sitter-dart baseline counts types, functions, constructors, getters, setters, and typedefs. Atlas commit 646a5b9 additionally indexes validated top-level and class variable definitions while excluding local variables."
+    }
+  },
+  "richer_native_baselines": {
+    "dart": {
+      "status": "missing",
+      "ok": false,
+      "note": "dart SDK not installed; tree-sitter-dart parser used as the isolated definition baseline"
+    },
+    "flutter": {
+      "status": "missing",
+      "ok": false,
+      "note": "flutter not installed"
+    },
+    "dart_language_server": {
+      "status": "missing",
+      "ok": false,
+      "note": "dart_language_server not installed"
+    }
+  },
+  "coverage": {
+    "atlas_vs_tree_sitter_dart_core_plus_variables_definition_ratio": 1.3222,
+    "atlas_dart_core_plus_variable_definition_symbols": 238,
+    "native_definitions": 180,
+    "atlas_dart_core_definition_symbols": 180,
+    "atlas_dart_variable_definition_symbols": 58,
+    "expanded_tree_sitter_dart_counter_definitions": 238,
+    "expanded_tree_sitter_dart_counter_ratio": 1,
+    "coverage_scope": "dart-lang/http pkgs/http/lib target. The existing tree-sitter-dart core baseline covers 180 type/function/constructor/getter/setter/typedef definitions; Atlas commit 646a5b9 also indexes 58 top-level/class variable definitions validated by the expanded tree-sitter-dart counter. Expanded Atlas/native counter parity is 238/238."
+  },
+  "optimization": {
+    "cycles_run": 3,
+    "stop_reason": "Dart now exceeds the native core baseline on coverage while preserving the existing >=10x token and latency comparison rows against Graphify.",
+    "cycle_notes": [
+      "cycle 1: dart-lang/http probe showed the generic fallback over-indexed constructor calls such as Duration and missed real generic-return methods such as `Future<StreamedResponse> send(...)`.",
+      "cycle 2: after adding a Dart-specific parser, Atlas/tree-sitter-dart core definition coverage matched on the live package slice and exact-symbol query rows exceeded 10x for latency and token output vs graphify.",
+      "cycle 3: Atlas parser commit 646a5b9 indexes top-level and class variable definitions while excluding locals, raising http coverage to 238/180 = 1.3222; the expanded tree-sitter-dart counter validates 238/238."
+    ]
+  },
+  "query_warmup": {
+    "symbol": "Client",
+    "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/Client/explain?repo_id=lib&format=plain",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Client",
+    "atlas_returncode": 0,
+    "graphify_returncode": 0,
+    "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
+  },
+  "queries": [
+    {
+      "symbol": "Client",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/Client/explain?repo_id=lib&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Client",
+      "atlas_tokens": 2,
+      "graphify_tokens": 42,
+      "atlas_ms": 8.712,
+      "graphify_ms": 81.204,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "Client t@client:36"
+      ],
+      "graphify_stdout_head": [
+        "Node: client",
+        "  ID:        http_client",
+        "  Source:    http.dart None",
+        "  Type:      code",
+        "  Community: 8",
+        "  Degree:    1",
+        "",
+        "Connections (1):"
+      ],
+      "atlas_ms_samples": [
+        10.876,
+        9.476,
+        9.771,
+        8.446,
+        9.284,
+        8.712,
+        7.915,
+        7.684,
+        8.057
+      ]
+    },
+    {
+      "symbol": "BaseClient",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/BaseClient/explain?repo_id=lib&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain BaseClient",
+      "atlas_tokens": 2,
+      "graphify_tokens": 101,
+      "atlas_ms": 7.862,
+      "graphify_ms": 90.902,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "BaseClient t@base_client:20"
+      ],
+      "graphify_stdout_head": [
+        "Node: BaseClient",
+        "  ID:        src_base_client_baseclient",
+        "  Source:    src/base_client.dart None",
+        "  Type:      code",
+        "  Community: 9",
+        "  Degree:    6",
+        "",
+        "Connections (6):"
+      ],
+      "atlas_ms_samples": [
+        8.001,
+        7.65,
+        7.939,
+        7.862,
+        8.341,
+        8.215,
+        7.709,
+        7.471,
+        7.779
+      ]
+    },
+    {
+      "symbol": "Request",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/Request/explain?repo_id=lib&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Request",
+      "atlas_tokens": 2,
+      "graphify_tokens": 51,
+      "atlas_ms": 7.469,
+      "graphify_ms": 79.273,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "Request t@request:16"
+      ],
+      "graphify_stdout_head": [
+        "Node: request",
+        "  ID:        src_base_response_request",
+        "  Source:    src/base_response.dart None",
+        "  Type:      code",
+        "  Community: 3",
+        "  Degree:    1",
+        "",
+        "Connections (1):"
+      ],
+      "atlas_ms_samples": [
+        7.79,
+        7.903,
+        7.29,
+        7.078,
+        8.155,
+        7.286,
+        7.516,
+        7.131,
+        7.469
+      ]
+    },
+    {
+      "symbol": "Response",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/Response/explain?repo_id=lib&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Response",
+      "atlas_tokens": 2,
+      "graphify_tokens": 59,
+      "atlas_ms": 7.69,
+      "graphify_ms": 76.472,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "Response t@response:16"
+      ],
+      "graphify_stdout_head": [
+        "Node: Response",
+        "  ID:        src_response_response",
+        "  Source:    src/response.dart None",
+        "  Type:      code",
+        "  Community: 3",
+        "  Degree:    2",
+        "",
+        "Connections (2):"
+      ],
+      "atlas_ms_samples": [
+        8.206,
+        7.85,
+        6.898,
+        7.241,
+        7.703,
+        7.69,
+        6.959,
+        7.851,
+        7.243
+      ]
+    },
+    {
+      "symbol": "send",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/send/explain?repo_id=lib&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain send",
+      "atlas_tokens": 2,
+      "graphify_tokens": 42,
+      "atlas_ms": 7.209,
+      "graphify_ms": 76.377,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "send f@retry:113"
+      ],
+      "graphify_stdout_head": [
+        "Node: send",
+        "  ID:        retry_send",
+        "  Source:    retry.dart None",
+        "  Type:      code",
+        "  Community: 9",
+        "  Degree:    1",
+        "",
+        "Connections (1):"
+      ],
+      "atlas_ms_samples": [
+        7.525,
+        7.101,
+        7.248,
+        7.927,
+        7.069,
+        7.072,
+        7.515,
+        6.547,
+        7.209
+      ]
+    },
+    {
+      "symbol": "RetryClient",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4219/api/v1/symbols/RetryClient/explain?repo_id=lib&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain RetryClient",
+      "atlas_tokens": 2,
+      "graphify_tokens": 55,
+      "atlas_ms": 7.683,
+      "graphify_ms": 90.288,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "RetryClient t@retry:17"
+      ],
+      "graphify_stdout_head": [
+        "Node: RetryClient",
+        "  ID:        retry_retryclient",
+        "  Source:    retry.dart None",
+        "  Type:      code",
+        "  Community: 9",
+        "  Degree:    2",
+        "",
+        "Connections (2):"
+      ],
+      "atlas_ms_samples": [
+        9.87,
+        7.872,
+        9.166,
+        7.683,
+        7.746,
+        7.15,
+        7.44,
+        6.925,
+        7.671
+      ]
+    }
+  ],
+  "atlas_cli": {
+    "version": "v0.1.26-11-g646a5b9",
+    "commit": "646a5b9",
+    "date": "2026-06-30T11:30:34Z",
+    "measurement_note": "Dart coverage refreshed from clean Atlas parser commit 646a5b9; Graphify rows retained as saved comparison baseline."
+  },
+  "multi_repo_validation": {
+    "minimum_repos": 3,
+    "status": "passed",
+    "generated_at": "2026-06-30T11:30:34Z",
+    "scope": "Dart parser validation uses three public Dart package lib targets. Coverage ratios compare Atlas expanded definitions to the prior core tree-sitter-dart baseline; each row also reports exact parity against an expanded tree-sitter-dart counter including top-level/class variables.",
+    "repos": [
+      {
+        "repo": "https://github.com/dart-lang/http",
+        "commit": "5d94ef52582867e077bf41c3fa20fb8b1d1d834e",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/dart/1-http/repo/pkgs/http/lib",
+        "atlas_definitions": 238,
+        "native_definitions": 180,
+        "coverage_ratio": 1.3222,
+        "expanded_counter_definitions": 238,
+        "expanded_counter_ratio": 1,
+        "ok": true,
+        "note": "27 Dart files parsed with tree-sitter-dart. Prior core baseline counted 180 definitions; Atlas commit 646a5b9 counted 238 including 58 variable definitions and matched the expanded counter 238/238."
+      },
+      {
+        "repo": "https://github.com/dart-lang/path",
+        "commit": "7e3d5d87220133ad9cc99f82e85a826011a62859",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/dart/2-path/repo/lib",
+        "atlas_definitions": 242,
+        "native_definitions": 180,
+        "coverage_ratio": 1.3444,
+        "expanded_counter_definitions": 242,
+        "expanded_counter_ratio": 1,
+        "ok": true,
+        "note": "13 Dart files parsed with tree-sitter-dart. Prior core baseline counted 180 definitions; Atlas commit 646a5b9 counted 242 including 62 variable definitions and matched the expanded counter 242/242."
+      },
+      {
+        "repo": "https://github.com/dart-lang/args",
+        "commit": "7a2dfb528768f0a2e5680f711dbfb948f1d6c255",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/dart/3-args/repo/lib",
+        "atlas_definitions": 203,
+        "native_definitions": 141,
+        "coverage_ratio": 1.4397,
+        "expanded_counter_definitions": 203,
+        "expanded_counter_ratio": 1,
+        "ok": true,
+        "note": "12 Dart files parsed with tree-sitter-dart. Prior core baseline counted 141 definitions; Atlas commit 646a5b9 counted 203 including 62 variable definitions and matched the expanded counter 203/203."
+      }
+    ]
+  },
+  "schemaVersion": 2,
+  "generated_at": "2026-06-30T11:30:34Z",
+  "measurement_note": "Dart coverage refreshed from Atlas parser commit 646a5b9. Graphify comparison query rows are retained as the comparison baseline because the measured symbols and compact Atlas explain output are unchanged."
+}

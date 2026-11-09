@@ -1,0 +1,1179 @@
+{
+ "schema_version": 1,
+ "corpus": "ts-vue",
+ "frozen": "2026-10-29",
+ "derivation": {"definition": "LSP `definitions` of the QA-set entity; relevant = name at any of those paths; acceptable = any symbol named exactly the entity", "callers": "LSP `truth` caller names, matched by name; paths from Atlas for humans; acceptable = any symbol named exactly the entity", "error_handling": "hand-labelled by reading the code at the pinned commit; file:line cited per item", "adversarial": "generic/stopword phrasings; expected refusal (code_query insufficient) or, where an acceptable list exists, a grounded answer", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)", "corpus_tree": "8c37cc4ea9cfd921e1386ad7ade9f80273627149"},
+ "queries": [
+  {
+   "id": "definition::warn",
+   "class": "definition",
+   "entity": "warn",
+   "component": "vuejs/core",
+   "question": "where is warn defined?",
+   "relevant": [
+    {"names": ["warn"], "paths": ["packages/compiler-sfc/src/script/context.ts", "packages/compiler-sfc/src/warn.ts", "packages/reactivity/src/warning.ts", "packages/runtime-core/src/index.ts", "packages/runtime-core/src/warning.ts", "scripts/setup-vitest.ts"], "locations": ["packages/compiler-sfc/src/script/context.ts:142", "packages/compiler-sfc/src/warn.ts:12", "packages/reactivity/src/warning.ts:1", "packages/runtime-core/src/warning.ts:35", "packages/runtime-core/src/index.ts:133", "scripts/setup-vitest.ts:81"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["warn"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::warn", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 6 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::warn",
+   "class": "callers",
+   "entity": "warn",
+   "component": "vuejs/core",
+   "question": "what calls warn?",
+   "relevant": [
+    {"names": ["VueElement"], "paths": ["packages/runtime-dom/src/apiCustomElement.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["_createVNode"], "paths": ["packages/runtime-core/src/vnode.ts", "packages/runtime-dom/src/apiCustomElement.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["_mount"], "paths": ["packages/runtime-dom/src/apiCustomElement.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["_resolveDef"], "paths": ["packages/runtime-dom/src/apiCustomElement.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["_resolveProps"], "paths": ["packages/runtime-dom/src/apiCustomElement.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["applyOptions"], "paths": ["packages/runtime-core/src/componentOptions.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["assertNumber"], "paths": ["packages/runtime-core/src/warning.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["callWithAsyncErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["checkIdentityKeys"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["compileToFunction"], "paths": ["packages/vue-compat/src/index.ts", "packages/vue/src/index.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["component"], "paths": ["packages/runtime-core/src/apiCreateApp.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["config"], "paths": ["packages/runtime-core/src/apiCreateApp.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["createApp"], "paths": ["packages/runtime-core/src/apiCreateApp.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["createBaseVNode"], "paths": ["packages/runtime-core/src/vnode.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["createDuplicateChecker"], "paths": ["packages/runtime-core/src/componentOptions.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["createReactiveObject"], "paths": ["packages/reactivity/src/reactive.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["createReadonlyMethod"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["createWatcher"], "paths": ["packages/runtime-core/src/componentOptions.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["defineReactive"], "paths": ["packages/runtime-core/src/compat/global.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["deleteProperty"], "paths": ["packages/reactivity/src/baseHandlers.ts", "packages/runtime-core/src/component.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["directive"], "paths": ["packages/runtime-core/src/apiCreateApp.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["doSet"], "paths": ["packages/runtime-core/src/rendererTemplateRef.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["doWatch"], "paths": ["packages/runtime-core/src/apiWatch.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["emit"], "paths": ["packages/runtime-core/src/componentEmits.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["expose"], "paths": ["packages/runtime-core/src/component.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["exposeSetupStateOnRenderContext"], "paths": ["packages/runtime-core/src/componentPublicInstance.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["findNonCommentChild"], "paths": ["packages/runtime-core/src/components/BaseTransition.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["finishComponentSetup"], "paths": ["packages/runtime-core/src/component.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["get"], "paths": ["packages/runtime-core/src/componentPublicInstance.ts", "packages/runtime-core/src/componentRenderUtils.ts", "packages/runtime-dom/src/index.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["getContext"], "paths": ["packages/runtime-core/src/apiSetupHelpers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["handleMismatch"], "paths": ["packages/runtime-core/src/hydration.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["handleSetupResult"], "paths": ["packages/runtime-core/src/component.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["has"], "paths": ["packages/runtime-core/src/componentPublicInstance.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["hydrate"], "paths": ["packages/runtime-core/src/apiAsyncComponent.ts", "packages/runtime-core/src/hydration.ts", "packages/runtime-core/src/renderer.ts", "packages/runtime-dom/src/index.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["hydrateChildren"], "paths": ["packages/runtime-core/src/hydration.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["hydrateElement"], "paths": ["packages/runtime-core/src/hydration.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["hydrateNode"], "paths": ["packages/runtime-core/src/hydration.ts", "packages/runtime-core/src/renderer.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["inject"], "paths": ["packages/runtime-core/src/apiInject.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["injectHook"], "paths": ["packages/runtime-core/src/apiLifecycle.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["installCompatMount"], "paths": ["packages/runtime-core/src/compat/global.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["installFilterMethod"], "paths": ["packages/runtime-core/src/compat/global.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["load"], "paths": ["packages/runtime-core/src/apiAsyncComponent.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["logError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["mergeDefaults"], "paths": ["packages/runtime-core/src/apiSetupHelpers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["mergeOptions"], "paths": ["packages/runtime-core/src/componentOptions.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["mixin"], "paths": ["packages/runtime-core/src/apiCreateApp.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["mount"], "paths": ["packages/runtime-core/src/apiCreateApp.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["mountToTarget"], "paths": ["packages/runtime-core/src/components/Teleport.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["normalizeContainer"], "paths": ["packages/runtime-dom/src/index.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["normalizeObjectSlots"], "paths": ["packages/runtime-core/src/componentSlots.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["normalizePropsOptions"], "paths": ["packages/runtime-core/src/componentProps.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["normalizeSlot"], "paths": ["packages/runtime-core/src/componentSlots.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["normalizeSuspenseSlot"], "paths": ["packages/runtime-core/src/components/Suspense.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["normalizeVNodeSlots"], "paths": ["packages/runtime-core/src/componentSlots.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["onEffectCleanup"], "paths": ["packages/reactivity/src/effect.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["onError"], "paths": ["packages/vue-compat/src/index.ts", "packages/vue/src/index.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["onScopeDispose"], "paths": ["packages/reactivity/src/effectScope.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["onUnmount"], "paths": ["packages/runtime-core/src/apiCreateApp.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["onWatcherCleanup"], "paths": ["packages/reactivity/src/watch.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["patch"], "paths": ["packages/runtime-core/src/renderer.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["patchDOMProp"], "paths": ["packages/runtime-dom/src/modules/props.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["patchKeyedChildren"], "paths": ["packages/runtime-core/src/renderer.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["performHydrate"], "paths": ["packages/runtime-core/src/apiAsyncComponent.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["process"], "paths": ["packages/runtime-core/src/components/Suspense.ts", "packages/runtime-core/src/components/Teleport.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["processWithDefaults"], "paths": ["packages/compiler-sfc/src/script/defineProps.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["propHasMismatch"], "paths": ["packages/runtime-core/src/hydration.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["provide"], "paths": ["packages/runtime-core/src/apiCreateApp.ts", "packages/runtime-core/src/apiInject.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["renderComponentRoot"], "paths": ["packages/runtime-core/src/componentRenderUtils.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["renderComponentSubTree"], "paths": ["packages/server-renderer/src/render.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["renderList"], "paths": ["packages/runtime-core/src/helpers/renderList.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["renderSlot"], "paths": ["packages/runtime-core/src/helpers/renderSlot.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["renderTeleportVNode"], "paths": ["packages/server-renderer/src/render.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["renderVNode"], "paths": ["packages/server-renderer/src/render.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["resolveAsset"], "paths": ["packages/runtime-core/src/helpers/resolveAssets.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["resolveTarget"], "paths": ["packages/runtime-core/src/components/Teleport.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["rewriteSelector"], "paths": ["packages/compiler-sfc/src/style/pluginScoped.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["run"], "paths": ["packages/reactivity/src/effect.ts", "packages/reactivity/src/effectScope.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["sanitizeEventValue"], "paths": ["packages/runtime-dom/src/modules/events.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["set"], "paths": ["packages/reactivity/src/baseHandlers.ts", "packages/runtime-core/src/component.ts", "packages/runtime-core/src/componentPublicInstance.ts", "packages/runtime-dom/src/index.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setRef"], "paths": ["packages/runtime-core/src/rendererTemplateRef.ts", "packages/vue/__tests__/index.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["setSelected"], "paths": ["packages/runtime-dom/src/directives/vModel.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setStyle"], "paths": ["packages/runtime-dom/src/modules/style.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setup"], "paths": ["packages/runtime-dom/src/components/TransitionGroup.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setupStatefulComponent"], "paths": ["packages/runtime-core/src/component.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["ssrRenderList"], "paths": ["packages/server-renderer/src/helpers/ssrRenderList.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["toHandlers"], "paths": ["packages/runtime-core/src/helpers/toHandlers.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["toRefs"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["unmount"], "paths": ["packages/runtime-core/src/apiCreateApp.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["use"], "paths": ["packages/runtime-core/src/apiCreateApp.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["useCssModule"], "paths": ["packages/runtime-dom/src/helpers/useCssModule.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["useCssVars"], "paths": ["packages/runtime-dom/src/helpers/useCssVars.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["useHost"], "paths": ["packages/runtime-dom/src/apiCustomElement.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["useId"], "paths": ["packages/runtime-core/src/helpers/useId.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["useModel"], "paths": ["packages/runtime-core/src/helpers/useModel.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["useSSRContext"], "paths": ["packages/runtime-core/src/helpers/useSsrContext.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["useTemplateRef"], "paths": ["packages/runtime-core/src/helpers/useTemplateRef.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["validateCompatConfig"], "paths": ["packages/runtime-core/src/compat/compatConfig.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["validateComponentName"], "paths": ["packages/runtime-core/src/component.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["validateDirectiveName"], "paths": ["packages/runtime-core/src/directives.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["validateProp"], "paths": ["packages/runtime-core/src/componentProps.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["validatePropName"], "paths": ["packages/runtime-core/src/componentProps.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["value"], "paths": ["packages/reactivity/src/computed.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["warn"], "paths": ["packages/compiler-sfc/src/script/context.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["warnDeprecation"], "paths": ["packages/runtime-core/src/compat/compatConfig.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["warnOnce"], "paths": ["packages/compiler-sfc/src/warn.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["warnRuntimeUsage"], "paths": ["packages/runtime-core/src/apiSetupHelpers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["watch"], "paths": ["packages/runtime-core/src/apiWatch.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["withAsyncContext"], "paths": ["packages/runtime-core/src/apiSetupHelpers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["withDirectives"], "paths": ["packages/runtime-core/src/directives.ts"], "paths_source": "atlas symbol definitions", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["warn"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::warn", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 6 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::toRaw",
+   "class": "definition",
+   "entity": "toRaw",
+   "component": "vuejs/core",
+   "question": "where is toRaw defined?",
+   "relevant": [
+    {"names": ["toRaw"], "paths": ["packages/reactivity/src/reactive.ts"], "locations": ["packages/reactivity/src/reactive.ts:391"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["toRaw"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::toRaw", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::toRaw",
+   "class": "callers",
+   "entity": "toRaw",
+   "component": "vuejs/core",
+   "question": "what calls toRaw?",
+   "relevant": [
+    {"names": ["ObjectRefImpl"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["RefImpl"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["_createVNode"], "paths": ["packages/runtime-core/src/vnode.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["add"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["checkIdentityKeys"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["clear"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["compileCode"], "paths": ["packages-private/template-explorer/src/index.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["createIterableMethod"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["createReadonlyMethod"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["delete"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["exposeSetupStateOnRenderContext"], "paths": ["packages/runtime-core/src/componentPublicInstance.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["forEach"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["formatInstance"], "paths": ["packages/runtime-core/src/customFormatter.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["formatProp"], "paths": ["packages/runtime-core/src/warning.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["formatValue"], "paths": ["packages/runtime-core/src/customFormatter.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["get"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["has"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["hasOwnProperty"], "paths": ["packages/reactivity/src/baseHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["noTracking"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["reactiveReadArray"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["searchProxy"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["set"], "paths": ["packages/reactivity/src/baseHandlers.ts", "packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setFullProps"], "paths": ["packages/runtime-core/src/componentProps.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setRef"], "paths": ["packages/runtime-core/src/rendererTemplateRef.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setup"], "paths": ["packages/runtime-core/src/components/BaseTransition.ts", "packages/runtime-dom/src/components/TransitionGroup.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["shallowReadArray"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["size"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["toRaw"], "paths": ["packages/reactivity/src/reactive.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["updateProps"], "paths": ["packages/runtime-core/src/componentProps.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["validateProps"], "paths": ["packages/runtime-core/src/componentProps.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["value"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["toRaw"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::toRaw", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::ref",
+   "class": "definition",
+   "entity": "ref",
+   "component": "vuejs/core",
+   "question": "where is ref defined?",
+   "relevant": [
+    {"names": ["ref"], "paths": ["packages-private/dts-test/h.test-d.ts", "packages/compiler-sfc/src/style/preprocessors.ts", "packages/reactivity/__tests__/computed.spec.ts", "packages/reactivity/src/ref.ts", "packages/runtime-core/__tests__/apiWatch.spec.ts", "packages/runtime-core/src/hydration.ts", "packages/runtime-core/src/renderer.ts", "packages/runtime-core/src/vnode.ts", "packages/server-renderer/__tests__/ssrRenderAttrs.spec.ts"], "locations": ["packages/reactivity/__tests__/computed.spec.ts:861", "packages/reactivity/src/ref.ts:59", "packages/reactivity/src/ref.ts:62", "packages/reactivity/src/ref.ts:64", "packages/runtime-core/__tests__/apiWatch.spec.ts:1325", "packages/server-renderer/__tests__/ssrRenderAttrs.spec.ts:16", "packages-private/dts-test/h.test-d.ts:27", "packages/compiler-sfc/src/style/preprocessors.ts:121", "packages/runtime-core/src/hydration.ts:157", "packages/runtime-core/src/renderer.ts:424", "packages/runtime-core/src/renderer.ts:2181", "packages/runtime-core/src/vnode.ts:427"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["ref"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::ref", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 12 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::ref",
+   "class": "callers",
+   "entity": "ref",
+   "component": "vuejs/core",
+   "question": "what calls ref?",
+   "relevant": [
+    {"names": ["Item"], "paths": ["packages/reactivity/__tests__/computed.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["assertAnonymous"], "paths": ["packages/runtime-core/__tests__/components/KeepAlive.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["assertNameMatch"], "paths": ["packages/runtime-core/__tests__/components/KeepAlive.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["assertNameMatchWithFlag"], "paths": ["packages/runtime-core/__tests__/components/KeepAlive.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["assertNameMatchWithFlagExclude"], "paths": ["packages/runtime-core/__tests__/components/KeepAlive.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["bailType"], "paths": ["packages-private/dts-test/ref.test-d.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["data"], "paths": ["packages-private/dts-test/defineComponent.test-d.tsx"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["mockPersistedHooks"], "paths": ["packages/runtime-core/__tests__/components/BaseTransition.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["mount"], "paths": ["packages/runtime-core/__tests__/components/BaseTransition.spec.ts", "packages/runtime-core/__tests__/helpers/withMemo.spec.ts", "packages/runtime-core/src/apiCreateApp.ts", "packages/runtime-core/src/components/Teleport.ts", "packages/runtime-dom/src/index.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["plainType"], "paths": ["packages-private/dts-test/ref.test-d.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["runSharedTests"], "paths": ["packages/runtime-core/__tests__/components/Teleport.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["setup"], "paths": ["packages-private/dts-test/component.test-d.ts", "packages-private/dts-test/defineComponent.test-d.tsx", "packages/runtime-core/__tests__/apiCreateApp.spec.ts", "packages/runtime-core/__tests__/apiExpose.spec.ts", "packages/runtime-core/__tests__/apiOptions.spec.ts", "packages/runtime-core/__tests__/apiSetupContext.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setupExclude"], "paths": ["packages/runtime-core/__tests__/components/KeepAlive.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["testInOut"], "paths": ["packages/runtime-core/__tests__/components/BaseTransition.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["testInOutBeforeFinish"], "paths": ["packages/runtime-core/__tests__/components/BaseTransition.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["testOutIn"], "paths": ["packages/runtime-core/__tests__/components/BaseTransition.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["testOutInBeforeFinish"], "paths": ["packages/runtime-core/__tests__/components/BaseTransition.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["testOutInDoubleToggle"], "paths": ["packages/runtime-core/__tests__/components/BaseTransition.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["testRender"], "paths": ["packages/server-renderer/__tests__/render.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["testToggleBranches"], "paths": ["packages/runtime-core/__tests__/components/BaseTransition.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["testToggleBranchesBeforeFinish"], "paths": ["packages/runtime-core/__tests__/components/BaseTransition.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["testToggleOnOff"], "paths": ["packages/runtime-core/__tests__/components/BaseTransition.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["testToggleOnOffBeforeFinish"], "paths": ["packages/runtime-core/__tests__/components/BaseTransition.spec.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["toRef"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["useModel"], "paths": ["packages/runtime-core/src/helpers/useModel.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["withSymbol"], "paths": ["packages-private/dts-test/ref.test-d.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["ref"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::ref", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 12 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::isRef",
+   "class": "definition",
+   "entity": "isRef",
+   "component": "vuejs/core",
+   "question": "where is isRef defined?",
+   "relevant": [
+    {"names": ["isRef"], "paths": ["packages/reactivity/src/ref.ts", "packages/shared/src/toDisplayString.ts"], "locations": ["packages/reactivity/src/ref.ts:46", "packages/reactivity/src/ref.ts:48", "packages/shared/src/toDisplayString.ts:16"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["isRef"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::isRef", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 3 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::isRef",
+   "class": "callers",
+   "entity": "isRef",
+   "component": "vuejs/core",
+   "question": "what calls isRef?",
+   "relevant": [
+    {"names": ["bailType"], "paths": ["packages-private/dts-test/ref.test-d.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["createRef"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["createSetupContext"], "paths": ["packages/runtime-core/src/component.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["expose"], "paths": ["packages/runtime-core/src/component.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["formatProp"], "paths": ["packages/runtime-core/src/warning.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["get"], "paths": ["packages/reactivity/src/baseHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["getter"], "paths": ["packages/reactivity/__tests__/computed.spec.ts", "packages/reactivity/src/computed.ts", "packages/reactivity/src/watch.ts", "packages/runtime-core/__tests__/apiWatch.spec.ts", "packages/runtime-core/__tests__/helpers/useModel.spec.ts", "packages/runtime-core/src/apiWatch.ts", "packages/runtime-core/src/componentOptions.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["header"], "paths": ["packages/runtime-core/src/customFormatter.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["normalizeRef"], "paths": ["packages/runtime-core/src/vnode.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["plainType"], "paths": ["packages-private/dts-test/ref.test-d.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["replacer"], "paths": ["packages/shared/src/toDisplayString.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["resolveInjections"], "paths": ["packages/runtime-core/src/componentOptions.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["set"], "paths": ["packages/reactivity/src/baseHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setRef"], "paths": ["packages/runtime-core/src/rendererTemplateRef.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["toDisplayString"], "paths": ["packages/shared/src/toDisplayString.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["toRef"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["traverse"], "paths": ["packages/reactivity/src/watch.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["unref"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["value"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["watch"], "paths": ["packages/reactivity/src/watch.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["isRef"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::isRef", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 3 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::reactive",
+   "class": "definition",
+   "entity": "reactive",
+   "component": "vuejs/core",
+   "question": "where is reactive defined?",
+   "relevant": [
+    {"names": ["reactive"], "paths": ["packages/reactivity/src/reactive.ts"], "locations": ["packages/reactivity/src/reactive.ts:85", "packages/reactivity/src/reactive.ts:87"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["reactive"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::reactive", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::reactive",
+   "class": "callers",
+   "entity": "reactive",
+   "component": "vuejs/core",
+   "question": "what calls reactive?",
+   "relevant": [
+    {"names": ["applyOptions"], "paths": ["packages/runtime-core/src/componentOptions.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["assertCssVars"], "paths": ["packages/runtime-dom/__tests__/helpers/useCssVars.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["assertTriggerRef"], "paths": ["packages/reactivity/__tests__/ref.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["assertValue"], "paths": ["packages/reactivity/__tests__/reactive.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["coverCollectionFn"], "paths": ["packages/reactivity/__tests__/collections/Map.spec.ts", "packages/reactivity/__tests__/collections/Set.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["createCompatVue"], "paths": ["packages/runtime-core/src/compat/global.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["defineReactive"], "paths": ["packages/runtime-core/src/compat/global.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["defineReactiveSimple"], "paths": ["packages/runtime-core/src/compat/global.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["get"], "paths": ["packages/reactivity/src/baseHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["observable"], "paths": ["packages/runtime-core/src/compat/global.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["set"], "paths": ["packages/runtime-core/src/compat/global.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setup"], "paths": ["packages-private/dts-test/defineComponent.test-d.tsx", "packages/runtime-core/__tests__/apiSetupContext.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["testRender"], "paths": ["packages/server-renderer/__tests__/render.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["toReactive"], "paths": ["packages/reactivity/src/reactive.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["reactive"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::reactive", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::isShallow",
+   "class": "definition",
+   "entity": "isShallow",
+   "component": "vuejs/core",
+   "question": "where is isShallow defined?",
+   "relevant": [
+    {"names": ["isShallow"], "paths": ["packages/reactivity/src/reactive.ts"], "locations": ["packages/reactivity/src/reactive.ts:351"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["isShallow"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::isShallow", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::isShallow",
+   "class": "callers",
+   "entity": "isShallow",
+   "component": "vuejs/core",
+   "question": "what calls isShallow?",
+   "relevant": [
+    {"names": ["ObjectRefImpl"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["add"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["apply"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["genRefFlag"], "paths": ["packages/runtime-core/src/customFormatter.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["header"], "paths": ["packages/runtime-core/src/customFormatter.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["iterator"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["reactiveGetter"], "paths": ["packages/reactivity/src/watch.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["reactiveReadArray"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["reduce"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["renderList"], "paths": ["packages/runtime-core/src/helpers/renderList.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["set"], "paths": ["packages/reactivity/src/baseHandlers.ts", "packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["value"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["watch"], "paths": ["packages/reactivity/src/watch.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["isShallow"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::isShallow", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::track",
+   "class": "definition",
+   "entity": "track",
+   "component": "vuejs/core",
+   "question": "where is track defined?",
+   "relevant": [
+    {"names": ["track"], "paths": ["packages/reactivity/src/dep.ts"], "locations": ["packages/reactivity/src/dep.ts:108", "packages/reactivity/src/dep.ts:262"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["track"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::track", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::track",
+   "class": "callers",
+   "entity": "track",
+   "component": "vuejs/core",
+   "question": "what calls track?",
+   "relevant": [
+    {"names": ["createIterableMethod"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["forEach"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["get"], "paths": ["packages/reactivity/src/baseHandlers.ts", "packages/reactivity/src/collectionHandlers.ts", "packages/runtime-core/src/compat/global.ts", "packages/runtime-core/src/component.ts", "packages/runtime-core/src/componentPublicInstance.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["has"], "paths": ["packages/reactivity/src/baseHandlers.ts", "packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["hasOwnProperty"], "paths": ["packages/reactivity/src/baseHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["ownKeys"], "paths": ["packages/reactivity/src/baseHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["reactiveReadArray"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["searchProxy"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["shallowReadArray"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["size"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["track"], "paths": ["packages/reactivity/src/dep.ts", "packages/runtime-dom/src/jsx.ts"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["value"], "paths": ["packages/reactivity/src/computed.ts", "packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["track"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::track", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 2 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::trigger",
+   "class": "definition",
+   "entity": "trigger",
+   "component": "vuejs/core",
+   "question": "where is trigger defined?",
+   "relevant": [
+    {"names": ["trigger"], "paths": ["packages/reactivity/src/dep.ts", "packages/reactivity/src/effect.ts"], "locations": ["packages/reactivity/src/dep.ts:167", "packages/reactivity/src/dep.ts:294", "packages/reactivity/src/effect.ts:206"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["trigger"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::trigger", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 3 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::trigger",
+   "class": "callers",
+   "entity": "trigger",
+   "component": "vuejs/core",
+   "question": "what calls trigger?",
+   "relevant": [
+    {"names": ["add"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["clear"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["delete"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["deleteProperty"], "paths": ["packages/reactivity/src/baseHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["endBatch"], "paths": ["packages/reactivity/src/effect.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["resume"], "paths": ["packages/reactivity/src/effect.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["run"], "paths": [".github/workflows/autofix.yml", ".github/workflows/ci.yml", ".github/workflows/release.yml", ".github/workflows/size-data.yml", ".github/workflows/size-report.yml", ".github/workflows/test.yml", "packages/reactivity/__tests__/effect.spec.ts", "packages/reactivity/__tests__/reactive.spec.ts", "packages/reactivity/src/dep.ts", "packages/reactivity/src/effect.ts", "packages/reactivity/src/effectScope.ts", "scripts/build.js", "scripts/release.js", "scripts/size-report.js"], "paths_source": "atlas symbol definitions", "match": "name"},
+    {"names": ["set"], "paths": ["packages/reactivity/__tests__/ref.spec.ts", "packages/reactivity/src/baseHandlers.ts", "packages/reactivity/src/collectionHandlers.ts", "packages/runtime-core/src/compat/global.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["triggerRef"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["updateProps"], "paths": ["packages/runtime-core/src/componentProps.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["updateSlots"], "paths": ["packages/runtime-core/src/componentSlots.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["value"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["trigger"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::trigger", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 3 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::pauseTracking",
+   "class": "definition",
+   "entity": "pauseTracking",
+   "component": "vuejs/core",
+   "question": "where is pauseTracking defined?",
+   "relevant": [
+    {"names": ["pauseTracking"], "paths": ["packages/reactivity/src/effect.ts"], "locations": ["packages/reactivity/src/effect.ts:525"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["pauseTracking"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::pauseTracking", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::pauseTracking",
+   "class": "callers",
+   "entity": "pauseTracking",
+   "component": "vuejs/core",
+   "question": "what calls pauseTracking?",
+   "relevant": [
+    {"names": ["finishComponentSetup"], "paths": ["packages/runtime-core/src/component.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["handleError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["header"], "paths": ["packages/runtime-core/src/customFormatter.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["injectHook"], "paths": ["packages/runtime-core/src/apiLifecycle.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["invokeDirectiveHook"], "paths": ["packages/runtime-core/src/directives.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["job"], "paths": ["packages/reactivity/src/watch.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["noTracking"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setupStatefulComponent"], "paths": ["packages/runtime-core/src/component.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["unmount"], "paths": ["packages/runtime-core/src/renderer.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["updateComponentPreRender"], "paths": ["packages/runtime-core/src/renderer.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["warn"], "paths": ["packages/runtime-core/src/warning.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["watch"], "paths": ["packages/reactivity/src/watch.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["pauseTracking"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::pauseTracking", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::resetTracking",
+   "class": "definition",
+   "entity": "resetTracking",
+   "component": "vuejs/core",
+   "question": "where is resetTracking defined?",
+   "relevant": [
+    {"names": ["resetTracking"], "paths": ["packages/reactivity/src/effect.ts"], "locations": ["packages/reactivity/src/effect.ts:541"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["resetTracking"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::resetTracking", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::resetTracking",
+   "class": "callers",
+   "entity": "resetTracking",
+   "component": "vuejs/core",
+   "question": "what calls resetTracking?",
+   "relevant": [
+    {"names": ["finishComponentSetup"], "paths": ["packages/runtime-core/src/component.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["handleError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["header"], "paths": ["packages/runtime-core/src/customFormatter.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["injectHook"], "paths": ["packages/runtime-core/src/apiLifecycle.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["invokeDirectiveHook"], "paths": ["packages/runtime-core/src/directives.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["job"], "paths": ["packages/reactivity/src/watch.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["noTracking"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setupStatefulComponent"], "paths": ["packages/runtime-core/src/component.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["unmount"], "paths": ["packages/runtime-core/src/renderer.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["updateComponentPreRender"], "paths": ["packages/runtime-core/src/renderer.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["warn"], "paths": ["packages/runtime-core/src/warning.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["watch"], "paths": ["packages/reactivity/src/watch.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["resetTracking"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::resetTracking", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::isReactive",
+   "class": "definition",
+   "entity": "isReactive",
+   "component": "vuejs/core",
+   "question": "where is isReactive defined?",
+   "relevant": [
+    {"names": ["isReactive"], "paths": ["packages/reactivity/src/reactive.ts"], "locations": ["packages/reactivity/src/reactive.ts:327"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["isReactive"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::isReactive", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::isReactive",
+   "class": "callers",
+   "entity": "isReactive",
+   "component": "vuejs/core",
+   "question": "what calls isReactive?",
+   "relevant": [
+    {"names": ["defineReactive"], "paths": ["packages/runtime-core/src/compat/global.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["header"], "paths": ["packages/runtime-core/src/customFormatter.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["hydrateElement"], "paths": ["packages/runtime-core/src/hydration.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["isReactive"], "paths": ["packages/reactivity/src/reactive.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["maxBy"], "paths": ["packages/reactivity/__tests__/reactiveArray.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["proxyRefs"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["reactiveReadArray"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["renderList"], "paths": ["packages/runtime-core/src/helpers/renderList.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["toWrapped"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["watch"], "paths": ["packages/reactivity/src/watch.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["isReactive"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::isReactive", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::isReadonly",
+   "class": "definition",
+   "entity": "isReadonly",
+   "component": "vuejs/core",
+   "question": "where is isReadonly defined?",
+   "relevant": [
+    {"names": ["isReadonly"], "paths": ["packages/reactivity/src/reactive.ts"], "locations": ["packages/reactivity/src/reactive.ts:346"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["isReadonly"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::isReadonly", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::isReadonly",
+   "class": "callers",
+   "entity": "isReadonly",
+   "component": "vuejs/core",
+   "question": "what calls isReadonly?",
+   "relevant": [
+    {"names": ["add"], "paths": ["packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["header"], "paths": ["packages/runtime-core/src/customFormatter.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["isReactive"], "paths": ["packages/reactivity/src/reactive.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["reactive"], "paths": ["packages/reactivity/src/reactive.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["reactiveReadArray"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["renderList"], "paths": ["packages/runtime-core/src/helpers/renderList.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["set"], "paths": ["packages/reactivity/src/baseHandlers.ts", "packages/reactivity/src/collectionHandlers.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["toWrapped"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["value"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["isReadonly"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::isReadonly", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::toWrapped",
+   "class": "definition",
+   "entity": "toWrapped",
+   "component": "vuejs/core",
+   "question": "where is toWrapped defined?",
+   "relevant": [
+    {"names": ["toWrapped"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "locations": ["packages/reactivity/src/arrayInstrumentations.ts:45"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["toWrapped"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::toWrapped", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::toWrapped",
+   "class": "callers",
+   "entity": "toWrapped",
+   "component": "vuejs/core",
+   "question": "what calls toWrapped?",
+   "relevant": [
+    {"names": ["apply"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["entries"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["filter"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["find"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["findLast"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["reduce"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["values"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["toWrapped"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::toWrapped", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::unref",
+   "class": "definition",
+   "entity": "unref",
+   "component": "vuejs/core",
+   "question": "where is unref defined?",
+   "relevant": [
+    {"names": ["unref"], "paths": ["packages/reactivity/src/ref.ts"], "locations": ["packages/reactivity/src/ref.ts:229"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["unref"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::unref", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::unref",
+   "class": "callers",
+   "entity": "unref",
+   "component": "vuejs/core",
+   "question": "what calls unref?",
+   "relevant": [
+    {"names": ["_mount"], "paths": ["packages/runtime-dom/src/apiCustomElement.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["bailType"], "paths": ["packages-private/dts-test/ref.test-d.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["plainType"], "paths": ["packages-private/dts-test/ref.test-d.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["ssrRender"], "paths": ["packages/server-renderer/__tests__/ssrDirectives.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["testUnrefGenerics"], "paths": ["packages-private/dts-test/ref.test-d.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["toValue"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["value"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["unref"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::unref", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::computed",
+   "class": "definition",
+   "entity": "computed",
+   "component": "vuejs/core",
+   "question": "where is computed defined?",
+   "relevant": [
+    {"names": ["computed"], "paths": ["packages/reactivity/__benchmarks__/computed.bench.ts", "packages/reactivity/src/computed.ts", "packages/runtime-core/src/apiComputed.ts"], "locations": ["packages/reactivity/__benchmarks__/computed.bench.ts:6", "packages/reactivity/src/computed.ts:189", "packages/reactivity/src/computed.ts:193", "packages/reactivity/src/computed.ts:198", "packages/runtime-core/src/apiComputed.ts:4"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["computed"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::computed", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 5 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::computed",
+   "class": "callers",
+   "entity": "computed",
+   "component": "vuejs/core",
+   "question": "what calls computed?",
+   "relevant": [
+    {"names": ["applyOptions"], "paths": ["packages/runtime-core/src/componentOptions.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["computed"], "paths": ["packages/runtime-core/src/apiComputed.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setup"], "paths": ["packages/reactivity/__tests__/computed.spec.ts", "packages/runtime-core/__tests__/apiSetupHelpers.spec.ts", "packages/runtime-core/__tests__/errorHandling.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["testRender"], "paths": ["packages/server-renderer/__tests__/render.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["useClamp"], "paths": ["packages/reactivity/__tests__/watch.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["computed"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::computed", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 5 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::isProxy",
+   "class": "definition",
+   "entity": "isProxy",
+   "component": "vuejs/core",
+   "question": "where is isProxy defined?",
+   "relevant": [
+    {"names": ["isProxy"], "paths": ["packages/reactivity/src/reactive.ts"], "locations": ["packages/reactivity/src/reactive.ts:363"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["isProxy"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::isProxy", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::isProxy",
+   "class": "callers",
+   "entity": "isProxy",
+   "component": "vuejs/core",
+   "question": "what calls isProxy?",
+   "relevant": [
+    {"names": ["ObjectRefImpl"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["_createVNode"], "paths": ["packages/runtime-core/src/vnode.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["guardReactiveProps"], "paths": ["packages/runtime-core/src/vnode.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["searchProxy"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["toRefs"], "paths": ["packages/reactivity/src/ref.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["isProxy"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::isProxy", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::markRaw",
+   "class": "definition",
+   "entity": "markRaw",
+   "component": "vuejs/core",
+   "question": "where is markRaw defined?",
+   "relevant": [
+    {"names": ["markRaw"], "paths": ["packages/reactivity/src/reactive.ts"], "locations": ["packages/reactivity/src/reactive.ts:420"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["markRaw"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::markRaw", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::markRaw",
+   "class": "callers",
+   "entity": "markRaw",
+   "component": "vuejs/core",
+   "question": "what calls markRaw?",
+   "relevant": [
+    {"names": ["createComment"], "paths": ["packages/runtime-test/src/nodeOps.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["createElement"], "paths": ["packages/runtime-test/src/nodeOps.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["createText"], "paths": ["packages/runtime-test/src/nodeOps.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["getComponentPublicInstance"], "paths": ["packages/runtime-core/src/component.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["setup"], "paths": ["packages/runtime-core/__tests__/components/Teleport.spec.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["markRaw"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::markRaw", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::noTracking",
+   "class": "definition",
+   "entity": "noTracking",
+   "component": "vuejs/core",
+   "question": "where is noTracking defined?",
+   "relevant": [
+    {"names": ["noTracking"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "locations": ["packages/reactivity/src/arrayInstrumentations.ts:401"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["noTracking"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::noTracking", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::noTracking",
+   "class": "callers",
+   "entity": "noTracking",
+   "component": "vuejs/core",
+   "question": "what calls noTracking?",
+   "relevant": [
+    {"names": ["pop"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["push"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["shift"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["splice"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["unshift"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["noTracking"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::noTracking", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "definition::reactiveReadArray",
+   "class": "definition",
+   "entity": "reactiveReadArray",
+   "component": "vuejs/core",
+   "question": "where is reactiveReadArray defined?",
+   "relevant": [
+    {"names": ["reactiveReadArray"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "locations": ["packages/reactivity/src/arrayInstrumentations.ts:22"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["reactiveReadArray"], "paths": [], "match": "name", "why": "same-named symbol outside the LSP definition set"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::reactiveReadArray", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "definitions"}
+  },
+  {
+   "id": "callers::reactiveReadArray",
+   "class": "callers",
+   "entity": "reactiveReadArray",
+   "component": "vuejs/core",
+   "question": "what calls reactiveReadArray?",
+   "relevant": [
+    {"names": ["concat"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["join"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["toReversed"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["toSorted"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"},
+    {"names": ["toSpliced"], "paths": ["packages/reactivity/src/arrayInstrumentations.ts"], "paths_source": "atlas symbol callers", "match": "name"}
+   ],
+   "acceptable": [
+    {"names": ["reactiveReadArray"], "paths": [], "match": "name", "why": "the entity itself (the anchor a callers answer shows first)"}
+   ],
+   "provenance": {"source": "lsp", "qa_set": "bench/QA_SET_typescript.json", "qa_id": "callers::reactiveReadArray", "qa_commit": "ca034820b8288ab6da3a033626a7857401ee64a5", "lsp_truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)", "truth_source": "call_hierarchy over 1 definition(s)", "derived_by": "bench/relevance/derive_labels.py", "field": "truth", "paths_from": "atlas v0.1.52-691-g7f7e7b07 (7f7e7b07, 2026-10-29T00:00:00Z)"}
+  },
+  {
+   "id": "error_handling::handleError",
+   "class": "error_handling",
+   "entity": "handleError",
+   "component": "vuejs/core",
+   "question": "handleError error exception handling",
+   "relevant": [
+    {"names": ["handleError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:112"], "match": "name+path", "why": "walks errorCaptured hooks, then app.config.errorHandler, then logError"},
+    {"names": ["logError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:157"], "match": "name+path"},
+    {"names": ["callWithErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:70"], "match": "name+path"},
+    {"names": ["ErrorCodes"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:11"], "match": "name+path"},
+    {"names": ["ErrorTypeStrings"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:34"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["callWithAsyncErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:83"], "match": "name+path"},
+    {"names": ["ErrorTypes"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:68"], "match": "name+path"},
+    {"names": ["onErrorCaptured"], "paths": ["packages/runtime-core/src/apiLifecycle.ts"], "locations": ["packages/runtime-core/src/apiLifecycle.ts:111"], "match": "name+path"},
+    {"names": ["handleError"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": ""}
+  },
+  {
+   "id": "error_handling::callWithErrorHandling",
+   "class": "error_handling",
+   "entity": "callWithErrorHandling",
+   "component": "vuejs/core",
+   "question": "callWithErrorHandling error exception handling",
+   "relevant": [
+    {"names": ["callWithErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:70"], "match": "name+path", "why": "try/catch -> handleError"},
+    {"names": ["handleError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:112"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["callWithAsyncErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:83"], "match": "name+path"},
+    {"names": ["logError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:157"], "match": "name+path"},
+    {"names": ["ErrorCodes"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:11"], "match": "name+path"},
+    {"names": ["callWithErrorHandling"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": ""}
+  },
+  {
+   "id": "error_handling::callWithAsyncErrorHandling",
+   "class": "error_handling",
+   "entity": "callWithAsyncErrorHandling",
+   "component": "vuejs/core",
+   "question": "callWithAsyncErrorHandling error exception handling",
+   "relevant": [
+    {"names": ["callWithAsyncErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:83"], "match": "name+path", "why": "promise .catch -> handleError; arrays recurse"},
+    {"names": ["callWithErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:70"], "match": "name+path"},
+    {"names": ["handleError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:112"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["logError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:157"], "match": "name+path"},
+    {"names": ["ErrorCodes"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:11"], "match": "name+path"},
+    {"names": ["callWithAsyncErrorHandling"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": ""}
+  },
+  {
+   "id": "error_handling::warn",
+   "class": "error_handling",
+   "entity": "warn",
+   "component": "vuejs/core",
+   "question": "warn error exception handling",
+   "relevant": [
+    {"names": ["warn"], "paths": ["packages/runtime-core/src/warning.ts"], "locations": ["packages/runtime-core/src/warning.ts:35"], "match": "name+path", "why": "re-entrancy guard; routes app.config.warnHandler through callWithErrorHandling(APP_WARN_HANDLER) (47-62)"},
+    {"names": ["callWithErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:70"], "match": "name+path"},
+    {"names": ["ErrorCodes"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:11"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["warn"], "paths": ["packages/reactivity/src/warning.ts"], "locations": ["packages/reactivity/src/warning.ts:1"], "match": "name+path"},
+    {"names": ["warn"], "paths": ["packages/compiler-sfc/src/warn.ts"], "locations": ["packages/compiler-sfc/src/warn.ts:12"], "match": "name+path"},
+    {"names": ["warn"], "paths": ["packages/runtime-core/src/index.ts"], "locations": ["packages/runtime-core/src/index.ts:133"], "match": "name+path"},
+    {"names": ["getComponentTrace"], "paths": ["packages/runtime-core/src/warning.ts"], "locations": ["packages/runtime-core/src/warning.ts:81"], "match": "name+path"},
+    {"names": ["handleError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:112"], "match": "name+path"},
+    {"names": ["logError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:157"], "match": "name+path"},
+    {"names": ["warn"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": "the runtime-core warn is the one with error handling"}
+  },
+  {
+   "id": "error_handling::setupStatefulComponent",
+   "class": "error_handling",
+   "entity": "setupStatefulComponent",
+   "component": "vuejs/core",
+   "question": "setupStatefulComponent error exception handling",
+   "relevant": [
+    {"names": ["setupStatefulComponent"], "paths": ["packages/runtime-core/src/component.ts"], "locations": ["packages/runtime-core/src/component.ts:833"], "match": "name+path", "why": "setup() via callWithErrorHandling(SETUP_FUNCTION) (877-885); async setup rejection -> handleError (908-910)"},
+    {"names": ["callWithErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:70"], "match": "name+path"},
+    {"names": ["handleError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:112"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["ErrorCodes"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:11"], "match": "name+path"},
+    {"names": ["setupComponent"], "paths": ["packages/runtime-core/src/component.ts"], "locations": ["packages/runtime-core/src/component.ts:813"], "match": "name+path"},
+    {"names": ["handleSetupResult"], "paths": ["packages/runtime-core/src/component.ts"], "locations": ["packages/runtime-core/src/component.ts:938"], "match": "name+path"},
+    {"names": ["setupStatefulComponent"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": ""}
+  },
+  {
+   "id": "error_handling::defineAsyncComponent",
+   "class": "error_handling",
+   "entity": "defineAsyncComponent",
+   "component": "vuejs/core",
+   "question": "defineAsyncComponent error exception handling",
+   "relevant": [
+    {"names": ["defineAsyncComponent"], "paths": ["packages/runtime-core/src/apiAsyncComponent.ts"], "locations": ["packages/runtime-core/src/apiAsyncComponent.ts:48"], "match": "name+path", "why": "user onError with retry/fail, handleError(ASYNC_COMPONENT_LOADER), errorComponent (173-200)"},
+    {"names": ["handleError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:112"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["ErrorCodes"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:11"], "match": "name+path"},
+    {"names": ["AsyncComponentOptions"], "paths": ["packages/runtime-core/src/apiAsyncComponent.ts"], "locations": ["packages/runtime-core/src/apiAsyncComponent.ts:28"], "match": "name+path", "why": "declares onError / errorComponent"},
+    {"names": ["defineAsyncComponent"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": ""}
+  },
+  {
+   "id": "error_handling::flushJobs",
+   "class": "error_handling",
+   "entity": "flushJobs",
+   "component": "vuejs/core",
+   "question": "flushJobs error exception handling",
+   "relevant": [
+    {"names": ["flushJobs"], "paths": ["packages/runtime-core/src/scheduler.ts"], "locations": ["packages/runtime-core/src/scheduler.ts:273"], "match": "name+path", "why": "each job runs under callWithErrorHandling(COMPONENT_UPDATE|SCHEDULER); finally clears QUEUED flags (308-316)"},
+    {"names": ["checkRecursiveUpdates"], "paths": ["packages/runtime-core/src/scheduler.ts"], "locations": ["packages/runtime-core/src/scheduler.ts:329"], "match": "name+path", "why": "recursion limit -> handleError(APP_ERROR_HANDLER)"},
+    {"names": ["callWithErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:70"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["handleError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:112"], "match": "name+path"},
+    {"names": ["ErrorCodes"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:11"], "match": "name+path"},
+    {"names": ["flushPostFlushCbs"], "paths": ["packages/runtime-core/src/scheduler.ts"], "locations": ["packages/runtime-core/src/scheduler.ts:186"], "match": "name+path"},
+    {"names": ["flushJobs"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": ""}
+  },
+  {
+   "id": "error_handling::watch",
+   "class": "error_handling",
+   "entity": "watch",
+   "component": "vuejs/core",
+   "question": "watch error exception handling",
+   "relevant": [
+    {"names": ["watch"], "paths": ["packages/reactivity/src/watch.ts"], "locations": ["packages/reactivity/src/watch.ts:120"], "match": "name+path", "why": "getter/callback/cleanup run through call(..., WatchErrorCodes.*)"},
+    {"names": ["WatchErrorCodes"], "paths": ["packages/reactivity/src/watch.ts"], "locations": ["packages/reactivity/src/watch.ts:31"], "match": "name+path"},
+    {"names": ["doWatch"], "paths": ["packages/runtime-core/src/apiWatch.ts"], "locations": ["packages/runtime-core/src/apiWatch.ts:146"], "match": "name+path", "why": "baseWatchOptions.call = callWithAsyncErrorHandling (195-196)"},
+    {"names": ["callWithAsyncErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:83"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["watch"], "paths": ["packages/runtime-core/src/apiWatch.ts"], "locations": ["packages/runtime-core/src/apiWatch.ts:131"], "match": "name+path"},
+    {"names": ["handleError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:112"], "match": "name+path"},
+    {"names": ["ErrorCodes"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:11"], "match": "name+path"},
+    {"names": ["watch"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": ""}
+  },
+  {
+   "id": "error_handling::computed",
+   "class": "error_handling",
+   "entity": "computed",
+   "component": "vuejs/core",
+   "question": "computed error exception handling",
+   "relevant": [
+    {"names": ["ComputedRefImpl"], "paths": ["packages/reactivity/src/computed.ts"], "locations": ["packages/reactivity/src/computed.ts:47"], "match": "name+path", "why": "set value warns 'Write operation failed: computed value is readonly' (147-153)"},
+    {"names": ["warn"], "paths": ["packages/reactivity/src/warning.ts"], "locations": ["packages/reactivity/src/warning.ts:1"], "match": "name+path"}
+   ],
+   "acceptable": [
+    {"names": ["computed"], "paths": ["packages/reactivity/src/computed.ts"], "locations": ["packages/reactivity/src/computed.ts:189"], "match": "name+path"},
+    {"names": ["value"], "paths": ["packages/reactivity/src/computed.ts"], "locations": ["packages/reactivity/src/computed.ts:147"], "match": "name+path"},
+    {"names": ["computed"], "paths": [], "match": "name", "why": "same-named symbol (the entity under another definition)"}
+   ],
+   "provenance": {"source": "hand", "method": "read the code at the pinned commit; every item cites path:line", "labelled": "2026-10-29", "note": "a dev warning is the only error path"}
+  },
+  {
+   "id": "adversarial::purpose-of-module",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "what is the purpose of the module",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::error-handling",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "error handling",
+   "expect": "refuse_or_grounded",
+   "relevant": [],
+   "acceptable": [
+    {"names": ["ErrorCodes"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:11"], "match": "name+path"},
+    {"names": ["ErrorTypeStrings"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:34"], "match": "name+path"},
+    {"names": ["ErrorTypes"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:68"], "match": "name+path"},
+    {"names": ["callWithErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:70"], "match": "name+path"},
+    {"names": ["callWithAsyncErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:83"], "match": "name+path"},
+    {"names": ["handleError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:112"], "match": "name+path"},
+    {"names": ["logError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:157"], "match": "name+path"},
+    {"names": ["onErrorCaptured"], "paths": ["packages/runtime-core/src/apiLifecycle.ts"], "locations": ["packages/runtime-core/src/apiLifecycle.ts:111"], "match": "name+path"},
+    {"names": ["WatchErrorCodes"], "paths": ["packages/reactivity/src/watch.ts"], "locations": ["packages/reactivity/src/watch.ts:31"], "match": "name+path"},
+    {"names": ["CompilerError"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:3"], "match": "name+path"},
+    {"names": ["CoreCompilerError"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:8"], "match": "name+path"},
+    {"names": ["defaultOnError"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:12"], "match": "name+path"},
+    {"names": ["defaultOnWarn"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:16"], "match": "name+path"},
+    {"names": ["createCompilerError"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:24"], "match": "name+path"},
+    {"names": ["ErrorCodes"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:40"], "match": "name+path"},
+    {"names": ["errorMessages"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:112"], "match": "name+path"},
+    {"names": ["ErrorHandlingOptions"], "paths": ["packages/compiler-core/src/options.ts"], "locations": ["packages/compiler-core/src/options.ts:17"], "match": "name+path"}
+   ],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; generic-domain term: refusing is safe, and so is an answer whose top-5 holds >=3 of the corpus's hand-labelled error machinery", "labelled": "2026-10-29", "acceptable_rule": "the corpus's dedicated error machinery, read from source: every export of runtime-core/src/errorHandling.ts and compiler-core/src/errors.ts, onErrorCaptured, WatchErrorCodes, compiler ErrorHandlingOptions"}
+  },
+  {
+   "id": "adversarial::errors-handled",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "how are errors handled and what exceptions are thrown?",
+   "expect": "refuse_or_grounded",
+   "relevant": [],
+   "acceptable": [
+    {"names": ["ErrorCodes"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:11"], "match": "name+path"},
+    {"names": ["ErrorTypeStrings"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:34"], "match": "name+path"},
+    {"names": ["ErrorTypes"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:68"], "match": "name+path"},
+    {"names": ["callWithErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:70"], "match": "name+path"},
+    {"names": ["callWithAsyncErrorHandling"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:83"], "match": "name+path"},
+    {"names": ["handleError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:112"], "match": "name+path"},
+    {"names": ["logError"], "paths": ["packages/runtime-core/src/errorHandling.ts"], "locations": ["packages/runtime-core/src/errorHandling.ts:157"], "match": "name+path"},
+    {"names": ["onErrorCaptured"], "paths": ["packages/runtime-core/src/apiLifecycle.ts"], "locations": ["packages/runtime-core/src/apiLifecycle.ts:111"], "match": "name+path"},
+    {"names": ["WatchErrorCodes"], "paths": ["packages/reactivity/src/watch.ts"], "locations": ["packages/reactivity/src/watch.ts:31"], "match": "name+path"},
+    {"names": ["CompilerError"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:3"], "match": "name+path"},
+    {"names": ["CoreCompilerError"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:8"], "match": "name+path"},
+    {"names": ["defaultOnError"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:12"], "match": "name+path"},
+    {"names": ["defaultOnWarn"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:16"], "match": "name+path"},
+    {"names": ["createCompilerError"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:24"], "match": "name+path"},
+    {"names": ["ErrorCodes"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:40"], "match": "name+path"},
+    {"names": ["errorMessages"], "paths": ["packages/compiler-core/src/errors.ts"], "locations": ["packages/compiler-core/src/errors.ts:112"], "match": "name+path"},
+    {"names": ["ErrorHandlingOptions"], "paths": ["packages/compiler-core/src/options.ts"], "locations": ["packages/compiler-core/src/options.ts:17"], "match": "name+path"}
+   ],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; generic-domain term: refusing is safe, and so is an answer whose top-5 holds >=3 of the corpus's hand-labelled error machinery", "labelled": "2026-10-29", "acceptable_rule": "the corpus's dedicated error machinery, read from source: every export of runtime-core/src/errorHandling.ts and compiler-core/src/errors.ts, onErrorCaptured, WatchErrorCodes, compiler ErrorHandlingOptions"}
+  },
+  {
+   "id": "adversarial::how-does-it-work",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "how does this code work",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::main-logic",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "where is the main logic implemented",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::function-called-from",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "what does the function do and where is it called from",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::stopwords-only",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "the of and to in is it for that with",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::utility-helpers",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "utility helper functions",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::architecture",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "explain the architecture of this repository",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::what-calls-function",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "what calls the function?",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::where-defined",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "where is it defined?",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  },
+  {
+   "id": "adversarial::fix-the-bug",
+   "class": "adversarial",
+   "entity": null,
+   "component": null,
+   "question": "fix the bug in the code",
+   "expect": "refuse",
+   "relevant": [],
+   "acceptable": [],
+   "provenance": {"source": "hand", "method": "generic / stopword phrasing with no named entity; nothing in the corpus is specifically asked for, so the safe outcome is a refusal", "labelled": "2026-10-29"}
+  }
+ ]
+}

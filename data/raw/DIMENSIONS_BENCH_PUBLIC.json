@@ -1,0 +1,363 @@
+{
+  "label": "dimensions",
+  "rows": [
+    {
+      "language": "go",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 214,
+      "atlas_latency_ms": 10.8,
+      "index_ms": 92.7
+    },
+    {
+      "language": "python",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 166,
+      "atlas_latency_ms": 11.6,
+      "index_ms": 50.5
+    },
+    {
+      "language": "javascript",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 233,
+      "atlas_latency_ms": 12.1,
+      "index_ms": 49.9
+    },
+    {
+      "language": "typescript",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 255,
+      "atlas_latency_ms": 10.4,
+      "index_ms": 50.9
+    },
+    {
+      "language": "java",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 244,
+      "atlas_latency_ms": 11.9,
+      "index_ms": 47.1
+    },
+    {
+      "language": "c",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 214,
+      "atlas_latency_ms": 12.2,
+      "index_ms": 52.1
+    },
+    {
+      "language": "cpp",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 222,
+      "atlas_latency_ms": 11.4,
+      "index_ms": 46
+    },
+    {
+      "language": "rust",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 210,
+      "atlas_latency_ms": 20.1,
+      "index_ms": 56.4
+    },
+    {
+      "language": "ruby",
+      "f1": 0,
+      "precision": 0,
+      "recall": 0,
+      "atlas_tokens": 6,
+      "atlas_latency_ms": 9.7,
+      "index_ms": 115
+    },
+    {
+      "language": "php",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 237,
+      "atlas_latency_ms": 10.5,
+      "index_ms": 67.5
+    },
+    {
+      "language": "csharp",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 237,
+      "atlas_latency_ms": 11,
+      "index_ms": 67.3
+    },
+    {
+      "language": "kotlin",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 210,
+      "atlas_latency_ms": 11.6,
+      "index_ms": 58
+    },
+    {
+      "language": "swift",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 225,
+      "atlas_latency_ms": 11.1,
+      "index_ms": 101.3
+    },
+    {
+      "language": "scala",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 244,
+      "atlas_latency_ms": 17.1,
+      "index_ms": 99.5
+    },
+    {
+      "language": "lua",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 233,
+      "atlas_latency_ms": 13,
+      "index_ms": 75.9
+    },
+    {
+      "language": "powershell",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 218,
+      "atlas_latency_ms": 10.3,
+      "index_ms": 45.7
+    },
+    {
+      "language": "bash",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 192,
+      "atlas_latency_ms": 10.9,
+      "index_ms": 47.2
+    },
+    {
+      "language": "zig",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 233,
+      "atlas_latency_ms": 11.4,
+      "index_ms": 93.4
+    },
+    {
+      "language": "elixir",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 210,
+      "atlas_latency_ms": 10.8,
+      "index_ms": 45.4
+    },
+    {
+      "language": "objc",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 229,
+      "atlas_latency_ms": 11.1,
+      "index_ms": 50.4
+    },
+    {
+      "language": "julia",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 178,
+      "atlas_latency_ms": 12.4,
+      "index_ms": 50.7
+    },
+    {
+      "language": "fortran",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 189,
+      "atlas_latency_ms": 11.2,
+      "index_ms": 50.7
+    },
+    {
+      "language": "dart",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 173,
+      "atlas_latency_ms": 11.6,
+      "index_ms": 50.3
+    },
+    {
+      "language": "verilog",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 204,
+      "atlas_latency_ms": 12.9,
+      "index_ms": 68
+    },
+    {
+      "language": "pascal",
+      "f1": 0,
+      "precision": 0,
+      "recall": 0,
+      "atlas_tokens": 6,
+      "atlas_latency_ms": 11.3,
+      "index_ms": 88.5
+    },
+    {
+      "language": "byond",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 162,
+      "atlas_latency_ms": 16.5,
+      "index_ms": 81.1
+    },
+    {
+      "language": "razor",
+      "f1": 0,
+      "precision": 0,
+      "recall": 0,
+      "atlas_tokens": 6,
+      "atlas_latency_ms": 11.6,
+      "index_ms": 71.4
+    },
+    {
+      "language": "vue",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 233,
+      "atlas_latency_ms": 11.1,
+      "index_ms": 70.1
+    },
+    {
+      "language": "svelte",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 244,
+      "atlas_latency_ms": 13.5,
+      "index_ms": 104.8
+    },
+    {
+      "language": "astro",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 240,
+      "atlas_latency_ms": 12.9,
+      "index_ms": 68.8
+    },
+    {
+      "language": "ejs",
+      "f1": 0,
+      "precision": 0,
+      "recall": 0,
+      "atlas_tokens": 15,
+      "atlas_latency_ms": 11.2,
+      "index_ms": 56.9
+    },
+    {
+      "language": "ets",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 263,
+      "atlas_latency_ms": 24.7,
+      "index_ms": 66.2
+    },
+    {
+      "language": "r",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 233,
+      "atlas_latency_ms": 10.1,
+      "index_ms": 84
+    },
+    {
+      "language": "apex",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 255,
+      "atlas_latency_ms": 10.5,
+      "index_ms": 57.2
+    },
+    {
+      "language": "blade",
+      "f1": 0,
+      "precision": 0,
+      "recall": 0,
+      "atlas_tokens": 6,
+      "atlas_latency_ms": 11.7,
+      "index_ms": 56.5
+    },
+    {
+      "language": "groovy",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 214,
+      "atlas_latency_ms": 12.9,
+      "index_ms": 60.1
+    },
+    {
+      "language": "sql",
+      "f1": 1,
+      "precision": 1,
+      "recall": 1,
+      "atlas_tokens": 476,
+      "atlas_latency_ms": 19.2,
+      "index_ms": 95.3
+    }
+  ],
+  "notes": {
+    "tokens": "len//4 heuristic on the plain-format answer context (same as bench toks())",
+    "latency": "median of 3 CLI invocations incl. process spawn — the honest agent-visible cost",
+    "speed": "fixture index --reindex wall ms"
+  },
+  "cross_repo": {
+    "note": "a real 2-repo workspace — a Go API server and the React app that calls it — indexed together",
+    "producerRoutes": 242,
+    "consumerRefs": 94,
+    "queries": {
+      "route_contracts": {
+        "count": 200,
+        "latencyMs": 14.8
+      },
+      "consumers": {
+        "count": 3,
+        "latencyMs": 14.8
+      },
+      "dependencies": {
+        "count": 3,
+        "latencyMs": 15.4
+      }
+    },
+    "consumerRepoCount": 1
+  }
+}

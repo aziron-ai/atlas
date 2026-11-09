@@ -1,0 +1,571 @@
+{
+  "language": "ruby",
+  "repo": "https://github.com/sinatra/sinatra",
+  "commit": "5236d3459b8b9015e5ce21ddd0c6beb0db4081d4",
+  "graphify_detector_only": "",
+  "commands": {
+    "clone": "git clone --depth 1 https://github.com/sinatra/sinatra $WORK/atlas-live-ruby-sinatra/repo",
+    "sparse_checkout": "",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-ruby-sinatra/atlas.db --json index $WORK/atlas-live-ruby-sinatra/repo",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-ruby-sinatra/atlas.db --json index $WORK/atlas-live-ruby-sinatra/repo",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb $WORK/atlas-live-ruby-sinatra/repo",
+    "query_symbols": [
+      "initialize",
+      "call",
+      "route",
+      "settings"
+    ],
+    "target_path": "$WORK/atlas-live-ruby-sinatra/repo",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-ruby-sinatra/atlas.db serve --addr 127.0.0.1:4341"
+  },
+  "atlas": {
+    "cold_wall_seconds": 0.187,
+    "reindex_wall_seconds": 0.025,
+    "index": {
+      "repo_id": "c01ebebb-aa9b-4d25-86ba-e99eba82a859",
+      "repo_full_name": "repo",
+      "snapshot_id": "74a6b95a-8849-4b5a-b836-f6665f48471f",
+      "commit_sha": "5236d3459b8b9015e5ce21ddd0c6beb0db4081d4",
+      "indexed_files": 180,
+      "symbols": 1476,
+      "edges": 3525,
+      "edge_kinds": {
+        "calls": 3305,
+        "imports": 220
+      },
+      "routes": 0,
+      "languages": {
+        "config": 3,
+        "css": 4,
+        "image": 2,
+        "markdown": 12,
+        "ruby": 147,
+        "text": 2,
+        "yaml": 10
+      },
+      "mode": "full",
+      "duration_ms": 187,
+      "timings_ms": {
+        "build_symbols_edges": 0,
+        "delta_check": 0,
+        "discover_files": 1,
+        "doc_links": 0,
+        "ensure_repo": 0,
+        "gitignore_scan": 11,
+        "go_types": 0,
+        "lexical": 105,
+        "parse": 67,
+        "persist": 105,
+        "resolve_head": 0,
+        "routes": 0,
+        "sort": 0,
+        "walk": 1,
+        "write_sqlite": 105
+      }
+    },
+    "reindex": {
+      "repo_id": "54898536-c05d-4609-9a9a-0763c6fd4b10",
+      "repo_full_name": "repo",
+      "snapshot_id": "01a3fc0f-1ed5-4640-9e4e-f819bb20a859",
+      "commit_sha": "5236d3459b8b9015e5ce21ddd0c6beb0db4081d4",
+      "indexed_files": 178,
+      "symbols": 1450,
+      "edges": 3970,
+      "routes": 0,
+      "languages": {
+        "config": 3,
+        "css": 4,
+        "markdown": 12,
+        "ruby": 147,
+        "text": 2,
+        "yaml": 10
+      },
+      "mode": "noop",
+      "duration_ms": 0,
+      "timings_ms": {
+        "delta_check": 0,
+        "resolve_head": 0
+      }
+    },
+    "symbol_breakdown": {
+      "repo_id": "c01ebebb-aa9b-4d25-86ba-e99eba82a859",
+      "repo_full_name": "repo",
+      "tier": "local",
+      "storage_driver": "sqlite",
+      "latest": {
+        "snapshot_id": "74a6b95a-8849-4b5a-b836-f6665f48471f",
+        "commit_sha": "5236d3459b8b9015e5ce21ddd0c6beb0db4081d4",
+        "created_at": "2026-06-30T07:48:56Z",
+        "files": 180,
+        "symbols": 1476,
+        "edges": 3525,
+        "routes": 0,
+        "mode": "full",
+        "duration_ms": 187,
+        "timings_ms": {
+          "build_symbols_edges": 0,
+          "delta_check": 0,
+          "discover_files": 1,
+          "doc_links": 0,
+          "ensure_repo": 0,
+          "gitignore_scan": 11,
+          "go_types": 0,
+          "lexical": 105,
+          "parse": 67,
+          "persist": 105,
+          "resolve_head": 0,
+          "routes": 0,
+          "sort": 0,
+          "walk": 1,
+          "write_sqlite": 105
+        }
+      },
+      "graph": {
+        "files": 113,
+        "symbols": 1203,
+        "edges": 1148,
+        "raw_symbols": 1203,
+        "raw_edges": 3484,
+        "communities": 756,
+        "isolated_nodes": 654,
+        "edge_kinds": [
+          {
+            "key": "calls",
+            "count": 3277
+          },
+          {
+            "key": "imports",
+            "count": 207
+          }
+        ],
+        "languages": [
+          {
+            "key": "ruby",
+            "count": 1201
+          },
+          {
+            "key": "image",
+            "count": 2
+          }
+        ]
+      },
+      "coverage_facts": 0,
+      "history": [
+        {
+          "snapshot_id": "74a6b95a-8849-4b5a-b836-f6665f48471f",
+          "commit_sha": "5236d3459b8b9015e5ce21ddd0c6beb0db4081d4",
+          "created_at": "2026-06-30T07:48:56Z",
+          "files": 180,
+          "symbols": 1476,
+          "edges": 3525,
+          "routes": 0,
+          "mode": "full",
+          "duration_ms": 187,
+          "timings_ms": {
+            "build_symbols_edges": 0,
+            "delta_check": 0,
+            "discover_files": 1,
+            "doc_links": 0,
+            "ensure_repo": 0,
+            "gitignore_scan": 11,
+            "go_types": 0,
+            "lexical": 105,
+            "parse": 67,
+            "persist": 105,
+            "resolve_head": 0,
+            "routes": 0,
+            "sort": 0,
+            "walk": 1,
+            "write_sqlite": 105
+          }
+        }
+      ],
+      "history_returned": 1
+    },
+    "edge_breakdown": {
+      "repo_id": "c01ebebb-aa9b-4d25-86ba-e99eba82a859",
+      "repo_full_name": "repo",
+      "tier": "local",
+      "storage_driver": "sqlite",
+      "latest": {
+        "snapshot_id": "74a6b95a-8849-4b5a-b836-f6665f48471f",
+        "commit_sha": "5236d3459b8b9015e5ce21ddd0c6beb0db4081d4",
+        "created_at": "2026-06-30T07:48:56Z",
+        "files": 180,
+        "symbols": 1476,
+        "edges": 3525,
+        "routes": 0,
+        "mode": "full",
+        "duration_ms": 187,
+        "timings_ms": {
+          "build_symbols_edges": 0,
+          "delta_check": 0,
+          "discover_files": 1,
+          "doc_links": 0,
+          "ensure_repo": 0,
+          "gitignore_scan": 11,
+          "go_types": 0,
+          "lexical": 105,
+          "parse": 67,
+          "persist": 105,
+          "resolve_head": 0,
+          "routes": 0,
+          "sort": 0,
+          "walk": 1,
+          "write_sqlite": 105
+        }
+      },
+      "graph": {
+        "files": 113,
+        "symbols": 1203,
+        "edges": 1148,
+        "raw_symbols": 1203,
+        "raw_edges": 3484,
+        "communities": 756,
+        "isolated_nodes": 654,
+        "edge_kinds": [
+          {
+            "key": "calls",
+            "count": 3277
+          },
+          {
+            "key": "imports",
+            "count": 207
+          }
+        ],
+        "languages": [
+          {
+            "key": "ruby",
+            "count": 1201
+          },
+          {
+            "key": "image",
+            "count": 2
+          }
+        ]
+      },
+      "coverage_facts": 0,
+      "history": [
+        {
+          "snapshot_id": "74a6b95a-8849-4b5a-b836-f6665f48471f",
+          "commit_sha": "5236d3459b8b9015e5ce21ddd0c6beb0db4081d4",
+          "created_at": "2026-06-30T07:48:56Z",
+          "files": 180,
+          "symbols": 1476,
+          "edges": 3525,
+          "routes": 0,
+          "mode": "full",
+          "duration_ms": 187,
+          "timings_ms": {
+            "build_symbols_edges": 0,
+            "delta_check": 0,
+            "discover_files": 1,
+            "doc_links": 0,
+            "ensure_repo": 0,
+            "gitignore_scan": 11,
+            "go_types": 0,
+            "lexical": 105,
+            "parse": 67,
+            "persist": 105,
+            "resolve_head": 0,
+            "routes": 0,
+            "sort": 0,
+            "walk": 1,
+            "write_sqlite": 105
+          }
+        }
+      ],
+      "history_returned": 1
+    },
+    "ruby_definition_symbols": 1173
+  },
+  "graphify": {
+    "status": "ok",
+    "ok": true,
+    "seconds": 0.721,
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "stdout_head": [
+      "Re-extracting code files in . (no LLM needed)...",
+      "  AST extraction: 100/156 uncached files (64%) [14 workers]",
+      "  AST extraction: 156/156 files (100%) [14 workers]",
+      "[graphify watch] Rebuilt: 1281 nodes, 1869 edges, 155 communities",
+      "[graphify watch] graph.json, graph.html and GRAPH_REPORT.md updated in graphify-out",
+      "Code graph updated. For doc/paper/image changes run /graphify --update in your AI assistant.",
+      "Tip: set GEMINI_API_KEY or GOOGLE_API_KEY to use Gemini for semantic extraction."
+    ],
+    "stderr_head": [],
+    "metrics": {
+      "nodes": 1281,
+      "links": 1869,
+      "calls": 737
+    }
+  },
+  "native_baseline": {
+    "tool": "ruby-ripper",
+    "status": "ok",
+    "ok": true,
+    "seconds": 0.166,
+    "command": "/usr/bin/ruby $WORK/atlas-live-ruby-sinatra/ripper_stats.rb $WORK/atlas-live-ruby-sinatra/repo",
+    "metrics": {
+      "files": 147,
+      "parsed_files": 147,
+      "parse_errors": 0,
+      "classes": 131,
+      "modules": 138,
+      "methods": 895,
+      "requires": 0,
+      "ruby_version": "2.6.10",
+      "definitions": 1164
+    }
+  },
+  "richer_native_baselines": {
+    "solargraph": {
+      "status": "missing",
+      "ok": false,
+      "note": "solargraph not installed"
+    },
+    "ruby-lsp": {
+      "status": "missing",
+      "ok": false,
+      "note": "ruby-lsp not installed"
+    }
+  },
+  "coverage": {
+    "atlas_vs_ruby_ripper_definition_ratio": 1.01,
+    "atlas_ruby_definition_symbols": 1173,
+    "native_definitions": 1164
+  },
+  "optimization": {
+    "cycles_run": 2,
+    "stop_reason": "Ruby live benchmark met the current 5x latency/token thresholds and the Ripper definition coverage proxy after adding operator, receiver-qualified, and ::-qualified module/class parsing.",
+    "cycle_notes": [
+      "cycle 1: Sinatra benchmark found Atlas/Ripper definition ratio 0.98; biggest gap was Ruby operator and qualified definition syntax.",
+      "cycle 2: after parser patch, Atlas/Ripper definition ratio reached 1.01 and equivalent query rows exceeded 5x for latency and token output vs graphify."
+    ]
+  },
+  "query_warmup": {
+    "symbol": "initialize",
+    "atlas_command": "curl -fsS http://127.0.0.1:4341/api/v1/symbols/initialize/explain?repo_id=repo&format=plain",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain initialize",
+    "atlas_returncode": 0,
+    "graphify_returncode": 0,
+    "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
+  },
+  "queries": [
+    {
+      "symbol": "initialize",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4341/api/v1/symbols/initialize/explain?repo_id=repo&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain initialize",
+      "atlas_tokens": 2,
+      "graphify_tokens": 61,
+      "atlas_ms": 7.672,
+      "graphify_ms": 90.373,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "initialize f@base:98"
+      ],
+      "graphify_stdout_head": [
+        "Node: .initialize()",
+        "  ID:        sinatra_base_acceptentry_initialize",
+        "  Source:    lib/sinatra/base.rb L98",
+        "  Type:      code",
+        "  Community: 23",
+        "  Degree:    2",
+        "",
+        "Connections (2):"
+      ],
+      "atlas_ms_samples": [
+        12.082,
+        9.414,
+        8.9,
+        8.988,
+        8.153,
+        7.643,
+        7.671,
+        7.672,
+        7.211,
+        7.523,
+        6.964,
+        7.782,
+        6.648
+      ]
+    },
+    {
+      "symbol": "call",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4341/api/v1/symbols/call/explain?repo_id=repo&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain call",
+      "atlas_tokens": 2,
+      "graphify_tokens": 89,
+      "atlas_ms": 7.001,
+      "graphify_ms": 108.646,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "call f@base:226"
+      ],
+      "graphify_stdout_head": [
+        "Node: .call()",
+        "  ID:        sinatra_base_extendedrack_call",
+        "  Source:    lib/sinatra/base.rb L226",
+        "  Type:      code",
+        "  Community: 14",
+        "  Degree:    5",
+        "",
+        "Connections (5):"
+      ],
+      "atlas_ms_samples": [
+        7.001,
+        7.14,
+        6.693,
+        7.054,
+        6.572,
+        7.439,
+        7.004,
+        6.97,
+        8.052,
+        6.996,
+        7.239,
+        6.589,
+        6.919
+      ]
+    },
+    {
+      "symbol": "route",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4341/api/v1/symbols/route/explain?repo_id=repo&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain route",
+      "atlas_tokens": 2,
+      "graphify_tokens": 96,
+      "atlas_ms": 6.955,
+      "graphify_ms": 94.267,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "route f@base:1776"
+      ],
+      "graphify_stdout_head": [
+        "Node: .route!()",
+        "  ID:        sinatra_base_base_route",
+        "  Source:    lib/sinatra/base.rb L1064",
+        "  Type:      code",
+        "  Community: 6",
+        "  Degree:    6",
+        "",
+        "Connections (6):"
+      ],
+      "atlas_ms_samples": [
+        7.099,
+        6.777,
+        7.304,
+        6.538,
+        7.237,
+        6.818,
+        6.955,
+        7.165,
+        6.935,
+        7.22,
+        6.441,
+        7.335,
+        6.74
+      ]
+    },
+    {
+      "symbol": "settings",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4341/api/v1/symbols/settings/explain?repo_id=repo&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain settings",
+      "atlas_tokens": 2,
+      "graphify_tokens": 58,
+      "atlas_ms": 7.058,
+      "graphify_ms": 93.757,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "settings f@base:1017"
+      ],
+      "graphify_stdout_head": [
+        "Node: .settings()",
+        "  ID:        sinatra_base_base_settings",
+        "  Source:    lib/sinatra/base.rb L1017",
+        "  Type:      code",
+        "  Community: 24",
+        "  Degree:    2",
+        "",
+        "Connections (2):"
+      ],
+      "atlas_ms_samples": [
+        7.101,
+        7.561,
+        7.071,
+        7.623,
+        6.501,
+        7.347,
+        6.579,
+        7.017,
+        7.454,
+        7.002,
+        7.058,
+        6.443,
+        6.887
+      ]
+    }
+  ],
+  "atlas_cli": {
+    "version": "v0.1.26-4-gd882e08",
+    "commit": "d882e08",
+    "date": "2026-06-30T07:15:57Z",
+    "measurement_note": "Query rows refreshed from 13-sample medians against atlas serve format=plain using curl; Graphify rows retained as the saved comparison baseline."
+  },
+  "multi_repo_validation": {
+    "minimum_repos": 3,
+    "status": "passed",
+    "generated_at": "2026-06-30T13:33:45Z",
+    "scope": "ruby parser random public-repo validation uses three GitHub repos selected by a deterministic random sample from 50 public non-archived ruby repos with 50..500 stars and size <= 5000. Atlas indexed each clean checkout after removing graphify-out, the native denominator came from Ruby Ripper, and Graphify was run on the same checkout as the comparison baseline.",
+    "selection_method": "gh search repos --language Ruby --stars 50..500 --archived=false --limit 50; size <= 5000; deterministic random sample seed 2026-06-30-atlas-random-validation-v1",
+    "measurement_order": "Atlas index after removing graphify-out, then native counter, then graphify update for comparison metrics.",
+    "repos": [
+      {
+        "repo": "https://github.com/tpope/hookup",
+        "commit": "3bca3fef5177de45bbdaa6caee063dd252ae9050",
+        "target_path": "$WORK/atlas-random-validation/work/ruby/1-tpope__hookup",
+        "atlas_definitions": 28,
+        "native_definitions": 28,
+        "coverage_ratio": 1,
+        "ok": true,
+        "note": "tpope/hookup: ruby-ripper native counts {\"class\":4,\"singleton_method\":1,\"method\":23}; Atlas counts {\"class\":4,\"method\":24}; Graphify rebuilt 28 nodes and 38 edges on the same checkout."
+      },
+      {
+        "repo": "https://github.com/mailgun/mailgun-ruby",
+        "commit": "bb69b98a8bc34bfd44713bbecebd17319d0d4697",
+        "target_path": "$WORK/atlas-random-validation/work/ruby/2-mailgun__mailgun-ruby",
+        "atlas_definitions": 325,
+        "native_definitions": 311,
+        "coverage_ratio": 1.045,
+        "ok": true,
+        "note": "mailgun/mailgun-ruby: ruby-ripper native counts {\"method\":236,\"module\":33,\"class\":35,\"singleton_method\":7}; Atlas counts {\"class\":35,\"method\":257,\"module\":33}; Graphify rebuilt 429 nodes and 556 edges on the same checkout."
+      },
+      {
+        "repo": "https://github.com/BerlinVagrant/vagrant-dns",
+        "commit": "57dee3fc45c40fb286c218f667435eae84666905",
+        "target_path": "$WORK/atlas-random-validation/work/ruby/3-BerlinVagrant__vagrant-dns",
+        "atlas_definitions": 116,
+        "native_definitions": 116,
+        "coverage_ratio": 1,
+        "ok": true,
+        "note": "BerlinVagrant/vagrant-dns: ruby-ripper native counts {\"module\":24,\"class\":13,\"singleton_method\":7,\"method\":72}; Atlas counts {\"class\":13,\"method\":79,\"module\":24}; Graphify rebuilt 166 nodes and 213 edges on the same checkout."
+      }
+    ]
+  }
+}

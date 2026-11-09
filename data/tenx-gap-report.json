@@ -1,0 +1,743 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-01T05:45:43.071Z",
+  "source": "data/benchmark-data.json",
+  "targetRatio": 10,
+  "metricNote": "Token and latency are ratio targets. Coverage is a native-definition coverage ratio, so the honest accuracy target is >1.0 native coverage exceed, not a fabricated 10x accuracy multiplier.",
+  "summary": {
+    "liveLanguages": 36,
+    "parityLanguages": 0,
+    "coverageExceedLanguages": 36,
+    "comparableLanguages": 36,
+    "token10xComparable": 36,
+    "latency10xComparable": 36,
+    "performance10xComparable": 36,
+    "threeRepoValidated": 35,
+    "threeRepoValidatedStrict10x": 35
+  },
+  "parityLanguages": [],
+  "live": [
+    {
+      "language": "apex",
+      "repo": "https://github.com/trailheadapps/apex-recipes",
+      "commit": "cb5cd9d3621985b816476e5a317b5a0016fc3576",
+      "artifact": "data/raw/LIVE_APEX_BENCHMARK.json",
+      "coverageRatio": 1.215,
+      "coverageExceedsNative": true,
+      "equivalentRows": 12,
+      "tokenRatio": 14.54,
+      "latencyRatio": 26.82,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.0607
+      }
+    },
+    {
+      "language": "astro",
+      "repo": "https://github.com/withastro/blog-tutorial-demo",
+      "commit": "0859a3ea85f35325c0a292f9b3131824ef95ee38",
+      "artifact": "data/raw/LIVE_ASTRO_BENCHMARK.json",
+      "coverageRatio": 1.0862,
+      "coverageExceedsNative": true,
+      "equivalentRows": 6,
+      "tokenRatio": 13.17,
+      "latencyRatio": 13.54,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "bash",
+      "repo": "https://github.com/nvm-sh/nvm",
+      "commit": "a6ec73943099a86fba98bde3b04a1c60944a4549",
+      "artifact": "data/raw/LIVE_BASH_BENCHMARK.json",
+      "coverageRatio": 1.044,
+      "coverageExceedsNative": true,
+      "equivalentRows": 4,
+      "tokenRatio": 24,
+      "latencyRatio": 14.85,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "blade",
+      "repo": "https://github.com/BookStackApp/BookStack",
+      "commit": "f7df78b91b12ff1d8e248ded7747e76203904b8e",
+      "artifact": "data/raw/LIVE_BLADE_BENCHMARK.json",
+      "coverageRatio": 1.0028,
+      "coverageExceedsNative": true,
+      "equivalentRows": 6,
+      "tokenRatio": 31.5,
+      "latencyRatio": 12.36,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.0121
+      }
+    },
+    {
+      "language": "byond",
+      "repo": "https://github.com/tgstation/tgstation",
+      "commit": "ba6e47987178c54dc0432f0d4ee6843f6a3c9828",
+      "artifact": "data/raw/LIVE_BYOND_BENCHMARK.json",
+      "coverageRatio": 1.2311,
+      "coverageExceedsNative": true,
+      "equivalentRows": 5,
+      "tokenRatio": 16.33,
+      "latencyRatio": 157.27,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "csharp",
+      "repo": "https://github.com/DapperLib/Dapper",
+      "commit": "72a54c475f75e18cb93cba0809d00a5e6e49efd9",
+      "artifact": "data/raw/LIVE_CSHARP_BENCHMARK.json",
+      "coverageRatio": 1.84,
+      "coverageExceedsNative": true,
+      "equivalentRows": 4,
+      "tokenRatio": 95.5,
+      "latencyRatio": 16.18,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.2411
+      }
+    },
+    {
+      "language": "cuda",
+      "repo": "https://github.com/NVIDIA/cuda-samples",
+      "commit": "b7c5481c556c3fe98db060207ecaa41a4b9a9abc",
+      "artifact": "data/raw/LIVE_CUDA_BENCHMARK.json",
+      "coverageRatio": 1.3333,
+      "coverageExceedsNative": true,
+      "equivalentRows": 4,
+      "tokenRatio": 19,
+      "latencyRatio": 209.55,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 2.5753
+      }
+    },
+    {
+      "language": "dart",
+      "repo": "https://github.com/dart-lang/http",
+      "commit": "5d94ef52582867e077bf41c3fa20fb8b1d1d834e",
+      "artifact": "data/raw/LIVE_DART_BENCHMARK.json",
+      "coverageRatio": 1.3222,
+      "coverageExceedsNative": true,
+      "equivalentRows": 6,
+      "tokenRatio": 29.17,
+      "latencyRatio": 10.61,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.3222
+      }
+    },
+    {
+      "language": "delphi",
+      "repo": "https://github.com/fpc/Lazarus",
+      "commit": "a37c7c35c6a271b377cd799c48586ea2689a8e0f",
+      "artifact": "data/raw/LIVE_DELPHI_BENCHMARK.json",
+      "coverageRatio": 3.4626,
+      "coverageExceedsNative": true,
+      "equivalentRows": 9,
+      "tokenRatio": 20.17,
+      "latencyRatio": 69.27,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "dotnet",
+      "repo": "https://github.com/DapperLib/Dapper",
+      "commit": "72a54c475f75e18cb93cba0809d00a5e6e49efd9",
+      "artifact": "data/raw/LIVE_DOTNET_BENCHMARK.json",
+      "coverageRatio": 17.235,
+      "coverageExceedsNative": true,
+      "equivalentRows": 10,
+      "tokenRatio": 24.1,
+      "latencyRatio": 21,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "ejs",
+      "repo": "https://github.com/expressjs/express",
+      "commit": "18e5985b8a9d5e8423db0a9121f22bdaecd5b120",
+      "artifact": "data/raw/LIVE_EJS_BENCHMARK.json",
+      "coverageRatio": 2.278,
+      "coverageExceedsNative": true,
+      "equivalentRows": 1,
+      "tokenRatio": 16,
+      "latencyRatio": 149.12,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "elixir",
+      "repo": "https://github.com/phoenixframework/phoenix",
+      "commit": "9d3f1f63e00c92aafc8f015073969a2632c6879a",
+      "artifact": "data/raw/LIVE_ELIXIR_BENCHMARK.json",
+      "coverageRatio": 1.0116,
+      "coverageExceedsNative": true,
+      "equivalentRows": 5,
+      "tokenRatio": 31.1,
+      "latencyRatio": 16.24,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "ets",
+      "repo": "https://github.com/openharmony/applications_app_samples",
+      "commit": "a826ab0e75fe51d028c1c5af58188e908736b53b",
+      "artifact": "data/raw/LIVE_ETS_BENCHMARK.json",
+      "coverageRatio": 1.0523,
+      "coverageExceedsNative": true,
+      "equivalentRows": 5,
+      "tokenRatio": 36.69,
+      "latencyRatio": 145.56,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.0229
+      }
+    },
+    {
+      "language": "fortran",
+      "repo": "https://github.com/fortran-lang/stdlib",
+      "commit": "4c8521d5658455a576946cca3bfe2bd8ede36e24",
+      "artifact": "data/raw/LIVE_FORTRAN_BENCHMARK.json",
+      "coverageRatio": 1.0604,
+      "coverageExceedsNative": true,
+      "equivalentRows": 6,
+      "tokenRatio": 31.83,
+      "latencyRatio": 15.86,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "groovy",
+      "repo": "https://github.com/nextflow-io/nextflow",
+      "commit": "83d452a51796aca34f136f796383185d703c349c",
+      "artifact": "data/raw/LIVE_GROOVY_BENCHMARK.json",
+      "coverageRatio": 1.59,
+      "coverageExceedsNative": true,
+      "equivalentRows": 5,
+      "tokenRatio": 39.9,
+      "latencyRatio": 11.79,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.0857
+      }
+    },
+    {
+      "language": "json",
+      "repo": "https://github.com/eslint/create-config",
+      "commit": "58d77fc302b25976bb4cc7dc273377b421bc226b",
+      "artifact": "data/raw/LIVE_JSON_BENCHMARK.json",
+      "coverageRatio": 1.483,
+      "coverageExceedsNative": true,
+      "equivalentRows": 12,
+      "tokenRatio": 18.83,
+      "latencyRatio": 14.82,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": false,
+        "repoCount": 0,
+        "minimumRepos": 3,
+        "minCoverageRatio": null
+      }
+    },
+    {
+      "language": "julia",
+      "repo": "https://github.com/JuliaIO/JSON.jl",
+      "commit": "e5ef310dece16746843753e4c3b44e868b917b64",
+      "artifact": "data/raw/LIVE_JULIA_BENCHMARK.json",
+      "coverageRatio": 1.0065,
+      "coverageExceedsNative": true,
+      "equivalentRows": 5,
+      "tokenRatio": 36.9,
+      "latencyRatio": 10.23,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.0037
+      }
+    },
+    {
+      "language": "kotlin",
+      "repo": "https://github.com/square/okhttp",
+      "commit": "0cadfa2997513d20bf88ca530c963a1266f17af9",
+      "artifact": "data/raw/LIVE_KOTLIN_BENCHMARK.json",
+      "coverageRatio": 1.01,
+      "coverageExceedsNative": true,
+      "equivalentRows": 5,
+      "tokenRatio": 89.3,
+      "latencyRatio": 13.19,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.3429
+      }
+    },
+    {
+      "language": "lua",
+      "repo": "https://github.com/folke/lazy.nvim",
+      "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97",
+      "artifact": "data/raw/LIVE_LUA_BENCHMARK.json",
+      "coverageRatio": 1.24,
+      "coverageExceedsNative": true,
+      "equivalentRows": 4,
+      "tokenRatio": 43.38,
+      "latencyRatio": 12.13,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "markdown",
+      "repo": "https://github.com/rust-lang/mdBook",
+      "commit": "cb49cc5523e609a731f27dea1af4395a504815a5",
+      "artifact": "data/raw/LIVE_MARKDOWN_BENCHMARK.json",
+      "coverageRatio": 1.026,
+      "coverageExceedsNative": true,
+      "equivalentRows": 6,
+      "tokenRatio": 14.5,
+      "latencyRatio": 14.73,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "objc",
+      "repo": "https://github.com/SDWebImage/SDWebImage",
+      "commit": "c3ad5e1a9bf55c9b76d4c362430b5fcded96c502",
+      "artifact": "data/raw/LIVE_OBJC_BENCHMARK.json",
+      "coverageRatio": 1.0021,
+      "coverageExceedsNative": true,
+      "equivalentRows": 4,
+      "tokenRatio": 103.38,
+      "latencyRatio": 11.88,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "pascal",
+      "repo": "https://github.com/remobjects/pascalscript",
+      "commit": "2c826cd803a3c0417354fa37b2417f21993ce4ac",
+      "artifact": "data/raw/LIVE_PASCAL_BENCHMARK.json",
+      "coverageRatio": 1.0067,
+      "coverageExceedsNative": true,
+      "equivalentRows": 11,
+      "tokenRatio": 19.5,
+      "latencyRatio": 36.42,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.21
+      }
+    },
+    {
+      "language": "php",
+      "repo": "https://github.com/slimphp/Slim",
+      "commit": "0da7dd2fc66956730b6633f6a056b35e59126583",
+      "artifact": "data/raw/LIVE_PHP_BENCHMARK.json",
+      "coverageRatio": 1.2564,
+      "coverageExceedsNative": true,
+      "equivalentRows": 3,
+      "tokenRatio": 14.83,
+      "latencyRatio": 17.5,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "powershell",
+      "repo": "https://github.com/PowerShell/PowerShellGet",
+      "commit": "a2dac8e74603f7c9eec4a54c5e23459531751b0d",
+      "artifact": "data/raw/LIVE_POWERSHELL_BENCHMARK.json",
+      "coverageRatio": 1.1071,
+      "coverageExceedsNative": true,
+      "equivalentRows": 4,
+      "tokenRatio": 30.88,
+      "latencyRatio": 10.67,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "r",
+      "repo": "https://github.com/tidyverse/ggplot2",
+      "commit": "6870419aa6e106c3580c45c81d5b688cb31758bd",
+      "artifact": "data/raw/LIVE_R_BENCHMARK.json",
+      "coverageRatio": 1.7531,
+      "coverageExceedsNative": true,
+      "equivalentRows": 5,
+      "tokenRatio": 66.73,
+      "latencyRatio": 198.41,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.6067
+      }
+    },
+    {
+      "language": "razor",
+      "repo": "https://github.com/dotnet-architecture/eShopOnWeb",
+      "commit": "4da8212117e87d808d4bbc7da6286fd2147ce606",
+      "artifact": "data/raw/LIVE_RAZOR_BENCHMARK.json",
+      "coverageRatio": 5.101,
+      "coverageExceedsNative": true,
+      "equivalentRows": 6,
+      "tokenRatio": 20.5,
+      "latencyRatio": 16.74,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "ruby",
+      "repo": "https://github.com/sinatra/sinatra",
+      "commit": "5236d3459b8b9015e5ce21ddd0c6beb0db4081d4",
+      "artifact": "data/raw/LIVE_RUBY_BENCHMARK.json",
+      "coverageRatio": 1.01,
+      "coverageExceedsNative": true,
+      "equivalentRows": 4,
+      "tokenRatio": 38,
+      "latencyRatio": 13.49,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "rust",
+      "repo": "https://github.com/BurntSushi/ripgrep",
+      "commit": "dfe4a81d2591daca76d25ae4e052c34b26578155",
+      "artifact": "data/raw/LIVE_RUST_BENCHMARK.json",
+      "coverageRatio": 1.0017,
+      "coverageExceedsNative": true,
+      "equivalentRows": 4,
+      "tokenRatio": 110.63,
+      "latencyRatio": 13.35,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.4076
+      }
+    },
+    {
+      "language": "scala",
+      "repo": "https://github.com/typelevel/cats",
+      "commit": "851965a582940d804f9a23179f58a53fc97f07dc",
+      "artifact": "data/raw/LIVE_SCALA_BENCHMARK.json",
+      "coverageRatio": 1.0023,
+      "coverageExceedsNative": true,
+      "equivalentRows": 5,
+      "tokenRatio": 67.67,
+      "latencyRatio": 10.45,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.4184
+      }
+    },
+    {
+      "language": "sql",
+      "repo": "https://github.com/hasura/graphql-engine",
+      "commit": "417c174c0ac3c80dafe6e8f9e8ac39d868334724",
+      "artifact": "data/raw/LIVE_SQL_BENCHMARK.json",
+      "coverageRatio": 1.1802,
+      "coverageExceedsNative": true,
+      "equivalentRows": 4,
+      "tokenRatio": 30.63,
+      "latencyRatio": 10.22,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.1802
+      }
+    },
+    {
+      "language": "svelte",
+      "repo": "https://github.com/carbon-design-system/carbon-components-svelte",
+      "commit": "454a3881cd2b5ac3e47b92d7524a8faa5d99f03d",
+      "artifact": "data/raw/LIVE_SVELTE_BENCHMARK.json",
+      "coverageRatio": 1.04,
+      "coverageExceedsNative": true,
+      "equivalentRows": 5,
+      "tokenRatio": 47.6,
+      "latencyRatio": 11.61,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.0476
+      }
+    },
+    {
+      "language": "swift",
+      "repo": "https://github.com/apple/swift-argument-parser",
+      "commit": "8122bc5941426c9494c78ff5ad01951e81c02f53",
+      "artifact": "data/raw/LIVE_SWIFT_BENCHMARK.json",
+      "coverageRatio": 1.19,
+      "coverageExceedsNative": true,
+      "equivalentRows": 4,
+      "tokenRatio": 80.43,
+      "latencyRatio": 18.99,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1.0118
+      }
+    },
+    {
+      "language": "terraform",
+      "repo": "https://github.com/terraform-aws-modules/terraform-aws-vpc",
+      "commit": "3ffbd46fb1c7733e1b34d8666893280454e27436",
+      "artifact": "data/raw/LIVE_TERRAFORM_BENCHMARK.json",
+      "coverageRatio": 1.0063,
+      "coverageExceedsNative": true,
+      "equivalentRows": 4,
+      "tokenRatio": 145.63,
+      "latencyRatio": 15.12,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "verilog",
+      "repo": "https://github.com/lowRISC/ibex",
+      "commit": "022f084096baed0a9b5ebdf697ed2965f13e8ed8",
+      "artifact": "data/raw/LIVE_VERILOG_BENCHMARK.json",
+      "coverageRatio": 1.5484,
+      "coverageExceedsNative": true,
+      "equivalentRows": 6,
+      "tokenRatio": 11,
+      "latencyRatio": 14.93,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 1
+      }
+    },
+    {
+      "language": "vue",
+      "repo": "https://github.com/gothinkster/vue-realworld-example-app",
+      "commit": "f7e48c8178602ce25d43293bc6f8ca51d84ae222",
+      "artifact": "data/raw/LIVE_VUE_BENCHMARK.json",
+      "coverageRatio": 1.3529,
+      "coverageExceedsNative": true,
+      "equivalentRows": 5,
+      "tokenRatio": 11.5,
+      "latencyRatio": 14.04,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 3.4167
+      }
+    },
+    {
+      "language": "zig",
+      "repo": "https://github.com/zigtools/zls",
+      "commit": "8da87d4f3305a550e7b739bad764e34bf1e46a08",
+      "artifact": "data/raw/LIVE_ZIG_BENCHMARK.json",
+      "coverageRatio": 1.0028,
+      "coverageExceedsNative": true,
+      "equivalentRows": 5,
+      "tokenRatio": 108.5,
+      "latencyRatio": 12.06,
+      "tokenGapTo10x": 1,
+      "latencyGapTo10x": 1,
+      "blockers": [],
+      "validation": {
+        "passed": true,
+        "repoCount": 3,
+        "minimumRepos": 3,
+        "minCoverageRatio": 2.1118
+      }
+    }
+  ],
+  "biggestLatencyGaps": [],
+  "biggestTokenGaps": []
+}

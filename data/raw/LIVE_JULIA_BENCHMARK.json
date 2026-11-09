@@ -1,0 +1,524 @@
+{
+  "language": "julia",
+  "repo": "https://github.com/JuliaIO/JSON.jl",
+  "commit": "e5ef310dece16746843753e4c3b44e868b917b64",
+  "graphify_detector_only": "",
+  "commands": {
+    "clone": "git clone --depth 1 https://github.com/JuliaIO/JSON.jl $WORK/atlas-live-julia-json/repo",
+    "sparse_checkout": "",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-julia-json/atlas.db --json index $WORK/atlas-live-julia-json/repo/src",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-julia-json/atlas.db --json index $WORK/atlas-live-julia-json/repo/src",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> $WORK/atlas-live-julia-json/repo/src",
+    "query_symbols": [
+      "JSON",
+      "JSONText",
+      "Object",
+      "parse",
+      "json",
+      "LazyValue"
+    ],
+    "target_path": "$WORK/atlas-live-julia-json/repo/src",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-julia-json/atlas.db serve --addr 127.0.0.1:4314"
+  },
+  "atlas": {
+    "cold_wall_seconds": 0.054,
+    "reindex_wall_seconds": 0.005,
+    "index": {
+      "repo_id": "7c2f8836-6526-4ee0-9ccf-b08fb4aefa73",
+      "repo_full_name": "src",
+      "snapshot_id": "e28fff60-deb8-4702-90bc-cabe04846077",
+      "commit_sha": "e5ef310dece16746843753e4c3b44e868b917b64",
+      "indexed_files": 6,
+      "symbols": 312,
+      "edges": 1048,
+      "edge_kinds": {
+        "calls": 1038,
+        "imports": 10
+      },
+      "routes": 0,
+      "languages": {
+        "julia": 6
+      },
+      "mode": "reindex",
+      "duration_ms": 54,
+      "timings_ms": {
+        "build_symbols_edges": 0,
+        "discover_files": 0,
+        "doc_links": 0,
+        "ensure_repo": 0,
+        "gitignore_scan": 15,
+        "go_types": 0,
+        "lexical": 23,
+        "parse": 14,
+        "persist": 23,
+        "resolve_head": 0,
+        "routes": 0,
+        "sort": 0,
+        "walk": 0,
+        "write_sqlite": 23
+      }
+    },
+    "reindex": {
+      "repo_id": "7c2f8836-6526-4ee0-9ccf-b08fb4aefa73",
+      "repo_full_name": "src",
+      "snapshot_id": "e28fff60-deb8-4702-90bc-cabe04846077",
+      "commit_sha": "e5ef310dece16746843753e4c3b44e868b917b64",
+      "indexed_files": 6,
+      "symbols": 312,
+      "edges": 1048,
+      "routes": 0,
+      "languages": {
+        "julia": 6
+      },
+      "mode": "noop",
+      "duration_ms": 5,
+      "timings_ms": {
+        "delta_check": 4,
+        "resolve_head": 0
+      }
+    },
+    "symbol_breakdown": [
+      {
+        "language": "julia",
+        "kind": "constant",
+        "count": 26
+      },
+      {
+        "language": "julia",
+        "kind": "function",
+        "count": 255
+      },
+      {
+        "language": "julia",
+        "kind": "macro",
+        "count": 6
+      },
+      {
+        "language": "julia",
+        "kind": "module",
+        "count": 2
+      },
+      {
+        "language": "julia",
+        "kind": "type",
+        "count": 21
+      },
+      {
+        "language": "julia",
+        "kind": "variable",
+        "count": 2
+      }
+    ],
+    "edge_breakdown": [
+      {
+        "kind": "calls",
+        "count": 1038
+      },
+      {
+        "kind": "imports",
+        "count": 10
+      }
+    ],
+    "julia_definition_symbols": 312,
+    "julia_core_definition_symbols": 310,
+    "julia_variable_definition_symbols": 2
+  },
+  "graphify": {
+    "status": "ok",
+    "ok": true,
+    "seconds": 0.19,
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "stdout_head": [
+      "Re-extracting code files in . (no LLM needed)...",
+      "[graphify watch] Rebuilt: 114 nodes, 179 edges, 11 communities",
+      "[graphify watch] graph.json, graph.html and GRAPH_REPORT.md updated in graphify-out",
+      "Code graph updated. For doc/paper/image changes run /graphify --update in your AI assistant.",
+      "Tip: set GEMINI_API_KEY or GOOGLE_API_KEY to use Gemini for semantic extraction."
+    ],
+    "stderr_head": [],
+    "metrics": {
+      "nodes": 114,
+      "links": 179,
+      "calls": 70
+    }
+  },
+  "native_baseline": {
+    "tool": "tree-sitter-julia",
+    "status": "partial",
+    "ok": false,
+    "seconds": 0.098,
+    "command": "$WORK/atlas-live-julia-json/tree-sitter-julia-venv/bin/python -c <tree-sitter-julia definition counter> $WORK/atlas-live-julia-json/repo/src",
+    "metrics": {
+      "files": 6,
+      "parsed_files": 5,
+      "parse_errors": 1,
+      "definition_counts": {
+        "module": 2,
+        "type": 21,
+        "function": 255,
+        "macro": 6,
+        "constant": 26
+      },
+      "definitions": 310,
+      "tree_sitter_version": "0.25.2",
+      "tree_sitter_julia_version": "0.23.1",
+      "parse_error_samples": [
+        {
+          "path": "write.jl",
+          "error": "tree-sitter parse error"
+        }
+      ],
+      "expanded_definition_counts": {
+        "module": 2,
+        "type": 21,
+        "function": 255,
+        "macro": 6,
+        "constant": 26,
+        "variable": 2
+      },
+      "expanded_definitions": 312,
+      "variable_definitions_excluded_from_core": 2,
+      "scope_note": "Core tree-sitter-julia baseline counts modules, types, functions, macros, and constants. Atlas commit 9d8bc41 additionally indexes validated module/top-level variable assignments while excluding locals and const statements from the variable surface."
+    }
+  },
+  "richer_native_baselines": {
+    "julia": {
+      "status": "missing",
+      "ok": false,
+      "note": "julia CLI not installed; tree-sitter-julia parser used as the isolated definition baseline"
+    },
+    "LanguageServer.jl": {
+      "status": "missing_adapter",
+      "ok": false,
+      "note": "LanguageServer.jl is not wired into this harness; tree-sitter-julia source parse coverage is used for this benchmark"
+    }
+  },
+  "coverage": {
+    "atlas_vs_tree_sitter_julia_core_plus_variables_definition_ratio": 1.0065,
+    "atlas_julia_core_plus_variable_definition_symbols": 312,
+    "native_definitions": 310,
+    "atlas_julia_core_definition_symbols": 310,
+    "atlas_julia_variable_definition_symbols": 2,
+    "expanded_tree_sitter_julia_counter_definitions": 312,
+    "expanded_tree_sitter_julia_counter_ratio": 1,
+    "coverage_scope": "JuliaIO/JSON.jl src target. The existing tree-sitter-julia core baseline covers 310 module/type/function/macro/constant definitions; Atlas commit 9d8bc41 also indexes 2 module/top-level variable assignments validated by the expanded tree-sitter-julia counter. Expanded Atlas/native counter parity is 312/312."
+  },
+  "optimization": {
+    "cycles_run": 3,
+    "stop_reason": "Julia now exceeds the native core baseline on coverage while preserving the existing >=10x token and latency comparison rows against Graphify.",
+    "cycle_notes": [
+      "cycle 1: JSON.jl probe required a Julia-specific parser with non-code masking, method-assignment detection, and macro-prefixed struct support.",
+      "cycle 2: Atlas/tree-sitter-julia core definition coverage matched on modules, types, functions, macros, and constants while exact-symbol query rows exceeded 10x token and latency output vs Graphify.",
+      "cycle 3: Atlas parser commit 9d8bc41 indexes module/top-level variable assignments while excluding locals, raising JSON.jl coverage to 312/310 = 1.0065; the expanded tree-sitter-julia counter validates 312/312."
+    ]
+  },
+  "query_warmup": {
+    "symbol": "JSON",
+    "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/JSON/explain?repo_id=src&format=plain",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain JSON",
+    "atlas_returncode": 0,
+    "graphify_returncode": 0,
+    "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
+  },
+  "queries": [
+    {
+      "symbol": "JSON",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/JSON/explain?repo_id=src&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain JSON",
+      "atlas_tokens": 2,
+      "graphify_tokens": 38,
+      "atlas_ms": 7.528,
+      "graphify_ms": 74.514,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "JSON p@JSON:1"
+      ],
+      "graphify_stdout_head": [
+        "Node: JSON.jl",
+        "  ID:        json",
+        "  Source:    JSON.jl L1",
+        "  Type:      code",
+        "  Community: 3",
+        "  Degree:    1",
+        "",
+        "Connections (1):"
+      ],
+      "atlas_ms_samples": [
+        12.061,
+        10.002,
+        8.974,
+        8.805,
+        7.822,
+        7.528,
+        7.378,
+        7.637,
+        7.514,
+        7.091,
+        7.225,
+        7.158,
+        7.114
+      ]
+    },
+    {
+      "symbol": "JSONText",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/JSONText/explain?repo_id=src&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain JSONText",
+      "atlas_tokens": 2,
+      "graphify_tokens": 51,
+      "atlas_ms": 7.022,
+      "graphify_ms": 73.121,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "JSONText t@JSON:84"
+      ],
+      "graphify_stdout_head": [
+        "Node: JSONText",
+        "  ID:        json_jsontext",
+        "  Source:    JSON.jl L84",
+        "  Type:      code",
+        "  Community: 3",
+        "  Degree:    2",
+        "",
+        "Connections (2):"
+      ],
+      "atlas_ms_samples": [
+        7.453,
+        6.889,
+        7.17,
+        7.261,
+        7.092,
+        6.519,
+        6.994,
+        6.792,
+        7.006,
+        7.542,
+        6.456,
+        7.022,
+        7.358
+      ]
+    },
+    {
+      "symbol": "Object",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/Object/explain?repo_id=src&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain Object",
+      "atlas_tokens": 2,
+      "graphify_tokens": 75,
+      "atlas_ms": 7.055,
+      "graphify_ms": 72.949,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "Object t@object:17"
+      ],
+      "graphify_stdout_head": [
+        "Node: object.jl",
+        "  ID:        object",
+        "  Source:    object.jl L1",
+        "  Type:      code",
+        "  Community: 8",
+        "  Degree:    5",
+        "",
+        "Connections (5):"
+      ],
+      "atlas_ms_samples": [
+        7.335,
+        6.808,
+        6.762,
+        7.125,
+        6.835,
+        7.055,
+        6.735,
+        7.51,
+        7.146,
+        6.985,
+        8.194,
+        6.423,
+        7.314
+      ]
+    },
+    {
+      "symbol": "parse",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/parse/explain?repo_id=src&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain parse",
+      "atlas_tokens": 2,
+      "graphify_tokens": 167,
+      "atlas_ms": 7.081,
+      "graphify_ms": 73.814,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "parse f@parse:148"
+      ],
+      "graphify_stdout_head": [
+        "Node: parse.jl",
+        "  ID:        parse",
+        "  Source:    parse.jl L1",
+        "  Type:      code",
+        "  Community: 2",
+        "  Degree:    13",
+        "",
+        "Connections (13):"
+      ],
+      "atlas_ms_samples": [
+        7.25,
+        7.677,
+        6.909,
+        7.152,
+        7.081,
+        6.844,
+        7.419,
+        7.279,
+        7.037,
+        7.044,
+        6.831,
+        7.112,
+        6.551
+      ]
+    },
+    {
+      "symbol": "json",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/json/explain?repo_id=src&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain json",
+      "atlas_tokens": 2,
+      "graphify_tokens": 38,
+      "atlas_ms": 7.211,
+      "graphify_ms": 72.815,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "json f@write:430"
+      ],
+      "graphify_stdout_head": [
+        "Node: JSON.jl",
+        "  ID:        json",
+        "  Source:    JSON.jl L1",
+        "  Type:      code",
+        "  Community: 3",
+        "  Degree:    1",
+        "",
+        "Connections (1):"
+      ],
+      "atlas_ms_samples": [
+        7.897,
+        6.824,
+        7.55,
+        6.798,
+        6.787,
+        7.716,
+        6.379,
+        7.051,
+        6.761,
+        7.211,
+        7.512,
+        7.336,
+        7.525
+      ]
+    },
+    {
+      "symbol": "LazyValue",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4314/api/v1/symbols/LazyValue/explain?repo_id=src&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain LazyValue",
+      "atlas_tokens": 2,
+      "graphify_tokens": 9,
+      "atlas_ms": 7.122,
+      "graphify_ms": 72.092,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": true,
+      "atlas_stdout_head": [
+        "LazyValue t@lazy:134"
+      ],
+      "graphify_stdout_head": [
+        "No node matching 'LazyValue' found."
+      ],
+      "atlas_ms_samples": [
+        6.632,
+        7.211,
+        6.784,
+        7.122,
+        7.567,
+        7.379,
+        7.39,
+        6.31,
+        6.952,
+        6.838,
+        7.217,
+        7.066,
+        7.598
+      ]
+    }
+  ],
+  "atlas_cli": {
+    "version": "v0.1.26-12-g9d8bc41",
+    "commit": "9d8bc41",
+    "date": "2026-06-30T11:38:59Z",
+    "measurement_note": "Julia coverage refreshed from clean Atlas parser commit 9d8bc41; Graphify rows retained as saved comparison baseline."
+  },
+  "multi_repo_validation": {
+    "minimum_repos": 3,
+    "status": "passed",
+    "generated_at": "2026-06-30T11:38:59Z",
+    "scope": "Julia parser validation uses three public Julia src targets. Coverage ratios compare Atlas expanded definitions to the prior core tree-sitter-julia baseline; each row also reports exact parity against an expanded tree-sitter-julia counter including module/top-level variable assignments.",
+    "repos": [
+      {
+        "repo": "https://github.com/JuliaIO/JSON.jl",
+        "commit": "e5ef310dece16746843753e4c3b44e868b917b64",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/julia/1-JSON.jl/repo/src",
+        "atlas_definitions": 312,
+        "native_definitions": 310,
+        "coverage_ratio": 1.0065,
+        "expanded_counter_definitions": 312,
+        "expanded_counter_ratio": 1,
+        "ok": true,
+        "note": "6 Julia files checked; tree-sitter-julia status partial with 1 parse error. Prior core baseline counted 310 definitions; Atlas commit 9d8bc41 counted 312 including 2 variable definitions and matched the expanded counter 312/312."
+      },
+      {
+        "repo": "https://github.com/JuliaData/DataFrames.jl",
+        "commit": "3924697ea6c02ac186a95b298a4e06b52e881b53",
+        "target_path": "/private$WORK/atlas-remaining-3repo-validation/julia/2-DataFrames.jl/repo/src",
+        "atlas_definitions": 1364,
+        "native_definitions": 1359,
+        "coverage_ratio": 1.0037,
+        "expanded_counter_definitions": 1364,
+        "expanded_counter_ratio": 1,
+        "ok": true,
+        "note": "36 Julia files checked; tree-sitter-julia status partial with 1 parse error. Prior core baseline counted 1359 definitions; Atlas commit 9d8bc41 counted 1364 including 5 variable definitions and matched the expanded counter 1364/1364."
+      },
+      {
+        "repo": "https://github.com/JuliaStats/StatsBase.jl",
+        "commit": "b8d458aee0fbfb20d386ae2986f30260361675a3",
+        "target_path": "/private$WORK/atlas-julia-third-candidates/StatsBase/repo/src",
+        "atlas_definitions": 605,
+        "native_definitions": 602,
+        "coverage_ratio": 1.005,
+        "expanded_counter_definitions": 605,
+        "expanded_counter_ratio": 1,
+        "ok": true,
+        "note": "23 Julia files checked with no tree-sitter parse errors. Prior core baseline counted 602 definitions; Atlas commit 9d8bc41 counted 605 including 3 variable definitions and matched the expanded counter 605/605."
+      }
+    ]
+  },
+  "schemaVersion": 2,
+  "generated_at": "2026-06-30T11:38:59Z",
+  "measurement_note": "Julia coverage refreshed from Atlas parser commit 9d8bc41. Graphify comparison query rows are retained as the comparison baseline because the measured symbols and compact Atlas explain output are unchanged."
+}

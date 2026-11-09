@@ -1,0 +1,782 @@
+{
+  "label": "after",
+  "truth": "fixture-truth: target called by exactly c01..c15, decoys n01..n03 (by construction)",
+  "scoring": "deterministic set comparison on simple names; no LLM",
+  "perfect_languages": 32,
+  "total_languages": 37,
+  "rows": [
+    {
+      "language": "go",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "python",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "javascript",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "typescript",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "java",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 21
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "c",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 21
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "cpp",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 21
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "rust",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 17
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "ruby",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 3
+      },
+      "returned": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 15,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "false_positives": [],
+      "missed": [
+        "c01",
+        "c02",
+        "c03",
+        "c04",
+        "c05",
+        "c06",
+        "c07",
+        "c08",
+        "c09",
+        "c10",
+        "c11",
+        "c12",
+        "c13",
+        "c14",
+        "c15"
+      ],
+      "decoy_leaks": []
+    },
+    {
+      "language": "php",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "csharp",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "kotlin",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "swift",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "scala",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 42
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "lua",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "powershell",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "bash",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "zig",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 17
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "elixir",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 16
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "objc",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 21
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "julia",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 17
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "fortran",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "dart",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "verilog",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "pascal",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 0
+      },
+      "returned": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 15,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "false_positives": [],
+      "missed": [
+        "c01",
+        "c02",
+        "c03",
+        "c04",
+        "c05",
+        "c06",
+        "c07",
+        "c08",
+        "c09",
+        "c10",
+        "c11",
+        "c12",
+        "c13",
+        "c14",
+        "c15"
+      ],
+      "decoy_leaks": []
+    },
+    {
+      "language": "byond",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "razor",
+      "status": "ok",
+      "index": {
+        "symbols": 2,
+        "edges": 34
+      },
+      "returned": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 15,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "false_positives": [],
+      "missed": [
+        "c01",
+        "c02",
+        "c03",
+        "c04",
+        "c05",
+        "c06",
+        "c07",
+        "c08",
+        "c09",
+        "c10",
+        "c11",
+        "c12",
+        "c13",
+        "c14",
+        "c15"
+      ],
+      "decoy_leaks": []
+    },
+    {
+      "language": "vue",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "svelte",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 18
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "astro",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 15
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "ejs",
+      "status": "ok",
+      "index": {
+        "symbols": 2,
+        "edges": 35
+      },
+      "returned": 1,
+      "tp": 0,
+      "fp": 1,
+      "fn": 15,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "false_positives": [
+        "view"
+      ],
+      "missed": [
+        "c01",
+        "c02",
+        "c03",
+        "c04",
+        "c05",
+        "c06",
+        "c07",
+        "c08",
+        "c09",
+        "c10",
+        "c11",
+        "c12",
+        "c13",
+        "c14",
+        "c15"
+      ],
+      "decoy_leaks": []
+    },
+    {
+      "language": "ets",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 21
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "r",
+      "status": "ok",
+      "index": {
+        "symbols": 20,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "apex",
+      "status": "ok",
+      "index": {
+        "symbols": 21,
+        "edges": 20
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "blade",
+      "status": "ok",
+      "index": {
+        "symbols": 1,
+        "edges": 35
+      },
+      "returned": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 15,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "false_positives": [],
+      "missed": [
+        "c01",
+        "c02",
+        "c03",
+        "c04",
+        "c05",
+        "c06",
+        "c07",
+        "c08",
+        "c09",
+        "c10",
+        "c11",
+        "c12",
+        "c13",
+        "c14",
+        "c15"
+      ],
+      "decoy_leaks": []
+    },
+    {
+      "language": "groovy",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 17
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    },
+    {
+      "language": "sql",
+      "status": "ok",
+      "index": {
+        "symbols": 19,
+        "edges": 16
+      },
+      "returned": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "false_positives": [],
+      "missed": [],
+      "decoy_leaks": []
+    }
+  ],
+  "_provenance": {
+    "label": "linux-container-on-darwin",
+    "commit": "fc3b8755345a93fa8b9fe9a6e5deba74654334fc",
+    "tree": "3d303c9dbc6dd29411babf2710bba87d51f438ee",
+    "tree_verified": "git write-tree inside the container matched `git rev-parse fc3b875^{tree}` byte-for-byte",
+    "host": {
+      "why_not_remote": "all four candidate Linux hosts (172.30.47.69, 172.30.62.31, 172.30.38.241, 172.30.36.100) refused passwordless ssh (Permission denied (publickey,password)); per the run rules password prompts are never guessed, so all four were skipped",
+      "actual": "Docker container golang:1.26-bookworm on the Darwin workstation",
+      "kernel": "Linux 6.12.54-linuxkit aarch64 (Docker Desktop VM)",
+      "arch": "arm64/aarch64",
+      "arch_caveat": "PUBLISHED reference run was Linux 6.18.5 x86_64. This leg is arm64. F1/accuracy is architecture-independent; latency_ms and index_ms are NOT comparable across these two architectures.",
+      "resources": "4 vCPU / ~4 GiB RAM -> atlas auto-selected the ECO profile (GOMAXPROCS=2, 614.9MiB soft heap, GOGC=50). The published run's profile is unknown; eco depresses latency/index throughput.",
+      "filesystem": "container overlayfs (case-SENSITIVE); sources were unpacked from git archive inside the container, never read over the case-insensitive Darwin bind mount"
+    },
+    "toolchain": {
+      "go": "go1.26.5 linux/arm64",
+      "gopls": "v0.23.0",
+      "python": "3.11.2",
+      "gcc": "Debian 12.2.0",
+      "graphify": "NOT INSTALLED — competitor column not reproducible on this host"
+    },
+    "status": "FRESH — measured at fc3b875 in this container",
+    "bench": "bench/callers_f1.py --atlas ./bin/atlas --label after",
+    "determinism": "fixture-truth, no LLM, no network"
+  }
+}

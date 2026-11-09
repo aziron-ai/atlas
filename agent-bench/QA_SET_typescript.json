@@ -1,0 +1,588 @@
+{
+ "meta": {
+  "repo_slug": "vuejs/core",
+  "repo_url": "https://github.com/vuejs/core",
+  "commit": "ca034820b8288ab6da3a033626a7857401ee64a5",
+  "language": "typescript",
+  "subdir": "packages/reactivity/src",
+  "truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+  "generated": "2026-10-29",
+  "n_questions": 19,
+  "generator_seconds": 44.3
+ },
+ "questions": [
+  {
+   "id": "callers::warn",
+   "symbol": "warn",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `warn`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "VueElement",
+    "_createVNode",
+    "_mount",
+    "_resolveDef",
+    "_resolveProps",
+    "applyOptions",
+    "assertNumber",
+    "callWithAsyncErrorHandling",
+    "checkIdentityKeys",
+    "compileToFunction",
+    "component",
+    "config",
+    "createApp",
+    "createBaseVNode",
+    "createDuplicateChecker",
+    "createReactiveObject",
+    "createReadonlyMethod",
+    "createWatcher",
+    "defineReactive",
+    "deleteProperty",
+    "directive",
+    "doSet",
+    "doWatch",
+    "emit",
+    "expose",
+    "exposeSetupStateOnRenderContext",
+    "findNonCommentChild",
+    "finishComponentSetup",
+    "get",
+    "getContext",
+    "handleMismatch",
+    "handleSetupResult",
+    "has",
+    "hydrate",
+    "hydrateChildren",
+    "hydrateElement",
+    "hydrateNode",
+    "inject",
+    "injectHook",
+    "installCompatMount",
+    "installFilterMethod",
+    "load",
+    "logError",
+    "mergeDefaults",
+    "mergeOptions",
+    "mixin",
+    "mount",
+    "mountToTarget",
+    "normalizeContainer",
+    "normalizeObjectSlots",
+    "normalizePropsOptions",
+    "normalizeSlot",
+    "normalizeSuspenseSlot",
+    "normalizeVNodeSlots",
+    "onEffectCleanup",
+    "onError",
+    "onScopeDispose",
+    "onUnmount",
+    "onWatcherCleanup",
+    "patch",
+    "patchDOMProp",
+    "patchKeyedChildren",
+    "performHydrate",
+    "process",
+    "processWithDefaults",
+    "propHasMismatch",
+    "provide",
+    "renderComponentRoot",
+    "renderComponentSubTree",
+    "renderList",
+    "renderSlot",
+    "renderTeleportVNode",
+    "renderVNode",
+    "resolveAsset",
+    "resolveTarget",
+    "rewriteSelector",
+    "run",
+    "sanitizeEventValue",
+    "set",
+    "setRef",
+    "setSelected",
+    "setStyle",
+    "setup",
+    "setupStatefulComponent",
+    "ssrRenderList",
+    "toHandlers",
+    "toRefs",
+    "unmount",
+    "use",
+    "useCssModule",
+    "useCssVars",
+    "useHost",
+    "useId",
+    "useModel",
+    "useSSRContext",
+    "useTemplateRef",
+    "validateCompatConfig",
+    "validateComponentName",
+    "validateDirectiveName",
+    "validateProp",
+    "validatePropName",
+    "value",
+    "warn",
+    "warnDeprecation",
+    "warnOnce",
+    "warnRuntimeUsage",
+    "watch",
+    "withAsyncContext",
+    "withDirectives"
+   ],
+   "truth_source": "call_hierarchy over 6 definition(s)",
+   "definitions": [
+    "packages/compiler-sfc/src/script/context.ts:142:3",
+    "packages/compiler-sfc/src/warn.ts:12:17",
+    "packages/reactivity/src/warning.ts:1:17",
+    "packages/runtime-core/src/warning.ts:35:17",
+    "packages/runtime-core/src/index.ts:133:14",
+    "scripts/setup-vitest.ts:81:5"
+   ]
+  },
+  {
+   "id": "callers::toRaw",
+   "symbol": "toRaw",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `toRaw`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "ObjectRefImpl",
+    "RefImpl",
+    "_createVNode",
+    "add",
+    "checkIdentityKeys",
+    "clear",
+    "compileCode",
+    "createIterableMethod",
+    "createReadonlyMethod",
+    "delete",
+    "exposeSetupStateOnRenderContext",
+    "forEach",
+    "formatInstance",
+    "formatProp",
+    "formatValue",
+    "get",
+    "has",
+    "hasOwnProperty",
+    "noTracking",
+    "reactiveReadArray",
+    "searchProxy",
+    "set",
+    "setFullProps",
+    "setRef",
+    "setup",
+    "shallowReadArray",
+    "size",
+    "toRaw",
+    "updateProps",
+    "validateProps",
+    "value"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/reactive.ts:391:17"
+   ]
+  },
+  {
+   "id": "callers::ref",
+   "symbol": "ref",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `ref`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "Item",
+    "assertAnonymous",
+    "assertNameMatch",
+    "assertNameMatchWithFlag",
+    "assertNameMatchWithFlagExclude",
+    "bailType",
+    "data",
+    "mockPersistedHooks",
+    "mount",
+    "plainType",
+    "runSharedTests",
+    "setup",
+    "setupExclude",
+    "testInOut",
+    "testInOutBeforeFinish",
+    "testOutIn",
+    "testOutInBeforeFinish",
+    "testOutInDoubleToggle",
+    "testRender",
+    "testToggleBranches",
+    "testToggleBranchesBeforeFinish",
+    "testToggleOnOff",
+    "testToggleOnOffBeforeFinish",
+    "toRef",
+    "useModel",
+    "withSymbol"
+   ],
+   "truth_source": "call_hierarchy over 12 definition(s)",
+   "definitions": [
+    "packages/reactivity/__tests__/computed.spec.ts:861:15",
+    "packages/reactivity/src/ref.ts:59:17",
+    "packages/reactivity/src/ref.ts:62:1",
+    "packages/reactivity/src/ref.ts:64:1",
+    "packages/runtime-core/__tests__/apiWatch.spec.ts:1325:15",
+    "packages/server-renderer/__tests__/ssrRenderAttrs.spec.ts:16:9",
+    "packages-private/dts-test/h.test-d.ts:27:14",
+    "packages/compiler-sfc/src/style/preprocessors.ts:121:11",
+    "packages/runtime-core/src/hydration.ts:157:19",
+    "packages/runtime-core/src/renderer.ts:424:19",
+    "packages/runtime-core/src/renderer.ts:2181:7",
+    "packages/runtime-core/src/vnode.ts:427:3"
+   ]
+  },
+  {
+   "id": "callers::isRef",
+   "symbol": "isRef",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `isRef`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "bailType",
+    "createRef",
+    "createSetupContext",
+    "expose",
+    "formatProp",
+    "get",
+    "getter",
+    "header",
+    "normalizeRef",
+    "plainType",
+    "replacer",
+    "resolveInjections",
+    "set",
+    "setRef",
+    "toDisplayString",
+    "toRef",
+    "traverse",
+    "unref",
+    "value",
+    "watch"
+   ],
+   "truth_source": "call_hierarchy over 3 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/ref.ts:46:17",
+    "packages/reactivity/src/ref.ts:48:1",
+    "packages/shared/src/toDisplayString.ts:16:7"
+   ]
+  },
+  {
+   "id": "callers::reactive",
+   "symbol": "reactive",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `reactive`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "applyOptions",
+    "assertCssVars",
+    "assertTriggerRef",
+    "assertValue",
+    "coverCollectionFn",
+    "createCompatVue",
+    "defineReactive",
+    "defineReactiveSimple",
+    "get",
+    "observable",
+    "set",
+    "setup",
+    "testRender",
+    "toReactive"
+   ],
+   "truth_source": "call_hierarchy over 2 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/reactive.ts:85:17",
+    "packages/reactivity/src/reactive.ts:87:1"
+   ]
+  },
+  {
+   "id": "callers::isShallow",
+   "symbol": "isShallow",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `isShallow`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "ObjectRefImpl",
+    "add",
+    "apply",
+    "genRefFlag",
+    "header",
+    "iterator",
+    "reactiveGetter",
+    "reactiveReadArray",
+    "reduce",
+    "renderList",
+    "set",
+    "value",
+    "watch"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/reactive.ts:351:17"
+   ]
+  },
+  {
+   "id": "callers::track",
+   "symbol": "track",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `track`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "createIterableMethod",
+    "forEach",
+    "get",
+    "has",
+    "hasOwnProperty",
+    "ownKeys",
+    "reactiveReadArray",
+    "searchProxy",
+    "shallowReadArray",
+    "size",
+    "track",
+    "value"
+   ],
+   "truth_source": "call_hierarchy over 2 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/dep.ts:108:3",
+    "packages/reactivity/src/dep.ts:262:17"
+   ]
+  },
+  {
+   "id": "callers::trigger",
+   "symbol": "trigger",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `trigger`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "add",
+    "clear",
+    "delete",
+    "deleteProperty",
+    "endBatch",
+    "resume",
+    "run",
+    "set",
+    "triggerRef",
+    "updateProps",
+    "updateSlots",
+    "value"
+   ],
+   "truth_source": "call_hierarchy over 3 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/dep.ts:167:3",
+    "packages/reactivity/src/dep.ts:294:17",
+    "packages/reactivity/src/effect.ts:206:3"
+   ]
+  },
+  {
+   "id": "callers::pauseTracking",
+   "symbol": "pauseTracking",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `pauseTracking`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "finishComponentSetup",
+    "handleError",
+    "header",
+    "injectHook",
+    "invokeDirectiveHook",
+    "job",
+    "noTracking",
+    "setupStatefulComponent",
+    "unmount",
+    "updateComponentPreRender",
+    "warn",
+    "watch"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/effect.ts:525:17"
+   ]
+  },
+  {
+   "id": "callers::resetTracking",
+   "symbol": "resetTracking",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `resetTracking`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "finishComponentSetup",
+    "handleError",
+    "header",
+    "injectHook",
+    "invokeDirectiveHook",
+    "job",
+    "noTracking",
+    "setupStatefulComponent",
+    "unmount",
+    "updateComponentPreRender",
+    "warn",
+    "watch"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/effect.ts:541:17"
+   ]
+  },
+  {
+   "id": "callers::isReactive",
+   "symbol": "isReactive",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `isReactive`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "defineReactive",
+    "header",
+    "hydrateElement",
+    "isReactive",
+    "maxBy",
+    "proxyRefs",
+    "reactiveReadArray",
+    "renderList",
+    "toWrapped",
+    "watch"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/reactive.ts:327:17"
+   ]
+  },
+  {
+   "id": "callers::isReadonly",
+   "symbol": "isReadonly",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `isReadonly`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "add",
+    "header",
+    "isReactive",
+    "reactive",
+    "reactiveReadArray",
+    "renderList",
+    "set",
+    "toWrapped",
+    "value"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/reactive.ts:346:17"
+   ]
+  },
+  {
+   "id": "callers::toWrapped",
+   "symbol": "toWrapped",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `toWrapped`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "apply",
+    "entries",
+    "filter",
+    "find",
+    "findLast",
+    "reduce",
+    "values"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/arrayInstrumentations.ts:45:10"
+   ]
+  },
+  {
+   "id": "callers::unref",
+   "symbol": "unref",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `unref`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "_mount",
+    "bailType",
+    "plainType",
+    "ssrRender",
+    "testUnrefGenerics",
+    "toValue",
+    "value"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/ref.ts:229:17"
+   ]
+  },
+  {
+   "id": "callers::computed",
+   "symbol": "computed",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `computed`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "applyOptions",
+    "computed",
+    "setup",
+    "testRender",
+    "useClamp"
+   ],
+   "truth_source": "call_hierarchy over 5 definition(s)",
+   "definitions": [
+    "packages/reactivity/__benchmarks__/computed.bench.ts:6:12",
+    "packages/reactivity/src/computed.ts:189:17",
+    "packages/reactivity/src/computed.ts:193:1",
+    "packages/reactivity/src/computed.ts:198:1",
+    "packages/runtime-core/src/apiComputed.ts:4:14"
+   ]
+  },
+  {
+   "id": "callers::isProxy",
+   "symbol": "isProxy",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `isProxy`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "ObjectRefImpl",
+    "_createVNode",
+    "guardReactiveProps",
+    "searchProxy",
+    "toRefs"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/reactive.ts:363:17"
+   ]
+  },
+  {
+   "id": "callers::markRaw",
+   "symbol": "markRaw",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `markRaw`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "createComment",
+    "createElement",
+    "createText",
+    "getComponentPublicInstance",
+    "setup"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/reactive.ts:420:17"
+   ]
+  },
+  {
+   "id": "callers::noTracking",
+   "symbol": "noTracking",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `noTracking`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "pop",
+    "push",
+    "shift",
+    "splice",
+    "unshift"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/arrayInstrumentations.ts:401:10"
+   ]
+  },
+  {
+   "id": "callers::reactiveReadArray",
+   "symbol": "reactiveReadArray",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `reactiveReadArray`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "concat",
+    "join",
+    "toReversed",
+    "toSorted",
+    "toSpliced"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "packages/reactivity/src/arrayInstrumentations.ts:22:17"
+   ]
+  }
+ ]
+}

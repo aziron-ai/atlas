@@ -1,0 +1,519 @@
+{
+  "language": "rust",
+  "repo": "https://github.com/BurntSushi/ripgrep",
+  "commit": "dfe4a81d2591daca76d25ae4e052c34b26578155",
+  "graphify_detector_only": "",
+  "commands": {
+    "clone": "git clone --depth 1 https://github.com/BurntSushi/ripgrep $WORK/atlas-live-rust-ripgrep/repo",
+    "sparse_checkout": "",
+    "atlas_index": "bin/atlas --db sqlite://$WORK/atlas-live-rust-ripgrep/atlas.db --json index $WORK/atlas-live-rust-ripgrep/repo",
+    "atlas_reindex": "bin/atlas --db sqlite://$WORK/atlas-live-rust-ripgrep/atlas.db --json index $WORK/atlas-live-rust-ripgrep/repo",
+    "graphify_update": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "native_baseline": "/opt/homebrew/bin/rust-analyzer documentSymbol <16 Rust files>",
+    "query_symbols": [
+      "HiArgs",
+      "LowArgs",
+      "PatternMatcher",
+      "WalkBuilder"
+    ],
+    "target_path": "$WORK/atlas-live-rust-ripgrep/repo",
+    "atlas_serve": "bin/atlas --db sqlite://$WORK/atlas-live-rust-ripgrep/atlas.db serve --addr 127.0.0.1:4190"
+  },
+  "atlas": {
+    "cold_wall_seconds": 0.474,
+    "reindex_wall_seconds": 0.042,
+    "index": {
+      "repo_id": "73f3b52a-2bdc-429b-8102-e890e72084af",
+      "repo_full_name": "repo",
+      "snapshot_id": "81d0c5c7-533a-45bf-b4c7-9d22e17bfbf3",
+      "commit_sha": "dfe4a81d2591daca76d25ae4e052c34b26578155",
+      "indexed_files": 161,
+      "symbols": 5920,
+      "edges": 16722,
+      "edge_kinds": {
+        "calls": 15805,
+        "imports": 917
+      },
+      "routes": 0,
+      "languages": {
+        "bash": 2,
+        "config": 4,
+        "csv": 12,
+        "markdown": 22,
+        "ruby": 1,
+        "rust": 100,
+        "text": 1,
+        "toml": 13,
+        "xml": 1,
+        "yaml": 5
+      },
+      "mode": "full",
+      "duration_ms": 474,
+      "timings_ms": {
+        "build_symbols_edges": 4,
+        "delta_check": 0,
+        "discover_files": 2,
+        "doc_links": 0,
+        "ensure_repo": 1,
+        "gitignore_scan": 17,
+        "go_types": 0,
+        "lexical": 332,
+        "parse": 115,
+        "persist": 332,
+        "resolve_head": 0,
+        "routes": 0,
+        "sort": 3,
+        "walk": 2,
+        "write_sqlite": 332
+      }
+    },
+    "reindex": {
+      "repo_id": "73f3b52a-2bdc-429b-8102-e890e72084af",
+      "repo_full_name": "repo",
+      "snapshot_id": "81d0c5c7-533a-45bf-b4c7-9d22e17bfbf3",
+      "commit_sha": "dfe4a81d2591daca76d25ae4e052c34b26578155",
+      "indexed_files": 161,
+      "symbols": 5920,
+      "edges": 16722,
+      "routes": 0,
+      "languages": {
+        "bash": 2,
+        "config": 4,
+        "csv": 12,
+        "markdown": 22,
+        "ruby": 1,
+        "rust": 100,
+        "text": 1,
+        "toml": 13,
+        "xml": 1,
+        "yaml": 5
+      },
+      "mode": "noop",
+      "duration_ms": null,
+      "timings_ms": {
+        "delta_check": null,
+        "resolve_head": 0
+      }
+    },
+    "symbol_breakdown": [
+      {
+        "language": "bash",
+        "kind": "function",
+        "count": 11
+      },
+      {
+        "language": "config",
+        "kind": "document",
+        "count": 4
+      },
+      {
+        "language": "csv",
+        "kind": "document",
+        "count": 12
+      },
+      {
+        "language": "markdown",
+        "kind": "document",
+        "count": 5
+      },
+      {
+        "language": "markdown",
+        "kind": "section",
+        "count": 69
+      },
+      {
+        "language": "ruby",
+        "kind": "class",
+        "count": 1
+      },
+      {
+        "language": "ruby",
+        "kind": "method",
+        "count": 1
+      },
+      {
+        "language": "rust",
+        "kind": "class",
+        "count": 412
+      },
+      {
+        "language": "rust",
+        "kind": "constant",
+        "count": 65
+      },
+      {
+        "language": "rust",
+        "kind": "function",
+        "count": 2744
+      },
+      {
+        "language": "rust",
+        "kind": "interface",
+        "count": 7
+      },
+      {
+        "language": "rust",
+        "kind": "macro",
+        "count": 36
+      },
+      {
+        "language": "rust",
+        "kind": "method",
+        "count": 2415
+      },
+      {
+        "language": "rust",
+        "kind": "module",
+        "count": 118
+      },
+      {
+        "language": "text",
+        "kind": "document",
+        "count": 1
+      },
+      {
+        "language": "toml",
+        "kind": "document",
+        "count": 13
+      },
+      {
+        "language": "xml",
+        "kind": "document",
+        "count": 1
+      },
+      {
+        "language": "yaml",
+        "kind": "document",
+        "count": 5
+      }
+    ],
+    "edge_breakdown": [
+      {
+        "kind": "calls",
+        "count": 15805
+      },
+      {
+        "kind": "imports",
+        "count": 917
+      }
+    ],
+    "rust_definition_symbols": 1153
+  },
+  "graphify": {
+    "status": "ok",
+    "ok": true,
+    "seconds": 2.067,
+    "command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify update .",
+    "stdout_head": [
+      "Re-extracting code files in . (no LLM needed)...",
+      "  AST extraction: 100/125 uncached files (80%) [14 workers]",
+      "  AST extraction: 130/130 files (100%) [14 workers]",
+      "[graphify watch] Rebuilt: 3457 nodes, 9148 edges, 233 communities",
+      "[graphify watch] graph.json, graph.html and GRAPH_REPORT.md updated in graphify-out",
+      "Code graph updated. For doc/paper/image changes run /graphify --update in your AI assistant.",
+      "Tip: set GEMINI_API_KEY or GOOGLE_API_KEY to use Gemini for semantic extraction."
+    ],
+    "stderr_head": [],
+    "metrics": {
+      "nodes": 3457,
+      "links": 9148,
+      "calls": 2657
+    }
+  },
+  "native_baseline": {
+    "tool": "rust-analyzer",
+    "status": "ok",
+    "ok": true,
+    "seconds": 0.331,
+    "command": "/opt/homebrew/bin/rust-analyzer documentSymbol <16 Rust files>",
+    "metrics": {
+      "sample_files": 16,
+      "document_symbol_files": 16,
+      "document_symbols": 1310,
+      "comparable_document_symbols": 1151,
+      "definitions": 1151,
+      "symbol_kind_counts": {
+        "2": 18,
+        "6": 791,
+        "8": 19,
+        "10": 4,
+        "12": 202,
+        "14": 21,
+        "19": 131,
+        "22": 9,
+        "23": 115
+      },
+      "definition_kind_scope": "LSP module/class/method/enum/interface/function/constant/struct kinds; fields, variables, enum members, and type parameters excluded",
+      "diagnostic_files": 0,
+      "diagnostics": 0,
+      "sample_paths": [
+        "build.rs",
+        "crates/cli/src/decompress.rs",
+        "crates/cli/src/escape.rs",
+        "crates/cli/src/hostname.rs",
+        "crates/cli/src/human.rs",
+        "crates/cli/src/lib.rs",
+        "crates/cli/src/pattern.rs",
+        "crates/cli/src/process.rs",
+        "crates/cli/src/wtr.rs",
+        "crates/core/flags/complete/bash.rs",
+        "crates/core/flags/complete/fish.rs",
+        "crates/core/flags/complete/mod.rs",
+        "crates/core/flags/complete/powershell.rs",
+        "crates/core/flags/complete/zsh.rs",
+        "crates/core/flags/config.rs",
+        "crates/core/flags/defs.rs"
+      ],
+      "tool_versions": {
+        "rust-analyzer": "rust-analyzer 0.0.0 (69ccffdb5b 2026-06-21)",
+        "cargo": "cargo 1.96.0 (30a34c682 2026-05-25) (Homebrew)",
+        "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25) (Homebrew)"
+      },
+      "stderr_tail": []
+    }
+  },
+  "richer_native_baselines": {
+    "rust-source-counter": {
+      "status": "ok",
+      "ok": true,
+      "note": "deterministic Rust source counter used as the scriptable parser coverage proxy"
+    },
+    "rust-analyzer": {
+      "status": "missing_adapter",
+      "ok": false,
+      "note": "rust-analyzer adapter not implemented in this harness yet"
+    },
+    "cargo": {
+      "status": "available",
+      "ok": true,
+      "note": "cargo is available but not a code-intelligence definition baseline by itself"
+    },
+    "rustc": {
+      "status": "available",
+      "ok": true,
+      "note": "rustc is available but not a code-intelligence definition baseline by itself"
+    }
+  },
+  "coverage": {
+    "atlas_vs_rust_analyzer_definition_ratio": 1.0017,
+    "atlas_rust_definition_symbols": 1153,
+    "native_definitions": 1151,
+    "coverage_scope": "16 sampled files from rust-analyzer"
+  },
+  "optimization": {
+    "cycles_run": 2,
+    "stop_reason": "Rust live benchmark records reproducible Atlas/graphify measurements and measures sampled source coverage against rust-analyzer documentSymbol when available, with deterministic source-counter fallback.",
+    "cycle_notes": [
+      "cycle 1: BurntSushi/ripgrep benchmark records live Atlas and graphify query behavior on shared Rust type symbols while explicitly marking rust-analyzer/cargo/rustc unavailable.",
+      "cycle 2: added a rust-analyzer documentSymbol adapter for sampled-file native coverage and a Rust source-counter fallback for machines without rust-analyzer."
+    ]
+  },
+  "query_warmup": {
+    "symbol": "HiArgs",
+    "atlas_command": "curl -fsS http://127.0.0.1:4190/api/v1/symbols/HiArgs/explain?repo_id=repo&format=plain",
+    "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain HiArgs",
+    "atlas_returncode": 0,
+    "graphify_returncode": 0,
+    "note": "Untimed warm-up for Atlas warm serve and graphify before measured query latency rows."
+  },
+  "queries": [
+    {
+      "symbol": "HiArgs",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4190/api/v1/symbols/HiArgs/explain?repo_id=repo&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain HiArgs",
+      "atlas_tokens": 2,
+      "graphify_tokens": 249,
+      "atlas_ms": 10.144,
+      "graphify_ms": 134.509,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "HiArgs c@hiargs:36"
+      ],
+      "graphify_stdout_head": [
+        "Node: HiArgs",
+        "  ID:        flags_hiargs_hiargs",
+        "  Source:    crates/core/flags/hiargs.rs L36",
+        "  Type:      code",
+        "  Community: 55",
+        "  Degree:    57",
+        "",
+        "Connections (57):"
+      ],
+      "atlas_ms_samples": [
+        10.144,
+        10.386,
+        9.257,
+        10.144,
+        10.126,
+        11.714,
+        11.636,
+        9.984,
+        10.182
+      ]
+    },
+    {
+      "symbol": "LowArgs",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4190/api/v1/symbols/LowArgs/explain?repo_id=repo&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain LowArgs",
+      "atlas_tokens": 2,
+      "graphify_tokens": 258,
+      "atlas_ms": 9.609,
+      "graphify_ms": 132.317,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "LowArgs c@lowargs:33"
+      ],
+      "graphify_stdout_head": [
+        "Node: LowArgs",
+        "  ID:        flags_lowargs_lowargs",
+        "  Source:    crates/core/flags/lowargs.rs L33",
+        "  Type:      code",
+        "  Community: 65",
+        "  Degree:    145",
+        "",
+        "Connections (145):"
+      ],
+      "atlas_ms_samples": [
+        11.452,
+        10.416,
+        9.568,
+        9.609,
+        8.589,
+        10.67,
+        9.058,
+        10.67,
+        9.478
+      ]
+    },
+    {
+      "symbol": "PatternMatcher",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4190/api/v1/symbols/PatternMatcher/explain?repo_id=repo&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain PatternMatcher",
+      "atlas_tokens": 2,
+      "graphify_tokens": 119,
+      "atlas_ms": 10.441,
+      "graphify_ms": 132.168,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "PatternMatcher c@search:193"
+      ],
+      "graphify_stdout_head": [
+        "Node: PatternMatcher",
+        "  ID:        core_search_patternmatcher",
+        "  Source:    crates/core/search.rs L193",
+        "  Type:      code",
+        "  Community: 49",
+        "  Degree:    7",
+        "",
+        "Connections (7):"
+      ],
+      "atlas_ms_samples": [
+        12.696,
+        10.397,
+        9.093,
+        10.86,
+        10.441,
+        9.786,
+        11.137,
+        9.096,
+        11.027
+      ]
+    },
+    {
+      "symbol": "WalkBuilder",
+      "atlas_query_mode": "serve_explain_plain",
+      "atlas_command": "curl -fsS http://127.0.0.1:4190/api/v1/symbols/WalkBuilder/explain?repo_id=repo&format=plain",
+      "graphify_command": "$HOME/.local/share/uv/tools/graphifyy/bin/graphify explain WalkBuilder",
+      "atlas_tokens": 2,
+      "graphify_tokens": 259,
+      "atlas_ms": 10.383,
+      "graphify_ms": 142.743,
+      "atlas_returncode": 0,
+      "graphify_returncode": 0,
+      "atlas_missing": false,
+      "graphify_missing": false,
+      "atlas_stdout_head": [
+        "WalkBuilder c@walk:483"
+      ],
+      "graphify_stdout_head": [
+        "Node: WalkBuilder",
+        "  ID:        src_walk_walkbuilder",
+        "  Source:    crates/ignore/src/walk.rs L483",
+        "  Type:      code",
+        "  Community: 32",
+        "  Degree:    48",
+        "",
+        "Connections (48):"
+      ],
+      "atlas_ms_samples": [
+        10.515,
+        10.013,
+        13.718,
+        10.948,
+        9.991,
+        10.383,
+        11.8,
+        10.307,
+        10.351
+      ]
+    }
+  ],
+  "atlas_cli": {
+    "version": "v0.1.26-4-gd882e08",
+    "commit": "d882e08",
+    "date": "2026-06-30T07:15:57Z",
+    "measurement_note": "Query rows refreshed from nine-sample medians against atlas serve format=plain using curl; graphify rows retained as the saved comparison baseline."
+  },
+  "multi_repo_validation": {
+    "minimum_repos": 3,
+    "status": "passed",
+    "generated_at": "2026-06-30T13:33:45Z",
+    "scope": "rust parser random public-repo validation uses three GitHub repos selected by a deterministic random sample from 50 public non-archived rust repos with 50..500 stars and size <= 5000. Atlas indexed each clean checkout after removing graphify-out, the native denominator came from rust-analyzer symbols, and Graphify was run on the same checkout as the comparison baseline.",
+    "selection_method": "gh search repos --language Rust --stars 50..500 --archived=false --limit 50; size <= 5000; deterministic random sample seed 2026-06-30-atlas-random-validation-v1",
+    "measurement_order": "Atlas index after removing graphify-out, then native counter, then graphify update for comparison metrics.",
+    "repos": [
+      {
+        "repo": "https://github.com/Taaitaaiger/jlrs",
+        "commit": "2297a23438ade895605619bd658510c67a239102",
+        "target_path": "$WORK/atlas-random-validation/work/rust/1-Taaitaaiger__jlrs",
+        "atlas_definitions": 7152,
+        "native_definitions": 5081,
+        "coverage_ratio": 1.4076,
+        "ok": true,
+        "note": "Taaitaaiger/jlrs: rust-analyzer symbols native counts {\"Function\":1994,\"Module\":388,\"Struct\":452,\"Const\":96,\"TypeAlias\":505,\"Method\":1291,\"Static\":149,\"Enum\":45,\"Trait\":106,\"Macro\":55}; Atlas counts {\"class\":966,\"constant\":96,\"function\":2964,\"interface\":106,\"macro\":55,\"method\":2577,\"module\":388}; Graphify rebuilt 4446 nodes and 11573 edges on the same checkout."
+      },
+      {
+        "repo": "https://github.com/rust-windowing/softbuffer",
+        "commit": "840683cfce68a04d20cfb75b2976d009d3ba77d8",
+        "target_path": "$WORK/atlas-random-validation/work/rust/2-rust-windowing__softbuffer",
+        "atlas_definitions": 715,
+        "native_definitions": 475,
+        "coverage_ratio": 1.5053,
+        "ok": true,
+        "note": "rust-windowing/softbuffer: rust-analyzer symbols native counts {\"Module\":41,\"Function\":119,\"Struct\":58,\"Method\":209,\"TypeAlias\":24,\"Enum\":10,\"Trait\":5,\"Const\":7,\"Macro\":1,\"Static\":1}; Atlas counts {\"class\":89,\"constant\":7,\"function\":313,\"interface\":5,\"macro\":1,\"method\":259,\"module\":41}; Graphify rebuilt 592 nodes and 1544 edges on the same checkout."
+      },
+      {
+        "repo": "https://github.com/rapidfuzz/strsim-rs",
+        "commit": "dacc84c0dc61eff0ee0ff66962bcf2e17018ad26",
+        "target_path": "$WORK/atlas-random-validation/work/rust/3-rapidfuzz__strsim-rs",
+        "atlas_definitions": 249,
+        "native_definitions": 148,
+        "coverage_ratio": 1.6824,
+        "ok": true,
+        "note": "rapidfuzz/strsim-rs: rust-analyzer symbols native counts {\"Macro\":2,\"Function\":127,\"Enum\":1,\"Method\":9,\"TypeAlias\":3,\"Struct\":5,\"Module\":1}; Atlas counts {\"class\":9,\"function\":136,\"macro\":2,\"method\":101,\"module\":1}; Graphify rebuilt 232 nodes and 293 edges on the same checkout."
+      }
+    ]
+  }
+}

@@ -1,0 +1,501 @@
+{
+ "meta": {
+  "repo_slug": "psf/requests",
+  "repo_url": "https://github.com/psf/requests",
+  "commit": "3c7baaa05ab4aa49cc819ce3a819d260de19c157",
+  "language": "python",
+  "subdir": "src",
+  "truth": "pyright-langserver LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+  "generated": "2026-10-28",
+  "n_questions": 19,
+  "generator_seconds": 6.5
+ },
+ "questions": [
+  {
+   "id": "callers::prepare",
+   "symbol": "prepare",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `prepare`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "prepare",
+    "prepare_request",
+    "test_HTTP_200_OK_GET_ALTERNATIVE",
+    "test_autoset_header_values_are_native",
+    "test_basic_building",
+    "test_basicauth_encodes_byte_strings",
+    "test_binary_put",
+    "test_can_send_file_object_with_non_string_filename",
+    "test_can_send_objects_with_files",
+    "test_chunked_upload_does_not_set_content_length_header",
+    "test_content_length_for_bytes_data",
+    "test_content_length_for_string_data_counts_bytes",
+    "test_cookielib_cookiejar_on_redirect",
+    "test_data_argument_accepts_tuples",
+    "test_empty_content_length",
+    "test_empty_stream_with_auth_does_not_set_content_length_header",
+    "test_form_encoded_post_query_multivalued_element",
+    "test_header_keys_are_native",
+    "test_json_encodes_as_bytes",
+    "test_json_param_post_should_not_override_data_param",
+    "test_long_authinfo_in_url",
+    "test_mixed_case_scheme_acceptable",
+    "test_no_body_content_length",
+    "test_no_content_length",
+    "test_nonhttp_schemes_dont_check_URLs",
+    "test_override_content_length",
+    "test_parameters_for_nonstandard_schemes",
+    "test_params_are_added_before_fragment",
+    "test_params_bytes_are_encoded",
+    "test_path_is_not_double_encoded",
+    "test_prepare_body_position_non_stream",
+    "test_prepared_copy",
+    "test_prepared_request_hook",
+    "test_prepared_request_is_pickleable",
+    "test_prepared_request_with_file_is_pickleable",
+    "test_prepared_request_with_hook_is_pickleable",
+    "test_preparing_bad_url",
+    "test_preparing_url",
+    "test_proxy_authorization_not_appended_to_https_request",
+    "test_proxy_env_vars_override_default",
+    "test_request_url_handles_leading_path_separators",
+    "test_requests_are_updated_each_time",
+    "test_respect_proxy_env_on_send_self_prepared_request",
+    "test_respect_proxy_env_on_send_with_redirects",
+    "test_rewind_body",
+    "test_rewind_body_failed_seek",
+    "test_rewind_body_failed_tell",
+    "test_rewind_body_no_seek",
+    "test_rewind_partially_read_body",
+    "test_session_pickling",
+    "test_set_basicauth",
+    "test_stream_with_auth_does_not_set_transfer_encoding_header",
+    "test_unicode_multipart_post_fieldnames",
+    "test_url_mutation",
+    "test_whitespaces_are_removed_from_url"
+   ],
+   "truth_source": "call_hierarchy over 2 definition(s)",
+   "definitions": [
+    "src/requests/models.py:360:9",
+    "src/requests/models.py:424:9"
+   ]
+  },
+  {
+   "id": "callers::post",
+   "symbol": "post",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `post`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "test_HTTP_307_ALLOW_REDIRECT_POST",
+    "test_HTTP_307_ALLOW_REDIRECT_POST_WITH_SEEKABLE",
+    "test_POSTBIN_GET_POST_FILES",
+    "test_POSTBIN_GET_POST_FILES_WITH_DATA",
+    "test_POSTBIN_SEEKED_OBJECT_WITH_NO_ITER",
+    "test_chunked_upload",
+    "test_chunked_upload_doesnt_skip_host_header",
+    "test_chunked_upload_uses_only_specified_host_header",
+    "test_conflicting_post_params",
+    "test_custom_content_type",
+    "test_different_encodings_dont_break_post",
+    "test_getattr_proxy_stream_follows_redirect",
+    "test_http_301_changes_post_to_get",
+    "test_http_302_changes_post_to_get",
+    "test_http_303_changes_post_to_get",
+    "test_invalid_files_input",
+    "test_json_param_post_content_type_works",
+    "test_post_getattr_proxy_read_only",
+    "test_post_json_nan",
+    "test_post_named_tempfile",
+    "test_post_with_custom_mapping",
+    "test_unicode_multipart_post"
+   ],
+   "truth_source": "call_hierarchy over 2 definition(s)",
+   "definitions": [
+    "src/requests/api.py:117:5",
+    "src/requests/sessions.py:695:9"
+   ]
+  },
+  {
+   "id": "callers::send",
+   "symbol": "send",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `send`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "handle_401",
+    "request",
+    "resolve_redirects",
+    "send",
+    "test_HTTP_200_OK_GET_ALTERNATIVE",
+    "test_cannot_send_unprepared_requests",
+    "test_cookielib_cookiejar_on_redirect",
+    "test_header_and_body_removal_on_redirect",
+    "test_hook_receives_request_arguments",
+    "test_mixed_case_scheme_acceptable",
+    "test_non_prepared_request_error",
+    "test_prepared_from_session",
+    "test_prepared_request_hook",
+    "test_prepared_request_is_pickleable",
+    "test_prepared_request_with_file_is_pickleable",
+    "test_prepared_request_with_hook_is_pickleable",
+    "test_respect_proxy_env_on_send_self_prepared_request",
+    "test_respect_proxy_env_on_send_session_prepared_request",
+    "test_respect_proxy_env_on_send_with_redirects",
+    "test_unicode_method_name_with_request_object"
+   ],
+   "truth_source": "call_hierarchy over 4 definition(s)",
+   "definitions": [
+    "src/requests/adapters.py:128:9",
+    "src/requests/adapters.py:634:9",
+    "src/requests/sessions.py:132:9",
+    "src/requests/sessions.py:752:9"
+   ]
+  },
+  {
+   "id": "callers::json",
+   "symbol": "json",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `json`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "test_HTTP_307_ALLOW_REDIRECT_POST",
+    "test_HTTP_307_ALLOW_REDIRECT_POST_WITH_SEEKABLE",
+    "test_POSTBIN_SEEKED_OBJECT_WITH_NO_ITER",
+    "test_cookie_sent_on_redirect",
+    "test_generic_cookiejar_works",
+    "test_getattr_proxy_stream_follows_redirect",
+    "test_json_decode_compatibility",
+    "test_json_decode_compatibility_for_alt_utf_encodings",
+    "test_json_decode_persists_doc_attr",
+    "test_json_param_post_content_type_works",
+    "test_param_cookiejar_works",
+    "test_params_are_merged_case_sensitive",
+    "test_post_getattr_proxy_read_only",
+    "test_post_named_tempfile",
+    "test_post_with_custom_mapping",
+    "test_prepared_from_session",
+    "test_proxy_authorization_preserved_on_request",
+    "test_request_cookie_overrides_session_cookie",
+    "test_response_json_when_content_is_None"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/models.py:1091:9"
+   ]
+  },
+  {
+   "id": "callers::session",
+   "symbol": "session",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `session`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "test_BASICAUTH_TUPLE_HTTP_200_OK_GET",
+    "test_DIGESTAUTH_WRONG_HTTP_401_GET",
+    "test_DIGEST_HTTP_200_OK_GET",
+    "test_HTTP_302_TOO_MANY_REDIRECTS_WITH_PARAMS",
+    "test_basicauth_with_netrc",
+    "test_cookie_persists_via_api",
+    "test_cookie_quote_wrapped",
+    "test_cookie_removed_on_expire",
+    "test_cookie_sent_on_redirect",
+    "test_entry_points",
+    "test_generic_cookiejar_works",
+    "test_param_cookiejar_works",
+    "test_request_cookie_overrides_session_cookie",
+    "test_request_cookies_not_persisted",
+    "test_set_cookie_on_301",
+    "test_unconsumed_session_response_closes_connection"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/sessions.py:908:5"
+   ]
+  },
+  {
+   "id": "callers::super_len",
+   "symbol": "super_len",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `super_len`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "prepare_body",
+    "prepare_content_length",
+    "test_file",
+    "test_io_streams",
+    "test_string",
+    "test_super_len_correctly_calculates_len_of_partially_read_file",
+    "test_super_len_handles_files_raising_weird_errors_in_tell",
+    "test_super_len_tell_ioerror",
+    "test_super_len_with__len__",
+    "test_super_len_with_fileno",
+    "test_super_len_with_no__len__",
+    "test_super_len_with_no_matches",
+    "test_super_len_with_tell",
+    "test_tarfile_member"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/utils.py:160:5"
+   ]
+  },
+  {
+   "id": "callers::prepare_request",
+   "symbol": "prepare_request",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `prepare_request`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "request",
+    "test_header_and_body_removal_on_redirect",
+    "test_headers_on_session_with_None_are_not_sent",
+    "test_headers_preserve_order",
+    "test_hook_receives_request_arguments",
+    "test_params_original_order_is_preserved_by_default",
+    "test_prepare_request_with_bytestring_url",
+    "test_prepared_from_session",
+    "test_respect_proxy_env_on_send_session_prepared_request",
+    "test_session_hooks_are_overridden_by_request_hooks",
+    "test_session_hooks_are_used_with_no_request_hooks",
+    "test_transfer_enc_removal_on_redirect",
+    "test_unicode_method_name_with_request_object"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/sessions.py:511:9"
+   ]
+  },
+  {
+   "id": "callers::request",
+   "symbol": "request",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `request`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "delete",
+    "get",
+    "head",
+    "options",
+    "patch",
+    "post",
+    "put",
+    "request",
+    "test_encoded_methods",
+    "test_proxy_authorization_preserved_on_request",
+    "test_request_with_bytestring_host",
+    "test_respect_proxy_env_on_request",
+    "test_unicode_method_name"
+   ],
+   "truth_source": "call_hierarchy over 2 definition(s)",
+   "definitions": [
+    "src/requests/api.py:24:5",
+    "src/requests/sessions.py:557:9"
+   ]
+  },
+  {
+   "id": "callers::mount",
+   "symbol": "mount",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `mount`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "__init__",
+    "test_session_get_adapter_prefix_matching",
+    "test_session_get_adapter_prefix_matching_is_case_insensitive",
+    "test_session_get_adapter_prefix_matching_mixed_case",
+    "test_session_get_adapter_prefix_with_trailing_slash",
+    "test_session_get_adapter_prefix_without_trailing_slash",
+    "test_transport_adapter_ordering",
+    "test_urllib3_pool_connection_closed",
+    "test_urllib3_retries"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/sessions.py:888:9"
+   ]
+  },
+  {
+   "id": "callers::should_bypass_proxies",
+   "symbol": "should_bypass_proxies",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `should_bypass_proxies`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "get_environ_proxies",
+    "resolve_proxies",
+    "test_should_bypass_proxies",
+    "test_should_bypass_proxies_no_proxy",
+    "test_should_bypass_proxies_no_proxy_domain_boundary",
+    "test_should_bypass_proxies_pass_only_hostname",
+    "test_should_bypass_proxies_win_registry",
+    "test_should_bypass_proxies_win_registry_ProxyOverride_value",
+    "test_should_bypass_proxies_win_registry_bad_values"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/utils.py:810:5"
+   ]
+  },
+  {
+   "id": "callers::cookiejar_from_dict",
+   "symbol": "cookiejar_from_dict",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `cookiejar_from_dict`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "__init__",
+    "add_dict_to_cookiejar",
+    "merge_cookies",
+    "prepare_cookies",
+    "prepare_request",
+    "test_cookielib_cookiejar_on_redirect",
+    "test_generic_cookiejar_works",
+    "test_param_cookiejar_works"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/cookies.py:579:5"
+   ]
+  },
+  {
+   "id": "callers::to_native_string",
+   "symbol": "to_native_string",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `to_native_string`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "_basic_auth_str",
+    "get_full_url",
+    "get_redirect_target",
+    "prepare_headers",
+    "prepare_method",
+    "prepare_url",
+    "resolve_redirects",
+    "test_to_native_string"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/_internal_utils.py:26:5"
+   ]
+  },
+  {
+   "id": "callers::iter_content",
+   "symbol": "iter_content",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `iter_content`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "__iter__",
+    "content",
+    "iter_lines",
+    "test_iter_content_wraps_exceptions",
+    "test_manual_redirect_with_partial_body_read",
+    "test_response_chunk_size_type",
+    "test_response_decode_unicode"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/models.py:914:9"
+   ]
+  },
+  {
+   "id": "callers::close",
+   "symbol": "close",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `close`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "__exit__",
+    "close",
+    "handle_401",
+    "resolve_redirects",
+    "test_response_without_release_conn",
+    "test_session_close_proxy_clear"
+   ],
+   "truth_source": "call_hierarchy over 4 definition(s)",
+   "definitions": [
+    "src/requests/adapters.py:153:9",
+    "src/requests/adapters.py:555:9",
+    "src/requests/models.py:1173:9",
+    "src/requests/sessions.py:883:9"
+   ]
+  },
+  {
+   "id": "callers::get_adapter",
+   "symbol": "get_adapter",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `get_adapter`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "send",
+    "test_session_get_adapter_prefix_matching",
+    "test_session_get_adapter_prefix_matching_is_case_insensitive",
+    "test_session_get_adapter_prefix_matching_mixed_case",
+    "test_session_get_adapter_prefix_with_trailing_slash",
+    "test_session_get_adapter_prefix_without_trailing_slash"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/sessions.py:870:9"
+   ]
+  },
+  {
+   "id": "callers::get_environ_proxies",
+   "symbol": "get_environ_proxies",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `get_environ_proxies`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "merge_environment_settings",
+    "resolve_proxies",
+    "test_bypass",
+    "test_bypass_no_proxy_keyword",
+    "test_not_bypass",
+    "test_not_bypass_no_proxy_keyword"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/utils.py:873:5"
+   ]
+  },
+  {
+   "id": "callers::morsel_to_cookie",
+   "symbol": "morsel_to_cookie",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `morsel_to_cookie`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "set",
+    "test_expires_invalid_int",
+    "test_expires_none",
+    "test_expires_valid_str",
+    "test_max_age_invalid_str",
+    "test_max_age_valid_int"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/cookies.py:531:5"
+   ]
+  },
+  {
+   "id": "callers::resolve_redirects",
+   "symbol": "resolve_redirects",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `resolve_redirects`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "send",
+    "test_cookielib_cookiejar_on_redirect",
+    "test_header_and_body_removal_on_redirect",
+    "test_manual_redirect_with_partial_body_read",
+    "test_requests_are_updated_each_time",
+    "test_transfer_enc_removal_on_redirect"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/sessions.py:186:9"
+   ]
+  },
+  {
+   "id": "callers::rewind_body",
+   "symbol": "rewind_body",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `rewind_body`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "resolve_redirects",
+    "test_rewind_body",
+    "test_rewind_body_failed_seek",
+    "test_rewind_body_failed_tell",
+    "test_rewind_body_no_seek",
+    "test_rewind_partially_read_body"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "src/requests/utils.py:1139:5"
+   ]
+  }
+ ]
+}

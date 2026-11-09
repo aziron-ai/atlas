@@ -1,0 +1,386 @@
+{
+ "meta": {
+  "repo_slug": "axios/axios",
+  "repo_url": "https://github.com/axios/axios",
+  "commit": "8f4ed5691168cf5bfd94c0b01086d9ad926e5240",
+  "language": "javascript",
+  "subdir": "lib",
+  "truth": "typescript-language-server LSP call_hierarchy, union over all same-name definitions (bench/make_qa_set.py)",
+  "generated": "2026-10-29",
+  "n_questions": 19,
+  "generator_seconds": 36.4
+ },
+ "questions": [
+  {
+   "id": "callers::from",
+   "symbol": "from",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `from`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "convertValue",
+    "dispatchHttpRequest",
+    "dispatchRequest",
+    "dispatchXhrRequest",
+    "factory",
+    "handleRequestError",
+    "handleStreamEnd",
+    "handleStreamError",
+    "onAdapterRejection",
+    "onAdapterResolution",
+    "onloadend",
+    "resolveConfig",
+    "transformData",
+    "transformResponse"
+   ],
+   "truth_source": "call_hierarchy over 3 definition(s)",
+   "definitions": [
+    "lib/core/AxiosError.js:154:10",
+    "lib/core/AxiosHeaders.js:423:10",
+    "lib/platform/node/classes/Buffer.js:8:3"
+   ]
+  },
+  {
+   "id": "callers::mergeConfig",
+   "symbol": "mergeConfig",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `mergeConfig`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "_request",
+    "create",
+    "forEachMethodNoData",
+    "getUri",
+    "httpMethod",
+    "resolveConfig"
+   ],
+   "truth_source": "call_hierarchy over 2 definition(s)",
+   "definitions": [
+    "lib/core/mergeConfig.js:199:25",
+    "index.js:22:3"
+   ]
+  },
+  {
+   "id": "callers::getMergedValue",
+   "symbol": "getMergedValue",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `getMergedValue`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "defaultToConfig2",
+    "mergeConfig",
+    "mergeDeepProperties",
+    "mergeDirectKeys",
+    "valueFromConfig2"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/core/mergeConfig.js:68:10"
+   ]
+  },
+  {
+   "id": "callers::isBuffer",
+   "symbol": "isBuffer",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `isBuffer`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "findKey",
+    "forEach",
+    "isEmptyObject",
+    "merge",
+    "visit"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/utils.js:221:10"
+   ]
+  },
+  {
+   "id": "callers::normalizeHeader",
+   "symbol": "normalizeHeader",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `normalizeHeader`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "defineAccessor",
+    "deleteHeader",
+    "get",
+    "has",
+    "setHeader"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/core/AxiosHeaders.js:9:10"
+   ]
+  },
+  {
+   "id": "callers::settle",
+   "symbol": "settle",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `settle`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "dispatchHttpRequest",
+    "factory",
+    "handleResponse",
+    "handleStreamEnd",
+    "onloadend"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/core/settle.js:14:25"
+   ]
+  },
+  {
+   "id": "callers::normalize",
+   "symbol": "normalize",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `normalize`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "dispatchHttpRequest",
+    "dispatchXhrRequest",
+    "transform",
+    "transformData"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/core/AxiosHeaders.js:361:3"
+   ]
+  },
+  {
+   "id": "callers::request",
+   "symbol": "request",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `request`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "forEachMethodNoData",
+    "request",
+    "testUnwritableErrorStack"
+   ],
+   "truth_source": "call_hierarchy over 59 definition(s)",
+   "definitions": [
+    "lib/adapters/http.js:624:3",
+    "lib/core/Axios.js:72:9",
+    "lib/helpers/Http2Sessions.js:85:25",
+    "scripts/benchmark-merge-config.js:37:5",
+    "scripts/benchmark-merge-config.js:43:5",
+    "tests/smoke/cjs/tests/basic.smoke.test.cjs:11:5",
+    "tests/smoke/cjs/tests/cancel.smoke.test.cjs:13:5",
+    "tests/smoke/cjs/tests/error.smoke.test.cjs:11:5",
+    "tests/smoke/cjs/tests/files.smoke.test.cjs:8:5",
+    "tests/smoke/cjs/tests/formData.smoke.test.cjs:11:5",
+    "tests/smoke/cjs/tests/headers.smoke.test.cjs:21:5",
+    "tests/smoke/cjs/tests/instance.smoke.test.cjs:11:5",
+    "tests/smoke/cjs/tests/interceptors.smoke.test.cjs:11:5",
+    "tests/smoke/cjs/tests/progress.smoke.test.cjs:12:5",
+    "tests/smoke/cjs/tests/rateLimit.smoke.test.cjs:11:5",
+    "tests/smoke/cjs/tests/timeout.smoke.test.cjs:11:5",
+    "tests/smoke/cjs/tests/urlencode.smoke.test.cjs:11:5",
+    "tests/smoke/esm/tests/basic.smoke.test.js:11:5",
+    "tests/smoke/esm/tests/cancel.smoke.test.js:10:5",
+    "tests/smoke/esm/tests/error.smoke.test.js:11:5",
+    "tests/smoke/esm/tests/files.smoke.test.js:8:5",
+    "tests/smoke/esm/tests/formData.smoke.test.js:8:5",
+    "tests/smoke/esm/tests/headers.smoke.test.js:21:5",
+    "tests/smoke/esm/tests/instance.smoke.test.js:11:5",
+    "tests/smoke/esm/tests/interceptors.smoke.test.js:11:5",
+    "tests/smoke/esm/tests/progress.smoke.test.js:12:5",
+    "tests/smoke/esm/tests/rateLimit.smoke.test.js:11:5",
+    "tests/smoke/esm/tests/timeout.smoke.test.js:11:5",
+    "tests/smoke/esm/tests/urlencode.smoke.test.js:11:5",
+    "tests/unit/adapters/directAgent.test.js:261:17",
+    "tests/unit/adapters/http.test.js:4653:11",
+    "tests/unit/adapters/http.test.js:4606:11",
+    "tests/unit/adapters/http.test.js:4521:11",
+    "tests/unit/adapters/http.test.js:6634:9",
+    "tests/unit/adapters/http.test.js:6797:9",
+    "tests/unit/adapters/http.test.js:6983:9",
+    "tests/unit/adapters/http.test.js:6711:9",
+    "tests/unit/adapters/http.test.js:6879:9",
+    "tests/unit/adapters/http.test.js:6911:9",
+    "tests/unit/adapters/http.test.js:6442:7",
+    "tests/unit/prototypePollution.test.js:404:9",
+    "tests/unit/prototypePollution.test.js:438:13",
+    "tests/browser/adapter.browser.test.js:69:11",
+    "tests/browser/basicAuth.browser.test.js:67:9",
+    "tests/browser/cancel.browser.test.js:75:11",
+    "tests/browser/defaults.browser.test.js:70:9",
+    "tests/browser/formdata.browser.test.js:66:9",
+    "tests/browser/headers.browser.test.js:64:9",
+    "tests/browser/instance.browser.test.js:64:9",
+    "tests/browser/instance.browser.test.js:80:11",
+    "tests/browser/interceptors.browser.test.js:663:15",
+    "tests/browser/interceptors.browser.test.js:609:13",
+    "tests/browser/interceptors.browser.test.js:112:11",
+    "tests/browser/options.browser.test.js:65:9",
+    "tests/browser/progress.browser.test.js:126:9",
+    "tests/browser/promise.browser.test.js:66:9",
+    "tests/browser/requests.browser.test.js:116:9",
+    "tests/browser/transform.browser.test.js:71:9",
+    "tests/browser/xsrf.browser.test.js:73:9"
+   ]
+  },
+  {
+   "id": "callers::syncHandlerEntries",
+   "symbol": "syncHandlerEntries",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `syncHandlerEntries`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "clear",
+    "eject",
+    "forEach",
+    "use"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/core/InterceptorManager.js:34:10"
+   ]
+  },
+  {
+   "id": "callers::toFormData",
+   "symbol": "toFormData",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `toFormData`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "AxiosURLSearchParams",
+    "multipartEntries",
+    "toURLEncodedForm",
+    "transformRequest"
+   ],
+   "truth_source": "call_hierarchy over 2 definition(s)",
+   "definitions": [
+    "lib/helpers/toFormData.js:94:10",
+    "index.js:17:3"
+   ]
+  },
+  {
+   "id": "callers::buildFullPath",
+   "symbol": "buildFullPath",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `buildFullPath`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "dispatchHttpRequest",
+    "getUri",
+    "resolveConfig"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/core/buildFullPath.js:68:25"
+   ]
+  },
+  {
+   "id": "callers::buildURL",
+   "symbol": "buildURL",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `buildURL`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "dispatchHttpRequest",
+    "getUri",
+    "resolveConfig"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/helpers/buildURL.js:31:25"
+   ]
+  },
+  {
+   "id": "callers::createMultipartBody",
+   "symbol": "createMultipartBody",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `createMultipartBody`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "factory",
+    "formBodyLengthCases",
+    "generateType"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/core/createMultipartBody.js:6:25"
+   ]
+  },
+  {
+   "id": "callers::matchHeaderValue",
+   "symbol": "matchHeaderValue",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `matchHeaderValue`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "clear",
+    "deleteHeader",
+    "has"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/core/AxiosHeaders.js:166:10"
+   ]
+  },
+  {
+   "id": "callers::parseProtocol",
+   "symbol": "parseProtocol",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `parseProtocol`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "dispatchXhrRequest",
+    "fromDataURI",
+    "onloadend"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/helpers/parseProtocol.js:3:25"
+   ]
+  },
+  {
+   "id": "callers::sanitizeValue",
+   "symbol": "sanitizeValue",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `sanitizeValue`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "sanitizeByteStringHeaderValue",
+    "sanitizeHeaderValue",
+    "sanitizeValue"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/helpers/sanitizeHeaderValue.js:38:10"
+   ]
+  },
+  {
+   "id": "callers::throwIfCancellationRequested",
+   "symbol": "throwIfCancellationRequested",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `throwIfCancellationRequested`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "dispatchRequest",
+    "onAdapterRejection",
+    "onAdapterResolution"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/core/dispatchRequest.js:18:10"
+   ]
+  },
+  {
+   "id": "callers::toByteStringHeaderObject",
+   "symbol": "toByteStringHeaderObject",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `toByteStringHeaderObject`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "dispatchHttpRequest",
+    "factory",
+    "sendRequest"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/helpers/sanitizeHeaderValue.js:52:17"
+   ]
+  },
+  {
+   "id": "callers::arrayToObject",
+   "symbol": "arrayToObject",
+   "qtype": "callers",
+   "question": "List the names of the functions that directly call `arrayToObject`. Answer with ONLY a comma-separated list of function names, nothing else.",
+   "truth": [
+    "buildPath",
+    "normalizeArray"
+   ],
+   "truth_source": "call_hierarchy over 1 definition(s)",
+   "definitions": [
+    "lib/helpers/formDataToJSON.js:55:10"
+   ]
+  }
+ ]
+}

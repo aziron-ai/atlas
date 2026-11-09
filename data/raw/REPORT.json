@@ -1,0 +1,325 @@
+[
+  {
+    "lang": "go",
+    "repo": "https://github.com/sirupsen/logrus",
+    "subdir": "",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/go",
+    "graphify": {
+      "ok": true,
+      "seconds": 0.7,
+      "nodes": 711,
+      "calls": 333,
+      "extracted": 198
+    },
+    "atlas": {
+      "ok": true,
+      "seconds": 0.81,
+      "files": 57,
+      "symbols": 679,
+      "edges": 2948,
+      "calls": 2102,
+      "recv_typed": 632,
+      "sources": {
+        "go_ast": 2102
+      },
+      "internal_calls": 1143
+    },
+    "queries": [
+      [
+        "log",
+        105,
+        4
+      ],
+      [
+        "newEntry",
+        62,
+        5
+      ],
+      [
+        "releaseEntry",
+        175,
+        6
+      ],
+      [
+        "Fire",
+        55,
+        6
+      ]
+    ]
+  },
+  {
+    "lang": "python",
+    "repo": "https://github.com/psf/requests",
+    "subdir": "src",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/python/src",
+    "graphify": {
+      "ok": true,
+      "seconds": 0.66,
+      "nodes": 580,
+      "calls": 229,
+      "extracted": 221
+    },
+    "atlas": {
+      "ok": true,
+      "seconds": 0.18,
+      "files": 19,
+      "symbols": 517,
+      "edges": 1371,
+      "calls": 961,
+      "recv_typed": 73,
+      "sources": {
+        "python_ts": 961
+      },
+      "internal_calls": 371
+    },
+    "queries": [
+      [
+        "get",
+        142,
+        4
+      ],
+      [
+        "request",
+        185,
+        5
+      ],
+      [
+        "__init__",
+        62,
+        7
+      ]
+    ]
+  },
+  {
+    "lang": "javascript",
+    "repo": "https://github.com/expressjs/express",
+    "subdir": "lib",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/javascript/lib",
+    "graphify": {
+      "ok": true,
+      "seconds": 0.16,
+      "nodes": 28,
+      "calls": 3,
+      "extracted": 3
+    },
+    "atlas": {
+      "ok": true,
+      "seconds": 0.09,
+      "files": 6,
+      "symbols": 312,
+      "edges": 486,
+      "calls": 435,
+      "recv_typed": 0,
+      "sources": {
+        "javascript_ts": 435
+      },
+      "internal_calls": 231
+    },
+    "queries": [
+      [
+        "get",
+        47,
+        5
+      ],
+      [
+        "sendFile",
+        46,
+        6
+      ],
+      [
+        "defineGetter",
+        47,
+        6
+      ],
+      [
+        "format",
+        8,
+        6
+      ]
+    ]
+  },
+  {
+    "lang": "typescript",
+    "repo": "https://github.com/pmndrs/zustand",
+    "subdir": "src",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/typescript/src",
+    "graphify": {
+      "ok": true,
+      "seconds": 0.2,
+      "nodes": 111,
+      "calls": 6,
+      "extracted": 6
+    },
+    "atlas": {
+      "ok": true,
+      "seconds": 0.12,
+      "files": 16,
+      "symbols": 226,
+      "edges": 224,
+      "calls": 197,
+      "recv_typed": 8,
+      "sources": {
+        "javascript_ts": 197
+      },
+      "internal_calls": 81
+    },
+    "queries": [
+      [
+        "DevtoolsImpl",
+        53,
+        7
+      ],
+      [
+        "hydrate",
+        8,
+        5
+      ],
+      [
+        "shallow",
+        75,
+        5
+      ],
+      [
+        "CreateStore",
+        89,
+        6
+      ]
+    ]
+  },
+  {
+    "lang": "java",
+    "repo": "https://github.com/google/gson",
+    "subdir": "gson/src/main/java",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/java/gson/src/main/java",
+    "graphify": {
+      "ok": true,
+      "seconds": 0.99,
+      "nodes": 1016,
+      "calls": 927,
+      "extracted": 599
+    },
+    "atlas": {
+      "ok": true,
+      "seconds": 0.27,
+      "files": 86,
+      "symbols": 1558,
+      "edges": 3782,
+      "calls": 3105,
+      "recv_typed": 2326,
+      "sources": {
+        "java_ts": 3105
+      },
+      "internal_calls": 2403
+    },
+    "queries": [
+      [
+        "write",
+        112,
+        5
+      ],
+      [
+        "read",
+        102,
+        5
+      ]
+    ]
+  },
+  {
+    "lang": "c",
+    "repo": "https://github.com/DaveGamble/cJSON",
+    "subdir": "",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/c",
+    "graphify": {
+      "ok": true,
+      "seconds": 0.95,
+      "nodes": 971,
+      "calls": 1018,
+      "extracted": 492
+    },
+    "atlas": {
+      "ok": true,
+      "seconds": 0.28,
+      "files": 178,
+      "symbols": 1790,
+      "edges": 5373,
+      "calls": 4973,
+      "recv_typed": 18,
+      "sources": {
+        "cpp_ts": 4275,
+        "call_pattern": 556,
+        "python_ts": 142
+      },
+      "internal_calls": 1975
+    },
+    "queries": [
+      [
+        "cJSON_Delete",
+        284,
+        6
+      ],
+      [
+        "cjson_functions_should_not_crash_with_null_pointers",
+        288,
+        17
+      ],
+      [
+        "cJSON_CreateObject",
+        332,
+        8
+      ],
+      [
+        "UnityPrint",
+        302,
+        5
+      ]
+    ]
+  },
+  {
+    "lang": "cpp",
+    "repo": "https://github.com/google/leveldb",
+    "subdir": "",
+    "target": "$WORK/atlas-graphify-vs-atlas-final/cpp",
+    "graphify": {
+      "ok": true,
+      "seconds": 1.28,
+      "nodes": 2206,
+      "calls": 1195,
+      "extracted": 1027
+    },
+    "atlas": {
+      "ok": true,
+      "seconds": 0.29,
+      "files": 144,
+      "symbols": 2088,
+      "edges": 10255,
+      "calls": 9481,
+      "recv_typed": 1959,
+      "sources": {
+        "cpp_ts": 9481
+      },
+      "internal_calls": 6217
+    },
+    "queries": [
+      [
+        "RandomString",
+        76,
+        7
+      ],
+      [
+        "MemEnvTest",
+        100,
+        8
+      ],
+      [
+        "Size",
+        72,
+        7
+      ],
+      [
+        "size",
+        72,
+        5
+      ]
+    ]
+  }
+]
