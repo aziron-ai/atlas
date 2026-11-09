@@ -1,21 +1,21 @@
-# Atlas documentation and wiki
+# Atlas documentation website
 
-Public documentation, user guides, and benchmark evidence for Atlas.
+The public Atlas website and user guides, published with GitHub Pages.
 
-- [Documentation website](https://atlas.aziro.com/)
+- [Website](https://atlas.aziro.com/)
+- [Documentation](https://atlas.aziro.com/docs/)
 - [Getting started](https://atlas.aziro.com/docs/getting-started/)
-- [GitHub Wiki](https://github.com/aziron-ai/atlas/wiki)
-- [Wiki Markdown sources](wiki/Home.md)
+- [GitHub Pages address](https://aziron-ai.github.io/atlas/) (redirects to the custom domain)
 
-This repository publishes the documentation website and its Wiki mirror. It does not publish binary releases. The previous repository is retained as `aziron-ai/atlas-arch`.
+The previous repository is retained privately as `aziron-ai/atlas-arch`. This fresh public repository hosts the website and documentation.
 
-## Editing the website
+## Publishing
 
-The website source is in `src/`; the Markdown guides are in `content/docs/`. The committed `index.html`, `docs/`, and `assets/` files are served by GitHub Pages from the root of `main` at `atlas.aziro.com`.
+GitHub Pages serves the root of the `main` branch. The `CNAME` file connects the site to `atlas.aziro.com`, and `.nojekyll` keeps the committed site assets intact.
 
-Install the locked dependencies with `npm ci`, then run `npm run build` after editing the website or guide content. Commit the generated website files along with the source changes.
+## Editing
 
-The `wiki/` directory keeps an editable copy of the GitHub Wiki pages.
+The website source is in `src/`; the Markdown guides are in `content/docs/`. Install the locked dependencies with `npm ci`, then run `npm run build` after changing website or guide content. Commit the generated `index.html`, `docs/`, and `assets/` files along with the source changes.
 
 ## License
 
